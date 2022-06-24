@@ -83,21 +83,13 @@ export class LBattlerBehavior extends LBehavior {
     private clearStates(): void {
         this.ownerEntity().removeAllStates(false);
     }
+    
 
     // Game_BattlerBase.prototype.isGuard 
     public isGuard(): boolean {
         return false;
     };
     
-    // Game_BattlerBase.prototype.recoverAll
-    public recoverAll(): void {
-        this.clearStates();
-        this.paramSet().params().forEach(x => x?.clearDamage(this.ownerEntity()));
-        //for (let paramId = 0; paramId < REData.parameters.length; paramId++) {
-
-        //    this._actualParamDamges[paramId] = 0;
-        //}
-    };
 
     // Game_Actor.prototype.attackAnimationId1
     public attackAnimationId(): number {

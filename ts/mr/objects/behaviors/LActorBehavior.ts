@@ -64,13 +64,7 @@ export class LActorBehavior extends LBattlerBehavior {
         const b1= self.actualParam(MRBasics.params.exp);
         //this.initEquips(actor.equips);
         this.paramSet().clearParamPlus();
-        const a2 = self.actualParam(MRBasics.params.level);
-        const b2= self.actualParam(MRBasics.params.exp);
-        this.recoverAll();
-        
-
-        const a = self.actualParam(MRBasics.params.level);
-        const b= self.actualParam(MRBasics.params.exp);
+        self.recoverAll();
 
     }
 

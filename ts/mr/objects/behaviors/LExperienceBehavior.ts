@@ -142,10 +142,19 @@ export class LExperienceBehavior extends LBehavior {
         return self.actualParam(MRBasics.params.level);
     }
 
+    // public maxLevel(self: LEntity): number {
+    //     return this.actor(self).maxLevel;
+    // }
+
     // for test
     public setLevel(self: LEntity, value: number): void {
+        value = value.clamp(1, this.maxLevel(self));
         self.setActualParam(MRBasics.params.level, value);
     }
+    
+    // Game_Actor.prototype.changeLevel = function(level, show) {
+    //     this.changeExp(this.expForLevel(level), show);
+    // };
 
     // Game_Actor.prototype.currentExp
     public currentExp(self: LEntity): number {

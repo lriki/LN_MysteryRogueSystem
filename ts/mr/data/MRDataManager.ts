@@ -118,25 +118,25 @@ export class MRDataManager {
 
         // Parameters
         MRData.parameters = [
-            REData_Parameter.makeBuiltin(0, "null", "null", "null", -1, 0, 0, Infinity),
-            REData_Parameter.makeBuiltin(1, "hp", "HP", tr2("最大HP"), 0, 0, 0, Infinity),
-            REData_Parameter.makeBuiltin(2, "mp", "MP", tr2("最大MP"), 1, 0, 0, Infinity),
-            REData_Parameter.makeBuiltin(3, "atk", "ATK", tr2("最大ATK"), 2, 0, 0, Infinity),
-            REData_Parameter.makeBuiltin(4, "def", "DEF", tr2("最大DEF"), 3, 0, 0, Infinity),
-            REData_Parameter.makeBuiltin(5, "mat", "MAT", tr2("最大MAT"), 4, 0, 0, Infinity),
-            REData_Parameter.makeBuiltin(6, "mdf", "MDF", tr2("最大MDF"), 5, 0, 0, Infinity),
-            REData_Parameter.makeBuiltin(7, "agi", "AGI", tr2("最大AGI"), 6, 0, -100, 200),
-            REData_Parameter.makeBuiltin(8, "luk", "LUK", tr2("最大LUK"), 7, 0, 0, Infinity),
-            REData_Parameter.makeBuiltin(9, "tp", "TP", tr2("最大TP"), 8, 0, 0, Infinity),
+            REData_Parameter.makeBuiltin(0, "null", "null", "null", -1, 0, 0, Infinity, false),
+            REData_Parameter.makeBuiltin(1, "hp", "HP", tr2("最大HP"), 0, 0, 0, Infinity, true),
+            REData_Parameter.makeBuiltin(2, "mp", "MP", tr2("最大MP"), 1, 0, 0, Infinity, true),
+            REData_Parameter.makeBuiltin(3, "atk", "ATK", tr2("最大ATK"), 2, 0, 0, Infinity, true),
+            REData_Parameter.makeBuiltin(4, "def", "DEF", tr2("最大DEF"), 3, 0, 0, Infinity, true),
+            REData_Parameter.makeBuiltin(5, "mat", "MAT", tr2("最大MAT"), 4, 0, 0, Infinity, true),
+            REData_Parameter.makeBuiltin(6, "mdf", "MDF", tr2("最大MDF"), 5, 0, 0, Infinity, true),
+            REData_Parameter.makeBuiltin(7, "agi", "AGI", tr2("最大AGI"), 6, 0, -100, 200, true),
+            REData_Parameter.makeBuiltin(8, "luk", "LUK", tr2("最大LUK"), 7, 0, 0, Infinity, true),
+            REData_Parameter.makeBuiltin(9, "tp", "TP", tr2("最大TP"), 8, 0, 0, Infinity, true),
             //----------
-            REData_Parameter.makeBuiltin(10, "fp", tr2("満腹度"), tr2("最大満腹度"), -1, 10000, 0, Infinity),    // FP
-            REData_Parameter.makeBuiltin(11, "pow", tr2("ちから"), tr2("ちからの最大値"), -1, 8, 0, Infinity),   // Power
-            REData_Parameter.makeBuiltin(12, "up", tr2("つよさ"), tr2("つよさの最大値"), -1, 99, -Infinity, Infinity),
-            REData_Parameter.makeBuiltin(13, "rem", tr2("回数"), tr2("最大回数"), -1, 99, 0, Infinity),
-            REData_Parameter.makeBuiltin(14, "cap", "Capacity", tr2("最大容量"), -1, 8, 0, Infinity),
-            REData_Parameter.makeBuiltin(15, "gold", "Gold", tr2("最大ゴールド"), -1, 999999, 10, Infinity),
-            REData_Parameter.makeBuiltin(16, "level", tr2("レベル"), tr2("最大レベル"), -1, 99, 1, Infinity),
-            REData_Parameter.makeBuiltin(17, "exp", tr2("経験値"), tr2("最大経験値"), -1, 999999, 0, Infinity),
+            REData_Parameter.makeBuiltin(10, "fp", tr2("満腹度"), tr2("最大満腹度"), -1, 10000, 0, Infinity, true),    // FP
+            REData_Parameter.makeBuiltin(11, "pow", tr2("ちから"), tr2("ちからの最大値"), -1, 8, 0, Infinity, true),   // Power
+            REData_Parameter.makeBuiltin(12, "up", tr2("つよさ"), tr2("つよさの最大値"), -1, 99, -Infinity, Infinity, false),
+            REData_Parameter.makeBuiltin(13, "rem", tr2("回数"), tr2("最大回数"), -1, 99, 0, Infinity, false),
+            REData_Parameter.makeBuiltin(14, "cap", "Capacity", tr2("最大容量"), -1, 8, 0, Infinity, false),
+            REData_Parameter.makeBuiltin(15, "gold", "Gold", tr2("最大ゴールド"), -1, 999999, 10, Infinity, false),
+            REData_Parameter.makeBuiltin(16, "level", tr2("レベル"), tr2("最大レベル"), -1, 99, 1, Infinity, false),
+            REData_Parameter.makeBuiltin(17, "exp", tr2("経験値"), tr2("最大経験値"), -1, 999999, 0, Infinity, false),
         ];
         MRBasics.params = {
             hp: MRData.parameters.findIndex(x => x.code == "hp"),

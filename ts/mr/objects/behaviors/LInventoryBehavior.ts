@@ -121,6 +121,25 @@ export class LInventoryBehavior extends LBehavior {
         b._gold = this._gold;
         return b
     }
+ 
+    /** [ScriptCommandAPI] */
+    public clearItems(): void {
+        const items = this.items;
+        for (let i = items.length - 1; i >= 0; i--) {
+            items[i].removeFromParent();
+        }
+        // for (const entity of this.items) {
+        //     assert(entity.parentObject() == this);
+        //     entity.clearParent();
+        //     entity.destroy();
+        // }
+        // this._entities.splice(0);
+    }
+    
+    /** [ScriptCommandAPI] */
+    public clearGold(): void {
+       this._gold = 0;
+    }
 
     public get capacity(): number {
         return this._capacity;

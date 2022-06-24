@@ -30,7 +30,7 @@ export class LEnemyBehavior extends LBattlerBehavior {
 
     onAttached(self: LEntity): void {
         super.onAttached(self);
-        this.recoverAll();
+        self.recoverAll();
     }
 
     public enemyData(): DEnemy {

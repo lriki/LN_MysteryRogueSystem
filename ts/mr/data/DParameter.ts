@@ -77,6 +77,9 @@ export class REData_Parameter
     minValue: number;
     maxValue: number;
 
+    /** [全回復] の対象とするか */
+    recoverTarget: boolean;
+
     magnification: number = 1;
 
 
@@ -102,7 +105,7 @@ export class REData_Parameter
     opponentSideMessages: DParamMessage[] = [];
 
 
-    public static makeBuiltin(id: DParameterId, code: string, displayName: string, displayNameMaximun: string, battlerParamId: number, initialIdealValue: number, minValue: number, maxValue: number) {
+    public static makeBuiltin(id: DParameterId, code: string, displayName: string, displayNameMaximun: string, battlerParamId: number, initialIdealValue: number, minValue: number, maxValue: number, recoverTarget: boolean) {
         const p = new REData_Parameter(id, code);
         p.displayName = displayName;
         p.displayNameMaximum = displayNameMaximun;
@@ -110,6 +113,7 @@ export class REData_Parameter
         p.initialIdealValue = initialIdealValue;
         p.minValue = minValue;
         p.maxValue = maxValue;
+        p.recoverTarget = recoverTarget;
         return p;
     }
 
@@ -125,6 +129,7 @@ export class REData_Parameter
         this.addBuffCoe = 100;
         this.mulBuffCore = 0.25;
         this.messageValueSource = DParamMessageValueSource.Relative;
+        this.recoverTarget = true;
         // this.selfDamageMessage = DTextManager.actorDamage;
         // this.targetDamageMessage = DTextManager.enemyDamage;
         // this.selfDamageRecovery = DTextManager.actorRecovery;

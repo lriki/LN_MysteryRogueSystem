@@ -854,6 +854,11 @@ export class LEntity extends LObject
     //----------------------------------------
     // Behavior
 
+    // スクリプトコマンド用簡易API
+    public behavior(name: string): LBehavior | undefined {
+        return this.findEntityBehaviorByName(name);
+    }
+
     public basicBehaviors(): LBehavior[] {
         return this._basicBehaviors.map(x => REGame.world.behavior(x));
     }
@@ -1525,6 +1530,16 @@ export class LEntity extends LObject
         });
         return result;
     }
+
+    // Game_BattlerBase.prototype.recoverAll
+    public recoverAll(): void {
+        this.removeAllStates(false);
+        this.params().params().forEach(x => {
+            if (x && x.data().recoverTarget) {
+                x.clearDamage(this);
+            }
+        });
+    };
 
     //----------------------------------------
 

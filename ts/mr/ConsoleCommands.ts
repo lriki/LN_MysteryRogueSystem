@@ -1,3 +1,4 @@
+import { assert } from "./Common";
 import { DEntityCreateInfo } from "./data/DEntity";
 import { MRBasics } from "./data/MRBasics";
 import { MRData } from "./data/MRData";
@@ -95,5 +96,14 @@ function getItem(itemKey: string) {
     moveToExit: moveToExit,
     getItem: getItem,
 };
+
+Object.defineProperty((window as any).MR, "player", {
+    get: function(): LEntity {
+        console.log("player!!!!");
+        const player = REGame.camera.focusedEntity();
+        assert(player);
+        return player;
+    }
+});
 
 export {}
