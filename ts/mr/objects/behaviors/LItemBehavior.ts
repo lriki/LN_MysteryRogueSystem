@@ -1,4 +1,4 @@
-import { assert } from "ts/mr/Common";
+import { assert, MRSerializable } from "ts/mr/Common";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { DIdentifiedTiming } from "ts/mr/data/DIdentifyer";
 import { DItem, DItemDataId } from "ts/mr/data/DItem";
@@ -22,6 +22,7 @@ import { DActionId } from "ts/mr/data/DCommon";
 /**
  * Item として表現する Entity の共通 Behavior
  */
+@MRSerializable
 export class LItemBehavior extends LBehavior {
     private _shopStructureId: LStructureId = 0;
 

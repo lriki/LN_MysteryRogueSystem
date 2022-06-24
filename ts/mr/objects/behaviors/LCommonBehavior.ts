@@ -12,6 +12,7 @@ import { LEffectResult } from "../LEffectResult";
 import { SEmittorPerformer } from "ts/mr/system/SEmittorPerformer";
 import { MRData } from "ts/mr/data/MRData";
 import { DActionId } from "ts/mr/data/DCommon";
+import { MRSerializable } from "ts/mr/Common";
 
 
 
@@ -22,6 +23,7 @@ import { DActionId } from "ts/mr/data/DCommon";
  * ひとまず、一般的ではないかもしれないけど、検証用途や一時的にここに機能を置くこともある。
  * というか現状何が本当に必要なのか不透明な状態なので、あるていど機能のまとまりが見えてきたら派生クラス作って分離していく。
  */
+@MRSerializable
 export class LCommonBehavior extends LBehavior {
     reservedCounterActionIndex = -1;
 

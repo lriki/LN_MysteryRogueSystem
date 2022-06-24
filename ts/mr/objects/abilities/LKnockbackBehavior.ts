@@ -1,3 +1,4 @@
+import { MRSerializable } from "ts/mr/Common";
 import { SCommandResponse } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { LProjectileBehavior } from "../behaviors/activities/LProjectileBehavior";
@@ -6,6 +7,7 @@ import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 
 
+@MRSerializable
 export class LKnockbackBehavior extends LBehavior {
     
     public clone(newOwner: LEntity): LBehavior {

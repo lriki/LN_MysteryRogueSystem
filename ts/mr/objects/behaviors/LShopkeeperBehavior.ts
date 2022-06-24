@@ -14,10 +14,12 @@ import { SEventExecutionDialog } from "ts/mr/system/dialogs/SEventExecutionDialo
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { LActivity } from "../activities/LActivity";
 import { LInventoryBehavior } from "./LInventoryBehavior";
+import { MRSerializable } from "ts/mr/Common";
 
 
 /**
  */
+@MRSerializable
 export class LShopkeeperBehavior extends LBehavior {
     private _shopStructureId: LStructureId = 0;
     private _shopkeeperIndex = 0;   // ひとつの Shop 内での、店主番号
@@ -113,6 +115,8 @@ export class LShopkeeperBehavior extends LBehavior {
     }
 }
 
+
+@MRSerializable
 export class LMovingTargetFinder_Shopkeeper extends LMovingTargetFinder {
     private _ownerShopkeeperId: LBehaviorId;
 

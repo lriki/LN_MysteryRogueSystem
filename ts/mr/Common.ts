@@ -62,7 +62,7 @@ export class TypeStore {
     public static createInstance(name: string): any {
         const t = this.typeInfos.find(x => x.fullName == name || x.friendlyName == name);
         if (!t) {
-            const message = tr2("%1が登録されていません。@RESerializable でクラスを装飾してください。").format(name);
+            const message = tr2("%1が登録されていません。@MRSerializable でクラスを装飾してください。").format(name);
             console.error(message);
             throw new Error(message);
         }

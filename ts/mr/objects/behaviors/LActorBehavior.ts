@@ -1,4 +1,4 @@
-import { assert } from "ts/mr/Common";
+import { assert, MRSerializable } from "ts/mr/Common";
 import { DActor } from "ts/mr/data/DActor";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { DClass } from "ts/mr/data/DClass";
@@ -12,6 +12,7 @@ import { LBattlerBehavior } from "./LBattlerBehavior";
 
 /**
  */
+@MRSerializable
 export class LActorBehavior extends LBattlerBehavior {
 
     /*

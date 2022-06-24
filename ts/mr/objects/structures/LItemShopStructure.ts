@@ -4,13 +4,14 @@ import { LEntity } from "../LEntity";
 import { LStructure } from "./LStructure";
 import { DItemShopTypeId } from "ts/mr/data/DItemShop";
 import { LItemBehavior } from "../behaviors/LItemBehavior";
-import { assert } from "ts/mr/Common";
+import { assert, MRSerializable } from "ts/mr/Common";
 import { UMovement } from "ts/mr/usecases/UMovement";
 import { LEntityId } from "../LObject";
 import { DFactionId, MRData } from "ts/mr/data/MRData";
 import { LRoomId } from "../LCommon";
 
 // 店の入り口情報
+@MRSerializable
 export class LShopEntrance {
     private _index;
     private _homeX = 0;
@@ -51,6 +52,7 @@ export class LShopEntrance {
     }
 }
 
+@MRSerializable
 export class LItemShopStructure extends LStructure {
     private _roomId: LRoomId = 0;
     private _itemShopTypeId: DItemShopTypeId = 0;

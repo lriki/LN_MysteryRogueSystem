@@ -96,7 +96,7 @@
  * 
  */
 
-import { assert } from "ts/mr/Common";
+import { assert, MRSerializable } from "ts/mr/Common";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
@@ -107,6 +107,7 @@ import { MRBasics } from "ts/mr/data/MRBasics";
 import { RESystem } from "ts/mr/system/RESystem";
 import { ItemRemovedFromInventoryArgs } from "ts/mr/data/predefineds/DBasicEvents";
 
+@MRSerializable
 export class LInventoryBehavior extends LBehavior {
     _entities: LEntityId[] = [];
     private _gold: number = 0;

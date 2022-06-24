@@ -7,9 +7,11 @@ import { SCommandResponse } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
+import { MRSerializable } from "ts/mr/Common";
 
 /**
  */
+@MRSerializable
 export class LEntryPointBehavior extends LBehavior {
     
     public clone(newOwner: LEntity): LBehavior {

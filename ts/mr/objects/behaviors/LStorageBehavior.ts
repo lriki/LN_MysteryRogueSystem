@@ -1,3 +1,4 @@
+import { MRSerializable } from "ts/mr/Common";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { LBehavior } from "./LBehavior";
@@ -6,6 +7,7 @@ import { LBehavior } from "./LBehavior";
 /**
  * 
  */
+@MRSerializable
 export class LStorageBehavior extends LBehavior {
 
 

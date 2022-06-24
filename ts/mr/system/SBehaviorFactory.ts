@@ -37,7 +37,7 @@ export class SBehaviorFactory {
         { fullName: "REGame_DecisionBehavior", friendlyName: "_Decision", create: () => new LDecisionBehavior() },
         { fullName: "REUnitBehavior", friendlyName: "_Unit", create: () => new LUnitBehavior() },
         { fullName: "LInventoryBehavior", friendlyName: "_Inventory", create: () => new LInventoryBehavior() },
-        { fullName: "LItemUserBehavior", friendlyName: "_ItemUser", create: () => new LItemUserBehavior() },
+        //{ fullName: "LItemUserBehavior", friendlyName: "_ItemUser", create: () => new LItemUserBehavior() },
         { fullName: "LEquipmentBehavior", friendlyName: "Equipment", create: () => new LEquipmentBehavior() },
         { fullName: "LEquipmentUserBehavior", friendlyName: "_EquipmentUser", create: () => new LEquipmentUserBehavior() },
         { fullName: "LActorBehavior", friendlyName: "_Actor", create: () => new LActorBehavior() },

@@ -1,4 +1,4 @@
-import { tr2 } from "ts/mr/Common";
+import { MRSerializable, tr2 } from "ts/mr/Common";
 import { SCommandResponse } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { UName } from "ts/mr/usecases/UName";
@@ -17,6 +17,7 @@ import { Helpers } from "ts/mr/system/Helpers";
  * 
  * 
  */
+ @MRSerializable
 export class LGrabFootBehavior extends LBehavior {
 
     /*

@@ -6,7 +6,6 @@ import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { UAction } from "ts/mr/usecases/UAction";
 import { UMovement } from "ts/mr/usecases/UMovement";
 import { LActivity } from "../activities/LActivity";
-import { LActivityPreprocessor } from "../activities/LActivityPreprocessor";
 import { LCharacterAI } from "./LCharacterAI";
 import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
@@ -122,8 +121,3 @@ export class LConfusionAI extends LCharacterAI {
     }
 }
 
-export class LConfusionActivityPreprocessor extends LActivityPreprocessor {
-    public preprocess(src: LActivity): LActivity {
-        throw new Error("Method not implemented.");
-    }
-}

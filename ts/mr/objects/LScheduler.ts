@@ -9,62 +9,64 @@ import { LBehaviorId, LEntityId } from "./LObject";
 import { REGame } from "./REGame";
 
 export type LTOUnitId = number;
-export class LTOUnit {
-    private _id: LTOUnitId;
-    private _entityId: LEntityId;	        // 一連の実行中に Collapse などで map から消えたりしたら empty になる
-    //attr: LUnitAttribute;     // cache for avoiding repeated find.
-    private _behaviorId: LBehaviorId;
-    private _factionId: DFactionId;  // これも頻繁に参照するためキャッシュ
 
-    actionCount: number;    // 行動順リストを作るための一時変数。等速の場合は1,倍速の場合は2.x
-    speedLevel: number;     // 最新の Table を作った時の SpeedLevel. Entity のものと変化がある場合は Table を変更する必要がある。
-    speedLevel2: number;    // Refresh 時の一時変数
+// @MRSerializable
+// export class LTOUnit {
+//     private _id: LTOUnitId;
+//     private _entityId: LEntityId;	        // 一連の実行中に Collapse などで map から消えたりしたら empty になる
+//     //attr: LUnitAttribute;     // cache for avoiding repeated find.
+//     private _behaviorId: LBehaviorId;
+//     private _factionId: DFactionId;  // これも頻繁に参照するためキャッシュ
 
-    public constructor(id: LTOUnitId, entity: LEntity, behavior: LUnitBehavior, actionCount: number) {
-        this._id = id;
-        this._entityId = entity.entityId();
-        this._behaviorId = behavior.id();
-        this.actionCount = actionCount;
-        this.speedLevel = 0;
-        this.speedLevel2 = 0;
+//     actionCount: number;    // 行動順リストを作るための一時変数。等速の場合は1,倍速の場合は2.x
+//     speedLevel: number;     // 最新の Table を作った時の SpeedLevel. Entity のものと変化がある場合は Table を変更する必要がある。
+//     speedLevel2: number;    // Refresh 時の一時変数
 
-        this._factionId = entity.getOutwardFactionId();
-        assert(this._factionId > 0);
-    }
+//     public constructor(id: LTOUnitId, entity: LEntity, behavior: LUnitBehavior, actionCount: number) {
+//         this._id = id;
+//         this._entityId = entity.entityId();
+//         this._behaviorId = behavior.id();
+//         this.actionCount = actionCount;
+//         this.speedLevel = 0;
+//         this.speedLevel2 = 0;
 
-    public id(): number {
-        return this._id;
-    }
+//         this._factionId = entity.getOutwardFactionId();
+//         assert(this._factionId > 0);
+//     }
 
-    public entityId(): LEntityId {
-        return this._entityId;
-    }
+//     public id(): number {
+//         return this._id;
+//     }
 
-    public entity(): LEntity {
-        return REGame.world.entity(this._entityId);
-    }
+//     public entityId(): LEntityId {
+//         return this._entityId;
+//     }
 
-    public factionId(): number {
-        return this._factionId;
-    }
+//     public entity(): LEntity {
+//         return REGame.world.entity(this._entityId);
+//     }
 
-    public behavior(): LUnitBehavior {
-        return REGame.world.behavior(this._behaviorId) as LUnitBehavior;
-    }
+//     public factionId(): number {
+//         return this._factionId;
+//     }
 
-    public isValid(): boolean {
-        return this._entityId.hasAny();
-    }
+//     public behavior(): LUnitBehavior {
+//         return REGame.world.behavior(this._behaviorId) as LUnitBehavior;
+//     }
 
-    public invalidate(): void {
-        this._entityId = LEntityId.makeEmpty();
-    }
+//     public isValid(): boolean {
+//         return this._entityId.hasAny();
+//     }
 
-    public resetEntity(entity: LEntity): void {
-        this._entityId = entity.entityId();
-        this._behaviorId = entity.getEntityBehavior(LUnitBehavior).id();
-    }
-}
+//     public invalidate(): void {
+//         this._entityId = LEntityId.makeEmpty();
+//     }
+
+//     public resetEntity(entity: LEntity): void {
+//         this._entityId = entity.entityId();
+//         this._behaviorId = entity.getEntityBehavior(LUnitBehavior).id();
+//     }
+// }
 
 
 

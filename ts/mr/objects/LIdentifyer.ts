@@ -21,6 +21,7 @@ export enum DescriptionHighlightLevel {
  * 
  * これは未識別アイテムや、アイテムに化けるモンスターを表現するために必要な仕組み。
  */
+@MRSerializable
 export class LEntityDescription {
     private _iconIndex: number;
     private _name: string;

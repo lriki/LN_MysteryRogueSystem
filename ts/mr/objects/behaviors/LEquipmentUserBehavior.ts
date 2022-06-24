@@ -1,4 +1,4 @@
-import { assert, tr2 } from "ts/mr/Common";
+import { assert, MRSerializable, tr2 } from "ts/mr/Common";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { DEquipmentPartId } from "ts/mr/data/DEquipmentPart";
 import { MRData } from "ts/mr/data/MRData";
@@ -37,7 +37,8 @@ interface SlotPart2 {
  * 装備アイテムは LInventoryBehavior が持っているものを参照する。
  * この Behavior が装備アイテムEntity の親になることは無い。
  */
-export class LEquipmentUserBehavior extends LBehavior {
+ @MRSerializable
+ export class LEquipmentUserBehavior extends LBehavior {
 
 /*
 NOTE:

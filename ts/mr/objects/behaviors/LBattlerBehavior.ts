@@ -13,7 +13,9 @@ import { SEffectorFact } from "ts/mr/system/SEffectApplyer";
 import { UAction } from "ts/mr/usecases/UAction";
 import { SStepPhase } from "ts/mr/system/SCommon";
 import { DActionId } from "ts/mr/data/DCommon";
+import { MRSerializable } from "ts/mr/Common";
 
+@MRSerializable
 export class LBattlerBehavior extends LBehavior {
 
     /*

@@ -1,3 +1,4 @@
+import { MRSerializable } from "ts/mr/Common";
 import { DParameterId } from "ts/mr/data/DParameter";
 import { SPhaseResult } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
@@ -9,6 +10,7 @@ import { REGame } from "../REGame";
 
 /**
  */
+@MRSerializable
 export class LEscapeBehavior extends LBehavior {
     private _escapeAI: LEscapeAI;
     

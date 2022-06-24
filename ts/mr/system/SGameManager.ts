@@ -16,7 +16,6 @@ import { SCommandContext } from "./SCommandContext";
 import { SImmediatelyCommandExecuteScheduler } from "./SImmediatelyCommandExecuteScheduler";
 import { LEventServer } from "ts/mr/objects/LEventServer";
 import { SMinimapData } from "./SMinimapData";
-import { LFloorDirector } from "ts/mr/objects/LFloorDirector";
 import { LScheduler2 } from "ts/mr/objects/LScheduler";
 import { FMap } from "ts/mr/floorgen/FMapData";
 import { FMapBuilder } from "ts/mr/floorgen/FMapBuilder";
@@ -74,7 +73,6 @@ export class SGameManager {
         REGame.recorder = new SActivityRecorder();
         REGame.messageHistory = new LMessageHistory();
         REGame.eventServer = new LEventServer();
-        REGame.floorDirector = new LFloorDirector();
         REGame.borderWall = new LBlock(-1, -1);
 
         REGame.world._registerObject(REGame.map);
@@ -155,7 +153,7 @@ export class SGameManager {
             inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_キュアリーフ_A").id, [], "item1")));
             inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_アンチポイズン_A").id, [], "item1")));
             inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スリープドラッグ_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_フレイムリーフ_A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_アイアンシールド_A").id, [], "item1")));
             
         }
     }

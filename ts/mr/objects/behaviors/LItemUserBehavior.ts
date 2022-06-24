@@ -6,7 +6,7 @@ import { LBehavior } from "./LBehavior";
 
 
 /**
- * 
+ * @deprecated
  */
 export class LItemUserBehavior extends LBehavior {
 

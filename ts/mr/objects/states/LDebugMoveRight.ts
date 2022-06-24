@@ -7,7 +7,10 @@ import { MovingMethod } from "../LMap";
 import { LActivity } from "../activities/LActivity";
 import { LActionTokenType } from "../LActionToken";
 import { LActionTokenConsumeType } from "../LCommon";
+import { MRSerializable } from "ts/mr/Common";
 
+
+@MRSerializable
 export class LDebugMoveRightBehavior extends LBehavior {
 
     public clone(newOwner: LEntity): LBehavior {

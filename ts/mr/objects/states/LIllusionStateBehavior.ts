@@ -5,7 +5,9 @@ import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { LEscapeAI } from "../ai/LEscapeAI";
+import { MRSerializable } from "ts/mr/Common";
 
+@MRSerializable
 export class LIllusionStateBehavior extends LBehavior {
     private _characterAI: LCharacterAI;
     

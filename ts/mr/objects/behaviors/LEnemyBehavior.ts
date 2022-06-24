@@ -1,5 +1,5 @@
 
-import { assert } from "ts/mr/Common";
+import { assert, MRSerializable } from "ts/mr/Common";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import {  DEnemy, DDropItem } from "ts/mr/data/DEnemy";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -17,6 +17,7 @@ import { LInventoryBehavior } from "./LInventoryBehavior";
 
 /**
  */
+@MRSerializable
 export class LEnemyBehavior extends LBattlerBehavior {
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LEnemyBehavior);

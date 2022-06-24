@@ -8,8 +8,10 @@ import { CommandArgs, LBehavior, onDirectAttackDamaged } from "../behaviors/LBeh
 import { LEntity } from "../LEntity";
 import { MovingMethod } from "../LMap";
 import { REGame } from "../REGame";
+import { MRSerializable } from "ts/mr/Common";
 
 /** @deprecated TODO: カウンターアクションとして、"分裂" スキルを発動するようにしたい */
+@MRSerializable
 export class LEntityDivisionBehavior extends LBehavior {
     
     public clone(newOwner: LEntity): LBehavior {

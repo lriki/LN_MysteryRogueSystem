@@ -8,7 +8,6 @@ import { LIdentifyer } from "./LIdentifyer";
 import { SSequelSet } from "../system/SSequel";
 import { SImmediatelyCommandExecuteScheduler } from "ts/mr/system/SImmediatelyCommandExecuteScheduler";
 import { LEventServer } from "./LEventServer";
-import { LFloorDirector } from "./LFloorDirector";
 import { LBlock } from "./LBlock";
 import { LScheduler2 } from "./LScheduler";
 import { MRGameExtension } from "./MRGameExtension";
@@ -33,7 +32,6 @@ export class REGame
     static recorder: SActivityRecorder;
     static messageHistory: LMessageHistory;
     static eventServer: LEventServer;
-    static floorDirector: LFloorDirector;
 
     // 冒険結果の表示中かどうか
     static challengeResultShowing: boolean = false;

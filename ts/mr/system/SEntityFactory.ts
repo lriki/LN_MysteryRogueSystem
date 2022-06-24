@@ -68,7 +68,7 @@ export class SEntityFactory {
         e.addBehavior(LDecisionBehavior);
         e.addBehavior(LUnitBehavior).setFactionId(MRData.system.factions.player);
         e.addBehavior(LInventoryBehavior);
-        e.addBehavior(LItemUserBehavior);
+        //e.addBehavior(LItemUserBehavior);
         e.addBehavior(LEquipmentUserBehavior);
         e.addBehavior(LExperienceBehavior);
         e.addBehavior(LActorBehavior);    // この時点の装備品などで初期パラメータを作るので、後ろに追加しておく

@@ -1,4 +1,4 @@
-import { tr2 } from "ts/mr/Common";
+import { MRSerializable, tr2 } from "ts/mr/Common";
 import { SCommandResponse } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { LEntity } from "../LEntity";
@@ -10,6 +10,7 @@ import { MRData } from "ts/mr/data/MRData";
 
 /**
  */
+@MRSerializable
 export class LSelfExplosionBehavior extends LBehavior {
 
     /*

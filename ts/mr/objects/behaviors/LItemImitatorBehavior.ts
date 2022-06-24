@@ -1,4 +1,4 @@
-import { assert } from "ts/mr/Common";
+import { assert, MRSerializable } from "ts/mr/Common";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { DPrefabActualImage } from "ts/mr/data/DPrefab";
 import { DEventId, WalkEventArgs } from "ts/mr/data/predefineds/DBasicEvents";
@@ -55,6 +55,7 @@ import { LMinimapMarkerClass } from "../LCommon";
  * 
  * 
  */
+@MRSerializable
 export class LItemImitatorBehavior extends LBehavior {
 
     //private _itemId: DItemDataId = 0;

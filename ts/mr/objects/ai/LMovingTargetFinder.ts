@@ -1,3 +1,4 @@
+import { MRSerializable } from "ts/mr/Common";
 import { USearch } from "ts/mr/usecases/USearch";
 import { ElementFlags } from "typescript";
 import { LItemBehavior } from "../behaviors/LItemBehavior";
@@ -23,11 +24,12 @@ import { REGame } from "../REGame";
  * さらに AI のアーキテクチャはまだまだ手探り状態。
  * そのためできるだけ細かい粒度で機能を分割 (継承ではなく包含で) しておき、後々のリファクタリングに耐えやすいようにしておく。
  */
+@MRSerializable
 export class LMovingTargetFinder {
     public decide(self: LEntity): (number[] | undefined) { return undefined; }
 }
 
-
+@MRSerializable
 export class LMovingTargetFinder_Item {
     public decide(self: LEntity): (number[] | undefined) {
 
@@ -44,6 +46,7 @@ export class LMovingTargetFinder_Item {
 
 
 
+@MRSerializable
 export class LMovingTargetFinder_Gold {
     public decide(self: LEntity): (number[] | undefined) {
 

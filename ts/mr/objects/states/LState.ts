@@ -405,7 +405,4 @@ export class LState extends LObject {
     }
 }
 
-export class LStateEffectView {
-
-}
 

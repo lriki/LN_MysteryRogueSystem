@@ -5,7 +5,7 @@ import { DecisionPhase, LBehavior } from "../behaviors/LBehavior";
 import { LEntity } from "../LEntity";
 import { LState } from "./LState";
 import { DAutoRemovalTiming, DState, DStateEffect, DStateRestriction } from "ts/mr/data/DState";
-import { assert } from "ts/mr/Common";
+import { assert, MRSerializable } from "ts/mr/Common";
 import { REGame } from "../REGame";
 import { LConfusionAI, LConfusionAIRestriction } from "../ai/LConfusionAI";
 import { LActivity } from "../activities/LActivity";
@@ -21,6 +21,7 @@ import { SActivityContext } from "ts/mr/system/SActivityContext";
 
 
 
+@MRSerializable
 export class LGenericRMMZStateBehavior extends LBehavior {
     _stateTurn: number | null = 0;
     //private _persistent: boolean = false;   // 永続ステータス？
