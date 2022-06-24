@@ -56,7 +56,7 @@ export class SEmittorPerformer {
     /** 対象に効果を適用する際の基準となる向き。ノックバック方向等に使用する。0 の場合、performer の向きを採用する。 */
     private _effectDirection = 0;
 
-    private _projectilePriorityEffectSet: DEffectSet | undefined;
+    private _projectilePriorityEffectSet: DEmittor | undefined;
 
     private _onPerformed: SOnPerformedFunc | undefined;
 
@@ -104,7 +104,7 @@ export class SEmittorPerformer {
         return this;
     }
 
-    public setProjectilePriorityEffectSet(value: DEffectSet): this {
+    public setProjectilePriorityEffectSet(value: DEmittor): this {
         this._projectilePriorityEffectSet = value;
         return this;
     }
@@ -472,7 +472,7 @@ export class SEmittorPerformer {
             actualEmittor = itemEmittors[0];
         }
 
-        let actualEffectSet = actualEmittor.effectSet;
+        let actualEffectSet = actualEmittor;
         if (this._projectilePriorityEffectSet) {
             actualEffectSet = this._projectilePriorityEffectSet;
         }

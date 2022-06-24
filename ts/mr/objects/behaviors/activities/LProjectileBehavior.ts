@@ -17,6 +17,7 @@ import { DEffectHitType, DEffectSet } from "ts/mr/data/DEffect";
 import { DActionId, DBlockLayerKind } from "ts/mr/data/DCommon";
 import { SActionHitTest } from "ts/mr/system/SActionHitTest";
 import { paramThrowingDistance } from "ts/mr/PluginParameters";
+import { DEmittor, DEmittorId } from "ts/mr/data/DEmittor";
 
 /**
  * 投射可能であるか。従来の Throwable の拡張。
@@ -34,7 +35,7 @@ export class LProjectileBehavior extends LBehavior {
     blowDirection: number = 0;      // 吹き飛ばし方向
     blowMoveCount: number = 0;      // 吹き飛ばし移動数
     //blowMoveCountMax: number = 0;      // 吹き飛ばし移動数
-    private _effectSet: DEffectSet | undefined;
+    private _effectSet: DEmittorId = 0;
     //private _effectSubject: LEntityId | undefined;
     private _penetration: boolean = false;
 
@@ -72,11 +73,11 @@ export class LProjectileBehavior extends LBehavior {
     }
     
     // こちらは飛び道具効果のあるスキル（ブレスや魔法弾）
-    public static startMoveAsEffectProjectile(cctx: SCommandContext, entity: LEntity, subject: SEffectSubject, dir: number, length: number, effectSet: DEffectSet): void {
+    public static startMoveAsEffectProjectile(cctx: SCommandContext, entity: LEntity, subject: SEffectSubject, dir: number, length: number, effectSet: DEmittor): void {
         const common = entity.findEntityBehavior(LProjectileBehavior);
         assert(common);
 
-        common._effectSet = effectSet;
+        common._effectSet = effectSet.id;
         common.blowDirection = dir;
         common.blowMoveCount = length;
         
@@ -92,8 +93,13 @@ export class LProjectileBehavior extends LBehavior {
     }
 
     private hitType(): DEffectHitType {
-        if (this._effectSet) return this._effectSet.hitType();
+        if (this._effectSet) return this.effectSet.hitType();
         return DEffectHitType.Certain;
+    }
+
+    private get effectSet(): DEffectSet {
+        assert(this._effectSet);
+        return MRData.emittors[this._effectSet].effectSet;
     }
 
     
@@ -227,7 +233,7 @@ export class LProjectileBehavior extends LBehavior {
                 //this.applyEffect(cctx, self, args.sender, args.subject, DEffectCause.Affect);
                 
 
-                const effectSubject = new SEffectorFact(subject.entity(), this._effectSet, SEffectIncidentType.IndirectAttack, this.blowDirection);
+                const effectSubject = new SEffectorFact(subject.entity(), this.effectSet, SEffectIncidentType.IndirectAttack, this.blowDirection);
                 const effectContext = new SEffectContext(effectSubject, cctx.random());
         
         
