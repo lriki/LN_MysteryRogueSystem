@@ -10,7 +10,6 @@ export class VDetailsDialog extends VDialog {
         super(model);
         this._model = model;
         this._window = new VDetailsWindow(model.entity());
-        //this._window.openness = 255;
         this._window.onClose = () => this.handleClose();
         this.addWindow(this._window);
     }
@@ -23,6 +22,6 @@ export class VDetailsDialog extends VDialog {
 
     private handleClose(): void {
         SoundManager.playOk();
-        this.submit();
+        this.cancel();
     }
 }

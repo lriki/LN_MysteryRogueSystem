@@ -19,6 +19,10 @@ export class VDialog {
         this._baseModel = model;
     }
 
+    protected get model(): SDialog {
+        return this._baseModel;
+    }
+
     protected dialogContext(): SDialogContext {
         return RESystem.dialogContext;
     }
@@ -34,7 +38,6 @@ export class VDialog {
         dialog._resultCallbackVisual = (model: T) => {
             const handled = onResult(model);
             if (!handled) {
-                console.log("model.resultAction", model.resultAction);
                 switch (model.resultAction) {
                     case SDialogAction.Submit:
                         this.submit();

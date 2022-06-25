@@ -141,38 +141,40 @@ Scene_Map.prototype.update = function() {
     //SGameManager.attemptRestartFloor2(this);
 }
 
-const _Scene_Map_callMenu = Scene_Map.prototype.isMenuCalled;
+const _Scene_Map_callMenu = Scene_Map.prototype.callMenu;
 Scene_Map.prototype.callMenu = function() {
     if (REGame.map.floorId().isRMMZDefaultSystemMap()) {
         // 通常の RMMZ マップ & システム
         _Scene_Map_callMenu.call(this);
     }
-    else if (REGame.map.floorId().isTacticsMap()) {
-        // REシステムマップ
-        this.menuCalling = false;
-    }
     else {
+        // セーフティマップ。ManualActionDialog は無いので、ここから MainMenu を表示する。
         assert(RESystem.dialogContext.dialogs().length == 0);
-
-        // REセーフティマップ
-        this.menuCalling = false;
         const actorEntity = REGame.camera.focusedEntity();
         assert(actorEntity);
         RESystem.commandContext.openDialog(actorEntity, new SMainMenuDialog(actorEntity), false);
+        this.menuCalling = false;
     }
-};
+}
 
-/*
-// RE Map 内では RMMZ 通常のメニューを禁止する
-const _Scene_Map_isMenuCalled = Scene_Map.prototype.isMenuCalled;
-Scene_Map.prototype.isMenuCalled = function() {
-    if ($gameMap.isRMMZDefaultSystemMap())
-        return _Scene_Map_isMenuCalled.call(this);
-    else
-        return false;
-};
-*/
-
+const _Scene_Map_updateCallMenu = Scene_Map.prototype.updateCallMenu;
+Scene_Map.prototype.updateCallMenu = function() {
+    if (REGame.map.floorId().isRMMZDefaultSystemMap()) {
+        // 通常の RMMZ マップ & システム
+        _Scene_Map_updateCallMenu.call(this);
+    }
+    else if (REGame.map.floorId().isTacticsMap()) {
+        // タクティクスマップ。MainMenu の表示は ManualActionDialog から行う。
+        // Scene_Map からのメニュー表示は行わない。
+        this.menuCalling = false;
+    }
+    else {
+        // セーフティマップ。ManualActionDialog は無いので、ここから MainMenu を表示する。
+        if (RESystem.dialogContext.dialogs().length == 0) {
+            _Scene_Map_updateCallMenu.call(this);
+        }
+    }
+}
 
 const _Scene_Map_shouldAutosave = Scene_Map.prototype.shouldAutosave;
 Scene_Map.prototype.shouldAutosave = function() {

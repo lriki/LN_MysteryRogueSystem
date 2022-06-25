@@ -13,16 +13,21 @@ export class VDetailsWindow extends Window_Base {
         this.refresh();
     }
     
-    update(): void {
-        super.update();
+    private isOpenAndActive(): boolean {
+        return this.isOpen() && this.visible && this.active;
+    };
 
-        if (this.isTriggered()) {
-            this.close();
+    update(): void {
+
+        if (this.isOpenAndActive()) {
+            if (this.isTriggered()) {
+                this.close();
+            }
         }
+        super.update();
     }
 
     close(): void {
-        super.close();
         if (this.onClose) {
             this.onClose();
         }

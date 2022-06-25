@@ -125,7 +125,7 @@ export class VItemListDialogBase extends VDialog {
     private handleDetails(): void {
         const itemEntity = this.itemListWindow.selectedItem();
         const model = new SDetailsDialog(itemEntity);
-        this.openSubDialog(model, (result: any) => {
+        this.model.openSubDialog(model, (result: SDetailsDialog) => {
             this.activateCommandWindow();
             return true;
         });

@@ -118,6 +118,11 @@ export class SDialog {
     //     return this._dialogResult.action == SDialogAction.Cancel;
     // }
 
+    /**
+     * SubDialog を開く。
+     * 
+     * onResult が呼ばれる時点で、dialog はスタックから取り除かれている。
+     */
     public openSubDialog<T extends SDialog>(dialog: T, onResult?: ((model: T) => boolean | void) | undefined) {
         dialog._resultCallbackVisual = (model: T) => {
             const handled = (onResult) ? onResult(model) : false;
@@ -127,7 +132,8 @@ export class SDialog {
                         this.submit();
                         break;
                     case SDialogAction.Cancel:
-                        //this.cancel();
+                        // ほとんどの場合ひとつ前の Dialog に戻ることを想定しているため、
+                        // 親 Dialog まで cancel を伝播するようなことはしない。
                         break;
                     case SDialogAction.CloseAllSubDialogs:
                         if (RESystem.dialogContext.dialogs().length >= 2) {

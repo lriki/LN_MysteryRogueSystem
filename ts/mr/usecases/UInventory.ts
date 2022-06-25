@@ -75,19 +75,14 @@ export class UInventory {
         }
         
 
-        console.log("!!!!!  storeItems", items);
-
         items.forEach(item => {
-            console.log("0");
             // Item を取り出せるか確認
             cctx.post(user, user, subject, item, testPickOutItem,
                 () => {
-                    console.log("2");
 
                     // Item を格納できるか確認
                     cctx.post(warehouse, warehouse, subject, item, testPutInItem,
                         () => {
-                            console.log("4");
     
                             // Item を移す
                             userInventory.removeEntity(item);
@@ -116,16 +111,13 @@ export class UInventory {
         }
 
         items.forEach(item => {
-            console.log("0");
             // Item を取り出せるか確認
             cctx.post(warehouse, warehouse, subject, item, testPickOutItem,
                 () => {
-                    console.log("2");
 
                     // Item を格納できるか確認
                     cctx.post(user, user, subject, item, testPutInItem,
                         () => {
-                            console.log("4");
     
                             // Item を移す
                             warehouseInventory.removeEntity(item);

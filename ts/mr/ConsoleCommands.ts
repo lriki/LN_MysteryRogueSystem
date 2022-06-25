@@ -99,7 +99,6 @@ function getItem(itemKey: string) {
 
 Object.defineProperty((window as any).MR, "player", {
     get: function(): LEntity {
-        console.log("player!!!!");
         const player = REGame.camera.focusedEntity();
         assert(player);
         return player;
