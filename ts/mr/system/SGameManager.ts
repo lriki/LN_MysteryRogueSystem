@@ -138,7 +138,7 @@ export class SGameManager {
            
         // test
         //REGame.camera.focusedEntity()?.setActualParam(DBasics.params.hp, 2);
-        if (1) {
+        if (0) {
             const inventory = firstActor.getEntityBehavior(LInventoryBehavior);
             //const inventory = REGame.world.getFirstEntityByKey("kEntity_Warehouse_A").getEntityBehavior(LInventoryBehavior);
             inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スピードドラッグ_A").id, [], "item1")));

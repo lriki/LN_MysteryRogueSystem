@@ -780,6 +780,7 @@ export class MRDataManager {
             if (x) {
                 entity.display.name = DHelpers.parseDisplayName(x.name);
                 entity.display.iconIndex = x.iconIndex ?? 0;
+                entity.description = x.description;
                 entity.sellingPrice2 = x.price;
                 entity.purchasePrice = Math.max(entity.sellingPrice2 / 2, 1);
                 entity.equipment = new DEquipment();
@@ -824,6 +825,7 @@ export class MRDataManager {
             if (x) {
                 entity.display.name = x.name;
                 entity.display.iconIndex = x.iconIndex ?? 0;
+                entity.description = x.description;
                 entity.sellingPrice2 = x.price;
                 entity.purchasePrice = Math.max(entity.sellingPrice2 / 2, 1);
                 entity.equipment = new DEquipment();
