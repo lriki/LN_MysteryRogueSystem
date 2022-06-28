@@ -1,4 +1,4 @@
-import { assert } from "ts/mr/Common";
+import { assert, tr2 } from "ts/mr/Common";
 import { MRData } from "ts/mr/data/MRData";
 import { LEquipmentUserBehavior } from "ts/mr/objects/behaviors/LEquipmentUserBehavior";
 import { LInventoryBehavior } from "ts/mr/objects/behaviors/LInventoryBehavior";
@@ -86,7 +86,9 @@ export class VItemListWindow extends Window_Selectable {
     }
     
     public selectedItem(): LEntity {
-        return this.itemAt(this.index()).entity;
+        const item = this.itemAt(this.index());
+        assert(item);
+        return item.entity;
     }
 
     public isMultipleSelecting(): boolean {
@@ -105,7 +107,8 @@ export class VItemListWindow extends Window_Selectable {
 
         if (result.length == 0) {
             // もしひとつも選択状態ないなら、カーソル位置の Item を返す
-            return [this.itemAt(this.index()).entity];
+            const item = this.itemAt(this.index());
+            return item ? [item.entity] : [];
         }
         else {
             // 選択された順で返す
@@ -136,7 +139,7 @@ export class VItemListWindow extends Window_Selectable {
     
     // override
     isCurrentItemEnabled(): boolean {
-        return true;
+        return this._items.length > 0;
     }
 
     // override
@@ -151,7 +154,8 @@ export class VItemListWindow extends Window_Selectable {
     // override
     drawAllItems(): void {
         if (this.maxItems() <= 0) {
-            this.drawText("なにも持っていない", 0, 0, 300, "left");
+            const rect = this.itemLineRect(0);
+            this.drawText(tr2("なにも持っていない"), rect.x, rect.y, 300, "left");
         }
         else {
             super.drawAllItems();
@@ -176,7 +180,10 @@ export class VItemListWindow extends Window_Selectable {
         super.update();
         if (Input.isTriggered("pageup")) {
             if (this.multipleSelectionEnabled) {
-                this.toggleItemSelection(this.itemAt(this.index()));
+                const item = this.itemAt(this.index());
+                if (item) {
+                    this.toggleItemSelection(item);
+                }
             }
         }
     }
@@ -255,8 +262,11 @@ export class VItemListWindow extends Window_Selectable {
         return this.textWidth("000");
     }
 
-    private itemAt(index: number): VItemListWindowItem {
-        if (this._pagenationEnabled) {
+    private itemAt(index: number): VItemListWindowItem | undefined {
+        if (this._items.length == 0) {
+            return undefined;
+        }
+        else if (this._pagenationEnabled) {
             return this._items[this._currentPageIndex * this.itemsParPage + index];
         }
         else {
