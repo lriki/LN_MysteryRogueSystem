@@ -73,3 +73,23 @@ test("concretes.dialogs.FeetDialog.ExitPoint", () => {
     expect(commands[0].actionId).toBe(MRBasics.actions.ForwardFloorActionId);   // [進む]
 });
 
+test("concretes.dialogs.FeetDialog.Trap", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_FlatMap50x50;
+
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
+    
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_地雷_A").id, [], "trap1"));
+    REGame.world.transferEntity(trap1, floorId, 10, 10);
+
+    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    const dialog = new SFeetDialog(player1, trap1);
+    RESystem.dialogContext.activeDialog().openSubDialog(dialog);
+
+    const commands = dialog.makeActionList();
+    expect(commands.length).toBe(1);
+    expect(commands[0].actionId).toBe(MRBasics.actions.trample);   // [踏む]
+});
+
+

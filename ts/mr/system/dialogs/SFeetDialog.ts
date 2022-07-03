@@ -13,25 +13,25 @@ import { SItemListDialog } from "./SItemListDialog";
 
 export class SFeetDialog extends SDialog {
     private _actorEntityId: LEntityId;
-    private _targetEntityId: LEntityId;
+    private _itemEntityId: LEntityId;
 
     constructor(actorEntity: LEntity, targetEntity: LEntity) {
         super();
         this._actorEntityId = actorEntity.entityId();
-        this._targetEntityId = targetEntity.entityId();
+        this._itemEntityId = targetEntity.entityId();
     }
 
     public get actor(): LEntity {
         return REGame.world.entity(this._actorEntityId);
     }
 
-    public targetEntity(): LEntity {
-        return REGame.world.entity(this._targetEntityId);
+    public get item(): LEntity {
+        return REGame.world.entity(this._itemEntityId);
     }
     
     
     public makeActionList(): SDialogCommand[] {
-        const item = this.targetEntity();
+        const item = this.item;
         const actor = this.actor;
         let commands: SDialogCommand[] = [];
         
@@ -50,11 +50,12 @@ export class SFeetDialog extends SDialog {
             }
         }
         
-        return commands.concat(SItemListDialog.normalizeActionList(actualActions).map(a => SDialogCommand.makeActivityCommand(a, _ => this.handleAction(a))));
+        const result = commands.concat(SItemListDialog.normalizeActionList(actualActions).map(a => SDialogCommand.makeActivityCommand(a, _ => this.handleAction(a))));
+        return result;
     }
 
     private handleAction(actionId: DActionId): void {
-        SCommonCommand.handleAction(this, this.actor, this.actor.getEntityBehavior(LInventoryBehavior), this.targetEntity(), actionId);
+        SCommonCommand.handleAction(this, this.actor, this.actor.getEntityBehavior(LInventoryBehavior), this.item, actionId);
     }
 
     // public makeActionList(): DActionId[] {

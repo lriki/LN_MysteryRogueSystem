@@ -85,7 +85,13 @@ export class LTrapBehavior extends LBehavior {
 
     
     onQueryReactions(self: LEntity, actions: DActionId[]): void {
-        actions.mutableRemove(x => x == MRBasics.actions.PickActionId);
+        // Trap 側で Action を非表示にする方がよいだろう。
+        // 例えば Trap を標準システムではなく拡張と考えた時、
+        // Player 側からは「Trap であるか」といった判断はするべきではない。
+        actions.mutableRemoveAll(x =>
+            x == MRBasics.actions.PickActionId ||
+            x == MRBasics.actions.ThrowActionId);
+        actions.push(MRBasics.actions.trample);
     }
 
     onAttached(self: LEntity): void {

@@ -153,6 +153,7 @@ export class LUnitBehavior extends LBehavior {
     
     onQueryActions(actions: DActionId[]): DActionId[] {
         return actions.concat([
+            MRBasics.actions.trample,
             MRBasics.actions.PickActionId,
             MRBasics.actions.PutActionId,
             //DBasics.actions.ExchangeActionId,

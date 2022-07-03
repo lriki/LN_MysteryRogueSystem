@@ -350,7 +350,7 @@ export class MRDataManager {
             RollActionId: MRData.newAction("Roll").id,
             FallActionId: MRData.newAction("Fall").id,
             DropActionId: MRData.newAction("Drop").id,
-            trample: MRData.newAction("trample").id,
+            trample: MRData.newAction("踏む").id,
             TrashActionId: MRData.newAction("Trash").id,
             ForwardFloorActionId: MRData.newAction("すすむ").id,
             BackwardFloorActionId: MRData.newAction("戻る").id,
