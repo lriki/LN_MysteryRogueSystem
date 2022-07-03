@@ -12,7 +12,7 @@
 | troop | string | - | 出現させるトループの MR-Key。1か所に複数の Entity を出現させることができます。 data とは同時に指定できません。 |
 | stack | number | 1 | 出現したエンティティのスタック数。 |
 | rate | number | 100 | 出現率。 |
-
+| overrideEvent | boolean | false | エンティティを出現させる際の見た目として、この @MR-Spawner が記述されているイベントを使用します。 |
 
 
 ### 例
