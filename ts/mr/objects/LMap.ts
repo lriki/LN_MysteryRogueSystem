@@ -93,6 +93,8 @@ export class LMap extends LObject {
         this._floorId = floorId;
         this.unitClarity = false;
         this.itemClarity = false;
+        this.trapClarity = false;
+        this.sightClarity = false;
         this.build(mapData);
     }
 

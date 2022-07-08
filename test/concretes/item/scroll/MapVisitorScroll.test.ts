@@ -55,5 +55,18 @@ test("concretes.item.scroll.MapVisitorScroll", () => {
     const trap1Visibility2 = SView.getEntityVisibility(trap1);
     expect(trap1Visibility2.visible).toBeTruthy();
     expect(SNavigationHelper.testVisibilityForMinimap(player1, trap1)).toBeTruthy();
+
+    //----------------------------------------------------------------------------------------------------
+    
+    const floorId2 = TestEnv.FloorId_UnitTestFlatMap50x50;
+    
+    REGame.world.transferEntity(player1, floorId2, 10, 10);
+    TestEnv.performFloorTransfer();
+
+    // マップを切り替えれば可視フラグはリセットされる
+    expect(REGame.map.unitClarity).toBeFalsy();
+    expect(REGame.map.itemClarity).toBeFalsy();
+    expect(REGame.map.trapClarity).toBeFalsy();
+    expect(REGame.map.sightClarity).toBeFalsy();
 });
 
