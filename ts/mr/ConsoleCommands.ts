@@ -76,7 +76,7 @@ function moveToExit() {
     REGame.world.transferEntity(player, player.floorId, exitPoint.mx, exitPoint.my);
 }
 
-function getItem(itemKey: string) {
+function addItem(itemKey: string) {
     const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity(itemKey).id));
     const player = REGame.camera.focusedEntity();
     if (!player) return;
@@ -94,7 +94,7 @@ function getItem(itemKey: string) {
     setVariable: setVariable,
     levelMax: levelMax,
     moveToExit: moveToExit,
-    getItem: getItem,
+    addItem: addItem,
 };
 
 Object.defineProperty((window as any).MR, "player", {
