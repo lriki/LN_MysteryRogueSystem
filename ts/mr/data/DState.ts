@@ -17,7 +17,10 @@ export enum DAutoRemovalTiming {
     TurnEnd = 2,
 
     ActualParam,
+
+    /** ダメージを "与えようとされたか" */
     DamageTesting,
+    
     FloorTransfer,
 }
 
@@ -107,6 +110,11 @@ export interface DStateMatchConditions {
     kindId: DEntityKindId;
 }
 
+export interface DStateDamageRemovel {
+    paramId: DParameterId;  // このパラメータに対するダメージを受けた時に解除判定する
+    chance: number; // 解除率(0~100)
+}
+
 export class DStateEffect {
 
     /** このステートが Match の子効果として定義される際の有効化条件 */
@@ -121,9 +129,18 @@ export class DStateEffect {
     behaviors: DBehaviorInstantiation[];
 
 
-    /** 自動解除のタイミング */
-    //autoRemovalTiming: DAutoRemovalTiming;
+    /**
+     * 自動解除の定義。
+     */
+    // TODO : 色々あるから Trait ぽくしてるけど、その分乗るオーバーヘッドに対してメリットが無さそう。
+    // 個別にしていいかも。
+    // リスト化する必要があるのは DamageTesting くらいか。
     autoRemovals: DAutoRemoval[];
+
+    /** ダメージを実際に受けた時の解除判定 (ミスしたときは解除判定しない) */
+    damageRemovels: DStateDamageRemovel[]
+
+
 
 
     public constructor() {
@@ -132,6 +149,7 @@ export class DStateEffect {
         this.traits = [];
         this.behaviors = [];
         this.autoRemovals = [];
+        this.damageRemovels = [];
     }
 }
 

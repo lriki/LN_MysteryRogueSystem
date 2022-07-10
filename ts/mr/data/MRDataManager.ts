@@ -602,8 +602,9 @@ export class MRDataManager {
                         state.message4 = x.message4 ?? "";
                         state.effect.behaviors = meta.behaviors;
                         state.effect.traits = x.traits.concat(meta.traits);
-                        //state.effect.traits = x.traits.concat(DTrait.parseTraitMetadata(x.meta));
-                        //state.effect.behaviors = makeStateBehaviorsFromMeta(x.meta);
+                        if (x.removeByDamage) {
+                            state.effect.damageRemovels.push({paramId: MRBasics.params.hp, chance: x.chanceByDamage});
+                        }
                         state.import(x);
                     }
                 }

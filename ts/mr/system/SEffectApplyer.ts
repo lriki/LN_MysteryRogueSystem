@@ -742,6 +742,7 @@ export class SEffectApplyer {
             if (value > 0) {
                 // TODO:
                 //target.onDamage(value);
+                this.removeStatesByDamage(target, paramEffect.paramId);
             }
             this.gainDrainedParam(paramEffect, value);
         }
@@ -910,6 +911,20 @@ export class SEffectApplyer {
         if (stateData.deadState) {
             result.clearParamEffects();
         }
+    }
+
+    private removeStatesByDamage(target: LEntity, paramId: DParameterId) {
+        const removeStates: DStateId[] = [];
+        target.iterateStates(s => {
+            const data = s.stateData();
+            for (const r of data.effect.damageRemovels) {
+                if (r.paramId == paramId &&
+                    this._rand.nextIntWithMax(100) < r.chance) {
+                    removeStates.push(s.stateDataId());
+                }
+            }
+        });
+        target.removeStates(removeStates);
     }
 
     // Game_Action.prototype.itemEffectRemoveState 

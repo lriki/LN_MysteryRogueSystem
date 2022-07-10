@@ -1416,13 +1416,12 @@ export class MRSetup {
             case "kState_System_kNap":
                 data.effect.autoRemovals.push({ kind: DAutoRemovalTiming.DamageTesting, paramId: MRBasics.params.hp });
                 break;
-            case "kState_UTアイテム擬態":
-                data.effect.behaviors.push({ name: "LItemImitatorBehavior" });
-                break;
             case "kState_仮眠2":
-                //data.behaviors.push("LDoze2Behavior");
                 data.effect.traits.push({ code: MRBasics.traits.StateRemoveByEffect, dataId: 0, value: 0 });
                 data.idleSequel = MRBasics.sequels.asleep;
+                break;
+            case "kState_UTアイテム擬態":
+                data.effect.behaviors.push({ name: "LItemImitatorBehavior" });
                 break;
             case "kState_UT魔法使い":
                 data.effect.traits.push({ code: MRBasics.traits.EquipmentProficiency, dataId: MRData.getEntityKind("Weapon").id, value: 0.5 });

@@ -930,6 +930,8 @@ export class LEntity extends LObject
     }
 
     public removeStates(stateIds: DStateId[]) {
+        if (stateIds.length == 0) return;
+
         this._states = UState.resolveStates(this, [], stateIds).map(s => s.id());
 
         // 自動追加の更新を行う

@@ -189,4 +189,42 @@ test("concretes.states.ShallowSleep.Issue1", () => {
     expect(affected).toBe(100);
 });
 
+// 特殊仮眠(攻撃されることでのみ解除) 攻撃による解除チェック
+test("concretes.states.ShallowSleep.DamageRemoval", () => {
+    TestEnv.newGame();
+    const stateId = MRData.getState("kState_仮眠2").id;
+
+    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10, 6);
+    
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
+    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+
+    // からぶり攻撃
+    player1.addState(MRData.getState("kState_UTからぶり").id);
+    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, RESystem.skills.normalAttack, 6).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    // 実際にダメージを受けていないので、ステートは解除されない
+    expect(enemy1.hasState(stateId)).toBeTruthy();
+    
+    //----------------------------------------------------------------------------------------------------
+
+    // 必中攻撃
+    player1.removeAllStates(true);
+    player1.addState(TestEnv.StateId_CertainDirectAttack);
+    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, RESystem.skills.normalAttack, 6).withConsumeAction());
+    RESystem.dialogContext.activeDialog().submit();
+
+    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+
+    // ダメージを受けたら解除
+    expect(enemy1.hasState(stateId)).toBeFalsy();
+});
+
 
