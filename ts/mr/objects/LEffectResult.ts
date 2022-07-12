@@ -1,7 +1,7 @@
 import { assert, MRSerializable, tr2 } from "ts/mr/Common";
 import { DState, DStateId } from "ts/mr/data/DState";
 import { MRData } from "ts/mr/data/MRData";
-import { DescriptionHighlightLevel, LEntityDescription } from "ts/mr/objects/LIdentifyer";
+import { DescriptionHighlightColor, LEntityDescription } from "ts/mr/objects/LIdentifyer";
 import { LEntity } from "ts/mr/objects/LEntity";
 import { SCommandContext } from "../system/SCommandContext";
 import { DParameterId, DParamMessageValueSource, REData_Parameter } from "ts/mr/data/DParameter";
@@ -334,7 +334,7 @@ export class LEffectResult {
 
             // 経験値
             {
-                const targetName = LEntityDescription.makeDisplayText(UName.makeUnitName(entity), DescriptionHighlightLevel.UnitName);
+                const targetName = LEntityDescription.makeDisplayText(UName.makeUnitName(entity), DescriptionHighlightColor.UnitName);
 
                 if (this.gainedExp > 0) {
                     const text = DTextManager.obtainExp.format(this.gainedExp, DTextManager.exp);

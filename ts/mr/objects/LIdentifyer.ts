@@ -1,16 +1,15 @@
-import { MRSerializable, tr2 } from "ts/mr/Common";
+import { assert, MRSerializable, tr2 } from "ts/mr/Common";
 import { DEntityId, DIdentificationDifficulty } from "ts/mr/data/DEntity";
 import { DLand } from "ts/mr/data/DLand";
 import { MRData } from "ts/mr/data/MRData";
 import { SView } from "ts/mr/system/SView";
 import { LEntity } from "./LEntity";
 
-export enum DescriptionHighlightLevel {
+export enum DescriptionHighlightColor {
     Identified,         // 識別済み。白テキスト
     Unidentified,       // 未識別。黄テキスト
     UserIdentified,     // ユーザーから名指定済み。緑テキスト
     UnitName,       //
-    Number,             // ダメージ値などの数字
 }
 
 /**
@@ -25,7 +24,7 @@ export enum DescriptionHighlightLevel {
 export class LEntityDescription {
     private _iconIndex: number;
     private _name: string;
-    private _highlightLevel: DescriptionHighlightLevel;
+    private _highlightLevel: DescriptionHighlightColor;
     private _upgrades: number;
     private _capacity: number | undefined;
 
@@ -37,7 +36,7 @@ export class LEntityDescription {
         23,  // Number
     ];
     
-    constructor(iconIndex: number, name: string, level: DescriptionHighlightLevel, upgrades: number, capacity: number | undefined) {
+    constructor(iconIndex: number, name: string, level: DescriptionHighlightColor, upgrades: number, capacity: number | undefined) {
         this._iconIndex = iconIndex;
         this._name = name;
         this._highlightLevel = level;
@@ -76,11 +75,11 @@ export class LEntityDescription {
     }
     */
     
-    private static getColorNumber(level: DescriptionHighlightLevel): number {
+    private static getColorNumber(level: DescriptionHighlightColor): number {
         return this._levelColorTable[level];
     }
 
-    public static makeDisplayText(name: string, level: DescriptionHighlightLevel): string {
+    public static makeDisplayText(name: string, level: DescriptionHighlightColor): string {
         return `\\C[${this.getColorNumber(level)}]${name}\\C[0]`;
     }
 }
@@ -91,6 +90,17 @@ interface IdentificationState {
     nameIdentified: boolean;    // 名前識別済み
     pseudonym: string;          // ランダム割り当てされた名前
     nickname: string | undefined;           // ユーザー指定の仮名
+}
+
+export enum EntityIdentificationLevel {
+    /** 未識別。 */
+    Unidentified,
+
+    /** 種別識別済み。名前が黄色で表示される。説明は見ることができる。修正値や呪いの有無はわからない。 */
+    KindIdentified,
+
+    /** 個体識別済み。修正値や説明文も見ることができる。 */
+    IndividualIdentified,
 }
 
 /**
@@ -160,51 +170,94 @@ export class LIdentifyer {
         }
     }
 
+    public getEntityIdentificationLevel(viewSubject: LEntity, entity: LEntity): EntityIdentificationLevel {
+        const dataId = entity.dataId;
+        const entityData = entity.data;
+        const state = this._identificationStates[dataId];
+
+        // そもそも未識別となりえないものは識別済みとする
+        // if (!state) {
+        //     return EntityIdentificationLevel.IndividualIdentified;
+        // }
+
+
+        // 種別未識別になる(=名前が仮名になる)可能性がある？
+        if (state) {
+            if (entity.individualIdentified()) {
+                // 個体識別済み
+                return EntityIdentificationLevel.IndividualIdentified;
+            }
+
+            if (state.nameIdentified) {// 呪い状態などを受けないものは、名前識別済みであれば個体識別済みとする
+                if (entityData.canModifierState) {
+                    return EntityIdentificationLevel.KindIdentified;
+                }
+                else {
+                    return EntityIdentificationLevel.IndividualIdentified;
+                }
+            }
+            else {
+                return EntityIdentificationLevel.Unidentified;
+            }
+        }
+        // 種別識別という状態を持つ必要が無ければ、個体識別済みかそうでないかのみ扱う。
+        else {
+            if (entity.individualIdentified()) {
+                // 個体識別済み
+                return EntityIdentificationLevel.IndividualIdentified;
+            }
+            else {
+                // 個体識別されていなくても、種別はわかる
+                return EntityIdentificationLevel.KindIdentified;
+            }
+        }
+    }
+
     public resolveDescription(viewSubject: LEntity, entity: LEntity): LEntityDescription {
         const dataId = entity.dataId;
         const entityData = entity.data;
 
         const state = this._identificationStates[dataId];
-        let individualIdentified = true;
-        let globalIdentified = true;
+        //let individualIdentified = true;
+        //let globalIdentified = true;
+        
         let pseudonym = "";
-        let level = DescriptionHighlightLevel.Identified;
+        let level = DescriptionHighlightColor.Identified;
+        const entityIdentificationLevel = this.getEntityIdentificationLevel(viewSubject, entity);
 
         // 個体識別済み？
-        if (!entity.individualIdentified()) {
-            individualIdentified = false;
-            level = DescriptionHighlightLevel.Unidentified;
+        if (entityIdentificationLevel == EntityIdentificationLevel.IndividualIdentified) {
+            level = DescriptionHighlightColor.Unidentified;
         }
 
-        // 種別(名前)識別済みの有無は個体識別済みよりも強い。
-        // 仮に個体識別済みでも、種別未識別であれば正しい名前を表示することはできない。
-        if (state && !state.nameIdentified) {
-            globalIdentified = false;
-            pseudonym = state.pseudonym;
-            level = DescriptionHighlightLevel.Unidentified;
+        if (entityIdentificationLevel <= EntityIdentificationLevel.KindIdentified) {
+            if (state) {
+                pseudonym = state.pseudonym;
+            }
+            level = DescriptionHighlightColor.Unidentified;
         }
 
         // 呪い状態などを受けないものは、名前識別済みであれば個体識別済みとする
-        if (globalIdentified && !entityData.canModifierState) {
-            individualIdentified = true;
-            level = DescriptionHighlightLevel.Identified;
-        }
+        // if (globalIdentified && !entityData.canModifierState) {
+        //     individualIdentified = true;
+        //     level = DescriptionHighlightColor.Identified;
+        // }
 
 
         const nameView = SView.getLookNames(viewSubject, entity);
         let displayName = pseudonym;
-        if (globalIdentified) {
+        if (entityIdentificationLevel >= EntityIdentificationLevel.KindIdentified) {
             displayName = nameView.name;
         }
 
         let upgrades = 0;
-        if (individualIdentified && globalIdentified) {
+        if (entityIdentificationLevel >= EntityIdentificationLevel.IndividualIdentified) {
             upgrades = nameView.upgrades;
         }
 
         let capacity = undefined;
         if (nameView.capacity !== undefined && nameView.initialCapacity) {
-            if (!individualIdentified || !globalIdentified) {
+            if (entityIdentificationLevel <= EntityIdentificationLevel.KindIdentified) {
                 // 何かしら未識別？
                 capacity = nameView.capacity - nameView.initialCapacity;
 
@@ -219,10 +272,10 @@ export class LIdentifyer {
 
         
         let iconIndex = nameView.iconIndex;
-        if (!individualIdentified || !globalIdentified) {
+        if (entityIdentificationLevel <= EntityIdentificationLevel.KindIdentified) {
             // 何かしら未識別？
         }
-        else if (individualIdentified) {
+        else if (entityIdentificationLevel >= EntityIdentificationLevel.IndividualIdentified) {
             // 個体識別済み
             const states = entity.states();
             if (states.length > 0) {

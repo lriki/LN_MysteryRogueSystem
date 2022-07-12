@@ -1,6 +1,6 @@
 import { assert } from "ts/mr/Common";
 import { LEntity } from "ts/mr/objects/LEntity";
-import { DescriptionHighlightLevel, LEntityDescription } from "ts/mr/objects/LIdentifyer";
+import { DescriptionHighlightColor, LEntityDescription } from "ts/mr/objects/LIdentifyer";
 import { REGame } from "ts/mr/objects/REGame";
 import { SView } from "ts/mr/system/SView";
 
@@ -13,7 +13,7 @@ export class UName {
         if (!viewSubject) viewSubject = REGame.camera.focusedEntity();
         assert(viewSubject);
         const nameView = SView.getLookNames(viewSubject, entity);
-        const targetName = LEntityDescription.makeDisplayText(nameView.name, DescriptionHighlightLevel.UnitName);
+        const targetName = LEntityDescription.makeDisplayText(nameView.name, DescriptionHighlightColor.UnitName);
         return targetName;
     }
 

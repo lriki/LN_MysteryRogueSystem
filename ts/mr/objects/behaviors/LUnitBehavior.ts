@@ -10,7 +10,7 @@ import { MRBasics } from "ts/mr/data/MRBasics";
 import { UMovement } from "ts/mr/usecases/UMovement";
 import { SEffectContext, SEffectSubject } from "ts/mr/system/SEffectContext";
 import { LActivity } from "../activities/LActivity";
-import { DescriptionHighlightLevel, LEntityDescription } from "../LIdentifyer";
+import { DescriptionHighlightColor, LEntityDescription } from "../LIdentifyer";
 import { SSoundManager } from "ts/mr/system/SSoundManager";
 import { DFactionId, MRData } from "ts/mr/data/MRData";
 import { MovingMethod } from "../LMap";
@@ -244,7 +244,7 @@ export class LUnitBehavior extends LBehavior {
                 if (itemEntity) {
                     actx.postHandleActivity(cctx, itemEntity)
                     .then(() => {
-                        const name = LEntityDescription.makeDisplayText(UName.makeUnitName(self), DescriptionHighlightLevel.UnitName);
+                        const name = LEntityDescription.makeDisplayText(UName.makeUnitName(self), DescriptionHighlightColor.UnitName);
 
                         const gold = itemEntity.findEntityBehavior(LGoldBehavior);
                         if (gold) {

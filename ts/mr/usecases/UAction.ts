@@ -10,7 +10,7 @@ import { REGame } from "ts/mr/objects/REGame";
 import { MRBasics } from "../data/MRBasics";
 import { DActionId, DBlockLayerKind } from "../data/DCommon";
 import { LInventoryBehavior } from "../objects/behaviors/LInventoryBehavior";
-import { DescriptionHighlightLevel, LEntityDescription } from "../objects/LIdentifyer";
+import { DescriptionHighlightColor, LEntityDescription } from "../objects/LIdentifyer";
 import { Helpers } from "../system/Helpers";
 import { RESystem } from "../system/RESystem";
 import { STask, SCommandContext } from "../system/SCommandContext";
@@ -153,7 +153,7 @@ export class UAction {
                 REGame.map._removeEntity(itemEntity);
                 inventory.addEntityWithStacking(itemEntity);
                 
-                const name = LEntityDescription.makeDisplayText(UName.makeUnitName(self), DescriptionHighlightLevel.UnitName);
+                const name = LEntityDescription.makeDisplayText(UName.makeUnitName(self), DescriptionHighlightColor.UnitName);
                 cctx.postMessage(tr("{0} は {1} をひろった", name, UName.makeNameAsItem(itemEntity)));
                 SSoundManager.playPickItem();
 

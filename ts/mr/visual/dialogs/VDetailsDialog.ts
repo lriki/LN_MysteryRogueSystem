@@ -9,7 +9,7 @@ export class VDetailsDialog extends VDialog {
     constructor(model: SDetailsDialog) {
         super(model);
         this._model = model;
-        this._window = new VDetailsWindow(model.entity());
+        this._window = new VDetailsWindow(model);
         this._window.onClose = () => this.handleClose();
         this.addWindow(this._window);
     }
