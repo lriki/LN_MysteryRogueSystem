@@ -1,10 +1,13 @@
 import { UTransfer } from "ts/mr/usecases/UTransfer";
 import { assert } from "../Common";
+import { DEntityCreateInfo } from "../data/DEntity";
+import { MRData } from "../data/MRData";
 import { LActorBehavior } from "../objects/behaviors/LActorBehavior";
 import { LExperienceBehavior } from "../objects/behaviors/LExperienceBehavior";
 import { LInventoryBehavior } from "../objects/behaviors/LInventoryBehavior";
 import { LEntity } from "../objects/LEntity";
 import { REGame } from "../objects/REGame";
+import { SEntityFactory } from "../system/internal";
 import { RESystem } from "../system/RESystem";
 
 function commandTarget(): LEntity | undefined {
@@ -21,6 +24,34 @@ Game_Interpreter.prototype.updateWaitMode = function(): boolean {
     }
     else {
         return _Game_Interpreter_updateWaitMode.call(this);
+    }
+}
+
+// Conditional Branch
+const _Game_Interpreter_command111 = Game_Interpreter.prototype.command111;
+Game_Interpreter.prototype.command111 = function(params: any): boolean {
+    const entity = commandTarget();
+    if (entity) {
+        let result = false;
+        switch (params[0]) {
+            case 8: { // Item
+                const inventory = entity.findEntityBehavior(LInventoryBehavior);
+                if (inventory) {
+                    const entityDataId = MRData.itemData(params[1]).entityId;
+                    result = !!inventory.items.find(x => x.dataId == entityDataId);
+                }
+                break;
+            }
+        }
+
+        this._branch[this._indent] = result;
+        if (this._branch[this._indent] === false) {
+            this.skipBranch();
+        }
+        return true;
+    }
+    else {
+        return _Game_Interpreter_command111.call(this, params);
     }
 }
 
@@ -66,6 +97,27 @@ Game_Interpreter.prototype.command125 = function(params) {
 
     return true;
 }
+
+// Change Items
+const _Game_Interpreter_command126 = Game_Interpreter.prototype.command126;
+Game_Interpreter.prototype.command126 = function(params) {
+    //_Game_Interpreter_command126.call(this, params);
+
+    const entity = commandTarget();
+    if (entity) {
+        const inventory = entity.findEntityBehavior(LInventoryBehavior);
+        if (inventory) {
+            const entityDataId = MRData.itemData(params[0]).entityId;
+            const value = Math.min(this.operateValue(params[1], params[2], params[3]), inventory.remaining);
+            for (let i = 0; i < value; i++) {
+                const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(entityDataId));
+                inventory.addEntity(item);
+            }
+        }
+    }
+
+    return true;
+};
 
 // Change Level
 const _Game_Interpreter_command316 = Game_Interpreter.prototype.command316;

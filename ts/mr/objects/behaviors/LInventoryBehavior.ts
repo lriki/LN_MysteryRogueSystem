@@ -153,6 +153,10 @@ export class LInventoryBehavior extends LBehavior {
         return this._entities.length;
     }
 
+    public get remaining(): number {
+        return this._capacity - this._entities.length;
+    }
+
     public get isFully(): boolean {
         return this._entities.length >= this._capacity;
     }

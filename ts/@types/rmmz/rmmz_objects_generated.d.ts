@@ -10606,7 +10606,7 @@ declare class Game_Interpreter {
     /**
      * 
      */
-    _branch: /*no type*/{};
+    _branch: { [key: number]: boolean }
 
     /**
      * 
