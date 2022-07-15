@@ -110,7 +110,7 @@ export class UProperty {
         }
     }
 
-    public static getValueByVariablePattern(pattern: string): any {
+    public static getValueByVariablePattern(pattern: string): unknown {
         if (pattern.startsWith("${")) {
             const i = pattern.indexOf("}");
             if (i >= 0) {
@@ -129,11 +129,15 @@ export class UProperty {
                     }
                 }
             }
-            else {
-                return eval(pattern);
-            }
         }
-
+        
+        const numberValue = parseInt(pattern);
+        if (!isNaN(numberValue)) {
+            return numberValue;
+        }
+        else {
+            return eval(pattern);
+        }
     }
 }
 

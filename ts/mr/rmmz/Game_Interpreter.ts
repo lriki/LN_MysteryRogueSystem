@@ -34,6 +34,27 @@ Game_Interpreter.prototype.command111 = function(params: any): boolean {
     if (entity) {
         let result = false;
         switch (params[0]) {
+            case 7: { // Gold
+                console.log("1");
+                const inventory = entity.findEntityBehavior(LInventoryBehavior);
+                if (inventory) {
+                    console.log("2");
+                    switch (params[2]) {
+                        case 0: // Greater than or equal to
+                            result = inventory.gold() >= params[1];
+                            console.log("3", result);
+                            console.log("3", inventory);
+                            break;
+                        case 1: // Less than or equal to
+                            result = inventory.gold() <= params[1];
+                            break;
+                        case 2: // Less than
+                            result = inventory.gold() < params[1];
+                            break;
+                    }
+                }
+                break;
+            }
             case 8: { // Item
                 const inventory = entity.findEntityBehavior(LInventoryBehavior);
                 if (inventory) {

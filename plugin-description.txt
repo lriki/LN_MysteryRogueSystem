@@ -73,6 +73,15 @@
  * @text ProceedFloorBackword
  * @desc 前のフロアへ
  *
+ * @command MR-SetProperty
+ * @text MR-SetProperty
+ * @desc entityKey で指定された Entity へ様々な情報を設定します。
+ * @arg entityKey
+ * @type string
+ * @arg property
+ * @type string
+ * @arg value
+
  * @command MR-GetProperty
  * @text MR-GetProperty
  * @desc entityKey で指定された Entity から様々な情報を取得し、変数に代入します。
