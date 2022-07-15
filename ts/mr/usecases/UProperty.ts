@@ -120,7 +120,7 @@ export class UProperty {
                     return $gameVariables.value(id);
                 }
                 else {
-                    const id = $dataSystem.variables.findIndex(x => x && x == pattern);
+                    const id = $dataSystem.variables.findIndex(x => x && x == name);
                     if (id >= 0) {
                         return $gameVariables.value(id);
                     }
