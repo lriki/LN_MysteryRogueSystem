@@ -87,14 +87,18 @@ export class VCharacterSpriteSet {
                     }
                 }
 
-                // 一度除外する
-                for (const s of this._sprites) {
-                    if (s.sprite) this._parent.removeChild(s.sprite);
-                }
-
-                // 装備スロットIDの若い方が上に表示されるように追加する
-                for (const s of this._sprites.slice().reverse()) {
-                    if (s.sprite) this._parent.addChild(s.sprite);
+                // 追加処理。
+                // 装備アイテムのイメージは Z-Offset を設定する必要があるため、CharacterSprite の子ではなく、その親に追加する。
+                {
+                    // 一度除外する
+                    for (const s of this._sprites) {
+                        if (s.sprite) this._parent.removeChild(s.sprite);
+                    }
+    
+                    // 装備スロットIDの若い方が上に表示されるように追加する
+                    for (const s of this._sprites.slice().reverse()) {
+                        if (s.sprite) this._parent.addChild(s.sprite);
+                    }
                 }
 
                 this._revisionNumber = equipments.revisitonNumber();
@@ -108,8 +112,12 @@ export class VCharacterSpriteSet {
             for (const s of this._sprites) {
                 if (s.sprite) {
                     s.sprite.setFrame(sx, sy, pw, ph);
+
+                    // Owner と同期する
                     s.sprite.position = this._owner.position;
-                    s.sprite.visible = true;
+                    s.sprite.visible = this._owner.visible;
+                    s.sprite.opacity = this._owner.opacity;
+
                     if (MRData.entities[s.itemEntityDataId].entity.equipmentImage.side == DItemEquipmentSide.Right) {
                         s.sprite.z = this._owner.z + ZOFFSET_TABLE_RIGHT_HAND[d];
                     }
