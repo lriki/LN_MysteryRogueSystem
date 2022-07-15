@@ -30,6 +30,7 @@ Game_Interpreter.prototype.updateWaitMode = function(): boolean {
 // Conditional Branch
 const _Game_Interpreter_command111 = Game_Interpreter.prototype.command111;
 Game_Interpreter.prototype.command111 = function(params: any): boolean {
+    let handled = false;
     const entity = commandTarget();
     if (entity) {
         let result = false;
@@ -49,6 +50,7 @@ Game_Interpreter.prototype.command111 = function(params: any): boolean {
                             break;
                     }
                 }
+                handled = true;
                 break;
             }
             case 8: { // Item
@@ -57,19 +59,21 @@ Game_Interpreter.prototype.command111 = function(params: any): boolean {
                     const entityDataId = MRData.itemData(params[1]).entityId;
                     result = !!inventory.items.find(x => x.dataId == entityDataId);
                 }
+                handled = true;
                 break;
             }
         }
 
-        this._branch[this._indent] = result;
-        if (this._branch[this._indent] === false) {
-            this.skipBranch();
+        if (handled) {
+            this._branch[this._indent] = result;
+            if (this._branch[this._indent] === false) {
+                this.skipBranch();
+            }
+            return true;
         }
-        return true;
     }
-    else {
-        return _Game_Interpreter_command111.call(this, params);
-    }
+
+    return _Game_Interpreter_command111.call(this, params);
 }
 
 // Transfer Player
