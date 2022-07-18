@@ -91,6 +91,19 @@
  * @type string
  * @arg variable
  *
+ * @command MR-ResetStatus
+ * @text MR-ResetStatus
+ * @desc entityKey で指定された Entity のパラメータ及びステートを初期状態に戻します。
+ * @arg entityKey
+ * @type string
+ *
+ * @command MR-ResetInventory
+ * @text MR-ResetInventory
+ * @desc entityKey で指定された Entity のインベントリを初期状態に戻します。
+ * @arg entityKey
+ * @type string
+ *
+ *
  *
  * @command MR-LivingResult-GetIncludesState
  * @text MR-LivingResult-GetIncludesState
@@ -100,6 +113,7 @@
  * @type string
  * @arg stateKey
  * @type string
+ 
  */
  
 

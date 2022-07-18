@@ -412,6 +412,20 @@ export class LEntity extends LObject
         this._individualIdentified = value;
     }
 
+    /**
+     * すべての状態をリセットする。
+     * 
+     * recoverAll() は buffs 等一部リセットされないものがあるが、このメソッドは全てリセットする。
+     * 拠点へ戻ったときなどで完全リセットしたいときに使う。
+     */
+    public resetStatus(): void {
+        this._params.resetAllConditions();
+        this.removeAllStates(false);
+        this.iterateBehaviorsReverse((b) => {
+            b.onResetStatus(this);
+        });
+    }
+
     //--------------------------------------------------------------------------------
     // Parameters
 

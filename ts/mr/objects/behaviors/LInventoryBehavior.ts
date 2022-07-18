@@ -128,17 +128,20 @@ export class LInventoryBehavior extends LBehavior {
         for (let i = items.length - 1; i >= 0; i--) {
             items[i].removeFromParent();
         }
-        // for (const entity of this.items) {
-        //     assert(entity.parentObject() == this);
-        //     entity.clearParent();
-        //     entity.destroy();
-        // }
-        // this._entities.splice(0);
     }
     
-    /** [ScriptCommandAPI] */
-    public clearGold(): void {
-       this._gold = 0;
+
+    public reset(): void {
+        // destroy items
+        for (const entity of this.items) {
+            assert(entity.parentObject() == this);
+            entity.clearParent();
+            entity.destroy();
+        }
+        this._entities.splice(0);
+
+        this._gold = 0;
+        this._capacity = 0;
     }
 
     public get capacity(): number {

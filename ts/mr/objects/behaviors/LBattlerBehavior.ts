@@ -66,24 +66,7 @@ export class LBattlerBehavior extends LBehavior {
         // 敵味方を問わず、話しかけることは可能。
         actions.push(MRBasics.actions.talk);
     }
-    
 
-    /**
-     * すべての状態をリセットする。
-     * 
-     * recoverAll() は buffs 等一部リセットされないものがあるが、このメソッドは全てリセットする。
-     * 拠点へ戻ったときなどで完全リセットしたいときに使う。
-     */
-    public resetAllConditions(): void {
-        this.paramSet().resetAllConditions();
-        this.clearStates();
-    }
-
-    // Game_BattlerBase.prototype.clearStates
-    private clearStates(): void {
-        this.ownerEntity().removeAllStates(false);
-    }
-    
 
     // Game_BattlerBase.prototype.isGuard 
     public isGuard(): boolean {

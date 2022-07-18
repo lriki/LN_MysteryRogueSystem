@@ -121,6 +121,10 @@ export class LExperienceBehavior extends LBehavior {
         this.resetLevel(self);
     }
 
+    onResetStatus(self: LEntity): void {
+        this.resetLevel(self);
+    }
+
     onParamChanged(self: LEntity, paramId: DParameterId, newValue: number, oldValue: number): void {
         if (paramId == MRBasics.params.level) {
             self.setActualParam(MRBasics.params.exp, this.expForLevel(self, newValue));

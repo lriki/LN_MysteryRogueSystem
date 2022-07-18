@@ -15,6 +15,7 @@ import { SWarehouseWithdrawDialog } from "../system/dialogs/SWarehouseWithdrawDi
 import { UProperty } from "../usecases/UProperty";
 import { SItemSellDialog } from "../system/dialogs/SItemSellDialog";
 import { RMMZHelper } from "./RMMZHelper";
+import { LInventoryBehavior } from "../objects/behaviors/LInventoryBehavior";
 
 const pluginName: string = "LN_MysteryRogueSystem";
 
@@ -156,4 +157,19 @@ PluginManager.registerCommand(pluginName, "MR-GetProperty", function(this: Game_
     const variable = args["variable"];
     const entity = USearch.getEntityByKeyPattern(entityKey);
     RMMZHelper.setVariable(variable, UProperty.getValueFromEntity(entity, property));
+});
+
+PluginManager.registerCommand(pluginName, "MR-ResetStatus", function(this: Game_Interpreter, args: any) {
+    const entityKey = args["entityKey"];
+    const entity = USearch.getEntityByKeyPattern(entityKey);
+    entity.resetStatus();
+});
+
+PluginManager.registerCommand(pluginName, "MR-ResetInventory", function(this: Game_Interpreter, args: any) {
+    const entityKey = args["entityKey"];
+    const entity = USearch.getEntityByKeyPattern(entityKey);
+    const inventory = entity.findEntityBehavior(LInventoryBehavior);
+    if (inventory) {
+        inventory.reset();
+    }
 });
