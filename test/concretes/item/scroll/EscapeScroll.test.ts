@@ -4,7 +4,7 @@ import { REGame } from "ts/mr/objects/REGame";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { RESystem } from "ts/mr/system/RESystem";
 import { TestEnv } from "../../../TestEnv";
-import { MRData } from "ts/mr/data/MRData";
+import { LandExitResult, MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
 import { LActivity } from "ts/mr/objects/activities/LActivity";
 import { LActionTokenType } from "ts/mr/objects/LActionToken";
@@ -66,6 +66,8 @@ test("concretes.item.EscapeScroll.Basic", () => {
         // ExitMap へ遷移しているはず
         const exitMapId = REGame.map.land2().landData().exitRMMZMapId;
         expect(player1.floorId.floorNumber()).toBe(exitMapId);
+
+        expect(TestEnv.integration.exitResult).toBe(LandExitResult.Escape);
     }
 });
 

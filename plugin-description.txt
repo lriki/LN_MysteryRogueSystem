@@ -29,6 +29,15 @@
  * @default 6
  * @type number
  *
+ * @param SuspendMenuEnabled
+ * @text [中断] メニューの表示有無
+ * @desc MRタクティクスマップ上でのメニュー画面で、[中断] を表示するかどうかを指定します。
+ * @default false
+ * @type boolean
+ *
+ *
+ *
+ *
  *
  * @command RE.ShowChallengeResult
  * @text ShowChallengeResult

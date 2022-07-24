@@ -204,6 +204,7 @@ export class TestEnvIntegration extends SIntegration {
     public skillEmittedCount: number = 0;
     public sequelFlushCount: number = 0;
     public records: SIntegrationRecord[] = [];
+    public exitResult: LandExitResult = LandExitResult.Goal;
 
     onEventPublished(eventId: DEventId, args: any, handled: boolean): void {
         if (eventId == MRBasics.events.skillEmitted) {
@@ -292,5 +293,6 @@ export class TestEnvIntegration extends SIntegration {
     }
 
     onSetLandExitResult(result: LandExitResult): void {
+        this.exitResult = result;
     }
 }

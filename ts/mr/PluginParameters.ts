@@ -9,6 +9,13 @@ function getNumber(key: string, defaultValue: number): number {
     
 }
 
+function getBoolean(key: string, defaultValue: boolean): boolean {
+    if (typeof PluginManager == "undefined") return defaultValue;
+    const v = PluginManager.parameters(pluginName)[key];
+    if (v === undefined) return defaultValue;
+    return v.toLowerCase() === 'true';
+}
+
 // 固定マップで部屋をマークするためのリージョンID
 export var paramFixedMapRoomRegionId = 1;
 
@@ -61,6 +68,8 @@ export var paramRandomMapPaddingY = getNumber("RandomMapPaddingY", 6);
 
 // 投げた時の飛距離
 export var paramThrowingDistance = 10;
+
+export var paramSuspendMenuEnabled = getBoolean("SuspendMenuEnabled", false);
 
 
 //Maximum number of items in the map
