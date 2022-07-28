@@ -1,6 +1,5 @@
 import { assert, tr2 } from "ts/mr/Common";
 import { LandExitResult, MRData } from "ts/mr/data/MRData";
-import { SWarehouseDialog } from "ts/mr/system/dialogs/SWarehouseDialog";
 import { LFloorId } from "ts/mr/objects/LFloorId";
 import { REGame } from "ts/mr/objects/REGame";
 import { RESystem } from "ts/mr/system/RESystem";
@@ -22,20 +21,6 @@ const pluginName: string = "LN_MysteryRogueSystem";
 PluginManager.registerCommand(pluginName, "RE.ShowChallengeResult", (args: any) => {
     REGame.challengeResultShowing = true;
     $gameMap._interpreter.setWaitMode("REResultWinodw");
-});
-
-PluginManager.registerCommand(pluginName, "RE.ShowWarehouse", (args: any) => {
-    const actorId: number = args.actorId;
-    if (!args.actorId || args.actorId < 0 || MRData.actors.length <= actorId) {
-        throw new Error("RE.ShowWarehouse - Invalid 'actorId'.");
-    }
-    
-    if (REVisual.manager) {
-        const warehouseEntity = REGame.world.entity(REGame.system.uniqueActorUnits[actorId - 1]);
-        const actorEntity = REGame.camera.focusedEntity();
-        assert(actorEntity);
-        RESystem.commandContext.openDialog(actorEntity, new SWarehouseDialog(actorEntity.entityId(), warehouseEntity.entityId()), false);
-    }
 });
 
 PluginManager.registerCommand(pluginName, "MR-ShowWarehouseStoreDialog", (args: any) => {

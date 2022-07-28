@@ -29,7 +29,6 @@ export class VWarehouseWithdrawDialog extends VItemListDialogBase {
     }
     
     private handleWithdraw(items: LEntity[]): void {
-        this._model.setResultItems(items);
         this._model.withdrawItems(items);
     }
 }

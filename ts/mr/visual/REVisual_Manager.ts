@@ -10,8 +10,6 @@ import { VCollapseSequel } from "./sequels/VCollapseSequel";
 import { VAttackSequel } from "./sequels/AttackSequel";
 import { VBlowMoveSequel } from "./sequels/VBlowMoveSequel";
 import { REVisualSequel_Move } from "./sequels/VMoveSequel";
-import { SWarehouseDialog } from "ts/mr/system/dialogs/SWarehouseDialog";
-import { VWarehouseDialog } from "./dialogs/VWarehouseDialog";
 import { DSequel, DSequelId } from "ts/mr/data/DSequel";
 import { VIdleSequel } from "./sequels/VIdleSequel";
 import { MRData } from "ts/mr/data/MRData";
@@ -101,8 +99,8 @@ export class REVisual_Manager
             this._dialogNavigator._openDialog(new VManualActionDialogVisual(model));
         else if (model instanceof SEventExecutionDialog)
             this._dialogNavigator._openDialog(new REEventExecutionDialogVisual(model));
-        else if (model instanceof SWarehouseDialog)
-            this._dialogNavigator._openDialog(new VWarehouseDialog(model));
+        // else if (model instanceof SWarehouseDialog)
+        //     this._dialogNavigator._openDialog(new VWarehouseDialog(model));
         else if (model instanceof SWarehouseStoreDialog)
             this._dialogNavigator._openDialog(new VWarehouseStoreDialog(model));
         else if (model instanceof SWarehouseWithdrawDialog)

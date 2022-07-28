@@ -16,8 +16,28 @@ import { RESystem } from "./RESystem";
 export class SImmediatelyCommandExecuteScheduler {
     public stepSimulation(): void {
         const dialogContext = RESystem.dialogContext;
+        const commandContext = RESystem.commandContext;
 
         while (true) {
+
+
+
+            
+            if (commandContext.isRunning()) {
+                commandContext._processCommand();
+                RESystem.sequelContext.attemptFlush(false);
+                return;
+            }
+            else {
+                // 実行予約が溜まっているなら submit して実行開始する。
+                // ※もともと callDecisionPhase() と後に毎回直接呼んでいたのだが、
+                //   onTurnEnd() などもサポートしはじめて呼び出し忘れが多くなった。
+                //   そもそもいつ呼び出すべきなのか分かりづらいので、submit の呼び出しは一元化する。
+                if (!commandContext.isRecordingListEmpty()) {
+                    commandContext._submit(); // swap
+                }
+            }
+
             if (dialogContext._hasDialogModel()) {
                 dialogContext._update();
                 if (dialogContext._hasDialogModel()) {
@@ -25,31 +45,15 @@ export class SImmediatelyCommandExecuteScheduler {
                 }
             }
 
-
-            if (RESystem.commandContext.isEmpty()) {
-                break;
-            }
-
-            
-            if (RESystem.commandContext.isRunning()) {
-                RESystem.commandContext._processCommand();
-                RESystem.sequelContext.attemptFlush(false);
-            }
-            else {
-                // 実行予約が溜まっているなら submit して実行開始する。
-                // ※もともと callDecisionPhase() と後に毎回直接呼んでいたのだが、
-                //   onTurnEnd() などもサポートしはじめて呼び出し忘れが多くなった。
-                //   そもそもいつ呼び出すべきなのか分かりづらいので、submit の呼び出しは一元化する。
-                if (!RESystem.commandContext.isRecordingListEmpty()) {
-                    RESystem.commandContext._submit(); // swap
-                }
-            }
-
-            if (RESystem.commandContext.isRunning()) {
+            if (commandContext.isRunning()) {
                 // コマンド実行中。まだフェーズを進ませない
             }
             else {
                 REGame.world._removeDestroyedObjects();
+            }
+
+            if (commandContext.isEmpty()) {
+                break;
             }
         }
     }

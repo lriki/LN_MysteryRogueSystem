@@ -33,8 +33,6 @@ export class VWarehouseStoreDialog extends VItemListDialogBase {
     }
 
     private handleStore(): void {
-        const items = this.itemListWindow.getSelectedItems();
-        this._model.setResultItems(items);
-        this._model.storeItems(this._model.resultItems());
+        this._model.storeItems(this.itemListWindow.getSelectedItems());
     }
 }

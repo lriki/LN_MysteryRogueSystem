@@ -130,7 +130,8 @@ export class SDialogContext
         const dialog = this.activeDialog();
         dialog.onUpdate(this);
 
-        if (dialog.isVisualIntegration()) {
+        if (this._hasDialogModel() &&   // dialog.onUpdate() の中で submit が走り、Dialog が閉じられることに備える
+            dialog.isVisualIntegration()) {
             RESystem.integration.updateDialog(this);
         }
         //REGame.recorder._recording = false;

@@ -3,6 +3,7 @@ import { testPickOutItem, testPutInItem } from "../objects/behaviors/LBehavior";
 import { LEquipmentUserBehavior } from "../objects/behaviors/LEquipmentUserBehavior";
 import { LInventoryBehavior } from "../objects/behaviors/LInventoryBehavior";
 import { LEntity } from "../objects/LEntity";
+import { LEntityId } from "../objects/LObject";
 import { SCommandContext } from "../system/SCommandContext";
 import { SEffectSubject } from "../system/SEffectContext";
 import { UName } from "./UName";
@@ -64,7 +65,7 @@ export class UInventory {
     /**
      * [預ける]
      */
-    public static postStoreItemsToWarehouse(cctx: SCommandContext, user: LEntity, warehouse: LEntity, items: LEntity[]): void {
+    public static postStoreItemsToWarehouse(cctx: SCommandContext, user: LEntity, warehouse: LEntity, items: LEntity[], resultItems: LEntityId[]): void {
         const userInventory = user.getEntityBehavior(LInventoryBehavior);
         const warehouseInventory = warehouse.getEntityBehavior(LInventoryBehavior);
         const subject = new SEffectSubject(user);
@@ -90,6 +91,9 @@ export class UInventory {
 
                             cctx.postMessage(tr2("%1を預けた。").format(UName.makeNameAsItem(item)));
                             this.sort(warehouseInventory);
+                            resultItems.push(item.entityId());
+                            
+                            console.log("resultItems.push");
                             return true;
                         });
                     return true;
@@ -100,7 +104,7 @@ export class UInventory {
     /**
      * [引き出す]
      */
-    public static postWithdrawItemsToWarehouse(cctx: SCommandContext, user: LEntity, warehouse: LEntity, items: LEntity[]): void {
+    public static postWithdrawItemsToWarehouse(cctx: SCommandContext, user: LEntity, warehouse: LEntity, items: LEntity[], resultItems: LEntityId[]): void {
         const userInventory = user.getEntityBehavior(LInventoryBehavior);
         const warehouseInventory = warehouse.getEntityBehavior(LInventoryBehavior);
         const subject = new SEffectSubject(user);
@@ -124,6 +128,7 @@ export class UInventory {
                             userInventory.addEntity(item);
 
                             cctx.postMessage(tr2("%1を取り出した。").format(UName.makeNameAsItem(item)));
+                            resultItems.push(item.entityId());
                             return true;
                         });
                     return true;

@@ -38,16 +38,16 @@ export class SWarehouseWithdrawDialog extends SDialog {
         return REGame.world.entity(this._warehouseEntityId);
     }
 
-    public setResultItems(items: LEntity[]) {
-        this._resultItems = items.map(e => e.entityId());
-    }
+    // public setResultItems(items: LEntity[]) {
+    //     this._resultItems = items.map(e => e.entityId());
+    // }
 
     public resultItems(): LEntity[] {
         return this._resultItems.map(e => REGame.world.entity(e));
     }
     
     public withdrawItems(items: LEntity[]): void {
-        UInventory.postWithdrawItemsToWarehouse(RESystem.commandContext, this.user, this.warehouseEntity, items);
+        UInventory.postWithdrawItemsToWarehouse(RESystem.commandContext, this.user, this.warehouseEntity, items, this._resultItems);
         this.submit();
     }
 }

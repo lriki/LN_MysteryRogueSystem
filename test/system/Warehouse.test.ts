@@ -184,6 +184,7 @@ test("system.Warehouse.Withdraw.Fully", () => {
     // アイテムの受け渡しは発生していないこと
     expect(inventory1.itemCount).toBe(inventory1.capacity - 1);
     expect(inventory2.itemCount).toBe(2);
+    expect(dialog.resultItems().length).toBe(0);
 });
 
 test("system.Warehouse.Sell", () => {

@@ -43,12 +43,6 @@
  * @text ShowChallengeResult
  * @desc test
  *
- * @command RE.ShowWarehouse
- * @text ShowWarehouse
- * @desc 引数 actorId に指定した ID のアクターが持つ Inventory を倉庫として、倉庫画面を表示します。
- * @arg actorId
- * @type number
- *
  * @command MR-ShowWarehouseStoreDialog
  * @text ShowWarehouseStoreDialog
  * @desc 預ける

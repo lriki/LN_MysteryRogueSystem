@@ -155,6 +155,13 @@ export class SGameManager {
             inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スリープドラッグ_A").id, [], "item1")));
             inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_アイアンシールド_A").id, [], "item1")));
             
+            // 容量-1 までアイテムを詰め込む
+            const inventory2 = REGame.world.getFirstEntityByKey("kEntity_Warehouse_A").getEntityBehavior(LInventoryBehavior);
+            for (let i = 0; i < inventory2.capacity - 1; i++) {
+                const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_キュアリーフ_A").id, [], "item"));
+                inventory2.addEntity(item);
+            }
+
         }
     }
 
