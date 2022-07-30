@@ -46,7 +46,9 @@ export class VHudWindow extends Window_Base {
         const nextExp = experience.nextLevelExp(entity);
         const extRatio = Math.max(0, (experience.currentExp(entity) - prevExp) / (nextExp - prevExp));
 
-        this.drawFloorNumber(0, 0, REGame.map.floorId());
+        if (REGame.map.floorId().isRESystem()) {
+            this.drawFloorNumber(0, 0, REGame.map.floorId());
+        }
         this.drawLevel(150, 0, level, extRatio);
         this.drawHpFp(300, 0, hp, mhp, fp, mfp);
         this.drawGold(inventory.gold());
