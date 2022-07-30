@@ -47,6 +47,7 @@ export class SWarehouseWithdrawDialog extends SDialog {
     }
     
     public withdrawItems(items: LEntity[]): void {
+        this._resultItems = items.map(e => e.entityId());
         UInventory.postWithdrawItemsToWarehouse(RESystem.commandContext, this.user, this.warehouseEntity, items, this._resultItems);
         this.submit();
     }

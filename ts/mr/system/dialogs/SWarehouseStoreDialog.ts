@@ -45,6 +45,7 @@ export class SWarehouseStoreDialog extends SDialog {
     }
     
     public storeItems(items: LEntity[]): void {
+        this._resultItems = items.map(e => e.entityId());
         UInventory.postStoreItemsToWarehouse(RESystem.commandContext, this.user, this.warehouseEntity, items, this._resultItems);
         this.submit();
         // this._closeRequested = true;

@@ -65,7 +65,7 @@ export class UInventory {
     /**
      * [預ける]
      */
-    public static postStoreItemsToWarehouse(cctx: SCommandContext, user: LEntity, warehouse: LEntity, items: LEntity[], resultItems: LEntityId[]): void {
+    public static postStoreItemsToWarehouse(cctx: SCommandContext, user: LEntity, warehouse: LEntity, items: readonly LEntity[], resultItems: LEntityId[]): void {
         const userInventory = user.getEntityBehavior(LInventoryBehavior);
         const warehouseInventory = warehouse.getEntityBehavior(LInventoryBehavior);
         const subject = new SEffectSubject(user);
@@ -91,9 +91,7 @@ export class UInventory {
 
                             cctx.postMessage(tr2("%1を預けた。").format(UName.makeNameAsItem(item)));
                             this.sort(warehouseInventory);
-                            resultItems.push(item.entityId());
-                            
-                            console.log("resultItems.push");
+                            //resultItems.push(item.entityId());
                             return true;
                         });
                     return true;
@@ -104,7 +102,7 @@ export class UInventory {
     /**
      * [引き出す]
      */
-    public static postWithdrawItemsToWarehouse(cctx: SCommandContext, user: LEntity, warehouse: LEntity, items: LEntity[], resultItems: LEntityId[]): void {
+    public static postWithdrawItemsToWarehouse(cctx: SCommandContext, user: LEntity, warehouse: LEntity, items: readonly LEntity[], resultItems: LEntityId[]): void {
         const userInventory = user.getEntityBehavior(LInventoryBehavior);
         const warehouseInventory = warehouse.getEntityBehavior(LInventoryBehavior);
         const subject = new SEffectSubject(user);
@@ -128,7 +126,7 @@ export class UInventory {
                             userInventory.addEntity(item);
 
                             cctx.postMessage(tr2("%1を取り出した。").format(UName.makeNameAsItem(item)));
-                            resultItems.push(item.entityId());
+                            //resultItems.push(item.entityId());
                             return true;
                         });
                     return true;
