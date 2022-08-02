@@ -17,10 +17,10 @@ db.entities = {
     },
 
     "kEntity_スピードドラッグ_A": {
-        descriptions: [
-            "説明文１行目",
-            "説明文2行目"
-        ]
+        // descriptions: [
+        //     "説明文１行目",
+        //     "説明文2行目"
+        // ]
     },
     
 
