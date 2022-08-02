@@ -2,8 +2,9 @@ import { LInventoryBehavior } from "ts/mr/objects/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/mr/objects/LEntity";
 import { LBehaviorId, LEntityId } from "ts/mr/objects/LObject";
 import { REGame } from "ts/mr/objects/REGame";
-import { UInventory } from "ts/mr/usecases/UInventory";
+import { SWarehouseActionResult, UInventory } from "ts/mr/usecases/UInventory";
 import { RESystem } from "../RESystem";
+import { SWarehouseDialogResult } from "../SCommon";
 import { SDialog } from "../SDialog";
 
 export class SWarehouseWithdrawDialog extends SDialog {
@@ -12,6 +13,7 @@ export class SWarehouseWithdrawDialog extends SDialog {
     private _warehouseEntityId: LEntityId;
     private _inventoryBehaviorId: LBehaviorId;
     private _resultItems: LEntityId[];
+    private _result: SWarehouseDialogResult;
 
     public constructor(user: LEntity, warehouse: LEntity) {
         super();
@@ -20,6 +22,7 @@ export class SWarehouseWithdrawDialog extends SDialog {
         this._warehouseEntityId = warehouse.entityId();
         this._inventoryBehaviorId = warehouse.getEntityBehavior(LInventoryBehavior).id();
         this._resultItems = [];
+        this._result = SWarehouseDialogResult.Succeeded;
     }
 
     public get user(): LEntity {
@@ -45,10 +48,18 @@ export class SWarehouseWithdrawDialog extends SDialog {
     public resultItems(): LEntity[] {
         return this._resultItems.map(e => REGame.world.entity(e));
     }
+
+    public get result(): SWarehouseDialogResult {
+        return this._result;
+    }
     
     public withdrawItems(items: LEntity[]): void {
         this._resultItems = items.map(e => e.entityId());
-        UInventory.postWithdrawItemsToWarehouse(RESystem.commandContext, this.user, this.warehouseEntity, items, this._resultItems);
-        this.submit();
+        const r: SWarehouseActionResult = { code: SWarehouseDialogResult.Succeeded, items: [] };
+        UInventory.postWithdrawItemsToWarehouse(RESystem.commandContext, this.user, this.warehouseEntity, items, r)
+            .finally(_ => {
+                this._result = r.code;
+                this.submit();
+            });
     }
 }

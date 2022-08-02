@@ -1,4 +1,3 @@
-import { SCommandResponse } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { SSequelContext } from "ts/mr/system/SSequelContext";
 
@@ -62,7 +61,6 @@ test("system.TaskContext.SingleThenCatch", () => {
     // then 側を実行
     ctx.postTask((c) => {
         result.push(0);
-        c.next();
     })
     .then2((c) => {
         result.push(1);
@@ -100,18 +98,14 @@ test("system.TaskContext.SequentialThen", () => {
 
     ctx.postTask((c) => {
         result.push(0);
-        c.next();
     })
     .then2((c) => {
-        c.next();
         result.push(1);
     })
     .then2((c) => {
-        c.next();
         result.push(2);
     })
     .then2((c) => {
-        c.next();
         result.push(3);
     });
     
@@ -133,25 +127,21 @@ test("system.TaskContext.NearCache", () => {
 
     ctx.postTask((c) => {
         result.push(0);
-        c.next();
     })
     .then2((c) => {
         c.reject();
         result.push(1);
     })
     .then2((c) => { // 実行されない
-        c.next();
         result.push(2);
     })
     .catch(() => {
         result.push(3);
     })
     .then2((c) => { // 実行されない
-        c.next();
         result.push(4);
     })
     .then2((c) => { // 実行されない
-        c.next();
         result.push(5);
     })
     .catch(() => {  // 実行されない
@@ -174,7 +164,6 @@ test("system.TaskContext.Finally", () => {
 
     ctx.postTask((c) => {
         result.push(0);
-        c.next();
     })
     .then2((c) => {
         result.push(1);
@@ -182,35 +171,27 @@ test("system.TaskContext.Finally", () => {
     })
     .finally((c) => {
         result.push(2);
-        c.next();
     })
     .then2((c) => { // 実行されない
         result.push(3);
-        c.next();
     })
     .catch((c) => {
         result.push(4);
-        c.next();
     })
     .finally((c) => {
         result.push(5);
-        c.next();
     })
     .then2((c) => { // 実行されない
         result.push(6);
-        c.next();
     })
     .then2((c) => { // 実行されない
         result.push(7);
-        c.next();
     })
     .catch((c) => {  // 実行されない
         result.push(8);
-        c.next();
     })
     .finally((c) => {
         result.push(9);
-        c.next();
     });
     
     while (ctx.isRunning()) {
@@ -232,8 +213,10 @@ test("system.TaskContext.DialogLike", () => {
     const ctx = new SCommandContext(new SSequelContext());
 
     ctx.postTask((c) => {
+        c.hold();   // 自分で next() する
         result.push(0);
         ctx.postTask((c2) => {
+            c2.hold();  // 自分で next() する
             result.push(1);
             dlg = () => {
                 result.push(2);
@@ -244,7 +227,6 @@ test("system.TaskContext.DialogLike", () => {
     })
     .then2((c) => {
         result.push(3);
-        c.next();
     });
     
     
@@ -272,23 +254,18 @@ test("system.TaskContext.Nesting", () => {
 
     ctx.postTask((c) => {
         result.push(0);
-        ctx.postTask((c2) => {
+        return ctx.postTask((c2) => {
             result.push(1);
-            c2.next();
-            c.next();    // 最初の Task を resolve. finally に書いたとしても、今この postTask が終わった後に実行される。
         })
         .finally((c2) => {
             result.push(2);
-            c2.next();
         });
     })
     .then2((c) => {
         result.push(3);
-        c.next();
     })
     .finally((c) => {
         result.push(4);
-        c.next();
     });
     
     while (ctx.isRunning()) {
@@ -308,37 +285,45 @@ test("system.TaskContext.Nesting2", () => {
     const ctx = new SCommandContext(new SSequelContext());
 
     ctx.postTask((c1) => {
+        c1.hold();
         result.push(0);
 
         ctx.postTask((c2) => {
+            c2.hold();
             result.push(1);
             
             ctx.postTask((c3) => {
+                c3.hold();
                 result.push(2);
 
                 ctx.postTask((c4) => {
+                    c4.hold();
                     result.push(3);
                     c4.next();
                 })
                 .then2((c4) => {
+                    c4.hold();
                     result.push(4);
                     c3.next();
                     c4.next();
                 });
             })
             .then2((c3) => {
+                c3.hold();
                 result.push(5);
                 c2.next();
                 c3.next();
             });
         })
         .then2((c2) => {
+            c2.hold();
             result.push(6);
             c1.next();
             c2.next();
         })
     })
     .then2((c1) => {
+        c1.hold();
         result.push(7);
         c1.next();
     })
@@ -356,4 +341,48 @@ test("system.TaskContext.Nesting2", () => {
     expect(result[5]).toBe(5);
     expect(result[6]).toBe(6);
     expect(result[7]).toBe(7);
+});
+
+test("system.TaskContext.WhenAll1", () => {
+    const result: number[] = [];
+    const ctx = new SCommandContext(new SSequelContext());
+
+    // then でチェインした Task
+    const task1 = ctx.postTask((c) => {
+        result.push(0);
+    })
+    .then2((c) => {
+        result.push(1);
+    });
+
+    // シングルの Task
+    const task2 = ctx.postTask((c) => {
+        result.push(2);
+        c.next();
+    });
+
+    // ネストした Task
+    const task3 = ctx.postTask((c1) => {
+        result.push(3);
+        return ctx.postTask((c2) => {
+            result.push(4);
+        });
+    });
+
+    const task4 = ctx.whenAll([task1, task2, task3]);
+    task4.then2((c) => {
+        result.push(5);
+    });
+
+    while (ctx.isRunning()) {
+        ctx._processCommand();
+    }
+
+    expect(result.length).toBe(6);
+    expect(result[0]).toBe(0);
+    expect(result[1]).toBe(1);
+    expect(result[2]).toBe(2);
+    expect(result[3]).toBe(3);
+    expect(result[4]).toBe(4);
+    expect(result[5]).toBe(5);
 });

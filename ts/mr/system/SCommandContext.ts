@@ -1,4 +1,4 @@
-import { checkContinuousResponse, SCommandResponse } from "./SCommand";
+import { checkContinuousResponse, SCommand, SCommandResponse } from "./SCommand";
 import { SDialog } from "./SDialog";
 import { LEntity } from "../objects/LEntity";
 import { assert, Log } from "ts/mr/Common";
@@ -18,145 +18,9 @@ import { LActionTokenType } from "../objects/LActionToken";
 import { SActivityContext } from "./SActivityContext";
 import { DActionId, DCommandId } from "../data/DCommon";
 import { LActionTokenConsumeType } from "../objects/LCommon";
+import { CommandResultCallback, SSubTaskChain, STask, STaskCallMethod, STaskStatus, TaskThenFunc } from "./tasks/STask";
 
 
-export enum STaskResult {
-    Succeeded,
-    Rejected,
-}
-
-export enum STaskCallMethod {
-    Default,
-    Then,
-    Catch,
-}
-
-// export class STaskChain {
-//     resolve: () => void;
-//     reject: () => void;
-//     _command: RECCMessageCommand;
-// }
-
-export type MCEntryProc = () => SCommandResponse;
-export type TaskThenFunc = (c: SSubTaskChain) => void;
-export type TaskCatchFunc = (c: SSubTaskChain) => void;
-export type TaskFinallyFunc = (c: SSubTaskChain) => void;
-export type CommandResultCallback = () => boolean;
-
-export class STask {
-
-    _name: string;   // for debug
-    _entryFunc: MCEntryProc | undefined;
-    _chainFunc: CommandResultCallback | undefined;//TaskThenFunc | undefined;
-    _nextTask: STask | undefined;
-    
-    _result: STaskResult;   // これは Behavior リストの成否ではなく Command の成否なので、Response 関係なし。普通の Promise と同様、二値。
-    //_prev: RECCMessageCommand | undefined;
-
-    _subChain: SSubTaskChain | undefined;
-    _thenFunc2: TaskThenFunc | undefined;
-    _catchFunc: TaskCatchFunc | undefined;
-    _finallyFunc: TaskFinallyFunc | undefined;
-    _callMethod: STaskCallMethod = STaskCallMethod.Default;
-
-    constructor(name: string, entryFunc: MCEntryProc | undefined, chainFunc?: CommandResultCallback | undefined, prev?: STask | undefined) {
-        assert(!(entryFunc && chainFunc));
-        this._name = name;
-        this._entryFunc = entryFunc;
-        this._chainFunc = chainFunc;
-        this._result = STaskResult.Succeeded;
-        //this._prev = prev;
-    }
-
-    public then(func: CommandResultCallback): STask {
-        assert(!this._nextTask);
-        this._nextTask = new STask("then", undefined, func);
-        return this._nextTask;
-    }
-
-    public then2(func: TaskThenFunc): STask {
-        assert(this._subChain);
-        assert(!this._nextTask);
-        this._nextTask = new STask("then", undefined, undefined);
-        this._nextTask._subChain = this._subChain;
-        this._nextTask._thenFunc2 = func;
-        return this._nextTask;
-    }
-
-    public catch(func: TaskCatchFunc): this {
-        assert(!this._catchFunc);
-        this._catchFunc = func;
-        return this;
-    }
-
-    public finally(func: TaskFinallyFunc): STask {
-        assert(this._subChain);
-        assert(!this._nextTask);
-        this._nextTask = new STask("finally", undefined, undefined);
-        this._nextTask._subChain = this._subChain;
-        this._nextTask._finallyFunc = func;
-        return this._nextTask;
-    }
-
-    public call(cctx: SCommandContext): STaskResult {
-        if (this._callMethod == STaskCallMethod.Default) {
-            if (this._result == STaskResult.Rejected) {
-                // if (this._catchFunc) {
-                //     this._catchFunc();
-                // }
-                throw new Error();
-                return STaskResult.Rejected;
-            }
-            else {
-                // const c: STaskChain = {
-                //     resolve: () => {
-                //         this._result = STaskResult.Succeeded;
-                //         this.setNextPriorityTaskIfNeeded(cctx);
-                //     },
-                //     reject: () => {
-                //         this._result = STaskResult.Rejected;
-                //     },
-                //     _command: this,
-                // };
-    
-                if (this._entryFunc) {
-                    this._result = (this._entryFunc() != SCommandResponse.Canceled) ? STaskResult.Succeeded : STaskResult.Rejected;
-                }
-                else if (this._chainFunc) {
-                    this._result = (this._chainFunc()) ? STaskResult.Succeeded : STaskResult.Rejected;
-                }
-                return this._result;
-            }
-        }
-        else {
-
-
-            assert(this._subChain);
-            cctx.pushSubTaskChain(this._subChain);
-            if (this._callMethod == STaskCallMethod.Then) {
-                if (this._finallyFunc) {
-                    this._finallyFunc(this._subChain);
-                }
-                else {
-                    assert(this._thenFunc2);
-                    this._thenFunc2(this._subChain);
-                }
-            }
-            else {
-                assert(this._catchFunc);
-                this._catchFunc(this._subChain);
-            }
-            cctx.popSubTaskChain(this._subChain);
-            return STaskResult.Succeeded;
-        }
-    }
-
-    private setNextPriorityTaskIfNeeded(ctx: SCommandContext) {
-        if (this._nextTask) {
-            ctx._setNextPriorityTask(this._nextTask);
-        }
-    }
-}
 
 export enum SHandleCommandResult {
     Resolved,
@@ -178,143 +42,6 @@ export class HandleActivityCommand {
     }
 }
 
-enum STaskChainMethod {
-    Next,
-    Reject,
-}
-
-export class SSubTaskChain {
-    private _ctx: SCommandContext;
-    private _firstTask: STask;
-    private _currentTask: STask | undefined;
-    private _error: boolean;
-    private _errorHandled: boolean;
-    private _postedMethod: STaskChainMethod;
-    private _postedChain: SSubTaskChain | undefined;
-
-    public constructor(ctx: SCommandContext, first: STask) {
-        this._ctx = ctx;
-        this._firstTask = first;
-        this._currentTask = first;
-        this._error = false;
-        this._errorHandled = false;
-        this._postedMethod = STaskChainMethod.Next;
-    }
-
-    public next(): void {
-        this._postedMethod = STaskChainMethod.Next;
-        this.processOrPost();
-    }
-    
-    public reject(): void {
-        this._postedMethod = STaskChainMethod.Reject;
-        this.processOrPost();
-    }
-
-    private processOrPost(): void {
-        const last = this._ctx._subTaskChainStack[this._ctx._subTaskChainStack.length - 1];
-        if (last != this) {
-            last._postedChain = this;
-        }
-        else {
-            this.processInternal();
-        }
-    }
-
-    private processInternal(): void {
-        if (this._postedMethod == STaskChainMethod.Next) {
-            this.nextInternal();
-        }
-        else if (this._postedMethod == STaskChainMethod.Reject) {
-            this.rejectInternal();
-        }
-        else {
-            throw new Error("Unreachable.");
-        }
-    }
-
-    private nextInternal(): void {
-        assert(this._currentTask);
-
-        if (this._error) {
-            assert(this._currentTask._catchFunc || this._currentTask._finallyFunc); // catch または finally から実行できる
-
-            // 次の finally へ
-            let t: STask | undefined = this._currentTask._nextTask;
-            this._currentTask = undefined;
-            while (t) {
-                if (t._finallyFunc) {
-                    t._callMethod = STaskCallMethod.Then;
-                    this._ctx._setNextPriorityTask(t);
-                    this._currentTask = t;
-                    break;
-                }
-                if (!this._errorHandled) {
-                    if (t._catchFunc) {
-                        t._callMethod = STaskCallMethod.Catch;
-                        this._ctx._setNextPriorityTask(t);
-                        this._currentTask = t;
-                        this._errorHandled = true;
-                        break;
-                    }
-                }
-                t = t._nextTask;
-            }
-        }
-        else {
-            // いわゆる resolve()
-            const next = this._currentTask._nextTask;
-            this._currentTask = undefined;
-            if (next && next._thenFunc2 || next?._finallyFunc) {
-                next._callMethod = STaskCallMethod.Then;
-                this._ctx._setNextPriorityTask(next);
-                this._currentTask = next;
-            }
-        }
-
-        if (!this._currentTask) {
-            this.close();
-        }
-    }
-    
-    private rejectInternal(): void {
-        assert(this._currentTask);
-        assert(!this._errorHandled);
-        this._error = true;
-
-        // Task につながっている直近の catch を探してみる
-        let t: STask | undefined = this._currentTask._nextTask;
-        this._currentTask = undefined;
-        while (t) {
-            if (t._finallyFunc) {
-                t._callMethod = STaskCallMethod.Then;
-                this._ctx._setNextPriorityTask(t);
-                this._currentTask = t;
-                break;
-            }
-            if (t._catchFunc) {
-                t._callMethod = STaskCallMethod.Catch;
-                this._ctx._setNextPriorityTask(t);
-                this._currentTask = t;
-                this._errorHandled = true;
-                break;
-            }
-            t = t._nextTask;
-        }
-
-        if (!this._currentTask) {
-            this.close();
-        }
-    }
-
-    private close(): void {
-        // assert(this._ctx._subTaskChainStack[this._ctx._subTaskChainStack.length - 1] == this);
-        // this._ctx._subTaskChainStack.pop();
-        if (this._postedChain) {
-            this._postedChain.processInternal();
-        }
-    }
-}
 
 /**
  * 
@@ -487,8 +214,10 @@ export class SCommandContext
     private _afterChainCommandList: STask[] = [];
     private _messageIndex: number = 0;
     private _commandChainRunning: boolean = false;
+    private __whenWaitingTasks: STask[] = [];
     
     _subTaskChainStack: SSubTaskChain[] = [];
+
     public pushSubTaskChain(c: SSubTaskChain) {
         this._subTaskChainStack.push(c);
     }
@@ -522,28 +251,63 @@ export class SCommandContext
         return this._recodingCommandList.find(x => x._name == "openDialog") !== undefined;
     }
 
-    public postTask(func: TaskThenFunc): STask {
+    // TODO: private. 同期的な実行なのでこれを読んだ後に c が何らかの結果を持っていることを期待してはならない。
+    public callCommand(c: SSubTaskChain, entity: LEntity, cmd: SCommand): void {
+        let result = SCommandResponse.Pass;
+        entity.iterateBehaviorsReverse(b => {
+            result = b.onCommand(entity, this, c, cmd);
+            return result == SCommandResponse.Pass;
+        });
+        // if (result == SCommandResponse.Pass) {
+        //     c.next();
+        // }
+    }
+
+    public makeTask(action: TaskThenFunc): STask { 
         const task = new STask("Task", undefined);
         task._callMethod = STaskCallMethod.Then;
-        task._thenFunc2 = func;
+        task._thenFunc2 = action;
         task._subChain = new SSubTaskChain(this, task);
-        this._recodingCommandList.push(task);
         return task;
     }
 
-    public postCommand(entity: LEntity, commandId: DCommandId): STask {
-        const task = this.postTask((c) => {
-            let result = SCommandResponse.Pass;
-            entity.iterateBehaviorsReverse(b => {
-                result = b.onCommand(entity, this, c, commandId);
-                return result == SCommandResponse.Pass;
-            });
-            if (result == SCommandResponse.Pass) {
-                c.next();
-            }
+    public makeCommandTask(entity: LEntity, cmd: SCommand): STask {
+        const task = this.makeTask((c) => {
+            this.callCommand(c, entity, cmd);
         });
         return task;
     }
+
+    public postTask2(task: STask): STask {
+        this.pushRecodingCommandList(task);
+        return task;
+    }
+
+    public postTask(action: TaskThenFunc): STask {
+        const task = this.makeTask(action);
+        this.postTask2(task);
+        return task;
+    }
+
+    public postCommandTask(entity: LEntity, cmd: SCommand): STask {
+        const task = this.makeCommandTask(entity, cmd);
+        this.postTask2(task);
+        return task;
+    }
+
+    public whenAll(tasks: STask[]): STask {
+        const task = new STask("Task", undefined);
+        task._callMethod = STaskCallMethod.Then;
+        task._subChain = new SSubTaskChain(this, task);
+        task._callMethod = STaskCallMethod.When;
+        task._whenWaitingTasks = tasks;
+
+        this.__whenWaitingTasks.push(task);
+        task._status = STaskStatus.Pending;
+        return task;
+    }
+
+
 
     postConsumeActionToken(entity: LEntity, tokenType: LActionTokenConsumeType): void {
         const behavior = entity.findEntityBehavior(LUnitBehavior);
@@ -558,7 +322,7 @@ export class SCommandContext
 
             return SCommandResponse.Handled;
         };
-        this._recodingCommandList.push(new STask("ConsumeActionToken", m1));
+        this.pushRecodingCommandList(new STask("ConsumeActionToken", m1));
         Log.postCommand("ConsumeActionToken");
     }
 
@@ -625,7 +389,7 @@ export class SCommandContext
             }
             return r;
         };
-        this._recodingCommandList.push(new STask("Activity", m1));
+        this.pushRecodingCommandList(new STask("Activity", m1));
 
         Log.postCommand("Activity");
         return actx;
@@ -703,7 +467,7 @@ export class SCommandContext
             return response;
 
         };
-        this._recodingCommandList.push(new STask("Post", m1));
+        this.pushRecodingCommandList(new STask("Post", m1));
         Log.postCommand("Post");
         return this._recodingCommandList[this._recodingCommandList.length - 1];
     }
@@ -714,7 +478,7 @@ export class SCommandContext
             func();
             return SCommandResponse.Handled;
         };
-        this._recodingCommandList.push(new STask("Call", m1));
+        this.pushRecodingCommandList(new STask("Call", m1));
         Log.postCommand("Call");
         return this._recodingCommandList[this._recodingCommandList.length - 1];
     }
@@ -745,9 +509,9 @@ export class SCommandContext
         };
 
         if (afterChain)
-            this._afterChainCommandList.push(new STask("openDialog", m1));
+            this.pushAfterChainCommandList(new STask("openDialog", m1));
         else
-            this._recodingCommandList.push(new STask("openDialog", m1));
+            this.pushRecodingCommandList(new STask("openDialog", m1));
         Log.postCommand("openDialog");
         return dialogModel;
     }
@@ -763,7 +527,7 @@ export class SCommandContext
             this._visualAnimationWaiting = true;
             return SCommandResponse.Handled;
         };
-        this._recodingCommandList.push(new STask("Sequel", m1));
+        this.pushRecodingCommandList(new STask("Sequel", m1));
         Log.postCommand("Sequel");
         return s;
     }
@@ -778,7 +542,7 @@ export class SCommandContext
             this._visualAnimationWaiting = true;
             return SCommandResponse.Handled;
         };
-        this._recodingCommandList.push(new STask("Animation", m1));
+        this.pushRecodingCommandList(new STask("Animation", m1));
         Log.postCommand("Animation");
     }
 
@@ -791,7 +555,7 @@ export class SCommandContext
             this._visualAnimationWaiting = true;
             return SCommandResponse.Handled;
         };
-        this._recodingCommandList.push(new STask("Balloon", m1));
+        this.pushRecodingCommandList(new STask("Balloon", m1));
         Log.postCommand("Balloon");
     }
 
@@ -805,7 +569,7 @@ export class SCommandContext
             this._visualAnimationWaiting = true;
             return SCommandResponse.Handled;
         };
-        this._recodingCommandList.push(new STask("WaitSequel", m1));
+        this.pushRecodingCommandList(new STask("WaitSequel", m1));
         Log.postCommand("WaitSequel");
     }
 
@@ -816,7 +580,7 @@ export class SCommandContext
             this._visualAnimationWaiting = true;
             return SCommandResponse.Handled;
         };
-        this._recodingCommandList.push(new STask("Wait", m1));
+        this.pushRecodingCommandList(new STask("Wait", m1));
         Log.postCommand("Wait");
     }
 
@@ -828,7 +592,7 @@ export class SCommandContext
             });
             return SCommandResponse.Pass;
         };
-        this._recodingCommandList.push(new STask("ApplyEffect", m1));
+        this.pushRecodingCommandList(new STask("ApplyEffect", m1));
         Log.postCommand("ApplyEffect");
     }
 
@@ -843,7 +607,7 @@ export class SCommandContext
             entity.destroy();
             return SCommandResponse.Handled;
         };
-        this._recodingCommandList.push(new STask("Destroy", m1));
+        this.pushRecodingCommandList(new STask("Destroy", m1));
         Log.postCommand("Destroy");
     }
 
@@ -855,7 +619,7 @@ export class SCommandContext
             REGame.messageHistory.add(text);
             return SCommandResponse.Handled;
         };
-        this._recodingCommandList.push(new STask("Message", m1));
+        this.pushRecodingCommandList(new STask("Message", m1));
         Log.postCommand("Message");
     }
 
@@ -867,7 +631,7 @@ export class SCommandContext
                 RESystem.integration.flushEffectResult();
             return SCommandResponse.Handled;
         };
-        this._recodingCommandList.push(new STask("EffectResult", m1));
+        this.pushRecodingCommandList(new STask("EffectResult", m1));
     }
 
     /**
@@ -884,21 +648,9 @@ export class SCommandContext
             REGame.world.transferEntity(entity, floorId, x, y);
             return SCommandResponse.Handled;
         };
-        this._recodingCommandList.push(new STask("TransferFloor", m1));
+        this.pushRecodingCommandList(new STask("TransferFloor", m1));
         Log.postCommand("TransferFloor");
     }
-    
-    /*
-    public postTransferRMMZMap(entity: LEntity, mapId: number, x: number = 0, y:number = 0, d: number = 0) {
-        const m1 = () => {
-            Log.doCommand("TransferFloor");
-            RESystem.integration.onReserveTransferMap(mapId, x, y, d);
-            return REResponse.Succeeded;
-        };
-        this._recodingCommandList.push(new RECCMessageCommand("TransferFloor", m1));
-        Log.postCommand("TransferFloor");
-    }
-    */
 
     postSkipPart(entity: LEntity): void {
         const behavior = entity.findEntityBehavior(LUnitBehavior);
@@ -911,37 +663,10 @@ export class SCommandContext
 
             return SCommandResponse.Handled;
         };
-        this._recodingCommandList.push(new STask("SkipPart", m1));
+        this.pushRecodingCommandList(new STask("SkipPart", m1));
         Log.postCommand("SkipPart");
     }
     
-
-    // Skill や Item などの効果適用。
-    // MP cost など発動可能判定は呼び出す前に済ませること。
-    /*
-    postApplyEffect(context: REEffectContext): void {
-        const m1 = () => {
-            Log.doCommand("ApplyEffect");
-            // TODO:
-            return REResponse.Succeeded;
-        };
-        this._recodingCommandList.push(new RECCMessageCommand("ApplyEffect", m1));
-        Log.postCommand("ApplyEffect");
-    }
-    */
-
-    /*
-    postRemoveFromWhereabouts(entity: REGame_Entity, result: CommandResultCallback): void {
-        const m1 = () => {
-            Log.doCommand("RemoveFromWhereabouts");
-            const response = entity.callRemoveFromWhereabouts(this);
-            result(response, entity, this);
-            return response;
-        };
-        this._recodingCommandList.push(new RECCMessageCommand("RemoveFromWhereabouts", m1));
-        Log.postCommand("RemoveFromWhereabouts");
-    }
-    */
 
 
 
@@ -957,7 +682,8 @@ export class SCommandContext
         return this._nextPriorityTask != undefined ||
             this._messageIndex < this._runningCommandList.length ||
             this._recodingCommandList.length != 0 ||
-            this._afterChainCommandList.length != 0;
+            this._afterChainCommandList.length != 0 ||
+            this.__whenWaitingTasks.length != 0;
     }
 
     isRecordingListEmpty(): boolean {
@@ -980,6 +706,8 @@ export class SCommandContext
             }
         }
 
+                    
+        console.log("_processCommand in");
 
         if (this.isRunning()) {
             // 今回実行したい Task は？
@@ -990,13 +718,14 @@ export class SCommandContext
             // const callingCatch = !task._result;
 
             // Task 実行
-            const result = task.call(this);
-            if (result != STaskResult.Rejected) {
-                // つながっている Task があれば、次にそれを実行してみる
-                if (task._nextTask && !task._subChain) {
-                    this._nextPriorityTask = task._nextTask;
-                }
-            }
+            //const result = 
+            task.call(this);
+            // if (result != STaskResult.Rejected) {
+            //     // つながっている Task があれば、次にそれを実行してみる
+            //     if (task._nextTask && !task._subChain) {
+            //         this._nextPriorityTask = task._nextTask;
+            //     }
+            // }
             // else if (!callingCatch) {   // SubTasckChain の中で catch はひとつしか呼びたくない
             //     // Task につながっている直近の catch を探してみる
             //     let t = task._nextTask;
@@ -1025,7 +754,7 @@ export class SCommandContext
                         Log.d("<<<<[End CommandChain]");
         
                         // CommandChain 中に post されたものがあれば、続けて swap して実行開始してみる
-                        if (this._recodingCommandList.length > 0 || this._afterChainCommandList.length > 0) {
+                        if (this._recodingCommandList.length > 0 || this._afterChainCommandList.length > 0 || this.__whenWaitingTasks.length > 0) {
                             this._submit();
                         }
                     }
@@ -1048,6 +777,34 @@ export class SCommandContext
         this._recodingCommandList.splice(0);
         this._messageIndex = 0;
 
+
+        if (this.__whenWaitingTasks.length > 0) {
+            const tasks = this.__whenWaitingTasks;
+            this.__whenWaitingTasks = [];
+            for (const task of tasks) {
+                assert(task._status == STaskStatus.Pending);
+                
+                let completed = true;   // 万一、ひとつも無ければ完了扱いにする (次のタスクを実行する)
+                for (const t of task._whenWaitingTasks) {
+                    if (!t.isCompleted) {
+                        completed = false;
+                        break;
+                    }
+                }
+
+                if (completed) {
+                    
+                    console.log("when start");
+                    this._runningCommandList.push(task);
+                }
+                else {
+                    this.__whenWaitingTasks.push(task);
+                }
+            }
+        } 
+
+
+
         if (this._runningCommandList.length > 0) {
             Log.d(">>>>[Start CommandChain]");
             this._commandChainRunning = true;
@@ -1061,7 +818,9 @@ export class SCommandContext
     }
 
     _setNextPriorityTask(task: STask): void {
+        console.log("_setNextPriorityTask");
         assert(!this._nextPriorityTask);
+        assert(task._status == STaskStatus.Pending);
         this._nextPriorityTask = task;
     }
 
@@ -1072,6 +831,17 @@ export class SCommandContext
         });
     }
 
+    private pushRecodingCommandList(task: STask): void {
+        assert(task._status == STaskStatus.Created);
+        task._status = STaskStatus.Pending;
+        this._recodingCommandList.push(task);
+    }
+
+    private pushAfterChainCommandList(task: STask): void {
+        assert(task._status == STaskStatus.Created);
+        task._status = STaskStatus.Pending;
+        this._afterChainCommandList.push(task);
+    }
 }
 
 

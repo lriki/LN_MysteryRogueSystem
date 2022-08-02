@@ -3,7 +3,7 @@ import { MRBasics } from "ts/mr/data/MRBasics";
 import { DEquipmentPartId } from "ts/mr/data/DEquipmentPart";
 import { MRData } from "ts/mr/data/MRData";
 import { SCommandResponse } from "ts/mr/system/SCommand";
-import { STask, SCommandContext } from "ts/mr/system/SCommandContext";
+import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { RESystem } from "ts/mr/system/RESystem";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
@@ -20,6 +20,7 @@ import { SActivityContext } from "ts/mr/system/SActivityContext";
 import { DActionId, DSubComponentEffectTargetKey } from "ts/mr/data/DCommon";
 import { LEventResult } from "../LEventServer";
 import { DEventId, ItemRemovedFromInventoryArgs } from "ts/mr/data/predefineds/DBasicEvents";
+import { STask } from "ts/mr/system/tasks/STask";
 
 interface SlotPart {
     itemEntityIds: LEntityId[];

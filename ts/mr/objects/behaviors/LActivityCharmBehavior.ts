@@ -10,7 +10,7 @@ import { UName } from "ts/mr/usecases/UName";
 import { LActivity } from "../activities/LActivity";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
-import { CommandArgs, LBehavior, onGrounded, testPickOutItem } from "./LBehavior";
+import { LBehavior } from "./LBehavior";
 
 /**
  * 

@@ -376,6 +376,7 @@ export class MRDataManager {
 
         MRBasics.commands = {
             testPickOutItem: MRData.newCommand("testPickOutItem").id,
+            testPutInItem: MRData.newCommand("testPutInItem").id,
         };
         
         // Sequels

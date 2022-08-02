@@ -30,7 +30,7 @@ PluginManager.registerCommand(pluginName, "MR-ShowWarehouseStoreDialog", (args: 
         const player = REGame.camera.getFocusedEntity();
         RESystem.commandContext.openDialog(player, new SWarehouseStoreDialog(USearch.getEntityByKeyPattern(serviceUserKey), USearch.getEntityByKeyPattern(serviceProviderKey)), false)
         .then((d: SWarehouseStoreDialog) => {
-            $gameVariables.setValue(MRBasics.variables.result, d.resultItems().length);
+            $gameVariables.setValue(MRBasics.variables.result, d.result);
         });
         $gameMap._interpreter.setWaitMode("MR-Dialog");
     }
@@ -43,7 +43,7 @@ PluginManager.registerCommand(pluginName, "MR-ShowWarehouseWithdrawDialog", (arg
         const player = REGame.camera.getFocusedEntity();
         RESystem.commandContext.openDialog(player, new SWarehouseWithdrawDialog(USearch.getEntityByKeyPattern(serviceUserKey), USearch.getEntityByKeyPattern(serviceProviderKey)), false)
         .then((d: SWarehouseWithdrawDialog) => {
-            $gameVariables.setValue(MRBasics.variables.result, d.resultItems().length);
+            $gameVariables.setValue(MRBasics.variables.result, d.result);
         });
         $gameMap._interpreter.setWaitMode("MR-Dialog");
     }

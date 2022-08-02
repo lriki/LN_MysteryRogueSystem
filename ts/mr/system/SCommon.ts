@@ -15,3 +15,10 @@ export enum SStepPhase {
     RunClosing,
     Closed,
 }
+
+export enum SWarehouseDialogResult {
+    Succeeded = 0,
+    SucceededAsMuch = 1,
+    
+    FullyCanceled = -1,
+}

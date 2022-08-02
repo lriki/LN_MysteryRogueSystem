@@ -1,6 +1,6 @@
-import { SCommandResponse, SPhaseResult } from "../../system/SCommand";
+import { SCommand, SCommandResponse, SPhaseResult } from "../../system/SCommand";
 import { SCommandContext, SHandleCommandResult } from "../../system/SCommandContext";
-import { CommandArgs, LBehavior, onAttackReaction, onDirectAttackDamaged, onPreThrowReaction, onProceedFloorReaction, onThrowReaction, onWalkedOnTopAction, onWaveReaction, testPickOutItem } from "./LBehavior";
+import { CommandArgs, LBehavior, onAttackReaction, onDirectAttackDamaged, onPreThrowReaction, onProceedFloorReaction, onThrowReaction, onWalkedOnTopAction, onWaveReaction } from "./LBehavior";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { Helpers } from "ts/mr/system/Helpers";
@@ -14,7 +14,7 @@ import { DescriptionHighlightColor, LEntityDescription } from "../LIdentifyer";
 import { SSoundManager } from "ts/mr/system/SSoundManager";
 import { DFactionId, MRData } from "ts/mr/data/MRData";
 import { MovingMethod } from "../LMap";
-import { DecisionPhase, onGrounded, onPreStepFeetProcess, onPreStepFeetProcess_Actor, testPutInItem } from "../internal";
+import { DecisionPhase, onGrounded, onPreStepFeetProcess, onPreStepFeetProcess_Actor } from "../internal";
 import { PutEventArgs, WalkEventArgs } from "ts/mr/data/predefineds/DBasicEvents";
 import { DPrefabActualImage } from "ts/mr/data/DPrefab";
 import { UName } from "ts/mr/usecases/UName";
@@ -289,13 +289,10 @@ export class LUnitBehavior extends LBehavior {
             const layer = block.layer(DBlockLayerKind.Ground);
             if (!layer.isContainsAnyEntity()) {
                 // 足元に置けそうなら試行
-                //cctx.post(itemEntity, self, subject, undefined, testPickOutItem)
-                //    .then(() => {
-                cctx.postCommand(itemEntity, MRBasics.commands.testPickOutItem)
+                cctx.postCommandTask(itemEntity, SCommand.make(MRBasics.commands.testPickOutItem))
                     .then2(() => {
                         if (ULimitations.isItemCountFullyInMap()) {
                             cctx.postMessage(tr2("不思議な力で行動できなかった。"));
-                            return true;
                         }
                         else {
                             itemEntity.removeFromParent();
@@ -303,7 +300,6 @@ export class LUnitBehavior extends LBehavior {
 
                             cctx.postMessage(tr("{0} を置いた。", UName.makeNameAsItem(itemEntity)));
                             cctx.post(itemEntity, self, subject, undefined, onGrounded);
-                            return true;
                         }
                     });
             }

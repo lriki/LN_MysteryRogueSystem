@@ -29,8 +29,8 @@
 import { assert } from "ts/mr/Common";
 import { DEventId } from "ts/mr/data/predefineds/DBasicEvents";
 import { SEffectContext, SEffectSubject } from "ts/mr/system/SEffectContext";
-import { SCommandResponse, SPhaseResult } from "../../system/SCommand";
-import { SCommandContext, SSubTaskChain } from "../../system/SCommandContext";
+import { SCommand, SCommandResponse, SPhaseResult } from "../../system/SCommand";
+import { SCommandContext } from "../../system/SCommandContext";
 import { LBehaviorId, LEntityId, LObject, LObjectType } from "../LObject";
 import { LEntity } from "../LEntity";
 import { LActivity } from "../activities/LActivity";
@@ -51,6 +51,7 @@ import { DEmittor } from "ts/mr/data/DEmittor";
 import { SActivityContext } from "ts/mr/system/SActivityContext";
 import { SStepPhase } from "ts/mr/system/SCommon";
 import { LFieldEffect } from "../LFieldEffect";
+import { SSubTaskChain } from "ts/mr/system/tasks/STask";
 
 export enum DecisionPhase {
     //Prepare,
@@ -121,12 +122,6 @@ export const onPerformStepFeetProcess = Symbol("onPerformStepFeetProcess");
  * - Canceled : 呪い状態等のため、Inventory からアイテムを取り出すことはできない。
  */
 export const testPickOutItem = Symbol("testPickOutItem");
-
-/**
- * Response
- * - Canceled : 容量オーバーなどのため、アイテムを入れることができない。
- */
-export const testPutInItem = Symbol("testPutInItem");
 
 /**
  * knockback 状態の別の Entity が衝突しようとしている
@@ -364,7 +359,7 @@ export abstract class LBehavior extends LObject {
     // また実行内容も onAction などとは少し毛色が違うので、あえて分離してみる。
     onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult { return SPhaseResult.Pass; }
 
-    onCommand(self: LEntity, cctx: SCommandContext, chain: SSubTaskChain, commandId: DCommandId): SCommandResponse { return SCommandResponse.Pass; }
+    onCommand(self: LEntity, cctx: SCommandContext, chain: SSubTaskChain, cmd: SCommand): SCommandResponse { return SCommandResponse.Pass; }
 
     public onPreprocessActivity(cctx: SCommandContext, activity: LActivity): LActivity { return activity; }
     

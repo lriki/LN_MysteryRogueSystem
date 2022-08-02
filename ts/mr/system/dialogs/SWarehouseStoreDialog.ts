@@ -2,8 +2,9 @@ import { LInventoryBehavior } from "ts/mr/objects/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/mr/objects/LEntity";
 import { LBehaviorId, LEntityId } from "ts/mr/objects/LObject";
 import { REGame } from "ts/mr/objects/REGame";
-import { UInventory } from "ts/mr/usecases/UInventory";
+import { SWarehouseActionResult, UInventory } from "ts/mr/usecases/UInventory";
 import { RESystem } from "../RESystem";
+import { SWarehouseDialogResult } from "../SCommon";
 import { SDialog } from "../SDialog";
 import { SDialogContext } from "../SDialogContext";
 
@@ -13,6 +14,7 @@ export class SWarehouseStoreDialog extends SDialog {
     private _warehouseEntityId: LEntityId;
     private _warehouseInventoryBehaviorId: LBehaviorId;
     private _resultItems: LEntityId[];
+    private _result: SWarehouseDialogResult;
     // private _closeRequested: boolean = false;
 
     public constructor(user: LEntity, warehouse: LEntity) {
@@ -22,6 +24,7 @@ export class SWarehouseStoreDialog extends SDialog {
         this._warehouseEntityId = warehouse.entityId();
         this._warehouseInventoryBehaviorId = warehouse.getEntityBehavior(LInventoryBehavior).id();
         this._resultItems = [];
+        this._result = SWarehouseDialogResult.Succeeded;
     }
 
     public get user(): LEntity {
@@ -43,18 +46,18 @@ export class SWarehouseStoreDialog extends SDialog {
     public resultItems(): LEntity[] {
         return this._resultItems.map(e => REGame.world.entity(e));
     }
+
+    public get result(): SWarehouseDialogResult {
+        return this._result;
+    }
     
     public storeItems(items: LEntity[]): void {
         this._resultItems = items.map(e => e.entityId());
-        UInventory.postStoreItemsToWarehouse(RESystem.commandContext, this.user, this.warehouseEntity, items, this._resultItems);
-        this.submit();
-        // this._closeRequested = true;
+        const r: SWarehouseActionResult = { code: SWarehouseDialogResult.Succeeded, items: [] };
+        UInventory.postStoreItemsToWarehouse(RESystem.commandContext, this.user, this.warehouseEntity, items, r)
+            .finally(_ => {
+                this._result = r.code;
+                this.submit();
+            });
     }
-    
-    // onUpdate(context: SDialogContext): void {
-    //     console.log("SWarehouseStoreDialog.onUpdate", this._closeRequested);
-    //     if (this._closeRequested) {
-    //         this.submit();
-    //     }
-    // }
 }

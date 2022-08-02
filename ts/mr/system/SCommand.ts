@@ -1,4 +1,5 @@
 import { DAction } from "ts/mr/data/DAction";
+import { DCommandId } from "../data/DCommon";
 import { MRData } from "../data/MRData";
 import { LEntity } from "../objects/LEntity";
 import { SEffectContext } from "./SEffectContext";
@@ -58,5 +59,38 @@ export function checkContinuousResponse(r: SCommandResponse): boolean {
     return r == SCommandResponse.Pass;
 }
 
+/**
+ * onCommand の引数。
+ * 
+ * LActivity と似ているが、こちらは Recoding 対象外。シリアライズされるものではない。
+ * LActivity は意思決定の履歴と考えることができる。対して SCommand は単純な引数のセットである。
+ */
+export class SCommand {
+    public readonly id: DCommandId;
+    private _objects: readonly LEntity[];
 
+    private constructor(id: DCommandId) {
+        this.id = id;
+        this._objects = [];
+    }
+
+    public static make(id: DCommandId): SCommand {
+        // TODO: プールを作りたいところ。
+        return new SCommand(id);
+    }
+
+    public get objects(): readonly LEntity[] {
+        return this._objects;
+    }
+
+    public withObject(object: LEntity): this {
+        this._objects = [object];
+        return this;
+    }
+
+    public withObjects(objects: readonly LEntity[]): this {
+        this._objects = objects;
+        return this;
+    }
+}
 

@@ -7,7 +7,7 @@ import { Helpers } from "./Helpers";
 import { LEffectResult, LParamEffectResult } from "../objects/LEffectResult";
 import { DParameterId } from "ts/mr/data/DParameter";
 import { LEnemyBehavior } from "ts/mr/objects/behaviors/LEnemyBehavior";
-import { STask, SCommandContext } from "./SCommandContext";
+import { SCommandContext } from "./SCommandContext";
 import { REGame } from "ts/mr/objects/REGame";
 import { LRandom } from "ts/mr/objects/LRandom";
 import { DStateId } from "ts/mr/data/DState";
@@ -19,6 +19,7 @@ import { assert } from "../Common";
 import { LObject, LObjectType } from "../objects/LObject";
 import { UEffect } from "../usecases/UEffect";
 import { UAction } from "../usecases/UAction";
+import { STask } from "./tasks/STask";
 
 
 export enum SEffectIncidentType {

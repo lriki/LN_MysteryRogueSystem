@@ -3,7 +3,7 @@ import { DEffectFieldScope, DEffectFieldScopeArea, DEffectFieldScopeRange, DRmmz
 import { DHelpers } from "ts/mr/data/DHelper";
 import { DSkill } from "ts/mr/data/DSkill";
 import { MRData } from "ts/mr/data/MRData";
-import { LGenerateDropItemCause, onPerformStepFeetProcess, onPreStepFeetProcess, onPreStepFeetProcess_Actor, onWalkedOnTopAction, onWalkedOnTopReaction, testPutInItem } from "ts/mr/objects/internal";
+import { LGenerateDropItemCause, onPerformStepFeetProcess, onPreStepFeetProcess, onPreStepFeetProcess_Actor, onWalkedOnTopAction, onWalkedOnTopReaction } from "ts/mr/objects/internal";
 import { LEntity } from "ts/mr/objects/LEntity";
 import { LEntityId } from "ts/mr/objects/LObject";
 import { REGame } from "ts/mr/objects/REGame";
@@ -13,7 +13,7 @@ import { LInventoryBehavior } from "../objects/behaviors/LInventoryBehavior";
 import { DescriptionHighlightColor, LEntityDescription } from "../objects/LIdentifyer";
 import { Helpers } from "../system/Helpers";
 import { RESystem } from "../system/RESystem";
-import { STask, SCommandContext } from "../system/SCommandContext";
+import { SCommandContext } from "../system/SCommandContext";
 import { SEffectSubject } from "../system/SEffectContext";
 import { SSoundManager } from "../system/SSoundManager";
 import { UBlock } from "./UBlock";
@@ -24,8 +24,8 @@ import { SPoint } from "./UCommon";
 import { LEquipmentUserBehavior } from "../objects/behaviors/LEquipmentUserBehavior";
 import { LActivity } from "../objects/activities/LActivity";
 import { ULimitations } from "./ULimitations";
-import { LUnitBehavior } from "../objects/behaviors/LUnitBehavior";
-import { LTrapBehavior } from "../objects/behaviors/LTrapBehavior";
+import { SCommand } from "../system/SCommand";
+import { STask } from "../system/tasks/STask";
 
 export interface LCandidateSkillAction {
     action: IDataAction;
@@ -147,17 +147,17 @@ export class UAction {
 
     /** @deprecated */
     public static postPickItem(cctx: SCommandContext, self: LEntity, inventory: LInventoryBehavior, itemEntity: LEntity): STask {
-        return cctx.post(
-            self, itemEntity, new SEffectSubject(self), undefined, testPutInItem,
-            () => {
+        const cmd = SCommand.make(MRBasics.commands.testPutInItem)
+            .withObjects([itemEntity]);
+
+        return cctx.postCommandTask(self, cmd)
+            .then2(() => {
                 REGame.map._removeEntity(itemEntity);
                 inventory.addEntityWithStacking(itemEntity);
                 
                 const name = LEntityDescription.makeDisplayText(UName.makeUnitName(self), DescriptionHighlightColor.UnitName);
                 cctx.postMessage(tr("{0} は {1} をひろった", name, UName.makeNameAsItem(itemEntity)));
                 SSoundManager.playPickItem();
-
-                return true;
             });
     }
     
