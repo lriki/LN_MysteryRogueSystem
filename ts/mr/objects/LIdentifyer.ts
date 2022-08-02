@@ -206,6 +206,10 @@ export class LIdentifyer {
                 // 個体識別済み
                 return EntityIdentificationLevel.IndividualIdentified;
             }
+            else if (!entityData.canModifierState) {
+                // 呪い状態などを受けないものは、名前識別済みであれば個体識別済みとする
+                return EntityIdentificationLevel.IndividualIdentified;
+            }
             else {
                 // 個体識別されていなくても、種別はわかる
                 return EntityIdentificationLevel.KindIdentified;
@@ -227,7 +231,7 @@ export class LIdentifyer {
 
         // 個体識別済み？
         if (entityIdentificationLevel == EntityIdentificationLevel.IndividualIdentified) {
-            level = DescriptionHighlightColor.Unidentified;
+            level = DescriptionHighlightColor.Identified;
         }
 
         if (entityIdentificationLevel <= EntityIdentificationLevel.KindIdentified) {

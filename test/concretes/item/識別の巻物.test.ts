@@ -33,6 +33,7 @@ test("concretes.item.識別の巻物", () => {
     inventory.addEntity(item2);
 
     const name1 = UName.makeNameAsItem(item2);
+    expect(name1.includes("\\C[14]")).toBeTruthy(); // 黄色
 
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
@@ -47,6 +48,6 @@ test("concretes.item.識別の巻物", () => {
 
     const name2 = UName.makeNameAsItem(item2);
     expect(name1).not.toBe(name2);  // 少なくとも、識別の前後で表示名が変わっていること
-
+    expect(name2.includes("\\C[0]薬草")).toBeTruthy();  // 白
 });
 

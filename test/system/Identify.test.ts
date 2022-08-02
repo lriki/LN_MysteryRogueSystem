@@ -32,3 +32,18 @@ test("Identify.Details", () => {
     expect(dlg.description.includes("識別されていません")).toBeTruthy();
 });
 
+test("Identify.Details.KindIdetified", () => {
+    TestEnv.newGame();
+
+    const floor1 = new LFloorId(TestEnv.UnitTestLandId, 2);
+    const player1 = TestEnv.setupPlayer(floor1, 10, 10);
+    const inventory = player1.getEntityBehavior(LInventoryBehavior);
+
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_キュアリーフ_A").id, [], "item1"));
+    inventory.addEntity(item1);
+
+    const name1 = UName.makeNameAsItem(item1);
+
+    expect(name1.includes("\\C[0]薬草")).toBeTruthy();  // 白
+});
+
