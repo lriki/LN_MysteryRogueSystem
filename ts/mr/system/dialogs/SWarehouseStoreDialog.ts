@@ -24,7 +24,7 @@ export class SWarehouseStoreDialog extends SDialog {
         this._warehouseEntityId = warehouse.entityId();
         this._warehouseInventoryBehaviorId = warehouse.getEntityBehavior(LInventoryBehavior).id();
         this._resultItems = [];
-        this._result = SWarehouseDialogResult.Succeeded;
+        this._result = SWarehouseDialogResult.Cancel;
     }
 
     public get user(): LEntity {

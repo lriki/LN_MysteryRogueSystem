@@ -22,7 +22,7 @@ export class SWarehouseWithdrawDialog extends SDialog {
         this._warehouseEntityId = warehouse.entityId();
         this._inventoryBehaviorId = warehouse.getEntityBehavior(LInventoryBehavior).id();
         this._resultItems = [];
-        this._result = SWarehouseDialogResult.Succeeded;
+        this._result = SWarehouseDialogResult.Cancel;
     }
 
     public get user(): LEntity {
