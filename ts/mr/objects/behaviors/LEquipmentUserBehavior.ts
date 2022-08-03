@@ -323,6 +323,9 @@ NOTE:
         if (item.entityId().equals(this._shortcutItemEntityId)) {
             this._shortcutItemEntityId = LEntityId.makeEmpty();
         }
+        else {
+            this.removeEquitment(item);
+        }
     }
 
     private refreshSlots(): void {

@@ -11,6 +11,7 @@ import { SWarehouseWithdrawDialog } from "ts/mr/system/dialogs/SWarehouseWithdra
 import { SItemSellDialog } from "ts/mr/system/dialogs/SItemSellDialog";
 import { UProperty } from "ts/mr/usecases/UProperty";
 import { SWarehouseDialogResult } from "ts/mr/system/SCommon";
+import { LEquipmentUserBehavior } from "ts/mr/objects/behaviors/LEquipmentUserBehavior";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -21,11 +22,13 @@ test("system.Warehouse.Store.Basic", () => {
 
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
+    const equipmentUser1 = player1.getEntityBehavior(LEquipmentUserBehavior);
 
     const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_キュアリーフ_A").id, [], "grass1"));
     const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ゴブリンのこん棒_A").id, [], "weapon1"));
     inventory1.addEntity(grass1);
     inventory1.addEntity(weapon1);
+    equipmentUser1.equipOnUtil(weapon1);
 
     const warehouse1 = REGame.world.getFirstEntityByKey("kEntity_Warehouse_A");
     const inventory2 = warehouse1.getEntityBehavior(LInventoryBehavior);
@@ -50,6 +53,7 @@ test("system.Warehouse.Store.Basic", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
     expect(inventory1.hasAnyItem()).toBeFalsy(); // もちものは空になる
+    expect(equipmentUser1.isEquipped(weapon1)).toBeFalsy(); // 装備は外れている
 
     const items = inventory2.items;
     expect(items.length).toBe(2);

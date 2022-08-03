@@ -218,6 +218,10 @@ export class LInventoryBehavior extends LBehavior {
         this._entities.splice(index, 1);
         
         entity.clearParent();
+        
+        // TODO: onRemoveChild と統合したほうがいいかも。
+        const args: ItemRemovedFromInventoryArgs = { item: entity };
+        REGame.eventServer.publish(RESystem.commandContext, MRBasics.events.itemRemovedFromInventory, args);
     }
 
 
@@ -226,9 +230,7 @@ export class LInventoryBehavior extends LBehavior {
             entity.clearParent();
 
             
-            const args: ItemRemovedFromInventoryArgs = {
-                item: entity,
-            };
+            const args: ItemRemovedFromInventoryArgs = { item: entity };
             REGame.eventServer.publish(RESystem.commandContext, MRBasics.events.itemRemovedFromInventory, args);
         }
     }

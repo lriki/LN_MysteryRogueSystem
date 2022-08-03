@@ -38,6 +38,7 @@ import { UEffect } from "../usecases/UEffect";
 import { DTerrainSetting } from "../data/DTerrainPreset";
 import { DTerrainSettingRef } from "../data/DLand";
 import { MRBasics } from "../data/MRBasics";
+import { LEquipmentUserBehavior } from "../objects/behaviors/LEquipmentUserBehavior";
 //import { REVisual } from "../visual/REVisual";
 
 /**
@@ -153,7 +154,10 @@ export class SGameManager {
             inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_キュアリーフ_A").id, [], "item1")));
             inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_アンチポイズン_A").id, [], "item1")));
             inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スリープドラッグ_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_アイアンシールド_A").id, [], "item1")));
+
+            const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_アイアンシールド_A").id, [], "item1"));
+            inventory.addEntity(shield1);
+            firstActor.getEntityBehavior(LEquipmentUserBehavior).equipOnUtil(shield1);
             
             // 容量-1 までアイテムを詰め込む
             const inventory2 = REGame.world.getFirstEntityByKey("kEntity_Warehouse_A").getEntityBehavior(LInventoryBehavior);
