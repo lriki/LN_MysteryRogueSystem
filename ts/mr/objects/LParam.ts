@@ -37,6 +37,9 @@ export class LParam {
         i._actualParamDamge = this._actualParamDamge;
         i._idealParamPlus = this._idealParamPlus;
         i._buff = this._buff;
+        i._initialActualValue = this._initialActualValue;
+        i._addBuff = { ...this._addBuff };
+        i._mulBuff = { ...this._mulBuff };
         return i;
     }
 
@@ -67,11 +70,16 @@ export class LParam {
     }
 
     public setActualDamgeParam(value: number): void {
-        this._actualParamDamge = value;
+        //this._actualParamDamge = value;
+        this._actualParamDamge = Math.max(value, 0);
+        //assert(this._actualParamDamge >= 0);
     }
 
     public gainActualParam(value: number): void {
-        this._actualParamDamge -= value;
+        this._actualParamDamge = Math.max(this._actualParamDamge - value, 0);
+        //this._actualParamDamge -= value;
+        
+        //assert(this._actualParamDamge >= 0);
     }
 
     public idealParamPlus(): number {

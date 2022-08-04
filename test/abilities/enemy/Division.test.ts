@@ -7,6 +7,7 @@ import { MRData } from "ts/mr/data/MRData";
 import { LActivity } from "ts/mr/objects/activities/LActivity";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { SFormulaOperand } from "ts/mr/system/SFormulaOperand";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -23,8 +24,10 @@ test("Abilities.Enemy.Division", () => {
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_スピリットスライムA").id, [], "enemy1"));
     enemy1.addState(MRData.getState("kState_UTからぶり").id);   // Player を倒さないように
     REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
-
+    
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    
+    const atk1 = enemy1.actualParam(MRBasics.params.atk);
 
     //----------------------------------------------------------------------------------------------------
 
@@ -37,7 +40,12 @@ test("Abilities.Enemy.Division", () => {
     REGame.world.random().resetSeed(9);     // 乱数調整
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
+    const atk2 = enemy1.actualParam(MRBasics.params.atk);
+
     expect(enemy1.isDeathStateAffected()).toBeFalsy();  // 倒しちゃってない？
     const entityCount2 = REGame.map.entities().length;
     expect(entityCount2).toBe(entityCount1 + 1);    // 分裂でエンティティが増えていること
+
+    // 分裂後にパラメータが増えてしまう問題の修正確認
+    expect(atk2).toBe(atk1);  // 倒しちゃってない？
 });

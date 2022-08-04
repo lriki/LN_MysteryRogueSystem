@@ -24,7 +24,6 @@ export class SImmediatelyCommandExecuteScheduler {
 
             
             if (commandContext.isRunning()) {
-                console.log("_processCommand");
                 commandContext._processCommand();
                 RESystem.sequelContext.attemptFlush(false);
                 return;

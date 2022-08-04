@@ -16,7 +16,7 @@ export class LEntityDivisionBehavior extends LBehavior {
     
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LEntityDivisionBehavior);
-        return b
+        return b;
     }
 
     [onDirectAttackDamaged](args: CommandArgs, cctx: SCommandContext): SCommandResponse {

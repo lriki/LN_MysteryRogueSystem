@@ -706,9 +706,6 @@ export class SCommandContext
             }
         }
 
-                    
-        console.log("_processCommand in");
-
         if (this.isRunning()) {
             // 今回実行したい Task は？
             const task = this._nextPriorityTask ? this._nextPriorityTask : this._runningCommandList[this._messageIndex];
