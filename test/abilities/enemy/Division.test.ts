@@ -2,12 +2,10 @@ import { REGame } from "ts/mr/objects/REGame";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { RESystem } from "ts/mr/system/RESystem";
 import { TestEnv } from "../../TestEnv";
-import { LEntityDivisionBehavior } from "ts/mr/objects/abilities/LEntityDivisionBehavior";
 import { MRData } from "ts/mr/data/MRData";
 import { LActivity } from "ts/mr/objects/activities/LActivity";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
-import { SFormulaOperand } from "ts/mr/system/SFormulaOperand";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -40,12 +38,13 @@ test("Abilities.Enemy.Division", () => {
     REGame.world.random().resetSeed(9);     // 乱数調整
     RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
+    const eintites = REGame.map.entities();
+    const enemy2 = eintites[eintites.length - 1];
+
     const atk2 = enemy1.actualParam(MRBasics.params.atk);
+    expect(atk2).toBe(atk1);    // 分裂後にパラメータが増えてしまう問題の修正確認
 
     expect(enemy1.isDeathStateAffected()).toBeFalsy();  // 倒しちゃってない？
     const entityCount2 = REGame.map.entities().length;
     expect(entityCount2).toBe(entityCount1 + 1);    // 分裂でエンティティが増えていること
-
-    // 分裂後にパラメータが増えてしまう問題の修正確認
-    expect(atk2).toBe(atk1);  // 倒しちゃってない？
 });

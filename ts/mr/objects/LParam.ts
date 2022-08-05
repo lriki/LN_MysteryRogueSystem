@@ -70,14 +70,14 @@ export class LParam {
     }
 
     public setActualDamgeParam(value: number): void {
-        //this._actualParamDamge = value;
-        this._actualParamDamge = Math.max(value, 0);
+        this._actualParamDamge = value;
+        //this._actualParamDamge = Math.max(value, 0);
         //assert(this._actualParamDamge >= 0);
     }
 
     public gainActualParam(value: number): void {
-        this._actualParamDamge = Math.max(this._actualParamDamge - value, 0);
-        //this._actualParamDamge -= value;
+        //this._actualParamDamge = Math.max(this._actualParamDamge - value, 0);
+        this._actualParamDamge -= value;
         
         //assert(this._actualParamDamge >= 0);
     }

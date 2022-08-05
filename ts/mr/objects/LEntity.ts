@@ -309,7 +309,7 @@ export class LEntity extends LObject
         //entity._effectResult = new LEffectResult();
         //entity._actionConsumed = this._actionConsumed;
         //entity._located = this._located;
-        entity._params.copyTo(this._params);
+        this._params.copyTo(entity._params);
         entity._needVisualRefresh = true;   // とりあえず
         entity._dropItemGenerated = false;  // 新しく現れた Entity は drop の可能性がある
 
