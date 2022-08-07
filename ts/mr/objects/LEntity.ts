@@ -25,7 +25,7 @@ import { DEventId } from "ts/mr/data/predefineds/DBasicEvents";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { LParamSet } from "./LParam";
 import { UState } from "ts/mr/usecases/UState";
-import { DParamBuff, LStateLevelType } from "ts/mr/data/DEffect";
+import { DBuffMode, DParamBuff, LStateLevelType } from "ts/mr/data/DEffect";
 import { DSequelId } from "../data/DSequel";
 import { LReward } from "./LReward";
 import { DBlockLayerKind, DSpecificEffectId, DEntityKindId, DSubComponentEffectTargetKey, DRaceId, DActionId } from "../data/DCommon";
@@ -627,7 +627,13 @@ export class LEntity extends LObject
         if (param) {
             param.addBuff(buff);
             this.refreshConditions();
-            this._effectResult.pushAddedBuff(buff.paramId);
+
+            if (buff.mode == DBuffMode.Strength) {
+                this._effectResult.pushAddedBuff(buff.paramId);
+            }
+            else {
+                this._effectResult.pushAddedDebuff(buff.paramId);
+            }
         }
     }
 
