@@ -217,7 +217,7 @@ NOTE:
                         const localSlot = slot;
     
                         // まずは外す
-                        this.equipOff(cctx, self, REGame.world.entity(localSlot.itemEntityId))
+                        this.postEquipOff(cctx, self, REGame.world.entity(localSlot.itemEntityId))
                             .then(() => {
                                 // 外せたら装備する
                                 this.equipOn(cctx, self, localSlot, itemEntity);
@@ -243,7 +243,7 @@ NOTE:
                 this.equipOffShortcut(cctx, itemEntity);
             }
             else {
-                this.equipOff(cctx, self, itemEntity);
+                this.postEquipOff(cctx, self, itemEntity);
             }
             return SCommandResponse.Handled;
         }
@@ -278,7 +278,7 @@ NOTE:
         }
     }
 
-    private equipOff(cctx: SCommandContext, self: LEntity, itemEntity: LEntity): STask {
+    private postEquipOff(cctx: SCommandContext, self: LEntity, itemEntity: LEntity): STask {
         return cctx.post(itemEntity, self, new SEffectSubject(self), undefined, testPickOutItem)
             .then(() => {
                 const removed = this.removeEquitment(itemEntity);
@@ -301,6 +301,14 @@ NOTE:
                 slot.itemEntityId = LEntityId.makeEmpty();
                 return true;
             }
+        }
+        return false;
+    }
+
+    public removeShortcut(itemEntity: LEntity): boolean {
+        if (this._shortcutItemEntityId.hasAny() && this._shortcutItemEntityId.equals(itemEntity.entityId())) {
+            this._shortcutItemEntityId = LEntityId.makeEmpty();
+            return true;
         }
         return false;
     }

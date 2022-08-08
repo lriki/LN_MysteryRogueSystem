@@ -1,11 +1,11 @@
 import { DSpecificEffectId } from "ts/mr/data/DCommon";
 import { DSpecialEffectRef } from "ts/mr/data/DEffect";
 import { MRData } from "ts/mr/data/MRData";
-import { LBattlerBehavior } from "ts/mr/objects/behaviors/LBattlerBehavior";
+import { LEquipmentUserBehavior } from "ts/mr/objects/behaviors/LEquipmentUserBehavior";
+import { LInventoryBehavior } from "ts/mr/objects/behaviors/LInventoryBehavior";
 import { LEffectResult } from "ts/mr/objects/LEffectResult";
 import { LEntity } from "ts/mr/objects/LEntity";
 import { REGame } from "ts/mr/objects/REGame";
-import { UAction } from "ts/mr/usecases/UAction";
 import { USpawner } from "ts/mr/usecases/USpawner";
 import { SCommandContext } from "../SCommandContext";
 import { SEffectModifier } from "../SEffectApplyer";
@@ -24,6 +24,27 @@ export class SChangeInstanceSpecialEffect extends SSpecialEffect {
         const prevIsUnit = target.isUnit();
 
         target.setupInstance(entityData.id);
+
+        // TODO: リリース前暫定対応。
+        // ここで直接 Behavior を参照してるのであまりよくない。
+        // Instance が変わったことをしめす Event を実装したほうがいいだろう。
+        // かつ、その Event はグローバルなイベントではなく、特定の Entity の状態変化を "監視" 出来るような仕組みにしたい。
+        {
+            const inventory = target.parentAs(LInventoryBehavior);
+            if (inventory) {
+                const owner = inventory.ownerEntity();
+                const equipmentUser = owner.findEntityBehavior(LEquipmentUserBehavior);
+                if (equipmentUser) {
+                    if (equipmentUser.isShortcutEquipped(target)) {
+                        equipmentUser.removeShortcut(target);
+                    }
+                    else {
+                        equipmentUser.removeEquitment(target);
+                    }
+                }
+            }
+        }
+
         result.makeSuccess();
 
         if (prevIsUnit) {
