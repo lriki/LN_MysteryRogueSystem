@@ -315,9 +315,12 @@ export class UAction {
     }
 
     public static makeCandidateSkillActions(performer: LEntity, primaryTargetId: LEntityId): LCandidateSkillAction[] {
-        const actions = performer.collectSkillActions();
+        let actions = performer.collectSkillActions();
         let result: LCandidateSkillAction[] = [];
 
+        if (performer.hasTrait(MRBasics.traits.SealSpecialAbility)) {
+            actions = actions.filter(x => x.skillId == RESystem.skills.normalAttack);
+        }
 
 
         // まずは射程や地形状況を考慮して、発動可能な Skill を集める
