@@ -45,7 +45,7 @@ export class LActorBehavior extends LBattlerBehavior {
         const b = REGame.world.spawn(LActorBehavior);
         throw new Error("Not implemented.");    // TODO: base の LBattlerBehavior のコピー
         b._classId = this._classId;
-        return b
+        return b;
     }
     
     public constructor() {

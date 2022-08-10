@@ -11,6 +11,7 @@ declare global {
         mutableRemoveAll(predicate: (x: T) => boolean): boolean;
         mutableShuffle(): void;
         distinct(): Array<T>;
+        distinctObjects(key: (x: T) => any): Array<T>;
         immutableSort(compareFn?: (a: T, b: T) => number): Array<T>;
         selectMin(fn: (a: T, b: T) => number): T | undefined;
         count(predicate: (x: T) => boolean): number;
@@ -83,6 +84,13 @@ Array.prototype.distinct = function<T>(): Array<T> {
     return Array.from(new Set(this));
 }
 
+Array.prototype.distinctObjects = function<T>(key: (x: T) => any): Array<T> {
+    const knownElements = new Map();
+    for (const i of this) {
+      knownElements.set(key(i), i);
+    }
+    return Array.from(knownElements.values());
+}
 
 Array.prototype.immutableSort = function<T>(compareFn?: (a: T, b: T) => number): Array<T> {
     return Object.assign([], this).sort(compareFn);

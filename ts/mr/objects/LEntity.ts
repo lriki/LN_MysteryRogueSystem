@@ -30,7 +30,7 @@ import { DSequelId } from "../data/DSequel";
 import { LReward } from "./LReward";
 import { DBlockLayerKind, DSpecificEffectId, DEntityKindId, DSubComponentEffectTargetKey, DRaceId, DActionId } from "../data/DCommon";
 import { LActionToken } from "./LActionToken";
-import { LMinimapMarkerClass, LPriceInfo, LRoomId, LStructureId } from "./LCommon";
+import { LMinimapMarkerClass, LPriceInfo, LReaction, LRoomId, LStructureId } from "./LCommon";
 import { LShopArticle } from "./LShopArticle";
 import { DEntityKind } from "../data/DEntityKind";
 import { DTraitId } from "../data/DTraits";
@@ -1238,24 +1238,24 @@ export class LEntity extends LObject
         return result;
     }
 
-    queryReactions(): DActionId[] {
+    queryReactions(): LReaction[] {
         // 既定では、すべての Entity は Item として Map に存在できる。
         // Item 扱いしたくないものは、Behavior 側でこれらの Action を取り除く。
         // FIXME: 既定では拾ったり投げたりできないほうがいいかも。階段とか罠とか、間違って操作してしまう。やっぱりすべてに共通なものをここに置きたい。
-        let result: DActionId[] = this.data.reactions.map(x => x.actionId).concat(
-        [
+        let result: LReaction[] = this.data.reactions.map(x => { return { actionId: x.actionId, displayName: x.overrideDisplayCommandName }; });
+        result = result.concat([
             //DBasics.actions.ExchangeActionId,
-            MRBasics.actions.ThrowActionId,
-            MRBasics.actions.FallActionId,
-            MRBasics.actions.DropActionId,
+            { actionId: MRBasics.actions.ThrowActionId }, 
+            { actionId: MRBasics.actions.FallActionId },
+            { actionId: MRBasics.actions.DropActionId },
         ]);
 
         if (this.isOnGround()) {
             // Ground Layer 上に存在していれば、拾われる可能性がある
-            result.push(MRBasics.actions.PickActionId);
+            result.push({ actionId: MRBasics.actions.PickActionId });
         }
         else {
-            result.push(MRBasics.actions.PutActionId);
+            result.push({ actionId: MRBasics.actions.PutActionId });
         }
 
 

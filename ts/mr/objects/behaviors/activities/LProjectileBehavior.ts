@@ -18,6 +18,7 @@ import { DActionId, DBlockLayerKind } from "ts/mr/data/DCommon";
 import { SActionHitTest } from "ts/mr/system/SActionHitTest";
 import { paramThrowingDistance } from "ts/mr/PluginParameters";
 import { DEmittor, DEmittorId } from "ts/mr/data/DEmittor";
+import { LReaction } from "../../LCommon";
 
 /**
  * 投射可能であるか。従来の Throwable の拡張。
@@ -43,7 +44,7 @@ export class LProjectileBehavior extends LBehavior {
         const b = REGame.world.spawn(LProjectileBehavior);
         b.blowDirection = this.blowDirection;
         b.blowMoveCount = this.blowMoveCount;
-        return b
+        return b;
     }
 
     // こちらはアイテムが投げられたとき。
@@ -103,8 +104,8 @@ export class LProjectileBehavior extends LBehavior {
     }
 
     
-    onQueryReactions(self: LEntity, actions: DActionId[]): void {
-        actions.push(MRBasics.actions.ThrowActionId);
+    onQueryReactions(self: LEntity, reactions: LReaction[]): void {
+        reactions.push({ actionId: MRBasics.actions.ThrowActionId });
     }
     
     // 投げられた

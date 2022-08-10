@@ -574,7 +574,7 @@ export class UAction {
     public static findTalkableFront(entity: LEntity): LEntity | undefined {
         const frontTarget = UMovement.getFrontBlock(entity).getFirstEntity();
         if (frontTarget && !Helpers.isHostile(entity, frontTarget)) {
-            if (frontTarget.queryReactions().includes(MRBasics.actions.talk)) {
+            if (!!frontTarget.queryReactions().find(x => x.actionId == MRBasics.actions.talk)) {
                 return frontTarget;
             }
         }

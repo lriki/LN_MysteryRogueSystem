@@ -41,7 +41,7 @@ export class VFlexCommandWindow extends Window_Command {
         this.clear();
         for (const command of commands) {
             if (command.isActivityCommand) {
-                this.addActionCommand(command.actionId, `act#${command.actionId}`, command.activityCommandHandler);
+                this.addActionCommand(command.actionId, command.displayName, `act#${command.actionId}`, command.activityCommandHandler);
             }
             else if (command.isSystemCommand) {
                 this.addSystemCommand(command.displayName, command.systemCommandId, command.systemCommandIdHandler);
@@ -52,10 +52,10 @@ export class VFlexCommandWindow extends Window_Command {
         }
     }
 
-    public addActionCommand(actionId: DActionId, commandId: string, handler: ActionCommandHandler): void {
+    public addActionCommand(actionId: DActionId, displayName: string | undefined, commandId: string, handler: ActionCommandHandler): void {
         this._commands.push({
             actionId: actionId,
-            displayText: MRData.actions[actionId].displayName,
+            displayText: displayName ?? MRData.actions[actionId].displayName,
             commandId: commandId,
             actionHandler: handler,
             systemHandler: undefined,

@@ -295,7 +295,7 @@ test("Equipment.EquipReaction", () => {
     //----------------------------------------------------------------------------------------------------
 
     // インベントリに入っているものに対してのみ、[装備] を実行できる
-    expect(weapon1.queryReactions().includes(MRBasics.actions.EquipActionId)).toBeTruthy();
-    expect(shield1.queryReactions().includes(MRBasics.actions.EquipActionId)).toBeFalsy();
+    expect(!!weapon1.queryReactions().find(x => x.actionId == MRBasics.actions.EquipActionId)).toBeTruthy();
+    expect(!!shield1.queryReactions().find(x => x.actionId == MRBasics.actions.EquipActionId)).toBeFalsy();
 });
 

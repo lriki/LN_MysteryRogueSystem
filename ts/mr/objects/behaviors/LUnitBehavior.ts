@@ -32,6 +32,7 @@ import { ULimitations } from "ts/mr/usecases/ULimitations";
 import { LTrapBehavior } from "./LTrapBehavior";
 import { SFeetDialog } from "ts/mr/system/dialogs/SFeetDialog";
 import { RESystem } from "ts/mr/system/RESystem";
+import { LReaction } from "../LCommon";
 
 enum LFeetProcess {
     None,
@@ -64,7 +65,7 @@ export class LUnitBehavior extends LBehavior {
         b._targetingEntityId = this._targetingEntityId;
         b._straightDashing = this._straightDashing;
         b._fastforwarding = this._fastforwarding;
-        return b
+        return b;
     }
 
     // Battler params
@@ -164,8 +165,8 @@ export class LUnitBehavior extends LBehavior {
         ]);
     }
 
-    onQueryReactions(self: LEntity, actions: DActionId[]): void {
-        actions.push(MRBasics.actions.AttackActionId);
+    onQueryReactions(self: LEntity, reactions: LReaction[]): void {
+        reactions.push({ actionId: MRBasics.actions.AttackActionId });
     }
 
     onEffectSensed(self: LEntity, cctx: SCommandContext): SCommandResponse { 
@@ -607,29 +608,26 @@ export class LUnitBehavior extends LBehavior {
 
     }
 
-    
+    // 歩行移動時、足元に何かアクションを行えるものがあれば、そのアクションをチェックする。
     private judgeFeetProcess(self: LEntity): [LFeetProcess, LEntity | undefined] {
         if (this._manualMovement) {
             if (self.immediatelyAfterAdjacentMoving) {
                 const targetEntity = REGame.map.firstFeetEntity(self);
                 if (targetEntity && !targetEntity.findEntityBehavior(LTrapBehavior)) {
-                    const actions = targetEntity.queryReactions();
-                    if (actions.length > 0) {
-                        const actions = targetEntity.queryReactions();
-                        if (actions.length > 0) {
-                            if (actions.includes(MRBasics.actions.PickActionId) &&
-                                !targetEntity._shopArticle.isSalling()) {
-                                if (this._straightDashing) {
-                                    return [LFeetProcess.RideOnMessage, targetEntity];
-                                }
-                                else {
-                                    // 歩行移動時に足元に拾えるものがあれば取得試行
-                                    return [LFeetProcess.AutoPick, targetEntity];
-                                }
+                    const reactions = targetEntity.queryReactions();
+                    if (reactions.length > 0) {
+                        if (!!reactions.find(x => x.actionId == MRBasics.actions.PickActionId) &&
+                            !targetEntity._shopArticle.isSalling()) {
+                            if (this._straightDashing) {
+                                return [LFeetProcess.RideOnMessage, targetEntity];
                             }
                             else {
-                                return [LFeetProcess.Dialog, targetEntity];
+                                // 歩行移動時に足元に拾えるものがあれば取得試行
+                                return [LFeetProcess.AutoPick, targetEntity];
                             }
+                        }
+                        else {
+                            return [LFeetProcess.Dialog, targetEntity];
                         }
                     }
                 }

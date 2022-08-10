@@ -57,7 +57,7 @@ test("Items.Arrow", () => {
     //----------------------------------------------------------------------------------------------------
 
     // item1 は [撃つ] ことができる
-    expect(item1.queryReactions().includes(MRBasics.actions.ShootingActionId)).toBeTruthy();
+    expect(!!item1.queryReactions().find(x => x.actionId == MRBasics.actions.ShootingActionId)).toBeTruthy();
     
     // [撃つ]
     const activity1 = LActivity.makeShooting(player1, item1).withConsumeAction();

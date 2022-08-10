@@ -30,5 +30,5 @@ test("ExitPoint.Reactions", () => {
     assert(exitpoint);
     const reactions = exitpoint.queryReactions();
     expect(reactions.length).toBe(1);
-    expect(reactions[0]).toBe(MRBasics.actions.ForwardFloorActionId);
+    expect(reactions[0].actionId).toBe(MRBasics.actions.ForwardFloorActionId);
 });

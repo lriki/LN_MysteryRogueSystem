@@ -486,7 +486,7 @@ export class SCommandContext
     findReactorEntityInBlock(block: LBlock, actionId: number): LEntity | undefined {
         const layers = block.layers();
         for (let iLayer = layers.length - 1; iLayer >= 0; iLayer--) {   // 上の Layer から
-            const reactor = layers[iLayer].entities().find(entity => entity.queryReactions().find(x => x == actionId) != undefined);
+            const reactor = layers[iLayer].entities().find(entity => entity.queryReactions().find(x => x.actionId == actionId) != undefined);
             if (reactor) return reactor;
         }
         return undefined;

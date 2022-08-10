@@ -15,7 +15,7 @@ export class TestUtils {
         const data = item.data;
 
         // [食べる] ができる？
-        expect(item.queryReactions().includes(MRBasics.actions.EatActionId)).toBeTruthy();
+        expect(!!item.queryReactions().find(x => x.actionId == MRBasics.actions.EatActionId)).toBeTruthy();
 
         // [食べる] に対応する Emittor がある？
         const reaction = data.getReaction(MRBasics.actions.EatActionId);
@@ -33,7 +33,7 @@ export class TestUtils {
         expect(name.includes(data.display.name)).toBe(false);
         
         // [食べる] ができる？
-        expect(item.queryReactions().includes(MRBasics.actions.EatActionId)).toBeTruthy();
+        expect(!!item.queryReactions().find(x => x.actionId == MRBasics.actions.EatActionId)).toBeTruthy();
 
         // [食べる] に対応する Emittor がある？
         const reaction = data.getReaction(MRBasics.actions.EatActionId);
@@ -68,7 +68,7 @@ export class TestUtils {
         expect(name.includes(data.display.name)).toBe(false);
         
         // [読む] ができる？
-        expect(item.queryReactions().includes(MRBasics.actions.ReadActionId)).toBeTruthy();
+        expect(!!item.queryReactions().find(x => x.actionId ==MRBasics.actions.ReadActionId)).toBeTruthy();
 
         // [読む] に対応する Emittor がある？
         const reaction = data.getReaction(MRBasics.actions.ReadActionId);
@@ -88,7 +88,7 @@ export class TestUtils {
 
     public static testCommonArrow(item: LEntity): void {
         // [撃つ] ことができる
-        expect(item.queryReactions().includes(MRBasics.actions.ShootingActionId)).toBeTruthy();
+        expect(!!item.queryReactions().find(x => x.actionId ==MRBasics.actions.ShootingActionId)).toBeTruthy();
 
         // スタックできる
         expect(item.hasTrait(MRBasics.traits.Stackable)).toBeTruthy();

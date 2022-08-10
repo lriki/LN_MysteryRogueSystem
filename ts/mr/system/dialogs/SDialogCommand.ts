@@ -16,9 +16,9 @@ export class SDialogCommand {
     private _systemCommandId: string;
     private _systemCommandIdHandler: SSystemCommandHandler | undefined;
 
-    public static makeActivityCommand(actionId: DActionId, handler: SActivityCommandHandler): SDialogCommand {
+    public static makeActivityCommand(actionId: DActionId, displayName: string | undefined, handler: SActivityCommandHandler): SDialogCommand {
         const cmd = new SDialogCommand();
-        cmd._displayName = MRData.actions[actionId].displayName;
+        cmd._displayName = displayName ?? MRData.actions[actionId].displayName;
         cmd._actionId = actionId;
         cmd._activityCommandHandler = handler;
         return cmd;

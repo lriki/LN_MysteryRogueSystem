@@ -45,7 +45,7 @@ import { DSequelId } from "ts/mr/data/DSequel";
 import { LCandidateSkillAction } from "ts/mr/usecases/UAction";
 import { DEffect } from "ts/mr/data/DEffect";
 import { DFactionId } from "ts/mr/data/MRData";
-import { LMinimapMarkerClass, LPriceInfo } from "../LCommon";
+import { LMinimapMarkerClass, LPriceInfo, LReaction } from "../LCommon";
 import { LMap } from "../LMap";
 import { DEmittor } from "ts/mr/data/DEmittor";
 import { SActivityContext } from "ts/mr/system/SActivityContext";
@@ -341,7 +341,7 @@ export abstract class LBehavior extends LObject {
      * 
      * なお "階段" Entity がこのメソッドで PickAction を返すと、階段を拾うことができてしまう。
      */
-    public onQueryReactions(self: LEntity, actions: DActionId[]): void { }
+    public onQueryReactions(self: LEntity, reactions: LReaction[]): void { }
 
     public onQueryCharacterAI(characterAIs: LCharacterAI[]): void { }
     

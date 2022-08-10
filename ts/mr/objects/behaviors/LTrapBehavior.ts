@@ -18,6 +18,7 @@ import { DCounterAction } from "ts/mr/data/DEntity";
 import { paramExposedTrapTriggerRate, paramHiddenTrapTriggerRate } from "ts/mr/PluginParameters";
 import { LRandom } from "../LRandom";
 import { DActionId } from "ts/mr/data/DCommon";
+import { LReaction } from "../LCommon";
 
 
 /**
@@ -62,7 +63,7 @@ export class LTrapBehavior extends LBehavior {
     public clone(newOwner: LEntity): LBehavior {
         const b = REGame.world.spawn(LTrapBehavior);
         b._exposed = this._exposed;
-        return b
+        return b;
     }
 
     /**
@@ -84,14 +85,14 @@ export class LTrapBehavior extends LBehavior {
     }
 
     
-    onQueryReactions(self: LEntity, actions: DActionId[]): void {
+    onQueryReactions(self: LEntity, reactions: LReaction[]): void {
         // Trap 側で Action を非表示にする方がよいだろう。
         // 例えば Trap を標準システムではなく拡張と考えた時、
         // Player 側からは「Trap であるか」といった判断はするべきではない。
-        actions.mutableRemoveAll(x =>
-            x == MRBasics.actions.PickActionId ||
-            x == MRBasics.actions.ThrowActionId);
-        actions.push(MRBasics.actions.trample);
+        reactions.mutableRemoveAll(x =>
+            x.actionId == MRBasics.actions.PickActionId ||
+            x.actionId == MRBasics.actions.ThrowActionId);
+        reactions.push({ actionId: MRBasics.actions.trample });
     }
 
     onAttached(self: LEntity): void {

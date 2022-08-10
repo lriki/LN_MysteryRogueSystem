@@ -1,3 +1,4 @@
+import { DActionId } from "../data/DCommon";
 
 export type LRoomId = number;
 export type LStructureId = number;
@@ -37,3 +38,7 @@ export enum LActionTokenConsumeType {
     WaitActed,
 }
 
+export interface LReaction {
+    actionId: DActionId;
+    displayName?: string | undefined;
+}

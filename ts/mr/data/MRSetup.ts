@@ -1596,7 +1596,8 @@ export class MRSetup {
         const fpEffect = MRData.newEffect(entity.entity.key);
         fpEffect.parameterQualifyings.push(new DParameterQualifying(MRBasics.params.fp, "500", DParameterEffectApplyType.Recover).withSilent());
         eatEmittor.effectSet.addEffect(fpEffect);
-        entity.addReaction(MRBasics.actions.EatActionId, eatEmittor);
+        const reaction = entity.addReaction(MRBasics.actions.EatActionId, eatEmittor);
+        reaction.overrideDisplayCommandName = tr2("飲む");
         //entity.addEmittor(DEffectCause.Eat, eatEmittor);
 
         // 投げ当てで MainEmittor 発動

@@ -4,6 +4,7 @@ import { MRBasics } from "ts/mr/data/MRBasics";
 import { SCommand, SCommandResponse } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { SSubTaskChain } from "ts/mr/system/tasks/STask";
+import { LReaction } from "../LCommon";
 import { LEntity } from "../LEntity";
 import { LObject } from "../LObject";
 import { REGame } from "../REGame";
@@ -97,10 +98,10 @@ export class LEquipmentBehavior extends LBehavior {
         }
     }
     
-    onQueryReactions(self: LEntity, actions: DActionId[]): void {
+    onQueryReactions(self: LEntity, reactions: LReaction[]): void {
         if (self.parentAs(LInventoryBehavior)) {
-            actions.push(MRBasics.actions.EquipActionId);
-            actions.push(MRBasics.actions.EquipOffActionId);
+            reactions.push({ actionId: MRBasics.actions.EquipActionId });
+            reactions.push({ actionId: MRBasics.actions.EquipOffActionId });
         }
     }
     

@@ -40,18 +40,22 @@ export class SFeetDialog extends SDialog {
         const actions = actor.queryActions();
         const reactions = item.queryReactions();
         const actualActions = reactions
-            .filter(actionId => actions.includes(actionId))
-            .distinct();
+            .filter(x => actions.includes(x.actionId))
+            .distinctObjects(x => x.actionId);
 
         // [撃つ] があれば [投げる] を除く
         {
-            if (actualActions.includes(MRBasics.actions.ShootingActionId)) {
-                actualActions.mutableRemove(x => x == MRBasics.actions.ThrowActionId);
+            if (!!actualActions.find(x => x.actionId == MRBasics.actions.ShootingActionId)) {
+                actualActions.mutableRemove(x => x.actionId == MRBasics.actions.ThrowActionId);
             }
         }
         
-        const result = commands.concat(SItemListDialog.normalizeActionList(actualActions).map(a => SDialogCommand.makeActivityCommand(a, _ => this.handleAction(a))));
-        return result;
+        commands = commands.concat(
+            SItemListDialog.normalizeActionList(actualActions)
+                .map(a => SDialogCommand.makeActivityCommand(a.actionId, a.displayName, _ => this.handleAction(a.actionId)))
+            );
+
+        return commands;
     }
 
     private handleAction(actionId: DActionId): void {

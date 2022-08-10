@@ -7,6 +7,7 @@ import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { MRSerializable } from "ts/mr/Common";
 import { DActionId, DBlockLayerKind } from "ts/mr/data/DCommon";
+import { LReaction } from "../LCommon";
 
 /**
  * [2021/8/14] 「戻る」の実装について
@@ -50,9 +51,9 @@ export class LExitPointBehavior extends LBehavior {
         return DBlockLayerKind.Ground;
     }
 
-    onQueryReactions(self: LEntity, actions: DActionId[]): void {
-        actions.splice(0);
-        actions.push(MRBasics.actions.ForwardFloorActionId);
+    onQueryReactions(self: LEntity, reactions: LReaction[]): void {
+        reactions.splice(0);
+        reactions.push({ actionId: MRBasics.actions.ForwardFloorActionId });
     }
     
     [onProceedFloorReaction](args: CommandArgs, cctx: SCommandContext): SCommandResponse {

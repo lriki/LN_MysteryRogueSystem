@@ -6,6 +6,7 @@ import { LActivity } from "ts/mr/objects/activities/LActivity";
 import { LEquipmentUserBehavior } from "ts/mr/objects/behaviors/LEquipmentUserBehavior";
 import { LInventoryBehavior } from "ts/mr/objects/behaviors/LInventoryBehavior";
 import { LStorageBehavior } from "ts/mr/objects/behaviors/LStorageBehavior";
+import { LReaction } from "ts/mr/objects/LCommon";
 import { LEntity } from "ts/mr/objects/LEntity";
 import { LBehaviorId, LEntityId } from "ts/mr/objects/LObject";
 import { REGame } from "ts/mr/objects/REGame";
@@ -77,8 +78,8 @@ export class SItemListDialog extends SDialog {
         const actions = actor.queryActions();
         const reactions = item.queryReactions();
         const actualActions = reactions
-            .filter(actionId => actions.includes(actionId))
-            .distinct();
+            .filter(x => actions.includes(x.actionId))
+            .distinctObjects(x => x.actionId);
 
         // コマンドカスタマイズ。
         // ここで行うのはあくまで見た目に関係するもの。
@@ -90,42 +91,43 @@ export class SItemListDialog extends SDialog {
             {
                 const equipments = actor.getEntityBehavior(LEquipmentUserBehavior);
                 if (equipments.isEquipped(item))
-                    actualActions.mutableRemove(x => x == MRBasics.actions.EquipActionId);   // [装備] を除く
+                    actualActions.mutableRemove(x => x.actionId == MRBasics.actions.EquipActionId);   // [装備] を除く
                 else
-                    actualActions.mutableRemove(x => x == MRBasics.actions.EquipOffActionId);  // [はずす] を除く
+                    actualActions.mutableRemove(x => x .actionId== MRBasics.actions.EquipOffActionId);  // [はずす] を除く
             }
 
             // 足元に何かあれば [置く] を [交換] にする
             {
                 const feetEntity = REGame.map.firstFeetEntity(actor);
                 if (feetEntity) {
-                    if (actualActions.mutableRemove(x => x == MRBasics.actions.PutActionId)) {
-                        actualActions.push(MRBasics.actions.ExchangeActionId);
+                    if (actualActions.mutableRemove(x => x.actionId == MRBasics.actions.PutActionId)) {
+                        actualActions.push({ actionId: MRBasics.actions.ExchangeActionId });
                     }
                 }
             }
 
             // [撃つ] があれば [投げる] を除く
             {
-                if (actualActions.includes(MRBasics.actions.ShootingActionId)) {
-                    actualActions.mutableRemove(x => x == MRBasics.actions.ThrowActionId);
+                if (!!actualActions.find(x => x.actionId == MRBasics.actions.ShootingActionId)) {
+                    actualActions.mutableRemove(x => x.actionId == MRBasics.actions.ThrowActionId);
                 }
             }
         }
 
-        commands = commands.concat(SItemListDialog.normalizeActionList(actualActions).map(a => SDialogCommand.makeActivityCommand(a, _ => this.handleAction(a))));
-
-
+        commands = commands.concat(
+            SItemListDialog.normalizeActionList(actualActions)
+                .map(a => SDialogCommand.makeActivityCommand(a.actionId, a.displayName, _ => this.handleAction(a.actionId)))
+            );
 
         return commands;
     }
 
-    public static normalizeActionList(actions: DActionId[]): DActionId[] {
+    public static normalizeActionList(actions: LReaction[]): LReaction[] {
         return actions
-            .distinct()
+            .distinctObjects(x => x.actionId)
             .immutableSort((a, b) => {
-                const ad = MRData.actions[a];
-                const bd = MRData.actions[b];
+                const ad = MRData.actions[a.actionId];
+                const bd = MRData.actions[b.actionId];
                 if (ad.priority == bd.priority) return ad.id - bd.id;
                 return bd.priority - ad.priority;   // 降順
             });

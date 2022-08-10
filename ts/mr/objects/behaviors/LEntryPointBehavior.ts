@@ -8,6 +8,7 @@ import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { MRSerializable } from "ts/mr/Common";
+import { LReaction } from "../LCommon";
 
 /**
  */
@@ -23,9 +24,9 @@ export class LEntryPointBehavior extends LBehavior {
         return DBlockLayerKind.Ground;
     }
 
-    onQueryReactions(self: LEntity, actions: DActionId[]): void {
-        actions.splice(0);
-        actions.push(MRBasics.actions.BackwardFloorActionId);
+    onQueryReactions(self: LEntity, reactions: LReaction[]): void {
+        reactions.splice(0);
+        reactions.push({ actionId: MRBasics.actions.BackwardFloorActionId });
     }
     
     [onProceedFloorReaction](args: CommandArgs, cctx: SCommandContext): SCommandResponse {

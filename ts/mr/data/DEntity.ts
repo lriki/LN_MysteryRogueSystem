@@ -114,6 +114,8 @@ export class DReaction {
     
     public primariyUse: boolean;
 
+    public overrideDisplayCommandName: string | undefined;
+
     public constructor(actionId: DActionId) {
         this._actionId = actionId;
         this._emittorIds = [];
@@ -332,7 +334,7 @@ export class DEntity {
         return (this.isTraitCharmItem) ? this.equipmentTraits : [];
     }
 
-    public addReaction(actionId: DActionId, emittor?: DEmittor, primaryUse?: boolean): void {
+    public addReaction(actionId: DActionId, emittor?: DEmittor, primaryUse?: boolean): DReaction {
         let reaction = this.reactions.find(x => x.actionId == actionId);
         if (!reaction) {
             reaction = new DReaction(actionId);
@@ -345,6 +347,7 @@ export class DEntity {
         if (primaryUse) {
             reaction.primariyUse = primaryUse;
         }
+        return reaction;
     }
 
     public findReaction(actionId: DActionId): DReaction | undefined {

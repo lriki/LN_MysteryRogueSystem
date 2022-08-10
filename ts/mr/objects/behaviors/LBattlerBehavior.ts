@@ -14,6 +14,7 @@ import { UAction } from "ts/mr/usecases/UAction";
 import { SStepPhase } from "ts/mr/system/SCommon";
 import { DActionId } from "ts/mr/data/DCommon";
 import { MRSerializable } from "ts/mr/Common";
+import { LReaction } from "../LCommon";
 
 @MRSerializable
 export class LBattlerBehavior extends LBehavior {
@@ -62,9 +63,9 @@ export class LBattlerBehavior extends LBehavior {
         params.acquireParam(MRBasics.params.pow);
     }
     
-    onQueryReactions(self: LEntity, actions: DActionId[]): void {
+    onQueryReactions(self: LEntity, reactions: LReaction[]): void {
         // 敵味方を問わず、話しかけることは可能。
-        actions.push(MRBasics.actions.talk);
+        reactions.push({ actionId: MRBasics.actions.talk });
     }
 
 

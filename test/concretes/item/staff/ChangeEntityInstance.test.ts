@@ -35,7 +35,7 @@ test("Items.ChangeEntityInstance.Wave", () => {
     RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // item1 は [振る] ことができる
-    expect(item1.queryReactions().includes(MRBasics.actions.WaveActionId)).toBe(true);
+    expect(!!item1.queryReactions().find(x => x.actionId == MRBasics.actions.WaveActionId)).toBe(true);
     
     // [振る]
     const activity1 = LActivity.makeWave(actor1, item1).withConsumeAction();

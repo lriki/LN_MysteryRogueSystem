@@ -360,7 +360,7 @@ export class VManualActionDialogVisual extends VDialog {
         // 正面に、少なくとも敵対していない Entity がいれば、話しかけてみる
         const frontTarget = UMovement.getFrontBlock(entity).getFirstEntity();
         if (frontTarget && !Helpers.isHostile(entity, frontTarget)) {
-            if (frontTarget.queryReactions().includes(MRBasics.actions.talk)) {
+            if (!!frontTarget.queryReactions().find(x => x.actionId == MRBasics.actions.talk)) {
                 context.postActivity(LActivity.makeTalk(entity).withConsumeAction(LActionTokenConsumeType.MajorActed));
                 this._model.submit();
                 return true;

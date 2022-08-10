@@ -18,7 +18,7 @@ import { CommandArgs, DecisionPhase, LBehavior, LNameView, testPickOutItem } fro
 import { DActionId, DBlockLayerKind } from "ts/mr/data/DCommon";
 import { LMap } from "../LMap";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
-import { LMinimapMarkerClass } from "../LCommon";
+import { LMinimapMarkerClass, LReaction } from "../LCommon";
 
 
 /**
@@ -119,11 +119,10 @@ export class LItemImitatorBehavior extends LBehavior {
         return LMinimapMarkerClass.Item;
     }
     
-    onQueryReactions(self: LEntity, actions: DActionId[]): DActionId[] {
+    onQueryReactions(self: LEntity, reactions: LReaction[]): void {
         for (const a of this.itemEntity().queryReactions()) {
-            actions.push(a);
+            reactions.push(a);
         }
-        return actions;
     }
 
     public itemEntity(): LEntity {
