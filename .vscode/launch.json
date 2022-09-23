@@ -1,0 +1,56 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Jest",
+            "type": "node",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+            "args": [
+                //"${file}",
+                // 現在のプロセスで逐次テストを実行していく設定.
+                // この設定をしないと複数のchildプロセスでテストを実行するらしい
+                // cliのpackage の性質上、子プロセスがテスト画像を変更してしまうリスクがあるし、
+                // debuggingのために有用とのことだったので、この設定を有効にした
+                // https://facebook.github.io/jest/docs/en/cli.html#runinband
+                "--runInBand", 
+                // debugの際はcacheを無効にした。
+                // cacheを無効にすると、2倍くらい遅くなるらしい。
+                "--no-cache",
+                "--coverage", "false",
+
+                // 個別テスト実行
+                "-t", "concretes.item.ring.SleepGuardRing",
+            ],
+            "cwd": "${workspaceRoot}",
+            "console": "integratedTerminal",
+            "sourceMaps": true,
+        },
+        {
+            "name": "Debug Chrome",
+            "type": "chrome",
+            "request": "launch",
+            "file": "${workspaceRoot}/index.html",
+            "runtimeArgs": [
+                "--allow-file-access-from-files",
+                "--remote-debugging-port=9222",
+                "--autoplay-policy=no-user-gesture-required"
+            ]
+        },
+        {
+            "name": "Debug NWjs",
+            "type": "nwjs",
+            "request": "launch",
+            "nwjsVersion": "0.48.4",
+            "webRoot": "${workspaceFolder}",
+            "reloadAfterAttached": true,
+            "runtimeArgs": ["${workspaceFolder}", "test"]
+        }
+    ]
+}

@@ -1,0 +1,148 @@
+//==============================================================================
+// LN_MysteryRogueSystem.js
+// -----------------------------------------------------------------------------
+// Copyright (c) 2022 lriki
+// This software is released under the MIT License.
+// http://opensource.org/licenses/mit-license.php
+// -----------------------------------------------------------------------------
+// [GitHub]  : https://github.com/lriki/LN_MysteryRogueSystem
+// [Twitter] : https://twitter.com/lriki8
+//==============================================================================
+
+/*:ja
+ * @target MZ
+ * @plugindesc LN_MysteryRogueSystem v0.7.0
+ * @author lriki
+ *
+ * @help test.
+ *
+ * MIT License
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ * @param Group_Inventory
+ * @text 持ち物
+ * @default --------------------
+ * 
+ * @param InventoryCapacity
+ * @text 持ち物の最大数
+ * @parent Group_Inventory
+ * @default 24
+ * @type number
+ * 
+ * @param InventoryItemsPerPage
+ * @text ウィンドウの1ページ分のアイテム数
+ * @parent Group_Inventory
+ * @default 12
+ * @type number
+ * 
+ * @param Group_Map
+ * @text マップ
+ * @default --------------------
+  * 
+ * @param RandomMapPaddingX
+ * @text ランダムマップの外周幅 (上下)
+ * @desc ランダムマップ作成時の、マップ外周の侵入不可領域の大きさです。ゲーム画面のサイズに応じて、プレイヤーキャラを画面中央に表示するために変更できます。
+ * @parent Group_Map
+ * @default 8
+ * @type number
+ *
+ * @param RandomPaddingY
+ * @text ランダムマップの外周幅 (左右)
+ * @desc ランダムマップ作成時の、マップ外周の侵入不可領域の大きさです。ゲーム画面のサイズに応じて、プレイヤーキャラを画面中央に表示するために変更できます。
+* @parent Group_Map
+ * @default 6
+ * @type number
+ *
+ * @param SuspendMenuEnabled
+ * @text [中断] メニューの表示有無
+ * @desc MRタクティクスマップ上でのメニュー画面で、[中断] を表示するかどうかを指定します。
+ * @default false
+ * @type boolean
+ *
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ *
+ * @command RE.ShowChallengeResult
+ * @text ShowChallengeResult
+ * @desc test
+ *
+ * @command MR-ShowWarehouseStoreDialog
+ * @text ShowWarehouseStoreDialog
+ * @desc 預ける
+ * @arg serviceProviderKey
+ * @type string
+ * @arg serviceUserKey
+ * @type string
+
+ * @command MR-ShowWarehouseWithdrawDialog
+ * @text ShowWarehouseWithdrawDialog
+ * @desc 引き出す
+ * @arg serviceProviderKey
+ * @type string
+ * @arg serviceUserKey
+ * @type string
+
+ * @command MR-ShowItemSellDialog
+ * @desc 売る
+ * @arg serviceProviderKey
+ * @type string
+ * @arg serviceUserKey
+ * @type string
+ * @arg inventoryOwnerKey
+ * @type string
+
+ * @command MR-ProceedFloorForward
+ * @text ProceedFloorForward
+ * @desc 次のフロアへ
+ *
+ * @command MR-ProceedFloorBackword
+ * @text ProceedFloorBackword
+ * @desc 前のフロアへ
+ *
+ * @command MR-SetProperty
+ * @text MR-SetProperty
+ * @desc entityKey で指定された Entity へ様々な情報を設定します。
+ * @arg entityKey
+ * @type string
+ * @arg property
+ * @type string
+ * @arg value
+
+ * @command MR-GetProperty
+ * @text MR-GetProperty
+ * @desc entityKey で指定された Entity から様々な情報を取得し、変数に代入します。
+ * @arg entityKey
+ * @type string
+ * @arg property
+ * @type string
+ * @arg variable
+ *
+ * @command MR-ResetStatus
+ * @text MR-ResetStatus
+ * @desc entityKey で指定された Entity のパラメータ及びステートを初期状態に戻します。
+ * @arg entityKey
+ * @type string
+ *
+ * @command MR-ResetInventory
+ * @text MR-ResetInventory
+ * @desc entityKey で指定された Entity のインベントリを初期状態に戻します。
+ * @arg entityKey
+ * @type string
+ *
+ *
+ *
+ * @command MR-LivingResult-GetIncludesState
+ * @text MR-LivingResult-GetIncludesState
+ * @desc actorKey で指定された Entity の戦闘不能原因に、stateKey で指定されたステートが含まれているかを確認します。
+ *       MR-CommndResult1: 1=含まれている, 0=含まれていない, -1=Entityが見つからなかった
+ * @arg actorKey
+ * @type string
+ * @arg stateKey
+ * @type string
+ 
+ */
+ 
+
+ 

@@ -1,0 +1,1323 @@
+[
+  null,
+  {
+    "id": 1,
+    "animationId": 6,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 97,
+    "name": "⚔--武器.1",
+    "note": "",
+    "params": [
+      0,
+      0,
+      10,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 100,
+    "wtypeId": 2
+  },
+  {
+    "id": 2,
+    "animationId": 1,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 97,
+    "name": "こん棒",
+    "note": "<MR-Type: Entity>\n<MR-Category: Weapon>\n<MR-Key: kEntity_こん棒_A>\n<MR-Prefab: kPrefab_こん棒_A>\n<RE-EquipmentImage:RE-Weapon-1,Right>\n\n",
+    "params": [
+      0,
+      0,
+      10,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 100,
+    "wtypeId": 2
+  },
+  {
+    "id": 3,
+    "animationId": 6,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 97,
+    "name": "青銅の剣",
+    "note": "<MR-Type: Entity>\n<MR-Category: Weapon>\n<MR-Key: kEntity_青銅の剣_A>\n<MR-Prefab: kPrefab_青銅の剣_A>\n<RE-EquipmentImage:RE-Weapon-1,Right>",
+    "params": [
+      0,
+      0,
+      20,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 200,
+    "wtypeId": 2
+  },
+  {
+    "id": 4,
+    "animationId": 6,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 97,
+    "name": "ポイズンキラー",
+    "note": "<MR-Type: Entity>\n<MR-Category: Weapon>\n<MR-Key: kEntity_ポイズンキラー_A>\n<MR-Prefab: kPrefab_ポイズンキラー_A>\n<RE-EquipmentImage:RE-Weapon-1,Right>",
+    "params": [
+      0,
+      0,
+      30,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 300,
+    "wtypeId": 2
+  },
+  {
+    "id": 5,
+    "animationId": 6,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 97,
+    "name": "金の剣",
+    "note": "<MR-Type: Entity>\n<MR-Category: Weapon>\n<MR-Key: kEntity_金の剣_A>\n<MR-Prefab: kPrefab_金の剣_A>",
+    "params": [
+      0,
+      0,
+      40,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 400,
+    "wtypeId": 2
+  },
+  {
+    "id": 6,
+    "animationId": 6,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "鋼の剣",
+    "note": "<MR-Type: Entity>\n<MR-Category: Weapon>\n<MR-Key: kEntity_鋼の剣_A>\n<MR-Prefab: kPrefab_鋼の剣_A>",
+    "params": [
+      0,
+      0,
+      70,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 600,
+    "wtypeId": 0
+  },
+  {
+    "id": 7,
+    "animationId": 6,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 97,
+    "name": "ドラゴンキラー",
+    "note": "<MR-Type: Entity>\n<MR-Category: Weapon>\n<MR-Key: kEntity_ドラゴンキラー_A>\n<MR-Prefab: kPrefab_ドラゴンキラー_A>",
+    "params": [
+      0,
+      0,
+      50,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 500,
+    "wtypeId": 2
+  },
+  {
+    "id": 8,
+    "animationId": 6,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 101,
+    "name": "隕石の剣",
+    "note": "<MR-Type: Entity>\n<MR-Category: Weapon>\n<MR-Key: kEntity_隕石の剣_A>\n<MR-Prefab: kPrefab_隕石の剣_A>",
+    "params": [
+      0,
+      0,
+      100,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 700,
+    "wtypeId": 6
+  },
+  {
+    "id": 9,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "[Test]ダミードラゴンキラー",
+    "note": "<MR-Type: Entity>\n<MR-Category: Weapon>\n<MR-Key: kEntity_ダミードラゴンキラー_A>\n<MR-Prefab: kPrefab_ドラゴンキラー_A>",
+    "params": [
+      0,
+      0,
+      50,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 10,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 11,
+    "animationId": 6,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 97,
+    "name": "🏹--矢弾.1",
+    "note": "\n",
+    "params": [
+      0,
+      0,
+      10,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 100,
+    "wtypeId": 2
+  },
+  {
+    "id": 12,
+    "animationId": 1,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 102,
+    "name": "木の矢",
+    "note": "<MR-Type: Entity>\n<MR-Category: Arrow>\n<MR-Key: kEntity_木の矢_A>\n<MR-Prefab: kPrefab_木の矢_A>",
+    "params": [
+      0,
+      0,
+      2,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 13,
+    "animationId": 1,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 102,
+    "name": "鉄の矢",
+    "note": "<MR-Type: Entity>\n<MR-Category: Arrow>\n<MR-Key: kEntity_鉄の矢_A>\n<MR-Prefab: kPrefab_鉄の矢_A>",
+    "params": [
+      0,
+      0,
+      10,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 14,
+    "animationId": 1,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 102,
+    "name": "銀の矢",
+    "note": "<MR-Type: Entity>\n<MR-Category: Arrow>\n<MR-Key: kEntity_銀の矢_A>\n<MR-Prefab: kPrefab_銀の矢_A>",
+    "params": [
+      0,
+      0,
+      2,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 15,
+    "animationId": 1,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "毒矢",
+    "note": "<MR-Type: Entity>\n<MR-Category: Arrow>\n<MR-Key: kEntity_毒矢_A>\n<MR-Prefab: kPrefab_毒矢_A>",
+    "params": [
+      0,
+      0,
+      2,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 16,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 17,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 18,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 19,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 20,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 21,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 22,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 23,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 24,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 25,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 26,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 27,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 28,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 29,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 30,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 31,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 32,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 33,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 34,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 35,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 36,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 37,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 38,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 39,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  },
+  {
+    "id": 40,
+    "animationId": 0,
+    "description": "",
+    "etypeId": 1,
+    "traits": [
+      {
+        "code": 31,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 22,
+        "dataId": 0,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0,
+    "wtypeId": 0
+  }
+]

@@ -1,0 +1,958 @@
+[
+  null,
+  {
+    "id": 1,
+    "atypeId": 0,
+    "description": "",
+    "etypeId": 2,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "🛡--盾.1",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0
+  },
+  {
+    "id": 2,
+    "atypeId": 1,
+    "description": "サビよけ・ハラヘリよけ",
+    "etypeId": 2,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 128,
+    "name": "皮の盾",
+    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kEntity_皮の盾_A>\n<MR-Prefab: kPrefab_皮の盾_A>\n<RE-EquipmentImage:RE-Shield-2,Left>",
+    "params": [
+      0,
+      0,
+      0,
+      10,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 100
+  },
+  {
+    "id": 3,
+    "atypeId": 1,
+    "description": "",
+    "etypeId": 2,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 128,
+    "name": "青銅の盾",
+    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kEntity_青銅の盾_A>\n<MR-Prefab: kPrefab_青銅の盾_A>\n<RE-EquipmentImage:RE-Shield-1,Left>",
+    "params": [
+      0,
+      0,
+      0,
+      20,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 200
+  },
+  {
+    "id": 4,
+    "atypeId": 1,
+    "description": "毒攻撃無効化",
+    "etypeId": 2,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 128,
+    "name": "うろこの盾",
+    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kEntity_うろこの盾_A>\n<MR-Prefab: kPrefab_うろこの盾_A>",
+    "params": [
+      0,
+      0,
+      0,
+      30,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 300
+  },
+  {
+    "id": 5,
+    "atypeId": 1,
+    "description": "サビよけ",
+    "etypeId": 2,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 128,
+    "name": "金の盾",
+    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kEntity_金の盾_A>\n<MR-Prefab: kPrefab_金の盾_A>",
+    "params": [
+      0,
+      0,
+      0,
+      40,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 400
+  },
+  {
+    "id": 6,
+    "atypeId": 1,
+    "description": "",
+    "etypeId": 2,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 128,
+    "name": "鋼の盾",
+    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kEntity_鋼の盾_A>\n<MR-Prefab: kPrefab_鋼の盾_A>",
+    "params": [
+      0,
+      0,
+      0,
+      50,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 500
+  },
+  {
+    "id": 7,
+    "atypeId": 1,
+    "description": "炎のダメージを軽減",
+    "etypeId": 2,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 11,
+        "dataId": 2,
+        "value": 0.5
+      }
+    ],
+    "iconIndex": 128,
+    "name": "ドラゴンシールド",
+    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kEntity_ドラゴンシールド_A>\n<MR-Prefab: kPrefab_ドラゴンシールド_A>",
+    "params": [
+      0,
+      0,
+      0,
+      70,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 600
+  },
+  {
+    "id": 8,
+    "atypeId": 1,
+    "description": "",
+    "etypeId": 2,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 128,
+    "name": "隕石の盾",
+    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kEntity_隕石の盾_A>\n<MR-Prefab: kPrefab_隕石の盾_A>",
+    "params": [
+      0,
+      0,
+      0,
+      100,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 700
+  },
+  {
+    "id": 9,
+    "atypeId": 0,
+    "description": "",
+    "etypeId": 2,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0
+  },
+  {
+    "id": 10,
+    "atypeId": 0,
+    "description": "",
+    "etypeId": 2,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0
+  },
+  {
+    "id": 11,
+    "atypeId": 0,
+    "description": "",
+    "etypeId": 2,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "💍--指輪.1",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0
+  },
+  {
+    "id": 12,
+    "atypeId": 1,
+    "description": "接近や部屋の出入りでモンスターを必ず起こす。\n",
+    "etypeId": 5,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 144,
+    "name": "目覚めの指輪",
+    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_目覚めの指輪_A>\n<MR-Prefab: kPrefab_目覚めの指輪_A>",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 100
+  },
+  {
+    "id": 13,
+    "atypeId": 1,
+    "description": "ちから+3。\n",
+    "etypeId": 5,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 144,
+    "name": "ちからの指輪",
+    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_ちからの指輪_A>\n<MR-Prefab: kPrefab_ちからの指輪_A>",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 100
+  },
+  {
+    "id": 14,
+    "atypeId": 1,
+    "description": "1歩歩くごとに1/16の確率でワープ。\n",
+    "etypeId": 5,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 144,
+    "name": "高跳びの指輪",
+    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_高跳びの指輪_A>\n<MR-Prefab: kPrefab_高跳びの指輪_A>",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 100
+  },
+  {
+    "id": 15,
+    "atypeId": 1,
+    "description": "状態異常：眠りにならない。\n",
+    "etypeId": 5,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      },
+      {
+        "code": 14,
+        "dataId": 25,
+        "value": 1
+      }
+    ],
+    "iconIndex": 144,
+    "name": "睡眠よけの指輪",
+    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_睡眠よけの指輪_A>\n<MR-Prefab: kPrefab_睡眠よけの指輪_A>",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 100
+  },
+  {
+    "id": 16,
+    "atypeId": 1,
+    "description": "満腹度が2倍減る。",
+    "etypeId": 5,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 144,
+    "name": "ハラヘリの指輪",
+    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_ハラヘリの指輪_A>\n<MR-Prefab: kPrefab_ハラヘリの指輪_A>",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 100
+  },
+  {
+    "id": 17,
+    "atypeId": 1,
+    "description": "ちから及びちからの最大値が減らない。",
+    "etypeId": 5,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 144,
+    "name": "毒消しの指輪",
+    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_毒消しの指輪_A>\n<MR-Prefab: kPrefab_毒消しの指輪_A>",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 100
+  },
+  {
+    "id": 18,
+    "atypeId": 1,
+    "description": "黒幕バットが見える。",
+    "etypeId": 5,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 144,
+    "name": "影読みの指輪",
+    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_影読みの指輪_A>\n<MR-Prefab: kPrefab_影読みの指輪_A>",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 100
+  },
+  {
+    "id": 19,
+    "atypeId": 1,
+    "description": "インプ系モンスターの特殊攻撃を防ぐ。",
+    "etypeId": 5,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 144,
+    "name": "インプよけの指輪",
+    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_インプよけの指輪_A>\n<MR-Prefab: kPrefab_インプよけの指輪_A>",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 100
+  },
+  {
+    "id": 20,
+    "atypeId": 1,
+    "description": "接近や部屋の出入りでモンスターを起こさない。",
+    "etypeId": 5,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 144,
+    "name": "忍び足の指輪",
+    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_忍び足の指輪_A>\n<MR-Prefab: kPrefab_忍び足の指輪_A>",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 100
+  },
+  {
+    "id": 21,
+    "atypeId": 0,
+    "description": "",
+    "etypeId": 2,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "💍--指輪.2",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0
+  },
+  {
+    "id": 22,
+    "atypeId": 1,
+    "description": "罠にかからなくなる。\n",
+    "etypeId": 5,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 144,
+    "name": "罠よけの指輪",
+    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_罠よけの指輪_A>\n<MR-Prefab: kPrefab_罠よけの指輪_A>",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 100
+  },
+  {
+    "id": 23,
+    "atypeId": 1,
+    "description": "満腹度が減らなくなる。",
+    "etypeId": 5,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 144,
+    "name": "ハラヘラズの指輪",
+    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_ハラヘラズの指輪_A>\n<MR-Prefab: kPrefab_ハラヘラズの指輪_A>",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 100
+  },
+  {
+    "id": 24,
+    "atypeId": 1,
+    "description": "特殊効果なし。",
+    "etypeId": 5,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 144,
+    "name": "きれいな指輪",
+    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_きれいな指輪_A>\n<MR-Prefab: kPrefab_きれいな指輪_A>",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 100
+  },
+  {
+    "id": 25,
+    "atypeId": 0,
+    "description": "",
+    "etypeId": 2,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0
+  },
+  {
+    "id": 26,
+    "atypeId": 0,
+    "description": "",
+    "etypeId": 2,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0
+  },
+  {
+    "id": 27,
+    "atypeId": 0,
+    "description": "",
+    "etypeId": 2,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0
+  },
+  {
+    "id": 28,
+    "atypeId": 0,
+    "description": "",
+    "etypeId": 2,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0
+  },
+  {
+    "id": 29,
+    "atypeId": 0,
+    "description": "",
+    "etypeId": 2,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0
+  },
+  {
+    "id": 30,
+    "atypeId": 0,
+    "description": "",
+    "etypeId": 2,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0
+  },
+  {
+    "id": 31,
+    "atypeId": 0,
+    "description": "",
+    "etypeId": 2,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0
+  },
+  {
+    "id": 32,
+    "atypeId": 0,
+    "description": "",
+    "etypeId": 2,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0
+  },
+  {
+    "id": 33,
+    "atypeId": 0,
+    "description": "",
+    "etypeId": 2,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0
+  },
+  {
+    "id": 34,
+    "atypeId": 0,
+    "description": "",
+    "etypeId": 2,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0
+  },
+  {
+    "id": 35,
+    "atypeId": 0,
+    "description": "",
+    "etypeId": 2,
+    "traits": [
+      {
+        "code": 22,
+        "dataId": 1,
+        "value": 0
+      }
+    ],
+    "iconIndex": 0,
+    "name": "",
+    "note": "",
+    "params": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "price": 0
+  }
+]
