@@ -92,7 +92,9 @@ export class REDialogVisualNavigator {
     }
 
     update(context: SDialogContext): void {
-        this.changeScene();
+        if (this._nextScene) {
+            this.changeScene();
+        }
         this.updateScene(context);
     }
 
@@ -102,7 +104,6 @@ export class REDialogVisualNavigator {
         //     this._scene = undefined;
         // }
 
-        if (this._nextScene) {
             this._scene = this._nextScene;
             this._nextScene = undefined;
             if (this._scene) {
@@ -112,7 +113,8 @@ export class REDialogVisualNavigator {
                 }
                 this._scene.onStart();
             }
-        }
+
+        console.log("changeScene", this);
     }
 
     private updateScene(context: SDialogContext): void {

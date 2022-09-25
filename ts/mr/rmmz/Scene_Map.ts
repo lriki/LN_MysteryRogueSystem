@@ -134,11 +134,7 @@ Scene_Map.prototype.update = function() {
         }
     }
     
-    
     _Scene_Map_update.call(this);
-
-    
-    //SGameManager.attemptRestartFloor2(this);
 }
 
 const _Scene_Map_callMenu = Scene_Map.prototype.callMenu;
