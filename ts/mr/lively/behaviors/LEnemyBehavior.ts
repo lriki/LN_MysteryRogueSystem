@@ -7,7 +7,7 @@ import { DParameterId } from "ts/mr/data/DCommon";
 import {  SPhaseResult } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { USpawner } from "ts/mr/usecases/USpawner";
+import { USpawner } from "ts/mr/utility/USpawner";
 import { DecisionPhase, LBehavior, LGenerateDropItemCause } from "../internal";
 import { LEntity } from "../LEntity";
 import { LRandom } from "../LRandom";

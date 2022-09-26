@@ -1,19 +1,13 @@
 import { REGame } from "ts/mr/lively/REGame";
 import { TestEnv } from "./../TestEnv";
-import { LFloorId } from "ts/mr/lively/LFloorId";
-import { UMovement } from "ts/mr/usecases/UMovement";
 import { RESystem } from "ts/mr/system/RESystem";
-import { LTileShape } from "ts/mr/lively/LBlock";
-import { FMap } from "ts/mr/floorgen/FMapData";
-import { FGenericRandomMapGenerator } from "ts/mr/floorgen/FGenericRandomMapGenerator";
-import { FMapBuilder } from "ts/mr/floorgen/FMapBuilder";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
 import { MRData } from "ts/mr/data/MRData";
 import { paramMaxItemsInMap } from "ts/mr/PluginParameters";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { ULimitations } from "ts/mr/usecases/ULimitations";
+import { ULimitations } from "ts/mr/utility/ULimitations";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

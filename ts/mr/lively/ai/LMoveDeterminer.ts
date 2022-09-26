@@ -2,13 +2,11 @@ import { assert, MRSerializable } from "ts/mr/Common";
 import { Helpers } from "ts/mr/system/Helpers";
 import { SAIHelper } from "ts/mr/system/SAIHelper";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
-import { UMovement } from "ts/mr/usecases/UMovement";
+import { UMovement } from "ts/mr/utility/UMovement";
 import { LActivity } from "../activities/LActivity";
-import { LActionTokenType } from "../LActionToken";
 import { LBlock } from "../LBlock";
 import { LActionTokenConsumeType } from "../LCommon";
 import { LEntity } from "../LEntity";
-import { LRandom } from "../LRandom";
 import { REGame } from "../REGame";
 
 export enum LMovingMethod {

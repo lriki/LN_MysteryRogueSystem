@@ -28,7 +28,7 @@
 
 import { assert } from "ts/mr/Common";
 import { DEventId } from "ts/mr/data/predefineds/DBasicEvents";
-import { SEffectContext, SEffectSubject } from "ts/mr/system/SEffectContext";
+import { SEffectSubject } from "ts/mr/system/SEffectContext";
 import { SCommand, SCommandResponse, SPhaseResult } from "../../system/SCommand";
 import { SCommandContext } from "../../system/SCommandContext";
 import { LBehaviorId, LEntityId, LObject, LObjectType } from "../LObject";
@@ -36,20 +36,19 @@ import { LEntity } from "../LEntity";
 import { LActivity } from "../activities/LActivity";
 import { DAnimationId, DParameterId } from "ts/mr/data/DCommon";
 import { LEventResult } from "../LEventServer";
-import { DPrefabActualImage, DPrefabId } from "ts/mr/data/DPrefab";
-import { DCounterAction, DEntityNamePlate } from "ts/mr/data/DEntity";
+import { DPrefabId } from "ts/mr/data/DPrefab";
+import { DCounterAction } from "ts/mr/data/DEntity";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { SEffect, SEffectorFact } from "ts/mr/system/SEffectApplyer";
-import { DBlockLayerKind, DSpecificEffectId, DSkillId, DSubComponentEffectTargetKey, DCommandId, DActionId } from "ts/mr/data/DCommon";
+import { DBlockLayerKind, DSpecificEffectId, DSubComponentEffectTargetKey, DCommandId, DActionId } from "ts/mr/data/DCommon";
 import { DSequelId } from "ts/mr/data/DSequel";
-import { LCandidateSkillAction } from "ts/mr/usecases/UAction";
+import { LCandidateSkillAction } from "ts/mr/utility/UAction";
 import { DEffect } from "ts/mr/data/DEffect";
 import { DFactionId } from "ts/mr/data/MRData";
 import { LMinimapMarkerClass, LPriceInfo, LReaction } from "../LCommon";
 import { LMap } from "../LMap";
 import { DEmittor } from "ts/mr/data/DEmittor";
 import { SActivityContext } from "ts/mr/system/SActivityContext";
-import { SStepPhase } from "ts/mr/system/SCommon";
 import { LFieldEffect } from "../LFieldEffect";
 import { SSubTaskChain } from "ts/mr/system/tasks/STask";
 

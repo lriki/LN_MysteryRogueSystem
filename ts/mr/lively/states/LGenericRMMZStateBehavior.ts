@@ -1,6 +1,5 @@
 import { SCommandResponse, SPhaseResult } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
-import { RESystem } from "ts/mr/system/RESystem";
 import { DecisionPhase, LBehavior } from "../behaviors/LBehavior";
 import { LEntity } from "../LEntity";
 import { LState } from "./LState";
@@ -11,12 +10,11 @@ import { LConfusionAI, LConfusionAIRestriction } from "../ai/LConfusionAI";
 import { LActivity } from "../activities/LActivity";
 import { LUnitBehavior } from "../behaviors/LUnitBehavior";
 import { MRBasics } from "ts/mr/data/MRBasics";
-import { UMovement } from "ts/mr/usecases/UMovement";
+import { UMovement } from "ts/mr/utility/UMovement";
 import { LBlindAI } from "../ai/LBlindAI";
 import { LCharacterAI } from "../ai/LCharacterAI";
-import { UName } from "ts/mr/usecases/UName";
+import { UName } from "ts/mr/utility/UName";
 import { DSequelId } from "ts/mr/data/DSequel";
-import { LActionTokenType } from "../LActionToken";
 import { SActivityContext } from "ts/mr/system/SActivityContext";
 import { MRData } from "ts/mr/data/MRData";
 

@@ -7,8 +7,7 @@ import { TestEnv } from "../../../TestEnv";
 import { LandExitResult, MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
-import { LActionTokenType } from "ts/mr/lively/LActionToken";
-import { UName } from "ts/mr/usecases/UName";
+import { UName } from "ts/mr/utility/UName";
 import { LFloorId } from "ts/mr/lively/LFloorId";
 
 beforeAll(() => {

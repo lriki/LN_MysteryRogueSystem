@@ -13,11 +13,9 @@ import { DStateId } from "ts/mr/data/DState";
 import { SEffect, SEffectApplyer, SEffectorFact, SEffectModifier } from "./SEffectApplyer";
 import { onEffectResult } from "../lively/internal";
 import { SCommandResponse } from "./SCommand";
-import { RESystem } from "./RESystem";
-import { assert } from "../Common";
 import { LObject, LObjectType } from "../lively/LObject";
-import { UEffect } from "../usecases/UEffect";
-import { UAction } from "../usecases/UAction";
+import { UEffect } from "../utility/UEffect";
+import { UAction } from "../utility/UAction";
 import { STask } from "./tasks/STask";
 
 

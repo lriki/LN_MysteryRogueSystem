@@ -4,7 +4,7 @@ import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBeh
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { LItemBehavior } from "ts/mr/lively/behaviors/LItemBehavior";
 import { LEntity } from "ts/mr/lively/LEntity";
-import { UName } from "ts/mr/usecases/UName";
+import { UName } from "ts/mr/utility/UName";
 
 export class VItemListWindowItem {
     public entity: LEntity;

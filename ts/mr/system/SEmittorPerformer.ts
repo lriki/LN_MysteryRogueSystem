@@ -3,24 +3,22 @@ import { DEffectFieldScopeRange, DSkillCostSource, DEmittorCost, DParamCostType,
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
 import { MRData } from "ts/mr/data/MRData";
 import { LProjectileBehavior } from "ts/mr/lively/behaviors/activities/LProjectileBehavior";
-import { LBattlerBehavior } from "ts/mr/lively/behaviors/LBattlerBehavior";
 import { onAttackReaction } from "ts/mr/lively/internal";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { REGame } from "ts/mr/lively/REGame";
-import { RESystem } from "./RESystem";
 import { SCommandContext } from "./SCommandContext";
 import { SEffectContext, SEffectIncidentType, SEffectSubject } from "./SEffectContext";
 import { SEntityFactory } from "./SEntityFactory";
-import { UMovement } from "../usecases/UMovement";
+import { UMovement } from "../utility/UMovement";
 import { assert, tr2 } from "ts/mr/Common";
 import { SkillEmittedArgs } from "ts/mr/data/predefineds/DBasicEvents";
 import { DBlockLayerKind, DBlockLayerScope, DParameterId, DSkillId } from "../data/DCommon";
 import { SEffectorFact } from "./SEffectApplyer";
 import { DEmittor } from "../data/DEmittor";
-import { USearch } from "../usecases/USearch";
+import { USearch } from "../utility/USearch";
 import { LBlock } from "../lively/LBlock";
-import { UAction } from "../usecases/UAction";
-import { UName } from "../usecases/UName";
+import { UAction } from "../utility/UAction";
+import { UName } from "../utility/UName";
 import { SCommandResponse } from "./SCommand";
 
 export type SOnPerformedFunc = (targets: LEntity[]) => void;

@@ -1,12 +1,12 @@
 import { assert, MRSerializable } from "ts/mr/Common";
 import { MRBasics } from "ts/mr/data/MRBasics";
-import { DPrefabActualImage, DPrefabId } from "ts/mr/data/DPrefab";
+import { DPrefabId } from "ts/mr/data/DPrefab";
 import { DEventId, WalkEventArgs } from "ts/mr/data/predefineds/DBasicEvents";
 import { DFactionId, MRData } from "ts/mr/data/MRData";
 import { Helpers } from "ts/mr/system/Helpers";
 import { SCommandResponse, SPhaseResult } from "ts/mr/system/SCommand";
 import { RESystem } from "ts/mr/system/RESystem";
-import { UAction } from "ts/mr/usecases/UAction";
+import { UAction } from "ts/mr/utility/UAction";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { LEntity } from "../LEntity";

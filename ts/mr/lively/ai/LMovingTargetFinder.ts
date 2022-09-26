@@ -1,9 +1,6 @@
 import { MRSerializable } from "ts/mr/Common";
-import { USearch } from "ts/mr/usecases/USearch";
-import { ElementFlags } from "typescript";
-import { LItemBehavior } from "../behaviors/LItemBehavior";
+import { USearch } from "ts/mr/utility/USearch";
 import { LEntity } from "../LEntity";
-import { REGame } from "../REGame";
 
 /**
  * LActionDeterminer で有効スキルが発生しなかったため移動処理を行う際に、移動先座標を決定するためのクラス。

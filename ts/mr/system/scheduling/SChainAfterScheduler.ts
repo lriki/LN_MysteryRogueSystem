@@ -2,7 +2,7 @@ import { SCommandContext } from "../SCommandContext";
 import { REGame } from "ts/mr/lively/REGame";
 import { SCommandResponse } from "../SCommand";
 import { MRBasics } from "ts/mr/data/MRBasics";
-import { UAction } from "ts/mr/usecases/UAction";
+import { UAction } from "ts/mr/utility/UAction";
 import { LGenerateDropItemCause } from "ts/mr/lively/internal";
 import { assert } from "ts/mr/Common";
 import { LActivity } from "ts/mr/lively/activities/LActivity";

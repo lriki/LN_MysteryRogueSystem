@@ -1,14 +1,10 @@
-import { tr2 } from "ts/mr/Common";
-import { DSpecificEffectId } from "ts/mr/data/DCommon";
 import { DSpecialEffectRef } from "ts/mr/data/DEffect";
 import { DLandForwardDirection } from "ts/mr/data/DLand";
-import { LBattlerBehavior } from "ts/mr/lively/behaviors/LBattlerBehavior";
 import { LEffectResult } from "ts/mr/lively/LEffectResult";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { LFloorId } from "ts/mr/lively/LFloorId";
 import { REGame } from "ts/mr/lively/REGame";
-import { UAction } from "ts/mr/usecases/UAction";
-import { UTransfer } from "ts/mr/usecases/UTransfer";
+import { UTransfer } from "ts/mr/utility/UTransfer";
 import { SCommandContext } from "../SCommandContext";
 import { SEffectModifier } from "../SEffectApplyer";
 import { SSpecialEffect } from "./SSpecialEffect";

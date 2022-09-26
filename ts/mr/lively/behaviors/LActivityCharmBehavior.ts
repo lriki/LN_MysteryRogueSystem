@@ -1,12 +1,9 @@
 import { MRSerializable, tr2 } from "ts/mr/Common";
-import { MRBasics } from "ts/mr/data/MRBasics";
-import { MRData } from "ts/mr/data/MRData";
 import { SCommandResponse } from "ts/mr/system/SCommand";
 import { RESystem } from "ts/mr/system/RESystem";
 import { SActivityContext } from "ts/mr/system/SActivityContext";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { SEmittorPerformer } from "ts/mr/system/SEmittorPerformer";
-import { UName } from "ts/mr/usecases/UName";
 import { LActivity } from "../activities/LActivity";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";

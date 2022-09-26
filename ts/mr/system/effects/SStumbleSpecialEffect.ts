@@ -1,13 +1,8 @@
-import { DSpecificEffectId } from "ts/mr/data/DCommon";
 import { DSpecialEffectRef } from "ts/mr/data/DEffect";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
-import { LBattlerBehavior } from "ts/mr/lively/behaviors/LBattlerBehavior";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { LEffectResult } from "ts/mr/lively/LEffectResult";
 import { LEntity } from "ts/mr/lively/LEntity";
-import { REGame } from "ts/mr/lively/REGame";
-import { UAction } from "ts/mr/usecases/UAction";
 import { SCommandContext } from "../SCommandContext";
 import { SEffectModifier } from "../SEffectApplyer";
 import { SSpecialEffect } from "./SSpecialEffect";

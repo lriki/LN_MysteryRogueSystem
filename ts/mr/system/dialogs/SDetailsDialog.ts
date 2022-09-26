@@ -2,7 +2,7 @@ import { assert, tr2 } from "ts/mr/Common";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { EntityIdentificationLevel } from "ts/mr/lively/LIdentifyer";
 import { REGame } from "ts/mr/lively/REGame";
-import { UName } from "ts/mr/usecases/UName";
+import { UName } from "ts/mr/utility/UName";
 import { SDialog } from "../SDialog";
 
 export class SDetailsDialog extends SDialog {

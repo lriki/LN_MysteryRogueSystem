@@ -1,7 +1,7 @@
 import { DFloorMonsterHousePattern } from "ts/mr/data/DLand";
 import { MRData } from "ts/mr/data/MRData";
 import { LRandom } from "ts/mr/lively/LRandom";
-import { UEffect } from "ts/mr/usecases/UEffect";
+import { UEffect } from "ts/mr/utility/UEffect";
 import { FMap } from "../FMapData";
 import { FMonsterHouseStructure } from "../FStructure";
 import { FMapBuildPass } from "./FMapBuildPass";

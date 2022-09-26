@@ -3,7 +3,7 @@ import { REGame } from "ts/mr/lively/REGame";
 import { MRData } from "ts/mr/data/MRData";
 import { RESystem } from "ts/mr/system/RESystem";
 import { assert } from "ts/mr/Common";
-import { USearch } from "ts/mr/usecases/USearch";
+import { USearch } from "ts/mr/utility/USearch";
 import { paramEnemySpawnInvalidArea } from "ts/mr/PluginParameters";
 
 beforeAll(() => {

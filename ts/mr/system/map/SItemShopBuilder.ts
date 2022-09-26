@@ -6,8 +6,8 @@ import { LRandom } from "ts/mr/lively/LRandom";
 import { LRoom } from "ts/mr/lively/LRoom";
 import { REGame } from "ts/mr/lively/REGame";
 import { LItemShopStructure } from "ts/mr/lively/structures/LItemShopStructure";
-import { UMovement } from "ts/mr/usecases/UMovement";
-import { USpawner } from "ts/mr/usecases/USpawner";
+import { UMovement } from "ts/mr/utility/UMovement";
+import { USpawner } from "ts/mr/utility/USpawner";
 import { SEntityFactory } from "../SEntityFactory";
 import { SMapManager } from "../SMapManager";
 

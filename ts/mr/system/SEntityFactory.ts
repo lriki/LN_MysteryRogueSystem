@@ -17,7 +17,7 @@ import { LEntryPointBehavior } from "ts/mr/lively/behaviors/LEntryPointBehavior"
 import { LActorBehavior } from "ts/mr/lively/behaviors/LActorBehavior";
 import { SBehaviorFactory } from "./SBehaviorFactory";
 import { LEaterBehavior } from "ts/mr/lively/behaviors/actors/LEaterBehavior";
-import { DItem, DItemDataId } from "ts/mr/data/DItem";
+import {  DItemDataId } from "ts/mr/data/DItem";
 import { LProjectileBehavior } from "ts/mr/lively/behaviors/activities/LProjectileBehavior";
 import { LSurvivorBehavior } from "ts/mr/lively/behaviors/LSurvivorBehavior";
 import { LEntityDivisionBehavior } from "ts/mr/lively/abilities/LEntityDivisionBehavior";
@@ -26,7 +26,7 @@ import { LGlueToGroundBehavior } from "ts/mr/lively/behaviors/LGlueToGroundBehav
 import { DPrefab } from "ts/mr/data/DPrefab";
 import { DTroop } from "ts/mr/data/DTroop";
 import { DStateId } from "ts/mr/data/DState";
-import { UMovement } from "../usecases/UMovement";
+import { UMovement } from "../utility/UMovement";
 import { LFlockBehavior } from "ts/mr/lively/behaviors/LFlockBehavior";
 import { assert } from "ts/mr/Common";
 import { LStorageBehavior } from "ts/mr/lively/behaviors/LStorageBehavior";
@@ -34,7 +34,6 @@ import { MRBasics } from "ts/mr/data/MRBasics";
 import { LFloorId } from "ts/mr/lively/LFloorId";
 import { LRatedRandomAIBehavior } from "ts/mr/lively/behaviors/LRatedRandomAIBehavior";
 import { RESystem } from "./RESystem";
-import { LSelfExplosionBehavior } from "../lively/behaviors/LSelfExplosionBehavior";
 import { LGrabFootBehavior } from "../lively/abilities/LGrabFootBehavior";
 import { LItemThiefBehavior } from "../lively/behaviors/LItemThiefBehavior";
 import { LShopkeeperBehavior } from "../lively/behaviors/LShopkeeperBehavior";

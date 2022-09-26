@@ -5,7 +5,7 @@ import { LStructure } from "./LStructure";
 import { DItemShopTypeId } from "ts/mr/data/DItemShop";
 import { LItemBehavior } from "../behaviors/LItemBehavior";
 import { assert, MRSerializable } from "ts/mr/Common";
-import { UMovement } from "ts/mr/usecases/UMovement";
+import { UMovement } from "ts/mr/utility/UMovement";
 import { LEntityId } from "../LObject";
 import { DFactionId, MRData } from "ts/mr/data/MRData";
 import { LRoomId } from "../LCommon";

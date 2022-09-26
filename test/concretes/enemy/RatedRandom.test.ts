@@ -5,9 +5,7 @@ import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
-import { LActionTokenType } from "ts/mr/lively/LActionToken";
 import { LTileShape } from "ts/mr/lively/LBlock";
-import { USearch } from "ts/mr/usecases/USearch";
 import { MRBasics } from "ts/mr/data/MRBasics";
 
 beforeAll(() => {

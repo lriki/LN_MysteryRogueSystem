@@ -2,7 +2,7 @@ import { DecisionPhase } from "ts/mr/lively/behaviors/LBehavior";
 import { REGame } from "ts/mr/lively/REGame";
 import { SScheduler } from "./SScheduler";
 import { RESystem } from "../RESystem";
-import { UAction } from "../../usecases/UAction";
+import { UAction } from "../../utility/UAction";
 import { LItemShopStructure } from "../../lively/structures/LItemShopStructure";
 import { SSchedulerPhase } from "./SSchedulerPhase";
 import { LEntity } from "../../lively/LEntity";

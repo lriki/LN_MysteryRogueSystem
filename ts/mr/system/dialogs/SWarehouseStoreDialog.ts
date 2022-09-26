@@ -2,11 +2,10 @@ import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { LBehaviorId, LEntityId } from "ts/mr/lively/LObject";
 import { REGame } from "ts/mr/lively/REGame";
-import { SWarehouseActionResult, UInventory } from "ts/mr/usecases/UInventory";
+import { SWarehouseActionResult, UInventory } from "ts/mr/utility/UInventory";
 import { RESystem } from "../RESystem";
 import { SWarehouseDialogResult } from "../SCommon";
 import { SDialog } from "../SDialog";
-import { SDialogContext } from "../SDialogContext";
 
 export class SWarehouseStoreDialog extends SDialog {
     private _userEntityId: LEntityId;

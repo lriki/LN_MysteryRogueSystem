@@ -3,7 +3,7 @@ import { DActionId } from "ts/mr/data/DCommon";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/mr/lively/LEntity";
-import { UAction } from "ts/mr/usecases/UAction";
+import { UAction } from "ts/mr/utility/UAction";
 import { RESystem } from "../RESystem";
 import { SDialog } from "../SDialog";
 import { SItemSelectionDialog } from "./SItemSelectionDialog";

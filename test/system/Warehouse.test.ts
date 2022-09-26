@@ -9,7 +9,7 @@ import { DEntityCreateInfo } from "ts/mr/data/DEntity";
 import { SWarehouseStoreDialog } from "ts/mr/system/dialogs/SWarehouseStoreDialog";
 import { SWarehouseWithdrawDialog } from "ts/mr/system/dialogs/SWarehouseWithdrawDialog";
 import { SItemSellDialog } from "ts/mr/system/dialogs/SItemSellDialog";
-import { UProperty } from "ts/mr/usecases/UProperty";
+import { UProperty } from "ts/mr/utility/UProperty";
 import { SWarehouseDialogResult } from "ts/mr/system/SCommon";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 

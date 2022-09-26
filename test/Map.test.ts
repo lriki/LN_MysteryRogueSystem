@@ -2,7 +2,7 @@ import { REGame } from "ts/mr/lively/REGame";
 import { TestEnv } from "./TestEnv";
 import "./Extension";
 import { LFloorId } from "ts/mr/lively/LFloorId";
-import { UMovement } from "ts/mr/usecases/UMovement";
+import { UMovement } from "ts/mr/utility/UMovement";
 import { RESystem } from "ts/mr/system/RESystem";
 import { LTileShape } from "ts/mr/lively/LBlock";
 import { LActivity } from "ts/mr/lively/activities/LActivity";

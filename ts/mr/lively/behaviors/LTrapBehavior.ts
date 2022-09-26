@@ -10,14 +10,13 @@ import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { DEventId, SkillEmittedArgs } from "ts/mr/data/predefineds/DBasicEvents";
 import { LEventResult } from "../LEventServer";
-import { UMovement } from "ts/mr/usecases/UMovement";
+import { UMovement } from "ts/mr/utility/UMovement";
 import { DEmittor } from "ts/mr/data/DEmittor";
 import { SEmittorPerformer } from "ts/mr/system/SEmittorPerformer";
 import { LActivity } from "../activities/LActivity";
 import { DCounterAction } from "ts/mr/data/DEntity";
 import { paramExposedTrapTriggerRate, paramHiddenTrapTriggerRate } from "ts/mr/PluginParameters";
 import { LRandom } from "../LRandom";
-import { DActionId } from "ts/mr/data/DCommon";
 import { LReaction } from "../LCommon";
 
 

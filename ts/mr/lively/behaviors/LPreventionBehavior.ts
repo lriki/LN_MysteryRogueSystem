@@ -2,7 +2,7 @@ import { MRSerializable, tr2 } from "ts/mr/Common";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { SCommandResponse } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
-import { UName } from "ts/mr/usecases/UName";
+import { UName } from "ts/mr/utility/UName";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { LBehavior, SRejectionInfo } from "./LBehavior";

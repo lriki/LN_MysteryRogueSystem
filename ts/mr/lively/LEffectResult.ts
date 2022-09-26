@@ -6,7 +6,7 @@ import { LEntity } from "ts/mr/lively/LEntity";
 import { SCommandContext } from "../system/SCommandContext";
 import { DParameterFlavorEffect, DParamMessageValueSource, DValueAddition } from "ts/mr/data/DParameter";
 import { SSoundManager } from "ts/mr/system/SSoundManager";
-import { UName } from "ts/mr/usecases/UName";
+import { UName } from "ts/mr/utility/UName";
 import { DTextManager } from "../data/DTextManager";
 import { DEffect, DValuePoint } from "../data/DEffect";
 import { MRBasics } from "../data/MRBasics";

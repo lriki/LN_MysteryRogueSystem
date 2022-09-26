@@ -6,11 +6,6 @@ import { TestEnv } from "../../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
-import { LFloorId } from "ts/mr/lively/LFloorId";
-import { UName } from "ts/mr/usecases/UName";
-import { LActionTokenType } from "ts/mr/lively/LActionToken";
-import { ULimitations } from "ts/mr/usecases/ULimitations";
-import { paramMaxTrapsInMap } from "ts/mr/PluginParameters";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 
 beforeAll(() => {

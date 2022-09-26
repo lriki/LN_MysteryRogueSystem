@@ -2,13 +2,10 @@ import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { REGame } from "ts/mr/lively/REGame";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { RESystem } from "ts/mr/system/RESystem";
-import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
-import { LFloorId } from "ts/mr/lively/LFloorId";
 import { MRBasics } from "ts/mr/data/MRBasics";
-import { UName } from "ts/mr/usecases/UName";
 import { TestEnv } from "test/TestEnv";
 
 beforeAll(() => {

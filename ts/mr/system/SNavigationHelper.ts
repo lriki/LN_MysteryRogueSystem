@@ -4,7 +4,7 @@ import { REGame } from "ts/mr/lively/REGame";
 import { MRBasics } from "../data/MRBasics";
 import { LExitPointBehavior } from "../lively/behaviors/LExitPointBehavior";
 import { paramDefaultVisibiltyLength } from "../PluginParameters";
-import { UMovement } from "../usecases/UMovement";
+import { UMovement } from "../utility/UMovement";
 import { Helpers } from "./Helpers";
 
 // いわゆる ナビゲーションAI 関係のサポート

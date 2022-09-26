@@ -1,8 +1,6 @@
-import { UTransfer } from "ts/mr/usecases/UTransfer";
-import { assert } from "../Common";
+import { UTransfer } from "ts/mr/utility/UTransfer";
 import { DEntityCreateInfo, DEntityId } from "../data/DEntity";
 import { MRData } from "../data/MRData";
-import { LActorBehavior } from "../lively/behaviors/LActorBehavior";
 import { LExperienceBehavior } from "../lively/behaviors/LExperienceBehavior";
 import { LInventoryBehavior } from "../lively/behaviors/LInventoryBehavior";
 import { LEntity } from "../lively/LEntity";

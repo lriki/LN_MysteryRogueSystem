@@ -8,7 +8,7 @@ import { LMap, MovingMethod } from "ts/mr/lively/LMap";
 import { Helpers } from "../system/Helpers";
 import { RESystem } from "../system/RESystem";
 import { LRandom } from "ts/mr/lively/LRandom";
-import { UBlock } from "ts/mr/usecases/UBlock";
+import { UBlock } from "ts/mr/utility/UBlock";
 import { SCommandContext } from "../system/SCommandContext";
 import { DBlockLayerKind } from "../data/DCommon";
 import { LRoom } from "../lively/LRoom";

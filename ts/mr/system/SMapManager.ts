@@ -8,19 +8,19 @@ import { FMap } from "ts/mr/floorgen/FMapData";
 import { MRData } from "ts/mr/data/MRData";
 import { LObjectType } from "ts/mr/lively/LObject";
 import { LBlock } from "ts/mr/lively/LBlock";
-import { UMovement } from "../usecases/UMovement";
+import { UMovement } from "../utility/UMovement";
 import { SMonsterHouseBuilder } from "./map/SMonsterHouseBuilder";
 import { LMonsterHouseStructure } from "ts/mr/lively/structures/LMonsterHouseStructure";
 import { LRandom } from "ts/mr/lively/LRandom";
 import { LItemShopStructure } from "ts/mr/lively/structures/LItemShopStructure";
 import { SItemShopBuilder } from "./map/SItemShopBuilder";
-import { USearch } from "../usecases/USearch";
+import { USearch } from "../utility/USearch";
 import { DBlockLayerKind } from "../data/DCommon";
-import { USpawner } from "../usecases/USpawner";
-import { ULimitations } from "../usecases/ULimitations";
+import { USpawner } from "../utility/USpawner";
+import { ULimitations } from "../utility/ULimitations";
 import { paramMaxTrapsInMap } from "../PluginParameters";
 import { DEntityKind } from "../data/DEntityKind";
-import { UEffect } from "../usecases/UEffect";
+import { UEffect } from "../utility/UEffect";
 import { DAppearanceTableEntity } from "../data/DLand";
 
 

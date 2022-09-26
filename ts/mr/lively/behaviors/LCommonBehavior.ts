@@ -5,7 +5,7 @@ import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { SActivityContext } from "ts/mr/system/SActivityContext";
 import { SCommandResponse, SPhaseResult } from "ts/mr/system/SCommand";
 import { MRBasics } from "ts/mr/data/MRBasics";
-import { USearch } from "ts/mr/usecases/USearch";
+import { USearch } from "ts/mr/utility/USearch";
 import { DEmittor } from "ts/mr/data/DEmittor";
 import { DCounterAction } from "ts/mr/data/DEntity";
 import { LEffectResult } from "../LEffectResult";

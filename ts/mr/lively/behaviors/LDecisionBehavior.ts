@@ -5,12 +5,11 @@ import { DecisionPhase, LBehavior } from "./LBehavior";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { REGame } from "ts/mr/lively/REGame";
 import { LUnitBehavior } from "./LUnitBehavior";
-import { UMovement } from "ts/mr/usecases/UMovement";
+import { UMovement } from "ts/mr/utility/UMovement";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { LActivity } from "../activities/LActivity";
 import { LCharacterAI_Normal } from "../ai/LStandardAI";
 import { MRSerializable } from "ts/mr/Common";
-import { LActionTokenType } from "../LActionToken";
 import { LActionTokenConsumeType } from "../LCommon";
 
 /**

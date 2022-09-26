@@ -9,8 +9,7 @@ import { LUnitBehavior } from "../lively/behaviors/LUnitBehavior";
 import { LNameView } from "../lively/internal";
 import { LEntity } from "../lively/LEntity";
 import { LTrapBehavior } from "../lively/behaviors/LTrapBehavior";
-import { USearch } from "../usecases/USearch";
-import { UMovement } from "../usecases/UMovement";
+import { USearch } from "../utility/USearch";
 import { Helpers } from "./Helpers";
 import { LExitPointBehavior } from "../lively/behaviors/LExitPointBehavior";
 

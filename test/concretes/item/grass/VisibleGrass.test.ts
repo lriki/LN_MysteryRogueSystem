@@ -7,9 +7,8 @@ import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
-import { LActionTokenType } from "ts/mr/lively/LActionToken";
 import { SView } from "ts/mr/system/SView";
-import { UTransfer } from "ts/mr/usecases/UTransfer";
+import { UTransfer } from "ts/mr/utility/UTransfer";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

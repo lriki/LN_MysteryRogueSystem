@@ -5,7 +5,7 @@ import { TestEnv } from "../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
 import { LFloorId } from "ts/mr/lively/LFloorId";
-import { UName } from "ts/mr/usecases/UName";
+import { UName } from "ts/mr/utility/UName";
 import { SDetailsDialog } from "ts/mr/system/dialogs/SDetailsDialog";
 import { RESystem } from "ts/mr/system/RESystem";
 import { LActivity } from "ts/mr/lively/activities/LActivity";

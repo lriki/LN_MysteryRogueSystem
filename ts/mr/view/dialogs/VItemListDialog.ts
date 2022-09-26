@@ -3,7 +3,7 @@ import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBeh
 import { LEntity } from "ts/mr/lively/LEntity";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
 import { VItemListDialogBase, VItemListMode } from "./VItemListDialogBase";
-import { UInventory } from "ts/mr/usecases/UInventory";
+import { UInventory } from "ts/mr/utility/UInventory";
 
 export class VItemListDialog extends VItemListDialogBase {
     private _model: SItemListDialog;

@@ -4,9 +4,8 @@ import { MRData } from "ts/mr/data/MRData";
 import { Helpers } from "ts/mr/system/Helpers";
 import { SPhaseResult } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
-import { LCandidateSkillAction } from "ts/mr/usecases/UAction";
-import { UMovement } from "ts/mr/usecases/UMovement";
-import { USearch } from "ts/mr/usecases/USearch";
+import { LCandidateSkillAction } from "ts/mr/utility/UAction";
+import { UMovement } from "ts/mr/utility/UMovement";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { LEscapeAI } from "../ai/LEscapeAI";
 import { LMovingTargetFinder_Gold } from "../ai/LMovingTargetFinder";
@@ -15,7 +14,6 @@ import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
 import { DecisionPhase, LBehavior } from "./LBehavior";
 import { LInventoryBehavior } from "./LInventoryBehavior";
-import { LItemBehavior } from "./LItemBehavior";
 
 
 

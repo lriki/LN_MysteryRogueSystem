@@ -9,7 +9,6 @@ import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
-import { UAction } from "ts/mr/usecases/UAction";
 import { SGameManager } from "ts/mr/system/SGameManager";
 import { TestJsonEx } from "./TestJsonEx";
 

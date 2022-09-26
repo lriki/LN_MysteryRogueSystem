@@ -10,10 +10,10 @@ import { MRData } from "ts/mr/data/MRData";
 import { LLand } from "./LLand";
 import { DLandId } from "ts/mr/data/DLand";
 import { LParty, LPartyId } from "./LParty";
-import { UMovement } from "ts/mr/usecases/UMovement";
+import { UMovement } from "ts/mr/utility/UMovement";
 import { RESystem } from "ts/mr/system/RESystem";
 import { DEntityId } from "ts/mr/data/DEntity";
-import { UState } from "ts/mr/usecases/UState";
+import { UState } from "ts/mr/utility/UState";
 
 /**
  * 1ゲーム内に1インスタンス存在する。

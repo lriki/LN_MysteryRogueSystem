@@ -10,7 +10,6 @@ import { LReaction } from "ts/mr/lively/LCommon";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { LBehaviorId, LEntityId } from "ts/mr/lively/LObject";
 import { REGame } from "ts/mr/lively/REGame";
-import { UAction } from "ts/mr/usecases/UAction";
 import { RESystem } from "../RESystem";
 import { SDialog } from "../SDialog";
 import { SCommonCommand } from "./SCommonCommand";

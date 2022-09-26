@@ -6,7 +6,7 @@ import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { LEffectResult } from "ts/mr/lively/LEffectResult";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { REGame } from "ts/mr/lively/REGame";
-import { USpawner } from "ts/mr/usecases/USpawner";
+import { USpawner } from "ts/mr/utility/USpawner";
 import { SCommandContext } from "../SCommandContext";
 import { SEffectModifier } from "../SEffectApplyer";
 import { SSpecialEffect } from "./SSpecialEffect";

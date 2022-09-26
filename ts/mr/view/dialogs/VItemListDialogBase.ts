@@ -7,7 +7,6 @@ import { paramInventoryItemsPerPage } from "ts/mr/PluginParameters";
 import { SDetailsDialog } from "ts/mr/system/dialogs/SDetailsDialog";
 import { SNicknameDialog } from "ts/mr/system/dialogs/SNicknameDialog";
 import { SDialog } from "ts/mr/system/SDialog";
-import { UIdentify } from "ts/mr/usecases/UIdentify";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
 import { VItemListWindow } from "../windows/VItemListWindow";
 import { VDialog } from "./VDialog";

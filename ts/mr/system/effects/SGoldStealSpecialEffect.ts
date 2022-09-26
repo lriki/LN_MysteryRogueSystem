@@ -5,7 +5,7 @@ import { MRData } from "ts/mr/data/MRData";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { LRandom } from "ts/mr/lively/LRandom";
-import { UName } from "ts/mr/usecases/UName";
+import { UName } from "ts/mr/utility/UName";
 import { SCommandContext } from "../SCommandContext";
 import { SEffectModifier } from "../SEffectApplyer";
 import { SEntityFactory } from "../SEntityFactory";

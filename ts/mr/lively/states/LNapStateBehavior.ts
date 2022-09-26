@@ -3,17 +3,14 @@ import { DEventId, RoomEventArgs, SkillEmittedArgs, WalkEventArgs } from "ts/mr/
 import { Helpers } from "ts/mr/system/Helpers";
 import { SPhaseResult } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
-import { RESystem } from "ts/mr/system/RESystem";
 import { DecisionPhase, LBehavior } from "../behaviors/LBehavior";
 import { REGame } from "../REGame";
 import { LEntity } from "../LEntity";
 import { LState } from "./LState";
 import { LEventResult } from "../LEventServer";
 import { DSequelId } from "ts/mr/data/DSequel";
-import { LActionTokenType } from "../LActionToken";
 import { MRSerializable } from "ts/mr/Common";
-import { LEntityId } from "../LObject";
-import { UMovement } from "ts/mr/usecases/UMovement";
+import { UMovement } from "ts/mr/utility/UMovement";
 
 enum GetUpReserved {
     None,

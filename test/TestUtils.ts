@@ -3,7 +3,7 @@ import { MRBasics } from "ts/mr/data/MRBasics";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { RESystem } from "ts/mr/system/RESystem";
-import { UName } from "ts/mr/usecases/UName";
+import { UName } from "ts/mr/utility/UName";
 
 export class TestUtils {
     public static submitActivity(activity: LActivity) {

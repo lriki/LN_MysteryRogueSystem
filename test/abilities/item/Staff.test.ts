@@ -8,7 +8,7 @@ import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { LFloorId } from "ts/mr/lively/LFloorId";
-import { UName } from "ts/mr/usecases/UName";
+import { UName } from "ts/mr/utility/UName";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

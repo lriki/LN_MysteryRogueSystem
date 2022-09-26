@@ -1,6 +1,4 @@
-import { DTextManager } from "ts/mr/data/DTextManager";
 import { LEntity } from "ts/mr/lively/LEntity";
-import { UName } from "ts/mr/usecases/UName";
 import { VLayout } from "../ui/VUIElement";
 import { VWindowHelper } from "./VWindowHelper";
 

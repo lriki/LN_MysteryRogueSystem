@@ -1,8 +1,7 @@
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { SCommandResponse } from "ts/mr/system/SCommand";
-import { RESystem } from "ts/mr/system/RESystem";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
-import { UMovement } from "ts/mr/usecases/UMovement";
+import { UMovement } from "ts/mr/utility/UMovement";
 import { LBattlerBehavior } from "../behaviors/LBattlerBehavior";
 import { CommandArgs, LBehavior, onDirectAttackDamaged } from "../behaviors/LBehavior";
 import { LEntity } from "../LEntity";

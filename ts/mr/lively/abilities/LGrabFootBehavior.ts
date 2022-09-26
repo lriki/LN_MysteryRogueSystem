@@ -1,14 +1,13 @@
 import { MRSerializable, tr2 } from "ts/mr/Common";
-import { SCommandResponse } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
-import { UName } from "ts/mr/usecases/UName";
+import { UName } from "ts/mr/utility/UName";
 import { LEntity } from "../LEntity";
 import { REGame } from "../REGame";
-import { CommandArgs, LBehavior } from "../behaviors/LBehavior";
-import { UMovement } from "ts/mr/usecases/UMovement";
+import { LBehavior } from "../behaviors/LBehavior";
+import { UMovement } from "ts/mr/utility/UMovement";
 import { LEntityId } from "../LObject";
 import { MRBasics } from "ts/mr/data/MRBasics";
-import { DEventId, RoomEventArgs, WalkEventArgs } from "ts/mr/data/predefineds/DBasicEvents";
+import { DEventId, WalkEventArgs } from "ts/mr/data/predefineds/DBasicEvents";
 import { LEventResult } from "../LEventServer";
 import { Helpers } from "ts/mr/system/Helpers";
 

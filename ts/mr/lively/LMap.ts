@@ -14,14 +14,13 @@ import { LMonsterHouseStructure } from "./structures/LMonsterHouseStructure";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { LFloorId } from "./LFloorId";
 import { LLand } from "./LLand";
-import { UMovement } from "ts/mr/usecases/UMovement";
+import { UMovement } from "ts/mr/utility/UMovement";
 import { FMap } from "ts/mr/floorgen/FMapData";
 import { LItemShopStructure } from "./structures/LItemShopStructure";
 import { DBlockLayerKind } from "../data/DCommon";
-import { UBlock } from "../usecases/UBlock";
-import { paramDefaultVisibiltyLength } from "../PluginParameters";
+import { UBlock } from "../utility/UBlock";
 import { LRoomId } from "./LCommon";
-import { USearch } from "../usecases/USearch";
+import { USearch } from "../utility/USearch";
 
 export enum MovingMethod {
     Walk,

@@ -8,7 +8,7 @@ import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { LTileShape } from "ts/mr/lively/LBlock";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { UMovement } from "ts/mr/usecases/UMovement";
+import { UMovement } from "ts/mr/utility/UMovement";
 import { assert } from "ts/mr/Common";
 
 beforeAll(() => {

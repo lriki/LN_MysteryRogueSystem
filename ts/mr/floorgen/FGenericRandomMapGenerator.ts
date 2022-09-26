@@ -1,9 +1,8 @@
 import { assert } from "ts/mr/Common";
-import { DTerrainSetting, DTerrainShape, DTerrainShapeRef, DTerrainStructureDef, FGenericRandomMapWayConnectionMode } from "../data/DTerrainPreset";
+import { DTerrainSetting, DTerrainShape, DTerrainShapeRef, FGenericRandomMapWayConnectionMode } from "../data/DTerrainPreset";
 import { LRandom } from "../lively/LRandom";
-import { USearch } from "../usecases/USearch";
-import { UEffect } from "../usecases/UEffect";
-import { FSector, FSectorAdjacency } from "./data/FSector";
+import { UEffect } from "../utility/UEffect";
+import { FSector } from "./data/FSector";
 import { FAxis, FBlockComponent, FDirection, FEdgePin, FMap, FSectorId } from "./FMapData";
 import { FSectorConnectionBuilder } from "./FSectorConnectionBuilder";
 import { MRData } from "../data/MRData";

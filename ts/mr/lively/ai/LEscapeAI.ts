@@ -1,20 +1,17 @@
 import { SPhaseResult } from "ts/mr/system/SCommand";
 import { SAIHelper } from "ts/mr/system/SAIHelper";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
-import { UAction } from "ts/mr/usecases/UAction";
-import { UMovement } from "ts/mr/usecases/UMovement";
+import { UAction } from "ts/mr/utility/UAction";
+import { UMovement } from "ts/mr/utility/UMovement";
 import { LActivity } from "../activities/LActivity";
 import { LCharacterAI } from "./LCharacterAI";
 import { LEntity } from "../LEntity";
 import { MovingMethod } from "../LMap";
-import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
-import { LSaunteringAIHelper } from "./LSaunteringAIHelper";
 import { MRSerializable } from "ts/mr/Common";
-import { LActionTokenType } from "../LActionToken";
 import { LMoveDeterminer } from "./LMoveDeterminer";
 import { LActionTokenConsumeType } from "../LCommon";
-import { UBlock } from "ts/mr/usecases/UBlock";
+import { UBlock } from "ts/mr/utility/UBlock";
 
 @MRSerializable
 export class LEscapeAI extends LCharacterAI {

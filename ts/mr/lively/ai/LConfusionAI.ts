@@ -1,17 +1,15 @@
 import { DSkillId } from "ts/mr/data/DCommon";
 import { MRData } from "ts/mr/data/MRData";
 import { SPhaseResult } from "ts/mr/system/SCommand";
-import { RESystem } from "ts/mr/system/RESystem";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
-import { UAction } from "ts/mr/usecases/UAction";
-import { UMovement } from "ts/mr/usecases/UMovement";
+import { UAction } from "ts/mr/utility/UAction";
+import { UMovement } from "ts/mr/utility/UMovement";
 import { LActivity } from "../activities/LActivity";
 import { LCharacterAI } from "./LCharacterAI";
 import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
 import { REGame } from "../REGame";
 import { MRSerializable } from "ts/mr/Common";
-import { LActionTokenType } from "../LActionToken";
 import { Helpers } from "ts/mr/system/Helpers";
 import { LActionTokenConsumeType } from "../LCommon";
 

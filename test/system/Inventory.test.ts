@@ -7,8 +7,7 @@ import { TestEnv } from "./../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
-import { DBlockLayerKind } from "ts/mr/data/DCommon";
-import { UInventory } from "ts/mr/usecases/UInventory";
+import { UInventory } from "ts/mr/utility/UInventory";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 
 beforeAll(() => {

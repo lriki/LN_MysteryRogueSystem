@@ -1,7 +1,4 @@
-import { DTextManager } from "ts/mr/data/DTextManager";
-import { LEntity } from "ts/mr/lively/LEntity";
 import { SDetailsDialog } from "ts/mr/system/dialogs/SDetailsDialog";
-import { UName } from "ts/mr/usecases/UName";
 
 export class VDetailsWindow extends Window_Base {
     private _dialog: SDetailsDialog;

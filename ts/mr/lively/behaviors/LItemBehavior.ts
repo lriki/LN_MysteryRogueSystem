@@ -8,13 +8,13 @@ import { RESystem } from "ts/mr/system/RESystem";
 import { SCommandContext, SHandleCommandResult } from "ts/mr/system/SCommandContext";
 import { SEffectContext, SEffectSubject } from "ts/mr/system/SEffectContext";
 import { SEmittorPerformer, SOnPerformedFunc } from "ts/mr/system/SEmittorPerformer";
-import { UIdentify } from "ts/mr/usecases/UIdentify";
+import { UIdentify } from "ts/mr/utility/UIdentify";
 import { LActivity } from "../activities/LActivity";
 import { LStructureId } from "../LCommon";
 import { LEntity, LParamMinMax } from "../LEntity";
 import { REGame } from "../REGame";
-import { CollideActionArgs, CommandArgs, LBehavior, LParamMinMaxInfo, onAttackReaction, onCollideAction, onEatReaction } from "./LBehavior";
-import { UAction } from "ts/mr/usecases/UAction";
+import { CommandArgs, LBehavior, onAttackReaction } from "./LBehavior";
+import { UAction } from "ts/mr/utility/UAction";
 import { SActivityContext } from "ts/mr/system/SActivityContext";
 import { DActionId } from "ts/mr/data/DCommon";
 

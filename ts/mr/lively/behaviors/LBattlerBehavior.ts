@@ -1,18 +1,14 @@
-import { DState, DStateId, DStateRestriction } from "ts/mr/data/DState";
-import { LandExitResult, MRData } from "ts/mr/data/MRData";
+import { LandExitResult } from "ts/mr/data/MRData";
 import { REGame } from "../REGame";
 import { LBehavior, LGenerateDropItemCause } from "ts/mr/lively/behaviors/LBehavior";
 import { LEntity } from "../LEntity";
 import { SCommandResponse } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
-import { RESystem } from "ts/mr/system/RESystem";
 import { MRBasics } from "ts/mr/data/MRBasics";
-import { UTransfer } from "ts/mr/usecases/UTransfer";
+import { UTransfer } from "ts/mr/utility/UTransfer";
 import { LParamSet } from "../LParam";
 import { SEffectorFact } from "ts/mr/system/SEffectApplyer";
-import { UAction } from "ts/mr/usecases/UAction";
-import { SStepPhase } from "ts/mr/system/SCommon";
-import { DActionId } from "ts/mr/data/DCommon";
+import { UAction } from "ts/mr/utility/UAction";
 import { MRSerializable } from "ts/mr/Common";
 import { LReaction } from "../LCommon";
 
