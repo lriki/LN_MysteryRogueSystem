@@ -3,8 +3,8 @@ import { assert } from "../../Common";
 import { DecisionPhase } from "../../lively/internal";
 import { phaseCount } from "../../lively/LCommon";
 import { LScheduler2, LSchedulingUnit } from "../../lively/LScheduler";
-import { REGame } from "../../lively/REGame";
-import { RESystem } from "../RESystem";
+import { MRLively } from "../../lively/MRLively";
+import { MRSystem } from "../MRSystem";
 import { SCommandContext } from "../SCommandContext";
 import { SStepPhase } from "../SCommon";
 import { SScheduler } from "./SScheduler";
@@ -43,7 +43,7 @@ export class SStepScheduler2 {
     public constructor(scheduler: SScheduler) {
         this._scheduler = scheduler;
         this._data = scheduler.data();
-        this._cctx = RESystem.commandContext;
+        this._cctx = MRSystem.commandContext;
         this._stepPhase = SStepPhase.RunStarting;
         this._phases = [
             //new SSchedulerPhase_Prepare(),
@@ -79,7 +79,7 @@ export class SStepScheduler2 {
                 break;
             }
 
-            if (RESystem.commandContext.isRunning()) {
+            if (MRSystem.commandContext.isRunning()) {
                 break;
             }
             this.processCore2();
@@ -195,8 +195,8 @@ export class SStepScheduler2 {
     }
 
     private process_AfterProcess(): void {
-        for (const entity of REGame.map.entities()) {
-            entity._callBehaviorIterationHelper(behavior => behavior.onAfterStep(entity, RESystem.commandContext));
+        for (const entity of MRLively.map.entities()) {
+            entity._callBehaviorIterationHelper(behavior => behavior.onAfterStep(entity, MRSystem.commandContext));
         }
 
         // この後の流れは process_MainProcessClosing と同様。必要であれば一度 process を抜ける。
@@ -257,8 +257,8 @@ export class SStepScheduler2 {
             //     entity._callBehaviorIterationHelper(behavior => behavior.onStepEnd(RESystem.commandContext));
             // });
             // Trap の状態リセットも行いたいので、マップ上の全 Entity に対して通知する
-            for (const entity of REGame.map.entities()) {
-                entity._callBehaviorIterationHelper(behavior => behavior.onStepEnd(RESystem.commandContext));
+            for (const entity of MRLively.map.entities()) {
+                entity._callBehaviorIterationHelper(behavior => behavior.onStepEnd(MRSystem.commandContext));
             }
         //}
 
@@ -269,7 +269,7 @@ export class SStepScheduler2 {
             //entity._effectResult.showResultMessages(RESystem.commandContext, entity);
 
             entity._reward.apply(entity);
-            entity._effectResult.showResultMessages(RESystem.commandContext, entity);
+            entity._effectResult.showResultMessages(MRSystem.commandContext, entity);
             entity._effectResult.clear();
         }
 

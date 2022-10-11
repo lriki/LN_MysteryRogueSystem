@@ -1,7 +1,7 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -29,10 +29,10 @@ test("concretes.item.weapon.DragonKiller", () => {
 
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_Test_サンドバッグドラゴン").id, [], "enemy1"));
     enemy1.addState(MRData.getState("kState_UTからぶり").id);
-    REGame.world.transferEntity(enemy1, floorId, 11, 10);
+    MRLively.world.transferEntity(enemy1, floorId, 11, 10);
     const enemy1HP1 = enemy1.actualParam(MRBasics.params.hp);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
     // 特攻無しダメージを出してみる
@@ -40,10 +40,10 @@ test("concretes.item.weapon.DragonKiller", () => {
     equipmentUser.equipOnUtil(weapon1);
 
     // [攻撃]
-    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, MRData.system.skills.normalAttack, 6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, MRData.system.skills.normalAttack, 6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     const enemy1HP2 = enemy1.actualParam(MRBasics.params.hp);
     
@@ -53,10 +53,10 @@ test("concretes.item.weapon.DragonKiller", () => {
     equipmentUser.equipOnUtil(weapon2);
 
     // [攻撃]
-    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, MRData.system.skills.normalAttack, 6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, MRData.system.skills.normalAttack, 6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     const enemy1HP3 = enemy1.actualParam(MRBasics.params.hp);
 

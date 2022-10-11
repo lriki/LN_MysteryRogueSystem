@@ -1,5 +1,5 @@
 import { MRDataManager } from "ts/mr/data/MRDataManager";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { SSequelSet } from "ts/mr/system/SSequel";
 import { REVisualSequelManager } from "./REVisualSequelManager";
@@ -26,7 +26,7 @@ export class REEntityVisualSet {
         this._visualEntities = [];
         this._sequelManager = new REVisualSequelManager(this);
         //this._reservedDeleteVisuals = [];
-        REGame.signalFlushSequelSet = (x) => this.handleFlushSequelSet(x);
+        MRLively.signalFlushSequelSet = (x) => this.handleFlushSequelSet(x);
         
         // init 時点の map 上にいる Entity から Visual を作る
         this.resetVisuals();
@@ -38,7 +38,7 @@ export class REEntityVisualSet {
         }
         this._visualEntities = [];
 
-        REGame.map.entities().forEach(x => {
+        MRLively.map.entities().forEach(x => {
             this.createVisual2(x);
         });
     }
@@ -139,8 +139,8 @@ export class REEntityVisualSet {
     public createVisual2(entity: LEntity): void {
 
         let overrideEvent: IDataMapEvent | undefined;
-        const floorNumber = REGame.map.floorId().floorNumber();
-        const land = REGame.map.land2();
+        const floorNumber = MRLively.map.floorId().floorNumber();
+        const land = MRLively.map.land2();
         for (const info of land.landData().appearanceTable.entities) {
             if (info.startFloorNumber <= floorNumber && floorNumber <= info.lastFloorNumber) {
                 if (info.spawiInfo.entityId == entity.dataId) {

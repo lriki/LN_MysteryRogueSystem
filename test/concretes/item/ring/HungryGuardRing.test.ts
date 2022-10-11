@@ -1,6 +1,6 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -25,14 +25,14 @@ test("concretes.item.ring.HungryGuardRing.test", () => {
     inventory.addEntity(ring1);
     equipmentUser.equipOnUtil(ring1);
 
-    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
-    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
     const fp2 = player1.actualParam(MRBasics.params.fp);
     expect(fp2).toBe(fp1);  // FP は減少していない

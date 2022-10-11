@@ -1,7 +1,7 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -30,19 +30,19 @@ test("concretes.item.shield.LeatherShield.test", () => {
 
     // trap1 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_錆ワナ_A").id, [], "trap1"));
-    REGame.world.transferEntity(trap1, floorId, 11, 10);
+    MRLively.world.transferEntity(trap1, floorId, 11, 10);
     const shield1_UP1 = shield1.actualParam(MRBasics.params.upgradeValue);
 
-    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
     
     // [装備] → 右 (罠上) へ移動
-    RESystem.dialogContext.postActivity(LActivity.makeEquip(player1, shield1));
-    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeEquip(player1, shield1));
+    MRSystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     const fp2 = player1.actualParam(MRBasics.params.fp);
     expect(fp2).toBe(fp1 - (paramFPLoss / 2));  // FP が基本値の半分、減少していること

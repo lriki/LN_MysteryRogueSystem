@@ -15,7 +15,7 @@ import { SSpecialEffectManager } from "./effects/SSpecialEffectManager";
 import { SFormulaOperand } from "./SFormulaOperand";
 import { LEntityId } from "../lively/LObject";
 
-export class RESystem {
+export class MRSystem {
     static propertyData:EntityProperty[] = [
         { id: 0, defaultValue: undefined },
         { id: 1, defaultValue: 0 },  // itemId

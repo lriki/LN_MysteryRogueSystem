@@ -1,8 +1,8 @@
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -29,20 +29,20 @@ test("Items.ChangeEntityInstance.Wave", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_飴色スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
     const entityDataId = enemy1.dataId;
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // item1 は [振る] ことができる
     expect(!!item1.queryReactions().find(x => x.actionId == MRBasics.actions.WaveActionId)).toBe(true);
     
     // [振る]
     const activity1 = LActivity.makeWave(actor1, item1).withConsumeAction();
-    RESystem.dialogContext.postActivity(activity1);
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(activity1);
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     expect(enemy1.dataId).not.toBe(entityDataId); // 種類が変わっていること
     expect(enemy1.mx).toBe(12);                  // 変化したターンもモンスターに行動が回り、近づいてくる
@@ -62,17 +62,17 @@ test("Items.ChangeEntityInstance.Throw", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_飴色スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
     const entityDataId = enemy1.dataId;
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
     // [投げる]
     const activity = LActivity.makeThrow(actor1, item1).withConsumeAction();
-    RESystem.dialogContext.postActivity(activity);
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(activity);
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     expect(enemy1.dataId).not.toBe(entityDataId); // 種類が変わっていること
     expect(enemy1.mx).toBe(12);                  // 変化したターンもモンスターに行動が回り、近づいてくる

@@ -1,7 +1,7 @@
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { TestEnv } from "./TestEnv";
 import "./Extension";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { LUnitBehavior } from "ts/mr/lively/behaviors/LUnitBehavior";
 import { assert } from "ts/mr/Common";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
@@ -21,18 +21,18 @@ test("State_Brace", () => {
     TestEnv.newGame();
 
     // Player
-    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
+    const actor1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
+    MRLively.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
     TestEnv.performFloorTransfer();
 
     // "睡眠" 強制付加
     actor1.addState(TestEnv.StateId_Sleep);
 
     // 行動できる Entity は Player(行動不能) しかいない状態。
-    assert(REGame.map.entities().filter(e => e.findEntityBehavior(LUnitBehavior)).length == 1);
+    assert(MRLively.map.entities().filter(e => e.findEntityBehavior(LUnitBehavior)).length == 1);
 
     // シミュレーション実行
-    RESystem.scheduler.stepSimulation();
+    MRSystem.scheduler.stepSimulation();
 
     // ハングせずに stepSimulation を抜けてくればOK.
 
@@ -44,8 +44,8 @@ test("State.AutoRemove", () => {
     TestEnv.newGame();
 
     // Player
-    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
+    const actor1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
+    MRLively.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
     TestEnv.performFloorTransfer();
 
     // "睡眠" 強制付加
@@ -55,14 +55,14 @@ test("State.AutoRemove", () => {
 
     // 10 ターン分 シミュレーション実行
     for (let i = 0; i < 10; i++) {
-        RESystem.scheduler.stepSimulation();
+        MRSystem.scheduler.stepSimulation();
     }
 
     // 自然解除されている
     expect(actor1.states().length).toBe(0);
 
     // State Object も GC で削除されている
-    const state = REGame.world.findEntity(stateObjectId);
+    const state = MRLively.world.findEntity(stateObjectId);
     expect(state).toBe(undefined);
 
 });
@@ -71,8 +71,8 @@ test("State.Proficiency", () => {
     TestEnv.newGame();
     
     // Player
-    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
+    const actor1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
+    MRLively.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
     TestEnv.performFloorTransfer();
 
     const inventory = actor1.getEntityBehavior(LInventoryBehavior);
@@ -85,16 +85,16 @@ test("State.Proficiency", () => {
     const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Shield1));
     inventory.addEntity(shield1);
 
-    RESystem.scheduler.stepSimulation();
+    MRSystem.scheduler.stepSimulation();
 
     //----------------------------------------------------------------------------------------------------
 
     // [装備]
-    RESystem.dialogContext.postActivity(LActivity.makeEquip(actor1, weapon1));
-    RESystem.dialogContext.postActivity(LActivity.makeEquip(actor1, shield1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeEquip(actor1, weapon1));
+    MRSystem.dialogContext.postActivity(LActivity.makeEquip(actor1, shield1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();
+    MRSystem.scheduler.stepSimulation();
     
     const atk1 = actor1.atk;
     const def1 = actor1.def;

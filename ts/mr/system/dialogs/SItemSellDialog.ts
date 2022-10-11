@@ -1,9 +1,9 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { LBehaviorId, LEntityId } from "ts/mr/lively/LObject";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { UInventory } from "ts/mr/utility/UInventory";
-import { RESystem } from "../RESystem";
+import { MRSystem } from "../MRSystem";
 import { SDialog } from "../SDialog";
 
 export class SItemSellDialog extends SDialog {
@@ -21,19 +21,19 @@ export class SItemSellDialog extends SDialog {
     }
 
     public get serviceProvider(): LEntity {
-        return REGame.world.entity(this._serviceProviderId);
+        return MRLively.world.entity(this._serviceProviderId);
     }
 
     public get serviceUser(): LEntity {
-        return REGame.world.entity(this._serviceUserId);
+        return MRLively.world.entity(this._serviceUserId);
     }
 
     public get inventory(): LInventoryBehavior {
-        return REGame.world.behavior(this._inventoryId) as LInventoryBehavior;
+        return MRLively.world.behavior(this._inventoryId) as LInventoryBehavior;
     }
 
     public get resultItems(): LEntity[] {
-        return this._resultItems.map(e => REGame.world.entity(e));
+        return this._resultItems.map(e => MRLively.world.entity(e));
     }
 
     public setResultItems(items: LEntity[]) {
@@ -42,7 +42,7 @@ export class SItemSellDialog extends SDialog {
 
     
     public submitSell(): void {
-        UInventory.postSellItemsAndDestroy(RESystem.commandContext, this.serviceUser, this.resultItems);
+        UInventory.postSellItemsAndDestroy(MRSystem.commandContext, this.serviceUser, this.resultItems);
         this.submit();
     }
 }

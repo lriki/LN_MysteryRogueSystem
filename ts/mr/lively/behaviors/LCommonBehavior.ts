@@ -1,4 +1,4 @@
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { LEntity } from "../LEntity";
 import { DecisionPhase, LBehavior } from "./LBehavior";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
@@ -28,7 +28,7 @@ export class LCommonBehavior extends LBehavior {
     reservedCounterActionIndex = -1;
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LCommonBehavior);
+        const b = MRLively.world.spawn(LCommonBehavior);
         return b
     }
 

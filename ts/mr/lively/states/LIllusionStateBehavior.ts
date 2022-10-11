@@ -2,7 +2,7 @@ import { SPhaseResult } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { DecisionPhase, LBehavior } from "../behaviors/LBehavior";
 import { LEntity } from "../LEntity";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { LEscapeAI } from "../ai/LEscapeAI";
 import { MRSerializable } from "ts/mr/Common";
@@ -17,7 +17,7 @@ export class LIllusionStateBehavior extends LBehavior {
     }
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LIllusionStateBehavior);
+        const b = MRLively.world.spawn(LIllusionStateBehavior);
         b._characterAI = this._characterAI.clone();
         return b
     }

@@ -1,8 +1,8 @@
 import { assert } from "ts/mr/Common";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "./../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -18,39 +18,39 @@ test("activity.PickAndPut", () => {
     TestEnv.newGame();
 
     // actor1 配置
-    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);  // (5, 5) へ配置
+    const actor1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
+    MRLively.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);  // (5, 5) へ配置
 
     // item1 生成&配置
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb, [], "item1"));
-    REGame.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 6, 5);  // (6, 5) へ配置。Item のデフォルトの追加先レイヤーは Ground.
+    MRLively.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 6, 5);  // (6, 5) へ配置。Item のデフォルトの追加先レイヤーは Ground.
 
     // マップ移動
     TestEnv.performFloorTransfer();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // player を右へ移動
-    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();    // 行動確定
+    MRSystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();    // 行動確定
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // 足元のアイテムを拾う
-    RESystem.dialogContext.postActivity(LActivity.makePick(actor1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();    // 行動確定
+    MRSystem.dialogContext.postActivity(LActivity.makePick(actor1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();    // 行動確定
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     const inventory = actor1.findEntityBehavior(LInventoryBehavior);
     assert(inventory);
 
     // item1 は Map 上から外れている
-    const block = REGame.map.block(6, 5);
+    const block = MRLively.map.block(6, 5);
     expect(block.layer(DBlockLayerKind.Ground).isContains(item1)).toBe(false);
 
     // item1 がインベントリに追加されている
@@ -60,10 +60,10 @@ test("activity.PickAndPut", () => {
     //----------------------------------------------------------------------------------------------------
 
     // item1 を置く
-    RESystem.dialogContext.postActivity(LActivity.makePut(actor1, item1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();    // 行動確定
+    MRSystem.dialogContext.postActivity(LActivity.makePut(actor1, item1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();    // 行動確定
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // item1 は Map 上に追加されている
     expect(block.layer(DBlockLayerKind.Ground).isContains(item1)).toBe(true);
@@ -81,25 +81,25 @@ test("activity.PickAtMoved", () => {
 
     // item1 生成&配置
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb, [], "item1"));
-    REGame.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    MRLively.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     // enemy1 (ターン経過チェック用)
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
 
     // マップ移動
     //TestEnv.performFloorTransfer();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
     //----------------------------------------------------------------------------------------------------
 
     // player を右へ移動
-    const dialogContext = RESystem.dialogContext;
+    const dialogContext = MRSystem.dialogContext;
     dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction());
     dialogContext.activeDialog().submit();    // 行動確定
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     expect(enemy1.mx).toBe(19);  // enemy は動いていない (ターンは回っていない)
     expect(actor1.getEntityBehavior(LInventoryBehavior).items[0]).toBe(item1);   // アイテムを拾えていること
@@ -127,22 +127,22 @@ test("activity.PickAtMoved.Maximum", () => {
 
     // item1 生成&配置
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb, [], "item1"));
-    REGame.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    MRLively.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
     //----------------------------------------------------------------------------------------------------
 
     // player を右へ移動して拾う
-    const dialogContext = RESystem.dialogContext;
+    const dialogContext = MRSystem.dialogContext;
     dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction());
     dialogContext.activeDialog().submit();    // 行動確定
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-    const message = REGame.messageHistory;
+    const message = MRLively.messageHistory;
 
-    const block = REGame.map.block(11, 10);
+    const block = MRLively.map.block(11, 10);
     const item = block.layer(DBlockLayerKind.Ground).firstEntity();
     expect(item).toBe(item1);
     expect(message.includesText("薬草")).toBeTruthy();

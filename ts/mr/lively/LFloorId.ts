@@ -1,8 +1,10 @@
 import { assert, MRSerializable } from "ts/mr/Common";
 import { DHelpers } from "ts/mr/data/DHelper";
-import { DFloorInfo, DLand, DLandId } from "ts/mr/data/DLand";
-import { DMap, MRData } from "ts/mr/data/MRData";
+import { DFloorClass, DFloorInfo, DLand } from "ts/mr/data/DLand";
+import { MRData } from "ts/mr/data/MRData";
 import { MRDataManager } from "ts/mr/data/MRDataManager";
+import { DLandId } from "../data/DCommon";
+import { DMap } from "../data/DMap";
 import { DFloorPreset } from "../data/DTerrainPreset";
 
 /**
@@ -33,11 +35,12 @@ import { DFloorPreset } from "../data/DTerrainPreset";
 export class LFloorId {
     /** LandId==DHelpers.RmmzNormalMapLandId は、floorNumber が RMMZ の MapId を直接示すことを表す。 */
     private readonly _landId: DLandId;
+    private readonly _floorClass: DFloorClass;
+    private readonly _floorNumber: number;      // DLand.floors または DLand.eventMapIds の index.
 
-    private readonly _floorNumber: number;
-
-    constructor(landId: DLandId, floorNumber: number) {
+    constructor(landId: DLandId, floorClass: DFloorClass, floorNumber: number) {
         this._landId = landId;
+        this._floorClass = floorClass;
         this._floorNumber = floorNumber;
     }
 
@@ -45,8 +48,24 @@ export class LFloorId {
         return this._landId;
     }
 
+    public landData(): DLand {
+        return MRData.lands[this._landId];
+    }
+
     public floorNumber(): number {
+        assert(this._floorClass == DFloorClass.FloorMap);
         return this._floorNumber;
+    }
+
+    public get eventMapIndex(): number {
+        assert(this._floorClass == DFloorClass.EventMap);
+        return this._floorNumber;
+    }
+
+    public eventMapData(): DMap {
+        const land = this.landData();
+        const mapId = land.eventMapIds[this.eventMapIndex];
+        return MRData.maps[mapId];
     }
 
     public get preset(): DFloorPreset {
@@ -56,11 +75,17 @@ export class LFloorId {
     }
 
     public isEmpty(): boolean {
-        return this._landId == 0 && this._floorNumber == 0;
+        return !this.hasAny();
     }
 
     public hasAny(): boolean {
-        return this._landId > 0 && this._floorNumber != 0;
+        if (this._landId <= 0) return false;
+        if (this._floorClass == DFloorClass.FloorMap) {
+            return this._floorNumber != 0;
+        }
+        else {
+            return this._floorNumber >= 0;
+        }
     }
 
     public equals(other: LFloorId): boolean {
@@ -68,15 +93,15 @@ export class LFloorId {
     }
 
     public clone(): LFloorId {
-        return new LFloorId(this._landId, this._floorNumber);
+        return new LFloorId(this._landId, this._floorClass, this._floorNumber);
     }
 
     public static makeEmpty(): LFloorId {
-        return new LFloorId(0, 0);
+        return new LFloorId(0, DFloorClass.FloorMap, 0);
     }
 
-    public static make(landId: DLandId, floorNumber: number): LFloorId {
-        return new LFloorId(landId, floorNumber);
+    public static make(landId: DLandId, floorClass: DFloorClass, floorNumber: number): LFloorId {
+        return new LFloorId(landId, floorClass, floorNumber);
     }
 
     public static makeFromKeys(landKey: string, floorKey: string): LFloorId {
@@ -84,7 +109,14 @@ export class LFloorId {
         if (!land) throw new Error(`Land "${landKey}" not found.`);
         const floorNumber = land.floorInfos.findIndex(x => x && x.key == floorKey);
         if (floorNumber <= 0) throw new Error(`Floor "${floorKey}" not found.`);
-        return new LFloorId(land.id, floorNumber);
+        return new LFloorId(land.id, DFloorClass.FloorMap, floorNumber);
+    }
+
+    public static makeFromEventMapData(mapData: DMap): LFloorId {
+        const land = MRData.lands[mapData.landId];
+        const floorClass = land.getFloorClass(mapData);
+        assert(floorClass == DFloorClass.EventMap);
+        return new LFloorId(mapData.landId, floorClass, land.eventMapIds.findIndex(x => x == mapData.id));
     }
 
     public static makeByRmmzFixedMapName(fixedMapName: string): LFloorId {
@@ -92,46 +124,45 @@ export class LFloorId {
         const landId = MRData.maps[mapId].landId;
         const floorNumber = MRData.lands[landId].floorInfos.findIndex(x => x && x.fixedMapName == fixedMapName);
         assert(floorNumber > 0);
-        return new LFloorId(landId, floorNumber);
+        return new LFloorId(landId, DFloorClass.FloorMap, floorNumber);
     }
 
-    public static makeByRmmzFixedMapId(mapId: number): LFloorId {
-        const mapInfo = $dataMapInfos[mapId];
-        assert(mapInfo);
-        const fixedMapName = mapInfo.name;
-        const landId = MRData.maps[mapId].landId;
-        const floorNumber = MRData.lands[landId].floorInfos.findIndex(x => x && x.fixedMapName == fixedMapName);
-        assert(floorNumber > 0);
-        return new LFloorId(landId, floorNumber);
-    }
+    // public static makeByRmmzFixedMapId(mapId: number): LFloorId {
+    //     const mapInfo = $dataMapInfos[mapId];
+    //     assert(mapInfo);
+    //     const fixedMapName = mapInfo.name;
+    //     const landId = MRData.maps[mapId].landId;
+    //     const floorNumber = MRData.lands[landId].floorInfos.findIndex(x => x && x.fixedMapName == fixedMapName);
+    //     assert(floorNumber > 0);
+    //     return new LFloorId(landId, floorNumber);
+    // }
 
     public static makeByRmmzNormalMapId(mapId: number): LFloorId {
-        return new LFloorId(DHelpers.RmmzNormalMapLandId, mapId);
+        const landId = MRData.maps[mapId].landId;
+        assert(landId > 0);
+        return new LFloorId(landId, DFloorClass.EventMap, mapId);
     }
 
-    public static makeFromMapTransfarInfo(mapId: number, x: number) {
-        let floorId: LFloorId;
-        if (MRDataManager.isLandMap(mapId)) {
-            floorId = new LFloorId(MRData.lands.findIndex(x => x.rmmzMapId == mapId), x);
-        }
-        else if (MRDataManager.isRESystemMap(mapId)) {
-            // 固定マップへの遷移
-            floorId = LFloorId.makeByRmmzFixedMapId(mapId);
-        }
-        else {
-            // 管理外マップへの遷移
-            floorId = LFloorId.makeByRmmzNormalMapId(mapId);
-        }
-        return floorId;
-    }
-
-    public landData(): DLand {
-        return MRData.lands[this._landId];
-    }
+    // public static makeFromMapTransfarInfo(mapId: number, x: number) {
+    //     let floorId: LFloorId;
+    //     if (MRDataManager.isLandMap(mapId)) {
+    //         floorId = new LFloorId(MRData.lands.findIndex(x => x.rmmzMapId == mapId), x);
+    //     }
+    //     else if (MRDataManager.isRESystemMap(mapId)) {
+    //         // 固定マップへの遷移
+    //         floorId = LFloorId.makeByRmmzFixedMapId(mapId);
+    //     }
+    //     else {
+    //         // 管理外マップへの遷移
+    //         floorId = LFloorId.makeByRmmzNormalMapId(mapId);
+    //     }
+    //     return floorId;
+    // }
 
     public floorInfo(): DFloorInfo {
         assert(this.hasAny());
-        const info = MRData.lands[this._landId].floorInfos[this._floorNumber];
+        const land = MRData.lands[this._landId];
+        const info = land.floorInfos[this._floorNumber];
         assert(info);
         return info;
     }
@@ -139,9 +170,12 @@ export class LFloorId {
     /** this が示すフロアへ遷移するとなったときに、ロードするべき RMMZ MapId */
     public rmmzMapId(): number {
         assert(this._landId > 0);
-        if (this._landId == DHelpers.RmmzNormalMapLandId) {
+        if (this._landId == DHelpers.VanillaLandId) {
             // REシステム管理外
             return this._floorNumber;
+        }
+        else if (this._floorClass == DFloorClass.EventMap) {
+            return this.eventMapData().mapId;
         }
         else {
             const fixedMapId = this.rmmzFixedMapId();
@@ -161,26 +195,31 @@ export class LFloorId {
         return map ? map.mapId : 0;
     }
 
-    public isNormalMap(): boolean {
-        return this._landId == DHelpers.RmmzNormalMapLandId;
+    public isEventMap(): boolean {
+        return this._floorClass == DFloorClass.EventMap;
     }
 
-    public isRESystem(): boolean {
-        return this._landId != DHelpers.RmmzNormalMapLandId;
+    public isNormalMap(): boolean {
+        return this._landId == DHelpers.VanillaLandId;
     }
+
+    // public isRESystem(): boolean {
+    //     return this._landId != DHelpers.VanillaLandId;
+    // }
 
     public isRandomMap(): boolean {
-        if (!this.isRESystem()) return false;
+        if (!this.isTacticsMap()) return false;
+        if (this.isEventMap()) return false;
         return this.rmmzFixedMapId() <= 0;
     }
 
     public isFixedMap(): boolean {
-        if (!this.isRESystem()) return false;
+        if (!this.isTacticsMap()) return false;
         return this.rmmzFixedMapId() > 0;
     }
 
     public isSafetyMap(): boolean {
-        if (this._landId == DHelpers.RmmzNormalMapLandId) {
+        if (this._landId == DHelpers.VanillaLandId) {
             const mapId = this.rmmzMapId();
             if (MRData.maps[mapId].safetyMap) {
                 return true;
@@ -193,11 +232,17 @@ export class LFloorId {
 
     /** Entity を登場させるマップであるか。false の場合は通常の RMMZ マップ。Entity は登場せず、Event を非表示にすることもない。 */
     public isTacticsMap(): boolean {
-        return this._landId != DHelpers.RmmzNormalMapLandId;
+        if (this._landId == DHelpers.VanillaLandId) return false;
+        return this._floorClass == DFloorClass.FloorMap;
+    }
+
+    /** FloorInfo を取ることができるか */
+    public isDungeonMap(): boolean {
+        return this._floorClass == DFloorClass.FloorMap;
     }
 
     public isRMMZDefaultSystemMap(): boolean {
-        if (this._landId != DHelpers.RmmzNormalMapLandId) return false;
+        if (this._landId != DHelpers.VanillaLandId) return false;
         return MRData.maps[this._floorNumber].defaultSystem;
     }
 }

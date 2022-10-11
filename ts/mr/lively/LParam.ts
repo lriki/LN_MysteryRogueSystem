@@ -5,7 +5,7 @@ import { MRData } from "ts/mr/data/MRData";
 import { DParameterId } from "../data/DCommon";
 import { LEntity } from "./LEntity";
 import { LEntityId } from "./LObject";
-import { REGame } from "./REGame";
+import { MRLively } from "./MRLively";
 
 interface LParamBuff {
     //mode: DBuffMode,

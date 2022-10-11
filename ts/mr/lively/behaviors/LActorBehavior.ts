@@ -7,7 +7,7 @@ import { DActionId, DSkillId } from "ts/mr/data/DCommon";
 import { MRData } from "ts/mr/data/MRData";
 import { LBehavior } from "../internal";
 import { LEntity } from "../LEntity";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { LBattlerBehavior } from "./LBattlerBehavior";
 
 /**
@@ -42,7 +42,7 @@ export class LActorBehavior extends LBattlerBehavior {
     _skills: DSkillId[] = [];
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LActorBehavior);
+        const b = MRLively.world.spawn(LActorBehavior);
         throw new Error("Not implemented.");    // TODO: base の LBattlerBehavior のコピー
         b._classId = this._classId;
         return b;

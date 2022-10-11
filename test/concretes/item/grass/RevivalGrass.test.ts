@@ -1,7 +1,7 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -29,20 +29,20 @@ test("concretes.item.grass.RevivalGrass.Basic", () => {
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 10, 11);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 10, 11);
     enemy1.getEntityBehavior(LUnitBehavior).setSpeedLevel(2); // 倍速化
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     player1.setActualParam(MRBasics.params.hp, 1);
 
     // 待機
-    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 倒されるが、復活して HP が回復している。
     // また Enemy は倍速であるが復活した直後はターンは回らず、Scheduler はリセットされる。

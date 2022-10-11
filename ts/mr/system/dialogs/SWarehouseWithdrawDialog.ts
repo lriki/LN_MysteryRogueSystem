@@ -1,9 +1,9 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { LBehaviorId, LEntityId } from "ts/mr/lively/LObject";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SWarehouseActionResult, UInventory } from "ts/mr/utility/UInventory";
-import { RESystem } from "../RESystem";
+import { MRSystem } from "../MRSystem";
 import { SWarehouseDialogResult } from "../SCommon";
 import { SDialog } from "../SDialog";
 
@@ -26,19 +26,19 @@ export class SWarehouseWithdrawDialog extends SDialog {
     }
 
     public get user(): LEntity {
-        return REGame.world.entity(this._userEntityId);
+        return MRLively.world.entity(this._userEntityId);
     }
 
     public get userInventory(): LInventoryBehavior {
-        return REGame.world.behavior(this._userInventoryBehaviorId) as LInventoryBehavior;
+        return MRLively.world.behavior(this._userInventoryBehaviorId) as LInventoryBehavior;
     }
 
     public get inventory(): LInventoryBehavior {
-        return REGame.world.behavior(this._inventoryBehaviorId) as LInventoryBehavior;
+        return MRLively.world.behavior(this._inventoryBehaviorId) as LInventoryBehavior;
     }
 
     public get warehouseEntity(): LEntity {
-        return REGame.world.entity(this._warehouseEntityId);
+        return MRLively.world.entity(this._warehouseEntityId);
     }
 
     // public setResultItems(items: LEntity[]) {
@@ -46,7 +46,7 @@ export class SWarehouseWithdrawDialog extends SDialog {
     // }
 
     public resultItems(): LEntity[] {
-        return this._resultItems.map(e => REGame.world.entity(e));
+        return this._resultItems.map(e => MRLively.world.entity(e));
     }
 
     public get result(): SWarehouseDialogResult {
@@ -56,7 +56,7 @@ export class SWarehouseWithdrawDialog extends SDialog {
     public withdrawItems(items: LEntity[]): void {
         this._resultItems = items.map(e => e.entityId());
         const r: SWarehouseActionResult = { code: SWarehouseDialogResult.Succeeded, items: [] };
-        UInventory.postWithdrawItemsToWarehouse(RESystem.commandContext, this.user, this.warehouseEntity, items, r)
+        UInventory.postWithdrawItemsToWarehouse(MRSystem.commandContext, this.user, this.warehouseEntity, items, r)
             .finally(_ => {
                 this._result = r.code;
                 this.submit();

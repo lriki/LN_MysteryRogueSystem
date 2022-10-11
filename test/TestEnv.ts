@@ -1,21 +1,20 @@
 
 import fs from "fs";
-import { LandExitResult, MRData, REFloorMapKind } from "ts/mr/data/MRData";
+import { LandExitResult, MRData } from "ts/mr/data/MRData";
 import { MRDataManager } from "ts/mr/data/MRDataManager";
 import { FMap } from "ts/mr/floorgen/FMapData";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { SSequelSet } from "ts/mr/system/SSequel";
 import { SIntegration } from "ts/mr/system/SIntegration";
 import { SGameManager } from "ts/mr/system/SGameManager";
 import { SRmmzHelpers } from "ts/mr/system/SRmmzHelpers";
 import "./Extension";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { LFloorId } from "ts/mr/lively/LFloorId";
 import { LMap } from "ts/mr/lively/LMap";
 import { DHelpers } from "ts/mr/data/DHelper";
 import { assert } from "ts/mr/Common";
-import { DLandId } from "ts/mr/data/DLand";
 import { DStateId } from "ts/mr/data/DState";
 import { SDialogContext } from "ts/mr/system/SDialogContext";
 import { SDialog } from "ts/mr/system/SDialog";
@@ -24,6 +23,8 @@ import { LBlock } from "ts/mr/lively/LBlock";
 import { DEventId } from "ts/mr/data/predefineds/DBasicEvents";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
+import { DLandId } from "ts/mr/data/DCommon";
+import { DFloorClass } from "ts/mr/data/DLand";
 
 declare global {
     interface Number {
@@ -79,15 +80,15 @@ export class TestEnv {
         MRDataManager.testMode = true;
         MRDataManager.load();
         this.integration = new TestEnvIntegration();
-        RESystem.integration = this.integration;
-        RESystem.unittest = true;
+        MRSystem.integration = this.integration;
+        MRSystem.unittest = true;
 
         this.UnitTestLandId = MRData.lands.findIndex(x => x.name.includes("UnitTestDungeon1"));
         this.FloorId_DefaultNormalMap = LFloorId.makeByRmmzNormalMapId(MRData.getMap("MR-Safety:テスト拠点").mapId);
         this.FloorId_FlatMap50x50 = LFloorId.makeByRmmzFixedMapName("FlatMap50x50");
         this.FloorId_UnitTestFlatMap50x50 = LFloorId.makeByRmmzFixedMapName("UnitTestFlatMap50x50");
         this.FloorId_CharacterAI = LFloorId.makeByRmmzFixedMapName("CharacterAI");
-        this.FloorId_RandomMapFloor = LFloorId.make(this.UnitTestLandId, 3);
+        this.FloorId_RandomMapFloor = LFloorId.make(this.UnitTestLandId, DFloorClass.FloorMap, 3);
         this.StateId_debug_MoveRight = MRData.getState("kState_Test_MoveRight").id
         this.StateId_Sleep = MRData.getState("kState_睡眠").id;
         this.StateId_CertainDirectAttack = MRData.states.findIndex(x => x.key == "kState_UnitTest_攻撃必中");
@@ -102,25 +103,25 @@ export class TestEnv {
     }
 
     public static setupPlayer(floorId: LFloorId, mx?: number, my?: number, dir: number = 0): LEntity {
-        const player = REGame.world.entity(REGame.system.mainPlayerEntityId);
+        const player = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
         player._name = "Player";
         if (dir) {
             player.dir = dir;
         }
-        REGame.world.transferEntity(player, floorId, mx, my);
+        MRLively.world.transferEntity(player, floorId, mx, my);
         TestEnv.performFloorTransfer();
         return player;
     }
 
     public static createReflectionObject(floorId: LFloorId, mx: number, my: number): LEntity {
         const object1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_投擲反射石_A").id, [MRData.getState("kState_System_ItemStanding").id], "object1"));
-        REGame.world.transferEntity(object1, floorId, 13, 10);
+        MRLively.world.transferEntity(object1, floorId, 13, 10);
         return object1;
     }
 
     public static performFloorTransfer(): void {
-        assert(REGame.camera.isFloorTransfering());
-        this.loadMapData(REGame.camera.transferingNewFloorId().rmmzMapId());
+        assert(MRLively.camera.isFloorTransfering());
+        this.loadMapData(MRLively.camera.transferingNewFloorId().rmmzMapId());
         SGameManager.performFloorTransfer();
     }
 

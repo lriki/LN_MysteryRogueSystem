@@ -1,4 +1,4 @@
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 
 /**
  */
@@ -60,7 +60,7 @@ export class VFloorNameWindow extends Window_Base {
         this.contents.clear();
         if ($gameMap.displayName()) {
 
-            const floorId = REGame.map.floorId();
+            const floorId = MRLively.map.floorId();
             const floorInfo = floorId.floorInfo();
 
             const displayName = floorInfo.displayName ? floorInfo.displayName : $gameMap.displayName();

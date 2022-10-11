@@ -1,6 +1,6 @@
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { LTileShape } from "ts/mr/lively/LBlock";
 import { MRData } from "ts/mr/data/MRData";
@@ -23,20 +23,20 @@ test("concretes.item.scroll.Sanctuary.NoEffect", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     enemy1.addState(TestEnv.StateId_CertainDirectAttack);   // 攻撃必中にする
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
 
     // item1: player1 と enemy1 の間に聖域を置いてみる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_聖域の巻物_A").id, [], "item1"));
-    REGame.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    MRLively.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
     //----------------------------------------------------------------------------------------------------
     
     // 足踏み
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 巻物は張り付いていないので、Enemy はアイテムの上に載ってくる
     expect(enemy1.mx).toBe(11);
@@ -45,10 +45,10 @@ test("concretes.item.scroll.Sanctuary.NoEffect", () => {
     //----------------------------------------------------------------------------------------------------
     
     // player を右へ移動。聖域の上に乗る
-    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // Enemy は攻撃してくる
     const hp2 = player1.actualParam(MRBasics.params.hp);
@@ -63,21 +63,21 @@ test("concretes.item.scroll.Sanctuary.Basic", () => {
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     // item1: 持たせる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_聖域の巻物_A").id, [], "item1"));
     inventory1.addEntity(item1);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
     //----------------------------------------------------------------------------------------------------
     
     // [置く]
-    RESystem.dialogContext.postActivity(LActivity.makePut(player1, item1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makePut(player1, item1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 攻撃してこない。Enemy は聖域を避け、左折の法則に従って進行方向の左前に進んでいる
     const hp2 = player1.actualParam(MRBasics.params.hp);
@@ -88,13 +88,13 @@ test("concretes.item.scroll.Sanctuary.Basic", () => {
     //----------------------------------------------------------------------------------------------------
     
     // [拾う]
-    RESystem.dialogContext.postActivity(LActivity.makePick(player1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makePick(player1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 拾えていない
-    expect(REGame.messageHistory.includesText("はりついている")).toBeTruthy();
+    expect(MRLively.messageHistory.includesText("はりついている")).toBeTruthy();
     expect(inventory1.itemCount).toBe(0);
 });
 
@@ -104,25 +104,25 @@ test("concretes.item.scroll.Sanctuary.ForceDeth", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 9, 10);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 9, 10);
 
     // item1: player1 と enemy1 の間に聖域を置いてみる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_聖域の巻物_A").id, [], "item1"));
     item1.getEntityBehavior(LGlueToGroundBehavior).glued = true;    // 張り付き状態にする
-    REGame.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 6, 10);
+    MRLively.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 6, 10);
     
-    REGame.map.block(5, 10)._tileShape = LTileShape.Wall;
+    MRLively.map.block(5, 10)._tileShape = LTileShape.Wall;
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // 壁 聖 敵 のような並びを作り、←方向へ敵を吹き飛ばす
     //LProjectableBehavior.startMoveAsProjectile(RESystem.commandContext, enemy1, new SEffectSubject(player1), 4, 10);
-    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, MRData.getSkill("kSkill_KnockbackAttack").id).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, MRData.getSkill("kSkill_KnockbackAttack").id).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
     // "戦闘不能" 付加 -> HP0 -> 削除されている
     const aa = enemy1.isDeathStateAffected();

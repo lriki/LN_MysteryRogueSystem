@@ -1,6 +1,6 @@
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
@@ -20,19 +20,19 @@ test("system.Parameters.pow", () => {
 
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_Test_サンドバッグドラゴン").id, [], "enemy1"));
     enemy1.addState(MRData.getState("kState_UTからぶり").id);
-    REGame.world.transferEntity(enemy1, floorId, 11, 10);
+    MRLively.world.transferEntity(enemy1, floorId, 11, 10);
     const enemy1HP1 = enemy1.actualParam(MRBasics.params.hp);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
     // 通常状態でダメージを出してみる
 
     // [攻撃]
-    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, MRData.system.skills.normalAttack, 6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, MRData.system.skills.normalAttack, 6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     const enemy1HP2 = enemy1.actualParam(MRBasics.params.hp);
     
@@ -43,10 +43,10 @@ test("system.Parameters.pow", () => {
     expect(player1.actualParam(MRBasics.params.pow)).toBe(24);  // 最大値上昇に伴い、ちからが上昇する
 
     // [攻撃]
-    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, MRData.system.skills.normalAttack, 6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, MRData.system.skills.normalAttack, 6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     const enemy1HP3 = enemy1.actualParam(MRBasics.params.hp);
 

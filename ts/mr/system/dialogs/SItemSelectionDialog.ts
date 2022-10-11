@@ -1,7 +1,7 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { LBehaviorId, LEntityId } from "ts/mr/lively/LObject";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SDialog } from "../SDialog";
 
 export class SItemSelectionDialog extends SDialog {
@@ -16,11 +16,11 @@ export class SItemSelectionDialog extends SDialog {
     }
 
     public entity(): LEntity {
-        return REGame.world.entity(this._actorEntityId);
+        return MRLively.world.entity(this._actorEntityId);
     }
 
     public inventory(): LInventoryBehavior {
-        return REGame.world.behavior(this._inventoryBehaviorId) as LInventoryBehavior;
+        return MRLively.world.behavior(this._inventoryBehaviorId) as LInventoryBehavior;
     }
 
     public setSelectedEntity(entity: LEntity): void {

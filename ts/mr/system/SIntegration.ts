@@ -4,10 +4,10 @@ import { FMap } from "ts/mr/floorgen/FMapData";
 import { LBlock } from "ts/mr/lively/LBlock";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { LMap } from "ts/mr/lively/LMap";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SSequelSet } from "ts/mr/system/SSequel";
 import { LObjectType } from "../lively/LObject";
-import { RESystem } from "./RESystem";
+import { MRSystem } from "./MRSystem";
 import { SDialog } from "./SDialog";
 import { SDialogContext } from "./SDialogContext";
 
@@ -68,7 +68,7 @@ export abstract class SIntegration {
     // Visual notifications
 
     public refreshGameMap(map: LMap): void {
-        if (!REGame.recorder.isSilentPlayback()) {
+        if (!MRLively.recorder.isSilentPlayback()) {
             this.onRefreshGameMap(map);
         }
     }
@@ -76,13 +76,13 @@ export abstract class SIntegration {
     public flushEffectResultOneEntity(entity: LEntity): void {
         if (entity._effectResult.hasResult()) {
             this.onFlushEffectResult(entity);
-            entity._effectResult.showResultMessages(RESystem.commandContext, entity);
+            entity._effectResult.showResultMessages(MRSystem.commandContext, entity);
             entity._effectResult.clear();
         }
     }
 
     public flushEffectResult(): void {
-        for (const obj of REGame.world.objects()) {
+        for (const obj of MRLively.world.objects()) {
             if (obj && obj.objectType() == LObjectType.Entity) {
                 const entity = obj as LEntity;
                 this.flushEffectResultOneEntity(entity);
@@ -91,13 +91,13 @@ export abstract class SIntegration {
     }
 
     public flushSequelSet(sequelSet: SSequelSet): void {
-        if (!REGame.recorder.isSilentPlayback()) {
+        if (!MRLively.recorder.isSilentPlayback()) {
             this.onFlushSequelSet(sequelSet);
         }
     }
 
     public checkVisualSequelRunning(): boolean {
-        if (!REGame.recorder.isSilentPlayback()) {
+        if (!MRLively.recorder.isSilentPlayback()) {
             return this.onCheckVisualSequelRunning();
         }
         else {
@@ -106,37 +106,37 @@ export abstract class SIntegration {
     }
     
     public openDialog(model: SDialog): void {
-        if (!REGame.recorder.isSilentPlayback()) {
+        if (!MRLively.recorder.isSilentPlayback()) {
             this.onOpenDialog(model);
         }
     }
 
     public updateDialog(context: SDialogContext): void {
-        if (!REGame.recorder.isSilentPlayback()) {
+        if (!MRLively.recorder.isSilentPlayback()) {
             this.onUpdateDialog(context);
         }
     }
 
     public dialogClosed(context: SDialogContext, dialog: SDialog): void {
-        if (!REGame.recorder.isSilentPlayback()) {
+        if (!MRLively.recorder.isSilentPlayback()) {
             this.onDialogClosed(context, dialog);
         }
     }
 
     public entityEnteredMap(entity: LEntity): void {
-        if (!REGame.recorder.isSilentPlayback()) {
+        if (!MRLively.recorder.isSilentPlayback()) {
             this.onEntityEnteredMap(entity);
         }
     }
 
     public entityLeavedMap(entity: LEntity): void {
-        if (!REGame.recorder.isSilentPlayback()) {
+        if (!MRLively.recorder.isSilentPlayback()) {
             this.onEntityLeavedMap(entity);
         }
     }
 
     public entityReEnterMap(entity: LEntity): void {
-        if (!REGame.recorder.isSilentPlayback()) {
+        if (!MRLively.recorder.isSilentPlayback()) {
             this.onEntityReEnterMap(entity);
         }
     }

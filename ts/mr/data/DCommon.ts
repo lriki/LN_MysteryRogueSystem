@@ -18,6 +18,12 @@ export type DEffectId = number & { readonly brand?: unique symbol }; // Do not i
 export type DAnimationId = number & { readonly brand?: unique symbol };
 
 
+export type DLandId = number;
+
+/** DMap のインデックス。 RMMZ の MapId と等しい。 */
+export type DMapId = number;
+
+
 // /**
 //  * システムに基づいた根本的な分類。
 //  * 

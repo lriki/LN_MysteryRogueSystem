@@ -2,13 +2,13 @@ import { assert } from "ts/mr/Common";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { LEntity } from "ts/mr/lively/LEntity";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { UName } from "ts/mr/utility/UName";
 
 export class TestUtils {
     public static submitActivity(activity: LActivity) {
-        RESystem.dialogContext.postActivity(activity);
-        RESystem.dialogContext.activeDialog().submit();
+        MRSystem.dialogContext.postActivity(activity);
+        MRSystem.dialogContext.activeDialog().submit();
     }
 
     public static testCommonFood(item: LEntity) {

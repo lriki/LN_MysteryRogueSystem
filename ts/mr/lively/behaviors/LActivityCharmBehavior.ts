@@ -1,12 +1,12 @@
 import { MRSerializable, tr2 } from "ts/mr/Common";
 import { SCommandResponse } from "ts/mr/system/SCommand";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { SActivityContext } from "ts/mr/system/SActivityContext";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { SEmittorPerformer } from "ts/mr/system/SEmittorPerformer";
 import { LActivity } from "../activities/LActivity";
 import { LEntity } from "../LEntity";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { LBehavior } from "./LBehavior";
 
 /**
@@ -16,7 +16,7 @@ import { LBehavior } from "./LBehavior";
 export class LActivityCharmBehavior extends LBehavior {
 
     clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LActivityCharmBehavior);
+        const b = MRLively.world.spawn(LActivityCharmBehavior);
         return b;
     }
 
@@ -37,7 +37,7 @@ export class LActivityCharmBehavior extends LBehavior {
             }
 
                 // TODO: test
-            RESystem.scheduler.reset();
+            MRSystem.scheduler.reset();
 
             return SCommandResponse.Handled;
         }

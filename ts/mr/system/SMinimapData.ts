@@ -4,7 +4,7 @@ import { LBattlerBehavior } from "ts/mr/lively/behaviors/LBattlerBehavior";
 import { LItemBehavior } from "ts/mr/lively/behaviors/LItemBehavior";
 import { LTrapBehavior } from "ts/mr/lively/behaviors/LTrapBehavior";
 import { LExitPointBehavior } from "ts/mr/lively/behaviors/LExitPointBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { Helpers } from "./Helpers";
 import { SNavigationHelper } from "./SNavigationHelper";
 import { SView } from "./SView";
@@ -111,7 +111,7 @@ export class SMinimapData {
 
     // 地形表示の更新
     public refresh(): void {
-        const map = REGame.map;
+        const map = MRLively.map;
         const width = map.width();
         const height = map.height();
         for (let y = 0; y < height; y++) {
@@ -142,10 +142,10 @@ export class SMinimapData {
     }
 
     public update() {
-        const map = REGame.map;
+        const map = MRLively.map;
         const width = map.width();
         const height = map.height();
-        const subject = REGame.camera.focusedEntity();
+        const subject = MRLively.camera.focusedEntity();
         assert(subject);
 
         if (width != this._width || height != this._height) {
@@ -297,7 +297,7 @@ export class SMinimapData {
 
     // (x, y) のタイルが、component と同種かどうか
     private getSameKindTile(x: number, y: number, component: FBlockComponent): boolean {
-        const block = REGame.map.tryGetBlock(x, y);
+        const block = MRLively.map.tryGetBlock(x, y);
         if (!block) return true;        // マップ範囲外は同種とすることで、境界外にも広がっているように見せる
         if (!block._passed) return true; // 未踏なら壁Edgeなどは表示したくないので、同種扱いする
         if (block._blockComponent == component) return true;

@@ -1,5 +1,5 @@
 import { assert, MRSerializable } from "ts/mr/Common";
-import { REGame } from "./REGame";
+import { MRLively } from "./MRLively";
 
 
 @MRSerializable
@@ -46,7 +46,7 @@ export class LEntityId {
     }
 
     public get object(): LObject {
-        return REGame.world.object(this);
+        return MRLively.world.object(this);
     }
 }
 
@@ -137,7 +137,7 @@ export class LObject {
     }
     
     public parentObject(): LObject {
-        return REGame.world.object(this._parentObjectId);
+        return MRLively.world.object(this._parentObjectId);
     }
 
     public parentAs<T extends LObject>(ctor: { new(...args: any[]): T }): T | undefined {

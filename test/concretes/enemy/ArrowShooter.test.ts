@@ -4,8 +4,8 @@ import { MRBasics } from "ts/mr/data/MRBasics";
 import { MRData } from "ts/mr/data/MRData";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { LTileShape } from "ts/mr/lively/LBlock";
-import { REGame } from "ts/mr/lively/REGame";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRLively } from "ts/mr/lively/MRLively";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { TestEnv } from "../../TestEnv";
 
@@ -24,17 +24,17 @@ test("concretes.enemies.ArrowShooter.Basic", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_インプ_A").id, [], "enemy1"));
     enemy1.addState(MRData.getState("kState_UnitTest_投擲必中").id);    // 投擲必中
-    REGame.world.transferEntity(enemy1, floorId, 12, 10);
+    MRLively.world.transferEntity(enemy1, floorId, 12, 10);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // 待機
-    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 離れていれば 100% 矢を撃ってくる
     const hp2 = player1.actualParam(MRBasics.params.hp);
@@ -43,10 +43,10 @@ test("concretes.enemies.ArrowShooter.Basic", () => {
     //----------------------------------------------------------------------------------------------------
     
     // 右へ移動
-    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 隣接していても 100% 矢を撃ってくる
     const hp3 = player1.actualParam(MRBasics.params.hp);
@@ -63,21 +63,21 @@ test("concretes.enemies.ArrowShooter.OutOfSight", () => {
     
     // enemy1 (Player とは別の部屋に配置)
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_インプ_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, floorId, 9, 4);
+    MRLively.world.transferEntity(enemy1, floorId, 9, 4);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // 待機
     for (let i = 0; i < 5; i++) {
-        RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
-        RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+        MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
+        MRSystem.dialogContext.activeDialog().submit();
+        MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     }
 
     // 矢が撃たれ、床に落ちていないこと
-    const item1 = REGame.map.block(9, 4).getFirstEntity();
+    const item1 = MRLively.map.block(9, 4).getFirstEntity();
     expect(item1).toBeUndefined();
 });
 
@@ -88,23 +88,23 @@ test("concretes.enemies.ArrowShooter.ArrowStack", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_インプ_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, floorId, 13, 10);
+    MRLively.world.transferEntity(enemy1, floorId, 13, 10);
 
     // Player と Enemy の間に壁を作る
-    REGame.map.block(11, 10)._tileShape = LTileShape.Wall;
+    MRLively.map.block(11, 10)._tileShape = LTileShape.Wall;
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // 待機
-    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 壁に当たって落ちた arrow のスタック数を確認
-    const arrow1 = REGame.map.block(12, 10).getFirstEntity();
+    const arrow1 = MRLively.map.block(12, 10).getFirstEntity();
     assert(arrow1);
     expect(arrow1._stackCount).toBe(1);
 });

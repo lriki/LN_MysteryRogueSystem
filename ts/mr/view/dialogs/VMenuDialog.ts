@@ -2,7 +2,7 @@
 import { SItemListDialog } from "ts/mr/system/dialogs/SItemListDialog";
 import { SMainMenuDialog } from "ts/mr/system/dialogs/SMainMenuDialog";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { VMenuCommandWindow } from "../windows/VMenuCommandWindow";
 import { VDialog } from "./VDialog";
 import { SFeetDialog } from "ts/mr/system/dialogs/SFeetDialog";
@@ -53,7 +53,7 @@ export class VMainMenuDialog extends VDialog {
     }
 
     private handleFeet() {
-        const feetEntity = REGame.map.firstFeetEntity(this._model.entity());
+        const feetEntity = MRLively.map.firstFeetEntity(this._model.entity());
         if (feetEntity) {
             this._model.openSubDialog(new SFeetDialog(this._model.entity(), feetEntity), d => {
                 //if (d.isSubmitted()) this.submit();

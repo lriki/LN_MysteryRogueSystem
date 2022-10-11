@@ -1,6 +1,6 @@
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -23,15 +23,15 @@ test("concretes.effect.Escape", () => {
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_撤退テストA").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
     // 待機
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     expect(enemy1.isDestroyed()).toBe(true);
 

@@ -1,6 +1,6 @@
 import { assert } from "ts/mr/Common";
-import { REGame } from "ts/mr/lively/REGame";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRLively } from "ts/mr/lively/MRLively";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "./TestEnv";
 import { LFloorId } from "ts/mr/lively/LFloorId";
 import { MRBasics } from "ts/mr/data/MRBasics";
@@ -21,17 +21,17 @@ test("Dialog.FeetDialogSequelTiming", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
 
     const exitPoint1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ExitPoint_A").id, [], ""));
-    REGame.world.transferEntity(exitPoint1, floorId, 11, 10);
+    MRLively.world.transferEntity(exitPoint1, floorId, 11, 10);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // 右へ移動
-    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // Dialog 表示と同時に、Sequel も Flush されること。
     const set = TestEnv.activeSequelSet;

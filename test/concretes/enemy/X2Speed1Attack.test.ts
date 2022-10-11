@@ -1,6 +1,6 @@
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -19,17 +19,17 @@ test("concretes.enemy.X2Speed1Attack", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ウルフA").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 14, 10);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 14, 10);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // [待機]
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 倍速で近づいて来る
     expect(enemy1.mx).toBe(12);
@@ -37,10 +37,10 @@ test("concretes.enemy.X2Speed1Attack", () => {
     //----------------------------------------------------------------------------------------------------
 
     // [待機]
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // Minor で接近し、Major で攻撃が発生している
     expect(enemy1.mx).toBe(11);
@@ -52,10 +52,10 @@ test("concretes.enemy.X2Speed1Attack", () => {
     enemy1.addState(MRData.getState("kState_System_Seal").id);
     
     // [←]
-    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 4).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 4).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 封印されているので等速
     expect(enemy1.mx).toBe(10);
@@ -64,10 +64,10 @@ test("concretes.enemy.X2Speed1Attack", () => {
     //----------------------------------------------------------------------------------------------------
 
     // [待機]
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 1回攻撃が来る
     expect(TestEnv.integration.skillEmittedCount).toBe(2);

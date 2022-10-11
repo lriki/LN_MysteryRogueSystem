@@ -1,7 +1,7 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -34,16 +34,16 @@ test("concretes.item.識別の巻物", () => {
     const name1 = UName.makeNameAsItem(item2);
     expect(name1.includes("\\C[14]")).toBeTruthy(); // 黄色
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // [読む]
     const activity = LActivity.makeRead(player1, item1, [item2]).withConsumeAction();
-    RESystem.dialogContext.postActivity(activity);
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(activity);
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     const name2 = UName.makeNameAsItem(item2);
     expect(name1).not.toBe(name2);  // 少なくとも、識別の前後で表示名が変わっていること

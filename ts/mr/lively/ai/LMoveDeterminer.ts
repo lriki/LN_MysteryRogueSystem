@@ -7,7 +7,7 @@ import { LActivity } from "../activities/LActivity";
 import { LBlock } from "../LBlock";
 import { LActionTokenConsumeType } from "../LCommon";
 import { LEntity } from "../LEntity";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 
 export enum LMovingMethod {
     ToTarget,
@@ -47,7 +47,7 @@ export class LMoveDeterminer {
 
     public decide(cctx: SCommandContext, self: LEntity): void {
         const rand = cctx.random();
-        const block = REGame.map.block(self.mx, self.my);
+        const block = MRLively.map.block(self.mx, self.my);
 
         if (!this.hasDestination()) {
             if (!block.isRoom()) {
@@ -57,7 +57,7 @@ export class LMoveDeterminer {
                 return;
             }
             else {
-                const room = REGame.map.room(block._roomId);
+                const room = MRLively.map.room(block._roomId);
                 if (!block.isRoomInnerEntrance()) {
                     // 目的地なし, 現在位置が部屋
                     // => ランダムな入口を目的地に設定し、目的地に向かう移動。

@@ -9,8 +9,8 @@ import { LStorageBehavior } from "ts/mr/lively/behaviors/LStorageBehavior";
 import { LReaction } from "ts/mr/lively/LCommon";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { LBehaviorId, LEntityId } from "ts/mr/lively/LObject";
-import { REGame } from "ts/mr/lively/REGame";
-import { RESystem } from "../RESystem";
+import { MRLively } from "ts/mr/lively/MRLively";
+import { MRSystem } from "../MRSystem";
 import { SDialog } from "../SDialog";
 import { SCommonCommand } from "./SCommonCommand";
 import { SDialogCommand } from "./SDialogCommand";
@@ -28,11 +28,11 @@ export class SItemListDialog extends SDialog {
     }
 
     public get actor(): LEntity {
-        return REGame.world.entity(this._actorEntityId);
+        return MRLively.world.entity(this._actorEntityId);
     }
 
     public get inventory(): LInventoryBehavior {
-        return REGame.world.behavior(this._inventoryBehaviorId) as LInventoryBehavior;
+        return MRLively.world.behavior(this._inventoryBehaviorId) as LInventoryBehavior;
     }
 
     public setSelectedEntity(entity: LEntity): void {
@@ -46,7 +46,7 @@ export class SItemListDialog extends SDialog {
 
     public makeActionList(item: LEntity): SDialogCommand[] {
         // SafetyMap など、ダンジョンマップ以外では ActionList を生成しない
-        if (!REGame.map.floorId().isRESystem()) {
+        if (!MRLively.map.floorId().isTacticsMap()) {
             return [];
         }
 
@@ -97,7 +97,7 @@ export class SItemListDialog extends SDialog {
 
             // 足元に何かあれば [置く] を [交換] にする
             {
-                const feetEntity = REGame.map.firstFeetEntity(actor);
+                const feetEntity = MRLively.map.firstFeetEntity(actor);
                 if (feetEntity) {
                     if (actualActions.mutableRemove(x => x.actionId == MRBasics.actions.PutActionId)) {
                         actualActions.push({ actionId: MRBasics.actions.ExchangeActionId });
@@ -140,14 +140,14 @@ export class SItemListDialog extends SDialog {
     private handleShortcutSet(): void {
         const itemEntity = this.selectedEntity();
         const equipmentUser = this.actor.getEntityBehavior(LEquipmentUserBehavior);
-        equipmentUser.equipOnShortcut(RESystem.commandContext, itemEntity);
+        equipmentUser.equipOnShortcut(MRSystem.commandContext, itemEntity);
         this.closeAllSubDialogs();
     }
 
     private handleShortcutUnset(): void {
         const itemEntity = this.selectedEntity();
         const equipmentUser = this.actor.getEntityBehavior(LEquipmentUserBehavior);
-        equipmentUser.equipOffShortcut(RESystem.commandContext, itemEntity);
+        equipmentUser.equipOffShortcut(MRSystem.commandContext, itemEntity);
         this.closeAllSubDialogs();
     }
 
@@ -167,7 +167,7 @@ export class SItemListDialog extends SDialog {
             const item = model.selectedEntity();
             assert(item);
             const activity = LActivity.makePutIn(this.actor, storage, item);
-            RESystem.dialogContext.postActivity(activity);
+            MRSystem.dialogContext.postActivity(activity);
             this.submit();
             return false;
         });

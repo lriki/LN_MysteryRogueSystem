@@ -11,7 +11,7 @@ import { LEscapeAI } from "../ai/LEscapeAI";
 import { LMovingTargetFinder_Gold } from "../ai/LMovingTargetFinder";
 import { LCharacterAI_Normal } from "../ai/LStandardAI";
 import { LEntity } from "../LEntity";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { DecisionPhase, LBehavior } from "./LBehavior";
 import { LInventoryBehavior } from "./LInventoryBehavior";
 
@@ -34,7 +34,7 @@ export class LGoldThiefBehavior extends LBehavior {
     }
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LGoldThiefBehavior);
+        const b = MRLively.world.spawn(LGoldThiefBehavior);
         return b;
     }
 

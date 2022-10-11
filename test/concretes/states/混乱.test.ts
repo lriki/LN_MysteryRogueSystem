@@ -1,8 +1,8 @@
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -22,18 +22,18 @@ test("concretes.states.混乱.move", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
 
     // 10 ターン分 シミュレーション実行
-    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     for (let i = 0; i < 10; i++) {
         // 10 ターンの間はステートが追加されている
         expect(!!enemy1.states().find(x => x.stateDataId() == stateId)).toBe(true);
 
-        RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
+        MRSystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+        MRSystem.dialogContext.activeDialog().submit();
 
-        RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+        MRSystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     }
 
     // 10 ターンで解除
@@ -51,7 +51,7 @@ test("concretes.states.混乱.attack", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [MRData.getState("kState_UT混乱").id, MRData.getState("kState_UTからぶり").id], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
 
     // 周りを移動できない Enemy で囲ってみる
     const enemies = [
@@ -64,20 +64,20 @@ test("concretes.states.混乱.attack", () => {
         SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [MRData.getState("kState_睡眠").id], "enemy1")),
         SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [MRData.getState("kState_睡眠").id], "enemy1")),
     ];
-    REGame.world.transferEntity(enemies[0], TestEnv.FloorId_FlatMap50x50, 19, 9);
-    REGame.world.transferEntity(enemies[1], TestEnv.FloorId_FlatMap50x50, 20, 9);
-    REGame.world.transferEntity(enemies[2], TestEnv.FloorId_FlatMap50x50, 21, 9);
-    REGame.world.transferEntity(enemies[3], TestEnv.FloorId_FlatMap50x50, 19, 10);
-    REGame.world.transferEntity(enemies[4], TestEnv.FloorId_FlatMap50x50, 21, 10);
-    REGame.world.transferEntity(enemies[5], TestEnv.FloorId_FlatMap50x50, 19, 11);
-    REGame.world.transferEntity(enemies[6], TestEnv.FloorId_FlatMap50x50, 20, 11);
-    REGame.world.transferEntity(enemies[7], TestEnv.FloorId_FlatMap50x50, 21, 11);
+    MRLively.world.transferEntity(enemies[0], TestEnv.FloorId_FlatMap50x50, 19, 9);
+    MRLively.world.transferEntity(enemies[1], TestEnv.FloorId_FlatMap50x50, 20, 9);
+    MRLively.world.transferEntity(enemies[2], TestEnv.FloorId_FlatMap50x50, 21, 9);
+    MRLively.world.transferEntity(enemies[3], TestEnv.FloorId_FlatMap50x50, 19, 10);
+    MRLively.world.transferEntity(enemies[4], TestEnv.FloorId_FlatMap50x50, 21, 10);
+    MRLively.world.transferEntity(enemies[5], TestEnv.FloorId_FlatMap50x50, 19, 11);
+    MRLively.world.transferEntity(enemies[6], TestEnv.FloorId_FlatMap50x50, 20, 11);
+    MRLively.world.transferEntity(enemies[7], TestEnv.FloorId_FlatMap50x50, 21, 11);
 
     // 10 ターン分 シミュレーション実行
-    RESystem.scheduler.stepSimulation();
+    MRSystem.scheduler.stepSimulation();
     for (let i = 0; i < 10; i++) {
-        RESystem.dialogContext.activeDialog().submit();
-        RESystem.scheduler.stepSimulation();
+        MRSystem.dialogContext.activeDialog().submit();
+        MRSystem.scheduler.stepSimulation();
     }
 
     // 混乱中はランダムに選択された進行方向に何らかのキャラクターがいる場合は攻撃を行う。
@@ -93,13 +93,13 @@ test("concretes.states.混乱.movePlayer", () => {
     actor1.addState(MRData.getState("kState_UT混乱").id);
 
     // 10 ターン分 シミュレーション実行
-    RESystem.scheduler.stepSimulation();
+    MRSystem.scheduler.stepSimulation();
     for (let i = 0; i < 10; i++) {
         // 右へ移動しようとする
-        RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
+        MRSystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(actor1, 6).withConsumeAction());
+        MRSystem.dialogContext.activeDialog().submit();
 
-        RESystem.scheduler.stepSimulation();
+        MRSystem.scheduler.stepSimulation();
     }
 
     // ふらふら移動するため、まっすぐこちらに向かってくることはないはず
@@ -114,14 +114,14 @@ test("concretes.states.混乱.attackPlayer", () => {
     actor1.addState(MRData.getState("kState_UT混乱").id);
 
     // 10 ターン分 シミュレーション実行
-    RESystem.scheduler.stepSimulation();
+    MRSystem.scheduler.stepSimulation();
     let count = 0;
     for (let i = 0; i < 10; i++) {
         // 右に向かって攻撃してみる
-        RESystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, MRData.system.skills.normalAttack).withEntityDirection(6));
-        RESystem.dialogContext.activeDialog().submit();
+        MRSystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, MRData.system.skills.normalAttack).withEntityDirection(6));
+        MRSystem.dialogContext.activeDialog().submit();
 
-        RESystem.scheduler.stepSimulation();
+        MRSystem.scheduler.stepSimulation();
 
         if (actor1.dir != 6) count++;
     }
@@ -145,17 +145,17 @@ test("concretes.states.混乱.throw", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
 
-    RESystem.scheduler.stepSimulation();
+    MRSystem.scheduler.stepSimulation();
     for (let i = 0; i < 5; i++) {
         // HP1 にする
         enemy1.setActualParam(MRBasics.params.hp, 1);
 
         // 投げる
-        RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, items[i]).withEntityDirection(6).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
-        RESystem.scheduler.stepSimulation();
+        MRSystem.dialogContext.postActivity(LActivity.makeThrow(actor1, items[i]).withEntityDirection(6).withConsumeAction());
+        MRSystem.dialogContext.activeDialog().submit();
+        MRSystem.scheduler.stepSimulation();
 
         // 混乱は投げには影響しないので、命中してHP回復しているはず
         expect(enemy1.actualParam(MRBasics.params.hp) > 5).toBe(true);

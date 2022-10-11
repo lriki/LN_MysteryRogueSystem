@@ -5,7 +5,7 @@ import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { UName } from "ts/mr/utility/UName";
 import { LActivity } from "../activities/LActivity";
 import { LEntity } from "../LEntity";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { CommandArgs, LBehavior, onGrounded, testPickOutItem } from "./LBehavior";
 
 /**
@@ -17,7 +17,7 @@ export class LGlueToGroundBehavior extends LBehavior {
     private _glued: boolean = false;
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LGlueToGroundBehavior);
+        const b = MRLively.world.spawn(LGlueToGroundBehavior);
         throw new Error("Not implemented.");
     }
 

@@ -4,7 +4,7 @@ import { DFactionId, MRData } from "ts/mr/data/MRData";
 import { Helpers } from "ts/mr/system/Helpers";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { LRoom, MonsterHouseState } from "../LRoom";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { LEntity } from "../LEntity";
 import { LStructure } from "./LStructure";
 import { SSoundManager } from "ts/mr/system/SSoundManager";
@@ -31,7 +31,7 @@ export class LMonsterHouseStructure extends LStructure {
     }
 
     public get room(): LRoom {
-        return REGame.map.room(this._roomId);
+        return MRLively.map.room(this._roomId);
     }
 
     public monsterHouseTypeId(): DMonsterHouseTypeId {
@@ -68,7 +68,7 @@ export class LMonsterHouseStructure extends LStructure {
     }
     
     onEntityLocated(cctx: SCommandContext, entity: LEntity): void {
-        const block = REGame.map.block(entity.mx, entity.my);
+        const block = MRLively.map.block(entity.mx, entity.my);
         if (block._roomId == this._roomId) {
             // モンスターハウスから見て、侵入してきた entity が敵対関係にあれば、起動する
             if (Helpers.isHostileFactionId(this.monsterHouseFactionId(), entity.getOutwardFactionId()) &&

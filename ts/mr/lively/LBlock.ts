@@ -1,10 +1,10 @@
 import { assert, MRSerializable } from "ts/mr/Common";
 import { LEntity } from "./LEntity";
 import { FBlockComponent } from "ts/mr/floorgen/FMapData";
-import { REGame } from "./REGame";
+import { MRLively } from "./MRLively";
 import { REBlockLayer } from "./LBlockLayer";
 import { LRoom } from "./LRoom";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { DBlockLayerKind } from "../data/DCommon";
 import { LRoomId } from "./LCommon";
 import { DBlockVisualPartIndex } from "../data/DTemplateMap";
@@ -106,7 +106,7 @@ export class LBlock {
 
     public room(): LRoom | undefined {
         if (this._roomId > 0)
-            return REGame.map.room(this._roomId);
+            return MRLively.map.room(this._roomId);
         else
             return undefined;
     }
@@ -142,7 +142,7 @@ export class LBlock {
 
     public setSystemDecoration(value: LBlockSystemDecoration): void {
         this._systemDecoration = value;
-        RESystem.integration.onUpdateBlock(this);
+        MRSystem.integration.onUpdateBlock(this);
     }
 
     public systemDecoration(): LBlockSystemDecoration {
@@ -260,7 +260,7 @@ export class LBlock {
     public findEntity(predicate: (entity: LEntity) => boolean): LEntity | undefined {
         for (const layer of this._layers) {
             for (const id of layer.entityIds()) {
-                const entity = REGame.world.entity(id);
+                const entity = MRLively.world.entity(id);
                 if (predicate(entity)) return entity;
             }
         }

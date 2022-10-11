@@ -4,7 +4,7 @@ import { paramFPLoss } from "ts/mr/PluginParameters";
 import { SPhaseResult } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { LEntity } from "../LEntity";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { DecisionPhase, LBehavior } from "./LBehavior";
 
 /**
@@ -47,7 +47,7 @@ export class LSurvivorBehavior extends LBehavior {
     private _basicLoss = paramFPLoss;
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LSurvivorBehavior);
+        const b = MRLively.world.spawn(LSurvivorBehavior);
         return b;
     }
 

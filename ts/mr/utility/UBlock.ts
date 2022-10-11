@@ -3,7 +3,7 @@ import { LMap } from "ts/mr/lively/LMap";
 import { LEnemyBehavior } from "../lively/behaviors/LEnemyBehavior";
 import { LSanctuaryBehavior } from "../lively/behaviors/LSanctuaryBehavior";
 import { LEntity } from "../lively/LEntity";
-import { REGame } from "../lively/REGame";
+import { MRLively } from "../lively/MRLively";
 
 /**
  * 様々な条件で Block を取得する方法を提供する。
@@ -79,7 +79,7 @@ export class UBlock {
         //     }
         // }
 
-        for (const entity2 of REGame.map.entities()) {
+        for (const entity2 of MRLively.map.entities()) {
             for (const fieldEffect of entity2.fieldEffects()) {
                 // TODO: とりあえず今は LSanctuaryBehavior でしか使っていないので、通行可否で判断している
                 if (!fieldEffect.onCheckPossibleMovement(entity, block.mx, block.my)) {

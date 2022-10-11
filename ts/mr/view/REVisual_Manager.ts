@@ -5,7 +5,7 @@ import { REDialogVisualNavigator } from "ts/mr/view/dialogs/REDialogVisual";
 import { VManualActionDialogVisual } from "ts/mr/view/dialogs/VManualActionDialogVisual";
 import { REVisualSequel } from "ts/mr/view/REVisualSequel";
 import { REEventExecutionDialogVisual } from "./dialogs/REEventExecutionDialogVisual";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { VCollapseSequel } from "./sequels/VCollapseSequel";
 import { VAttackSequel } from "./sequels/AttackSequel";
 import { VBlowMoveSequel } from "./sequels/VBlowMoveSequel";
@@ -47,7 +47,7 @@ import { VItemSelectionDialog } from "./dialogs/VItemSelectionDialog";
 import { SNicknameDialog } from "../system/dialogs/SNicknameDialog";
 import { VNicknameDialog } from "./dialogs/VNicknameDialog";
 import { VFloatingAnimationTargetSprite } from "./sprites/VFloatingAnimationSprite";
-import { REVisual } from "./REVisual";
+import { MRView } from "./MRView";
 import { VHelper } from "./VHelper";
 
 /**
@@ -136,7 +136,7 @@ export class REVisual_Manager
     }
 
     public startFloatingAnimation(animationId: number, mx: number, my: number): void {
-        const spriteset = REVisual.spriteSet2;
+        const spriteset = MRView.spriteSet2;
         if (spriteset) {
             spriteset.spritesetMap.createMRFloatingAnimationSprite(
                 $dataAnimations[animationId],

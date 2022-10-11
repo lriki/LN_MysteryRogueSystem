@@ -1,5 +1,5 @@
 import { DTextManager } from "ts/mr/data/DTextManager";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 
 export class VChallengeResultWindow extends Window_Base {
     _text: string;
@@ -16,13 +16,13 @@ export class VChallengeResultWindow extends Window_Base {
         super.update();
 
         if (!this.isOpen()) {
-            if (REGame.challengeResultShowing) {
+            if (MRLively.challengeResultShowing) {
                 this.open();
             }
         }
         else {
             if (this.isTriggered()) {
-                REGame.challengeResultShowing = false;
+                MRLively.challengeResultShowing = false;
                 this.close();
             }
         }

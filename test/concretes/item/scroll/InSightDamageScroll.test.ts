@@ -1,7 +1,7 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -28,20 +28,20 @@ test("concretes.item.scroll.InSightDamageScroll", () => {
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy2"));
-    REGame.world.transferEntity(enemy1, floorId, 15, 10);
-    REGame.world.transferEntity(enemy2, floorId, 10, 15);
+    MRLively.world.transferEntity(enemy1, floorId, 15, 10);
+    MRLively.world.transferEntity(enemy2, floorId, 10, 15);
     const enemy1HP1 = enemy1.actualParam(MRBasics.params.hp);
     const enemy2HP1 = enemy2.actualParam(MRBasics.params.hp);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // [読む]
-    RESystem.dialogContext.postActivity(LActivity.makeRead(player1, item1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeRead(player1, item1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     const player1HP2 = player1.actualParam(MRBasics.params.hp);
     const enemy1HP2 = enemy1.actualParam(MRBasics.params.hp);

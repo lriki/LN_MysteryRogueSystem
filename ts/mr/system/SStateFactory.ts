@@ -1,6 +1,6 @@
 import { DStateId } from "ts/mr/data/DState";
 import { LBehavior } from "ts/mr/lively/behaviors/LBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { LGenericRMMZStateBehavior } from "ts/mr/lively/states/LGenericRMMZStateBehavior";
 import { LState } from "ts/mr/lively/states/LState";
 import { assert } from "../Common";
@@ -13,7 +13,7 @@ export class SStateFactory {
         state.setup(stateId);
 
         const behavior = new LGenericRMMZStateBehavior();
-        REGame.world._registerObject(behavior);
+        MRLively.world._registerObject(behavior);
         
         //const behabiors: LStateTraitBehavior[] = [behavior];
         const behabiors: LBehavior[] = [behavior];

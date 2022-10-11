@@ -4,7 +4,7 @@ import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { LEscapeAI } from "../ai/LEscapeAI";
 import { DecisionPhase, LBehavior, LBehaviorGroup } from "../internal";
 import { LEntity } from "../LEntity";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 
 
 /**
@@ -19,7 +19,7 @@ export class LEscapeBehavior extends LBehavior {
     }
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LEscapeBehavior);
+        const b = MRLively.world.spawn(LEscapeBehavior);
         return b;
     }
 

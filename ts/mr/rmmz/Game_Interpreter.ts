@@ -4,21 +4,21 @@ import { MRData } from "../data/MRData";
 import { LExperienceBehavior } from "../lively/behaviors/LExperienceBehavior";
 import { LInventoryBehavior } from "../lively/behaviors/LInventoryBehavior";
 import { LEntity } from "../lively/LEntity";
-import { REGame } from "../lively/REGame";
+import { MRLively } from "../lively/MRLively";
 import { SEntityFactory } from "../system/internal";
-import { RESystem } from "../system/RESystem";
+import { MRSystem } from "../system/MRSystem";
 
 function commandTarget(): LEntity | undefined {
-    return REGame.camera.focusedEntity();
+    return MRLively.camera.focusedEntity();
 }
 
 const _Game_Interpreter_updateWaitMode = Game_Interpreter.prototype.updateWaitMode;
 Game_Interpreter.prototype.updateWaitMode = function(): boolean {
     if (this._waitMode == "REResultWinodw") {
-        return REGame.challengeResultShowing;
+        return MRLively.challengeResultShowing;
     }
     else if (this._waitMode == "MR-Dialog") {
-        return RESystem.dialogContext._hasDialogModel() || RESystem.commandContext.checkOpenDialogRequired();
+        return MRSystem.dialogContext._hasDialogModel() || MRSystem.commandContext.checkOpenDialogRequired();
     }
     else {
         return _Game_Interpreter_updateWaitMode.call(this);
@@ -99,7 +99,7 @@ const _Game_Interpreter_command129 = Game_Interpreter.prototype.command129;
 Game_Interpreter.prototype.command129 = function(params: any): boolean {
     const result = _Game_Interpreter_command129.call(this, params);
     const rmmzActorId = $gameParty.members()[0].actorId();
-    REGame.camera.focus(REGame.world.getEntityByRmmzActorId(rmmzActorId));
+    MRLively.camera.focus(MRLively.world.getEntityByRmmzActorId(rmmzActorId));
     return result;
 }
 

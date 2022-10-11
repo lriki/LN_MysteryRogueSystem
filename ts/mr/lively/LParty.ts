@@ -1,10 +1,13 @@
 import { assert, MRSerializable } from "ts/mr/Common";
-import { REGame } from "./REGame";
+import { MRLively } from "./MRLively";
 import { LEntity } from "./LEntity";
 import { LBehaviorId, LEntityId } from "./LObject";
 import { DEventId } from "ts/mr/data/predefineds/DBasicEvents";
 import { LBehavior } from "./internal";
 import { LEventResult } from "./LEventServer";
+import { LJournal } from "./LJournal";
+import { MRData } from "../data";
+import { DLandId } from "../data/DCommon";
 
 export type LPartyId = number;
 
@@ -18,11 +21,27 @@ interface LPartyEventSubscriber {
  * 仲間キャラや、グループで動くモンスターをまとめる仕組み。
  * RMMZ の Party と Troop を合わせたようなもの。
  * member がいなくなると、GC される。
+ * 
+ * Party には Leader が一人いる。
+ * Leader がフロア移動すると、Party に属する全員が移動する。
+ * 
+ * Leader ではないメンバーがフロア移動すると、そのメンバーは Party を脱退する。
+ * 
+ * Party は勢力を表すものではない。
+ * 仲間が倒されて Party を離脱しても、友好な Unique Entity として World 上には存在し、再び Party に入ることはできる。
  */
 @MRSerializable
 export class LParty {
     private _id: LPartyId = 0;
     private _members: LEntityId[] = [];
+    private _leaderEntityId: LEntityId;
+
+    public readonly journal: LJournal;
+
+    public constructor() {
+        this._leaderEntityId = LEntityId.makeEmpty();
+        this.journal = new LJournal();
+    }
 
     public setup(id: LPartyId) {
         this._id = id;
@@ -40,7 +59,13 @@ export class LParty {
         assert(entity.partyId() == 0);
         entity._partyId = this._id;
         this._members.push(entity.entityId());
-        for (const b of entity.collectBehaviors()) b.onPertyChanged(entity);
+        if (this._members.length == 1) {
+            this._leaderEntityId = entity.entityId();
+        }
+
+        for (const b of entity.collectBehaviors()) {
+            b.onPertyChanged(entity);
+        }
     }
 
     public removeMember(entity: LEntity): void {
@@ -49,7 +74,7 @@ export class LParty {
         for (const b of entity.collectBehaviors()) b.onPertyChanged(entity);
 
         // unsubscribe
-        this._entries.mutableRemoveAll(x => REGame.world.behavior(x.behaviorId).ownerEntity() == entity);
+        this._entries.mutableRemoveAll(x => MRLively.world.behavior(x.behaviorId).ownerEntity() == entity);
     }
     
     private _entries: LPartyEventSubscriber[] = [];
@@ -73,7 +98,7 @@ export class LParty {
     public send(eventId: DEventId, args: any): boolean {
         for (const e of this._entries) {
             if (e.eventId == eventId) {
-                const b = REGame.world.behavior(e.behaviorId);
+                const b = MRLively.world.behavior(e.behaviorId);
                 const r = b.onPartyEvent(eventId, args);
                 if (r != LEventResult.Pass) {
                     return false;
@@ -81,6 +106,24 @@ export class LParty {
             }
         }
         return true;
+    }
+
+    public onMemberMovedLand(member: LEntity, newLandId: DLandId, oldLandId: DLandId): void {
+        if (this._leaderEntityId.equals(member.entityId())) {
+            const newLand = MRData.lands[newLandId];
+            const oldLand = MRData.lands[oldLandId];
+            if (newLand.isDungeonLand && !oldLand.isDungeonLand) {
+                // World から Dungeon への移動（突入）
+                this.journal.startChallenge(newLandId);
+            }
+            else if (!newLand.isDungeonLand && oldLand.isDungeonLand) {
+                // Dungeon から World への移動（帰還）
+                
+
+                // TODO: ちゃんと LandRule を参照するべきだが、とりあえず #8 対応のため一律リセットにしておく
+                member.recoverAll();
+            }
+        }
     }
 }
 

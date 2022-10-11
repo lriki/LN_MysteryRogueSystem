@@ -1,6 +1,6 @@
 import { assert, Log, tr2 } from "../../Common";
-import { REGame } from "../../lively/REGame";
-import { RESystem } from "../RESystem";
+import { MRLively } from "../../lively/MRLively";
+import { MRSystem } from "../MRSystem";
 import { LScheduler2, LSchedulerPhase } from "ts/mr/lively/LScheduler";
 import { SStepScheduler2 } from "./SStepScheduler";
 import { SChainAfterScheduler } from "./SChainAfterScheduler";
@@ -16,7 +16,7 @@ export class SScheduler {
     private _occupy: boolean;
 
     public constructor() {
-        this._data = REGame.scheduler;
+        this._data = MRLively.scheduler;
         this._stepScheduler = new SStepScheduler2(this);
         this._chainAfterScheduler = new SChainAfterScheduler();
         this._brace = false;
@@ -24,7 +24,7 @@ export class SScheduler {
     }
 
     public reset(): void {
-        this._data = REGame.scheduler;
+        this._data = MRLively.scheduler;
         this._data.chedulerPhase = LSchedulerPhase.RoundStarting;
         this._stepScheduler.start();
         this._chainAfterScheduler.reset();
@@ -37,8 +37,8 @@ export class SScheduler {
     }
 
     public stepSimulation(): void {
-        const dialogContext = RESystem.dialogContext;
-        const commandContext = RESystem.commandContext;
+        const dialogContext = MRSystem.dialogContext;
+        const commandContext = MRSystem.commandContext;
 
         while (true) {
             // フレーム待ち
@@ -47,12 +47,12 @@ export class SScheduler {
             //}
 
             // Sequel 終了待ち
-            if (RESystem.integration.checkVisualSequelRunning()) {
+            if (MRSystem.integration.checkVisualSequelRunning()) {
                 // Sequel 実行中
                 break;
             }
 
-            if (REGame.camera.isFloorTransfering()) {
+            if (MRLively.camera.isFloorTransfering()) {
                 // マップ遷移中。
                 // postTransferFloor() の実行によって遷移が発生した場合は一度実行ループを抜けておかないと、
                 // 遷移が実際に行われる前に次のコマンド実行に進んでしまう。
@@ -78,7 +78,7 @@ export class SScheduler {
             */
 
             // 現在のコマンドリストの実行は終了しているが、Visual 側がアニメーション中であれば完了を待ってから次の Unit の行動を始めたい
-            if (!commandContext.isRunning() && RESystem.integration.checkVisualSequelRunning()) {
+            if (!commandContext.isRunning() && MRSystem.integration.checkVisualSequelRunning()) {
                 break;
             }
 
@@ -95,7 +95,7 @@ export class SScheduler {
                     this.onCommandChainConsumed();
                 }
 
-                RESystem.sequelContext.attemptFlush(false);
+                MRSystem.sequelContext.attemptFlush(false);
                 continue;
             }
             
@@ -134,7 +134,7 @@ export class SScheduler {
 
 
                 
-                REGame.world._removeDestroyedObjects();
+                MRLively.world._removeDestroyedObjects();
     
                 this.stepSimulationInternal();
             }
@@ -161,7 +161,7 @@ export class SScheduler {
 
     private update_RoundStarting(): void {
         // 敵の生成など
-        RESystem.mapManager.updateRound();
+        MRSystem.mapManager.updateRound();
 
         this._data.buildSchedulingUnits();
         this._data.dealActionTokens();
@@ -188,13 +188,13 @@ export class SScheduler {
             // 普通であれば ManualDialog が表示されている間はシミュレーションループは回らないので stepSimulation() から制御が返るが、
             // 押しっぱなしの場合 Dialog 表示→ キー入力判定 → 移動処理 → postSequel() が一気に行われる。
             // そのため RoundStarting → RoundEnding まで一度も制御を返さず来てしまうため、brace = true となり、1フレームだけ Idle Sequel を再生する猶予ができてしまった。
-            if (RESystem.sequelContext.isEmptySequelSet()) {
+            if (MRSystem.sequelContext.isEmptySequelSet()) {
                 this._brace = true;
             }
         }
         else {
             // ターン終了時に Sequel が残っていればすべて掃き出す
-            RESystem.sequelContext.flushSequelSet(false);
+            MRSystem.sequelContext.flushSequelSet(false);
         }
 
         this._data.chedulerPhase = LSchedulerPhase.RoundStarting
@@ -204,7 +204,7 @@ export class SScheduler {
     // ここで新たにコマンドを post すると、フェーズは進まず新たなコマンドチェーンを開始できる。
     private onCommandChainConsumed(): void {
         if (!this._chainAfterScheduler.isEnd()) {
-            this._chainAfterScheduler.process(RESystem.commandContext);
+            this._chainAfterScheduler.process(MRSystem.commandContext);
             
             // SChainAfterScheduler 最後の Phase で詰まれたコマンドに対して繰り返し SChainAfterScheduler を回したいこともあるので、
             // 一連の処理が終わったら直ちにリセットしておく。

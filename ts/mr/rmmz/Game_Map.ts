@@ -1,9 +1,9 @@
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { SView } from "ts/mr/system/SView";
 import { Log } from "../Common";
 import { MRData } from "../data/MRData";
 import { MRDataManager } from "../data/MRDataManager";
-import { REGame } from "../lively/REGame";
+import { MRLively } from "../lively/MRLively";
 import { SGameManager } from "../system/SGameManager";
 import { RMMZHelper } from "./RMMZHelper";
 
@@ -42,8 +42,8 @@ Game_Map.prototype.setup = function(mapId: number) {
     // 先に REMap をクリーンアップしておく。
     // 内部から onEntityLeavedMap() が呼び出され、ここで Game_Event の erase が走るため、
     // Game_Map 構築後にクリーンアップしてしまうと、新しく作成された Event が消えてしまう。
-    REGame.map.releaseMap();
-    REGame.messageHistory.clear();
+    MRLively.map.releaseMap();
+    MRLively.messageHistory.clear();
     
     // Game_Map.setup が呼ばれるのは、マップが切り替わるとき。
     // タイミングの都合で DataManager.onLoad によって前のマップの REEvent が $dataMap.event に含まれているので、これを削除しておく。
@@ -76,8 +76,8 @@ Game_Map.prototype.setup = function(mapId: number) {
     */
 
 
-    if (REGame.camera.isFloorTransfering()) {
-        if (REGame.camera.transferingNewFloorId().isTacticsMap()) {
+    if (MRLively.camera.isFloorTransfering()) {
+        if (MRLively.camera.transferingNewFloorId().isTacticsMap()) {
             // Land 定義マップなど、初期配置されているイベントを非表示にしておく。
             // ランダム Entity 生成ではこれが動的イベントの原本になることもあるので、削除はしない。
             if (MRDataManager.isLandMap(mapId)) {
@@ -91,14 +91,14 @@ Game_Map.prototype.setup = function(mapId: number) {
     SGameManager.performFloorTransfer();   // TODO: transferEntity でフラグ立った後すぐに performFloorTransfer() してるので、まとめていいかも
 
     // レコーディング開始
-    REGame.recorder.startRecording();
+    MRLively.recorder.startRecording();
 
     RMMZHelper.triggerOnStartEvent();
     
     // 新しいマップへの移動時は、遅くてもここで RMMZ 側の Map への更新をかけておく。
     // Game_Map.setup は抜けるとこの後する Game_Player の locate が行われるが、それまでにマップのサイズを確定させておく必要がある。
     // そうしないと、focusedEntity と Game_Player の位置同期がずれる。
-    RESystem.mapManager.attemptRefreshVisual();
+    MRSystem.mapManager.attemptRefreshVisual();
 
     Log.d("RMMZ map setup finished.");
 }
@@ -133,11 +133,11 @@ Game_Map.prototype.update = function(sceneActive: boolean) {
 
     //SGameManager.attemptRestartFloor();
 
-    if (REGame.map.lastKeeperCount != REGame.map.keeperCount &&
-        REGame.map.keeperCount == 0) {
+    if (MRLively.map.lastKeeperCount != MRLively.map.keeperCount &&
+        MRLively.map.keeperCount == 0) {
         RMMZHelper.triggerOnKeeperLostEvent();
     }
-    REGame.map.lastKeeperCount = REGame.map.keeperCount;
+    MRLively.map.lastKeeperCount = MRLively.map.keeperCount;
 }
 
 /*
@@ -152,12 +152,15 @@ Game_Map.prototype.isRESystemMap = function(): boolean {
 
 const _Game_Map_autoplay = Game_Map.prototype.autoplay;
 Game_Map.prototype.autoplay = function() {
-    const data = REGame.map.floorId().floorInfo();
-    if (data.bgmName != "") {
-        AudioManager.playBgm({ name: data.bgmName, pan: 0, pitch: data.bgmPitch, volume: data.bgmVolume }, 0);
+    const floorId = MRLively.map.floorId();
+    if (floorId.isDungeonMap()) {
+        const data = floorId.floorInfo();
+        if (data.bgmName != "") {
+            AudioManager.playBgm({ name: data.bgmName, pan: 0, pitch: data.bgmPitch, volume: data.bgmVolume }, 0);
+            return;
+        }
     }
-    else {
-        _Game_Map_autoplay.call(this);
-    }
+
+    _Game_Map_autoplay.call(this);
 }
 

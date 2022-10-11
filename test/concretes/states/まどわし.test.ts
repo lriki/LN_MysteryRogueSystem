@@ -1,6 +1,6 @@
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -23,11 +23,11 @@ test("concretes.states.まどわし", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
     enemy1.dir = 6; // 右へ
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     // item1
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草_A").id, [], "item1"));
-    REGame.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    MRLively.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     // View には何か別のものを表示させようとする
     const enemy1Visibility1 = SView.getEntityVisibility(enemy1);
@@ -38,17 +38,17 @@ test("concretes.states.まどわし", () => {
     expect(item1Visibility1.image).not.toBeUndefined();
 
     // 10 ターン分 シミュレーション実行
-    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     for (let i = 0; i < 10; i++) {
         // 10 ターンの間はステートが追加されている
         expect(!!actor1.states().find(x => x.stateDataId() == stateId)).toBe(true);
         expect(!!enemy1.states().find(x => x.stateDataId() == stateId)).toBe(true);
 
         // 待機
-        RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
+        MRSystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+        MRSystem.dialogContext.activeDialog().submit();
 
-        RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+        MRSystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     }
 
     // 10 ターンで解除

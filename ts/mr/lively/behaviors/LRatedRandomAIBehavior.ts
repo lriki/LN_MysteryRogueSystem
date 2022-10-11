@@ -4,7 +4,7 @@ import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { LRatedRandomAI } from "../ai/LRatedRandomAI";
 import { LEntity } from "../LEntity";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { DecisionPhase, LBehavior, LBehaviorGroup } from "./LBehavior";
 
 /**
@@ -24,7 +24,7 @@ export class LRatedRandomAIBehavior extends LBehavior {
     private _characterAI: LRatedRandomAI = new LRatedRandomAI();
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LRatedRandomAIBehavior);
+        const b = MRLively.world.spawn(LRatedRandomAIBehavior);
         b._characterAI = this._characterAI.clone() as LRatedRandomAI;
         return b;
     }

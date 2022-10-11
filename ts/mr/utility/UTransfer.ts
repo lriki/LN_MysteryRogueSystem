@@ -4,10 +4,11 @@ import { LandExitResult, MRData } from "ts/mr/data/MRData";
 import { MRDataManager } from "ts/mr/data/MRDataManager";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { LFloorId } from "ts/mr/lively/LFloorId";
-import { REGame } from "ts/mr/lively/REGame";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRLively } from "ts/mr/lively/MRLively";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { createNoSubstitutionTemplateLiteral } from "typescript";
+import { DFloorClass } from "../data/DLand";
 
 
 export class UTransfer {
@@ -23,7 +24,7 @@ export class UTransfer {
         let actualX = -1;
         let actualY = -1;
 
-        if (landId == DHelpers.RmmzNormalMapLandId || mapData.eventMap) {
+        if (landId == DHelpers.VanillaLandId || mapData.eventMap) {
             // REシステム管理外
             //actualMapId = newMapId;
             actualFloorNumber = newMapId;
@@ -73,11 +74,11 @@ export class UTransfer {
             throw new Error("Unreachable.");
         }
         
-        const floorId = new LFloorId(landId, actualFloorNumber);
+        const floorId = new LFloorId(landId, DFloorClass.FloorMap, actualFloorNumber);
         
-        const playerEntity = REGame.camera.focusedEntity();
+        const playerEntity = MRLively.camera.focusedEntity();
         if (playerEntity) {
-            REGame.world.transferEntity(playerEntity, floorId, actualX, actualY);
+            MRLively.world.transferEntity(playerEntity, floorId, actualX, actualY);
         }
 
         //$gamePlayer.reserveTransfer();
@@ -87,37 +88,35 @@ export class UTransfer {
      * entity を今いる Land から抜けさせ、ExitMap へ移動させる。
      */
     public static exitLand(cctx: SCommandContext, entity: LEntity, result: LandExitResult): void {
-        assert(entity == REGame.camera.focusedEntity());    // Player であるはず
+        assert(entity == MRLively.camera.focusedEntity());    // Player であるはず
 
-        RESystem.integration.onSetLandExitResult(result);
-        cctx.postTransferFloor(entity, LFloorId.makeByRmmzNormalMapId(REGame.map.land2().landData().exitRMMZMapId));
+        entity.party()?.journal.finishChallenge(result);
+        const map = MRLively.map;
+        const exitMapFloorId = LFloorId.makeFromEventMapData(map.land2().landData().exitMapData);
+        cctx.postTransferFloor(entity, exitMapFloorId);
     }
 
     public static proceedFloorForwardForPlayer(interpreter?: Game_Interpreter | undefined) {
-        const entity = REGame.camera.focusedEntity();
+        const entity = MRLively.camera.focusedEntity();
         if (entity) {
             const floorId = entity.floorId;
             const newFloorNumber = floorId.floorNumber() + 1;
 
             // 最後のフロアを踏破した？
-            if (newFloorNumber > REGame.map.land2().maxFloorNumber()) {
-                RESystem.integration.onSetLandExitResult(LandExitResult.Goal);
+            if (newFloorNumber > MRLively.map.land2().maxFloorNumber()) {
+                // ExitMap 取得
+                const newFloorId = LFloorId.makeFromEventMapData(floorId.landData().exitMapData);
 
-                const exitRMMZMapId = floorId.landData().exitRMMZMapId;
-                assert(exitRMMZMapId > 0);
-
-                const newFloorId = LFloorId.makeByRmmzNormalMapId(exitRMMZMapId)
-
-                //const newFloorId = LFloorId.make(DHelpers.RmmzNormalMapLandId, exitRMMZMapId);
-                REGame.world.transferEntity(entity, newFloorId);
+                entity.party()?.journal.finishChallenge(LandExitResult.Goal);
+                MRLively.world.transferEntity(entity, newFloorId);
 
                 //$gamePlayer.reserveTransfer(exitRMMZMapId, 0, 0, 2, 0);
                 //const result = this.command201([0, exitRMMZMapId, 0, 0, 2, 0]);
                 //assert(result);
             }
             else {
-                const newFloorId = LFloorId.make(floorId.landId(), newFloorNumber);
-                REGame.world.transferEntity(entity, newFloorId);
+                const newFloorId = LFloorId.make(floorId.landId(), DFloorClass.FloorMap, newFloorNumber);
+                MRLively.world.transferEntity(entity, newFloorId);
             }
 
             if (interpreter) {

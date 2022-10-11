@@ -1,5 +1,5 @@
-import { REGame } from "../lively/REGame";
-import { REVisual } from "../view/REVisual";
+import { MRLively } from "../lively/MRLively";
+import { MRView } from "../view/MRView";
 import { RMMZHelper } from "./RMMZHelper";
 
 const _Game_Player_initMembers = Game_Player.prototype.initMembers;
@@ -9,7 +9,7 @@ Game_Player.prototype.initMembers = function() {
 
 const _Game_Player_isTransparent = Game_Player.prototype.isTransparent;
 Game_Player.prototype.isTransparent = function() {
-    if (REGame.map.floorId().isTacticsMap())
+    if (MRLively.map.floorId().isTacticsMap())
         return true;    // RE マップ中は常に非表示
     else
         return _Game_Player_isTransparent.call(this);
@@ -18,12 +18,12 @@ Game_Player.prototype.isTransparent = function() {
 const _Game_Player_canMove = Game_Player.prototype.canMove;
 Game_Player.prototype.canMove = function(): boolean {
     // REma マップではマニュアル移動を禁止
-    if (REGame.map.floorId().isTacticsMap()) {
+    if (MRLively.map.floorId().isTacticsMap()) {
         return false;
     }
 
     // 通常マップでも、 Dialog 表示中は移動を禁止する
-    if (!REVisual.manager?.dialogNavigator.isEmpty()) {
+    if (!MRView.manager?.dialogNavigator.isEmpty()) {
         return false;
     }
     return _Game_Player_canMove.call(this);
@@ -43,7 +43,7 @@ Game_Player.prototype.refresh = function() {
         // 座標の再設定は refresh() のタイミングで行う必要がある。
         // なお、locate() を呼んでいるのは、合わせて $gameMap.setDisplayPos() が必要だから。
         // これが無いと、プレイヤー初期位置が画面中央になるようにスクロールしてくれない。
-        const entity = REGame.camera.focusedEntity();
+        const entity = MRLively.camera.focusedEntity();
         if (entity) {
             $gamePlayer.locate(entity.mx, entity.my);
         }

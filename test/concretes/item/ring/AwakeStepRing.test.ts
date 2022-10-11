@@ -1,7 +1,7 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -30,17 +30,17 @@ test("concretes.item.ring.AwakeStepRing", () => {
 
     // Enemy1 (仮眠状態)
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
-    REGame.world.transferEntity(enemy1, floorId, 19, 4);
+    MRLively.world.transferEntity(enemy1, floorId, 19, 4);
 
-    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
     
     //----------------------------------------------------------------------------------------------------
 
     // [装備]
-    RESystem.dialogContext.postActivity(LActivity.makeEquip(player1, ring1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeEquip(player1, ring1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
     
     // 装備されていること。
     const equipmens = player1.getEntityBehavior(LEquipmentUserBehavior);
@@ -50,16 +50,16 @@ test("concretes.item.ring.AwakeStepRing", () => {
 
     for (let i = 0; i < 100; i++) {
         // 移動。部屋に入る
-        RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
+        MRSystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
+        MRSystem.dialogContext.activeDialog().submit();
         
-        RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+        MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
         // 必ず起きる
         expect(enemy1.isStateAffected(stateId)).toBe(false);
         
         // 元に戻す
-        REGame.world.transferEntity(player1, floorId, 16, 4);
+        MRLively.world.transferEntity(player1, floorId, 16, 4);
         enemy1.addState(stateId);
     }
 

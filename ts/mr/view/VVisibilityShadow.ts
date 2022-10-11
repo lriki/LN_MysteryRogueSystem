@@ -1,7 +1,7 @@
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { VAnimation, VAnimationInstance, VEasingAnimationCurve } from "./animation/VAnimation";
 import { easing } from "./animation/VEasing";
-import { REVisual } from "./REVisual";
+import { MRView } from "./MRView";
 
 const VisibilityShadowTileSize = 48;
 
@@ -51,7 +51,7 @@ export class VVisibilityShadow {
     }
 
     _update() {
-        const spritesVisible = !REGame.map.sightClarity;
+        const spritesVisible = !MRLively.map.sightClarity;
         for (const s of this._visibilityShadowInnerSprites) {
             if (s) s.visible = spritesVisible;
         }
@@ -59,13 +59,13 @@ export class VVisibilityShadow {
             if (s) s.visible = spritesVisible;
         }
 
-        if (REGame.map.sightClarity) {
+        if (MRLively.map.sightClarity) {
             return;
         }
 
-        const focusedEntity = REGame.camera.focusedEntity();
-        if (REVisual.entityVisualSet && focusedEntity) {
-            const visual = REVisual.entityVisualSet.findEntityVisualByEntity(focusedEntity);
+        const focusedEntity = MRLively.camera.focusedEntity();
+        if (MRView.entityVisualSet && focusedEntity) {
+            const visual = MRView.entityVisualSet.findEntityVisualByEntity(focusedEntity);
             if (visual) {
                 const unit = $gamePlayer;
                 const sprite = visual.rmmzSprite();
@@ -82,7 +82,7 @@ export class VVisibilityShadow {
                     // LRoom は四捨五入した値から得るようにすると、部屋に入った時滑らかに影を動かせる
                     const unitX = Math.round(unitRealX);
                     const unitY = Math.round(unitRealY);
-                    const room = REGame.map.rooms().find(room => room.contains(unitX, unitY));
+                    const room = MRLively.map.rooms().find(room => room.contains(unitX, unitY));
                     if (room) {
                         tx1 = $gameMap.adjustX(room.mx1);
                         tx2 = $gameMap.adjustX(room.mx2);

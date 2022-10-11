@@ -1,9 +1,9 @@
 import { assert, tr2 } from "ts/mr/Common";
 import { LandExitResult, MRData } from "ts/mr/data/MRData";
 import { LFloorId } from "ts/mr/lively/LFloorId";
-import { REGame } from "ts/mr/lively/REGame";
-import { RESystem } from "ts/mr/system/RESystem";
-import { REVisual } from "ts/mr/view/REVisual";
+import { MRLively } from "ts/mr/lively/MRLively";
+import { MRSystem } from "ts/mr/system/MRSystem";
+import { MRView } from "ts/mr/view/MRView";
 import { UTransfer } from "ts/mr/utility/UTransfer";
 import { MRBasics } from "../data/MRBasics";
 import { LEntityId } from "../lively/LObject";
@@ -15,20 +15,21 @@ import { UProperty } from "../utility/UProperty";
 import { SItemSellDialog } from "../system/dialogs/SItemSellDialog";
 import { RMMZHelper } from "./RMMZHelper";
 import { LInventoryBehavior } from "../lively/behaviors/LInventoryBehavior";
+import { DFloorClass } from "../data/DLand";
 
 const pluginName: string = "LN_MysteryRogueSystem";
 
 PluginManager.registerCommand(pluginName, "RE.ShowChallengeResult", (args: any) => {
-    REGame.challengeResultShowing = true;
+    MRLively.challengeResultShowing = true;
     $gameMap._interpreter.setWaitMode("REResultWinodw");
 });
 
 PluginManager.registerCommand(pluginName, "MR-ShowWarehouseStoreDialog", (args: any) => {
     const serviceProviderKey: string = args.serviceProviderKey;
     const serviceUserKey: string = args.serviceUserKey;
-    if (REVisual.manager) {
-        const player = REGame.camera.getFocusedEntity();
-        RESystem.commandContext.openDialog(player, new SWarehouseStoreDialog(USearch.getEntityByKeyPattern(serviceUserKey), USearch.getEntityByKeyPattern(serviceProviderKey)), false)
+    if (MRView.manager) {
+        const player = MRLively.camera.getFocusedEntity();
+        MRSystem.commandContext.openDialog(player, new SWarehouseStoreDialog(USearch.getEntityByKeyPattern(serviceUserKey), USearch.getEntityByKeyPattern(serviceProviderKey)), false)
         .then((d: SWarehouseStoreDialog) => {
             $gameVariables.setValue(MRBasics.variables.result, d.result);
         });
@@ -39,9 +40,9 @@ PluginManager.registerCommand(pluginName, "MR-ShowWarehouseStoreDialog", (args: 
 PluginManager.registerCommand(pluginName, "MR-ShowWarehouseWithdrawDialog", (args: any) => {
     const serviceProviderKey: string = args.serviceProviderKey;
     const serviceUserKey: string = args.serviceUserKey;
-    if (REVisual.manager) {
-        const player = REGame.camera.getFocusedEntity();
-        RESystem.commandContext.openDialog(player, new SWarehouseWithdrawDialog(USearch.getEntityByKeyPattern(serviceUserKey), USearch.getEntityByKeyPattern(serviceProviderKey)), false)
+    if (MRView.manager) {
+        const player = MRLively.camera.getFocusedEntity();
+        MRSystem.commandContext.openDialog(player, new SWarehouseWithdrawDialog(USearch.getEntityByKeyPattern(serviceUserKey), USearch.getEntityByKeyPattern(serviceProviderKey)), false)
         .then((d: SWarehouseWithdrawDialog) => {
             $gameVariables.setValue(MRBasics.variables.result, d.result);
         });
@@ -53,9 +54,9 @@ PluginManager.registerCommand(pluginName, "MR-ShowItemSellDialog", (args: any) =
     const serviceProviderKey: string = args.serviceProviderKey;
     const serviceUserKey: string = args.serviceUserKey;
     const inventoryOwnerKey: string = args.inventoryOwnerKey;
-    if (REVisual.manager) {
-        const player = REGame.camera.getFocusedEntity();
-        RESystem.commandContext.openDialog(player, new SItemSellDialog(USearch.getEntityByKeyPattern(serviceProviderKey), USearch.getEntityByKeyPattern(serviceUserKey), USearch.getEntityByKeyPattern(inventoryOwnerKey)), false)
+    if (MRView.manager) {
+        const player = MRLively.camera.getFocusedEntity();
+        MRSystem.commandContext.openDialog(player, new SItemSellDialog(USearch.getEntityByKeyPattern(serviceProviderKey), USearch.getEntityByKeyPattern(serviceUserKey), USearch.getEntityByKeyPattern(inventoryOwnerKey)), false)
         .then((d: SItemSellDialog) => {
             $gameVariables.setValue(MRBasics.variables.result, d.resultItems.length);
         });
@@ -68,24 +69,24 @@ PluginManager.registerCommand(pluginName, "MR-ProceedFloorForward", function(thi
 });
 
 PluginManager.registerCommand(pluginName, "MR-ProceedFloorBackword", function(this: Game_Interpreter, args: any) {
-    const entity = REGame.camera.focusedEntity();
+    const entity = MRLively.camera.focusedEntity();
     if (entity) {
         const floorId = entity.floorId;
         const newFloorNumber = floorId.floorNumber() - 1;
 
         // 最初のフロアから戻った？
         if (newFloorNumber <= 0) {
-            RESystem.integration.onSetLandExitResult(LandExitResult.Escape);
+            MRSystem.integration.onSetLandExitResult(LandExitResult.Escape);
 
-            const exitRMMZMapId = floorId.landData().exitRMMZMapId;
+            const exitRMMZMapId = floorId.landData().exitMapData.mapId;
             assert(exitRMMZMapId > 0);
             
             const result = this.command201([0, exitRMMZMapId, 0, 0, 2, 0]);
             assert(result);
         }
         else {
-            const newFloorId = LFloorId.make(floorId.landId(), newFloorNumber);
-            REGame.world.transferEntity(entity, newFloorId);
+            const newFloorId = LFloorId.make(floorId.landId(), DFloorClass.FloorMap, newFloorNumber);
+            MRLively.world.transferEntity(entity, newFloorId);
 
             // イベントからの遷移は普通の [場所移動] コマンドと同じように WaitMode を設定する必要がある。
             // しないと、例えば直前に表示していたメッセージウィンドウのクローズなどを待たずに遷移が発生し、isBusy() でハングする。
@@ -100,7 +101,7 @@ PluginManager.registerCommand(pluginName, "MR-LivingResult-GetIncludesState", fu
 
     let actor: LEntity | undefined;
     if (actorKey) {
-        const r = REGame.world.objects().find(x => {
+        const r = MRLively.world.objects().find(x => {
             if (x instanceof LEntity) {
                 if (x.data.entity.key == actorKey) {
                     return true;
@@ -113,7 +114,7 @@ PluginManager.registerCommand(pluginName, "MR-LivingResult-GetIncludesState", fu
         }
     }
     else {
-        const r = REGame.camera.focusedEntity();
+        const r = MRLively.camera.focusedEntity();
         if (r) {
             actor = r;
         }

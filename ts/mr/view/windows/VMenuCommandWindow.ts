@@ -1,6 +1,6 @@
 import { tr2 } from "ts/mr/Common";
 import { DTextManager } from "ts/mr/data/DTextManager";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { paramSuspendMenuEnabled } from "ts/mr/PluginParameters";
 
 
@@ -17,7 +17,7 @@ export class VMenuCommandWindow extends Window_Command {
         this.addCommand(TextManager.item, "item", true, undefined);
         //this.addCommand(tr2("その他"), "other", true, undefined);
 
-        if (REGame.map.floorId().isSafetyMap()) {
+        if (MRLively.map.floorId().isSafetyMap()) {
             this.addCommand(DTextManager.save, "save", true, undefined);
         }
         else {

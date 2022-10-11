@@ -1,6 +1,6 @@
 import { assert } from "ts/mr/Common";
 import { LEntity } from "ts/mr/lively/LEntity";
-import { REVisual } from "../REVisual";
+import { MRView } from "../MRView";
 import { REVisualSequel } from "../REVisualSequel";
 import { REVisualSequelContext } from "../REVisualSequelContext";
 import { REVisual_Entity } from "../REVisual_Entity";
@@ -34,13 +34,13 @@ export class VUseItemSequel extends REVisualSequel {
         const event = visual.rmmzEvent();
         const item = context.sequel().args();
         assert(item instanceof LEntity);
-        assert(REVisual.spriteset);
+        assert(MRView.spriteset);
 
         if (frameCount == 0) {
             const bitmap = ImageManager.loadSystem("IconSet");
             this._itemSprite = new Sprite(bitmap);
             this._itemSprite.anchor.set(0.5, 0.5);
-            REVisual.spriteset._tilemap.addChild(this._itemSprite);
+            MRView.spriteset._tilemap.addChild(this._itemSprite);
 
             this._baseX = event._realX;
             this._baseY = event._realY;
@@ -103,7 +103,7 @@ export class VUseItemSequel extends REVisualSequel {
         
         if (frameCount >= DROP_TIME + EPILOGUE_TIME) {
             if (this._itemSprite) {
-                REVisual.spriteset._tilemap.removeChild(this._itemSprite);
+                MRView.spriteset._tilemap.removeChild(this._itemSprite);
             }
             if (this._itemVisual) {
                 this._itemVisual.visualTransparent = false;
@@ -115,9 +115,9 @@ export class VUseItemSequel extends REVisualSequel {
     }
 
     private findItemVisual(item: LEntity): REVisual_Entity | undefined {
-        if (!REVisual.entityVisualSet) return undefined;
+        if (!MRView.entityVisualSet) return undefined;
         
-        const visual = REVisual.entityVisualSet.findEntityVisualByEntity(item);
+        const visual = MRView.entityVisualSet.findEntityVisualByEntity(item);
         return visual;
     }
 }

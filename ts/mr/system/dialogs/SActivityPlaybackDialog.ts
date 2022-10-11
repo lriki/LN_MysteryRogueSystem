@@ -1,5 +1,5 @@
 import { assert } from "ts/mr/Common";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SDialog } from "ts/mr/system/SDialog";
 import { SDialogContext } from "ts/mr/system/SDialogContext";
 
@@ -13,11 +13,11 @@ export class SActivityPlaybackDialog extends SDialog {
     }
 
     onUpdate(context: SDialogContext): void {
-        assert(REGame.recorder.isPlayback());
+        assert(MRLively.recorder.isPlayback());
 
 
-        if (!REGame.recorder.runPlaybackCommand(this)) {
-            REGame.recorder.restartRecording();
+        if (!MRLively.recorder.runPlaybackCommand(this)) {
+            MRLively.recorder.restartRecording();
         }
 
         this.submit();

@@ -2,7 +2,7 @@ import { assert, MRSerializable } from "ts/mr/Common";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { LEntity } from "ts/mr/lively/LEntity";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { Helpers } from "ts/mr/system/Helpers";
 import { SCommandResponse } from "ts/mr/system/SCommand";
 import { SEffectContext, SEffectIncidentType, SEffectSubject } from "ts/mr/system/SEffectContext";
@@ -41,7 +41,7 @@ export class LProjectileBehavior extends LBehavior {
     private _penetration: boolean = false;
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LProjectileBehavior);
+        const b = MRLively.world.spawn(LProjectileBehavior);
         b.blowDirection = this.blowDirection;
         b.blowMoveCount = this.blowMoveCount;
         return b;
@@ -113,7 +113,7 @@ export class LProjectileBehavior extends LBehavior {
 
         const self = args.self;
 
-        REGame.map.appearEntity(self, self.mx, self.my, DBlockLayerKind.Projectile);
+        MRLively.map.appearEntity(self, self.mx, self.my, DBlockLayerKind.Projectile);
 
 
         LProjectileBehavior.startMoveAsProjectile(cctx, self, args.subject, args.sender.dir, paramThrowingDistance);
@@ -202,7 +202,7 @@ export class LProjectileBehavior extends LBehavior {
     private processEffectForNormal(cctx: SCommandContext, self: LEntity, x: number, y: number, subject: SEffectSubject): void {
 
         // 他 Unit との衝突判定
-        const hitTarget = REGame.map.block(x, y).aliveEntity(DBlockLayerKind.Unit);
+        const hitTarget = MRLively.map.block(x, y).aliveEntity(DBlockLayerKind.Unit);
         if (hitTarget) {
             if (hitTarget.hasTrait(MRBasics.traits.PhysicalProjectileReflector)) {
                 // 跳ね返し
@@ -265,7 +265,7 @@ export class LProjectileBehavior extends LBehavior {
         assert(this._penetration);
 
         // 他 Unit との衝突判定
-        const hitTarget = REGame.map.block(x, y).aliveEntity(DBlockLayerKind.Unit);
+        const hitTarget = MRLively.map.block(x, y).aliveEntity(DBlockLayerKind.Unit);
         if (hitTarget) {
             if (!SActionHitTest.testProjectle(subject.entity(), self, hitTarget, this.hitType(), cctx.random())) {
                 // 当たらなかった。貫通なので移動は続行する。

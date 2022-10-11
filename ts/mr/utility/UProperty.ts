@@ -1,7 +1,7 @@
 import { assert, tr2 } from "../Common";
 import { LEntity } from "../lively/LEntity";
 import { LObject } from "../lively/LObject";
-import { REGame } from "../lively/REGame";
+import { MRLively } from "../lively/MRLively";
 import { SFormulaOperand } from "../system/SFormulaOperand";
 import { USearch } from "./USearch";
 
@@ -52,7 +52,7 @@ export class UProperty {
     }
 
     public static getValue(key: string, path: string): any {
-        const entity = REGame.world.getFirstEntityByKey(key);
+        const entity = MRLively.world.getFirstEntityByKey(key);
         throw this.getValueFromEntity(entity, path);
     }
 

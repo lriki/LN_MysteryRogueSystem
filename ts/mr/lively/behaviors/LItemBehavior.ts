@@ -4,7 +4,7 @@ import { DIdentifiedTiming } from "ts/mr/data/DIdentifyer";
 import { DItem, DItemDataId } from "ts/mr/data/DItem";
 import { MRData } from "ts/mr/data/MRData";
 import { SCommandResponse } from "ts/mr/system/SCommand";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { SCommandContext, SHandleCommandResult } from "ts/mr/system/SCommandContext";
 import { SEffectContext, SEffectSubject } from "ts/mr/system/SEffectContext";
 import { SEmittorPerformer, SOnPerformedFunc } from "ts/mr/system/SEmittorPerformer";
@@ -12,7 +12,7 @@ import { UIdentify } from "ts/mr/utility/UIdentify";
 import { LActivity } from "../activities/LActivity";
 import { LStructureId } from "../LCommon";
 import { LEntity, LParamMinMax } from "../LEntity";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { CommandArgs, LBehavior, onAttackReaction } from "./LBehavior";
 import { UAction } from "ts/mr/utility/UAction";
 import { SActivityContext } from "ts/mr/system/SActivityContext";
@@ -27,7 +27,7 @@ export class LItemBehavior extends LBehavior {
     private _shopStructureId: LStructureId = 0;
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LItemBehavior);
+        const b = MRLively.world.spawn(LItemBehavior);
         return b;
     }
 

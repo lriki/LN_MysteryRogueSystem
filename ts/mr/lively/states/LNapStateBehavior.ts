@@ -4,7 +4,7 @@ import { Helpers } from "ts/mr/system/Helpers";
 import { SPhaseResult } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { DecisionPhase, LBehavior } from "../behaviors/LBehavior";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { LEntity } from "../LEntity";
 import { LState } from "./LState";
 import { LEventResult } from "../LEventServer";
@@ -22,21 +22,21 @@ export class LNapStateBehavior extends LBehavior {
     private _getUpReserved: GetUpReserved = GetUpReserved.None;
     
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LNapStateBehavior);
+        const b = MRLively.world.spawn(LNapStateBehavior);
         b._getUpReserved = this._getUpReserved;
         return b
     }
 
     onAttached(self: LEntity): void {
-        REGame.eventServer.subscribe(MRBasics.events.roomEnterd, this);
-        REGame.eventServer.subscribe(MRBasics.events.walked, this);
-        REGame.eventServer.subscribe(MRBasics.events.skillEmitted, this);
+        MRLively.eventServer.subscribe(MRBasics.events.roomEnterd, this);
+        MRLively.eventServer.subscribe(MRBasics.events.walked, this);
+        MRLively.eventServer.subscribe(MRBasics.events.skillEmitted, this);
     }
 
     onDetached(self: LEntity): void {
-        REGame.eventServer.unsubscribe(MRBasics.events.roomEnterd, this);
-        REGame.eventServer.unsubscribe(MRBasics.events.walked, this);
-        REGame.eventServer.unsubscribe(MRBasics.events.skillEmitted, this);
+        MRLively.eventServer.unsubscribe(MRBasics.events.roomEnterd, this);
+        MRLively.eventServer.unsubscribe(MRBasics.events.walked, this);
+        MRLively.eventServer.unsubscribe(MRBasics.events.skillEmitted, this);
     }
 
     onEvent(cctx: SCommandContext, eventId: DEventId, args: any): LEventResult {
@@ -45,7 +45,7 @@ export class LNapStateBehavior extends LBehavior {
         // handleRoomEnterd
         if (eventId == MRBasics.events.roomEnterd) {
             const e = (args as RoomEventArgs);
-            const block = REGame.map.block(self.mx, self.my);
+            const block = MRLively.map.block(self.mx, self.my);
             if (block._roomId == e.newRoomId) {
                 this.attemptReserveGetUp(self, e.entity);
             }
@@ -58,7 +58,7 @@ export class LNapStateBehavior extends LBehavior {
         }
         else if (eventId == MRBasics.events.skillEmitted) {
             const e = (args as SkillEmittedArgs);
-            const block = REGame.map.block(self.mx, self.my);
+            const block = MRLively.map.block(self.mx, self.my);
             if (block._roomId == e.performer.roomId()) {
                 this.attemptReserveGetUp(self, e.performer);
             }

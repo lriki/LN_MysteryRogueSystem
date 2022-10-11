@@ -5,8 +5,8 @@ import { MRBasics } from "ts/mr/data/MRBasics";
 import { MRData } from "ts/mr/data/MRData";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { LItemBehavior } from "ts/mr/lively/behaviors/LItemBehavior";
-import { REGame } from "ts/mr/lively/REGame";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRLively } from "ts/mr/lively/MRLively";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { TestEnv } from "../../TestEnv";
 
@@ -27,9 +27,9 @@ test("concretes.states.Seal.Skill", () => {
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ゾンビ_A").id, [], "enemy1"));
     enemy1.addState(MRData.getState("kState_System_Seal").id);
     enemy1.addState(MRData.getState("kState_UT10ダメージ").id);
-    REGame.world.transferEntity(enemy1, floorId, 11, 10);
+    MRLively.world.transferEntity(enemy1, floorId, 11, 10);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
@@ -38,10 +38,10 @@ test("concretes.states.Seal.Skill", () => {
         player1.setActualParam(MRBasics.params.hp, hp1);
 
         // 待機
-        RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
+        MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
+        MRSystem.dialogContext.activeDialog().submit();
 
-        RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+        MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
         // スキルは発動できないので、ちからは減っていない
         const pow2 = player1.actualParam(MRBasics.params.pow);

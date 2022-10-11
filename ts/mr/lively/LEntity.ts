@@ -1,8 +1,8 @@
 import { DecisionPhase, LBehavior, LBehaviorGroup, LGenerateDropItemCause, LNameView, LParamMinMaxInfo, SRejectionInfo } from "./behaviors/LBehavior";
-import { REGame } from "./REGame";
+import { MRLively } from "./MRLively";
 import { SCommandResponse, SPhaseResult } from "../system/SCommand";
 import { SCommandContext } from "../system/SCommandContext";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { DStateId } from "ts/mr/data/DState";
 import { assert, MRSerializable } from "ts/mr/Common";
 import { MRBasics } from "ts/mr/data/MRBasics";
@@ -140,8 +140,8 @@ export class LEntity extends LObject
             SEntityFactory.buildEntity(this);
 
             // 現在マップ上での変更であれば、再出現の処理を回すことで、見た目もリセットする
-            if (this.floorId.equals(REGame.map.floorId())) {
-                RESystem.integration.entityReEnterMap(this);
+            if (this.floorId.equals(MRLively.map.floorId())) {
+                MRSystem.integration.entityReEnterMap(this);
             }
         }
         else {
@@ -288,7 +288,7 @@ export class LEntity extends LObject
      * そうしなければ GC により削除される。
      */
     public clone(): LEntity {
-        const entity = REGame.world.spawnEntity(this._entityDataId);
+        const entity = MRLively.world.spawnEntity(this._entityDataId);
         entity._partyId = this._partyId;
         entity._individualIdentified = this._individualIdentified;
         entity._name = this._name;
@@ -334,11 +334,11 @@ export class LEntity extends LObject
 
     onFinalize(): void {
         // 現在マップ上の Entity 削除
-        if (this.floorId.equals(REGame.map.floorId())) {
-            REGame.map._removeEntity(this);
+        if (this.floorId.equals(MRLively.map.floorId())) {
+            MRLively.map._removeEntity(this);
         }
         this.clearInstance();
-        REGame.scheduler.invalidateEntity(this);
+        MRLively.scheduler.invalidateEntity(this);
     }
 
     private clearInstance(): void {
@@ -372,7 +372,7 @@ export class LEntity extends LObject
 
     parentEntity(): LEntity | undefined {
         if (this.parentObjectId().hasAny()) {
-            return REGame.world.entity(this.parentObjectId());
+            return MRLively.world.entity(this.parentObjectId());
         }
         else {
             return undefined;
@@ -380,7 +380,7 @@ export class LEntity extends LObject
     }
 
     public isPlayer(): boolean {
-        return this.entityId().equals(REGame.camera.focusedEntityId());
+        return this.entityId().equals(MRLively.camera.focusedEntityId());
     }
 
     public isUnit(): boolean {
@@ -399,7 +399,7 @@ export class LEntity extends LObject
         if (this._partyId == 0)
             return undefined;
         else
-            return REGame.world.party(this._partyId);
+            return MRLively.world.party(this._partyId);
     }
 
     public individualIdentified(): boolean {
@@ -887,14 +887,14 @@ export class LEntity extends LObject
     }
 
     public basicBehaviors(): LBehavior[] {
-        return this._basicBehaviors.map(x => REGame.world.behavior(x));
+        return this._basicBehaviors.map(x => MRLively.world.behavior(x));
     }
 
     
     public addBehavior<T extends LBehavior>(ctor: { new(...args: any[]): T }, ...args: any[]): T {
         const behavior = new ctor();
         (behavior as T).setup(...args);
-        REGame.world._registerObject(behavior);
+        MRLively.world._registerObject(behavior);
         this._addBehavior(behavior);
         return behavior;
     }
@@ -949,7 +949,7 @@ export class LEntity extends LObject
     }
 
     public states(): readonly LState[] {
-        return this._states.map(id => REGame.world.object(id) as LState);
+        return this._states.map(id => MRLively.world.object(id) as LState);
     }
 
     public isStateAffected(stateId: DStateId): boolean {
@@ -1048,7 +1048,7 @@ export class LEntity extends LObject
     // LAbility
 
     addAbility(abilityId: DAbilityId) {
-        const index = this._abilities.findIndex(id => (REGame.world.ability(id)).abilityId() == abilityId);
+        const index = this._abilities.findIndex(id => (MRLively.world.ability(id)).abilityId() == abilityId);
         if (index >= 0) {
         }
         else {
@@ -1062,9 +1062,9 @@ export class LEntity extends LObject
     }
 
     removeAbility(abilityId: DAbilityId) {
-        const index = this._abilities.findIndex(id => (REGame.world.ability(id)).abilityId() == abilityId);
+        const index = this._abilities.findIndex(id => (MRLively.world.ability(id)).abilityId() == abilityId);
         if (index >= 0) {
-            REGame.world.ability(this._abilities[index]).onDetached(this);
+            MRLively.world.ability(this._abilities[index]).onDetached(this);
             this._abilities.splice(index, 1);
         }
     }
@@ -1077,7 +1077,7 @@ export class LEntity extends LObject
     }
 
     public abilities(): readonly LAbility[] {
-        return this._abilities.map(id => REGame.world.object(id) as LAbility);
+        return this._abilities.map(id => MRLively.world.object(id) as LAbility);
     }
 
 
@@ -1127,7 +1127,7 @@ export class LEntity extends LObject
      * UniqueEntity のインベントリに入れられたアイテム等は UniqueEntity ではないので注意。
      */
     isUnique(): boolean {
-        return REGame.system.uniqueActorUnits.findIndex(id => id.equals(this.entityId())) >= 0;
+        return MRLively.system.uniqueActorUnits.findIndex(id => id.equals(this.entityId())) >= 0;
     }
 
     /**
@@ -1137,7 +1137,7 @@ export class LEntity extends LObject
      * メッセージ表示時に主語を省略するといった処理で参照する。
      */
     isFocused(): boolean {
-        return REGame.camera.focusedEntityId().equals(this.entityId());
+        return MRLively.camera.focusedEntityId().equals(this.entityId());
     }
 
     /**
@@ -1159,7 +1159,7 @@ export class LEntity extends LObject
      */
     public findEntityBehavior<T extends LBehavior>(ctor: { new(...args: any[]): T }): T | undefined {
         for (let i = 0; i < this._basicBehaviors.length; i++) {
-            const a = REGame.world.behavior(this._basicBehaviors[i]);
+            const a = MRLively.world.behavior(this._basicBehaviors[i]);
             if (a instanceof ctor) {
                 return a as T;
             }
@@ -1170,7 +1170,7 @@ export class LEntity extends LObject
     public findEntityBehaviorByName(name: string): LBehavior | undefined {
         const lowerName = name.toLocaleLowerCase();
         for (const id of this._basicBehaviors) {
-            const b = REGame.world.behavior(id);
+            const b = MRLively.world.behavior(id);
             let behaviorName = b.constructor.name;
             const index = behaviorName.lastIndexOf("Behavior");
             if (index >= 0) {
@@ -1207,7 +1207,7 @@ export class LEntity extends LObject
         }
 
         for (let i = this._basicBehaviors.length - 1; i >= 0; i--) {
-            if (!func(REGame.world.behavior(this._basicBehaviors[i]))) {
+            if (!func(MRLively.world.behavior(this._basicBehaviors[i]))) {
                 return;
             }
         }
@@ -1219,7 +1219,7 @@ export class LEntity extends LObject
             result = b.onQueryProperty(propertyId);
             return result == undefined;
         });
-        return result ?? RESystem.propertyData[propertyId].defaultValue;
+        return result ?? MRSystem.propertyData[propertyId].defaultValue;
     }
 
     /**
@@ -1240,7 +1240,7 @@ export class LEntity extends LObject
         let result: DActionId[] = [];
         
         for (let i = 0; i < this._basicBehaviors.length; i++) { // 前方から
-            result = REGame.world.behavior(this._basicBehaviors[i]).onQueryActions(result);
+            result = MRLively.world.behavior(this._basicBehaviors[i]).onQueryActions(result);
         }
         return result;
     }
@@ -1315,7 +1315,7 @@ export class LEntity extends LObject
             }
         }
         for (let i = this._basicBehaviors.length - 1; i >= 0; i--) {
-            let r = func(REGame.world.behavior((this._basicBehaviors[i])));
+            let r = func(MRLively.world.behavior((this._basicBehaviors[i])));
             if (r != SCommandResponse.Pass) {
                 response = r;
                 break;
@@ -1341,7 +1341,7 @@ export class LEntity extends LObject
     public static _iterateBehavior<TResult>(behaviorIds: readonly LBehaviorId[], func: (x: LBehavior) => TResult, isContinue: (x: TResult) => boolean): TResult | undefined {
         let result:(TResult | undefined) = undefined;
         for (let iBehavior = behaviorIds.length - 1; iBehavior >= 0; iBehavior--) {
-            const behavior = REGame.world.behavior(behaviorIds[iBehavior]);
+            const behavior = MRLively.world.behavior(behaviorIds[iBehavior]);
             result = func(behavior);
             if (!isContinue(result)) {
                 return result;
@@ -1364,13 +1364,13 @@ export class LEntity extends LObject
     /** @deprecated  use iterateBehaviors2*/
     public iterateBehaviors(func: (b: LBehavior) => void): void {
         for (const id of this._basicBehaviors) {
-            func(REGame.world.behavior(id));
+            func(MRLively.world.behavior(id));
         }
     }
 
     public iterateStates(func: ((s: LState) => void) | ((s: LState) => boolean)): boolean {
         for (const id of this._states) {
-            if (func(REGame.world.object(id) as LState) === false) return false;
+            if (func(MRLively.world.object(id) as LState) === false) return false;
         }
         return true;
     }
@@ -1378,7 +1378,7 @@ export class LEntity extends LObject
     public iterateBehaviors2(func: (b: LBehavior) => boolean): boolean {
         const sealedSpecialAbility = this.traits(MRBasics.traits.SealSpecialAbility).length > 0;
         for (let i = 0; i < this._basicBehaviors.length; i++) {
-            const j = REGame.world.behavior(this._basicBehaviors[i]) ;
+            const j = MRLively.world.behavior(this._basicBehaviors[i]) ;
             if (sealedSpecialAbility && j.behaviorGroup() == LBehaviorGroup.SpecialAbility) continue;
             if (!func(j)) return false;
             
@@ -1391,12 +1391,12 @@ export class LEntity extends LObject
         }
 
         for (let i = 0; i < this._states.length; i++) {
-            const j = REGame.world.object(this._states[i]) as LState;
+            const j = MRLively.world.object(this._states[i]) as LState;
             if (!j.iterateBehaviors(b => func(b))) return false;
         }
 
         for (let i = 0; i < this._abilities.length; i++) {
-            const j = REGame.world.object(this._abilities[i]) as LAbility;
+            const j = MRLively.world.object(this._abilities[i]) as LAbility;
             if (!j.iterateBehaviors(b => func(b))) return false;
         }
 
@@ -1405,12 +1405,12 @@ export class LEntity extends LObject
 
     public iterateBehaviorsReverse(func: ((b: LBehavior) => void) | ((b: LBehavior) => boolean), fromTraits: boolean = false): boolean {
         for (let i = this._states.length - 1; i >= 0; i--) {
-            const j = REGame.world.object(this._states[i]) as LState;
+            const j = MRLively.world.object(this._states[i]) as LState;
             if (!j.iterateBehaviors(b => func(b))) return false;
         }
 
         for (let i = this._abilities.length - 1; i >= 0; i--) {
-            const j = REGame.world.object(this._abilities[i]) as LAbility;
+            const j = MRLively.world.object(this._abilities[i]) as LAbility;
             if (!j.iterateBehaviors(b => func(b))) return false;
         }
 
@@ -1419,7 +1419,7 @@ export class LEntity extends LObject
             false;
 
         for (let i = this._basicBehaviors.length - 1; i >= 0; i--) {
-            const j = REGame.world.behavior(this._basicBehaviors[i]) ;
+            const j = MRLively.world.behavior(this._basicBehaviors[i]) ;
             if (sealedSpecialAbility && j.behaviorGroup() == LBehaviorGroup.SpecialAbility) continue;
             if (func(j) === false) return false;
             
@@ -1504,7 +1504,7 @@ export class LEntity extends LObject
      */
     isOnGround(): boolean {
         if (this.floorId.hasAny()) {
-            const block = REGame.map.block(this.mx, this.my);
+            const block = MRLively.map.block(this.mx, this.my);
             return block.findEntityLayerKind(this) == DBlockLayerKind.Ground;
         }
         else {
@@ -1518,7 +1518,7 @@ export class LEntity extends LObject
 
     /** 0 is Invalid. */
     public roomId(): LRoomId {
-        return REGame.map.block(this.mx, this.my)._roomId;
+        return MRLively.map.block(this.mx, this.my)._roomId;
     }
 
     public isOnRoom(): boolean {
@@ -1530,7 +1530,7 @@ export class LEntity extends LObject
     }
 
     public layer(): DBlockLayerKind {
-        const r = REGame.map.block(this.mx, this.my).findEntityLayerKind(this);
+        const r = MRLively.map.block(this.mx, this.my).findEntityLayerKind(this);
         assert(r);
         return r;
     }
@@ -1542,8 +1542,8 @@ export class LEntity extends LObject
 
     /** 現在のマップ上に出現しているか (いずれかの Block 上に存在しているか) */
     public isAppearedOnMap(): boolean {
-        if (!REGame.map.isValidPosition(this.mx, this.my)) return false;
-        const block = REGame.map.block(this.mx, this.my);
+        if (!MRLively.map.isValidPosition(this.mx, this.my)) return false;
+        const block = MRLively.map.block(this.mx, this.my);
         return block.containsEntity(this);
     }
 
@@ -1613,7 +1613,7 @@ export class LEntity extends LObject
 
     public sendPartyEvent(eventId: DEventId, args: any): boolean {
         if (this._partyId > 0) {
-            return REGame.world.party(this._partyId).send(eventId, args);
+            return MRLively.world.party(this._partyId).send(eventId, args);
         }
         return true;
     }

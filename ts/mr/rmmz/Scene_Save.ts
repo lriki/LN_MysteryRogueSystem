@@ -1,7 +1,7 @@
-import { REGame } from "../lively/REGame";
+import { MRLively } from "../lively/MRLively";
 
 const _Scene_Save_executeSave = Scene_Save.prototype.executeSave;
 Scene_Save.prototype.executeSave = function(savefileId: number) {
     _Scene_Save_executeSave.call(this, savefileId);
-    REGame.recorder.setSavefileId(savefileId);
+    MRLively.recorder.setSavefileId(savefileId);
 }

@@ -4,7 +4,7 @@ import { LShopkeeperBehavior } from "ts/mr/lively/behaviors/LShopkeeperBehavior"
 import { LBlock, LBlockSystemDecoration } from "ts/mr/lively/LBlock";
 import { LRandom } from "ts/mr/lively/LRandom";
 import { LRoom } from "ts/mr/lively/LRoom";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { LItemShopStructure } from "ts/mr/lively/structures/LItemShopStructure";
 import { UMovement } from "ts/mr/utility/UMovement";
 import { USpawner } from "ts/mr/utility/USpawner";
@@ -68,7 +68,7 @@ export class SItemShopBuilder {
                     if (room.contains(mx, my)) {
                         const data = manager.rand().select(items);
                         const entity = SEntityFactory.newEntity(data.spawiInfo, floorId);
-                        REGame.world.transferEntity(entity, floorId, mx, my);
+                        MRLively.world.transferEntity(entity, floorId, mx, my);
                         spawnedItems.push(entity);
 
                         // 値札をつける
@@ -119,7 +119,7 @@ export class SItemShopBuilder {
 
     private getInRoomFloorBlock(room: LRoom, mx: number, my: number): LBlock | undefined {
         if (!room.contains(mx, my)) return undefined;
-        const block = REGame.map.tryGetBlock(mx, my);
+        const block = MRLively.map.tryGetBlock(mx, my);
         if (!block) return undefined;
         if (!block.isFloorLikeShape()) return undefined;
         return block;

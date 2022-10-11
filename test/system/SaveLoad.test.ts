@@ -5,8 +5,8 @@ import { MRData } from "ts/mr/data/MRData";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { LUnitBehavior } from "ts/mr/lively/behaviors/LUnitBehavior";
-import { REGame } from "ts/mr/lively/REGame";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRLively } from "ts/mr/lively/MRLively";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { SGameManager } from "ts/mr/system/SGameManager";
 import { TestEnv } from "../TestEnv";
@@ -28,9 +28,9 @@ test("system.SaveLoad.EventServerIssue", () => {
     inventory.addEntity(item1);
     
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
-    REGame.world.transferEntity(enemy1, floorId, 20, 20);
+    MRLively.world.transferEntity(enemy1, floorId, 20, 20);
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // Save
     const savedata1 = TestJsonEx.stringify(SGameManager.makeSaveContentsCore());
@@ -42,16 +42,16 @@ test("system.SaveLoad.EventServerIssue", () => {
     SGameManager.loadGame(TestJsonEx.parse(savedata1), false);
 
     // Load 後は、Dialog を開くため 1 回必要
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
     
     // [撃つ]
     const activity1 = LActivity.makeShooting(player1, item1).withConsumeAction();
-    RESystem.dialogContext.postActivity(activity1);
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(activity1);
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
     //----------------------------------------------------------------------------------------------------
     
@@ -59,10 +59,10 @@ test("system.SaveLoad.EventServerIssue", () => {
     enemy1.destroy();
     for (let i = 0; i < 2; i++) {
         // [待機]
-        RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
+        MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
+        MRSystem.dialogContext.activeDialog().submit();
         
-        RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+        MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     }
 
     //----------------------------------------------------------------------------------------------------

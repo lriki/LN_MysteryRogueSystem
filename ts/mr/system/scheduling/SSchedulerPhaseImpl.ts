@@ -1,7 +1,7 @@
 import { DecisionPhase } from "ts/mr/lively/behaviors/LBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SScheduler } from "./SScheduler";
-import { RESystem } from "../RESystem";
+import { MRSystem } from "../MRSystem";
 import { UAction } from "../../utility/UAction";
 import { LItemShopStructure } from "../../lively/structures/LItemShopStructure";
 import { SSchedulerPhase } from "./SSchedulerPhase";
@@ -31,7 +31,7 @@ export class SSchedulerPhase_ManualAction extends SSchedulerPhase {
 
     onStart(): void {
         // マップ移動に伴う初期配置後、onLocatedEntity イベントを発行したい
-        REGame.map.updateLocatedResults(RESystem.commandContext);
+        MRLively.map.updateLocatedResults(MRSystem.commandContext);
     }
 
     testProcessable(entity: LEntity, unitBehavior: LUnitBehavior): boolean {
@@ -42,9 +42,9 @@ export class SSchedulerPhase_ManualAction extends SSchedulerPhase {
         assert(this.testProcessable(entity, unitBehavior));
 
         // 倍速対策。Pallarel 付きでも強制的に Flush.
-        RESystem.sequelContext.flushSequelSet(false);
+        MRSystem.sequelContext.flushSequelSet(false);
 
-        entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.Manual);
+        entity._callDecisionPhase(MRSystem.commandContext, DecisionPhase.Manual);
     }
 }
 
@@ -58,7 +58,7 @@ export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
     }
 
     onStart(): void {
-        for (const s of REGame.map.structures()) {
+        for (const s of MRLively.map.structures()) {
             if (s instanceof LItemShopStructure) {
                 
             }
@@ -73,7 +73,7 @@ export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
 
     onProcess(entity: LEntity, unitBehavior: LUnitBehavior): void {
         assert(this.testProcessable(entity, unitBehavior));
-        entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMinor);
+        entity._callDecisionPhase(MRSystem.commandContext, DecisionPhase.AIMinor);
     }
 
     onEnd(scheduler: SScheduler): void {
@@ -82,7 +82,7 @@ export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
                 const unitBehavior = unit.unitBehavior();
                 if (unitBehavior.requiredTrapProcess() ||
                     unitBehavior.requiredFeetProcess()) {   // 足元 Dialog の前処理がしたい
-                    UAction.postPreStepFeetProcess(RESystem.commandContext, unit.entity());
+                    UAction.postPreStepFeetProcess(MRSystem.commandContext, unit.entity());
                     unitBehavior.clearTrapProcess();
                 }
             }
@@ -93,8 +93,8 @@ export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
         //RESystem.sequelContext.flushSequelSet();
         //RESystem.sequelContext.attemptFlush(!RESystem.sequelContext.isMoveOnly());
         //RESystem.sequelContext.attemptFlush(false);
-        RESystem.sequelContext.attemptFlush(RESystem.sequelContext.trapPerforming);
-        RESystem.sequelContext.trapPerforming = false;
+        MRSystem.sequelContext.attemptFlush(MRSystem.sequelContext.trapPerforming);
+        MRSystem.sequelContext.trapPerforming = false;
         // true で実行しないと、このあとの stumble に伴う drop が、Move と並列実行されてしまう。
         // 先に Move は Flush しておきたい。
         // しかしこの時点ではまだ罠の発動判定をしていないので、true にしても効果が無い。
@@ -102,8 +102,8 @@ export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
         // → 罠の発動判定と、発動処理を別にしなければならないかも。
 
         // TODO: 発動 trap リストをどこかに作っておきたい
-        for (const entity of REGame.map.entities()) {
-            UAction.postAttemptPerformStepFeetProcess(RESystem.commandContext, entity);
+        for (const entity of MRLively.map.entities()) {
+            UAction.postAttemptPerformStepFeetProcess(MRSystem.commandContext, entity);
         }
 
         // ステート更新は全 Entity の移動が終わった後に行いたい
@@ -115,7 +115,7 @@ export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
                 // - NPC の場合は、移動が発生していたら更新
                 if (unit.isManual() ||
                     entity._schedulingResult.consumedActionToken(scheduler.data().currentPhaseIndex()) !== undefined) {
-                    entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.UpdateState);
+                    entity._callDecisionPhase(MRSystem.commandContext, DecisionPhase.UpdateState);
                 }
 
                 // 現在 step 内で何らかのトークン消費があった場合は行動が発生したとみなし、それに関する処理を行う
@@ -142,7 +142,7 @@ export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
             if (unit.isValid()) {
                 const unitBehavior = unit.unitBehavior();
                 if (unitBehavior.requiredFeetProcess()) {
-                    UAction.postStepOnGround(RESystem.commandContext, unit.entity());
+                    UAction.postStepOnGround(MRSystem.commandContext, unit.entity());
                     unitBehavior.clearFeetProcess();
                 }
             }
@@ -169,7 +169,7 @@ export class SSchedulerPhase_ResolveAdjacentAndMovingTarget extends SSchedulerPh
     }
 
     onStart(): void {
-        REGame.map.updateLocatedResults(RESystem.commandContext);
+        MRLively.map.updateLocatedResults(MRSystem.commandContext);
     }
 
     testProcessable(entity: LEntity, unitBehavior: LUnitBehavior): boolean {
@@ -178,7 +178,7 @@ export class SSchedulerPhase_ResolveAdjacentAndMovingTarget extends SSchedulerPh
 
     onProcess(entity: LEntity, unitBehavior: LUnitBehavior): void {
         assert(this.testProcessable(entity, unitBehavior));
-        entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.ResolveAdjacentAndMovingTarget);
+        entity._callDecisionPhase(MRSystem.commandContext, DecisionPhase.ResolveAdjacentAndMovingTarget);
     }
 }
 
@@ -192,7 +192,7 @@ export class SSchedulerPhase_CheckFeetMoved extends SSchedulerPhase {
         // ここまでの Phase で "歩行" Sequel のみ発生している場合に備え、
         // 罠の上へ移動している動きにしたいのでここで Flush.
         //RESystem.sequelContext.flushSequelSet();
-        RESystem.sequelContext.attemptFlush(true);
+        MRSystem.sequelContext.attemptFlush(true);
     }
     
     testProcessable(entity: LEntity, unitBehavior: LUnitBehavior): boolean {
@@ -202,7 +202,7 @@ export class SSchedulerPhase_CheckFeetMoved extends SSchedulerPhase {
     onProcess(entity: LEntity, unitBehavior: LUnitBehavior): void {
         assert(this.testProcessable(entity, unitBehavior));
         if (unitBehavior.requiredFeetProcess()) {
-            UAction.postStepOnGround(RESystem.commandContext, entity);
+            UAction.postStepOnGround(MRSystem.commandContext, entity);
             unitBehavior.clearFeetProcess();
         }
     }
@@ -220,9 +220,9 @@ export class SSchedulerPhase_AIMajorAction extends SSchedulerPhase {
     onProcess(entity: LEntity, unitBehavior: LUnitBehavior): void {
         //assert(this.testProcessable(entity, unitBehavior));
         if (this.testProcessable(entity, unitBehavior)) {
-            entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.AIMajor);
+            entity._callDecisionPhase(MRSystem.commandContext, DecisionPhase.AIMajor);
             
-            entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.UpdateState);
+            entity._callDecisionPhase(MRSystem.commandContext, DecisionPhase.UpdateState);
         }
     }
 }

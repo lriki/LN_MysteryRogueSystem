@@ -4,14 +4,14 @@ import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { LProjectileBehavior } from "../behaviors/activities/LProjectileBehavior";
 import { CollideActionArgs, CommandArgs, LBehavior, onCollideAction } from "../behaviors/LBehavior";
 import { LEntity } from "../LEntity";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 
 
 @MRSerializable
 export class LKnockbackBehavior extends LBehavior {
     
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LKnockbackBehavior);
+        const b = MRLively.world.spawn(LKnockbackBehavior);
         return b
     }
 

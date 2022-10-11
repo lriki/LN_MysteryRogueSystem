@@ -11,7 +11,7 @@ import { USpawner } from "ts/mr/utility/USpawner";
 import { DecisionPhase, LBehavior, LGenerateDropItemCause } from "../internal";
 import { LEntity } from "../LEntity";
 import { LRandom } from "../LRandom";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { LBattlerBehavior } from "./LBattlerBehavior";
 import { LInventoryBehavior } from "./LInventoryBehavior";
 
@@ -20,7 +20,7 @@ import { LInventoryBehavior } from "./LInventoryBehavior";
 @MRSerializable
 export class LEnemyBehavior extends LBattlerBehavior {
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LEnemyBehavior);
+        const b = MRLively.world.spawn(LEnemyBehavior);
         return b;
     }
 
@@ -86,14 +86,14 @@ export class LEnemyBehavior extends LBattlerBehavior {
 
         if (!self._dropItemGenerated) {
             self._dropItemGenerated = true;
-            const rand = REGame.world.random();
+            const rand = MRLively.world.random();
             switch (cause) {
                 case LGenerateDropItemCause.Dead:
                     const rate = self.traitsSumOrDefault(MRBasics.traits.ItemDropRate, 0, 0.05); // そもそも ItemDrop を発生させるか率
                     if (rand.nextIntWithMax(100) < rate * 100) {
         
                         // Enemy 固有のドロップアイテム
-                        const item1 = this.selectDropItem(REGame.world.random());
+                        const item1 = this.selectDropItem(MRLively.world.random());
                         if (item1) {
                             const info = DEntityCreateInfo.makeSingle(item1.entityId);
                             info.gold = item1.gold;

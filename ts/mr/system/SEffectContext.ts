@@ -7,7 +7,7 @@ import { Helpers } from "./Helpers";
 import { LEffectResult, LParamEffectResult } from "../lively/LEffectResult";
 import { LEnemyBehavior } from "ts/mr/lively/behaviors/LEnemyBehavior";
 import { SCommandContext } from "./SCommandContext";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { LRandom } from "ts/mr/lively/LRandom";
 import { DStateId } from "ts/mr/data/DState";
 import { SEffect, SEffectApplyer, SEffectorFact, SEffectModifier } from "./SEffectApplyer";
@@ -311,7 +311,7 @@ export class SEffectContext {
             }
     
     
-            const focusedEntity = REGame.camera.focusedEntity();
+            const focusedEntity = MRLively.camera.focusedEntity();
             const friendlySubject = focusedEntity ? Helpers.isFriend(effect.subject(), focusedEntity) : false;
             if (friendlySubject) {  // subject は味方
                 result.focusedFriendly = Helpers.isFriend(effect.subject(), target);

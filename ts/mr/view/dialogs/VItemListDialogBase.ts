@@ -2,7 +2,7 @@ import { tr2 } from "ts/mr/Common";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { EntityIdentificationLevel } from "ts/mr/lively/LIdentifyer";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { paramInventoryItemsPerPage } from "ts/mr/PluginParameters";
 import { SDetailsDialog } from "ts/mr/system/dialogs/SDetailsDialog";
 import { SNicknameDialog } from "ts/mr/system/dialogs/SNicknameDialog";
@@ -86,7 +86,7 @@ export class VItemListDialogBase extends VDialog {
             if (1) {
                 const owner = this._inventory.ownerEntity();
                 const itemEntity = this.itemListWindow.selectedItem();
-                const level = REGame.identifyer.getEntityIdentificationLevel(owner, itemEntity);
+                const level = MRLively.identifyer.getEntityIdentificationLevel(owner, itemEntity);
                 if (level == EntityIdentificationLevel.Unidentified) {
                     window.addSystemCommand(tr2("名前"), "nickname", () => this.handleNickname());
                 }

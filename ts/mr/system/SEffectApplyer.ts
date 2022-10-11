@@ -10,7 +10,7 @@ import { LEntity } from "../lively/LEntity";
 import { LRandom } from "../lively/LRandom";
 import { UIdentify } from "../utility/UIdentify";
 import { UTransfer } from "../utility/UTransfer";
-import { RESystem } from "./RESystem";
+import { MRSystem } from "./MRSystem";
 import { SCommandContext } from "./SCommandContext";
 import { SEffectIncidentType, SEffectSubject } from "./SEffectContext";
 import { paramThrowingDistance } from "../PluginParameters";
@@ -354,7 +354,7 @@ export class SParameterEffect {
 
     private meetsConditions(target: LEntity): boolean {
         if (this.qualifying.conditionFormula) {
-            const a = RESystem.formulaOperandA as any;
+            const a = MRSystem.formulaOperandA as any;
             a.wrap(target);
             try {
                 const r = eval(this.qualifying.conditionFormula);
@@ -507,7 +507,7 @@ export class SEffectApplyer {
             this.applyOtherEffect(cctx, target, effect, result);
         }
         for (const effect of modifier.effectBehaviors()) {
-            const b = RESystem.effectBehaviorManager.get(effect.specialEffectId);
+            const b = MRSystem.effectBehaviorManager.get(effect.specialEffectId);
             b.onApplyTargetEffect(cctx, effect, this._effect.fact().subject(),  this._effect.fact().item(), modifier, target, target._effectResult);
         }
         this.applyItemUserEffect(target);
@@ -575,9 +575,9 @@ export class SEffectApplyer {
             // const b = target; // eslint-disable-line no-unused-vars
             // const c = this._effect.fact().item(); // eslint-disable-line no-unused-vars
 
-            const a = RESystem.formulaOperandA;
-            const b = RESystem.formulaOperandB;
-            const c = RESystem.formulaOperandC;
+            const a = MRSystem.formulaOperandA;
+            const b = MRSystem.formulaOperandB;
+            const c = MRSystem.formulaOperandC;
             a.wrap(this._effect.subject());
             b.wrap(target);
             c.wrap(this._effect.fact().item());

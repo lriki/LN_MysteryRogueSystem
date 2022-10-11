@@ -1,7 +1,7 @@
 import { assert, tr2 } from "ts/mr/Common";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { EntityIdentificationLevel } from "ts/mr/lively/LIdentifyer";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { UName } from "ts/mr/utility/UName";
 import { SDialog } from "../SDialog";
 
@@ -22,9 +22,9 @@ export class SDetailsDialog extends SDialog {
     }
 
     public get description(): string {
-        const subject = REGame.camera.focusedEntity();
+        const subject = MRLively.camera.focusedEntity();
         assert(subject);
-        if (REGame.identifyer.getEntityIdentificationLevel(subject, this._entity) == EntityIdentificationLevel.Unidentified) {
+        if (MRLively.identifyer.getEntityIdentificationLevel(subject, this._entity) == EntityIdentificationLevel.Unidentified) {
             return tr2("このアイテムは識別されていません。");
         }
         else {

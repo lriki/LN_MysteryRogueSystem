@@ -30,70 +30,8 @@ import { DFloorPreset, DTerrainSetting, DTerrainShape } from "./DTerrainPreset";
 import { DCommand } from "./DCommand";
 import { DEffect } from "./DEffect";
 import { DActionId, DEffectId, DSkillId } from "./DCommon";
-// import { DPreset } from "./DPreset";
+import { DMap } from "./DMap";
 
-
-export enum REFloorMapKind {
-    // データ定義用のマップ。ここへの遷移は禁止
-    Land,
-
-    TemplateMap,
-
-    FixedMap,
-    ShuffleMap,
-    RandomMap,
-}
-
-
-
-
-
-
-/**
- * マップデータ。RMMZ の MapInfo 相当で、その ID と一致する。
- * FloorInfo と似ているが、こちらは RMMZ Map に対する直接の追加情報を意味する。
- */
-export class DMap {
-    /** ID (0 is Invalid). */
-    id: number;
-
-    /** Parent Land. */
-    landId: number;
-
-    /** RMMZ mapID. (0 is RandomMap) */
-    mapId: number;
-
-    /** マップ生成 */
-    mapKind: REFloorMapKind;
-
-    exitMap: boolean;
-
-    /** 明示的な MRセーフティマップであるか */
-    safetyMap: boolean;
-    
-    /** 非REシステムマップにおいて、RMMZオリジナルのメニューを使うか。(つまり、一切 RE システムと関係ないマップであるか) */
-    defaultSystem: boolean;
-
-    /** 明示的に RMMZ 標準マップとするか */
-    eventMap: boolean;
-
-    public constructor(id: number) {
-        this.id = id;
-        this.landId = 0;
-        this.mapId = 0;
-        this.mapKind = REFloorMapKind.FixedMap;
-        this.exitMap = false;
-        this.safetyMap = false;
-        this.defaultSystem = false;
-        this.eventMap = false;
-    }
-
-    public get name(): string {
-        const info = $dataMapInfos[this.mapId];
-        if (!info) return "";
-        return info.name;
-    }
-}
 
 export type DFactionId = number;
 
@@ -121,6 +59,9 @@ export interface REData_Faction
 // 3xx: 中断。持ち物などは無くならない。
 // 4xx: ゲームオーバー。
 export enum LandExitResult {
+    /** 冒険中 */
+    Ongoing = 100,
+
     /** ゴールに到達した。最後のフロアを抜けたか、戻り状態で最初のフロアを抜けたとき。 */
     Goal = 200,
 

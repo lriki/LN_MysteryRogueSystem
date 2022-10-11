@@ -1,7 +1,7 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -24,18 +24,18 @@ test("concretes.item.ring.WarpRing", () => {
     inventory.addEntity(ring1);
     equipmentUser.equipOnUtil(ring1);
 
-    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     let count = 0;
     for (let i = 0; i < 200; i++) {
         // 移動
-        REGame.world.transferEntity(player1, floorId, 10, 10);
-        RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
+        MRLively.world.transferEntity(player1, floorId, 10, 10);
+        MRSystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
+        MRSystem.dialogContext.activeDialog().submit();
         
-        RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+        MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
         // ワープしている
         if (player1.mx != 11 || player1.my != 10) count++;

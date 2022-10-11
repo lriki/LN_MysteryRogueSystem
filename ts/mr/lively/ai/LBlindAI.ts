@@ -8,7 +8,7 @@ import { LActivity } from "../activities/LActivity";
 import { LCharacterAI } from "./LCharacterAI";
 import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { MRSerializable } from "ts/mr/Common";
 import { LActionTokenConsumeType } from "../LCommon";
 
@@ -74,7 +74,7 @@ export class LBlindAI extends LCharacterAI {
 
         if (this._candidateSkillActions.length > 0) {
             const action = this._candidateSkillActions[0];
-            const target = REGame.world.entity(action.target);
+            const target = MRLively.world.entity(action.target);
             
             // 攻撃候補が有効なまま存在していれば、相手の方を向いて攻撃
             if (UAction.checkEntityWithinSkillActionRange(self, MRData.skills[action.skillId], false, [target])) {

@@ -3,7 +3,7 @@ import { MRBasics } from "ts/mr/data/MRBasics";
 import { MRData } from "ts/mr/data/MRData";
 import { MRDataManager } from "ts/mr/data/MRDataManager";
 import { FBlockComponent, FMap } from "ts/mr/floorgen/FMapData";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { LTileShape } from "ts/mr/lively/LBlock";
 import { paramFixedMapItemShopRoomRegionId, paramFixedMapMonsterHouseRoomRegionId, paramFixedMapPassagewayRegionId, paramFixedMapRoomRegionId, paramRandomMapPaddingX, paramRandomMapPaddingY } from "ts/mr/PluginParameters";
 import { SEntityFactory } from "./internal";
@@ -63,7 +63,7 @@ export class SRmmzHelpers {
     }
 
     public static createEntityFromRmmzEvent(data: DEntityCreateInfo, eventId: number, x: number, y: number): LEntity {
-        const entity = SEntityFactory.newEntity(data, REGame.map.floorId());
+        const entity = SEntityFactory.newEntity(data, MRLively.map.floorId());
 
         
         if (data.override) {
@@ -78,7 +78,7 @@ export class SRmmzHelpers {
         // }
         //entity.rmmzEventId = eventId;
         //entity.inhabitsCurrentFloor = true;
-        REGame.world.transferEntity(entity, REGame.map.floorId(), x, y);
+        MRLively.world.transferEntity(entity, MRLively.map.floorId(), x, y);
         return entity;
     }
 

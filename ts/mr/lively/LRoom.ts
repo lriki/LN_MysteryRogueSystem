@@ -1,5 +1,5 @@
 import { FRoom } from "ts/mr/floorgen/FMapData";
-import { REGame } from "./REGame";
+import { MRLively } from "./MRLively";
 import { LBlock, LTileShape } from "./LBlock";
 import { LEntity } from "./LEntity";
 import { MRSerializable } from "../Common";
@@ -65,7 +65,7 @@ export class LRoom {
     }
     
     public forEachEntities(func: (entity: LEntity) => void): void {
-        for (const entity of REGame.map.entities()) {
+        for (const entity of MRLively.map.entities()) {
             if (this.contains(entity.mx, entity.my)) {
                 func(entity);
             }
@@ -73,7 +73,7 @@ export class LRoom {
     }
     
     public findEntityInRoom(func: (entity: LEntity) => boolean): LEntity | undefined {
-        for (const entity of REGame.map.entities()) {
+        for (const entity of MRLively.map.entities()) {
             if (this.contains(entity.mx, entity.my)) {
                 if (func(entity)) {
                     return entity;
@@ -85,7 +85,7 @@ export class LRoom {
 
     /** 部屋内の Block を列挙する。 */
     public forEachBlocks(func: (block: LBlock) => void): void {
-        const map = REGame.map;
+        const map = MRLively.map;
         for (let y = this._my1; y <= this._my2; y++) {
             for (let x = this._mx1; x <= this._mx2; x++) {
                 const block = map.block(x, y);
@@ -96,7 +96,7 @@ export class LRoom {
     
     /** 部屋の外側、外周1タイル分の Block を列挙する */
     public forEachEdgeBlocks(func: (block: LBlock) => void): void {
-        const map = REGame.map;
+        const map = MRLively.map;
         const left = Math.max(0, this._mx1 - 1);
         const right = Math.min(this._mx2 + 1, map.width() - 1);
 
@@ -110,12 +110,12 @@ export class LRoom {
                 func(map.block(this._mx1 - 1, y));
             }
         }
-        if (this._mx2 < REGame.map.width() - 1) {
+        if (this._mx2 < MRLively.map.width() - 1) {
             for (let y = this._my1; y <= this._my2; y++) {
                 func(map.block(this._mx2 + 1, y));
             }
         }
-        if (this._my2 < REGame.map.height() - 1) {
+        if (this._my2 < MRLively.map.height() - 1) {
             for (let x = left; x <= right; x++) {
                 func(map.block(x, this._my2 + 1));
             }

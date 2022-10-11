@@ -1,7 +1,7 @@
 import { MRDataManager } from "../data/MRDataManager";
 import { RMMZIntegration } from "./RMMZIntegration";
-import { RESystem } from "../system/RESystem";
-import { REVisual } from "../view/REVisual";
+import { MRSystem } from "../system/MRSystem";
+import { MRView } from "../view/MRView";
 import { MRData } from "ts/mr/data/MRData";
 
 /*
@@ -80,7 +80,7 @@ async function _init(): Promise<void> {
 
 
 
-var _Scene_Boot_isReady = Scene_Boot.prototype.isReady;
+const _Scene_Boot_isReady = Scene_Boot.prototype.isReady;
 Scene_Boot.prototype.isReady = function() {
     // ベースの isReady の中から onDatabaseLoaded が呼び出される
     const result = _Scene_Boot_isReady.call(this);
@@ -95,11 +95,11 @@ Scene_Boot.prototype.isReady = function() {
     }
 }
 
-var _Scene_Boot_onDatabaseLoaded = Scene_Boot.prototype.onDatabaseLoaded;
+const _Scene_Boot_onDatabaseLoaded = Scene_Boot.prototype.onDatabaseLoaded;
 Scene_Boot.prototype.onDatabaseLoaded = function() {
     _Scene_Boot_onDatabaseLoaded.call(this);
     MRDataManager.load();
     
-    REVisual.initialize();
-    RESystem.integration = new RMMZIntegration();
+    MRView.initialize();
+    MRSystem.integration = new RMMZIntegration();
 }

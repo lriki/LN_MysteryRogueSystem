@@ -2,7 +2,7 @@ import { MRSerializable, tr2 } from "ts/mr/Common";
 import { SCommandResponse } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { LEntity } from "../LEntity";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { CommandArgs, LBehavior, onEffectResult } from "./LBehavior";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { LActivity } from "../activities/LActivity";
@@ -57,7 +57,7 @@ export class LSelfExplosionBehavior extends LBehavior {
     }
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LSelfExplosionBehavior);
+        const b = MRLively.world.spawn(LSelfExplosionBehavior);
         return b;
     }
     

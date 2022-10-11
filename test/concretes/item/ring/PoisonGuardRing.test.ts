@@ -1,7 +1,7 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -29,20 +29,20 @@ test("concretes.item.ring.PoisonGuardRing.test", () => {
 
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_毒矢の罠_A").id, [], "trap1"));
-    REGame.world.transferEntity(trap1, floorId, 11, 10);
+    MRLively.world.transferEntity(trap1, floorId, 11, 10);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // player を右 (罠上) へ移動
-    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    REGame.world.random().resetSeed(5);     // 乱数調整
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRLively.world.random().resetSeed(5);     // 乱数調整
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
     const pow2 = player1.actualParam(MRBasics.params.pow);
     expect(pow2).toBe(pow1);    // ちからは減っていない
-    expect(REGame.messageHistory.includesText("ちからは変化しなかった")).toBeTruthy();
+    expect(MRLively.messageHistory.includesText("ちからは変化しなかった")).toBeTruthy();
 });

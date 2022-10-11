@@ -1,4 +1,4 @@
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { DecisionPhase, LBehavior } from "ts/mr/lively/behaviors/LBehavior";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { SPhaseResult } from "ts/mr/system/SCommand";
@@ -14,7 +14,7 @@ import { MRSerializable } from "ts/mr/Common";
 export class LDebugMoveRightBehavior extends LBehavior {
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LDebugMoveRightBehavior);
+        const b = MRLively.world.spawn(LDebugMoveRightBehavior);
         return b
     }
 
@@ -29,7 +29,7 @@ export class LDebugMoveRightBehavior extends LBehavior {
             //const dir = table[REGame.world.random().nextIntWithMax(8)];
 
 
-            if (dir != 0 && REGame.map.checkPassage(self, dir, MovingMethod.Walk)) {
+            if (dir != 0 && MRLively.map.checkPassage(self, dir, MovingMethod.Walk)) {
                 cctx.postActivity(LActivity.makeDirectionChange(self, dir));
                 cctx.postActivity(LActivity.makeMoveToAdjacent(self, dir));
             }

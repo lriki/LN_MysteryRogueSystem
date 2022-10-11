@@ -1,12 +1,12 @@
 import { assert } from "ts/mr/Common";
 import { DSequelId } from "ts/mr/data/DSequel";
 import { Vector2 } from "ts/mr/math/Vector2";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { Helpers } from "ts/mr/system/Helpers";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { REVisualSequelContext } from "ts/mr/view/REVisualSequelContext";
 import { LEntity } from "../lively/LEntity";
-import { REVisual } from "./REVisual";
+import { MRView } from "./MRView";
 import { SNavigationHelper } from "ts/mr/system/SNavigationHelper";
 import { LUnitBehavior } from "ts/mr/lively/behaviors/LUnitBehavior";
 import { SEntityVisibility, SView } from "ts/mr/system/SView";
@@ -77,7 +77,7 @@ export class REVisual_Entity
     }
 
     rmmzSprite(): Sprite_Character | undefined {
-        return (REVisual.spriteset) ? REVisual.spriteset._characterSprites[this._rmmzSpriteIndex] : undefined;
+        return (MRView.spriteset) ? MRView.spriteset._characterSprites[this._rmmzSpriteIndex] : undefined;
     }
 
     getRmmzSprite(): Sprite_Character {
@@ -87,7 +87,7 @@ export class REVisual_Entity
     }
 
     public isVisible(): boolean {
-        const focusedEntity = REGame.camera.focusedEntity()
+        const focusedEntity = MRLively.camera.focusedEntity()
         return focusedEntity ? SNavigationHelper.testVisibilityForMinimap(focusedEntity, this._entity) : false;
     }
 
@@ -152,7 +152,7 @@ export class REVisual_Entity
     }
 
     _update() {
-        assert(REVisual.manager);
+        assert(MRView.manager);
 
         
         if (this._rmmzEventId >= 0) {

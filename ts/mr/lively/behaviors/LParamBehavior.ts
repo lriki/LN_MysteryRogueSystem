@@ -2,7 +2,7 @@ import { MRSerializable } from "ts/mr/Common";
 import { DParameterId } from "ts/mr/data/DCommon";
 import { LBehavior, LBehaviorGroup } from "../internal";
 import { LEntity } from "../LEntity";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 
 
 /**
@@ -18,7 +18,7 @@ export class LParamBehavior extends LBehavior {
     }
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LParamBehavior);
+        const b = MRLively.world.spawn(LParamBehavior);
         b._values = this._values.slice();
         return b;
     }

@@ -4,9 +4,9 @@ import { DEquipmentPartId } from "ts/mr/data/DEquipmentPart";
 import { MRData } from "ts/mr/data/MRData";
 import { SCommandResponse } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { LEntityId } from "../LObject";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { LEntity } from "../LEntity";
 import { LBehavior } from "./LBehavior";
 import { DAnimationId, DParameterId } from "ts/mr/data/DCommon";
@@ -60,11 +60,11 @@ NOTE:
     }
 
     onAttached(self: LEntity): void {
-        REGame.eventServer.subscribe(MRBasics.events.itemRemovedFromInventory, this);
+        MRLively.eventServer.subscribe(MRBasics.events.itemRemovedFromInventory, this);
     }
 
     onDetached(self: LEntity): void {
-        REGame.eventServer.unsubscribe(MRBasics.events.itemRemovedFromInventory, this);
+        MRLively.eventServer.unsubscribe(MRBasics.events.itemRemovedFromInventory, this);
     }
     
     onEvent(cctx: SCommandContext, eventId: DEventId, args: any): LEventResult {
@@ -75,7 +75,7 @@ NOTE:
     }
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LEquipmentUserBehavior);
+        const b = MRLively.world.spawn(LEquipmentUserBehavior);
         throw new Error("Not implemented."); // TODO: コピーされたインベントリから参照しないとダメでは？
         return b;
     }
@@ -95,7 +95,7 @@ NOTE:
 
     public get shortcutItem(): LEntity | undefined {
         if (this._shortcutItemEntityId.hasAny()) {
-            return REGame.world.entity(this._shortcutItemEntityId);
+            return MRLively.world.entity(this._shortcutItemEntityId);
         }
         return undefined;
     }
@@ -104,7 +104,7 @@ NOTE:
         const result: LEntity[] = [];
         for (const part of this._slots) {
             if (part.itemEntityId.hasAny()) {
-                result.push(REGame.world.entity(part.itemEntityId));
+                result.push(MRLively.world.entity(part.itemEntityId));
             }
         }
         return result;
@@ -152,7 +152,7 @@ NOTE:
     }
     
     onQueryProperty(propertyId: number): any {
-        if (propertyId == RESystem.properties.equipmentSlots) {
+        if (propertyId == MRSystem.properties.equipmentSlots) {
             // TODO: とりあえず全部有効にして返してみる
             return MRData.equipmentParts
                 .filter(x => x.id != 0)
@@ -228,7 +228,7 @@ NOTE:
                         const localSlot = slot;
     
                         // まずは外す
-                        this.postEquipOff(cctx, self, REGame.world.entity(localSlot.itemEntityId))
+                        this.postEquipOff(cctx, self, MRLively.world.entity(localSlot.itemEntityId))
                             .then(() => {
                                 // 外せたら装備する
                                 this.equipOn(cctx, self, localSlot, itemEntity);
@@ -349,7 +349,7 @@ NOTE:
 
     private refreshSlots(): void {
         const entity = this.ownerEntity();
-        const equipmentSlots = entity.queryProperty(RESystem.properties.equipmentSlots) as DEquipmentPartId[];
+        const equipmentSlots = entity.queryProperty(MRSystem.properties.equipmentSlots) as DEquipmentPartId[];
 
         // 現在の状態で、Slot のリストを作る
         const newSlots: SlotPart2[] = equipmentSlots.map(x => { return {partId: x, itemEntityId: LEntityId.makeEmpty()}; });

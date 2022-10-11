@@ -3,7 +3,7 @@ import { DAutoRemovalTiming, DState, DStateEffect, DStateId } from "ts/mr/data/D
 import { MRData } from "ts/mr/data/MRData";
 import { checkContinuousResponse, SCommandResponse } from "ts/mr/system/SCommand";
 import { LBehaviorId, LObject, LObjectId, LObjectType } from "../LObject";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { LEntity } from "../LEntity";
 import { LBehavior } from "../behaviors/LBehavior";
 import { MRBasics } from "ts/mr/data/MRBasics";
@@ -249,7 +249,7 @@ export class LState extends LObject {
 
     public constructor() {
         super(LObjectType.State);
-        REGame.world._registerObject(this);
+        MRLively.world._registerObject(this);
     }
 
     public clone(newOwner: LEntity): LState {
@@ -302,7 +302,7 @@ export class LState extends LObject {
     }
     
     public stateBehabiors(): readonly LBehavior[] {
-        return this._stateBehabiors.map(x => REGame.world.behavior(x) as LBehavior);
+        return this._stateBehabiors.map(x => MRLively.world.behavior(x) as LBehavior);
     }
 
     public behaviorIds(): LBehaviorId[] {
@@ -370,7 +370,7 @@ export class LState extends LObject {
 
     public iterateBehaviors(func: ((b: LBehavior) => void) | ((b: LBehavior) => boolean)): boolean {
         for (const id of this._stateBehabiors) {
-            if (func(REGame.world.behavior(id)) === false) return false;
+            if (func(MRLively.world.behavior(id)) === false) return false;
         }
         return true;
     }
@@ -379,7 +379,7 @@ export class LState extends LObject {
     _callStateIterationHelper(func: (x: LBehavior) => SCommandResponse): SCommandResponse {
         let response = SCommandResponse.Pass;
         for (let i = this._stateBehabiors.length - 1; i >= 0; i--) {
-            const behavior = (REGame.world.behavior(this._stateBehabiors[i]) as LBehavior);
+            const behavior = (MRLively.world.behavior(this._stateBehabiors[i]) as LBehavior);
             const r = func(behavior);
             if (r != SCommandResponse.Pass) {
                 response = r;

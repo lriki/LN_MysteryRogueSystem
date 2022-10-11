@@ -5,7 +5,7 @@ import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { LActivity } from "../activities/LActivity";
 import { LEntity } from "../LEntity";
 import { LFieldEffect, LSanctuaryFieldEffect } from "../LFieldEffect";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { LBehavior } from "./LBehavior";
 import { LGlueToGroundBehavior } from "./LGlueToGroundBehavior";
 
@@ -20,7 +20,7 @@ export class LSanctuaryBehavior extends LBehavior {
     }
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LSanctuaryBehavior);
+        const b = MRLively.world.spawn(LSanctuaryBehavior);
         return b;
     }
 

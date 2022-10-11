@@ -1,6 +1,6 @@
-import { DHelpers } from "./DHelper";
 import { DLand } from "./DLand";
-import { DMap, MRData } from "./MRData";
+import { DMap } from "./DMap";
+import {  MRData } from "./MRData";
 
 export class DDataImporter {
 
@@ -46,13 +46,17 @@ export class DDataImporter {
             const land = this.findLand(parent2);
             if (land) {
                 if (data.name == "ExitMap") {
-                    land.exitRMMZMapId = data.id;
+                    land.addEventMapAsExitMap(mapData);
                 }
             }
         }
         else if (parent1.name.includes("[Event]")) {
             mapData.eventMap = true;
-            mapData.landId = DHelpers.RmmzNormalMapLandId;
+            const land = this.findLand(parent2);
+            if (land) {
+                mapData.eventMap = true;
+                mapData.landId = land.id;
+            }
         }
     }
 

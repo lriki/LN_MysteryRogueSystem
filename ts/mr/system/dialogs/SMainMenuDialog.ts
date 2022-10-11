@@ -1,6 +1,6 @@
 import { LEntity } from "ts/mr/lively/LEntity";
 import { LEntityId } from "ts/mr/lively/LObject";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SDialog } from "../SDialog";
 
 export class SMainMenuDialog extends SDialog {
@@ -12,6 +12,6 @@ export class SMainMenuDialog extends SDialog {
     }
 
     public entity(): LEntity {
-        return REGame.world.entity(this._entityId);
+        return MRLively.world.entity(this._entityId);
     }
 }

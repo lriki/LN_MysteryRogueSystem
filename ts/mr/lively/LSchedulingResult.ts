@@ -1,7 +1,7 @@
 import { assert, MRSerializable, tr2 } from "ts/mr/Common";
 import { SStepPhase } from "../system/SCommon";
 import { LActionTokenType } from "./LActionToken";
-import { REGame } from "./REGame";
+import { MRLively } from "./MRLively";
 
 
 @MRSerializable
@@ -42,7 +42,7 @@ export class LSchedulingResult {
     }
 
     public setConsumedActionTokeInCurrentPhase(type: LActionTokenType): void {
-        this.setConsumedActionToken(REGame.scheduler.currentPhaseIndex(), type);
+        this.setConsumedActionToken(MRLively.scheduler.currentPhaseIndex(), type);
     }
 
     public consumedActionToken(phaseIndex: number): LActionTokenType | undefined {

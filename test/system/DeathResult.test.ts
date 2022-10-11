@@ -1,7 +1,7 @@
 import { TestEnv } from "../TestEnv";
 import { MRBasics } from "ts/mr/data/MRBasics";
-import { REGame } from "ts/mr/lively/REGame";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRLively } from "ts/mr/lively/MRLively";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { LTileShape } from "ts/mr/lively/LBlock";
@@ -23,10 +23,10 @@ test("system.DeathResult.State", () => {
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, floorId, 11, 10);
+    MRLively.world.transferEntity(enemy1, floorId, 11, 10);
     enemy1.addState(TestEnv.StateId_CertainDirectAttack);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     const result = player1._deathResult;
     expect(result.states().includes(TestEnv.StateId_Sleep)).toBe(true);

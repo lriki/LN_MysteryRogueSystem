@@ -1,7 +1,7 @@
 import { DAbilityId } from "ts/mr/data/DAbility";
 import { LBehavior } from "../behaviors/LBehavior";
 import { LBehaviorId, LObject, LObjectId, LObjectType } from "../LObject";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { LEntity } from "../LEntity";
 import { SBehaviorFactory } from "ts/mr/system/SBehaviorFactory";
 import { assert, MRSerializable } from "ts/mr/Common";
@@ -36,7 +36,7 @@ export class LAbility extends LObject {
 
     public clone(newOwner: LEntity): LAbility {
         const ability = new LAbility();
-        REGame.world._registerObject(ability);
+        MRLively.world._registerObject(ability);
         ability._abilityId = this._abilityId;
 
         for (const i of this.behabiors()) {
@@ -55,7 +55,7 @@ export class LAbility extends LObject {
     public setup(abilityId: DAbilityId/*, owner: LEntity*/): void {
         this._abilityId = abilityId;
         //this.setParent(owner);
-        REGame.world._registerObject(this);
+        MRLively.world._registerObject(this);
 
         // TODO: test
         //this._behabiorIds = [new LKnockbackBehavior()];
@@ -74,12 +74,12 @@ export class LAbility extends LObject {
     }
     
     public behabiors(): LBehavior[] {
-        return this._behabiorIds.map(id => REGame.world.behavior(id));
+        return this._behabiorIds.map(id => MRLively.world.behavior(id));
     }
 
     public iterateBehaviors(func: ((b: LBehavior) => void) | ((b: LBehavior) => boolean)): boolean {
         for (const id of this._behabiorIds) {
-            if (func(REGame.world.behavior(id)) === false) return false;
+            if (func(MRLively.world.behavior(id)) === false) return false;
         }
         return true;
     }

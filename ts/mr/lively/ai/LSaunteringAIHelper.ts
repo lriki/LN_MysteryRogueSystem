@@ -7,7 +7,7 @@ import { LActivity } from "../activities/LActivity";
 import { LBlock } from "../LBlock";
 import { LActionTokenConsumeType } from "../LCommon";
 import { LEntity } from "../LEntity";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 
 @MRSerializable
 export class LSaunteringAIHelper {
@@ -51,7 +51,7 @@ export class LSaunteringAIHelper {
     public thinkMovingCore(self: LEntity, cctx: SCommandContext): boolean {
         let moveToLHRule = false;
         let moveToPassageWay: LBlock | undefined;
-        const block = REGame.map.block(self.mx, self.my);
+        const block = MRLively.map.block(self.mx, self.my);
 
         if (!this.hasDestination()) {
             if (!block.isRoom()) {
@@ -60,7 +60,7 @@ export class LSaunteringAIHelper {
                 moveToLHRule = true;
             }
             else {
-                const room = REGame.map.room(block._roomId);
+                const room = MRLively.map.room(block._roomId);
                 if (!block.isRoomInnerEntrance()) {
                     // 目的地なし, 現在位置が部屋
                     // => ランダムな入口を目的地に設定し、目的地に向かう移動。

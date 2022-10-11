@@ -4,7 +4,7 @@ import { SCommandResponse } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { SEventExecutionDialog } from "ts/mr/system/dialogs/SEventExecutionDialog";
 import { LEntity } from "../LEntity";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { MRSerializable } from "ts/mr/Common";
 import { DActionId, DBlockLayerKind } from "ts/mr/data/DCommon";
 import { LReaction } from "../LCommon";
@@ -43,7 +43,7 @@ import { LReaction } from "../LCommon";
 export class LExitPointBehavior extends LBehavior {
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LExitPointBehavior);
+        const b = MRLively.world.spawn(LExitPointBehavior);
         return b;
     }
 

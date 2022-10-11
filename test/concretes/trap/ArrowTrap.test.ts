@@ -1,6 +1,6 @@
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -25,18 +25,18 @@ test("concretes.trap.ArrowTrap.Basic", () => {
 
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢の罠_A").id, [], "trap1"));
-    REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    MRLively.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
     //----------------------------------------------------------------------------------------------------
 
     // player を右 (罠上) へ移動
-    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    REGame.world.random().resetSeed(5);     // 乱数調整
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRLively.world.random().resetSeed(5);     // 乱数調整
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
     const hp2 = player1.actualParam(MRBasics.params.hp);
     expect(hp2 < hp1).toBe(true);  // ダメージを受けている
@@ -52,22 +52,22 @@ test("concretes.trap.ArrowTrap.HitOtherUnit", () => {
 
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢の罠_A").id, [], "trap1"));
-    REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    MRLively.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     // 右を向く Player の右、つまり下から矢が飛んでくるので、それに当たる位置に Enemy を配置する
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 15);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 15);
     const enemyhp1 = enemy1.actualParam(MRBasics.params.hp);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
     //----------------------------------------------------------------------------------------------------
     
     // [踏む]
-    RESystem.dialogContext.postActivity(LActivity.makeTrample(player1));
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeTrample(player1));
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
     const hp2 = player1.actualParam(MRBasics.params.hp);
     const enemyhp2 = enemy1.actualParam(MRBasics.params.hp);
@@ -95,26 +95,26 @@ test("concretes.trap.ArrowTrap.DropAsItem", () => {
 
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢の罠_A").id, [], "trap1"));
-    REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 12, 10);
+    MRLively.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 12, 10);
     
     // 右下に移動できないような壁を作る
-    REGame.map.block(12, 9)._tileShape = LTileShape.Wall;
-    REGame.map.block(13, 10)._tileShape = LTileShape.Wall;
+    MRLively.map.block(12, 9)._tileShape = LTileShape.Wall;
+    MRLively.map.block(13, 10)._tileShape = LTileShape.Wall;
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
     //----------------------------------------------------------------------------------------------------
     
     // [投げる]
-    RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeThrow(player1, item1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 矢アイテムが、床に落ちている。上記状況では、Trap と隣接した場所に落ちるはず
     const itemData2 = MRData.getEntity("kEntity_木の矢_A");
 
-    const item2 = REGame.map.entities().find(e => e.dataId == itemData2.id);
+    const item2 = MRLively.map.entities().find(e => e.dataId == itemData2.id);
     assert(item2);
     //expect(item2 !== undefined).toBe(true);
     expect(UMovement.checkAdjacentEntities(item2, trap1)).toBe(true);

@@ -1,7 +1,7 @@
 
 import { DecisionPhase, LBehavior } from "./LBehavior";
 import { LEntity } from "ts/mr/lively/LEntity";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { SCommandResponse, SPhaseResult } from "ts/mr/system/SCommand";
 import { LStructureId } from "../LCommon";
@@ -25,7 +25,7 @@ export class LShopkeeperBehavior extends LBehavior {
     private _shopkeeperIndex = 0;   // ひとつの Shop 内での、店主番号
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LShopkeeperBehavior);
+        const b = MRLively.world.spawn(LShopkeeperBehavior);
         return b;
     }
 
@@ -38,7 +38,7 @@ export class LShopkeeperBehavior extends LBehavior {
     }
 
     public shop(): LItemShopStructure {
-        return REGame.map.structures()[this._shopStructureId] as LItemShopStructure;
+        return MRLively.map.structures()[this._shopStructureId] as LItemShopStructure;
     }
 
     // この店主が守るべき入り口情報。大部屋の場合は全店主が同じ個所を指すこともある。
@@ -126,7 +126,7 @@ export class LMovingTargetFinder_Shopkeeper extends LMovingTargetFinder {
     }
 
     public decide(self: LEntity): (number[] | undefined) {
-        const shopkeeper = REGame.world.behavior(this._ownerShopkeeperId) as LShopkeeperBehavior;
+        const shopkeeper = MRLively.world.behavior(this._ownerShopkeeperId) as LShopkeeperBehavior;
         const shop = shopkeeper.shop();
 
         // const room = REGame.map.room(shop.roomId());

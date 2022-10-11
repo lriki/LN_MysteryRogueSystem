@@ -1,10 +1,10 @@
 import { assert, MRSerializable } from "ts/mr/Common";
 import { DEventId } from "ts/mr/data/predefineds/DBasicEvents";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { SCommandContext } from "../system/SCommandContext";
 import { LBehavior } from "./behaviors/LBehavior";
 import { LBehaviorId } from "./LObject";
-import { REGame } from "./REGame";
+import { MRLively } from "./MRLively";
 
 export type EventHandler = (args: any) => void;
 
@@ -71,15 +71,15 @@ export class LEventServer {
     public publish(cctx: SCommandContext, eventId: DEventId, args: any): boolean {
         for (const e of this._entries) {
             if (e.eventId == eventId) {
-                const b = REGame.world.behavior(e.behaviorId);
+                const b = MRLively.world.behavior(e.behaviorId);
                 const r = b.onEvent(cctx, eventId, args);
                 if (r != LEventResult.Pass) {
-                    RESystem.integration.onEventPublished(eventId, args, true);
+                    MRSystem.integration.onEventPublished(eventId, args, true);
                     return false;
                 }
             }
         }
-        RESystem.integration.onEventPublished(eventId, args, false);
+        MRSystem.integration.onEventPublished(eventId, args, false);
         return true;
     }
 }

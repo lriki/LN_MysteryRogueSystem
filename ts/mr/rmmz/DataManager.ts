@@ -1,8 +1,4 @@
-import { MRDataManager } from "../data/MRDataManager";
-import { REGame } from "../lively/REGame";
 import { SGameManager } from "../system/SGameManager";
-import { MRData, REFloorMapKind } from "../data/MRData";
-import { assert } from "../Common";
 import { DHelpers } from "../data/DHelper";
 
 /*

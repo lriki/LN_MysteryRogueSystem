@@ -1,7 +1,7 @@
 import { FBlockComponent } from "ts/mr/floorgen/FMapData";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SView } from "ts/mr/system/SView";
-import { REVisual } from "ts/mr/view/REVisual";
+import { MRView } from "ts/mr/view/MRView";
 
 export enum TilemapRendererId {
     Default,
@@ -107,7 +107,7 @@ Tilemap.prototype._addSpot = function(startX, startY, x, y) {
 
     //if (REGame.map.isValid()) {
     if (show) {
-        const block = REGame.map.block(mx, my);
+        const block = MRLively.map.block(mx, my);
         if (block._roomId > 0) {
             this._addTile(this._upperLayer, startTileId + block._roomId, dx, dy);
         }
@@ -123,8 +123,8 @@ Tilemap.prototype._addSpot = function(startX, startY, x, y) {
 
     // ガイドグリッドの描画
     if (this._lowerLayer._rendererId != 2) {
-        if (REVisual.guideGrid && REVisual.guideGrid.isVisible()) {
-            const tile = REVisual.guideGrid.readMapData(mx, my);
+        if (MRView.guideGrid && MRView.guideGrid.isVisible()) {
+            const tile = MRView.guideGrid.readMapData(mx, my);
             this._addTile(this._lowerLayer, tile, dx, dy);
         }
     }
@@ -177,7 +177,7 @@ const _Tilemap__addAutotile = Tilemap.prototype._addAutotile;
 Tilemap.prototype._addAutotile = function(layer, tileId, dx, dy) {
     const kind = Tilemap.getAutotileKind(tileId);
 
-    if (REGame.map.floorId().isTacticsMap() && Tilemap.isTileA4(tileId)) {
+    if (MRLively.map.floorId().isTacticsMap() && Tilemap.isTileA4(tileId)) {
         const x = dx / this._tileWidth;
         const y = dy / this._tileHeight;
     

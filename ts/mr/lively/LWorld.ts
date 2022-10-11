@@ -1,6 +1,6 @@
 import { LEntity } from "./LEntity";
 import { assert, MRSerializable } from "../Common";
-import { REGame } from "./REGame";
+import { MRLively } from "./MRLively";
 import { LRandom } from "ts/mr/lively/LRandom";
 import { LEntityId, LObject, LObjectType, LObjectId, LBehaviorId } from "./LObject";
 import { LBehavior } from "./behaviors/LBehavior";
@@ -8,12 +8,12 @@ import { LAbility, LAbilityId } from "./abilities/LAbility";
 import { LFloorId } from "./LFloorId";
 import { MRData } from "ts/mr/data/MRData";
 import { LLand } from "./LLand";
-import { DLandId } from "ts/mr/data/DLand";
 import { LParty, LPartyId } from "./LParty";
 import { UMovement } from "ts/mr/utility/UMovement";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { DEntityId } from "ts/mr/data/DEntity";
 import { UState } from "ts/mr/utility/UState";
+import { DLandId } from "../data/DCommon";
 
 /**
  * 1ゲーム内に1インスタンス存在する。
@@ -77,7 +77,7 @@ export class LWorld {
     }
 
     public findFirstEntity(func: (entity: LEntity) => boolean): LEntity | undefined {
-        const r = REGame.world.objects().find(x => {
+        const r = MRLively.world.objects().find(x => {
             if (x instanceof LEntity) {
                 return func(x);
             }
@@ -221,19 +221,20 @@ export class LWorld {
      * mx, my は省略可能。これは、未ロードのランダムマップへの遷移時に使用する。
      */
     public transferEntity(entity: LEntity, floorId: LFloorId, mx: number = -1, my: number = -1): boolean {
-        const mapFloorId = REGame.map.floorId();
+        const mapFloorId = MRLively.map.floorId();
         if (!mapFloorId .equals(floorId) && floorId.isRandomMap()) {
             // 未ロードのランダムマップへ遷移するとき、座標が明示されているのはおかしい
             assert(mx < 0);
             assert(my < 0);
         }
+        
+        const oldLandId = entity.floorId.landId();
 
-        if (REGame.map.isValid() && !mapFloorId.equals(floorId) && mapFloorId.equals(entity.floorId)) {
+        if (MRLively.map.isValid() && !mapFloorId.equals(floorId) && mapFloorId.equals(entity.floorId)) {
             // 現在マップからの離脱
-            REGame.map._removeEntity(entity);
+            MRLively.map._removeEntity(entity);
         }
 
-        const oldLandId = entity.floorId.landId();
 
         // Floor 間移動?
         if (!entity.floorId.equals(floorId)) {
@@ -249,7 +250,7 @@ export class LWorld {
                 // 他の Floor から、現在表示中の Floor へ移動
                 entity.floorId = floorId;
                 UMovement.locateEntity(entity, mx, my);
-                REGame.map._addEntityInternal(entity);
+                MRLively.map._addEntityInternal(entity);
             }
 
         }
@@ -259,14 +260,19 @@ export class LWorld {
         }
 
         // Camera が注視している Entity が別マップへ移動したら、マップ遷移
-        if (REGame.camera.focusedEntityId().equals(entity.entityId()) &&
+        if (MRLively.camera.focusedEntityId().equals(entity.entityId()) &&
             !mapFloorId.equals(entity.floorId)) {
-            REGame.camera._reserveFloorTransferToFocusedEntity();
+            MRLively.camera._reserveFloorTransferToFocusedEntity();
         }
 
         // Land 間移動が行われた
         if (oldLandId != floorId.landId()) {
-            RESystem.groundRules.onEntityLandLeaved(entity);
+            MRSystem.groundRules.onEntityLandLeaved(entity);
+
+            const party = entity.party();
+            if (party) {
+                party.onMemberMovedLand(entity, floorId.landId(), oldLandId)
+            }
         }
 
         return true;
@@ -286,8 +292,8 @@ export class LWorld {
                     obj.onFinalize();
                     this._objects[i] = undefined;
     
-                    if (REGame.camera.focusedEntityId().equals(obj.__objectId())) {
-                        REGame.camera.clearFocus();
+                    if (MRLively.camera.focusedEntityId().equals(obj.__objectId())) {
+                        MRLively.camera.clearFocus();
                     }
                 }
             }
@@ -306,7 +312,7 @@ export class LWorld {
 
     public getEntityByRmmzActorId(rmmzActorId: number): LEntity {
         let actorEntity: LEntity | undefined;
-        REGame.world.iterateEntity(entity => {
+        MRLively.world.iterateEntity(entity => {
             const actorData = entity.data.actor;
             if (actorData && actorData.rmmzActorId == rmmzActorId) {
                 actorEntity = entity;

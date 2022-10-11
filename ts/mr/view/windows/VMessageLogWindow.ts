@@ -1,7 +1,7 @@
 import { assert } from "ts/mr/Common";
 import { linear } from "ts/mr/math/Math";
 import { LMessageHistory } from "ts/mr/lively/LMessageHistory";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 
 
 // TextState の拡張
@@ -62,7 +62,7 @@ export class VMessageLogWindow extends Window_Base {
     
     // override
     update() {
-        if (!REGame.map.floorId().isTacticsMap()) return;
+        if (!MRLively.map.floorId().isTacticsMap()) return;
 
         this.checkToNotClose();
         Window_Base.prototype.update.call(this);

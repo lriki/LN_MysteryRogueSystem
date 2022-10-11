@@ -1,7 +1,8 @@
 
 import { MRData } from "ts/mr/data/MRData";
-import { DLand, DLandId } from "ts/mr/data/DLand";
+import { DLand } from "ts/mr/data/DLand";
 import { MRSerializable } from "../Common";
+import { DLandId } from "../data/DCommon";
 
 @MRSerializable
 export class LLand {

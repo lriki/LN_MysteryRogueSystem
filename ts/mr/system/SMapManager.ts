@@ -1,6 +1,6 @@
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { LEntity } from "ts/mr/lively/LEntity";
-import { RESystem } from "./RESystem";
+import { MRSystem } from "./MRSystem";
 import { LMap } from "ts/mr/lively/LMap";
 import { SEntityFactory } from "./internal";
 import { assert, Log } from "ts/mr/Common";
@@ -35,7 +35,7 @@ export class SMapManager {
     private _exitPoint: LEntity | undefined;
 
     constructor() {
-        this._map = REGame.map;
+        this._map = MRLively.map;
         this._enemySpawnCount = this._enemySpanwRate;
     }
 
@@ -53,7 +53,7 @@ export class SMapManager {
     }
 
     public rand(): LRandom {
-        return REGame.world.random();
+        return MRLively.world.random();
     }
 
     public setupMap(initialMap: FMap): void {
@@ -87,7 +87,7 @@ export class SMapManager {
                 assert(prefab);
 
                 this._exitPoint = SEntityFactory.newBasicExitPoint();
-                REGame.world.transferEntity(this._exitPoint, floorId, exitPoint.mx(), exitPoint.my());
+                MRLively.world.transferEntity(this._exitPoint, floorId, exitPoint.mx(), exitPoint.my());
             }
         }
         
@@ -138,12 +138,12 @@ export class SMapManager {
         // Event 配置
         const eventTable = this._map.land2().landData().appearanceTable.events[floorId.floorNumber()];
         for (const i of eventTable) {
-            RESystem.integration.onLocateRmmzEvent(i.rmmzEventId, 0, 0);
+            MRSystem.integration.onLocateRmmzEvent(i.rmmzEventId, 0, 0);
         }
     }
 
     private setupFixedMap(initialMap: FMap): void {
-        RESystem.integration.onLoadFixedMapEvents();
+        MRSystem.integration.onLoadFixedMapEvents();
 
         this.buildStructurs();
 
@@ -193,7 +193,7 @@ export class SMapManager {
     public attemptRefreshVisual(): void {
         if (this._needRefreshVisual) {
             if (this._map.floorId().isRandomMap()) {
-                RESystem.integration.refreshGameMap(REGame.map);
+                MRSystem.integration.refreshGameMap(MRLively.map);
             }
             else {
                 // 固定マップの場合は RMMZ 側で既に準備済みなので更新不要
@@ -215,13 +215,13 @@ export class SMapManager {
     // 現在の Map(Floor) に存在するべき Entity を、Map に登場 (追加) させる
     // ※追加だけ。配置方法はマップの種類によって変わるので、この関数では行わない。
     private enterEntitiesToCurrentMap(): LEntity[] {
-        const player = REGame.camera.focusedEntity();
+        const player = MRLively.camera.focusedEntity();
         assert(player)
 
         const result: LEntity[] = [];
         const isFixedMap = this._map.floorId().isFixedMap();
 
-        const objects = REGame.world.objects();
+        const objects = MRLively.world.objects();
         for (let i = 1; i < objects.length; i++) {
             const obj = objects[i];
             if (obj && obj.objectType() == LObjectType.Entity) {
@@ -297,7 +297,7 @@ export class SMapManager {
         }
         else {
             const entity = SEntityFactory.newEntity(data.spawiInfo, floorId);
-            REGame.world.transferEntity(entity, floorId, mx, my);
+            MRLively.world.transferEntity(entity, floorId, mx, my);
             entites = [entity];
         }
 
@@ -315,7 +315,7 @@ export class SMapManager {
         const floorId = this._map.floorId();
         const entity = USpawner.createItemFromSpawnTable(floorId, this.rand());
         if (entity) {
-            REGame.world.transferEntity(entity, floorId, mx, my);
+            MRLively.world.transferEntity(entity, floorId, mx, my);
         }
         return entity;
     }
@@ -325,7 +325,7 @@ export class SMapManager {
         const floorId = this._map.floorId();
         const entity = USpawner.createTrapFromSpawnTable(floorId, this.rand());
         if (entity) {
-            REGame.world.transferEntity(entity, floorId, mx, my);
+            MRLively.world.transferEntity(entity, floorId, mx, my);
         }
     }
 

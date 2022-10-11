@@ -16,8 +16,7 @@ import { VChallengeResultWindow } from "./windows/VChallengeResultWindow";
  * 普通のプラグインであれば Scene_Map を拡張してそこに持たせるべきな情報もこちらに持たせているが、
  * これは他プラグインとの競合対策や Scene_Map の拡張による複雑化防止のため。
  */
-export class REVisual
-{
+export class MRView {
     // グローバルな情報
     static ext: MRVisualExtension = new MRVisualExtension();
     static manager: REVisual_Manager | undefined;

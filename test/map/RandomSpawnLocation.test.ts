@@ -1,7 +1,7 @@
 import { TestEnv } from "../TestEnv";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { MRData } from "ts/mr/data/MRData";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { assert } from "ts/mr/Common";
 import { USearch } from "ts/mr/utility/USearch";
 import { paramEnemySpawnInvalidArea } from "ts/mr/PluginParameters";
@@ -19,10 +19,10 @@ test("map/RandomSpawnLocation.NearPlayer", () => {
 
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50); 
 
-    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     for (let i = 0; i < 1000; i++) {
-        const block = USearch.selectUnitSpawnableBlock(REGame.world.random());
+        const block = USearch.selectUnitSpawnableBlock(MRLively.world.random());
         assert(block);
         expect(
             block.mx < player1.mx - paramEnemySpawnInvalidArea ||

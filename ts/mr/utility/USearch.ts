@@ -13,7 +13,7 @@ import { LBlock } from "../lively/LBlock";
 import { LEntity } from "../lively/LEntity";
 import { LRandom } from "../lively/LRandom";
 import { LRoom } from "../lively/LRoom";
-import { REGame } from "../lively/REGame";
+import { MRLively } from "../lively/MRLively";
 import { paramDefaultVisibiltyLength, paramEnemySpawnInvalidArea } from "../PluginParameters";
 import { Helpers } from "../system/Helpers";
 import { UMovement } from "./UMovement";
@@ -44,7 +44,7 @@ export class USearch {
      */
     public static isVisibleFromSubject(subject: LEntity, target: LEntity): boolean {
         // あかりの巻物など、フロア自体に可視効果がある
-        if (REGame.map.unitClarity) return true;
+        if (MRLively.map.unitClarity) return true;
         
         // よく見え状態なら、相手が透明状態でも見える
         if (subject.hasTrait(MRBasics.traits.ForceVisible)) return true;
@@ -61,7 +61,7 @@ export class USearch {
      */
     public static checkInSightEntity(subject: LEntity, target: LEntity): boolean {
         if (subject.isOnRoom()) {
-            const map = REGame.map;
+            const map = MRLively.map;
             const subjectRoom = map.room(subject.roomId());
 
             // 部屋の外周にも含まれず、部屋の外にいる target を見ることはできない。
@@ -92,7 +92,7 @@ export class USearch {
 
         if (subject.isOnRoom()) {
             // 部屋の中からは、部屋の外周上の Block も可視となる
-            const room = REGame.map.room(subject.roomId());
+            const room = MRLively.map.room(subject.roomId());
             return room.checkVisibilityBlock(block);
         }
         else {
@@ -161,12 +161,12 @@ export class USearch {
         assert(length >= 1);
 
         if (withCenter) {
-            const block = REGame.map.tryGetBlock(mx, my);
+            const block = MRLively.map.tryGetBlock(mx, my);
             if (block) func(block);
         }
 
         this.iterateAroundPositions(mx, my, length, (mx, my) => {
-            const block = REGame.map.tryGetBlock(mx, my);
+            const block = MRLively.map.tryGetBlock(mx, my);
             if (block) func(block);
         })
     }
@@ -183,7 +183,7 @@ export class USearch {
     }
     
     public static getFirstUnderFootEntity(entity: LEntity): LEntity | undefined {
-        const block = REGame.map.tryGetBlock(entity.mx, entity.my);
+        const block = MRLively.map.tryGetBlock(entity.mx, entity.my);
         if (block) {
             const target = block.getFirstEntity(DBlockLayerKind.Ground);
             return target;
@@ -196,10 +196,10 @@ export class USearch {
      */
     public static selectUnitSpawnableBlock(rand: LRandom): LBlock | null {
         // 空いている Block をランダムに選択して配置する
-        const spawnableBlocks = REGame.map.getSpawnableBlocks(DBlockLayerKind.Unit);
+        const spawnableBlocks = MRLively.map.getSpawnableBlocks(DBlockLayerKind.Unit);
         if (spawnableBlocks.length == 0) return null;
 
-        const player = REGame.camera.focusedEntity();
+        const player = MRLively.camera.focusedEntity();
         assert(player);
         const px = player.mx;
         const py = player.my;
@@ -212,7 +212,7 @@ export class USearch {
         });
 
         // 部屋が複数ある場合、Player 以外の部屋を選ぶ
-        if (!REGame.map.isSingleRoomMap) {
+        if (!MRLively.map.isSingleRoomMap) {
             candidateBlocks = candidateBlocks.filter(b =>(b._roomId != player.roomId()));
         }
 
@@ -257,7 +257,7 @@ export class USearch {
 
         const roomId = entity.roomId();
 
-        const items = REGame.map.entities().filter(e => {
+        const items = MRLively.map.entities().filter(e => {
             if (e.roomId() != roomId) return false;
             if (!this.isNeutralItem(e)) return false;
             return true;
@@ -275,7 +275,7 @@ export class USearch {
      * (mx,my) は含まない。
      */
     public static findFirstWallInDirection(mx: number, my: number, dir: number): LBlock {
-        const map = REGame.map;
+        const map = MRLively.map;
         let i = 1;
         while (true) {
             const offset = Helpers._dirToTileOffsetTable[dir];
@@ -294,8 +294,8 @@ export class USearch {
     }
     
     public static getUniqueActorByKey(key: string): LEntity {
-        const entity = REGame.system.uniqueActorUnits
-            .map(x => REGame.world.entity(x))
+        const entity = MRLively.system.uniqueActorUnits
+            .map(x => MRLively.world.entity(x))
             .find(x => x.data.entity.key == key);
         if (!entity) throw new Error(tr2("%1はアクターの中から見つかりませんでした。").format(key));
         return entity;
@@ -303,11 +303,11 @@ export class USearch {
 
     public static getEntityByKeyPattern(keyPattern: string): LEntity {
         if (keyPattern == "${Player}") {
-            return REGame.camera.getFocusedEntity();
+            return MRLively.camera.getFocusedEntity();
         }
         else {
-            const entity = REGame.system.uniqueActorUnits
-                .map(x => REGame.world.entity(x))
+            const entity = MRLively.system.uniqueActorUnits
+                .map(x => MRLively.world.entity(x))
                 .find(x => x.data.entity.key == keyPattern);
             if (!entity) throw new Error(tr2("%1は見つかりませんでした。").format(keyPattern));
             return entity;

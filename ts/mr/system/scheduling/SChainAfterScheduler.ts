@@ -1,5 +1,5 @@
 import { SCommandContext } from "../SCommandContext";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SCommandResponse } from "../SCommand";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { UAction } from "ts/mr/utility/UAction";
@@ -66,8 +66,8 @@ export class SChainAfterScheduler {
     private process_StabilizeSituation(cctx: SCommandContext): void {
         
         {
-            for (const entity of REGame.map.entities()) {
-                const block = REGame.map.block(entity.mx, entity.my);
+            for (const entity of MRLively.map.entities()) {
+                const block = MRLively.map.block(entity.mx, entity.my);
                 const currentLayer = block.findEntityLayerKind(entity);
                 assert(currentLayer);
                 const homeLayer = entity.getHomeLayer();
@@ -77,7 +77,7 @@ export class SChainAfterScheduler {
             }
         }
         
-        for (const entity of REGame.map.entities()) {
+        for (const entity of MRLively.map.entities()) {
             entity.iterateBehaviorsReverse(b => {
                 b.onStabilizeSituation(entity, cctx);
                 return true;
@@ -92,7 +92,7 @@ export class SChainAfterScheduler {
 
     private process_PreviewDead(cctx: SCommandContext): void {
 
-        for (const entity of REGame.map.entities()) {
+        for (const entity of MRLively.map.entities()) {
             if (entity.isDeathStateAffected()) {
                 cctx.postActivity( (new LActivity()).setup(MRBasics.actions.dead, entity));
             }
@@ -105,7 +105,7 @@ export class SChainAfterScheduler {
     private process_ResolvePermanentDeath(cctx: SCommandContext): void {
         
         // 戦闘不能の確定処理
-        for (const entity of REGame.map.entities()) {
+        for (const entity of MRLively.map.entities()) {
             if (entity.isDeathStateAffected()) {
                 let result = SCommandResponse.Pass;
                 entity.iterateBehaviorsReverse(b => {

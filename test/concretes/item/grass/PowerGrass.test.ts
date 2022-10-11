@@ -1,7 +1,7 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -31,34 +31,34 @@ test("concretes.item.grass.PowerGrass.Basic", () => {
     // "草" の共通テスト
     TestUtils.testCommonGrassBegin(player1, item1);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     player1.setActualParam(MRBasics.params.pow, pow1 - 1);
 
     // [食べる] 1個め
-    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // ちからが回復する
     const pow2 = player1.actualParam(MRBasics.params.pow);
     expect(pow2).toBe(pow1);
 
     // メッセージは "回復した" でOK. 原作は違ったかもしれないが、これを細かくデータ駆動で指定するのはちょっと大変。
-    const message = REGame.messageHistory;
+    const message = MRLively.messageHistory;
     expect(message.includesText("回復した")).toBe(true);
     expect(message.includesText("増えた")).toBe(false);
 
     //----------------------------------------------------------------------------------------------------
 
     // [食べる] 2個め
-    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item2).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeEat(player1, item2).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 最大値も含め、ちからが増えている
     const powMax = player1.idealParam(MRBasics.params.pow);

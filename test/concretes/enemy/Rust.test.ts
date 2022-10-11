@@ -1,6 +1,6 @@
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -34,20 +34,20 @@ test("concretes.enemy.Rust", () => {
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ラストゾンビ_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
-    RESystem.scheduler.stepSimulation();
+    MRSystem.scheduler.stepSimulation();
     
     //----------------------------------------------------------------------------------------------------
 
     // [装備], [待機]
-    RESystem.dialogContext.postActivity(LActivity.makeEquip(player1, weapon1));
-    RESystem.dialogContext.postActivity(LActivity.makeEquip(player1, shield1));
-    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeEquip(player1, weapon1));
+    MRSystem.dialogContext.postActivity(LActivity.makeEquip(player1, shield1));
+    MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    REGame.world.random().resetSeed(5);     // 乱数調整
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRLively.world.random().resetSeed(5);     // 乱数調整
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     const weapon1_UP2 = weapon1.actualParam(MRBasics.params.upgradeValue);
     const shield1_UP2 = shield1.actualParam(MRBasics.params.upgradeValue);

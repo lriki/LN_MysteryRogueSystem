@@ -4,8 +4,8 @@ import { MRData } from "ts/mr/data/MRData";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { LUnitBehavior } from "ts/mr/lively/behaviors/LUnitBehavior";
-import { REGame } from "ts/mr/lively/REGame";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRLively } from "ts/mr/lively/MRLively";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { TestEnv } from "../TestEnv";
 
@@ -27,7 +27,7 @@ test("system.ItemStacking.FullyInventoryIssue", () => {
 
     // 5本の矢を作り、足元に置く
     const arrow2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢_A").id, [], "item1").withStackCount(5));
-    REGame.world.transferEntity(arrow2, floorId, 10, 10);
+    MRLively.world.transferEntity(arrow2, floorId, 10, 10);
 
     // 残り持てる数だけ適当なアイテムを持たせる
     const remaining = inventory.remaining;
@@ -36,15 +36,15 @@ test("system.ItemStacking.FullyInventoryIssue", () => {
         inventory.addEntity(item);
     }
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // [拾う]
-    RESystem.dialogContext.postActivity(LActivity.makePick(player1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makePick(player1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     expect(arrow2.isDestroyed()).toBeTruthy();  // 足元のアイテムは持ち物に統合され、消えていること
     expect(arrow1._stackCount).toBe(10);        // 持ち物に入れられた矢は残り10本となっていること

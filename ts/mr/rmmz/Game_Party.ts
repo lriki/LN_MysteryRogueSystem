@@ -1,17 +1,17 @@
 import { LInventoryBehavior } from "../lively/behaviors/LInventoryBehavior";
-import { REGame } from "../lively/REGame";
+import { MRLively } from "../lively/MRLively";
 
 // たくさんの場所に条件を追加しなければならなくなる。
 const _Game_Message_isBusy = Game_Message.prototype.isBusy;
 Game_Message.prototype.isBusy = function() {
     return (
         _Game_Message_isBusy.call(this) ||
-        REGame.challengeResultShowing
+        MRLively.challengeResultShowing
     );
 };
 
 function playerInventory(): LInventoryBehavior | undefined {
-    const player = REGame.camera.focusedEntity();
+    const player = MRLively.camera.focusedEntity();
     if (!player) return undefined;
     return player.findEntityBehavior(LInventoryBehavior);
 }

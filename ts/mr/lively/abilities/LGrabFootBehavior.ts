@@ -2,7 +2,7 @@ import { MRSerializable, tr2 } from "ts/mr/Common";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { UName } from "ts/mr/utility/UName";
 import { LEntity } from "../LEntity";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { LBehavior } from "../behaviors/LBehavior";
 import { UMovement } from "ts/mr/utility/UMovement";
 import { LEntityId } from "../LObject";
@@ -41,7 +41,7 @@ export class LGrabFootBehavior extends LBehavior {
     }
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LGrabFootBehavior);
+        const b = MRLively.world.spawn(LGrabFootBehavior);
         return b;
     }
     
@@ -51,11 +51,11 @@ export class LGrabFootBehavior extends LBehavior {
         //     this._targetId  = target.entityId();
         // }
         
-        REGame.eventServer.subscribe(MRBasics.events.preWalk, this);
+        MRLively.eventServer.subscribe(MRBasics.events.preWalk, this);
     }
 
     onDetached(self: LEntity): void {
-        REGame.eventServer.unsubscribe(MRBasics.events.preWalk, this);
+        MRLively.eventServer.unsubscribe(MRBasics.events.preWalk, this);
     }
 
     onEvent(cctx: SCommandContext, eventId: DEventId, args: any): LEventResult {

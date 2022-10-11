@@ -4,7 +4,7 @@ import { SCommandResponse } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { UName } from "ts/mr/utility/UName";
 import { LEntity } from "../LEntity";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { LBehavior, SRejectionInfo } from "./LBehavior";
 
 /**
@@ -14,7 +14,7 @@ import { LBehavior, SRejectionInfo } from "./LBehavior";
 export class LStumblePreventionBehavior extends LBehavior {
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LStumblePreventionBehavior);
+        const b = MRLively.world.spawn(LStumblePreventionBehavior);
         return b
     }
 

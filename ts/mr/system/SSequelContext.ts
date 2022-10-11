@@ -1,8 +1,8 @@
 import { Log } from "ts/mr/Common";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SSequelUnit, SSequelSet, SMotionSequel } from "ts/mr/system/SSequel";
 import { MRBasics } from "../data/MRBasics";
-import { RESystem } from "./RESystem";
+import { MRSystem } from "./MRSystem";
 
 export class SSequelContext {
     private _sequelSet: SSequelSet = new SSequelSet();
@@ -49,14 +49,14 @@ export class SSequelContext {
         Log.d("[FlushSequel]");
 
         if (!this.isEmptySequelSet()) {
-            if (REGame.signalFlushSequelSet) {
-                REGame.signalFlushSequelSet(this._sequelSet);
+            if (MRLively.signalFlushSequelSet) {
+                MRLively.signalFlushSequelSet(this._sequelSet);
             }
             if (waitForAll) {
                 this._sequelSet.waitForAll();
             }
             
-            RESystem.integration.flushSequelSet(this._sequelSet);
+            MRSystem.integration.flushSequelSet(this._sequelSet);
 
             this._sequelSet = new SSequelSet();
         }

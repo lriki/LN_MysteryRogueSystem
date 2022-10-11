@@ -1,6 +1,6 @@
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -26,21 +26,21 @@ test("concretes.item.staff.DivisionStaff.basic", () => {
 
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
-    const entityCount1 = REGame.map.entities().length;
+    const entityCount1 = MRLively.map.entities().length;
 
     //----------------------------------------------------------------------------------------------------
 
     // [振る]
-    RESystem.dialogContext.postActivity(LActivity.makeWave(player1, item1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeWave(player1, item1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const entityCount2 = REGame.map.entities().length;
+    const entityCount2 = MRLively.map.entities().length;
     expect(entityCount2).toBe(entityCount1 + 1);    // 分裂でエンティティが増えていること
 });
 
@@ -56,20 +56,20 @@ test("concretes.item.staff.DivisionStaff.Issue1", () => {
     inventory.addEntity(item1);
 
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ウルフA").id, [stateId], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // [振る]
-    RESystem.dialogContext.postActivity(LActivity.makeWave(player1, item1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeWave(player1, item1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // findLast
-    const entities = REGame.map.entities();
+    const entities = MRLively.map.entities();
     let enemy2;
     for (let i = entities.length - 1; entities.length >= 0; --i) {
         const entity = entities[i];
@@ -96,9 +96,9 @@ test("concretes.item.staff.DivisionStaff.Issue1", () => {
 
     // [待機]
     for (let i = 0; i < 3; i++) {
-        RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
+        MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
+        MRSystem.dialogContext.activeDialog().submit();
     
-        RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+        MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     }
 });

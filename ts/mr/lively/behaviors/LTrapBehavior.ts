@@ -3,11 +3,11 @@ import { MRBasics } from "ts/mr/data/MRBasics";
 import { MRData } from "ts/mr/data/MRData";
 import { SCommandResponse } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { CommandArgs, LBehavior, onPerformStepFeetProcess, onPreStepFeetProcess } from "./LBehavior";
 import { LItemBehavior } from "./LItemBehavior";
 import { LEntity } from "../LEntity";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { DEventId, SkillEmittedArgs } from "ts/mr/data/predefineds/DBasicEvents";
 import { LEventResult } from "../LEventServer";
 import { UMovement } from "ts/mr/utility/UMovement";
@@ -60,7 +60,7 @@ export class LTrapBehavior extends LBehavior {
     }
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LTrapBehavior);
+        const b = MRLively.world.spawn(LTrapBehavior);
         b._exposed = this._exposed;
         return b;
     }
@@ -74,7 +74,7 @@ export class LTrapBehavior extends LBehavior {
     }
 
     public isExposedFor(target: LEntity): boolean {
-        if (REGame.map.trapClarity) return true;
+        if (MRLively.map.trapClarity) return true;
         if (target.hasTrait(MRBasics.traits.ForceVisible)) return true;
         return this.exposed();
     }
@@ -96,11 +96,11 @@ export class LTrapBehavior extends LBehavior {
 
     onAttached(self: LEntity): void {
         assert(this.ownerEntity().findEntityBehavior(LItemBehavior));
-        REGame.eventServer.subscribe(MRBasics.events.skillEmitted, this);
+        MRLively.eventServer.subscribe(MRBasics.events.skillEmitted, this);
     }
 
     onDetached(self: LEntity): void {
-        REGame.eventServer.unsubscribe(MRBasics.events.skillEmitted, this);
+        MRLively.eventServer.unsubscribe(MRBasics.events.skillEmitted, this);
     }
 
     onEvent(cctx: SCommandContext, eventId: DEventId, args: any): LEventResult {
@@ -160,7 +160,7 @@ export class LTrapBehavior extends LBehavior {
 
         if (trigger) {
             this._launching = true;
-            RESystem.sequelContext.trapPerforming = true;
+            MRSystem.sequelContext.trapPerforming = true;
         }
         else {
             cctx.postMessage(tr("しかし罠にはかからなかった。"));

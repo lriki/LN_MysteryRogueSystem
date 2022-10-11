@@ -1,6 +1,6 @@
 import { DAnnotationReader } from "./importers/DAttributeReader";
 import { DHelpers } from "./DHelper";
-import { DMapId } from "./DLand";
+import { DMapId } from "./DCommon";
 
 /** 0 is invalid. */
 export type DBlockVisualPartIndex = number;

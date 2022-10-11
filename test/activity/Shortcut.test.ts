@@ -1,6 +1,6 @@
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -27,28 +27,28 @@ test("concretes.activity.Shortcut", () => {
 
     // [セット]
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
-    equipmentUser.equipOnShortcut(RESystem.commandContext, item1);
+    equipmentUser.equipOnShortcut(MRSystem.commandContext, item1);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // [使う] (ショートカット)
     const activity1 = LActivity.makePrimaryUse(player1, item1).withConsumeAction();
-    RESystem.dialogContext.postActivity(activity1);
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(activity1);
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     expect(item1._stackCount).toBe(2);      // スタックが減っている
 
     //----------------------------------------------------------------------------------------------------
 
     // [置く]
-    RESystem.dialogContext.postActivity(LActivity.makePut(player1, item1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makePut(player1, item1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // インベントリから外れたことで、ショートカットから外れている。
     expect(equipmentUser.isShortcutEquipped(item1)).toBeFalsy();

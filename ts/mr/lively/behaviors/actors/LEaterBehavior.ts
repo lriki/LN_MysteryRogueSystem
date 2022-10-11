@@ -4,7 +4,7 @@ import { LEntity } from "ts/mr/lively/LEntity";
 import { SCommandResponse } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { LBehavior } from "../LBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { MRSerializable } from "ts/mr/Common";
 import { SActivityContext } from "ts/mr/system/SActivityContext";
 import { DActionId } from "ts/mr/data/DCommon";
@@ -16,7 +16,7 @@ import { DActionId } from "ts/mr/data/DCommon";
 export class LEaterBehavior extends LBehavior {
     
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LEaterBehavior);
+        const b = MRLively.world.spawn(LEaterBehavior);
         return b
     }
     

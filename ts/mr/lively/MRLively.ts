@@ -17,8 +17,7 @@ import { MRGameExtension } from "./MRGameExtension";
  * 
  * コアスクリプトの $game* と同じ役割。
  */
-export class REGame
-{
+export class MRLively {
     static readonly TILE_LAYER_COUNT: number = 6;
 
     static ext: MRGameExtension = new MRGameExtension();

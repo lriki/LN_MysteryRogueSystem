@@ -15,7 +15,7 @@ import { SRmmzHelpers } from "ts/mr/system/SRmmzHelpers";
 import { assert } from "../Common";
 import { DPrefab, DPrefabId } from "../data/DPrefab";
 import { MRDataManager } from "../data/MRDataManager";
-import { REVisual } from "../view/REVisual";
+import { MRView } from "../view/MRView";
 
 //==============================================================================
 // Game_Map
@@ -146,8 +146,8 @@ Spriteset_Map.prototype.updateREPrefabEvent = function() {
 
     
     // Visual と Sprite を関連付ける
-    if (REVisual.entityVisualSet) {
-        for (const visual of REVisual.entityVisualSet.entityVisuals()) {
+    if (MRView.entityVisualSet) {
+        for (const visual of MRView.entityVisualSet.entityVisuals()) {
             if (visual.rmmzSpriteIndex() < 0) {
                 const spriteIndex = this._characterSprites.findIndex(s => (s._character instanceof Game_Event) && s._character.eventId() == visual.rmmzEventId());
                 if (spriteIndex < 0) {
@@ -175,7 +175,7 @@ Spriteset_Map.prototype.updateREPrefabEvent = function() {
 };
 
 Spriteset_Map.prototype.makeREPrefabEventSprite = function(event: Game_Event) {
-    assert(REVisual.manager);
+    assert(MRView.manager);
 
     event.setSpritePrepared(true);
     var sprite = new Sprite_Character(event as unknown as Game_Character);

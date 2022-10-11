@@ -1,7 +1,7 @@
 import { FBlockComponent } from "ts/mr/floorgen/FMapData";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { Helpers } from "ts/mr/system/Helpers";
-import { REVisual } from "./REVisual";
+import { MRView } from "./MRView";
 
 const StartETileId = 768;
 
@@ -15,7 +15,7 @@ export class VMapGuideGrid {
 
     public setVisible(v: boolean): void {
         this._visible = v;
-        REVisual.spriteset?._tilemap.refresh();
+        MRView.spriteset?._tilemap.refresh();
     }
 
     public isVisible(): boolean {
@@ -25,9 +25,9 @@ export class VMapGuideGrid {
     public update(): void {
         let refresh = false;
 
-        const entity = REGame.camera.focusedEntity();
-        if (this._mapdataRevision != REGame.map.mapdataRevision()) {
-            this._mapdataRevision = REGame.map.mapdataRevision();
+        const entity = MRLively.camera.focusedEntity();
+        if (this._mapdataRevision != MRLively.map.mapdataRevision()) {
+            this._mapdataRevision = MRLively.map.mapdataRevision();
             refresh = true;
         }
 
@@ -57,7 +57,7 @@ export class VMapGuideGrid {
             this._mapData = new Array<number>(len);
         }
 
-        const map = REGame.map;
+        const map = MRLively.map;
         for (let y = 0; y < this._mapHeight; y++) {
             for (let x = 0; x < this._mapWidth; x++) {
                 const block = map.block(x, y);
@@ -73,7 +73,7 @@ export class VMapGuideGrid {
             }
         }
 
-        const entity = REGame.camera.focusedEntity();
+        const entity = MRLively.camera.focusedEntity();
         if (entity) {
             for (let i = 0; i < 100; i++) {
                 const offset = Helpers._dirToTileOffsetTable[entity.dir];
@@ -89,6 +89,6 @@ export class VMapGuideGrid {
             }
         }
         
-        REVisual.spriteset?._tilemap.refresh();
+        MRView.spriteset?._tilemap.refresh();
     }
 }

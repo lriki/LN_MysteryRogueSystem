@@ -1,11 +1,11 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 
 beforeAll(() => {
@@ -26,21 +26,21 @@ test("concretes.item.scroll.ChangeToFoodScroll", () => {
     inventory.addEntity(item1);
     inventory.addEntity(item2);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // [読む]
-    RESystem.dialogContext.postActivity(LActivity.makeRead(player1, item1, [item2]).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeRead(player1, item1, [item2]).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     const items = inventory.items;
     expect(items.length).toBe(1);
     expect(items[0].data.entity.key).toBe("kEntity_大きなおにぎり_A");
     expect(item2.isDestroyed()).toBeFalsy();    // Entity が変異しただけなので、インスタンス自体は削除されていない
-    expect(REGame.messageHistory.includesText("変化した")).toBeTruthy();
+    expect(MRLively.messageHistory.includesText("変化した")).toBeTruthy();
 });
 
 test("concretes.item.scroll.EquipmentIssuse", () => {
@@ -62,18 +62,18 @@ test("concretes.item.scroll.EquipmentIssuse", () => {
     inventory.addEntity(weapon1);
     inventory.addEntity(arrow1);
     equipmentUser.equipOnUtil(weapon1);
-    equipmentUser.equipOnShortcut(RESystem.commandContext, arrow1);
+    equipmentUser.equipOnShortcut(MRSystem.commandContext, arrow1);
     const revision1 = equipmentUser.revisitonNumber();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // 装備中の武器に対して [読む]
-    RESystem.dialogContext.postActivity(LActivity.makeRead(player1, item1, [weapon1]).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeRead(player1, item1, [weapon1]).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     expect(equipmentUser.isEquipped(weapon1)).toBeFalsy();          // 装備が外された
     expect(equipmentUser.revisitonNumber()).toBe(revision1 + 1);    // Visual 更新のために revision が増やされる
@@ -81,10 +81,10 @@ test("concretes.item.scroll.EquipmentIssuse", () => {
     //----------------------------------------------------------------------------------------------------
 
     // 装備中の矢(ショートカット)に対して [読む]
-    RESystem.dialogContext.postActivity(LActivity.makeRead(player1, item2, [arrow1]).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeRead(player1, item2, [arrow1]).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
     expect(equipmentUser.shortcutItem).toBeUndefined();
 });

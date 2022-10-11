@@ -1,7 +1,7 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -36,24 +36,24 @@ test("concretes.item.scroll.ReinforcementScroll.Weapon.basic", () => {
     equipmentUser.equipOnUtil(weapon1);
     equipmentUser.equipOnUtil(shield1);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // [読む]
-    RESystem.dialogContext.postActivity(LActivity.makeRead(player1, item1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeRead(player1, item1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    REGame.world.random().resetSeed(5);     // 乱数調整
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRLively.world.random().resetSeed(5);     // 乱数調整
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 武器だけ +1 と解呪
     expect(weapon1.actualParam(MRBasics.params.upgradeValue)).toBe(1);
     expect(shield1.actualParam(MRBasics.params.upgradeValue)).toBe(0);
     expect(weapon1.isStateAffected(stateId)).toBe(false);
     expect(shield1.isStateAffected(stateId)).toBe(true);
-    expect(REGame.messageHistory.includesText("効かなかった")).toBe(false);
-    expect(REGame.messageHistory.includesText("つよさが 1 増えた")).toBe(true);
+    expect(MRLively.messageHistory.includesText("効かなかった")).toBe(false);
+    expect(MRLively.messageHistory.includesText("つよさが 1 増えた")).toBe(true);
 
     const s = (TestEnv.activeSequelSet.runs()[0].clips()[0].sequels()[0] as SAnumationSequel);
     expect(s.entity().equals(player1)).toBe(true);
@@ -72,15 +72,15 @@ test("concretes.item.scroll.ReinforcementScroll.miss", () => {
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_天の恵みの巻物_A").id, [], "item1"));
     inventory.addEntity(item1);
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // [読む]
-    RESystem.dialogContext.postActivity(LActivity.makeRead(player1, item1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeRead(player1, item1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 効果が無ければ Animation は表示されない
     expect((TestEnv.activeSequelSet.runs()[0].clips()[0].sequels()[0] instanceof SAnumationSequel)).toBe(false);
@@ -111,7 +111,7 @@ test("concretes.item.scroll.ReinforcementScroll.Weapon.Up3", () => {
     inventory.addEntity(weapon1);
     equipmentUser.equipOnUtil(weapon1);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
@@ -121,10 +121,10 @@ test("concretes.item.scroll.ReinforcementScroll.Weapon.Up3", () => {
         const item = items[i];
 
         // [読む]
-        RESystem.dialogContext.postActivity(LActivity.makeRead(player1, item).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
+        MRSystem.dialogContext.postActivity(LActivity.makeRead(player1, item).withConsumeAction());
+        MRSystem.dialogContext.activeDialog().submit();
         
-        RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+        MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
         const v = weapon1.actualParam(MRBasics.params.upgradeValue);
         const d = v - last;
@@ -159,22 +159,22 @@ test("concretes.item.scroll.ReinforcementScroll.Shield.basic", () => {
     equipmentUser.equipOnUtil(weapon1);
     equipmentUser.equipOnUtil(shield1);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // [読む]
-    RESystem.dialogContext.postActivity(LActivity.makeRead(player1, item1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeRead(player1, item1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    REGame.world.random().resetSeed(5);     // 乱数調整
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRLively.world.random().resetSeed(5);     // 乱数調整
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 防具だけ +1 と解呪
     expect(weapon1.actualParam(MRBasics.params.upgradeValue)).toBe(0);
     expect(shield1.actualParam(MRBasics.params.upgradeValue)).toBe(1);
     expect(weapon1.isStateAffected(stateId)).toBe(true);
     expect(shield1.isStateAffected(stateId)).toBe(false);
-    expect(REGame.messageHistory.includesText("効かなかった")).toBe(false);
-    expect(REGame.messageHistory.includesText("つよさが 1 増えた")).toBe(true);
+    expect(MRLively.messageHistory.includesText("効かなかった")).toBe(false);
+    expect(MRLively.messageHistory.includesText("つよさが 1 増えた")).toBe(true);
 });

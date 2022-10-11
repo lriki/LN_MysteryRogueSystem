@@ -3,8 +3,8 @@ import { MRBasics } from "ts/mr/data/MRBasics";
 import { MRData } from "ts/mr/data/MRData";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { LUnitBehavior } from "ts/mr/lively/behaviors/LUnitBehavior";
-import { REGame } from "ts/mr/lively/REGame";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRLively } from "ts/mr/lively/MRLively";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { TestEnv } from "../TestEnv";
 
@@ -23,18 +23,18 @@ test("system.BDash.ArrowDamageStop", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_インプ_A").id, [], "enemy1"));
     enemy1.addState(MRData.getState("kState_UnitTest_投擲必中").id);    // 投擲必中
-    REGame.world.transferEntity(enemy1, floorId, 15, 10);
+    MRLively.world.transferEntity(enemy1, floorId, 15, 10);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // Enemy の方に向かってダッシュで移動
-    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withFastForward().withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withFastForward().withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
     for (let i = 0; i < 10; i++) {
-        RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+        MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     }
 
     const hp2 = player1.actualParam(MRBasics.params.hp);

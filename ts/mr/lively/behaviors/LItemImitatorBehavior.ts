@@ -5,14 +5,14 @@ import { DEventId, WalkEventArgs } from "ts/mr/data/predefineds/DBasicEvents";
 import { DFactionId, MRData } from "ts/mr/data/MRData";
 import { Helpers } from "ts/mr/system/Helpers";
 import { SCommandResponse, SPhaseResult } from "ts/mr/system/SCommand";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { UAction } from "ts/mr/utility/UAction";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { LEntity } from "../LEntity";
 import { LEventResult } from "../LEventServer";
 import { LEntityId } from "../LObject";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { LState } from "../states/LState";
 import { CommandArgs, DecisionPhase, LBehavior, LNameView, testPickOutItem } from "./LBehavior";
 import { DActionId, DBlockLayerKind } from "ts/mr/data/DCommon";
@@ -62,7 +62,7 @@ export class LItemImitatorBehavior extends LBehavior {
     private _itemEntityId: LEntityId = LEntityId.makeEmpty();
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LItemImitatorBehavior);
+        const b = MRLively.world.spawn(LItemImitatorBehavior);
         b._itemEntityId = this._itemEntityId.clone();
         return b;
     }
@@ -74,20 +74,20 @@ export class LItemImitatorBehavior extends LBehavior {
     onAttached(self: LEntity): void {
         assert(this._itemEntityId.isEmpty());
 
-        REGame.eventServer.subscribe(MRBasics.events.preWalk, this);
-        REGame.eventServer.subscribe(MRBasics.events.prePut, this);
+        MRLively.eventServer.subscribe(MRBasics.events.preWalk, this);
+        MRLively.eventServer.subscribe(MRBasics.events.prePut, this);
     }
     
     onDetached(self: LEntity): void {
         assert(this._itemEntityId.hasAny());
-        REGame.eventServer.unsubscribe(MRBasics.events.preWalk, this);
-        REGame.eventServer.unsubscribe(MRBasics.events.prePut, this);
+        MRLively.eventServer.unsubscribe(MRBasics.events.preWalk, this);
+        MRLively.eventServer.unsubscribe(MRBasics.events.prePut, this);
         this.itemEntity().clearParent();
     }
 
     onEnteredMap(self: LEntity, map: LMap): void {
         if (this._itemEntityId.isEmpty()) {
-            const rand = REGame.world.random();
+            const rand = MRLively.world.random();
             const floorId = map.floorId();
             const list = map.land2().landData().appearanceTable.items[floorId.floorNumber()];
             const data = rand.selectOrUndefined(list);
@@ -125,7 +125,7 @@ export class LItemImitatorBehavior extends LBehavior {
     }
 
     public itemEntity(): LEntity {
-        return REGame.world.entity(this._itemEntityId);
+        return MRLively.world.entity(this._itemEntityId);
     }
 
     queryOutwardFactionId(): DFactionId | undefined {
@@ -139,8 +139,8 @@ export class LItemImitatorBehavior extends LBehavior {
             this.parentAs(LState)?.removeThisState();
             
             self.removeFromParent();
-            REGame.map.appearEntity(self, actor.mx, actor.my);
-            UAction.postDropOrDestroyOnCurrentPos(RESystem.commandContext, self, self.getHomeLayer());
+            MRLively.map.appearEntity(self, actor.mx, actor.my);
+            UAction.postDropOrDestroyOnCurrentPos(MRSystem.commandContext, self, self.getHomeLayer());
 
             return SCommandResponse.Canceled;
         }

@@ -1,5 +1,5 @@
 import { MRSerializable } from "../Common";
-import { REGame } from "./REGame";
+import { MRLively } from "./MRLively";
 
 
 export type ChoiceCallback = (n: number) => void;
@@ -33,7 +33,7 @@ export class LMessageHistory {
     add(text: string): void {
         this._texts.push(text);
 
-        if (REGame.recorder.isSilentPlayback()) {
+        if (MRLively.recorder.isSilentPlayback()) {
             this._lastViewLineIndex = this._texts.length;
         }
     }

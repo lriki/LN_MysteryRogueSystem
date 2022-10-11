@@ -1,6 +1,6 @@
 import { MRSerializable } from "ts/mr/Common";
 import { MRData } from "ts/mr/data/MRData";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { SAIHelper } from "ts/mr/system/SAIHelper";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { SEmittorPerformer } from "ts/mr/system/SEmittorPerformer";
@@ -9,7 +9,7 @@ import { UMovement } from "ts/mr/utility/UMovement";
 import { LActionTokenConsumeType } from "../LCommon";
 import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 
 @MRSerializable
 export class LActionDeterminer {
@@ -129,7 +129,7 @@ export class LActionDeterminer {
     }
 
     public primaryTarget(): LEntity {
-        return REGame.world.entity(this._primaryTargetEntityId);
+        return MRLively.world.entity(this._primaryTargetEntityId);
     }
 
     public perform(cctx: SCommandContext, self: LEntity): boolean {
@@ -148,7 +148,7 @@ export class LActionDeterminer {
 
 
                 // 対象決定フェーズで予約した対象が、視界を外れたりしていないかを確認する
-                const targetEntites = this._requiredSkillAction.targets.map(e => REGame.world.entity(e));
+                const targetEntites = this._requiredSkillAction.targets.map(e => MRLively.world.entity(e));
                 if (UAction.checkEntityWithinSkillActionRange(self, MRData.skills[this._requiredSkillAction.action.skillId], false, targetEntites)) {
                     
                     // AI は移動後に PrimaryTarget の方向を向くようになっているため、

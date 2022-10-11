@@ -2,7 +2,7 @@ import { DEntity, DEntityCreateInfo, DEntityId } from "ts/mr/data/DEntity";
 import { MRData } from "ts/mr/data/MRData";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { LFloorId } from "ts/mr/lively/LFloorId";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { DAppearanceTableEntity } from "../data/DLand";
 import { LRandom } from "../lively/LRandom";
@@ -12,9 +12,9 @@ import { UEffect } from "./UEffect";
 export class USpawner {
 
     public static spawnSingleEntity(entityKey: string, mx: number, my: number): LEntity {
-        const floorId = REGame.map.floorId();
+        const floorId = MRLively.map.floorId();
         const entity = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity(entityKey).id), floorId);
-        REGame.world.transferEntity(entity, floorId, mx, my);
+        MRLively.world.transferEntity(entity, floorId, mx, my);
         return entity;
     }
 

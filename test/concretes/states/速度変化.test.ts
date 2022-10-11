@@ -1,5 +1,5 @@
-import { REGame } from "ts/mr/lively/REGame";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRLively } from "ts/mr/lively/MRLively";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { assert } from "ts/mr/Common";
@@ -38,8 +38,8 @@ test("concretes.states.速度変化", () => {
     };
 
     // Player
-    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    const actor1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
+    MRLively.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     TestEnv.performFloorTransfer();
 
     // デフォルトの行動回数は 1 (等速)
@@ -78,7 +78,7 @@ test("concretes.states.速度変化", () => {
     expect(!!actor1.states().find(x => x.stateDataId() == MRData.getState("kState_UT倍速").id)).toBe(false);
     expect(!!actor1.states().find(x => x.stateDataId() == MRData.getState("kState_UT3倍速").id)).toBe(false);
 
-    RESystem.scheduler.stepSimulation();
+    MRSystem.scheduler.stepSimulation();
 });
 
 test("concretes.states.速度変化.remove", () => {
@@ -99,16 +99,16 @@ test("concretes.states.速度変化.remove", () => {
     assert(param);
 
     // 10 ターン分 シミュレーション実行
-    RESystem.scheduler.stepSimulation();
+    MRSystem.scheduler.stepSimulation();
     for (let i = 0; i < 10; i++) {
         // 10 ターンの間はステートが追加されている
         expect(param.getAddBuff().level > 0).toBe(true);
 
         // 待機
-        RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
+        MRSystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+        MRSystem.dialogContext.activeDialog().submit();
 
-        RESystem.scheduler.stepSimulation();
+        MRSystem.scheduler.stepSimulation();
     }
 
     // 10 ターンで解除
@@ -137,39 +137,39 @@ test("concretes.states.速度変化.Issue1", () => {
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 30, 10);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 30, 10);
 
     const wait = () => {
-        RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
+        MRSystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+        MRSystem.dialogContext.activeDialog().submit();
     }
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     
     //----------
     // Round
     expect(enemy1.mx).toBe(30);
-    RESystem.dialogContext.postActivity(LActivity.makeEat(actor1, item1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
-    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    MRSystem.dialogContext.postActivity(LActivity.makeEat(actor1, item1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
     expect(enemy1.mx).toBe(30);
     const buf = actor1.params().params()[MRBasics.params.agi];
     assert(buf);
     buf.getAddBuff().turn = 2;  // テスト用に残りターン数調整。あと2回ManualAction取ると通常速度に戻るイメージ。
     wait();
-    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
     //----------
     // Round
     expect(enemy1.mx).toBe(29);
     wait();
-    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     // ↑この中で速度変化は解除される
 
     expect(enemy1.mx).toBe(28);
     wait();
-    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
 
     /*

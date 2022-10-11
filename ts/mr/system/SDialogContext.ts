@@ -1,10 +1,10 @@
 
 import { assert } from "ts/mr/Common";
-import { REGame } from "../lively/REGame";
+import { MRLively } from "../lively/MRLively";
 import { LEntity } from "../lively/LEntity";
 import { SCommandContext } from "./SCommandContext";
 import { ActivityRecordingCommandType } from "./SActivityRecorder";
-import { RESystem } from "./RESystem";
+import { MRSystem } from "./MRSystem";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { SDialog } from "./SDialog";
 import { SActivityPlaybackDialog } from "./dialogs/SActivityPlaybackDialog";
@@ -23,20 +23,20 @@ export class SDialogContext
     }
 
     public open(dialog: SDialog): void {
-        dialog._openedFloorId = REGame.map.floorId().clone();
+        dialog._openedFloorId = MRLively.map.floorId().clone();
         this._dialogs.push(dialog);
-        RESystem.integration.openDialog(dialog);
+        MRSystem.integration.openDialog(dialog);
     }
 
     private pop(): void {
         const dialogIsPlaybck = this.activeDialog() instanceof SActivityPlaybackDialog;
-        const otherFloorOpened = !this.activeDialog()._openedFloorId.equals(REGame.map.floorId());
+        const otherFloorOpened = !this.activeDialog()._openedFloorId.equals(MRLively.map.floorId());
 
         this._dialogs.pop();
 
         if (this._dialogs.length == 0) {
             
-            if (REGame.recorder.isRecording()) {
+            if (MRLively.recorder.isRecording()) {
                 if (dialogIsPlaybck) {
                     // SCommandPlaybackDialog が最後のコマンドを実行し終えた時に備える。
                     // ここで記録してしまうと、回想が終わるたびに "待機" が増えてしまう。
@@ -45,7 +45,7 @@ export class SDialogContext
                     
                 }
                 else {
-                    REGame.recorder.push({
+                    MRLively.recorder.push({
                         type: ActivityRecordingCommandType.CloseMainDialog,
                         activity: null,
                     });
@@ -83,8 +83,8 @@ export class SDialogContext
     public postActivity(activity: LActivity): void {
         this._commandContext.postActivity(activity);
 
-        if (REGame.recorder.isRecording()) {
-            REGame.recorder.push({
+        if (MRLively.recorder.isRecording()) {
+            MRLively.recorder.push({
                 type: ActivityRecordingCommandType.Activity,
                 activity: activity.toData(),
             });
@@ -94,7 +94,7 @@ export class SDialogContext
     _closeDialog(dialog: SDialog) {
         assert(this.activeDialog() == dialog);  // TODO: stack ぜんぶ見て、見つかったものをその子を close したほうがいいかも？
         this.pop();
-        RESystem.integration.dialogClosed(this, dialog);
+        MRSystem.integration.dialogClosed(this, dialog);
     }
 
     /**
@@ -133,7 +133,7 @@ export class SDialogContext
 
         if (this._hasDialogModel() &&   // dialog.onUpdate() の中で submit が走り、Dialog が閉じられることに備える
             dialog.isVisualIntegration()) {
-            RESystem.integration.updateDialog(this);
+            MRSystem.integration.updateDialog(this);
         }
         //REGame.recorder._recording = false;
 

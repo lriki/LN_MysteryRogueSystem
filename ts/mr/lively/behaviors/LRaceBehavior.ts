@@ -2,7 +2,7 @@ import { assert, MRSerializable } from "ts/mr/Common";
 import { MRData } from "ts/mr/data/MRData";
 import { LBehavior } from "../internal";
 import { LEntity } from "../LEntity";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { LBattlerBehavior } from "./LBattlerBehavior";
 import { DRace } from "ts/mr/data/DRace";
 
@@ -12,7 +12,7 @@ import { DRace } from "ts/mr/data/DRace";
 @MRSerializable
 export class LRaceBehavior extends LBattlerBehavior {
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LRaceBehavior);
+        const b = MRLively.world.spawn(LRaceBehavior);
         return b;
     }
     

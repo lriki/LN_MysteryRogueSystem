@@ -1,5 +1,5 @@
-import { REGame } from "ts/mr/lively/REGame";
-import { RESystem } from "./RESystem";
+import { MRLively } from "ts/mr/lively/MRLively";
+import { MRSystem } from "./MRSystem";
 
 
 /**
@@ -15,8 +15,8 @@ import { RESystem } from "./RESystem";
  */
 export class SImmediatelyCommandExecuteScheduler {
     public stepSimulation(): void {
-        const dialogContext = RESystem.dialogContext;
-        const commandContext = RESystem.commandContext;
+        const dialogContext = MRSystem.dialogContext;
+        const commandContext = MRSystem.commandContext;
 
         while (true) {
 
@@ -25,7 +25,7 @@ export class SImmediatelyCommandExecuteScheduler {
             
             if (commandContext.isRunning()) {
                 commandContext._processCommand();
-                RESystem.sequelContext.attemptFlush(false);
+                MRSystem.sequelContext.attemptFlush(false);
                 return;
             }
             else {
@@ -49,7 +49,7 @@ export class SImmediatelyCommandExecuteScheduler {
                 // コマンド実行中。まだフェーズを進ませない
             }
             else {
-                REGame.world._removeDestroyedObjects();
+                MRLively.world._removeDestroyedObjects();
             }
 
             if (commandContext.isEmpty()) {

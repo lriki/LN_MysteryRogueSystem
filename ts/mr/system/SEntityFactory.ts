@@ -1,6 +1,6 @@
 import { LEntity } from "../lively/LEntity";
 import { MRData } from "../data/MRData";
-import { REGame } from "../lively/REGame";
+import { MRLively } from "../lively/MRLively";
 import { LDecisionBehavior } from "../lively/behaviors/LDecisionBehavior";
 import { LUnitBehavior } from "../lively/behaviors/LUnitBehavior";
 import { LExitPointBehavior } from "ts/mr/lively/behaviors/LExitPointBehavior";
@@ -33,7 +33,7 @@ import { LStorageBehavior } from "ts/mr/lively/behaviors/LStorageBehavior";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { LFloorId } from "ts/mr/lively/LFloorId";
 import { LRatedRandomAIBehavior } from "ts/mr/lively/behaviors/LRatedRandomAIBehavior";
-import { RESystem } from "./RESystem";
+import { MRSystem } from "./MRSystem";
 import { LGrabFootBehavior } from "../lively/abilities/LGrabFootBehavior";
 import { LItemThiefBehavior } from "../lively/behaviors/LItemThiefBehavior";
 import { LShopkeeperBehavior } from "../lively/behaviors/LShopkeeperBehavior";
@@ -50,7 +50,7 @@ import { DEntityKind } from "../data/DEntityKind";
 
 export class SEntityFactory {
     public static newActor(entityId: DEntityId): LEntity {
-        const e = REGame.world.spawnEntity(entityId);
+        const e = MRLively.world.spawnEntity(entityId);
         this.buildActor(e);
         return e;
     }
@@ -128,7 +128,7 @@ export class SEntityFactory {
     }
 
     public static newBasicExitPoint(): LEntity {
-        const e = REGame.world.spawnEntity(MRData.getEntity("kEntity_ExitPoint_A").id);
+        const e = MRLively.world.spawnEntity(MRData.getEntity("kEntity_ExitPoint_A").id);
         this.buildExitPoint(e);
         return e;
     }
@@ -169,7 +169,7 @@ export class SEntityFactory {
 
     public static newEntity(createInfo: DEntityCreateInfo, floorId?: LFloorId): LEntity {
         const entityData = MRData.entities[createInfo.entityId];
-        const entity = REGame.world.spawnEntity(entityData.id);
+        const entity = MRLively.world.spawnEntity(entityData.id);
         this.buildEntity(entity);
 
         // ステート追加
@@ -183,7 +183,7 @@ export class SEntityFactory {
             entity._stackCount = createInfo.stackCount;
         }
         else if (entityData.initialStackCount !== undefined) {
-            entity._stackCount = REGame.world.random().nextIntWithMinMax(entityData.initialStackCount.minValue, entityData.initialStackCount.maxValue + 1);
+            entity._stackCount = MRLively.world.random().nextIntWithMinMax(entityData.initialStackCount.minValue, entityData.initialStackCount.maxValue + 1);
         }
         else {
             entity._stackCount = 1;
@@ -236,16 +236,16 @@ export class SEntityFactory {
 
     public static spawnTroopAndMembers(troop: DTroop, mx: number, my: number, stateIds: DStateId[]): LEntity[] {
         const result = [];
-        const party = REGame.world.newParty();
+        const party = MRLively.world.newParty();
 
         for (const entityId of troop.members) {
-            const entity = this.newEntity(DEntityCreateInfo.makeSingle(entityId, stateIds), REGame.map.floorId());
+            const entity = this.newEntity(DEntityCreateInfo.makeSingle(entityId, stateIds), MRLively.map.floorId());
             party.addMember(entity);
             result.push(entity);
 
-            const block = UMovement.selectNearbyLocatableBlock(REGame.world.random(), mx, my, entity.getHomeLayer(), entity);
+            const block = UMovement.selectNearbyLocatableBlock(MRLively.world.random(), mx, my, entity.getHomeLayer(), entity);
             if (block) {
-                REGame.world.transferEntity(entity, REGame.map.floorId(), block.mx, block.my);
+                MRLively.world.transferEntity(entity, MRLively.map.floorId(), block.mx, block.my);
             }
             else {
                 // 配置できないなら無理に出さない
@@ -282,7 +282,7 @@ export class SEntityFactory {
 
                 
         }
-        RESystem.ext.onNewEntity(entity, entityData);
+        MRSystem.ext.onNewEntity(entity, entityData);
     }
 
     static setupDirectly_Enemy(entity: LEntity, entityData: DEntity) {
@@ -322,7 +322,7 @@ export class SEntityFactory {
                 entity.addBehavior(LShopkeeperBehavior);
                 break;
         }
-        RESystem.ext.onNewEntity(entity, entityData);
+        MRSystem.ext.onNewEntity(entity, entityData);
     }
 }
 

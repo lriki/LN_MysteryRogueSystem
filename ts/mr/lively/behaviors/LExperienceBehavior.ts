@@ -1,5 +1,5 @@
 import { MRData } from "ts/mr/data/MRData";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { LBehavior } from "ts/mr/lively/behaviors/LBehavior";
 import { LEntity } from "../LEntity";
 import { MRBasics } from "ts/mr/data/MRBasics";
@@ -122,7 +122,7 @@ export class LExperienceBehavior extends LBehavior {
     }
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LExperienceBehavior);
+        const b = MRLively.world.spawn(LExperienceBehavior);
         return b;
     }
 

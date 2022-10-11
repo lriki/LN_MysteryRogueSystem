@@ -1,8 +1,8 @@
 import { assert } from "ts/mr/Common";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "./../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -25,20 +25,20 @@ test("projectiles.Breath", () => {
     actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
     // 投げ当てテスト用に壁を作る
-    REGame.map.block(12, 10)._tileShape = LTileShape.Wall;
+    MRLively.map.block(12, 10)._tileShape = LTileShape.Wall;
 
-    RESystem.scheduler.stepSimulation();
+    MRSystem.scheduler.stepSimulation();
 
     //----------------------------------------------------------------------------------------------------
 
     // [食べる]
-    RESystem.dialogContext.postActivity(LActivity.makeEat(actor1, item1).withEntityDirection(6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeEat(actor1, item1).withEntityDirection(6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();
+    MRSystem.scheduler.stepSimulation();
 
     // スキル起点の特殊効果を持った Projectile は地面に落下せずに消える
-    const proj = REGame.map.block(11, 10).layer(DBlockLayerKind.Ground).firstEntity();
+    const proj = MRLively.map.block(11, 10).layer(DBlockLayerKind.Ground).firstEntity();
     expect(proj).toBe(undefined);
 });
 

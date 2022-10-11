@@ -98,13 +98,13 @@
 
 import { assert, MRSerializable } from "ts/mr/Common";
 import { LEntityId } from "../LObject";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { LEntity } from "../LEntity";
 import { LBehavior, SRejectionInfo } from "./LBehavior"
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { SCommandResponse } from "ts/mr/system/SCommand";
 import { MRBasics } from "ts/mr/data/MRBasics";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { ItemRemovedFromInventoryArgs } from "ts/mr/data/predefineds/DBasicEvents";
 import { paramInventoryCapacity } from "ts/mr/PluginParameters";
 
@@ -115,7 +115,7 @@ export class LInventoryBehavior extends LBehavior {
     private _capacity: number = paramInventoryCapacity;
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LInventoryBehavior);
+        const b = MRLively.world.spawn(LInventoryBehavior);
         // Item のディープコピーはやめてみる。
         // 盗み能力を持つ敵にわざとアイテムを盗ませて分裂の杖を振ればアイテム増殖ができてしまうことになる。
         b._entities = [];
@@ -170,12 +170,12 @@ export class LInventoryBehavior extends LBehavior {
     }
 
     public get items(): LEntity[] {
-        return this._entities.map(x => REGame.world.entity(x));
+        return this._entities.map(x => MRLively.world.entity(x));
     }
 
     public iterateItems(func : ((item: LEntity) => void) | ((item: LEntity) => boolean)): void {
         for (const id of this._entities) {
-            const r = func(REGame.world.entity(id));
+            const r = func(MRLively.world.entity(id));
             if (r === false) break;
         }
     } 
@@ -238,7 +238,7 @@ export class LInventoryBehavior extends LBehavior {
         
         // TODO: onRemoveChild と統合したほうがいいかも。
         const args: ItemRemovedFromInventoryArgs = { item: entity };
-        REGame.eventServer.publish(RESystem.commandContext, MRBasics.events.itemRemovedFromInventory, args);
+        MRLively.eventServer.publish(MRSystem.commandContext, MRBasics.events.itemRemovedFromInventory, args);
     }
 
 
@@ -248,7 +248,7 @@ export class LInventoryBehavior extends LBehavior {
 
             
             const args: ItemRemovedFromInventoryArgs = { item: entity };
-            REGame.eventServer.publish(RESystem.commandContext, MRBasics.events.itemRemovedFromInventory, args);
+            MRLively.eventServer.publish(MRSystem.commandContext, MRBasics.events.itemRemovedFromInventory, args);
         }
     }
 

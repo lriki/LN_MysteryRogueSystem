@@ -1,6 +1,6 @@
 import { MRSerializable } from "ts/mr/Common";
 import { LEntity } from "../LEntity";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { LBehavior } from "./LBehavior";
 
 
@@ -16,7 +16,7 @@ export class LStorageBehavior extends LBehavior {
     }
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LStorageBehavior);
+        const b = MRLively.world.spawn(LStorageBehavior);
         return b;
     }
 

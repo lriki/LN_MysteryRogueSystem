@@ -1,4 +1,4 @@
-import { REVisual } from "ts/mr/view/REVisual";
+import { MRView } from "ts/mr/view/MRView";
 import { REVisual_Entity } from "ts/mr/view/REVisual_Entity";
 import { VCharacterSpriteSet } from "ts/mr/view/VCharacterSpriteSet";
 import { VHelper } from "ts/mr/view/VHelper";
@@ -132,11 +132,11 @@ Sprite_Character.prototype.endAllEffect = function() {
 }
 
 Sprite_Character.prototype.findVisual = function(): REVisual_Entity | undefined {
-    if (!REVisual.entityVisualSet) return undefined;
+    if (!MRView.entityVisualSet) return undefined;
 
     const event = this._character;
     if (event instanceof Game_Event) {
-        const visual = REVisual.entityVisualSet.findEntityVisualByRMMZEventId(event.eventId());
+        const visual = MRView.entityVisualSet.findEntityVisualByRMMZEventId(event.eventId());
         return visual;
     }
     else {

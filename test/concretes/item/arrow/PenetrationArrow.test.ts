@@ -1,8 +1,8 @@
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -31,24 +31,24 @@ test("concretes.item.arrow.PenetrationArrow", () => {
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy2"));
-    REGame.world.transferEntity(enemy1, floorId, 15, 10);
-    REGame.world.transferEntity(enemy2, floorId, 17, 10);
+    MRLively.world.transferEntity(enemy1, floorId, 15, 10);
+    MRLively.world.transferEntity(enemy2, floorId, 17, 10);
     const enemy1HP1 = enemy1.actualParam(MRBasics.params.hp);
     const enemy2HP1 = enemy2.actualParam(MRBasics.params.hp);
 
     // Player の右に壁を作る
-    REGame.map.block(11, 10)._tileShape = LTileShape.Wall;
+    MRLively.map.block(11, 10)._tileShape = LTileShape.Wall;
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // [撃つ]
     const activity1 = LActivity.makeShooting(player1, item1).withEntityDirection(6).withConsumeAction();
-    RESystem.dialogContext.postActivity(activity1);
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(activity1);
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 壁を貫通し、2体の Enemy にダメージが出ている
     const enemy1HP2 = enemy1.actualParam(MRBasics.params.hp);

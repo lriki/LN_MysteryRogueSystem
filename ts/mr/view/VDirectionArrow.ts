@@ -1,5 +1,5 @@
-import { REGame } from "ts/mr/lively/REGame";
-import { REVisual } from "./REVisual";
+import { MRLively } from "ts/mr/lively/MRLively";
+import { MRView } from "./MRView";
 
 export class VDirectionArrow extends Sprite {
     private _sprites: Sprite[];
@@ -42,7 +42,7 @@ export class VDirectionArrow extends Sprite {
     // override
     update(): void {
         
-        if (REGame.map.floorId().isTacticsMap()) {
+        if (MRLively.map.floorId().isTacticsMap()) {
             this.visible = true;
         }
         else {
@@ -50,9 +50,9 @@ export class VDirectionArrow extends Sprite {
             return;
         }
 
-        const entity = REGame.camera.focusedEntity();
-        if (entity && REVisual.entityVisualSet) {
-            const visual = REVisual.entityVisualSet.findEntityVisualByEntity(entity);
+        const entity = MRLively.camera.focusedEntity();
+        if (entity && MRView.entityVisualSet) {
+            const visual = MRView.entityVisualSet.findEntityVisualByEntity(entity);
             if (!visual) {
                 // マップ遷移直後など、まだターゲットが生成されていないことがある
                 this.visible = false;

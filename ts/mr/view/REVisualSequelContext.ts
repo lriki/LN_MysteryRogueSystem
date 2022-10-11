@@ -1,11 +1,11 @@
 import { assert } from "ts/mr/Common";
 import { Vector2 } from "ts/mr/math/Vector2";
 import { LUnitBehavior } from "ts/mr/lively/behaviors/LUnitBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SSequelUnit, SSequelClip, SMotionSequel, SAnumationSequel, SWaitSequel, SBalloonSequel, SFloatingAnumationSequel } from "ts/mr/system/SSequel";
 import { DSequelId } from "../data/DSequel";
 
-import { REVisual } from "./REVisual";
+import { MRView } from "./MRView";
 import { REVisualSequel } from "./REVisualSequel";
 import { REVisual_Entity } from "./REVisual_Entity";
 
@@ -43,7 +43,7 @@ export class REVisualSequelContext {
     }
     
     public isDashing(): boolean {
-        const entty = REGame.camera.focusedEntity();
+        const entty = MRLively.camera.focusedEntity();
         if (!entty) return false;
         const behavior = entty.findEntityBehavior(LUnitBehavior);
         if (!behavior) return false;
@@ -96,11 +96,11 @@ export class REVisualSequelContext {
     }
 
     public lockCamera() {
-        REVisual._syncCamera = false;
+        MRView._syncCamera = false;
     }
 
     public unlockCamera() {
-        REVisual._syncCamera = true;
+        MRView._syncCamera = true;
     }
 
     public unlockCancellation() {
@@ -172,10 +172,10 @@ export class REVisualSequelContext {
     }
 
     private _startSequel(sequel: SMotionSequel) {
-        if (!REVisual.manager) throw new Error();
+        if (!MRView.manager) throw new Error();
 
         this._currentSequel = sequel;
-        this._currentVisualSequel = REVisual.manager.createVisualSequel(sequel.sequelId());
+        this._currentVisualSequel = MRView.manager.createVisualSequel(sequel.sequelId());
         this._frameCount = 0;
         this._cancellationLocked = false;
         this._cuurentFinished = false;
@@ -198,7 +198,7 @@ export class REVisualSequelContext {
     }
 
     private _startFloatingAnimation(unit: SFloatingAnumationSequel) {
-        REVisual.manager?.startFloatingAnimation(unit.anumationlId, unit.mx, unit.my);
+        MRView.manager?.startFloatingAnimation(unit.anumationlId, unit.mx, unit.my);
         if (unit.isWait()) {
             this._animationWaiting = true;
         }

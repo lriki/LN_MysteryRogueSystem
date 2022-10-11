@@ -4,10 +4,10 @@ import { MRBasics } from "ts/mr/data/MRBasics";
 import { MRData } from "ts/mr/data/MRData";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SFeetDialog } from "ts/mr/system/dialogs/SFeetDialog";
 import { SItemListDialog } from "ts/mr/system/dialogs/SItemListDialog";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { TestEnv } from "../../TestEnv";
 
@@ -26,7 +26,7 @@ test("concretes.dialogs.ItemListDialog.test", () => {
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草_A").id, [], "item1"));
     inventory1.addEntity(item1);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     const dialog = new SItemListDialog(player1, inventory1);
     const actionList = dialog.makeActionList(item1);

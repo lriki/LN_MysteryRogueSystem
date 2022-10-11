@@ -1,6 +1,6 @@
 import { MRDataManager } from "ts/mr/data/MRDataManager";
-import { REGame } from "ts/mr/lively/REGame";
-import { REVisual } from "ts/mr/view/REVisual";
+import { MRLively } from "ts/mr/lively/MRLively";
+import { MRView } from "ts/mr/view/MRView";
 
 
 export class RMMZHelper {
@@ -83,9 +83,9 @@ export class RMMZHelper {
         if ($gamePlayer.isTransferring()) return;
 
 
-        const entity = REGame.camera.focusedEntity();
-        if (entity && REVisual.entityVisualSet) {
-            const visual = REVisual.entityVisualSet.findEntityVisualByEntity(entity);
+        const entity = MRLively.camera.focusedEntity();
+        if (entity && MRView.entityVisualSet) {
+            const visual = MRView.entityVisualSet.findEntityVisualByEntity(entity);
             if (visual) {
                     
                 // [2021/11/22] 移動→ワープのように、内部で locate を伴いつつ Sequel が連続で呼び出されたとき、

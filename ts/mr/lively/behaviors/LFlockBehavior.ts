@@ -5,14 +5,14 @@ import { MRData } from "ts/mr/data/MRData";
 import { LBehavior } from "../internal";
 import { LEntity } from "../LEntity";
 import { LEventResult } from "../LEventServer";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 
 
 @MRSerializable
 export class LFlockBehavior extends LBehavior {
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LFlockBehavior);
+        const b = MRLively.world.spawn(LFlockBehavior);
         return b;
     }
     
@@ -24,7 +24,7 @@ export class LFlockBehavior extends LBehavior {
 
     onPertyChanged(self: LEntity): void {
         if (self.partyId() > 0) {
-            REGame.world.party(self.partyId()).subscribe(MRBasics.events.effectReacted, this);
+            MRLively.world.party(self.partyId()).subscribe(MRBasics.events.effectReacted, this);
         }
     }
     

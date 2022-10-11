@@ -1,7 +1,7 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "./TestEnv";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 import { MRData } from "ts/mr/data/MRData";
@@ -23,9 +23,9 @@ test("Equipment.EquipOnOff", () => {
 
     // Enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 21, 10);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 21, 10);
 
-    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
     
     //----------------------------------------------------------------------------------------------------
 
@@ -47,11 +47,11 @@ test("Equipment.EquipOnOff", () => {
     inventory.addEntity(shield1);
 
     // [装備]
-    RESystem.dialogContext.postActivity(LActivity.makeEquip(player1, weapon1));
-    RESystem.dialogContext.postActivity(LActivity.makeEquip(player1, shield1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeEquip(player1, weapon1));
+    MRSystem.dialogContext.postActivity(LActivity.makeEquip(player1, shield1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
     
     // 装備されていること。
     const equipmens = player1.getEntityBehavior(LEquipmentUserBehavior);
@@ -69,11 +69,11 @@ test("Equipment.EquipOnOff", () => {
     //----------------------------------------------------------------------------------------------------
 
     // [はずす]
-    RESystem.dialogContext.postActivity(LActivity.makeEquipOff(player1, weapon1));
-    RESystem.dialogContext.postActivity(LActivity.makeEquipOff(player1, shield1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeEquipOff(player1, weapon1));
+    MRSystem.dialogContext.postActivity(LActivity.makeEquipOff(player1, shield1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     // 外れていること。
     expect(equipmens.isEquipped(weapon1)).toBe(false);
@@ -97,22 +97,22 @@ test("Equipment.Put_Throw", () => {
     const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Shield1));
     inventory.addEntity(shield1);
 
-    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // [装備]
-    RESystem.dialogContext.postActivity(LActivity.makeEquip(player1, weapon1));
-    RESystem.dialogContext.postActivity(LActivity.makeEquip(player1, shield1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeEquip(player1, weapon1));
+    MRSystem.dialogContext.postActivity(LActivity.makeEquip(player1, shield1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
     
     // [置く]
-    RESystem.dialogContext.postActivity(LActivity.makePut(player1, weapon1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makePut(player1, weapon1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     expect(equipmens.isEquipped(weapon1)).toBe(false);  // 装備からは外れていること。
     expect(weapon1.isOnGround()).toBe(true);            // アイテムは地面に落ちている。
@@ -120,10 +120,10 @@ test("Equipment.Put_Throw", () => {
     //----------------------------------------------------------------------------------------------------
 
     // [投げる]
-    RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, shield1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeThrow(player1, shield1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     expect(equipmens.isEquipped(shield1)).toBe(false);  // 装備からは外れていること。
     expect(shield1.isOnGround()).toBe(true);            // アイテムは地面に落ちている。
@@ -143,37 +143,37 @@ test("Equipment.Curse", () => {
 
     // 武器 入手 (呪い付き)
     const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1, [MRData.getState("kState_System_Curse").id]));
-    REGame.world.transferEntity(weapon1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    MRLively.world.transferEntity(weapon1, TestEnv.FloorId_FlatMap50x50, 10, 10);
 
-    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // [拾う]
-    RESystem.dialogContext.postActivity(LActivity.makePick(player1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makePick(player1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     expect(inventory.contains(weapon1)).toBe(true);   // アイテムを拾えていること
     
     //----------------------------------------------------------------------------------------------------
 
     // [装備]
-    RESystem.dialogContext.postActivity(LActivity.makeEquip(player1, weapon1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeEquip(player1, weapon1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     expect(equipmens.isEquipped(weapon1)).toBe(true);   // 装備できていること。
 
     //----------------------------------------------------------------------------------------------------
 
     // 呪われていない武器を [装備]
-    RESystem.dialogContext.postActivity(LActivity.makeEquip(player1, weapon2).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeEquip(player1, weapon2).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     expect(equipmens.isEquipped(weapon1)).toBe(true);   // 呪われた武器は外せない
     expect(equipmens.isEquipped(weapon2)).toBe(false);
@@ -181,22 +181,22 @@ test("Equipment.Curse", () => {
     //----------------------------------------------------------------------------------------------------
 
     // [はずす]
-    RESystem.dialogContext.postActivity(LActivity.makeEquipOff(player1, weapon1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeEquipOff(player1, weapon1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     expect(equipmens.isEquipped(weapon1)).toBe(true);   // 外れないこと。
     
     //----------------------------------------------------------------------------------------------------
 
     // [置く]
-    RESystem.dialogContext.postActivity(LActivity.makePut(player1, weapon1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makePut(player1, weapon1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
-    const message = REGame.messageHistory;
+    const message = MRLively.messageHistory;
     expect(equipmens.isEquipped(weapon1)).toBe(true);   // 外れないこと。
     expect(weapon1.isOnGround()).toBe(false);           // 地面に置かれたりしていないこと。
 });
@@ -214,16 +214,16 @@ test("Equipment.UpgradeValue", () => {
     inventory.addEntity(weapon1);
     inventory.addEntity(shield1);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // [装備]
-    RESystem.dialogContext.postActivity(LActivity.makeEquip(player1, weapon1));
-    RESystem.dialogContext.postActivity(LActivity.makeEquip(player1, shield1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeEquip(player1, weapon1));
+    MRSystem.dialogContext.postActivity(LActivity.makeEquip(player1, shield1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     const atk1 = player1.actualParam(MRBasics.params.atk);
     const def1 = player1.actualParam(MRBasics.params.def);
@@ -272,7 +272,7 @@ test("Equipment.IdentifyUpgradeValue", () => {
     const name2 = UName.makeNameAsItem(item1);
     expect(name2.includes("+2")).toBe(true);
 
-    RESystem.scheduler.stepSimulation();
+    MRSystem.scheduler.stepSimulation();
 });
 
 test("Equipment.EquipReaction", () => {
@@ -288,9 +288,9 @@ test("Equipment.EquipReaction", () => {
 
     // 盾は足元へ
     const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Shield1));
-    REGame.world.transferEntity(shield1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    MRLively.world.transferEntity(shield1, TestEnv.FloorId_FlatMap50x50, 10, 10);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 

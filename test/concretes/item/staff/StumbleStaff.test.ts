@@ -1,6 +1,6 @@
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -26,20 +26,20 @@ test("concretes.item.staff.StumbleStaff.basic", () => {
 
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
     //----------------------------------------------------------------------------------------------------
 
     // [振る]
-    RESystem.dialogContext.postActivity(LActivity.makeWave(player1, item1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeWave(player1, item1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 何か足元に落ちてる
-    const item2 = REGame.map.block(13, 10).getFirstEntity();
+    const item2 = MRLively.map.block(13, 10).getFirstEntity();
     expect(item2 !== undefined).toBe(true);
 });
 
@@ -63,18 +63,18 @@ test("concretes.activity.Stumble.prevention", () => {
 
     // trap1 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_転び石_A").id, [], "trap1"));
-    REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    MRLively.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
     
     // player を右 (罠上) へ移動
-    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    REGame.world.random().resetSeed(5);     // 乱数調整
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRLively.world.random().resetSeed(5);     // 乱数調整
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 転倒は予防され、アイテムは落下していないこと。また杖の使用回数が減っていること。
     const hp2 = player1.actualParam(MRBasics.params.hp);

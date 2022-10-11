@@ -1,7 +1,7 @@
 import { SCommand, SCommandResponse, SPhaseResult } from "../../system/SCommand";
 import { SCommandContext, SHandleCommandResult } from "../../system/SCommandContext";
 import { CommandArgs, LBehavior, onAttackReaction, onDirectAttackDamaged, onPreThrowReaction, onProceedFloorReaction, onThrowReaction, onWalkedOnTopAction, onWaveReaction } from "./LBehavior";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { LEntity } from "../LEntity";
 import { Helpers } from "ts/mr/system/Helpers";
 import { LInventoryBehavior } from "./LInventoryBehavior";
@@ -28,7 +28,7 @@ import { SActivityContext } from "ts/mr/system/SActivityContext";
 import { ULimitations } from "ts/mr/utility/ULimitations";
 import { LTrapBehavior } from "./LTrapBehavior";
 import { SFeetDialog } from "ts/mr/system/dialogs/SFeetDialog";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { LReaction } from "../LCommon";
 
 enum LFeetProcess {
@@ -54,7 +54,7 @@ export class LUnitBehavior extends LBehavior {
     _fastforwarding: boolean = false;
     
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LUnitBehavior);
+        const b = MRLively.world.spawn(LUnitBehavior);
         b._factionId = this._factionId;
         b._speedLevel = this._speedLevel;
         b._waitTurnCount = this._waitTurnCount;
@@ -205,7 +205,7 @@ export class LUnitBehavior extends LBehavior {
             
             // Prepare event
             const args: WalkEventArgs = { walker: self, targetX: self.mx + offset.x, targetY: self.my + offset.y };
-            if (!REGame.eventServer.publish(cctx, MRBasics.events.preWalk, args)) return SCommandResponse.Canceled;
+            if (!MRLively.eventServer.publish(cctx, MRBasics.events.preWalk, args)) return SCommandResponse.Canceled;
 
             if (activity.isFastForward()) {
                 this._straightDashing = true;
@@ -217,7 +217,7 @@ export class LUnitBehavior extends LBehavior {
                 cctx.postSequel(self, MRBasics.sequels.MoveSequel).setStartPosition(startX, startY);
 
                 // Projectile の移動では通知したくないので、UMovement.moveEntity() の中ではなく Unit の移動側で通知する。
-                REGame.eventServer.publish(cctx, MRBasics.events.walked, args);
+                MRLively.eventServer.publish(cctx, MRBasics.events.walked, args);
 
                 // 次の DialogOpen 時に足元の優先コマンドを表示したりする
                 self.immediatelyAfterAdjacentMoving = true;
@@ -244,7 +244,7 @@ export class LUnitBehavior extends LBehavior {
         else if (activity.actionId() == MRBasics.actions.PickActionId) {
             const inventory = self.findEntityBehavior(LInventoryBehavior);
             if (inventory) {
-                const block = REGame.map.block(self.mx, self.my);
+                const block = MRLively.map.block(self.mx, self.my);
                 const layer = block.layer(DBlockLayerKind.Ground);
                 const itemEntity = layer.firstEntity();
                 if (itemEntity) {
@@ -256,7 +256,7 @@ export class LUnitBehavior extends LBehavior {
                         if (gold) {
                             // お金だった
                             inventory.gainGold(gold.gold());
-                            REGame.map._removeEntity(itemEntity);
+                            MRLively.map._removeEntity(itemEntity);
                             cctx.postDestroy(itemEntity);
                             cctx.postMessage(tr2("%1は%2をひろった").format(name, UName.makeNameAsItem(itemEntity)));
                             SSoundManager.playPickItem();
@@ -264,7 +264,7 @@ export class LUnitBehavior extends LBehavior {
                         else {
                             // 普通のアイテムだった
                             if (inventory.canAddEntityWithStacking(itemEntity)) {
-                                REGame.map._removeEntity(itemEntity);
+                                MRLively.map._removeEntity(itemEntity);
                                 inventory.addEntityWithStacking(itemEntity);
                                 cctx.postMessage(tr2("%1は%2をひろった").format(name, UName.makeNameAsItem(itemEntity)));
                                 SSoundManager.playPickItem();
@@ -284,14 +284,14 @@ export class LUnitBehavior extends LBehavior {
             
             // Prepare event
             const args: PutEventArgs = { actor: self };
-            if (!REGame.eventServer.publish(cctx, MRBasics.events.prePut, args)) return SCommandResponse.Canceled;
+            if (!MRLively.eventServer.publish(cctx, MRBasics.events.prePut, args)) return SCommandResponse.Canceled;
 
             const itemEntity = activity.object();//cmd.reactor();
             const inventory = self.findEntityBehavior(LInventoryBehavior);
             assert(itemEntity);
             assert(inventory);
             
-            const block = REGame.map.block(self.mx, self.my);
+            const block = MRLively.map.block(self.mx, self.my);
             const layer = block.layer(DBlockLayerKind.Ground);
             if (!layer.isContainsAnyEntity()) {
                 // 足元に置けそうなら試行
@@ -302,7 +302,7 @@ export class LUnitBehavior extends LBehavior {
                         }
                         else {
                             itemEntity.removeFromParent();
-                            REGame.map.appearEntity(itemEntity, self.mx, self.my);
+                            MRLively.map.appearEntity(itemEntity, self.mx, self.my);
 
                             cctx.postMessage(tr("{0} を置いた。", UName.makeNameAsItem(itemEntity)));
                             cctx.post(itemEntity, self, subject, undefined, onGrounded);
@@ -399,16 +399,16 @@ export class LUnitBehavior extends LBehavior {
             
             const inventory = self.getEntityBehavior(LInventoryBehavior);
             const item1 = activity.object();
-            const block = REGame.map.block(self.mx, self.my);
+            const block = MRLively.map.block(self.mx, self.my);
             const layer = block.layer(DBlockLayerKind.Ground);
             const item2 = layer.firstEntity();
             if (item2) {
                 // TODO: 呪いの処理など、アイテムを今いる場所から取り外せるかチェック入れる
 
-                REGame.map._removeEntity(item2);
+                MRLively.map._removeEntity(item2);
                 inventory.removeEntity(item1);
 
-                REGame.map.appearEntity(item1, self.mx, self.my);
+                MRLively.map.appearEntity(item1, self.mx, self.my);
                 inventory.addEntity(item2);
 
                 cctx.postMessage(tr("{0} と {1} を交換した。", UName.makeNameAsItem(item1), UName.makeNameAsItem(item2)));
@@ -531,7 +531,7 @@ export class LUnitBehavior extends LBehavior {
 
         const [result, targetEntity] = this.judgeFeetProcess(self);
         if (result == LFeetProcess.Dialog) {
-            RESystem.sequelContext.trapPerforming = true;
+            MRSystem.sequelContext.trapPerforming = true;
         }
 
         return SCommandResponse.Pass;
@@ -558,7 +558,7 @@ export class LUnitBehavior extends LBehavior {
                 // 歩行による自動拾得から実行される場合、この時点では Sequel は Flush されていないことがある。
                 // v0.5.0 時点では Pick のハンドリングでは REGame.map._removeEntity() を直接実行しているので、
                 // その前に Flush しておかないと、移動前にいきなり Item が消えたように見えてしまう。
-                RESystem.sequelContext.attemptFlush(true);
+                MRSystem.sequelContext.attemptFlush(true);
                 cctx.postActivity(LActivity.makePick(self));
                 break;
             default:
@@ -616,7 +616,7 @@ export class LUnitBehavior extends LBehavior {
     private judgeFeetProcess(self: LEntity): [LFeetProcess, LEntity | undefined] {
         if (this._manualMovement) {
             if (self.immediatelyAfterAdjacentMoving) {
-                const targetEntity = REGame.map.firstFeetEntity(self);
+                const targetEntity = MRLively.map.firstFeetEntity(self);
                 if (targetEntity && !targetEntity.findEntityBehavior(LTrapBehavior)) {
                     const reactions = targetEntity.queryReactions();
                     if (reactions.length > 0) {

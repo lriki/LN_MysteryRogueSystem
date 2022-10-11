@@ -6,7 +6,7 @@ import { SSchedulerPhase } from "../system/scheduling/SSchedulerPhase";
 import { LUnitBehavior } from "./behaviors/LUnitBehavior";
 import { LEntity } from "./LEntity";
 import { LBehaviorId, LEntityId } from "./LObject";
-import { REGame } from "./REGame";
+import { MRLively } from "./MRLively";
 
 export type LTOUnitId = number;
 
@@ -117,7 +117,7 @@ export class LSchedulingUnit {
     }
 
     public entity(): LEntity {
-        return REGame.world.entity(this._entityId);
+        return MRLively.world.entity(this._entityId);
     }
 
     public factionId(): number {
@@ -125,7 +125,7 @@ export class LSchedulingUnit {
     }
 
     public unitBehavior(): LUnitBehavior {
-        return REGame.world.behavior(this._unitBehaviorId) as LUnitBehavior;
+        return MRLively.world.behavior(this._unitBehaviorId) as LUnitBehavior;
     }
 
     public calcActionCount(): number {
@@ -221,7 +221,7 @@ export class LScheduler2 {
         this.currentRunIndex = 0;
 
         // 行動できるすべての entity を集める
-        for (const entity of REGame.map.entities()) {
+        for (const entity of MRLively.map.entities()) {
             const behavior = entity.findEntityBehavior(LUnitBehavior);
             if (behavior) {
                 //const canAct = entity.iterateStates(s => s.stateEffect().restriction != DStateRestriction.NotAction);

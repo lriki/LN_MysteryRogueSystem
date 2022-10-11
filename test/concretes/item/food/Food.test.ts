@@ -4,8 +4,8 @@ import { MRBasics } from "ts/mr/data/MRBasics";
 import { MRData } from "ts/mr/data/MRData";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRLively } from "ts/mr/lively/MRLively";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { TestEnv } from "../../../TestEnv";
 
@@ -32,14 +32,14 @@ test("concretes.item.food.LittleFood", () => {
 
     TestUtils.testCommonFood(item1);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // [食べる]
     TestUtils.submitActivity(LActivity.makeEat(player1, item1).withConsumeAction());
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 食べられたので消滅済み
     expect(item1.isDestroyed()).toBeTruthy();
@@ -47,7 +47,7 @@ test("concretes.item.food.LittleFood", () => {
     // FP が回復しているはず。
     expect(player1.actualParam(MRBasics.params.fp)).toBe(6990);
 
-    const message = REGame.messageHistory;
+    const message = MRLively.messageHistory;
     expect(message.countIncludesText("おなかがふくれた。")).toBe(1);
 
     //----------------------------------------------------------------------------------------------------
@@ -59,7 +59,7 @@ test("concretes.item.food.LittleFood", () => {
     // [食べる]
     TestUtils.submitActivity(LActivity.makeEat(player1, item2).withConsumeAction());
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 最大値も含め、FPが増えている
     const maxFp2 = player1.idealParam(MRBasics.params.fp);
@@ -89,7 +89,7 @@ test("concretes.item.food.CorrodedFood", () => {
     
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, floorId, 15, 10);
+    MRLively.world.transferEntity(enemy1, floorId, 15, 10);
     const enemy1Hp1 = enemy1.actualParam(MRBasics.params.hp);
     const enemy1Pow1 = enemy1.actualParam(MRBasics.params.pow);
 
@@ -98,19 +98,19 @@ test("concretes.item.food.CorrodedFood", () => {
 
     TestUtils.testCommonFood(item1);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // [食べる]
     TestUtils.submitActivity(LActivity.makeEat(player1, item1).withConsumeAction());
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 食べられたので消滅済み
     expect(item1.isDestroyed()).toBeTruthy();
 
-    const message = REGame.messageHistory;
+    const message = MRLively.messageHistory;
     const hp2 = player1.actualParam(MRBasics.params.hp);
     const pow2 = player1.actualParam(MRBasics.params.pow);
     expect(player1.actualParam(MRBasics.params.fp)).toBeGreaterThan(2000);// FP が回復しているはず。

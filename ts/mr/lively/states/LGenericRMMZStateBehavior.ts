@@ -5,7 +5,7 @@ import { LEntity } from "../LEntity";
 import { LState } from "./LState";
 import { DAutoRemovalTiming, DState, DStateEffect, DStateRestriction } from "ts/mr/data/DState";
 import { assert, MRSerializable } from "ts/mr/Common";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { LConfusionAI, LConfusionAIRestriction } from "../ai/LConfusionAI";
 import { LActivity } from "../activities/LActivity";
 import { LUnitBehavior } from "../behaviors/LUnitBehavior";
@@ -31,7 +31,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
     }
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LGenericRMMZStateBehavior);
+        const b = MRLively.world.spawn(LGenericRMMZStateBehavior);
         b._stateTurn = this._stateTurn;
         return b;
     }
@@ -54,7 +54,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
             }
             else {
                 const variance = 1 + Math.max(data.maxTurns - data.minTurns, 0);
-                this._stateTurn = data.minTurns + REGame.world.random().nextIntWithMax(variance);
+                this._stateTurn = data.minTurns + MRLively.world.random().nextIntWithMax(variance);
             }
         }
     }

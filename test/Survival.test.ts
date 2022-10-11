@@ -1,7 +1,7 @@
 import { TestEnv } from "./TestEnv";
 import { MRBasics } from "ts/mr/data/MRBasics";
-import { REGame } from "ts/mr/lively/REGame";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRLively } from "ts/mr/lively/MRLively";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { SDebugHelpers } from "ts/mr/system/SDebugHelpers";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
@@ -26,11 +26,11 @@ test("Survival.FP", () => {
     
     //----------------------------------------------------------------------------------------------------
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     expect(player1.actualParam(MRBasics.params.fp)).toBe(10000); // Dialog 開いた状態なので未行動。FP消費はされていない。
 
-    const dialogContext = RESystem.dialogContext;
+    const dialogContext = MRSystem.dialogContext;
 
     //----------------------------------------------------------------------------------------------------
     // 移動で FP が減少するか？
@@ -38,7 +38,7 @@ test("Survival.FP", () => {
     dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction());
     dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     expect(player1.actualParam(MRBasics.params.fp)).toBe(9990);  // FP が減少していること
 
@@ -51,7 +51,7 @@ test("Survival.FP", () => {
     dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction());
     dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     expect(player1.actualParam(MRBasics.params.hp)).toBe(prevHP - 1);   // HP が減少していること
 
@@ -63,10 +63,10 @@ test("Survival.FP", () => {
 
     // [食べる]
     const activity = LActivity.makeEat(player1, item1).withConsumeAction();
-    RESystem.dialogContext.postActivity(activity);
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(activity);
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     expect(player1.actualParam(MRBasics.params.fp)).toBe(490);  // 草を食べた分だけ FP が回復していること
     // NOTE: 原作では、食料を食べた直後、9回移動すると満腹度が1減る。
@@ -78,18 +78,18 @@ test("Survival.FP", () => {
     // UT薬草を Player の右に置く
     const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
     item2._name = "item2";
-    REGame.world.transferEntity(item2, TestEnv.FloorId_FlatMap50x50, player1.mx + 2, player1.my);
+    MRLively.world.transferEntity(item2, TestEnv.FloorId_FlatMap50x50, player1.mx + 2, player1.my);
     
     // UT薬草を Player へ向かって吹き飛ばす
     const subject = new SEffectSubject(player1); // 適当に
-    LProjectileBehavior.startMoveAsProjectile(RESystem.commandContext, item2, subject, 4, 5);
+    LProjectileBehavior.startMoveAsProjectile(MRSystem.commandContext, item2, subject, 4, 5);
 
     // Player は何もしない (FP は 1 減る)
-    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-    expect(REGame.world.findEntity(item2.entityId())).toBe(undefined);  // UT薬草は Player と衝突したので消滅している
+    expect(MRLively.world.findEntity(item2.entityId())).toBe(undefined);  // UT薬草は Player と衝突したので消滅している
     expect(player1.actualParam(MRBasics.params.fp)).toBe(480);            // 投げ当てたときの効果は発動するが、FP は回復しない
 });

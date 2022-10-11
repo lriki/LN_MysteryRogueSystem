@@ -5,7 +5,7 @@ import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { LStorageBehavior } from "ts/mr/lively/behaviors/LStorageBehavior";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { LEntityId } from "ts/mr/lively/LObject";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SDialog } from "../SDialog";
 import { SCommonCommand } from "./SCommonCommand";
 import { SDialogCommand } from "./SDialogCommand";
@@ -26,10 +26,10 @@ export class SNicknameDialog extends SDialog {
     // }
 
     public get item(): LEntity {
-        return REGame.world.entity(this._targetItemId);
+        return MRLively.world.entity(this._targetItemId);
     }
 
     public setNickname(name: string): void {
-        REGame.identifyer.setNickname(this.item.dataId, name);
+        MRLively.identifyer.setNickname(this.item.dataId, name);
     }
 }

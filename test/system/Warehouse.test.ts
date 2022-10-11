@@ -1,8 +1,8 @@
 import { assert } from "ts/mr/Common";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "./../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -30,27 +30,27 @@ test("system.Warehouse.Store.Basic", () => {
     inventory1.addEntity(weapon1);
     equipmentUser1.equipOnUtil(weapon1);
 
-    const warehouse1 = REGame.world.getFirstEntityByKey("kEntity_Warehouse_A");
+    const warehouse1 = MRLively.world.getFirstEntityByKey("kEntity_Warehouse_A");
     const inventory2 = warehouse1.getEntityBehavior(LInventoryBehavior);
 
     // Dialog を開く
     let submitted = false;
-    RESystem.commandContext.openDialog(player1, new SWarehouseStoreDialog(player1, warehouse1), false)
+    MRSystem.commandContext.openDialog(player1, new SWarehouseStoreDialog(player1, warehouse1), false)
     .then((d: SWarehouseStoreDialog) => {
         submitted = true;
     });
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
-    const dialog = RESystem.dialogContext.activeDialog();
+    const dialog = MRSystem.dialogContext.activeDialog();
     assert(dialog instanceof SWarehouseStoreDialog);
 
     // 草 → 武器の順で2個あずける
     dialog.storeItems([grass1, weapon1]);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
     expect(inventory1.hasAnyItem()).toBeFalsy(); // もちものは空になる
     expect(equipmentUser1.isEquipped(weapon1)).toBeFalsy(); // 装備は外れている
@@ -73,7 +73,7 @@ test("system.Warehouse.Store.Fully", () => {
     inventory1.addEntity(grass1);
     inventory1.addEntity(weapon1);
 
-    const warehouse1 = REGame.world.getFirstEntityByKey("kEntity_Warehouse_A");
+    const warehouse1 = MRLively.world.getFirstEntityByKey("kEntity_Warehouse_A");
     const inventory2 = warehouse1.getEntityBehavior(LInventoryBehavior);
 
     // 容量-1 までアイテムを詰め込む
@@ -84,22 +84,22 @@ test("system.Warehouse.Store.Fully", () => {
 
     // Dialog を開く
     let submitted = false;
-    RESystem.commandContext.openDialog(player1, new SWarehouseStoreDialog(player1, warehouse1), false)
+    MRSystem.commandContext.openDialog(player1, new SWarehouseStoreDialog(player1, warehouse1), false)
     .then((d: SWarehouseStoreDialog) => {
         submitted = true;
     });
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
-    const dialog = RESystem.dialogContext.activeDialog();
+    const dialog = MRSystem.dialogContext.activeDialog();
     assert(dialog instanceof SWarehouseStoreDialog);
 
     // あずける
     dialog.storeItems([grass1, weapon1]);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
     // アイテムの受け渡しは発生していないこと
     expect(inventory1.itemCount).toBe(2);
@@ -113,7 +113,7 @@ test("system.Warehouse.Withdraw.Basic", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
 
-    const warehouse1 = REGame.world.getFirstEntityByKey("kEntity_Warehouse_A");
+    const warehouse1 = MRLively.world.getFirstEntityByKey("kEntity_Warehouse_A");
     const inventory2 = warehouse1.getEntityBehavior(LInventoryBehavior);
 
     const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_こん棒_A").id, [], "weapon1"));
@@ -123,22 +123,22 @@ test("system.Warehouse.Withdraw.Basic", () => {
 
     // Dialog を開く
     let submitted = false;
-    RESystem.commandContext.openDialog(player1, new SWarehouseWithdrawDialog(player1, warehouse1), false)
+    MRSystem.commandContext.openDialog(player1, new SWarehouseWithdrawDialog(player1, warehouse1), false)
     .then((d: SWarehouseWithdrawDialog) => {
         submitted = true;
     });
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
-    const dialog = RESystem.dialogContext.activeDialog();
+    const dialog = MRSystem.dialogContext.activeDialog();
     assert(dialog instanceof SWarehouseWithdrawDialog);
 
     // 草 → 武器の順でとりだす
     dialog.withdrawItems([grass1, weapon1]);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
     expect(inventory2.hasAnyItem()).toBeFalsy(); // 倉庫空になる
 
@@ -155,7 +155,7 @@ test("system.Warehouse.Withdraw.Fully", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
 
-    const warehouse1 = REGame.world.getFirstEntityByKey("kEntity_Warehouse_A");
+    const warehouse1 = MRLively.world.getFirstEntityByKey("kEntity_Warehouse_A");
     const inventory2 = warehouse1.getEntityBehavior(LInventoryBehavior);
     
     // 容量-1 までアイテムを詰め込む
@@ -171,22 +171,22 @@ test("system.Warehouse.Withdraw.Fully", () => {
 
     // Dialog を開く
     let submitted = false;
-    RESystem.commandContext.openDialog(player1, new SWarehouseWithdrawDialog(player1, warehouse1), false)
+    MRSystem.commandContext.openDialog(player1, new SWarehouseWithdrawDialog(player1, warehouse1), false)
     .then((d: SWarehouseWithdrawDialog) => {
         submitted = true;
     });
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
-    const dialog = RESystem.dialogContext.activeDialog();
+    const dialog = MRSystem.dialogContext.activeDialog();
     assert(dialog instanceof SWarehouseWithdrawDialog);
 
     // とりだす
     dialog.withdrawItems([grass1, weapon1]);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
     // アイテムの受け渡しは発生していないこと
     expect(inventory1.itemCount).toBe(inventory1.capacity - 1);
@@ -200,7 +200,7 @@ test("system.Warehouse.Sell", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
 
-    const warehouse1 = REGame.world.getFirstEntityByKey("kEntity_Warehouse_A");
+    const warehouse1 = MRLively.world.getFirstEntityByKey("kEntity_Warehouse_A");
     const inventory2 = warehouse1.getEntityBehavior(LInventoryBehavior);
 
     const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_こん棒_A").id, [], "weapon1"));
@@ -210,22 +210,22 @@ test("system.Warehouse.Sell", () => {
 
     // Dialog を開く
     let submitted = false;
-    RESystem.commandContext.openDialog(player1, new SItemSellDialog(warehouse1, player1, warehouse1), false)
+    MRSystem.commandContext.openDialog(player1, new SItemSellDialog(warehouse1, player1, warehouse1), false)
     .then((d: SItemSellDialog) => {
         submitted = true;
     });
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
-    const dialog = RESystem.dialogContext.activeDialog();
+    const dialog = MRSystem.dialogContext.activeDialog();
     assert(dialog instanceof SItemSellDialog);
 
     dialog.setResultItems([grass1, weapon1]);
     dialog.submitSell();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
     expect(inventory2.hasAnyItem()).toBeFalsy();
     expect(weapon1.isDestroyed()).toBeTruthy();
@@ -236,7 +236,7 @@ test("system.Warehouse.Sell", () => {
 test("system.Warehouse.ChangeCapacity", () => {
     TestEnv.newGame();
 
-    const warehouse1 = REGame.world.getFirstEntityByKey("kEntity_Warehouse_A");
+    const warehouse1 = MRLively.world.getFirstEntityByKey("kEntity_Warehouse_A");
     const inventory2 = warehouse1.getEntityBehavior(LInventoryBehavior);
 
     UProperty.setValue("kEntity_Warehouse_A", "Entity:Inventory.capacity", 100);

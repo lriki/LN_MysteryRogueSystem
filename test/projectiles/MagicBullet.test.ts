@@ -1,8 +1,8 @@
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -29,24 +29,24 @@ test("projectiles.MagicBullet", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, floorId, 15, 10);
+    MRLively.world.transferEntity(enemy1, floorId, 15, 10);
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const count1 = REGame.map.entities().length;
+    const count1 = MRLively.map.entities().length;
 
     //----------------------------------------------------------------------------------------------------
 
     // [振る]
-    RESystem.dialogContext.postActivity(LActivity.makeWave(actor1, item1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeWave(actor1, item1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // const hp = enemy1.actualParam(REBasics.params.hp);
     // const count2 = REGame.map.entities().length;
     // // スキル起点の特殊効果を持った Projectile は地面に落下せずに消える
-    const block = REGame.map.block(15, 10);
+    const block = MRLively.map.block(15, 10);
     //const proj = .layer(DBlockLayerKind.Ground).firstEntity();
     expect(block.getFirstEntity()).toBe(undefined);
 });

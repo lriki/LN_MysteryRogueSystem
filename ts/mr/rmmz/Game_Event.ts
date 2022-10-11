@@ -1,11 +1,11 @@
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SRmmzHelpers } from "ts/mr/system/SRmmzHelpers";
 import { assert } from "../Common";
 import { DAnnotationReader, RmmzREEventAttribute } from "../data/importers/DAttributeReader";
 import { DPrefab, DPrefabId } from "../data/DPrefab";
 import { MRDataManager } from "../data/MRDataManager";
 import { LState } from "../lively/states/LState";
-import { REVisual } from "../view/REVisual";
+import { MRView } from "../view/MRView";
 
 
 const dummyMapEvent: IDataMapEvent = {
@@ -105,11 +105,11 @@ Game_Event.prototype.meetsConditions = function(page: IDataMapEventPage): boolea
     assert(index >= 0);
     const additionalData = this._pageData_RE[index];
     if (additionalData && additionalData.condition_state) {
-        if (REVisual.entityVisualSet) {
-            const visual = REVisual.entityVisualSet.findEntityVisualByRMMZEventId(this.eventId());
+        if (MRView.entityVisualSet) {
+            const visual = MRView.entityVisualSet.findEntityVisualByRMMZEventId(this.eventId());
             if (visual) {
                 const statekey = additionalData.condition_state;
-                const state = visual.entity()._states.find(x => (REGame.world.object(x) as LState).stateData().key == statekey);
+                const state = visual.entity()._states.find(x => (MRLively.world.object(x) as LState).stateData().key == statekey);
                 if (!state) {
                     return false;
                 }

@@ -1,5 +1,5 @@
-import { REGame } from "../lively/REGame";
-import { RESystem } from "../system/RESystem";
+import { MRLively } from "../lively/MRLively";
+import { MRSystem } from "../system/MRSystem";
 
 enum FloorRestartStep {
     Idle,
@@ -12,14 +12,14 @@ export class FloorRestartSequence {
     private static _step = FloorRestartStep.Idle;
 
     public static isProcessing(): boolean {
-        return this._step != FloorRestartStep.Idle || RESystem.requestedRestartFloorItem.hasAny();
+        return this._step != FloorRestartStep.Idle || MRSystem.requestedRestartFloorItem.hasAny();
     }
 
     public static update(scene: Scene_Map): void {
 
         switch (this._step) {
             case FloorRestartStep.Idle: {
-                if (RESystem.requestedRestartFloorItem.hasAny()) {
+                if (MRSystem.requestedRestartFloorItem.hasAny()) {
                     // Scene_Load.prototype.executeLoad() のように、DataManager.loadGame() の後にフェードアウトするのはNG。
                     // 暗転前に $gameXXXX が全て復元され、変な位置にプレイヤーが表示されたりしてしまう。
                     scene.fadeOutAll();
@@ -58,10 +58,10 @@ export class FloorRestartSequence {
         SceneManager.goto(Scene_Map);
         this._step = FloorRestartStep.FadeIn;
 
-        const item = REGame.world.entity(RESystem.requestedRestartFloorItem);
+        const item = MRLively.world.entity(MRSystem.requestedRestartFloorItem);
         item.removeFromParent();
         item.destroy();
-        RESystem.requestedRestartFloorItem.clear();
+        MRSystem.requestedRestartFloorItem.clear();
     }
 
     public static onLoadFailure(scene: Scene_Map) {

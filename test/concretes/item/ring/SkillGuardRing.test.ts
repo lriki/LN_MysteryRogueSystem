@@ -1,7 +1,7 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -33,18 +33,18 @@ test("concretes.item.ring.SkillGuardRing", () => {
     // Enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_くねくねインプ_A").id, [], "enemy1"));
     enemy1.addState(MRData.getState("kState_UTからぶり").id);
-    REGame.world.transferEntity(enemy1, floorId, 11, 4);
+    MRLively.world.transferEntity(enemy1, floorId, 11, 4);
 
-    RESystem.scheduler.stepSimulation();   // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
     // 先にレベル下げが働くことをチェックしておく
     for (let i = 0; i < 50; i++) {
         player1.setActualParam(MRBasics.params.hp, hp1);
-        RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
+        MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
+        MRSystem.dialogContext.activeDialog().submit();
         
-        RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+        MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     }
 
     expect(experience.level(player1) < 99).toBe(true);
@@ -57,11 +57,11 @@ test("concretes.item.ring.SkillGuardRing", () => {
     let count = 0;
     for (let i = 0; i < 50; i++) {
         player1.setActualParam(MRBasics.params.hp, hp1);
-        RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
+        MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
+        MRSystem.dialogContext.activeDialog().submit();
         const level1 = experience.level(player1);
         
-        RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+        MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
         if (experience.level(player1) < level1) count++;
     }

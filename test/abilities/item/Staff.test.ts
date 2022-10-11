@@ -1,8 +1,8 @@
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -21,8 +21,8 @@ test("Items.Staff.Knockback", () => {
     TestEnv.newGame();
 
     // actor1 配置
-    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    const actor1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
+    MRLively.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     actor1.dir = 6;
     TestEnv.performFloorTransfer();
     const inventory = actor1.getEntityBehavior(LInventoryBehavior);
@@ -41,9 +41,9 @@ test("Items.Staff.Knockback", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 振ってみる
     {
@@ -51,10 +51,10 @@ test("Items.Staff.Knockback", () => {
         
         // [振る]
         const activity2 = LActivity.makeWave(actor1, item1).withConsumeAction();
-        RESystem.dialogContext.postActivity(activity2);
-        RESystem.dialogContext.activeDialog().submit();
+        MRSystem.dialogContext.postActivity(activity2);
+        MRSystem.dialogContext.activeDialog().submit();
         
-        RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+        MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
         expect(enemy1.mx).toBe(20);  // 吹き飛ばし効果で 10Block 後退 & Enemy ターンで Player に 1Block 近づく
         expect(item1.actualParam(MRBasics.params.remaining)).toBe(0);    // 使用回数が減っている
@@ -66,10 +66,10 @@ test("Items.Staff.Knockback", () => {
 
         // [振る]
         const activity2 = LActivity.makeWave(actor1, item1).withConsumeAction();
-        RESystem.dialogContext.postActivity(activity2);
-        RESystem.dialogContext.activeDialog().submit();
+        MRSystem.dialogContext.postActivity(activity2);
+        MRSystem.dialogContext.activeDialog().submit();
         
-        RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+        MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
         expect(enemy1.mx).toBe(19);  // 杖を振っても何も起こらないので引き続き近づいてくる
         expect(item1.actualParam(MRBasics.params.remaining)).toBe(0);    // 使用回数は 0 のまま。余計に減算されたりしないこと。
@@ -78,18 +78,18 @@ test("Items.Staff.Knockback", () => {
     // 投げてみる
     {
         // Enemy を Player の右側に配置
-        REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+        MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
-        RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+        MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
         
         //----------------------------------------------------------------------------------------------------
 
         // [投げる]
         const activity1 = LActivity.makeThrow(actor1, item1).withConsumeAction();
-        RESystem.dialogContext.postActivity(activity1);
-        RESystem.dialogContext.activeDialog().submit();
+        MRSystem.dialogContext.postActivity(activity1);
+        MRSystem.dialogContext.activeDialog().submit();
         
-        RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+        MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
         
         expect(enemy1.mx).toBe(20);  // 吹き飛ばし効果で 10Block 後退 & Enemy ターンで Player に 1Block 近づく
@@ -101,8 +101,8 @@ test("Items.Staff.Identify", () => {
     TestEnv.newGame();
 
     // Player を未時期別アイテムが出現するダンジョンへ配置する
-    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world.transferEntity(actor1, LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
+    const actor1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
+    MRLively.world.transferEntity(actor1, LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
     TestEnv.performFloorTransfer();
     const inventory = actor1.getEntityBehavior(LInventoryBehavior);
 
@@ -115,14 +115,14 @@ test("Items.Staff.Identify", () => {
     expect(name1.includes(nameView1.name)).toBe(false);    // 未識別状態なので、元の名前とは異なる表示名になっている
     expect(name1.includes("[0]\\")).toBe(false);        // まだ１度も使っていない場合、 "杖の名前[0]" のように表示されていないこと。
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
         
     // [振る]
     const activity2 = LActivity.makeWave(actor1, item1).withConsumeAction();
-    RESystem.dialogContext.postActivity(activity2);
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(activity2);
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     const name2 = UName.makeNameAsItem(item1);
     expect(name2.includes("-1")).toBe(true);    // "ふきとばしの杖[-1]" のように表示される

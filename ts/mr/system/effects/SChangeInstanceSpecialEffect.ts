@@ -5,7 +5,7 @@ import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBeh
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { LEffectResult } from "ts/mr/lively/LEffectResult";
 import { LEntity } from "ts/mr/lively/LEntity";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { USpawner } from "ts/mr/utility/USpawner";
 import { SCommandContext } from "../SCommandContext";
 import { SEffectModifier } from "../SEffectApplyer";
@@ -48,7 +48,7 @@ export class SChangeInstanceSpecialEffect extends SSpecialEffect {
         result.makeSuccess();
 
         if (prevIsUnit) {
-            REGame.scheduler.resetEntity(target);
+            MRLively.scheduler.resetEntity(target);
         }
     }
 

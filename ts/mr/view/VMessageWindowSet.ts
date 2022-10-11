@@ -1,4 +1,4 @@
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { VHudWindow } from "./VHudWindow";
 import { VFloorNameWindow } from "./windows/VFloorNameWindow";
 import { VMessageLogWindow } from "./windows/VMessageLogWindow";
@@ -45,7 +45,7 @@ export class VMessageWindowSet {
         //this._shadowSprite.visible = false;
         scene._spriteset.addChild(this._shadowSprite);
 
-        this._logWindow = new VMessageLogWindow(REGame.messageHistory, this.messageWindowRect());
+        this._logWindow = new VMessageLogWindow(MRLively.messageHistory, this.messageWindowRect());
         this._scene.addWindow(this._logWindow);
 
         //this._messageWindow = new VMessageWindow(REGame.message, this.messageWindowRect());

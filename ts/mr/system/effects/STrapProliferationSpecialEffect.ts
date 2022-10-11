@@ -1,7 +1,7 @@
 import { DSpecialEffectRef } from "ts/mr/data/DEffect";
 import { LEffectResult } from "ts/mr/lively/LEffectResult";
 import { LEntity } from "ts/mr/lively/LEntity";
-import { RESystem } from "../RESystem";
+import { MRSystem } from "../MRSystem";
 import { SCommandContext } from "../SCommandContext";
 import { SEffectModifier } from "../SEffectApplyer";
 import { SSpecialEffect } from "./SSpecialEffect";
@@ -9,7 +9,7 @@ import { SSpecialEffect } from "./SSpecialEffect";
 export class STrapProliferationSpecialEffect extends SSpecialEffect {
 
     public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
-        RESystem.mapManager.spawnTraps(30);
+        MRSystem.mapManager.spawnTraps(30);
         result.makeSuccess();
     }
 

@@ -1,7 +1,7 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -28,15 +28,15 @@ test("concretes.item.grass.LevelUpGrass", () => {
 
     TestUtils.testCommonGrassBegin(player1, item1);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // [食べる]
-    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     const a2 = player1.actualParam(MRBasics.params.level);
     const level2 = experience.level(player1);
@@ -45,7 +45,7 @@ test("concretes.item.grass.LevelUpGrass", () => {
     TestUtils.testCommonGrassEnd(player1, item1);
 
     // レベルアップメッセージは "回復した" ではなく "【変更後の値】に上がった" と表示される
-    const message = REGame.messageHistory;
+    const message = MRLively.messageHistory;
     expect(message.includesText("回復した")).toBeFalsy();
     expect(message.includesText("2 に上がった")).toBeTruthy();
 });

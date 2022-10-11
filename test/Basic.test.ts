@@ -3,8 +3,8 @@
 
 import { LUnitBehavior } from "ts/mr/lively/behaviors/LUnitBehavior";
 import { SManualActionDialog } from "ts/mr/system/dialogs/SManualDecisionDialog";
-import { REGame } from "ts/mr/lively/REGame";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRLively } from "ts/mr/lively/MRLively";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "./TestEnv";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRBasics } from "ts/mr/data/MRBasics";
@@ -71,10 +71,10 @@ test("Basic1", () => {
     TestEnv.newGame();
 
     // Player
-    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    const actor1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
 
     // フロア移動。最初はどこでもないフロアにいるので、マップ遷移が要求される。
-    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
+    MRLively.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
 
     // 【RMMZ で使うときはこのあたりで $dataMap をロードしたりする】
 
@@ -82,9 +82,9 @@ test("Basic1", () => {
     TestEnv.performFloorTransfer();
 
     // シミュレーション 1 回実行
-    RESystem.scheduler.stepSimulation();
+    MRSystem.scheduler.stepSimulation();
     
-    const dialogContext = RESystem.dialogContext;
+    const dialogContext = MRSystem.dialogContext;
     
     // 方向転換してみる (ターン消費無し)
     {
@@ -100,7 +100,7 @@ test("Basic1", () => {
         expect(actor1.dir != 9).toBe(true);
         
         // シミュレーション実行
-        RESystem.scheduler.stepSimulation();
+        MRSystem.scheduler.stepSimulation();
         
         // 行動の消費が無いので、再び ManualActionDialog が開かれる。
         // しかし一度閉じているので、違うインスタンスで開かれている。
@@ -118,7 +118,7 @@ test("Basic1", () => {
         dialogContext.activeDialog().submit();
     
         // シミュレーション実行。実際に移動が行われる
-        RESystem.scheduler.stepSimulation();
+        MRSystem.scheduler.stepSimulation();
     
         // 移動後座標チェック
         expect(actor1.mx).toBe(5);

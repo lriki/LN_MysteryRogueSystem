@@ -3,7 +3,7 @@ import { SPhaseResult } from "../../system/SCommand";
 import { SCommandContext } from "../../system/SCommandContext";
 import { DecisionPhase, LBehavior } from "./LBehavior";
 import { LEntity } from "ts/mr/lively/LEntity";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { LUnitBehavior } from "./LUnitBehavior";
 import { UMovement } from "ts/mr/utility/UMovement";
 import { LCharacterAI } from "../ai/LCharacterAI";
@@ -23,7 +23,7 @@ export class LDecisionBehavior extends LBehavior {
     _characterAI: LCharacterAI_Normal = new LCharacterAI_Normal();
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LDecisionBehavior);
+        const b = MRLively.world.spawn(LDecisionBehavior);
         b._characterAI = this._characterAI.clone() as LCharacterAI_Normal;
         return b;
     }

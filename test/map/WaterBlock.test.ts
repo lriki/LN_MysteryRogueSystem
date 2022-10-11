@@ -1,7 +1,7 @@
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { TestEnv } from "./../TestEnv";
 import "./../Extension";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { LTileShape } from "ts/mr/lively/LBlock";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { SEntityFactory } from "ts/mr/system/internal";
@@ -17,25 +17,25 @@ beforeAll(() => {
 test("map.WaterBlock.EdgeMoving", () => {
     TestEnv.newGame();
 
-    const player1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world.transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    const player1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
+    MRLively.world.transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     TestEnv.performFloorTransfer();
 
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
 
     // Player と Enemy の間に水地を作る
-    REGame.map.block(11, 10)._tileShape = LTileShape.Water;
+    MRLively.map.block(11, 10)._tileShape = LTileShape.Water;
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
     //----------------------------------------------------------------------------------------------------
 
     // [Wait]
-    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
     expect(enemy1.mx).toBe(11);
     expect(enemy1.my).toBe(11);
@@ -54,21 +54,21 @@ test("map.WaterBlock.WoodArrow.ProjectileOverMove", () => {
     inventory.addEntity(item1);
     
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, floorId, 13, 10);
+    MRLively.world.transferEntity(enemy1, floorId, 13, 10);
     const initialHP = enemy1.actualParam(MRBasics.params.hp);
 
     // Player と Enemy の間に水地を作る
-    REGame.map.block(12, 10)._tileShape = LTileShape.Water;
+    MRLively.map.block(12, 10)._tileShape = LTileShape.Water;
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // [撃つ]
-    RESystem.dialogContext.postActivity(LActivity.makeShooting(player1, item1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeShooting(player1, item1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     const hp = enemy1.actualParam(MRBasics.params.hp);
     expect(hp < initialHP).toBeTruthy();      // ダメージを受けているはず
@@ -87,21 +87,21 @@ test("map.WaterBlock.WoodArrow.ProjectileOverMove", () => {
     inventory.addEntity(item1);
     
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, floorId, 13, 10);
+    MRLively.world.transferEntity(enemy1, floorId, 13, 10);
     const initialHP = enemy1.actualParam(MRBasics.params.hp);
 
     // Player と Enemy の間に水地を作る
-    REGame.map.block(12, 10)._tileShape = LTileShape.Water;
+    MRLively.map.block(12, 10)._tileShape = LTileShape.Water;
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // [撃つ]
-    RESystem.dialogContext.postActivity(LActivity.makeShooting(player1, item1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeShooting(player1, item1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     const hp = enemy1.actualParam(MRBasics.params.hp);
     expect(hp < initialHP).toBeTruthy();      // ダメージを受けているはず
@@ -120,18 +120,18 @@ test("map.WaterBlock.WoodArrow.SinkProjectile", () => {
     inventory.addEntity(item1);
 
     // Player の前に水と壁を作る
-    REGame.map.block(12, 10)._tileShape = LTileShape.Water;
-    REGame.map.block(13, 10)._tileShape = LTileShape.Wall;
+    MRLively.map.block(12, 10)._tileShape = LTileShape.Water;
+    MRLively.map.block(13, 10)._tileShape = LTileShape.Wall;
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // [撃つ]
-    RESystem.dialogContext.postActivity(LActivity.makeShooting(player1, item1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeShooting(player1, item1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 水に落ちている
     expect(item1.mx).toBe(12);

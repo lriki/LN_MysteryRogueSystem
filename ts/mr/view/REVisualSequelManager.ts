@@ -1,7 +1,7 @@
 import { REVisual_Entity } from "./REVisual_Entity";
 import { SSequelSet } from "../system/SSequel";
 import { REEntityVisualSet } from "./REEntityVisualSet";
-import { REVisual } from "./REVisual";
+import { MRView } from "./MRView";
 
 export class REVisualSequelManager {
     private _entityVisualSet: REEntityVisualSet;
@@ -50,7 +50,7 @@ export class REVisualSequelManager {
                         run.clips().forEach(x => {
                             const visual = this._entityVisualSet.findEntityVisualByEntity(x.entity());
                             if (visual) {
-                                REVisual._syncCamera = false; 
+                                MRView._syncCamera = false; 
                                 visual.sequelContext()._start(x);
                                 this._runningVisuals.push(visual);
                             }
@@ -74,7 +74,7 @@ export class REVisualSequelManager {
     onFinishedAllSequels(): void {
         this._runningVisuals.splice(0);
         this._activeSequelSet = undefined;
-        REVisual._syncCamera = true;
+        MRView._syncCamera = true;
     }
 
     isRunning(): boolean {

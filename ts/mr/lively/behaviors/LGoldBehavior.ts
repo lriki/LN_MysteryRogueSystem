@@ -2,7 +2,7 @@ import { MRSerializable } from "ts/mr/Common";
 import { DTextManager } from "ts/mr/data/DTextManager";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { LEntity } from "../LEntity";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { LBehavior, LNameView } from "./LBehavior";
 
 
@@ -31,7 +31,7 @@ export class LGoldBehavior extends LBehavior {
     */
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LGoldBehavior);
+        const b = MRLively.world.spawn(LGoldBehavior);
         return b;
     }
 

@@ -1,12 +1,12 @@
 import { assert } from "ts/mr/Common";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { RoomEventArgs } from "ts/mr/data/predefineds/DBasicEvents";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { LBlock } from "ts/mr/lively/LBlock";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { LMap, MovingMethod } from "ts/mr/lively/LMap";
 import { Helpers } from "../system/Helpers";
-import { RESystem } from "../system/RESystem";
+import { MRSystem } from "../system/MRSystem";
 import { LRandom } from "ts/mr/lively/LRandom";
 import { UBlock } from "ts/mr/utility/UBlock";
 import { SCommandContext } from "../system/SCommandContext";
@@ -116,7 +116,7 @@ export class UMovement {
      * entity が指定方向(斜め)を向くとき、壁の角と交差しているかを確認する。
      */
     public static checkDiagonalWallCornerCrossing(entity: LEntity, d: number): boolean {
-        const map = REGame.map;
+        const map = MRLively.map;
         if (UMovement.isDiagonalMoving(d)) {
             // 斜め場合
             const fl = UMovement.rotatePositionByDir(7, d);  // 左前
@@ -138,7 +138,7 @@ export class UMovement {
      */
     public static checkPassageToDir(entity: LEntity, dir: number): boolean {
         const offset = Helpers.dirToTileOffset(dir);
-        const map = REGame.map;
+        const map = MRLively.map;
         const oldBlock = map.block(entity.mx, entity.my);
         const newBlock = map.block(entity.mx + offset.x, entity.my + offset.y);
         return this.checkPassageBlockToBlock(entity, oldBlock, newBlock, MovingMethod.Walk);
@@ -166,7 +166,7 @@ export class UMovement {
      * 例えば entity が水路侵入可能であり、Block が水路であれば移動先候補になる。
      */
     public static checkPassageBlockToBlock(entity: LEntity, oldBlock: LBlock, newBlock: LBlock, method: MovingMethod, layer?: DBlockLayerKind): boolean {
-        const map = REGame.map;
+        const map = MRLively.map;
         const actualLayer = layer || entity.getHomeLayer();
 
         const dx = newBlock.mx - oldBlock.mx;
@@ -274,7 +274,7 @@ export class UMovement {
      */
     static getAdjacentBlock(entity: LEntity, dir: number): LBlock {
         const offset = Helpers._dirToTileOffsetTable[dir];
-        const block = REGame.map.block(entity.mx + offset.x, entity.my + offset.y);
+        const block = MRLively.map.block(entity.mx + offset.x, entity.my + offset.y);
         return block;
     }
 
@@ -283,7 +283,7 @@ export class UMovement {
      */
     public static getFrontBlock(entity: LEntity): LBlock {
         const front = Helpers.makeEntityFrontPosition(entity, 1);
-        const block = REGame.map.block(front.x, front.y);
+        const block = MRLively.map.block(front.x, front.y);
         return block;
     }
 
@@ -291,7 +291,7 @@ export class UMovement {
      * Entity の周囲 8 マスの Block を取得する。(有効座標のみ)
      */
     public static getAdjacentBlocks(entity: LEntity): LBlock[] {
-        const map = REGame.map;
+        const map = MRLively.map;
         assert(map.floorId().equals(entity.floorId));
 
         const blocks: LBlock[] = [];
@@ -325,7 +325,7 @@ export class UMovement {
      * 
      */
     public static getNextAdjacentEntityDirCW(entity: LEntity): number {
-        const map = REGame.map;
+        const map = MRLively.map;
         let d = entity.dir;
         for (let i = 0; i < 9; i++) {
             const offset = Helpers.dirToTileOffset(d);
@@ -352,7 +352,7 @@ export class UMovement {
             if (block) result.push(block);
         }
         */
-        const map = REGame.map;
+        const map = MRLively.map;
         const oldBlock = map.block(entity.mx, entity.my);
         for (const offset of this.LHRuleOffsets) {
             const pos = this.transformRotationBlock(offset.x, offset.y, dir);
@@ -369,7 +369,7 @@ export class UMovement {
      */
     public static getWay3FrontBlocks(entity: LEntity, dir: number): LBlock[] {
         const result = [];
-        const map = REGame.map;
+        const map = MRLively.map;
         for (const offset of this.way3Offsets) {
             const pos = this.transformRotationBlock(offset.x, offset.y, dir);
             const block = map.tryGetBlock(entity.mx + pos.x, entity.my + pos.y);
@@ -386,7 +386,7 @@ export class UMovement {
      */
     public static getMovableAdjacentTiles(entity: LEntity): LBlock[] {
         const result: LBlock[] = [];
-        const map = REGame.map;
+        const map = MRLively.map;
         const oldBlock = map.block(entity.mx, entity.my);
         for (const d of this.AdjacentDirs) {
             const offset = Helpers.dirToTileOffset(d);
@@ -403,7 +403,7 @@ export class UMovement {
     public static selectNearbyLocatableBlock(rand: LRandom, mx: number, my: number, layerKind: DBlockLayerKind, entity: LEntity): LBlock | undefined {
         const maxDistance = 3;
         for (let distance = 0; distance <= maxDistance; distance++) {
-            const candidates = REGame.map.getEdgeBlocks(mx, my, distance)
+            const candidates = MRLively.map.getEdgeBlocks(mx, my, distance)
                 .filter(b => {
                     if (b.isWallLikeShape()) {
                         // 壁の中には落ちない
@@ -550,7 +550,7 @@ export class UMovement {
     public static checkDashStopBlock(entity: LEntity): boolean {
         const x = entity.mx;
         const y = entity.my;
-        const map = REGame.map;
+        const map = MRLively.map;
         const front = Helpers.dirToTileOffset(entity.dir);
         const block = map.block(x, y);
         const frontBlock = map.block(x + front.x, y + front.y);
@@ -574,7 +574,7 @@ export class UMovement {
     }
 
     public static moveEntity(cctx: SCommandContext, entity: LEntity, x: number, y: number, method: MovingMethod, toLayer: DBlockLayerKind): boolean {
-        const map = REGame.map;
+        const map = MRLively.map;
 
         assert(entity.floorId.equals(map.floorId()));
 
@@ -607,7 +607,7 @@ export class UMovement {
      * - 侵入判定を伴う。
      */
     public static locateEntity(entity: LEntity, x: number, y: number, toLayer?: DBlockLayerKind): void {
-        const map = REGame.map;
+        const map = MRLively.map;
         assert(entity.floorId.equals(map.floorId()));
 
         const oldBlock = map.block(entity.mx, entity.my);
@@ -623,7 +623,7 @@ export class UMovement {
         this._postLocate(entity, oldBlock, newBlock, map, undefined);
 
         // Located 通知。これはアニメを伴う移動時は通知したくないのでここで行う。
-        RESystem.integration.onEntityLocated(entity);
+        MRSystem.integration.onEntityLocated(entity);
     }
     
     public static locateEntityAtFloorMoved(entity: LEntity, floorId: LFloorId, x: number, y: number): void {
@@ -635,7 +635,7 @@ export class UMovement {
     public static _postLocate(entity: LEntity, oldBlock: LBlock | undefined, newBlock: LBlock, map: LMap, cctx: SCommandContext | undefined) {
         assert(!entity.isOnOffstage());
 
-        if (REGame.camera.focusedEntityId().equals(entity.entityId())) {
+        if (MRLively.camera.focusedEntityId().equals(entity.entityId())) {
             this.markPassed(map, newBlock);
         }
 
@@ -647,8 +647,8 @@ export class UMovement {
                     oldRoomId: oldBlock._roomId,
                 };
             
-                REGame.eventServer.publish(cctx, MRBasics.events.roomEnterd, args);
-                REGame.eventServer.publish(cctx, MRBasics.events.roomLeaved, args);
+                MRLively.eventServer.publish(cctx, MRBasics.events.roomEnterd, args);
+                MRLively.eventServer.publish(cctx, MRBasics.events.roomLeaved, args);
             }
         }
 
@@ -680,6 +680,6 @@ export class UMovement {
                 }
             });
         }
-        RESystem.minimapData.setRefreshNeeded();
+        MRSystem.minimapData.setRefreshNeeded();
     }
 }

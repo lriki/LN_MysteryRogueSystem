@@ -1,6 +1,6 @@
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "./TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -20,11 +20,11 @@ test("Trap.TriggerRate", () => {
     const hp1 = player1.actualParam(MRBasics.params.hp);
 
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_地雷_A").id, [], "trap1"));
-    REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    MRLively.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     const trapBehavior = trap1.getEntityBehavior(LTrapBehavior);
     
-    REGame.world.random().resetSeed(5);     // 乱数調整
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRLively.world.random().resetSeed(5);     // 乱数調整
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
     // 隠れている状態のカウント
@@ -32,15 +32,15 @@ test("Trap.TriggerRate", () => {
     let triggerd1 = 0;
     for (let i = 0; i < 100; i++) {
         // 右へ移動
-        RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
+        MRSystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction());
+        MRSystem.dialogContext.activeDialog().submit();
 
         trapBehavior.setExposed(false);
-        RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+        MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
         const hp2 = player1.actualParam(MRBasics.params.hp);
         if (hp2 < hp1) triggerd1++;
-        REGame.world.transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+        MRLively.world.transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 10, 10);
         player1.setActualParam(MRBasics.params.hp, hp1);
     }
 
@@ -51,14 +51,14 @@ test("Trap.TriggerRate", () => {
     let triggerd2 = 0;
     for (let i = 0; i < 100; i++) {
         // 右へ移動
-        RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
+        MRSystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction());
+        MRSystem.dialogContext.activeDialog().submit();
 
-        RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+        MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
         const hp2 = player1.actualParam(MRBasics.params.hp);
         if (hp2 < hp1) triggerd2++;
-        REGame.world.transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+        MRLively.world.transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 10, 10);
         player1.setActualParam(MRBasics.params.hp, hp1);
     }
 
@@ -77,17 +77,17 @@ test("Trap.Basic", () => {
 
     // trap1 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_SleepTrap, [], "trap1"));
-    REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    MRLively.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
     //----------------------------------------------------------------------------------------------------
 
     // player を右へ移動
-    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
     expect(player1.isStateAffected(stateId)).toBe(true);   // 睡眠状態
 });
@@ -101,22 +101,22 @@ test("Trap.Enemy", () => {
     // trap1 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_SleepTrap));
     trap1._name = "trap1";
-    REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    MRLively.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     // TODO: 罠state:必ず発動
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
     //----------------------------------------------------------------------------------------------------
 
     // 足踏み
-    RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     expect(enemy1.states().length).toBe(0); // Enemy は罠にはかからないこと
 });
@@ -130,22 +130,22 @@ test("Trap.Attack", () => {
 
     // trap1
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_SleepTrap, [], "trap1"));
-    REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    MRLively.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10); // 罠の上に配置
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10); // 罠の上に配置
     const hp1 = enemy1.actualParam(MRBasics.params.hp);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
     //----------------------------------------------------------------------------------------------------
 
     // 右を向いて攻撃
-    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, MRData.system.skills.normalAttack, 6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, MRData.system.skills.normalAttack, 6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // Enemy がダメージを受けていることを確認
     const hp2 = enemy1.actualParam(MRBasics.params.hp);
@@ -158,13 +158,13 @@ test("Trap.Attack", () => {
     //----------------------------------------------------------------------------------------------------
 
     // Enemy をどける
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10); // 罠の上に配置
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10); // 罠の上に配置
 
     // 右を向いて攻撃
-    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, MRData.system.skills.normalAttack, 6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, MRData.system.skills.normalAttack, 6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 露出している
     const behavior2 = trap1.getEntityBehavior(LTrapBehavior);
@@ -177,16 +177,16 @@ test("Trap.Attack", () => {
 
     // Player の右下に罠を作る
     const trap2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_SleepTrap, [], "trap2"));
-    REGame.world.transferEntity(trap2, TestEnv.FloorId_FlatMap50x50, 11, 11);
+    MRLively.world.transferEntity(trap2, TestEnv.FloorId_FlatMap50x50, 11, 11);
 
     // Player の下に壁を作る
-    REGame.map.block(10, 11)._tileShape = LTileShape.Wall;
+    MRLively.map.block(10, 11)._tileShape = LTileShape.Wall;
 
     // 右下を向いて攻撃
-    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, MRData.system.skills.normalAttack, 3).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, MRData.system.skills.normalAttack, 3).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 露出しない
     const behavior3 = trap2.getEntityBehavior(LTrapBehavior);

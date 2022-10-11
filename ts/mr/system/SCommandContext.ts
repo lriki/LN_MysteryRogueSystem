@@ -3,10 +3,10 @@ import { SDialog } from "./SDialog";
 import { LEntity } from "../lively/LEntity";
 import { assert, Log } from "ts/mr/Common";
 import { SAnumationSequel, SBalloonSequel, SFloatingAnumationSequel, SMotionSequel, SWaitSequel } from "./SSequel";
-import { REGame } from "../lively/REGame";
+import { MRLively } from "../lively/MRLively";
 import { SEffectContext, SEffectSubject } from "./SEffectContext";
 import { LBlock } from "../lively/LBlock";
-import { RESystem } from "./RESystem";
+import { MRSystem } from "./MRSystem";
 import { CommandArgs, DecisionPhase, LBehavior } from "ts/mr/lively/behaviors/LBehavior";
 import { SSequelContext } from "./SSequelContext";
 import { SActivityPlaybackDialog } from "ts/mr/system/dialogs/SActivityPlaybackDialog";
@@ -250,7 +250,7 @@ export class SCommandContext
     }
 
     public random(): LRandom {
-        return REGame.world.random();
+        return MRLively.world.random();
     }
 
     public checkOpenDialogRequired(): boolean {
@@ -432,7 +432,7 @@ export class SCommandContext
                     entity._effectResult.clear();   // TODO: 仮
                     entity.params().updateBuffs(entity);
                     //entity._effectResult.showResultMessages(RESystem.commandContext, entity);   // TODO: 仮
-                    RESystem.integration.flushEffectResultOneEntity(entity);
+                    MRSystem.integration.flushEffectResultOneEntity(entity);
 
                     //entity._callDecisionPhase(RESystem.commandContext, DecisionPhase.UpdateState);
 
@@ -502,13 +502,13 @@ export class SCommandContext
         const m1 = () => {
             Log.doCommand("OpenDialog");
             
-            RESystem.dialogContext.setCauseEntity(causeEntity);
+            MRSystem.dialogContext.setCauseEntity(causeEntity);
 
-            if (REGame.recorder.isPlayback()) {
-                RESystem.dialogContext.open(new SActivityPlaybackDialog());
+            if (MRLively.recorder.isPlayback()) {
+                MRSystem.dialogContext.open(new SActivityPlaybackDialog());
             }
             else {
-                RESystem.dialogContext.open(dialogModel);
+                MRSystem.dialogContext.open(dialogModel);
             }
 
             return SCommandResponse.Handled;
@@ -656,7 +656,7 @@ export class SCommandContext
         
         const m1 = () => {
             Log.doCommand("Message");
-            REGame.messageHistory.add(text);
+            MRLively.messageHistory.add(text);
             return SCommandResponse.Handled;
         };
         this.pushRecodingCommandList(new STask("Message", m1));
@@ -666,9 +666,9 @@ export class SCommandContext
     public postEffectResult(entity?: LEntity | undefined): void {
         const m1 = () => {
             if (entity)
-                RESystem.integration.flushEffectResultOneEntity(entity);
+                MRSystem.integration.flushEffectResultOneEntity(entity);
             else
-                RESystem.integration.flushEffectResult();
+                MRSystem.integration.flushEffectResult();
             return SCommandResponse.Handled;
         };
         this.pushRecodingCommandList(new STask("EffectResult", m1));
@@ -685,7 +685,7 @@ export class SCommandContext
     postTransferFloor(entity: LEntity, floorId: LFloorId, x: number = 0, y:number = 0, d: number = 0) {
         const m1 = () => {
             Log.doCommand("TransferFloor");
-            REGame.world.transferEntity(entity, floorId, x, y);
+            MRLively.world.transferEntity(entity, floorId, x, y);
             return SCommandResponse.Handled;
         };
         this.pushRecodingCommandList(new STask("TransferFloor", m1));

@@ -5,7 +5,7 @@ import { FMap } from "../floorgen/FMapData";
 import { LEntity } from "../lively/LEntity";
 import { SSequelSet } from "../system/SSequel";
 import { SIntegration } from "../system/SIntegration";
-import { REVisual } from "../view/REVisual";
+import { MRView } from "../view/MRView";
 import { SRmmzHelpers } from "ts/mr/system/SRmmzHelpers";
 import { LMap } from "ts/mr/lively/LMap";
 import { VMapEditor } from "./VMapEditor";
@@ -14,7 +14,7 @@ import { SDialog } from "ts/mr/system/SDialog";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { LBlock } from "ts/mr/lively/LBlock";
 import { DEventId } from "ts/mr/data/predefineds/DBasicEvents";
-import { REGame } from "../lively/REGame";
+import { MRLively } from "../lively/MRLively";
 import { FloorRestartSequence } from "./FloorRestartSequence";
 import { MRBasics } from "../data/MRBasics";
 
@@ -42,12 +42,12 @@ export class RMMZIntegration extends SIntegration {
     }
 
     onEntityLocated(entity: LEntity): void {
-        if (entity.entityId().equals(REGame.camera.focusedEntityId())) {
+        if (entity.entityId().equals(MRLively.camera.focusedEntityId())) {
             //console.log("★★★★★");
             //$gamePlayer.reserveTransfer($gameMap.mapId(), entity.x, entity.y, $gamePlayer.direction(), 2);
             //$gamePlayer.locate(entity.x, entity.y);
             //$gamePlayer.refresh();
-            REVisual._playerPosRefreshNeed = true;
+            MRView._playerPosRefreshNeed = true;
         }
     }
 
@@ -61,7 +61,7 @@ export class RMMZIntegration extends SIntegration {
     }
 
     onLoadFixedMapEvents(): void {
-        REGame.map.keeperCount = 0;
+        MRLively.map.keeperCount = 0;
 
         // 固定マップ上のイベント情報から Entity を作成する
         $gameMap.events().forEach((e: Game_Event) => {
@@ -85,27 +85,27 @@ export class RMMZIntegration extends SIntegration {
 
                     if (data.keeper) {
                         entity.keeper = true;
-                        REGame.map.keeperCount++;
+                        MRLively.map.keeperCount++;
                     }
                 }
             }
         });
 
-        REGame.map.lastKeeperCount = REGame.map.keeperCount;
+        MRLively.map.lastKeeperCount = MRLively.map.keeperCount;
     }
 
     onUpdateBlock(block: LBlock): void {
-        if (REVisual.mapBuilder) {
+        if (MRView.mapBuilder) {
             //const width = $dataMap.width;
             //const height = $dataMap.height;
             //$dataMap.data[(z * height + y) * width + x] = tileId;
 
             //REVisual.mapBuilder.setTileId
             //REVisual.mapBuilder.set
-            REVisual.mapBuilder.refreshBlock(block);
+            MRView.mapBuilder.refreshBlock(block);
     
-            if (REVisual.spriteset) {
-                REVisual.spriteset._tilemap.refresh();
+            if (MRView.spriteset) {
+                MRView.spriteset._tilemap.refresh();
             }
         }
     }
@@ -113,14 +113,14 @@ export class RMMZIntegration extends SIntegration {
 
     
     onRefreshGameMap(map: LMap): void {
-        REVisual.mapBuilder = new VMapEditor(map);
-        REVisual.mapBuilder.build();
+        MRView.mapBuilder = new VMapEditor(map);
+        MRView.mapBuilder.build();
         //const builder = new GameMapBuilder();
         //builder.build(map);
     }
 
     onFlushEffectResult(entity: LEntity): void {
-        const visual = REVisual.entityVisualSet?.findEntityVisualByEntity(entity);
+        const visual = MRView.entityVisualSet?.findEntityVisualByEntity(entity);
         if (visual) {
             visual.showEffectResult();
         }
@@ -139,18 +139,18 @@ export class RMMZIntegration extends SIntegration {
             return true;
         }
 
-        if (REVisual.entityVisualSet)
-            return REVisual.entityVisualSet.visualRunning();
+        if (MRView.entityVisualSet)
+            return MRView.entityVisualSet.visualRunning();
         else
             return false;
     }
     
     onOpenDialog(model: SDialog): void {
-        REVisual.manager?.openDialog(model);
+        MRView.manager?.openDialog(model);
     }
     
     onUpdateDialog(context: SDialogContext): void {
-        const manager = REVisual.manager;
+        const manager = MRView.manager;
         if (manager) {
             assert(!manager.dialogNavigator.isEmpty());
             manager.dialogNavigator.update(context);
@@ -158,15 +158,15 @@ export class RMMZIntegration extends SIntegration {
     }
 
     override onDialogClosed(context: SDialogContext, dialog: SDialog): void {
-        const manager = REVisual.manager;
+        const manager = MRView.manager;
         if (manager) {
             manager.dialogNavigator.markCloseDialog(context, dialog);
         }
     }
     
     onEntityEnteredMap(entity: LEntity): void {
-        if (REVisual.entityVisualSet) {
-            REVisual.entityVisualSet.createVisual2(entity);
+        if (MRView.entityVisualSet) {
+            MRView.entityVisualSet.createVisual2(entity);
         }
         else {
             // フロア遷移直後は、初期配置処理時点ではまだ Visual(SpriteSet) の準備ができていないことがある。
@@ -177,14 +177,14 @@ export class RMMZIntegration extends SIntegration {
     }
 
     onEntityLeavedMap(entity: LEntity): void {
-        REVisual.entityVisualSet?.reserveDeleteVisual(entity);
+        MRView.entityVisualSet?.reserveDeleteVisual(entity);
 
         // Entity と RMMZ-Event の関連付けを解除
         entity.inhabitsCurrentFloor = false;
         entity.rmmzEventId = 0;
         if (entity.keeper) {
             entity.keeper = false;
-            REGame.map.keeperCount--;
+            MRLively.map.keeperCount--;
         }
     }
 

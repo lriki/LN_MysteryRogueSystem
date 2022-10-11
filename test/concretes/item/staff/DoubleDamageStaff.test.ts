@@ -1,6 +1,6 @@
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -26,18 +26,18 @@ test("concretes.item.staff.DoubleDamageStaff.basic", () => {
 
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
     const enemy1HP1 = enemy1.actualParam(MRBasics.params.hp);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
     //----------------------------------------------------------------------------------------------------
 
     // [振る] (壁に向かって)
-    RESystem.dialogContext.postActivity(LActivity.makeWave(player1, item1).withEntityDirection(8).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeWave(player1, item1).withEntityDirection(8).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 相手に効果が無ければ、自分にダメージもない
     const player1HP2 = player1.actualParam(MRBasics.params.hp);
@@ -48,10 +48,10 @@ test("concretes.item.staff.DoubleDamageStaff.basic", () => {
     //----------------------------------------------------------------------------------------------------
 
     // [振る] (相手に向かって)
-    RESystem.dialogContext.postActivity(LActivity.makeWave(player1, item1).withEntityDirection(6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeWave(player1, item1).withEntityDirection(6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 相手に効果が出れば、自分にも効果がでる
     const player1HP3 = player1.actualParam(MRBasics.params.hp);
@@ -64,10 +64,10 @@ test("concretes.item.staff.DoubleDamageStaff.basic", () => {
     player1.setActualParam(MRBasics.params.hp, 1);
     enemy1.setActualParam(MRBasics.params.hp, 1);
 
-    RESystem.dialogContext.postActivity(LActivity.makeWave(player1, item1).withEntityDirection(6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeWave(player1, item1).withEntityDirection(6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     const player1HP4 = player1.actualParam(MRBasics.params.hp);
     const enemy1HP4 = enemy1.actualParam(MRBasics.params.hp);

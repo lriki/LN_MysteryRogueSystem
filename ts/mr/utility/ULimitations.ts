@@ -1,6 +1,6 @@
 import { LTrapBehavior } from "../lively/behaviors/LTrapBehavior";
 import { LUnitBehavior } from "../lively/behaviors/LUnitBehavior";
-import { REGame } from "../lively/REGame";
+import { MRLively } from "../lively/MRLively";
 import { paramMaxItemsInMap, paramMaxTrapsInMap } from "../PluginParameters";
 
 
@@ -8,7 +8,7 @@ import { paramMaxItemsInMap, paramMaxTrapsInMap } from "../PluginParameters";
 export class ULimitations {
     
     public static getItemCountInMap(): number {
-        const map = REGame.map;
+        const map = MRLively.map;
         let count = 0;
         // Unit, Trap 以外を集計
         map.iterateEntities(e => {
@@ -24,7 +24,7 @@ export class ULimitations {
     }
 
     public static getTrapCountInMap(): number {
-        const map = REGame.map;
+        const map = MRLively.map;
         let count = 0;
         map.iterateEntities(e => {
             if (e.findEntityBehavior(LTrapBehavior)) {

@@ -1,6 +1,6 @@
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -27,18 +27,18 @@ test("concretes.trap.StumbleTrap", () => {
 
     // trap1 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_転び石_A").id, [], "trap1"));
-    REGame.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    MRLively.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
     //----------------------------------------------------------------------------------------------------
 
     // player を右 (罠上) へ移動
-    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    REGame.world.random().resetSeed(5);     // 乱数調整
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRLively.world.random().resetSeed(5);     // 乱数調整
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // モーション発行順チェック
     expect(TestEnv.sequelSets.length).toBe(2);
@@ -57,6 +57,6 @@ test("concretes.trap.StumbleTrap", () => {
     expect((sequels2_2 as SMotionSequel).sequelId()).toBe(MRBasics.sequels.stumble);
 
     // アイテムが目の前に落ちる
-    const item1 = REGame.map.block(12, 10).getFirstEntity();
+    const item1 = MRLively.map.block(12, 10).getFirstEntity();
     expect(item1).toBe(weapon1);
 });

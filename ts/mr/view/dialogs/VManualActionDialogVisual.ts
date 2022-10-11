@@ -1,9 +1,9 @@
 import { assert, tr2 } from "ts/mr/Common";
-import { REGame } from "ts/mr/lively/REGame";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRLively } from "ts/mr/lively/MRLively";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { SManualActionDialog } from "ts/mr/system/dialogs/SManualDecisionDialog";
-import { REVisual } from "../REVisual";
+import { MRView } from "../MRView";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { LUnitBehavior } from "ts/mr/lively/behaviors/LUnitBehavior";
 import { SDialogContext } from "ts/mr/system/SDialogContext";
@@ -76,7 +76,7 @@ export class VManualActionDialogVisual extends VDialog {
         this.updateInput();
 
 
-        const context = RESystem.dialogContext;
+        const context = MRSystem.dialogContext;
         const entity = context.causeEntity();
         if (!entity) return;
 
@@ -217,8 +217,8 @@ export class VManualActionDialogVisual extends VDialog {
         }
         else if (this.isOffDirectionButton()) {
             this._updateMode = UpdateMode.DirSelecting;
-            REGame.map.increaseRevision();
-            REVisual.guideGrid?.setVisible(true);
+            MRLively.map.increaseRevision();
+            MRView.guideGrid?.setVisible(true);
             context.postActivity(LActivity.makeDirectionChange(entity, UMovement.getNextAdjacentEntityDirCW(entity)));
         }
         else if (Input.isTriggered("menu")) {
@@ -235,19 +235,19 @@ export class VManualActionDialogVisual extends VDialog {
     }
 
     private endDirectionSelecting(): void {
-        assert(REVisual.spriteSet2);
-        const arrow =  REVisual.spriteSet2.directionArrow();
-        REVisual.guideGrid?.setVisible(false);
+        assert(MRView.spriteSet2);
+        const arrow =  MRView.spriteSet2.directionArrow();
+        MRView.guideGrid?.setVisible(false);
         this._updateMode = UpdateMode.Normal;
         arrow.setDirection(0);
     }
 
     private updateDirSelecting(context: SDialogContext, entity: LEntity): void {
-        assert(REVisual.entityVisualSet);
-        assert(REVisual.spriteSet2);
-        const visual = REVisual.entityVisualSet.getEntityVisualByEntity(entity);
+        assert(MRView.entityVisualSet);
+        assert(MRView.spriteSet2);
+        const visual = MRView.entityVisualSet.getEntityVisualByEntity(entity);
         const sprite = visual.getRmmzSprite();
-        const arrow =  REVisual.spriteSet2.directionArrow();
+        const arrow =  MRView.spriteSet2.directionArrow();
         //arrow.setPosition(sprite.x, sprite.y);
         arrow.setDirection(entity.dir);
 
@@ -281,23 +281,23 @@ export class VManualActionDialogVisual extends VDialog {
             if (this._waitCount <= 0 && Input.dir8 != 0 && Input.dir8 != entity.dir) {
                 //context.closeDialog(false); // 行動消費無しで close
                 context.postActivity(LActivity.makeDirectionChange(entity, Input.dir8));
-                REGame.map.increaseRevision();
+                MRLively.map.increaseRevision();
                 this._waitCount = 10;
             }
         }
     }
 
     private updateDiagonalMoving(context: SDialogContext,entity: LEntity): void {
-        assert(REVisual.entityVisualSet);
-        assert(REVisual.spriteSet2);
-        const visual = REVisual.entityVisualSet.getEntityVisualByEntity(entity);
+        assert(MRView.entityVisualSet);
+        assert(MRView.spriteSet2);
+        const visual = MRView.entityVisualSet.getEntityVisualByEntity(entity);
         const sprite = visual.getRmmzSprite();
-        const arrow =  REVisual.spriteSet2.directionArrow();
+        const arrow =  MRView.spriteSet2.directionArrow();
         //arrow.setPosition(sprite.x, sprite.y);
 
         this._crossDiagonalCount++;
         if (this._crossDiagonalCount > 3) {
-            REVisual.spriteSet2?.directionArrow().setCrossDiagonal(true);
+            MRView.spriteSet2?.directionArrow().setCrossDiagonal(true);
         }
 
         if (Input.isPressed("pagedown")) {

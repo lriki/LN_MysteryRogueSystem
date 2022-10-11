@@ -1,6 +1,6 @@
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -33,18 +33,18 @@ test("concretes.states.透明.EnemyMove", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
 
     // Minimap には表示されない
     expect(SView.getEntityVisibility(enemy1).visible).toBe(false);
 
     // 10 ターン分 シミュレーション実行
-    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     for (let i = 0; i < 10; i++) {
-        RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
+        MRSystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+        MRSystem.dialogContext.activeDialog().submit();
 
-        RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+        MRSystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     }
 
     // ふらふら移動するため、まっすぐこちらに向かってくることはないはず
@@ -61,19 +61,19 @@ test("concretes.states.透明.Enemy", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_CharacterAI, 11, 6);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_CharacterAI, 11, 6);
 
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
     // Player 透明化
     actor1.addState(stateId);
 
     // 足踏み
-    RESystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
     // enemy1 は Player を視認できなくなったので通路へ向かって移動している
     expect(enemy1.mx).toBe(12);

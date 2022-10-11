@@ -5,7 +5,7 @@ import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { LRatedRandomAI } from "../ai/LRatedRandomAI";
 import { LEntity } from "../LEntity";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { DecisionPhase, LBehavior, LBehaviorGroup } from "./LBehavior";
 
 /**
@@ -15,7 +15,7 @@ import { DecisionPhase, LBehavior, LBehaviorGroup } from "./LBehavior";
 export class LRevivalItemBehavior extends LBehavior {
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LRevivalItemBehavior);
+        const b = MRLively.world.spawn(LRevivalItemBehavior);
         return b;
     }
 

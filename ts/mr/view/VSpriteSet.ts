@@ -1,5 +1,5 @@
 import { TilemapRendererId } from "ts/mr/rmmz/Tilemap";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { SView } from "../system/SView";
 import { VDirectionArrow } from "./VDirectionArrow";
 import { VHudWindow } from "./VHudWindow";
@@ -68,7 +68,7 @@ export class VSpriteSet {
 
     public update(): void {
         
-        const minimap = RESystem.minimapData;
+        const minimap = MRSystem.minimapData;
         if (minimap.isTilemapResetNeeded() || this._initialUpdate ) {
             this._minimapTilemap.setData(minimap.width(), minimap.height(), minimap.data());
             minimap.clearTilemapResetNeeded();

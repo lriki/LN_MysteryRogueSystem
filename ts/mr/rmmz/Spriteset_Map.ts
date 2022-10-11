@@ -2,7 +2,7 @@
 
 import { VSpriteSet } from "ts/mr/view/VSpriteSet";
 import { assert } from "../Common";
-import { REVisual } from "../view/REVisual";
+import { MRView } from "../view/MRView";
 import { RMMZHelper } from "./RMMZHelper";
 
 
@@ -19,7 +19,7 @@ declare global {
 
 const _Spriteset_Map_initialize = Spriteset_Map.prototype.initialize;
 Spriteset_Map.prototype.initialize = function(): void {
-    assert(!REVisual.spriteSet2);
+    assert(!MRView.spriteSet2);
     _Spriteset_Map_initialize.call(this);
 }
 
@@ -38,10 +38,10 @@ Spriteset_Map.prototype.createPictures = function() {
 
     if (RMMZHelper.isRESystemMap()) {
         // VisibilityShadow はピクチャなどよりも先に描画したいので、Picture のレイヤーよりも先に作っておく
-        REVisual.spriteSet2 = new VSpriteSet(this);
+        MRView.spriteSet2 = new VSpriteSet(this);
     }
     else {
-        REVisual.spriteSet2 = undefined;
+        MRView.spriteSet2 = undefined;
     }
 
     _Spriteset_Map_prototype_createPictures.call(this);
@@ -50,7 +50,7 @@ Spriteset_Map.prototype.createPictures = function() {
 var _Spriteset_Map_prototype_createCharacters = Spriteset_Map.prototype.createCharacters;
 Spriteset_Map.prototype.createCharacters = function() {
     _Spriteset_Map_prototype_createCharacters.call(this);
-    REVisual.spriteset = this;
+    MRView.spriteset = this;
 };
 
 
@@ -59,7 +59,7 @@ Spriteset_Map.prototype.updateTilemap = function() {
     _Spriteset_Map_prototype_updateTilemap.call(this);
 
     // SpriteSet、特に VisibilityShadow の更新は Tilemap のタイミングと合わせないと微妙に位置がずれたりする。
-    REVisual.spriteSet2?.update();
+    MRView.spriteSet2?.update();
 }
 
 /*

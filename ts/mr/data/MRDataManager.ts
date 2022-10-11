@@ -1,19 +1,18 @@
 import fs from 'fs';
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { assert, tr, tr2 } from "../Common";
-import { DMap, MRData, REFloorMapKind } from "./MRData";
+import { MRData } from "./MRData";
 import { MRBasics } from "./MRBasics";
 import { DState, DStateRestriction } from "./DState";
 import { DEquipmentType_Default } from "./DEquipmentType";
 import { DAbility, DAbility_Default } from "./DAbility";
 import { parseMetaToEntityProperties } from "./DEntityProperties";
-import { DLand, DLandIdentificationLevel, DMapId } from "./DLand";
+import { DLand, DLandIdentificationLevel } from "./DLand";
 import { DHelpers } from "./DHelper";
 import { DPrefabMoveType } from "./DPrefab";
-import { DActor } from './DActor';
 import { DEquipment } from './DItem';
 import { DTrait } from './DTraits';
-import { DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DEffectFieldScopeRange, DSkillCostSource, DParamCostType, DEffect } from './DEffect';
+import { DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DEffectFieldScopeRange, DSkillCostSource, DParamCostType } from './DEffect';
 import { DSystem } from './DSystem';
 import { DSkill } from './DSkill';
 import { DTroop } from './DTroop';
@@ -33,6 +32,8 @@ import { DTerrainSettingImporter } from './importers/DTerrainSettingImporter';
 import { DFloorPresetImporter } from './importers/DFloorPresetImporter';
 import { DFlavorEffect, DSound } from './DFlavorEffect';
 import { DValidationHelper } from './DValidationHelper';
+import { DMapId } from './DCommon';
+import { REFloorMapKind } from './DMap';
 
 type NextFunc = () => void;
 type TaskFunc = (next: NextFunc) => void;
@@ -802,22 +803,8 @@ export class MRDataManager {
                 emittor.effectSet.effectIds.push(effect.id);
 
                 entity.setMainEmittor(emittor);
-                // TODO:
-                //item.effectSet.setEffect(DEffectCause.Eat, DEffect_Clone(effect));
-                //item.effectSet.setEffect(DEffectCause.Hit, DEffect_Clone(effect));
-                /*
-                if (x.damage.type > 0) {
-                    const effect = this.makeEffect(x.damage);
-                    effect.successRate = x.successRate;
-                    effect.hitType = x.hitType;
-                    effect.specialEffects = x.effects;
-                    item.effectSet.setEffect(DEffectCause.Eat, DEffect_Clone(effect));
-                    item.effectSet.setEffect(DEffectCause.Hit, DEffect_Clone(effect));
-                }
-                */
 
                 const rmmzScope = x.scope ?? DRmmzEffectScope.None;
-                //item.animationId = x.animationId;
 
                 if (DHelpers.isForFriend(rmmzScope)) {
                     emittor.scope.range = DEffectFieldScopeRange.Performer;
@@ -847,27 +834,6 @@ export class MRDataManager {
                 entity.equipmentTraits = x.traits.slice();
                 entity.equipmentTraits = entity.equipmentTraits.concat(DTrait.parseTraitMetadata(x.meta));
                 entity.entity = parseMetaToEntityProperties(x.meta);
-
-                // 投げ当て Effect
-                // TODO: ここでいいの？
-                // const emittor = REData.newEmittor();
-                // emittor.scope.range = DEffectFieldScopeRange.Performer;
-                // const effect = new DEffect();
-                // effect.critical = false;
-                // effect.successRate = 100;
-                // effect.hitType = DEffectHitType.Physical;
-                // const q: DParameterQualifying = {
-                //     parameterId: REBasics.params.hp,
-                //     applyTarget: DParameterApplyTarget.Current,
-                //     elementId: 0,
-                //     formula: "89",
-                //     applyType: DParameterEffectApplyType.Damage,
-                //     variance: 20,
-                //     silent: false,
-                // };
-                // effect.qualifyings.parameterQualifyings.push(q);
-                // emittor.effectSet.effects.push(effect);
-                // entity.emittorSet.addEmittor(DEffectCause.Hit, emittor);
             }
         });
         MRData.armorDataIdOffset = MRData.items.length;
@@ -894,7 +860,7 @@ export class MRDataManager {
                 entity.entity = parseMetaToEntityProperties(x.meta);
             }
         });
-        RESystem.items = {
+        MRSystem.items = {
             autoSupplyFood: 2,
         };
         MRData.system.initialPartyMembers = [];
@@ -1007,9 +973,11 @@ export class MRDataManager {
         MRData.lands = [];
         MRData.lands.push(new DLand(0)); // [0] dummy
 
-        
         const defaltLand = new DLand(1);
-        MRData.lands.push(defaltLand); // [1] REシステム管理外の RMMZ マップを表す Land
+        MRData.lands.push(defaltLand);  // [1] REシステム管理外の RMMZ マップを表す Land
+
+        const worldLand = new DLand(2);
+        MRData.lands.push(worldLand);   // [2] World
         
         {
             const level = DLandIdentificationLevel.Entity;
@@ -1039,7 +1007,7 @@ export class MRDataManager {
                 const info = $dataMapInfos[i];
                 
                 const mapData = MRData.newMap();
-                mapData.landId = DHelpers.RmmzNormalMapLandId;
+                mapData.landId = DHelpers.VanillaLandId;
                 // DMap = {
                 //     id: i, landId: , mapId: 0, mapKind: REFloorMapKind.FixedMap, exitMap: false, defaultSystem: false, eventMap: false,
                 // };
@@ -1095,21 +1063,16 @@ export class MRDataManager {
                             }
                         }
                                 
-                        if (info.name?.includes("ExitMap")) {
-                            mapData.exitMap = true;
-                            mapData.landId = DHelpers.RmmzNormalMapLandId;
-                        }
-
-
                         DDataImporter.importMapData(
                             mapData, info, parentInfo,
                             parentInfo.parentId > 0 ? $dataMapInfos[parentInfo.parentId] : undefined);
                     }
                 }
 
-                // null 回避のため、REシステム管理外のマップの FloorInfo を作っておく
-                if (mapData.landId == DHelpers.RmmzNormalMapLandId) {
-                    MRData.lands[DHelpers.RmmzNormalMapLandId].floorInfos[mapData.mapId] = {
+                // null 回避のため、 FloorInfo を作っておく
+                if (mapData.landId == DHelpers.VanillaLandId ||
+                    mapData.landId == DHelpers.WorldLandId) {
+                    MRData.lands[mapData.landId].floorInfos[mapData.mapId] = {
                         key: "",
                         template: undefined,
                         displayName: undefined,
@@ -1122,11 +1085,6 @@ export class MRDataManager {
 
         // 検証
         for (const land of MRData.lands) {
-            if (land.id > 0 && land.id != DHelpers.RmmzNormalMapLandId) {
-                if (land.exitRMMZMapId == 0) {
-                    throw new Error(`Land[${land.name}] is MR-ExitMap not defined.`);
-                }
-            }
         }
 
         next();
@@ -1378,7 +1336,7 @@ export class MRDataManager {
     public static isRESystemMap(mapId: DMapId) : boolean {
         const map = MRData.maps[mapId];
         if (map.eventMap) return false;
-        return map.landId > DHelpers.RmmzNormalMapLandId;
+        return map.landId > DHelpers.VanillaLandId;
     }
 
     //--------------------------------------------------
@@ -1392,7 +1350,7 @@ export class MRDataManager {
 
     private static loadDataFile(src: string, onLoad: (obj: any) => void) {
         if (DHelpers.isNode()) {
-            const dataDir = "data/";//REData.testMode ? "../data/" : "data/";
+            const dataDir = "data/";
             const data = JSON.parse(fs.readFileSync(dataDir + src).toString());
             onLoad(data);
         }

@@ -6,7 +6,7 @@ import { SEventExecutionDialog } from "ts/mr/system/dialogs/SEventExecutionDialo
 import { SCommandResponse } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { LEntity } from "../LEntity";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { MRSerializable } from "ts/mr/Common";
 import { LReaction } from "../LCommon";
 
@@ -16,7 +16,7 @@ import { LReaction } from "../LCommon";
 export class LEntryPointBehavior extends LBehavior {
     
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LEntryPointBehavior);
+        const b = MRLively.world.spawn(LEntryPointBehavior);
         return b;
     }
 

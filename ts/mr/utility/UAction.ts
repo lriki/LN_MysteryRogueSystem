@@ -6,13 +6,13 @@ import { MRData } from "ts/mr/data/MRData";
 import { LGenerateDropItemCause, onPerformStepFeetProcess, onPreStepFeetProcess, onPreStepFeetProcess_Actor, onWalkedOnTopAction, onWalkedOnTopReaction } from "ts/mr/lively/internal";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { LEntityId } from "ts/mr/lively/LObject";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { MRBasics } from "../data/MRBasics";
 import { DActionId, DBlockLayerKind } from "../data/DCommon";
 import { LInventoryBehavior } from "../lively/behaviors/LInventoryBehavior";
 import { DescriptionHighlightColor, LEntityDescription } from "../lively/LIdentifyer";
 import { Helpers } from "../system/Helpers";
-import { RESystem } from "../system/RESystem";
+import { MRSystem } from "../system/MRSystem";
 import { SCommandContext } from "../system/SCommandContext";
 import { SEffectSubject } from "../system/SEffectContext";
 import { SSoundManager } from "../system/SSoundManager";
@@ -104,7 +104,7 @@ export class UAction {
     }
 
     public static postStepOnGround(cctx: SCommandContext, entity: LEntity): void {
-        const block = REGame.map.block(entity.mx, entity.my);
+        const block = MRLively.map.block(entity.mx, entity.my);
         const layer = block.layer(DBlockLayerKind.Ground);
         const reactor = layer.firstEntity();
         if (reactor) {
@@ -114,7 +114,7 @@ export class UAction {
     }
 
     public static postPreStepFeetProcess(cctx: SCommandContext, entity: LEntity): void {
-        const block = REGame.map.block(entity.mx, entity.my);
+        const block = MRLively.map.block(entity.mx, entity.my);
         const layer = block.layer(DBlockLayerKind.Ground);
         const reactor = layer.firstEntity();
         if (reactor) {
@@ -126,7 +126,7 @@ export class UAction {
     }
 
     public static postAttemptPerformStepFeetProcess(cctx: SCommandContext, entity: LEntity): void {
-        const block = REGame.map.block(entity.mx, entity.my);
+        const block = MRLively.map.block(entity.mx, entity.my);
         const layer = block.layer(DBlockLayerKind.Ground);
         const reactor = layer.firstEntity();
         if (reactor) {
@@ -152,7 +152,7 @@ export class UAction {
 
         return cctx.postCommandTask(self, cmd)
             .then2(() => {
-                REGame.map._removeEntity(itemEntity);
+                MRLively.map._removeEntity(itemEntity);
                 inventory.addEntityWithStacking(itemEntity);
                 
                 const name = LEntityDescription.makeDisplayText(UName.makeUnitName(self), DescriptionHighlightColor.UnitName);
@@ -166,7 +166,7 @@ export class UAction {
      */
     public static postDropOrDestroy(cctx: SCommandContext, entity: LEntity, mx: number, my: number): void {
         cctx.postCall(() => {
-            REGame.world.transferEntity(entity, REGame.map.floorId(), mx, my);
+            MRLively.world.transferEntity(entity, MRLively.map.floorId(), mx, my);
             this.postDropOrDestroyOnCurrentPos(cctx, entity, entity.getHomeLayer());
         });
     }
@@ -242,12 +242,12 @@ export class UAction {
                 const my = entity.my + positions[i].y;
 
                 // 地形などを考慮して、本当に落とすアイテムを決める
-                const block = REGame.map.tryGetBlock(mx, my);
+                const block = MRLively.map.tryGetBlock(mx, my);
                 if (block && block.isFloorLikeShape() && !block.layer(DBlockLayerKind.Ground).isContainsAnyEntity()) {
                     const item = items[iItem];
                     item.removeFromParent();
-                    REGame.world.transferEntity(item, REGame.map.floorId(), entity.mx, entity.my);
-                    cctx.postTransferFloor(item, REGame.map.floorId(), mx, my);
+                    MRLively.world.transferEntity(item, MRLively.map.floorId(), entity.mx, entity.my);
+                    cctx.postTransferFloor(item, MRLively.map.floorId(), mx, my);
                     cctx.postSequel(item, MRBasics.sequels.jump);
                     iItem++;
                 }
@@ -289,7 +289,7 @@ export class UAction {
 
 
     private static checkAdjacentDirectlyAttack(self: LEntity, target: LEntity): boolean {
-        const map = REGame.map;
+        const map = MRLively.map;
         const selfBlock = map.block(self.mx, self.my);
         const targetBlock = map.block(target.mx, target.my);
         const dx = targetBlock.mx - selfBlock.mx;
@@ -363,14 +363,14 @@ export class UAction {
 
 
         // 攻撃対象が隣接していれば、"移動" を外す
-        if (primaryTargetId.hasAny() && UMovement.checkEntityAdjacent(performer, REGame.world.entity(primaryTargetId))) {
+        if (primaryTargetId.hasAny() && UMovement.checkEntityAdjacent(performer, MRLively.world.entity(primaryTargetId))) {
             result.mutableRemove(x => x.action.skillId == MRData.system.skills.move);
         }
         else {
             let found = false;
             for (const c of result) {
                 for (const id of c.targets) {
-                    const target = REGame.world.entity(id);
+                    const target = MRLively.world.entity(id);
                     if (UMovement.checkEntityAdjacent(performer, target)) {
                         result.mutableRemove(x => x.action.skillId == MRData.system.skills.move);
                         found = true;
@@ -414,7 +414,7 @@ export class UAction {
 
                 if (!this.checkAdjacentDirectlyAttack(performer, target)) return false; // 壁の角など、隣接攻撃できなければダメ
 
-                const targetBlock = REGame.map.block(target.mx, target.my);
+                const targetBlock = MRLively.map.block(target.mx, target.my);
                 if (!targetBlock || UBlock.checkPurifier(targetBlock, performer)) return false; // target の場所に聖域効果があるならダメ
 
                 return true;
@@ -458,7 +458,7 @@ export class UAction {
                 for (let i = 1; i < scope.length; i++) { // 足元を含む必要はないので i=1 から開始
                     const x = performer.mx + (ox * i);
                     const y = performer.my + (oy * i);
-                    const block = REGame.map.tryGetBlock(x, y);
+                    const block = MRLively.map.tryGetBlock(x, y);
 
                     // マップ外まで見たら列挙終了
                     if (!block) {
@@ -506,7 +506,7 @@ export class UAction {
         }
         else if (scope.range == DEffectFieldScopeRange.Room) {
             const candidates: LEntity[] = [];
-            REGame.map.room(performer.roomId()).forEachEntities(entity => {
+            MRLively.map.room(performer.roomId()).forEachEntities(entity => {
                 if (this.testFactionMatch(performer, entity, rmmzEffectScope)) {
                     candidates.push(entity);
                 };
@@ -562,7 +562,7 @@ export class UAction {
     public static findInSightNearlyHostileEntity(self: LEntity): LEntity | undefined {
         if (USearch.hasBlindness(self)) return undefined;   // 盲目
 
-        return REGame.map.getInsightEntities(self)
+        return MRLively.map.getInsightEntities(self)
                 .filter(e => Helpers.isHostile(self, e) && USearch.isVisibleFromSubject(self, e))
                 .immutableSort((a, b) => Helpers.getDistance(self, a) - Helpers.getDistance(self, b))
                 .find(e => Helpers.isHostile(self, e));
@@ -582,7 +582,7 @@ export class UAction {
     }
 
     public static postDropItems(cctx: SCommandContext, entity: LEntity, cause: LGenerateDropItemCause): void {
-        const map = REGame.map;
+        const map = MRLively.map;
         assert(map.checkAppearing(entity));
         const items = entity.generateDropItems(cause);
         for (const item of items) {

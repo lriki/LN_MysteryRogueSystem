@@ -1,7 +1,7 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -26,7 +26,7 @@ test("concretes.item.Gold", () => {
     // gold1 - 地面に配置
     const gold1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_Gold_A").id, [], "gold1"));
     gold1.getEntityBehavior(LGoldBehavior).setGold(1000);
-    REGame.world.transferEntity(gold1, TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
+    MRLively.world.transferEntity(gold1, TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
 
     // gold2 - インベントリに入れる
     const gold2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_Gold_A").id, [], "gold2"));
@@ -35,26 +35,26 @@ test("concretes.item.Gold", () => {
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 13, 10);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 13, 10);
     const hp1 = enemy1.actualParam(MRBasics.params.hp);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // [拾う]
-    RESystem.dialogContext.postActivity(LActivity.makePick(actor1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makePick(actor1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // GoldItem は消え、所持金が増えている
     expect(gold1.isDestroyed()).toBe(true);
     expect(inventory1.gold()).toBe(1000);
 
     // [投げる]
-    RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, gold2).withEntityDirection(6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeThrow(actor1, gold2).withEntityDirection(6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // 投げ当てた時は、1/10 の固定ダメージ
     const hp2 = enemy1.actualParam(MRBasics.params.hp);

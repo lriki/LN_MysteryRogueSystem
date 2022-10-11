@@ -1,5 +1,5 @@
 import { SDialog, SDialogAction } from "ts/mr/system/SDialog";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { REDialogVisualNavigator } from "./REDialogVisual";
 import { SDialogContext } from "ts/mr/system/SDialogContext";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
@@ -25,7 +25,7 @@ export class VDialog {
     }
 
     protected dialogContext(): SDialogContext {
-        return RESystem.dialogContext;
+        return MRSystem.dialogContext;
     }
 
     protected commandContext(): SCommandContext {
@@ -47,14 +47,14 @@ export class VDialog {
                         //this.cancel();
                         break;
                     case SDialogAction.CloseAllSubDialogs:
-                        if (RESystem.dialogContext.dialogs().length >= 2) {
+                        if (MRSystem.dialogContext.dialogs().length >= 2) {
                             this.closeAllSubDialogs();
                         }
                         break;
                 }
             }
         }
-        RESystem.dialogContext.open(dialog);
+        MRSystem.dialogContext.open(dialog);
     }
     
     //protected push<T extends VDialog>(dialog: T, result: (model: T) => void) {

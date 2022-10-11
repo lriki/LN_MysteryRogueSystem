@@ -1,9 +1,9 @@
 import { assert, MRSerializable } from "../Common";
 import { LBlock, LTileShape } from "./LBlock";
 import { LEntity } from "./LEntity";
-import { REGame } from "./REGame";
+import { MRLively } from "./MRLively";
 import { Helpers } from "ts/mr/system/Helpers";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { Vector2 } from "ts/mr/math/Vector2";
 import { DFloorInfo } from "ts/mr/data/DLand";
 import { LEntityId, LObject, LObjectType } from "./LObject";
@@ -224,7 +224,7 @@ export class LMap extends LObject {
     }
 
     public land2(): LLand {
-        return REGame.world.land(this._floorId.landId());
+        return MRLively.world.land(this._floorId.landId());
     }
 
     public floorData(): DFloorInfo {
@@ -267,7 +267,7 @@ export class LMap extends LObject {
         }
 
         if (x < 0 || this._width <= x || y < 0 || this._height <= y) {
-            return REGame.borderWall;
+            return MRLively.borderWall;
         }
         else {
             return this._blocks[y * this._width + x];
@@ -366,13 +366,13 @@ export class LMap extends LObject {
 
     public entities(): LEntity[] {
         return this._entityIds
-            .map(id => { return REGame.world.entity(id); })
+            .map(id => { return MRLively.world.entity(id); })
             .filter((e): e is LEntity => { return e != undefined; });
     }
 
     public iterateEntities(func: ((b: LEntity) => void) | ((b: LEntity) => boolean), fromTraits: boolean = false): boolean {
         for (const id of this._entityIds) {
-            const entity = REGame.world.entity(id);
+            const entity = MRLively.world.entity(id);
             if (func(entity) === false) return false;
         }
         return true;
@@ -410,7 +410,7 @@ export class LMap extends LObject {
             b.onEnteredMap(entity, this);
             return true;
          });
-        RESystem.integration.entityEnteredMap(entity);
+        MRSystem.integration.entityEnteredMap(entity);
     }
 
     /**
@@ -451,7 +451,7 @@ export class LMap extends LObject {
 
     _removeAllEntities(): void {
         this._entityIds.forEach(x => {
-            const entity = REGame.world.entity(x);
+            const entity = MRLively.world.entity(x);
             this._removeEntityHelper(entity);
             //_removeEntity(entity);
             //entity.floorId = 0;
@@ -467,7 +467,7 @@ export class LMap extends LObject {
 
         assert(entity.floorId.equals(this.floorId()));
         
-        if (entity.floorId.isRESystem()) {
+        if (entity.floorId.isTacticsMap()) {
             const block = this.block(entity.mx, entity.my);
             const result = block.removeEntity(entity);
             assert(result);
@@ -478,7 +478,7 @@ export class LMap extends LObject {
         
         entity.floorId = LFloorId.makeEmpty();
         entity.clearParent();
-        RESystem.integration.entityLeavedMap(entity);
+        MRSystem.integration.entityLeavedMap(entity);
     }
 
     onRemoveChild(obj: LObject): void {
@@ -557,7 +557,7 @@ export class LMap extends LObject {
 
     /** 足元の Entity を取得する */
     public firstFeetEntity(entity: LEntity): LEntity | undefined {
-        const block = REGame.map.block(entity.mx, entity.my);
+        const block = MRLively.map.block(entity.mx, entity.my);
         const layer = block.layer(DBlockLayerKind.Ground);
         return layer.firstEntity();
     }

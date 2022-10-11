@@ -1,8 +1,8 @@
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -25,7 +25,7 @@ test("concretes.item.grass.火炎草.test", () => {
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     enemy1.addState(MRData.getState("kState_UTからぶり").id);
-    REGame.world.transferEntity(enemy1, floorId, 11, 10);
+    MRLively.world.transferEntity(enemy1, floorId, 11, 10);
 
     enemy1.params().param(MRBasics.params.hp)?.setIdealParamPlus(500);
     enemy1.setActualParam(MRBasics.params.hp, 500);
@@ -39,15 +39,15 @@ test("concretes.item.grass.火炎草.test", () => {
 
     TestUtils.testCommonGrassBegin(player1, item1);
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // [食べる]
-    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withEntityDirection(6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withEntityDirection(6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // Enemy はダメージを受ける
     const enemy1Hp2 = enemy1.actualParam(MRBasics.params.hp);
@@ -63,10 +63,10 @@ test("concretes.item.grass.火炎草.test", () => {
     enemy1.setActualParam(MRBasics.params.hp, 500);
 
     // [投げる]
-    RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item2).withEntityDirection(6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeThrow(player1, item2).withEntityDirection(6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // Enemy はダメージを受ける。ただし、投げ当てた時のダメージ量は飲んだ時よりも少ない。
     const enemy1Hp3 = enemy1.actualParam(MRBasics.params.hp);

@@ -1,6 +1,6 @@
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -21,19 +21,19 @@ test("concretes.states.RatedRandom", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_バットA").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, floorId, 20, 10);
+    MRLively.world.transferEntity(enemy1, floorId, 20, 10);
 
-    REGame.world.random().resetSeed(9);     // 乱数調整
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRLively.world.random().resetSeed(9);     // 乱数調整
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
     //----------------------------------------------------------------------------------------------------
 
     // 10 ターン分 シミュレーション実行
     for (let i = 0; i < 10; i++) {
-        RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
+        MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
+        MRSystem.dialogContext.activeDialog().submit();
 
-        RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+        MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     }
 
     // ふらふら移動するため、まっすぐこちらに向かってくることはないはず
@@ -52,21 +52,21 @@ test("concretes.states.RatedRandom.Issue1", () => {
     */
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_バットA").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, floorId, 11, 10);
-    REGame.map.block(10, 9)._tileShape = LTileShape.Wall;
-    REGame.map.block(11, 9)._tileShape = LTileShape.Wall;
-    REGame.map.block(9, 10)._tileShape = LTileShape.Wall;
-    REGame.map.block(12, 10)._tileShape = LTileShape.Wall;
-    REGame.map.block(10, 11)._tileShape = LTileShape.Wall;
-    REGame.map.block(11, 11)._tileShape = LTileShape.Wall;
+    MRLively.world.transferEntity(enemy1, floorId, 11, 10);
+    MRLively.map.block(10, 9)._tileShape = LTileShape.Wall;
+    MRLively.map.block(11, 9)._tileShape = LTileShape.Wall;
+    MRLively.map.block(9, 10)._tileShape = LTileShape.Wall;
+    MRLively.map.block(12, 10)._tileShape = LTileShape.Wall;
+    MRLively.map.block(10, 11)._tileShape = LTileShape.Wall;
+    MRLively.map.block(11, 11)._tileShape = LTileShape.Wall;
     
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // シミュレーション実行
     for (let i = 0; i < 20; i++) {
         player1.setActualDamgeParam(MRBasics.params.hp, 0);
-        RESystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
-        RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+        MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
+        MRSystem.dialogContext.activeDialog().submit();
+        MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     }
 });

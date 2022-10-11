@@ -1,3 +1,4 @@
+import { DLandId } from "./DCommon";
 import { DRmmzEffectScope } from "./DEffect";
 
 export interface DConstructionExpr {
@@ -14,12 +15,29 @@ export class DHelpers {
     public static TILE_ID_A4 = 5888;
     public static TILE_ID_MAX = 8192;
 
-    public static RmmzNormalMapLandId = 1;
+    public static VanillaLandId = 1;
+    public static WorldLandId = 2;
+    // NOTE: なぜ Vanilla と World を分けるの？
+    //       → お試し中。 World という単位を入れると色々と都合がよいことが分かったが、
+    //          Vanilla は従来から「MRシステム管理外」のマップの置き場としていた。
+    //          Vanilla と World を一緒にしてしまうと、その置き場がなくなってしまう。
 
     // public static getMapName(mapId: DMapId): string {
     //     const info = $dataMapInfos[mapId];
     //     return info ? info.name : "";
     // }
+
+    public static isVanillaLand(landId: DLandId): boolean {
+        return landId == this.VanillaLandId;
+    }
+
+    public static isWorldLand(landId: DLandId): boolean {
+        return landId == this.WorldLandId;
+    }
+
+    public static isDungeonLand(landId: DLandId): boolean {
+        return landId > 0 && landId != this.VanillaLandId && landId != this.WorldLandId;
+    }
 
     public static getMapTopTile(mapData: IDataMap, x: number, y: number): number {
         for (let z = 3; z >= 0; z--) {

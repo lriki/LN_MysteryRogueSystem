@@ -1,6 +1,6 @@
 import { LEntity } from "../lively/LEntity";
 import { LBehavior } from "ts/mr/lively/behaviors/LBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { LDebugMoveRightBehavior } from "ts/mr/lively/states/LDebugMoveRight";
 import { LNapStateBehavior } from "ts/mr/lively/states/LNapStateBehavior";
 import { LKnockbackBehavior } from "ts/mr/lively/abilities/LKnockbackBehavior";
@@ -106,7 +106,7 @@ export class SBehaviorFactory {
     public static createBehavior(name: string): LBehavior | undefined {
         const b = this.createBehaviorInstance(name);
         if (!b) return undefined;
-        REGame.world._registerObject(b);
+        MRLively.world._registerObject(b);
         return b;
     }
 

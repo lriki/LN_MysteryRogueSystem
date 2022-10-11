@@ -1,5 +1,5 @@
 import { LandExitResult } from "ts/mr/data/MRData";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { LBehavior, LGenerateDropItemCause } from "ts/mr/lively/behaviors/LBehavior";
 import { LEntity } from "../LEntity";
 import { SCommandResponse } from "ts/mr/system/SCommand";
@@ -89,7 +89,7 @@ export class LBattlerBehavior extends LBehavior {
     onPermanentDeath(self: LEntity, cctx: SCommandContext): SCommandResponse {
         const entity = this.ownerEntity();
         if (entity.isUnique()) {
-            if (entity == REGame.camera.focusedEntity()) {
+            if (entity == MRLively.camera.focusedEntity()) {
                 cctx.postSequel(entity, MRBasics.sequels.CollapseSequel);
                 cctx.postWait(entity, 100);
                 cctx.postWaitSequel();   // ゲームオーバー時の遷移で、"倒れた" メッセージの後に Wait が動くようにしたい

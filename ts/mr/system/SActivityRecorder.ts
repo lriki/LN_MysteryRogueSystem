@@ -2,7 +2,7 @@
 import * as fs from "fs";
 import { assert } from "ts/mr/Common";
 import { SActivityPlaybackDialog } from "ts/mr/system/dialogs/SActivityPlaybackDialog";
-import { RESystem } from "./RESystem";
+import { MRSystem } from "./MRSystem";
 import { LActivity, LActivityData } from "ts/mr/lively/activities/LActivity";
 import { RmmzStorageManager } from "ts/mr/rmmz/StorageManager";
 
@@ -190,7 +190,7 @@ export class SActivityRecorder {
         switch (cmd.type) {
             case ActivityRecordingCommandType.Activity: {
                 assert(cmd.activity);
-                RESystem.commandContext.postActivity(LActivity.makeFromData(cmd.activity));
+                MRSystem.commandContext.postActivity(LActivity.makeFromData(cmd.activity));
                 return true;
             }
             case ActivityRecordingCommandType.CloseMainDialog: {

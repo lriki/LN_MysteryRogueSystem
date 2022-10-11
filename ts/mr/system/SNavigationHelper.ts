@@ -1,6 +1,6 @@
 import { LTrapBehavior } from "ts/mr/lively/behaviors/LTrapBehavior";
 import { LEntity } from "ts/mr/lively/LEntity";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { MRBasics } from "../data/MRBasics";
 import { LExitPointBehavior } from "../lively/behaviors/LExitPointBehavior";
 import { paramDefaultVisibiltyLength } from "../PluginParameters";
@@ -31,8 +31,8 @@ export class SNavigationHelper {
      * @deprecated SView.getEntityVisibility
      */
     public static testVisibilityForMinimap(subject: LEntity, target: LEntity): boolean {
-        const map = REGame.map;
-        const targetBlock = REGame.map.block(target.mx, target.my);
+        const map = MRLively.map;
+        const targetBlock = MRLively.map.block(target.mx, target.my);
 
         // Trap は未発見の場合、どのような勢力からであっても不可視
         const trap = target.findEntityBehavior(LTrapBehavior);

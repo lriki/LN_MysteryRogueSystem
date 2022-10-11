@@ -1,7 +1,7 @@
 import { MRSerializable } from "../Common";
 import { LEntity } from "./LEntity";
 import { LEntityId } from "./LObject";
-import { REGame } from "./REGame";
+import { MRLively } from "./MRLively";
 
 
 // 同一レイヤーに、同時に複数の Entity は存在可能。
@@ -20,12 +20,12 @@ export class REBlockLayer {
     }
 
     entities(): readonly LEntity[] {
-        return this._entityIds.map(x => REGame.world.entity(x));
+        return this._entityIds.map(x => MRLively.world.entity(x));
     }
 
     firstEntity(): LEntity | undefined {
         if (this._entityIds.length > 0)
-            return REGame.world.entity(this._entityIds[0]);
+            return MRLively.world.entity(this._entityIds[0]);
         else
             return undefined;
     }
@@ -39,7 +39,7 @@ export class REBlockLayer {
     }
 
     isOccupied(): boolean {
-        return this._entityIds.some(x => REGame.world.entity(x).blockOccupied);
+        return this._entityIds.some(x => MRLively.world.entity(x).blockOccupied);
     }
 
     addEntity(entity: LEntity) {

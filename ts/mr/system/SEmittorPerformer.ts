@@ -5,7 +5,7 @@ import { MRData } from "ts/mr/data/MRData";
 import { LProjectileBehavior } from "ts/mr/lively/behaviors/activities/LProjectileBehavior";
 import { onAttackReaction } from "ts/mr/lively/internal";
 import { LEntity } from "ts/mr/lively/LEntity";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SCommandContext } from "./SCommandContext";
 import { SEffectContext, SEffectIncidentType, SEffectSubject } from "./SEffectContext";
 import { SEntityFactory } from "./SEntityFactory";
@@ -233,7 +233,7 @@ export class SEmittorPerformer {
             targets: targets,
             skillId: skillId,
         };
-        REGame.eventServer.publish(cctx, MRBasics.events.skillEmitted, args)
+        MRLively.eventServer.publish(cctx, MRBasics.events.skillEmitted, args)
     }
 
     private onPerformed(cctx: SCommandContext, targets: LEntity[]): void {
@@ -414,7 +414,7 @@ export class SEmittorPerformer {
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.Center) {
             const targets: LEntity[] = [];
-            const block = REGame.map.tryGetBlock(performer.mx, performer.my);
+            const block = MRLively.map.tryGetBlock(performer.mx, performer.my);
             if (block) {
                 for (const entity of block.getEntities()) {
                     if (!entity.equals(performer)) {
@@ -426,7 +426,7 @@ export class SEmittorPerformer {
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.Room) {
             const targets: LEntity[] = [];
-            REGame.map.room(performer.roomId()).forEachEntities(entity => {
+            MRLively.map.room(performer.roomId()).forEachEntities(entity => {
                 if (UAction.testFactionMatch(performer, entity, DRmmzEffectScope.Opponent_All)) {
                     targets.push(entity);
                 };
@@ -435,7 +435,7 @@ export class SEmittorPerformer {
         }
         else if (emittor.scope.range == DEffectFieldScopeRange.Map) {
             const targets: LEntity[] = [];
-            REGame.map.entities().filter(entity => {
+            MRLively.map.entities().filter(entity => {
                 if (UAction.testFactionMatch(performer, entity, DRmmzEffectScope.Everyone)) {
                     targets.push(entity);
                 };
@@ -457,7 +457,7 @@ export class SEmittorPerformer {
     {
         const createInfo = DEntityCreateInfo.makeSingle(MRData.getEntity(emittor.scope.projectilePrefabKey).id).withStackCount(1);
         const bullet = SEntityFactory.newEntity(createInfo);
-        REGame.map.appearEntity(bullet, startX, startY);
+        MRLively.map.appearEntity(bullet, startX, startY);
         bullet.dir = dir;
 
         // Projectile は item とは異なる Entity であり、Projectile 自体はデータベース上では Effect を持たない。

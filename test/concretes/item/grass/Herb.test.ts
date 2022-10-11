@@ -1,7 +1,7 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -97,7 +97,7 @@ test("concretes.item.grass.Herb.player", () => {
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, floorId, 15, 10);
+    MRLively.world.transferEntity(enemy1, floorId, 15, 10);
 
     // アイテム作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草_A").id, [], "item1"));
@@ -107,23 +107,23 @@ test("concretes.item.grass.Herb.player", () => {
 
     TestUtils.testCommonGrassBegin(player1, item1);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     const player1HpMax1 = player1.idealParam(MRBasics.params.hp);
     
     // [食べる] (HP Max)
-    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 最大HPが増えている
     const player1HpMax2 = player1.idealParam(MRBasics.params.hp);
     expect(player1HpMax2).toBeGreaterThan(player1HpMax1);
-    expect(REGame.messageHistory.includesText("最大HP")).toBeTruthy();
-    expect(REGame.messageHistory.includesText("増えた")).toBeTruthy();  // "回復した" ではないこと
+    expect(MRLively.messageHistory.includesText("最大HP")).toBeTruthy();
+    expect(MRLively.messageHistory.includesText("増えた")).toBeTruthy();  // "回復した" ではないこと
 
     TestUtils.testCommonGrassEnd(player1, item1);
 
@@ -134,10 +134,10 @@ test("concretes.item.grass.Herb.player", () => {
     const player1Hp1 = player1.actualParam(MRBasics.params.hp);
     
     // [食べる]
-    RESystem.dialogContext.postActivity(LActivity.makeEat(player1, item2).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeEat(player1, item2).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // HPが回復している
     const player1Hp2 = player1.actualParam(MRBasics.params.hp);
@@ -153,7 +153,7 @@ test("concretes.item.grass.Herb.enemy", () => {
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, floorId, 15, 10);
+    MRLively.world.transferEntity(enemy1, floorId, 15, 10);
 
     // アイテム作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草_A").id, [], "item1"));
@@ -161,17 +161,17 @@ test("concretes.item.grass.Herb.enemy", () => {
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     const enemy1HpMax1 = enemy1.idealParam(MRBasics.params.hp);
     
     // [投げる] (HP Max)
-    RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item1).withEntityDirection(6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeThrow(player1, item1).withEntityDirection(6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 最大HPは変わらない
     const enemy1HpMax2 = enemy1.idealParam(MRBasics.params.hp);
@@ -184,10 +184,10 @@ test("concretes.item.grass.Herb.enemy", () => {
     const enemy1Hp1 = enemy1.actualParam(MRBasics.params.hp);
     
     // [投げる]
-    RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item2).withEntityDirection(6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeThrow(player1, item2).withEntityDirection(6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // HPが回復している
     const enemy1Hp2 = enemy1.actualParam(MRBasics.params.hp);
@@ -203,22 +203,22 @@ test("concretes.item.grass.Herb.undead", () => {
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ゾンビ_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, floorId, 15, 10);
+    MRLively.world.transferEntity(enemy1, floorId, 15, 10);
     const enemy1Hp1 = enemy1.actualParam(MRBasics.params.hp);
 
     // アイテム作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草_A").id, [], "item1"));
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // [投げる]
-    RESystem.dialogContext.postActivity(LActivity.makeThrow(player1, item1).withEntityDirection(6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeThrow(player1, item1).withEntityDirection(6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // ダメージを受けている
     const enemy2Hp1 = enemy1.actualParam(MRBasics.params.hp);

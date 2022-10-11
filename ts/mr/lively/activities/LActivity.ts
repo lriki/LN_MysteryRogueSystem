@@ -6,7 +6,7 @@ import { UMovement } from "ts/mr/utility/UMovement";
 import { LBlock } from "../LBlock";
 import { LEntity } from "../LEntity";
 import { LEntityId } from "../LObject";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { MRData } from "ts/mr/data/MRData";
 import { LActionTokenConsumeType } from "../LCommon";
 import { DSkill } from "ts/mr/data/DSkill";
@@ -95,11 +95,11 @@ export class LActivity {
     }
 
     public actor(): LEntity {
-        return REGame.world.entity(this._actor);
+        return MRLively.world.entity(this._actor);
     }
 
     public subject(): LEntity {
-        return REGame.world.entity(this._subject);
+        return MRLively.world.entity(this._subject);
     }
 
     public hasObject(): boolean {
@@ -107,7 +107,7 @@ export class LActivity {
     }
 
     public object(): LEntity {
-        return REGame.world.entity(this._object);
+        return MRLively.world.entity(this._object);
     }
 
     public setObject(object: LEntity): void {
@@ -115,7 +115,7 @@ export class LActivity {
     }
 
     public objects2(): LEntity[] {
-        return this._objects2.map(x => REGame.world.entity(x));
+        return this._objects2.map(x => MRLively.world.entity(x));
     }
 
     public setObjects2(objects: LEntity[]): void {

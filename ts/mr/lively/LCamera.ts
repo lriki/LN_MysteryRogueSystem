@@ -1,6 +1,6 @@
 import { LEntity } from "./LEntity";
-import { REGame } from "./REGame";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRLively } from "./MRLively";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { assert, Log, MRSerializable } from "ts/mr/Common";
 import { LEntityId } from "./LObject";
 import { LFloorId } from "./LFloorId";
@@ -61,7 +61,7 @@ export class LCamera {
 
     focusedEntity(): LEntity | undefined {
         if (!this._focusedEntityId.hasAny()) return undefined;
-        return REGame.world.entity(this._focusedEntityId);
+        return MRLively.world.entity(this._focusedEntityId);
     }
 
     getFocusedEntity(): LEntity {
@@ -110,7 +110,7 @@ export class LCamera {
         this._transferingNewFloorId = floorId;
         this._transferingNewX = x;
         this._transferingNewY = y;
-        RESystem.integration.onReserveTransferMap(floorId.rmmzMapId(), x, y, d);
+        MRSystem.integration.onReserveTransferMap(floorId.rmmzMapId(), x, y, d);
     }
 
     clearFloorTransfering() {

@@ -3,7 +3,7 @@ import { MRBasics } from "ts/mr/data/MRBasics";
 import { DPrefabActualImage } from "ts/mr/data/DPrefab";
 import { DStateRestriction } from "ts/mr/data/DState";
 import { MRData } from "ts/mr/data/MRData";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { LIllusionStateBehavior } from "ts/mr/lively/states/LIllusionStateBehavior";
 import { LUnitBehavior } from "../lively/behaviors/LUnitBehavior";
 import { LNameView } from "../lively/internal";
@@ -59,7 +59,7 @@ export class SView {
     }
 
     public static getTilemapView(): TilemapViewInfo {
-        const subject = REGame.camera.focusedEntity();
+        const subject = MRLively.camera.focusedEntity();
         if (subject) {
             
             if (subject.states().find(s => s.stateEffect().restriction == DStateRestriction.Blind)) {
@@ -74,7 +74,7 @@ export class SView {
     }
 
     public static getMinimapVisibility(entity: LEntity): SEntityVisibility {
-        const subject = REGame.camera.focusedEntity();
+        const subject = MRLively.camera.focusedEntity();
 
         // if (!entity.floorId.equals(REGame.map.floorId())) {
         //     return { visible: false, translucent: false };
@@ -201,7 +201,7 @@ export class SView {
         //if (subject.entityId().equals(target.entityId())) return true;
 
         //if (REGame.map.unitClarity) return true;
-        const map = REGame.map;
+        const map = MRLively.map;
 
         // あかりの巻物など、フロア自体に可視効果がある
         if (map.unitClarity) {
@@ -224,7 +224,7 @@ export class SView {
         
         // 中立 target は、踏破済みの Block 上なら見える
         if (!Helpers.isHostile(subject, target)) {
-            const targetBlock = REGame.map.block(target.mx, target.my);
+            const targetBlock = MRLively.map.block(target.mx, target.my);
             if (targetBlock._passed) {
                 return true;
             }

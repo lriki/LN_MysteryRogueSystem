@@ -4,7 +4,7 @@ import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { UAction } from "ts/mr/utility/UAction";
-import { RESystem } from "../RESystem";
+import { MRSystem } from "../MRSystem";
 import { SDialog } from "../SDialog";
 import { SItemSelectionDialog } from "./SItemSelectionDialog";
 
@@ -22,7 +22,7 @@ export class SCommonCommand {
                     assert(target);
                     const activity = (new LActivity).setup(actionId, actor, item, actor.dir);
                     activity.setObjects2([target]);
-                    RESystem.dialogContext.postActivity(activity);
+                    MRSystem.dialogContext.postActivity(activity);
                 }
                 else {
                     //this.activateCommandWindow();
@@ -32,7 +32,7 @@ export class SCommonCommand {
         }
         else {
             const activity = (new LActivity).setup(actionId, actor, item, actor.dir);
-            RESystem.dialogContext.postActivity(activity);
+            MRSystem.dialogContext.postActivity(activity);
             dialog.submit();
         }
     }

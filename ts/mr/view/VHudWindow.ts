@@ -2,7 +2,7 @@ import { MRBasics } from "ts/mr/data/MRBasics";
 import { LActorBehavior } from "ts/mr/lively/behaviors/LActorBehavior";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { LFloorId } from "ts/mr/lively/LFloorId";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { LExperienceBehavior } from "../lively/behaviors/LExperienceBehavior";
 
 
@@ -29,7 +29,7 @@ export class VHudWindow extends Window_Base {
     private refresh() {
         this.contents.clear();
 
-        const entity = REGame.camera.focusedEntity();
+        const entity = MRLively.camera.focusedEntity();
         if (!entity) return;
         const experience = entity.findEntityBehavior(LExperienceBehavior);
         if (!experience) return;
@@ -46,8 +46,8 @@ export class VHudWindow extends Window_Base {
         const nextExp = experience.nextLevelExp(entity);
         const extRatio = Math.max(0, (experience.currentExp(entity) - prevExp) / (nextExp - prevExp));
 
-        if (REGame.map.floorId().isRESystem()) {
-            this.drawFloorNumber(0, 0, REGame.map.floorId());
+        if (MRLively.map.floorId().isTacticsMap()) {
+            this.drawFloorNumber(0, 0, MRLively.map.floorId());
         }
         this.drawLevel(150, 0, level, extRatio);
         this.drawHpFp(300, 0, hp, mhp, fp, mfp);
@@ -57,7 +57,7 @@ export class VHudWindow extends Window_Base {
     update() {
         this.refresh();
 
-        if (REGame.map.floorId().isTacticsMap() || REGame.map.floorId().isSafetyMap()) {
+        if (MRLively.map.floorId().isTacticsMap() || MRLively.map.floorId().isSafetyMap()) {
             this.visible = true;
         }
         else {

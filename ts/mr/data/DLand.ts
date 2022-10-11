@@ -1,23 +1,21 @@
 
-import { assert, tr2 } from "../Common";
-import { DAnnotationReader, RmmzFloorRawAttribute } from "./importers/DAttributeReader";
-import { DTerrainPresetId, DTerrainSettingId } from "./DCommon";
-import { DEntityCreateInfo, DEntitySpawner2 } from "./DEntity";
+import { assert, tr, tr2 } from "../Common";
+import { DAnnotationReader } from "./importers/DAttributeReader";
+import { DLandId, DMapId, DTerrainPresetId, DTerrainSettingId } from "./DCommon";
+import { DEntitySpawner2 } from "./DEntity";
 import { DEntityKind } from "./DEntityKind";
 import { DHelpers } from "./DHelper";
-import { DPrefabId } from "./DPrefab";
-import { DMap, MRData } from "./MRData";
+import { MRData } from "./MRData";
+import { DMap } from "./DMap";
+import { Diag } from "../Diag";
+import { DValidationHelper } from "./DValidationHelper";
 
 
-export type DLandId = number;
-export type DMapId = number;
-
-/*
-export interface DFloorId {
-    landId: DLandId;
-    floorNumber: number;
+export enum DFloorClass {
+    FloorMap = 0,
+    EventMap = 1,
 }
-*/
+
 
 export interface DAppearanceTableEntity {
     startFloorNumber: number;
@@ -132,6 +130,76 @@ export enum DLandForwardDirection {
     Flat,
 }
 
+/** Land を抜けた時のステータスに対するルール */
+export enum DLandExitStatusRule {
+    /** グローバル設定を継承する */
+    Default,
+
+    /** 無し */
+    None,
+
+    /** 永続パラメータを含めて、全てのパラメータをリセットする */
+    Initialize,
+}
+
+/** Land を抜けた時のインベントリに対するルール */
+export enum DLandExitInventoryRule {
+    /** グローバル設定を継承する */
+    Default,
+
+    /** 無し */
+    None,
+
+    /** 持ち物を全て削除する */
+    Initialize,
+}
+
+
+export class DLandRule {
+
+    // Land に入った時のルール
+    //   高難易度ダンジョンは入る前に訓練場などでレベルを上げていたとしても、入ったときにリセットされるものがある。
+    enteredStatus: DLandExitStatusRule;
+    enteredInventory: DLandExitInventoryRule;
+
+    conqueredStatus: DLandExitStatusRule;
+    conqueredInventory: DLandExitInventoryRule;
+
+    // ゲームオーバーやあきらめた時のルール
+    abandonedStatus: DLandExitStatusRule;
+    abandonedInventory: DLandExitInventoryRule;
+
+    /*
+    [2022/9/29] ゲームオーバー時にステータスをリセットするのはどのタイミングがよい？
+    ----------
+    ### Dungeon から Land へ遷移開始したとき
+    - 画面暗転時に Window に表示されている HP が全快して見えてしまう。
+        - これは多分、ExitMap が Vanilla に属していたのが原因。
+    - 攻撃>戦闘不能処理>マップ遷移>ステータスリセット が同一のコマンドチェーンで実行されるため、ユニットテストが難しくなる。
+    - 特定条件で、ゲームオーバーではなくイベントに遷移し、そこでの結果に応じて冒険に復帰、といったことができなくなる。
+    おそらく、マップの移動に引っ掛けるよりはなんらか「冒険の終了宣言」に引っ掛けるのがよいのかもしれない。
+
+    ### Dungeon から World への遷移が完了したとき
+    ゲームオーバーでホームへ戻ったときや、クリアしてダンジョンの入口へ戻るときなど。
+
+
+
+    */
+
+    public constructor() {
+        this.enteredStatus = DLandExitStatusRule.Default;
+        this.enteredInventory = DLandExitInventoryRule.Default;
+        this.conqueredStatus = DLandExitStatusRule.Default;
+        this.conqueredInventory = DLandExitInventoryRule.Default;
+        this.abandonedStatus = DLandExitStatusRule.Default;
+        this.abandonedInventory = DLandExitInventoryRule.Default;
+        // this.conqueredStatus = DLandExitStatusRule.Initialize;
+        // this.conqueredInventory = DLandExitInventoryRule.None;
+        // this.abandonedStatus = DLandExitStatusRule.Initialize;
+        // this.abandonedInventory = DLandExitInventoryRule.Initialize;
+    }
+}
+
 /**
  * ダンジョンや町ひとつ分。
  */
@@ -164,12 +232,6 @@ export class DLand {
     //enemyTable: DAppearanceTable;
     //trapTable: DAppearanceTable;
 
-    /**
-     * 主にシステムの都合で行先が明示されずに、Land から "出される" ときの移動先となるマップ。
-     * ゲームオーバーや "脱出の巻物" などでダンジョンから抜けるときに参照される。
-     * このマップは通過点として演出や遷移先の指定のみ利用する。REシステム管理下のマップではない。
-     */
-    exitRMMZMapId: number;
     //exitFloorId: DFloorId;
 
     /** @MR-Floor から読み取った Floor 情報 */
@@ -184,6 +246,18 @@ export class DLand {
     identifiedKinds: (DLandIdentificationLevel | undefined)[];
 
     forwardDirection: DLandForwardDirection;
+
+    // イベントマップ。 ExitMap も含む。
+    // FixedMap は含まない。FixedMap への遷移はつまり DungeonFloor への遷移であるため、EventMap への遷移と混同しないようにする。
+    private _eventMapIds: DMapId[];
+    
+    
+    /**
+     * 主にシステムの都合で行先が明示されずに、Land から "出される" ときの移動先となるマップ。
+     * ゲームオーバーや "脱出の巻物" などでダンジョンから抜けるときに参照される。
+     * このマップは通過点として演出や遷移先の指定のみ利用する。REシステム管理下のマップではない。
+     */
+    private _exitEventMapIndex: number;
 
     public constructor(id: DLandId) {
         this.id = id;
@@ -209,19 +283,89 @@ export class DLand {
         //enemyTable = { entities = [] },
         //trapTable = { entities = [] },
         //exitFloorId = { landId = 0, floorNumber = 0 },
-        this.exitRMMZMapId = 0;
         this.floorInfos = [];
         this.floorIds = [];
         this.fixedMapIds = [];
+        this._eventMapIds = [];
+        this._exitEventMapIndex = -1;
         this.identifiedKinds = [];
         this.forwardDirection = DLandForwardDirection.Uphill;
     }
+
+    //--------------------------------------------------------------------------
+    // Validation
+
+    public toDebugName(): string {
+        return DValidationHelper.makeDataName("Land", this.id, this.name);
+    }
+
+    public validate(): void {
+        if (this.id > 0 && this.isDungeonLand) {
+            if (this._exitEventMapIndex == 0) {
+                Diag.error(this.toDebugName() + tr("の ExitMap が設定されていません。"));
+            }
+        }
+    }
+
+    //--------------------------------------------------------------------------
+
+    public get isVanillaLand(): boolean {
+        return DHelpers.isVanillaLand(this.id);
+    }
+
+    public get isWorldLand(): boolean {
+        return DHelpers.isWorldLand(this.id);
+    }
+
+    public get isDungeonLand(): boolean {
+        return DHelpers.isDungeonLand(this.id);
+    }
+    
+    public get eventMapIds(): readonly DMapId[] {
+        return this._eventMapIds;
+    }
+    
+    public get exitMapId(): DMapId {
+        assert(this._exitEventMapIndex >= 0);
+        return this._eventMapIds[this._exitEventMapIndex];
+    }
+
+    public get exitMapData(): DMap {
+        return MRData.maps[this.exitMapId];
+    }
+
+    public getFloorClass(mapData: DMap) {
+        assert(mapData.landId === this.id);
+        //if (this._exitMapId == mapData.id) return DFloorClass.ExitMap;
+        if (!!this._eventMapIds.find(id => mapData.id)) return DFloorClass.EventMap;
+        return DFloorClass.FloorMap;
+    }
+
+    // public getMapDataIndex(floorNumber: number): number {
+
+    // }
 
     public findFixedMapByName(name: string): DMap | undefined {
         if (!name) return undefined;
         const mapId = this.fixedMapIds.find(x => MRData.maps[x].name == name);
         if (!mapId) return undefined;
         return MRData.maps[mapId];
+    }
+
+    public addEventMap(map: DMap): void {
+        assert(map.landId === 0);
+        map.landId = this.id;
+        this._eventMapIds.push(map.id);
+    }
+
+    public addEventMapAsExitMap(map: DMap): void {
+        if (this._exitEventMapIndex >= 0) Diag.error(this.toDebugName() + tr2("既に ExitMap が設定されています。"));
+        //assert(map.landId === 0);
+        assert(map.landId === this.id); // TODO: 一時的に許容
+        map.landId = this.id;
+        map.exitMap = true;
+        this._exitEventMapIndex = this._eventMapIds.length;
+        this._eventMapIds.push(map.id);
     }
 
     // public getFixedMapByName(name: string): DMap {

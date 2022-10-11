@@ -1,6 +1,6 @@
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -26,23 +26,23 @@ test("concretes.states.くちなし.Basic", () => {
     actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
     actor1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // [食べる]
-    RESystem.dialogContext.postActivity(LActivity.makeEat(actor1, item1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeEat(actor1, item1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     expect(item1.isDestroyed()).toBe(false); // 食べられないので削除されてはいない
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // [読む]
-    RESystem.dialogContext.postActivity(LActivity.makeRead(actor1, item1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeRead(actor1, item1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     expect(item1.isDestroyed()).toBe(false); // 読めないので削除されてはいない
 });
@@ -54,9 +54,9 @@ test("concretes.states.くちなし.AutoRemove", () => {
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     actor1.addState(stateId);
-    REGame.world.transferEntity(actor1, LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
+    MRLively.world.transferEntity(actor1, LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // フロア移動でステート解除
     expect(!!actor1.states().find(x => x.stateDataId() == stateId)).toBe(false);

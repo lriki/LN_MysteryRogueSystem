@@ -1,6 +1,6 @@
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
 import { MRBasics } from "ts/mr/data/MRBasics";
@@ -17,7 +17,7 @@ beforeAll(() => {
 
 test("concretes.item.scroll.RestartScroll", async () => {
     TestEnv.newGame();
-    REGame.recorder.setSavefileId(999);
+    MRLively.recorder.setSavefileId(999);
     const floorId = TestEnv.FloorId_FlatMap50x50;
 
     // Player
@@ -31,30 +31,30 @@ test("concretes.item.scroll.RestartScroll", async () => {
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, floorId, 13, 10);
+    MRLively.world.transferEntity(enemy1, floorId, 13, 10);
     const enemy1HP1 = enemy1.actualParam(MRBasics.params.hp);
 
 
     // 初期状態を Save
     const savedata1 = TestJsonEx.stringify(SGameManager.makeSaveContentsCore());
-    await REGame.recorder.startRecording();
+    await MRLively.recorder.startRecording();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
     // 右へ移動
-    RESystem.dialogContext.postActivity(LActivity.makeDirectionChange(player1, 6));
-    RESystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeDirectionChange(player1, 6));
+    MRSystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
     // 右へ攻撃
-    RESystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, MRData.system.skills.normalAttack, 6).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, MRData.system.skills.normalAttack, 6).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     //await REGame.recorder.stopRecording();
 
@@ -65,22 +65,22 @@ test("concretes.item.scroll.RestartScroll", async () => {
     //----------------------------------------------------------------------------------------------------
 
     // [読む]
-    RESystem.dialogContext.postActivity(LActivity.makeRead(player1, item1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeRead(player1, item1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-    expect(RESystem.requestedRestartFloorItem).toBeDefined();
+    expect(MRSystem.requestedRestartFloorItem).toBeDefined();
     SGameManager.loadGameObjects(TestJsonEx.parse(savedata1));
 
     //----------------------------------------------------------------------------------------------------
 
     // 初期状態を Load
     
-    const player1_2 = REGame.world.entity(player1.entityId());
+    const player1_2 = MRLively.world.entity(player1.entityId());
     const inventory2 = player1_2.getEntityBehavior(LInventoryBehavior);
 
-    const enemy1_2 = REGame.world.entity(enemy1.entityId());
+    const enemy1_2 = MRLively.world.entity(enemy1.entityId());
     const enemy1HP3 = enemy1_2.actualParam(MRBasics.params.hp);
 
     // 色々元に戻っている

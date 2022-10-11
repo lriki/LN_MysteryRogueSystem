@@ -5,7 +5,7 @@ import { SCommandContext } from "../system/SCommandContext";
 import { LEnemyBehavior } from "./behaviors/LEnemyBehavior";
 import { LEntity } from "./LEntity";
 import { LEntityId } from "./LObject";
-import { REGame } from "./REGame";
+import { MRLively } from "./MRLively";
 
 
 /**
@@ -32,7 +32,7 @@ export class LSanctuaryFieldEffect extends LFieldEffect {
     }
 
     public get owner(): LEntity {
-        return REGame.world.entity(this._ownerEntityId);
+        return MRLively.world.entity(this._ownerEntityId);
     }
     
     onCheckIncludes(mx: number, my: number): boolean {
@@ -52,7 +52,7 @@ export class LSanctuaryFieldEffect extends LFieldEffect {
     // カバーしきれるように onStabilizeSituation() を使う。
     onStabilizeSituation(cctx: SCommandContext): SCommandResponse {
         const owner = this.owner;
-        const block = REGame.map.tryGetBlock(owner.mx, owner.my);
+        const block = MRLively.map.tryGetBlock(owner.mx, owner.my);
         if (block) {
             for (const entity of block.getEntities()) {
                 // 戦闘不能ステート 付加

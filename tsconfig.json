@@ -30,22 +30,10 @@
             "dom",
             "es2015.promise",
             "es2015"
-            //"scripthost",
-            //"es2016.array.include"
         ],
 
-        
         "declaration": true,
         "declarationDir": "dist/dts",
     },
-    // "include": [
-    //     "ts/*",
-    //     "ts/re/**/*",
-    //     "ts/extensions/**/*",
-    // ],
-    //"exclude": ["node_modules/**/*", "dist/**/*", "ts/viewer/**/*"],
-    //"files": [
-    //  "ts/main.ts"
-    //]
     "exclude": ["dist/**/*", "node_modules/**/*", "data/**/*"],
 }

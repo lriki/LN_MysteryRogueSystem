@@ -1,9 +1,9 @@
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { LTileShape } from "ts/mr/lively/LBlock";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../TestEnv";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
 import { SDebugHelpers } from "ts/mr/system/SDebugHelpers";
@@ -19,9 +19,9 @@ test("activity.Throw", () => {
     TestEnv.newGame();
 
     // Player
-    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    const actor1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
     actor1.dir = 6; // 右を向く
-    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    MRLively.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     TestEnv.performFloorTransfer();
 
     // アイテムを作ってインベントリに入れる
@@ -32,16 +32,16 @@ test("activity.Throw", () => {
     actor1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 
     // 投げ当てテスト用に壁を作る
-    REGame.map.block(actor1.mx, actor1.my + 2)._tileShape = LTileShape.Wall;
+    MRLively.map.block(actor1.mx, actor1.my + 2)._tileShape = LTileShape.Wall;
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // [投げる] Post
-    RESystem.dialogContext.postActivity(LActivity.makeThrow(actor1, item1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makeThrow(actor1, item1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
     
     // [投げる] 実行 (自然落下)
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // インベントリから消えていること。
     expect(actor1.getEntityBehavior(LInventoryBehavior).items.length).toBe(1);
@@ -55,11 +55,11 @@ test("activity.Throw", () => {
 
     // [投げる] Post
     const activity2 = LActivity.makeThrow(actor1, item2).withConsumeAction();
-    RESystem.dialogContext.postActivity(activity2);
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(activity2);
+    MRSystem.dialogContext.activeDialog().submit();
     
     // [投げる] 実行 (壁に当たって落下)
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // インベントリから消えていること。
     expect(actor1.getEntityBehavior(LInventoryBehavior).items.length).toBe(0);
@@ -75,29 +75,29 @@ test("activity.ThrowAndHit", () => {
     TestEnv.newGame();
 
     // Player
-    const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
+    const actor1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
     actor1.dir = 6; // 右を向く
-    REGame.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    MRLively.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     TestEnv.performFloorTransfer();
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    REGame.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
+    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
     SDebugHelpers.setHP(enemy1, 1); // HP1
 
     // アイテムを作ってインベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
     actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // [投げる] Post
     const activity = LActivity.makeThrow(actor1, item1).withConsumeAction();
-    RESystem.dialogContext.postActivity(activity);
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(activity);
+    MRSystem.dialogContext.activeDialog().submit();
     
     // [投げる] 実行
-    RESystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     expect(item1.isDestroyed()).toBe(true);     // item は削除されている
     const a = enemy1.actualParam(MRBasics.params.hp);

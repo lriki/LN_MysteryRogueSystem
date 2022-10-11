@@ -5,7 +5,7 @@ import { FMapBuilder } from "ts/mr/floorgen/FMapBuilder";
 import { MRData } from "ts/mr/data/MRData";
 import { paramRandomMapPaddingX, paramRandomMapPaddingY } from "ts/mr/PluginParameters";
 import { assert } from "ts/mr/Common";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -63,7 +63,7 @@ test("RandomMap.967875183", () => {
 test("RandomMap.ValidationStartIssue", () => {
     TestEnv.newGame();
     for (let i = 0; i < 100; i++) {
-        const seed = i==0 ? 1504087190 : REGame.world.random().nextInt();
+        const seed = i==0 ? 1504087190 : MRLively.world.random().nextInt();
         const map = new FMap(TestEnv.FloorId_RandomMapFloor, seed);
         const setting = MRData.getTerrainSetting("kTerrainSetting_Small2x2");
         (new FGenericRandomMapGenerator(map, setting)).generate();

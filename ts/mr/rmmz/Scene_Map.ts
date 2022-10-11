@@ -1,8 +1,8 @@
 import { assert } from "../Common";
-import { RESystem } from "../system/RESystem";
+import { MRSystem } from "../system/MRSystem";
 import { REEntityVisualSet } from "../view/REEntityVisualSet";
-import { REVisual } from "../view/REVisual";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRView } from "../view/MRView";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { RMMZHelper } from "./RMMZHelper";
 import { SMainMenuDialog } from "ts/mr/system/dialogs/SMainMenuDialog";
 import { SGameManager } from "../system/SGameManager";
@@ -28,7 +28,7 @@ Scene_Map.prototype.onMapLoaded = function() {
 const _Scene_Map_onTransferEnd = Scene_Map.prototype.onTransferEnd;
 Scene_Map.prototype.onTransferEnd = function() {
     _Scene_Map_onTransferEnd.call(this);
-    REVisual._messageWindowSet?.attemptStartDisplayFloorName();
+    MRView._messageWindowSet?.attemptStartDisplayFloorName();
 }
 
 
@@ -46,19 +46,19 @@ Scene_Map.prototype.createDisplayObjects = function() {
     // refresh はホントは onMapLoaded のフック内で呼ぶのが自然な気がするが、
     // createDisplayObjects() の前に呼んでおきたい。
     // そうしないと、特にランダムダンジョン内にいるときのセーブデータをロードした後、Tilemap 生成とのタイミングの問題で何も表示されなくなる。
-    if (REGame.map.floorId().isTacticsMap()) {
-        RESystem.mapManager.attemptRefreshVisual();
+    if (MRLively.map.floorId().isTacticsMap()) {
+        MRSystem.mapManager.attemptRefreshVisual();
     }
 
     // ベースの createDisplayObjects() では update() が一度呼ばれるため、先にインスタンスを作っておく
-    assert(!REVisual.entityVisualSet);
-    REVisual.entityVisualSet = new REEntityVisualSet();
+    assert(!MRView.entityVisualSet);
+    MRView.entityVisualSet = new REEntityVisualSet();
 
     _Scene_Map_createDisplayObjects.call(this);
     
     // REVisual の中で Window を作りたいが、ベースの createWindowLayer() を先に実行しておく必要がある。
     // その後 createWindows() を呼び出す。
-    REVisual.onSceneChanged(this);
+    MRView.onSceneChanged(this);
 };
 
 const _Scene_Map_start = Scene_Map.prototype.start;
@@ -70,19 +70,19 @@ const _Scene_Map_terminate = Scene_Map.prototype.terminate;
 Scene_Map.prototype.terminate = function() {
     _Scene_Map_terminate.call(this);
 
-    if (REVisual.entityVisualSet) {
-        REVisual.entityVisualSet.ternimate();
-        REVisual.entityVisualSet = undefined;
+    if (MRView.entityVisualSet) {
+        MRView.entityVisualSet.ternimate();
+        MRView.entityVisualSet = undefined;
     }
-    if (REVisual.spriteSet2) {
+    if (MRView.spriteSet2) {
         //REVisual.spriteSet2.destroy();
-        REVisual.spriteSet2 = undefined;
+        MRView.spriteSet2 = undefined;
     }
 }
 
 function isTransterEffectRunning(): boolean {
-    if (REVisual._messageWindowSet) {
-        return REVisual._messageWindowSet._floorNameWindow.isEffectRunning();
+    if (MRView._messageWindowSet) {
+        return MRView._messageWindowSet._floorNameWindow.isEffectRunning();
     }
     else {
         return false;
@@ -96,24 +96,24 @@ Scene_Map.prototype.update = function() {
     FloorRestartSequence.update(this);
 
     if (!isTransterEffectRunning()) {
-        if (REGame.map.floorId().isTacticsMap()) {
+        if (MRLively.map.floorId().isTacticsMap()) {
             if (!$gameMap.isEventRunning()) {   // イベント実行中はシミュレーションを行わない
     
-                if (REGame.camera.isFloorTransfering()) {
+                if (MRLively.camera.isFloorTransfering()) {
                     // マップ遷移中はコアシステムとしては何もしない。
                     // performFloorTransfer() すること。
                     //return;
                 }
                 else {
-                    RESystem.scheduler.stepSimulation();
+                    MRSystem.scheduler.stepSimulation();
                 }
             }
             
-            RESystem.minimapData.update();
+            MRSystem.minimapData.update();
         }
         else {
             // 普通のマップの時は、Command 実行用の Scheduler をずっと動かしておく
-            REGame.immediatelyCommandExecuteScheduler.stepSimulation();
+            MRLively.immediatelyCommandExecuteScheduler.stepSimulation();
         }
     
     }
@@ -121,15 +121,15 @@ Scene_Map.prototype.update = function() {
     else {
     }
     
-    REVisual.update();
+    MRView.update();
 
     // Entity と Game_Player の位置を合わせるときは、↑で先に REVisual の座標を更新した後、
     // Scene_Map.update の前に同期をかける必要がある。
     // 位置合わせは Game_Player だけではなく Game_Map や Game_Screen など様々なオブジェクトに対しても影響するため、
     // ここでまず Game_Player を調整した後、残りはコアスクリプトに任せる。
     // (ただし _realX などが中途半端だと座標移動がかかえるので、REMap 上ではすべての Character の update を切っている)
-    if (REGame.map.floorId().isTacticsMap()) {
-        if (REVisual._syncCamera) {
+    if (MRLively.map.floorId().isTacticsMap()) {
+        if (MRView._syncCamera) {
             RMMZHelper.syncCameraPositionToGamePlayer();
         }
     }
@@ -139,34 +139,34 @@ Scene_Map.prototype.update = function() {
 
 const _Scene_Map_callMenu = Scene_Map.prototype.callMenu;
 Scene_Map.prototype.callMenu = function() {
-    if (REGame.map.floorId().isRMMZDefaultSystemMap()) {
+    if (MRLively.map.floorId().isRMMZDefaultSystemMap()) {
         // 通常の RMMZ マップ & システム
         _Scene_Map_callMenu.call(this);
     }
     else {
         // セーフティマップ。ManualActionDialog は無いので、ここから MainMenu を表示する。
-        assert(RESystem.dialogContext.dialogs().length == 0);
-        const actorEntity = REGame.camera.focusedEntity();
+        assert(MRSystem.dialogContext.dialogs().length == 0);
+        const actorEntity = MRLively.camera.focusedEntity();
         assert(actorEntity);
-        RESystem.commandContext.openDialog(actorEntity, new SMainMenuDialog(actorEntity), false);
+        MRSystem.commandContext.openDialog(actorEntity, new SMainMenuDialog(actorEntity), false);
         this.menuCalling = false;
     }
 }
 
 const _Scene_Map_updateCallMenu = Scene_Map.prototype.updateCallMenu;
 Scene_Map.prototype.updateCallMenu = function() {
-    if (REGame.map.floorId().isRMMZDefaultSystemMap()) {
+    if (MRLively.map.floorId().isRMMZDefaultSystemMap()) {
         // 通常の RMMZ マップ & システム
         _Scene_Map_updateCallMenu.call(this);
     }
-    else if (REGame.map.floorId().isTacticsMap()) {
+    else if (MRLively.map.floorId().isTacticsMap()) {
         // タクティクスマップ。MainMenu の表示は ManualActionDialog から行う。
         // Scene_Map からのメニュー表示は行わない。
         this.menuCalling = false;
     }
     else {
         // セーフティマップ。ManualActionDialog は無いので、ここから MainMenu を表示する。
-        if (RESystem.dialogContext.dialogs().length == 0) {
+        if (MRSystem.dialogContext.dialogs().length == 0) {
             _Scene_Map_updateCallMenu.call(this);
         }
     }
@@ -174,7 +174,7 @@ Scene_Map.prototype.updateCallMenu = function() {
 
 const _Scene_Map_shouldAutosave = Scene_Map.prototype.shouldAutosave;
 Scene_Map.prototype.shouldAutosave = function() {
-    if (REGame.map.floorId().isTacticsMap()) {
+    if (MRLively.map.floorId().isTacticsMap()) {
         return true;
     }
     else {
@@ -184,7 +184,7 @@ Scene_Map.prototype.shouldAutosave = function() {
 
 const _Scene_Map_isAutosaveEnabled = Scene_Map.prototype.isAutosaveEnabled;
 Scene_Base.prototype.isAutosaveEnabled = function() {
-    if (REGame.map.floorId().isTacticsMap()) {
+    if (MRLively.map.floorId().isTacticsMap()) {
         return true;
     }
     else {

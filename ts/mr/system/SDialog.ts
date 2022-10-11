@@ -1,7 +1,7 @@
 import { LFloorId } from "ts/mr/lively/LFloorId";
 import { assert } from "../Common";
 import { LEntity } from "../lively/LEntity";
-import { RESystem } from "./RESystem";
+import { MRSystem } from "./MRSystem";
 import { SDialogContext } from "./SDialogContext";
 
 
@@ -85,14 +85,14 @@ export class SDialog {
     }
     
     public closeAllSubDialogs(): void {
-        assert(RESystem.dialogContext.dialogs().length >= 2);
+        assert(MRSystem.dialogContext.dialogs().length >= 2);
         assert(this._dialogResult.action == SDialogAction.None);
         this._dialogResult.action = SDialogAction.CloseAllSubDialogs;
         this._closeSelfAndSubDialogs();
     }
 
     private _closeSelfAndSubDialogs(): void {
-        RESystem.dialogContext._closeDialog(this);
+        MRSystem.dialogContext._closeDialog(this);
         
         if (this._resultCallbackVisual) {
             this._resultCallbackVisual(this);
@@ -136,14 +136,14 @@ export class SDialog {
                         // 親 Dialog まで cancel を伝播するようなことはしない。
                         break;
                     case SDialogAction.CloseAllSubDialogs:
-                        if (RESystem.dialogContext.dialogs().length >= 2) {
+                        if (MRSystem.dialogContext.dialogs().length >= 2) {
                             this.closeAllSubDialogs();
                         }
                         break;
                 }
             }
         }
-        RESystem.dialogContext.open(dialog);
+        MRSystem.dialogContext.open(dialog);
     }
 
 

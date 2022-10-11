@@ -1,7 +1,7 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -19,8 +19,8 @@ test("concretes.item.scroll.TrapScroll", () => {
     const floorId = LFloorId.makeFromKeys("MR-Land:UnitTestDungeon1", "kFloor_ランダム罠テスト");
 
     // Player を未時期別アイテムが出現するダンジョンへ配置する
-    const player1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    REGame.world.transferEntity(player1, floorId);
+    const player1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
+    MRLively.world.transferEntity(player1, floorId);
     TestEnv.performFloorTransfer();
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
@@ -32,7 +32,7 @@ test("concretes.item.scroll.TrapScroll", () => {
         items.push(item);
     }
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
 
@@ -40,10 +40,10 @@ test("concretes.item.scroll.TrapScroll", () => {
     let lastCount = ULimitations.getTrapCountInMap();
     for (const item of items) {
         // [読む]
-        RESystem.dialogContext.postActivity(LActivity.makeRead(player1, item).withConsumeAction());
-        RESystem.dialogContext.activeDialog().submit();
+        MRSystem.dialogContext.postActivity(LActivity.makeRead(player1, item).withConsumeAction());
+        MRSystem.dialogContext.activeDialog().submit();
         
-        RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+        MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
         const e = Math.min(lastCount + 30, paramMaxTrapsInMap);
         expect(ULimitations.getTrapCountInMap()).toBe(e);

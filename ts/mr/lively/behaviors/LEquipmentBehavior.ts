@@ -7,7 +7,7 @@ import { SSubTaskChain } from "ts/mr/system/tasks/STask";
 import { LReaction } from "../LCommon";
 import { LEntity } from "../LEntity";
 import { LObject } from "../LObject";
-import { REGame } from "../REGame";
+import { MRLively } from "../MRLively";
 import { CommandArgs, LBehavior, testPickOutItem } from "./LBehavior";
 import { LEquipmentUserBehavior } from "./LEquipmentUserBehavior";
 import { LInventoryBehavior } from "./LInventoryBehavior";
@@ -85,7 +85,7 @@ export class LEquipmentBehavior extends LBehavior {
     */
 
     public clone(newOwner: LEntity): LBehavior {
-        const b = REGame.world.spawn(LEquipmentBehavior);
+        const b = MRLively.world.spawn(LEquipmentBehavior);
         return b;
     }
     

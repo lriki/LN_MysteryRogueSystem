@@ -1,8 +1,8 @@
 import { assert } from "ts/mr/Common";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { REGame } from "ts/mr/lively/REGame";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { RESystem } from "ts/mr/system/RESystem";
+import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "./TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
@@ -23,31 +23,31 @@ test("Items.Stack", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 矢1本
     const info1 = DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢_A").id);
     info1.stackCount = 1;
     const item1 = SEntityFactory.newEntity(info1);
-    REGame.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
+    MRLively.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
 
     // 足元のアイテムを拾う
-    RESystem.dialogContext.postActivity(LActivity.makePick(player1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makePick(player1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 矢2本
     const info2 = DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢_A").id);
     info2.stackCount = 2;
     const item2 = SEntityFactory.newEntity(info2);
-    REGame.world.transferEntity(item2, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
+    MRLively.world.transferEntity(item2, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
 
     // 足元のアイテムを拾う
-    RESystem.dialogContext.postActivity(LActivity.makePick(player1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makePick(player1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     expect(item1._stackCount).toBe(3);  // 3本にまとめられている
 
@@ -55,25 +55,25 @@ test("Items.Stack", () => {
     const info3 = DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢_A").id);
     info3.stackCount = 99;
     const item3 = SEntityFactory.newEntity(info3);
-    REGame.world.transferEntity(item3, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
+    MRLively.world.transferEntity(item3, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
 
     // 足元のアイテムを拾う
-    RESystem.dialogContext.postActivity(LActivity.makePick(player1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makePick(player1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     expect(item1._stackCount).toBe(99);  // 99本が最大
 
     // 矢1本
     const item4 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢_A").id));
-    REGame.world.transferEntity(item4, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
+    MRLively.world.transferEntity(item4, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
 
     // 足元のアイテムを拾う
-    RESystem.dialogContext.postActivity(LActivity.makePick(player1).withConsumeAction());
-    RESystem.dialogContext.activeDialog().submit();
+    MRSystem.dialogContext.postActivity(LActivity.makePick(player1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
 
-    RESystem.scheduler.stepSimulation(); // Advance Simulation ----------
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     expect(item1._stackCount).toBe(99);  // 99本が最大
 
