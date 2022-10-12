@@ -59,6 +59,11 @@ export class LCamera {
         return this._focusedEntityId;
     }
 
+    /**
+     * 現在フォーカスのある Entity を取得します。
+     * 取得した Entity は、必ずしも Player ではない点に注意してください。
+     * 操作中の Player を取得したい場合は LSystem.mainPlayerEntity を使用してください。
+     */
     focusedEntity(): LEntity | undefined {
         if (!this._focusedEntityId.hasAny()) return undefined;
         return MRLively.world.entity(this._focusedEntityId);

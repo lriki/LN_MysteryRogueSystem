@@ -1393,14 +1393,10 @@
           },
           "list": [
             {
-              "code": 122,
+              "code": 117,
               "indent": 0,
               "parameters": [
-                12,
-                12,
-                0,
-                0,
-                0
+                12
               ]
             },
             {
@@ -1429,60 +1425,6 @@
                 91,
                 9,
                 5,
-                0,
-                0
-              ]
-            },
-            {
-              "code": 0,
-              "indent": 1,
-              "parameters": []
-            },
-            {
-              "code": 412,
-              "indent": 0,
-              "parameters": []
-            },
-            {
-              "code": 111,
-              "indent": 0,
-              "parameters": [
-                1,
-                2,
-                0,
-                3,
-                1
-              ]
-            },
-            {
-              "code": 108,
-              "indent": 1,
-              "parameters": [
-                "ゲームオーバーのとき"
-              ]
-            },
-            {
-              "code": 223,
-              "indent": 1,
-              "parameters": [
-                [
-                  -255,
-                  -255,
-                  -255,
-                  0
-                ],
-                1,
-                true
-              ]
-            },
-            {
-              "code": 201,
-              "indent": 1,
-              "parameters": [
-                0,
-                37,
-                0,
-                0,
                 0,
                 0
               ]

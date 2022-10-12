@@ -63,7 +63,12 @@
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
+ * @command MR-FinishChallenge
+ * @text MR-FinishChallenge
+ * @desc チャレンジを終了し、直前の Land の結果に応じた処理を実行します。 https://lriki.github.io/LN_MysteryRogueSystemSite/reference/plugin-commands/
  *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
  * @command RE.ShowChallengeResult
  * @text ShowChallengeResult
  * @desc test
@@ -141,7 +146,13 @@
  * @type string
  * @arg stateKey
  * @type string
- 
+ * 
+ * 
+ * @command MR-SetContext
+ * @text MR-SetContext
+ * @desc イベントコマンドの操作対象となる Entity を変更します。詳細は http://... を参照してください。
+ * @arg key
+ * @type string
  */
  
 

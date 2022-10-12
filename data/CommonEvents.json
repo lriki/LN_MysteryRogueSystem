@@ -51,5 +51,851 @@
     "name": "",
     "switchId": 1,
     "trigger": 0
+  },
+  {
+    "id": 5,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 6,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 7,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 8,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 9,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 10,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 11,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "--- MRシステム関連",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 12,
+    "list": [
+      {
+        "code": 122,
+        "indent": 0,
+        "parameters": [
+          12,
+          12,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "code": 242,
+        "indent": 0,
+        "parameters": [
+          5
+        ]
+      },
+      {
+        "code": 108,
+        "indent": 0,
+        "parameters": [
+          "------------------------------------------------------"
+        ]
+      },
+      {
+        "code": 408,
+        "indent": 0,
+        "parameters": [
+          "MR-FinishChallenge を実行することで、 Land から抜けた"
+        ]
+      },
+      {
+        "code": 408,
+        "indent": 0,
+        "parameters": [
+          "結果に応じた処理を行う。"
+        ]
+      },
+      {
+        "code": 408,
+        "indent": 0,
+        "parameters": [
+          "(ステータスのリセットや持ち物の削除など)"
+        ]
+      },
+      {
+        "code": 408,
+        "indent": 0,
+        "parameters": [
+          "------------------------------------------------------"
+        ]
+      },
+      {
+        "code": 357,
+        "indent": 0,
+        "parameters": [
+          "LN_MysteryRogueSystem",
+          "MR-FinishChallenge",
+          "MR-FinishChallenge",
+          {}
+        ]
+      },
+      {
+        "code": 111,
+        "indent": 0,
+        "parameters": [
+          1,
+          2,
+          0,
+          2,
+          0
+        ]
+      },
+      {
+        "code": 108,
+        "indent": 1,
+        "parameters": [
+          "------------------------------------------------------"
+        ]
+      },
+      {
+        "code": 408,
+        "indent": 1,
+        "parameters": [
+          "踏破したとき"
+        ]
+      },
+      {
+        "code": 408,
+        "indent": 1,
+        "parameters": [
+          "------------------------------------------------------"
+        ]
+      },
+      {
+        "code": 108,
+        "indent": 1,
+        "parameters": [
+          "（コモンイベントの呼び出し側でクリア後マップに遷移する）"
+        ]
+      },
+      {
+        "code": 0,
+        "indent": 1,
+        "parameters": []
+      },
+      {
+        "code": 412,
+        "indent": 0,
+        "parameters": []
+      },
+      {
+        "code": 111,
+        "indent": 0,
+        "parameters": [
+          1,
+          2,
+          0,
+          3,
+          0
+        ]
+      },
+      {
+        "code": 108,
+        "indent": 1,
+        "parameters": [
+          "------------------------------------------------------"
+        ]
+      },
+      {
+        "code": 408,
+        "indent": 1,
+        "parameters": [
+          "脱出したとき"
+        ]
+      },
+      {
+        "code": 408,
+        "indent": 1,
+        "parameters": [
+          "------------------------------------------------------"
+        ]
+      },
+      {
+        "code": 223,
+        "indent": 1,
+        "parameters": [
+          [
+            -255,
+            -255,
+            -255,
+            0
+          ],
+          1,
+          true
+        ]
+      },
+      {
+        "code": 201,
+        "indent": 1,
+        "parameters": [
+          0,
+          37,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "code": 0,
+        "indent": 1,
+        "parameters": []
+      },
+      {
+        "code": 412,
+        "indent": 0,
+        "parameters": []
+      },
+      {
+        "code": 111,
+        "indent": 0,
+        "parameters": [
+          1,
+          2,
+          0,
+          4,
+          1
+        ]
+      },
+      {
+        "code": 108,
+        "indent": 1,
+        "parameters": [
+          "------------------------------------------------------"
+        ]
+      },
+      {
+        "code": 408,
+        "indent": 1,
+        "parameters": [
+          "ゲームオーバーのとき"
+        ]
+      },
+      {
+        "code": 408,
+        "indent": 1,
+        "parameters": [
+          "------------------------------------------------------"
+        ]
+      },
+      {
+        "code": 223,
+        "indent": 1,
+        "parameters": [
+          [
+            -255,
+            -255,
+            -255,
+            0
+          ],
+          1,
+          true
+        ]
+      },
+      {
+        "code": 201,
+        "indent": 1,
+        "parameters": [
+          0,
+          37,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "code": 0,
+        "indent": 1,
+        "parameters": []
+      },
+      {
+        "code": 412,
+        "indent": 0,
+        "parameters": []
+      },
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "ExitMap共通",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 13,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 14,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 15,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 16,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 17,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 18,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 19,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 20,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 21,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 22,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 23,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 24,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 25,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 26,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 27,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 28,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 29,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 30,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 31,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 32,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 33,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 34,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 35,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 36,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 37,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 38,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 39,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 40,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 41,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 42,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 43,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 44,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 45,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 46,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 47,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 48,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 49,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
+  },
+  {
+    "id": 50,
+    "list": [
+      {
+        "code": 0,
+        "indent": 0,
+        "parameters": []
+      }
+    ],
+    "name": "",
+    "switchId": 1,
+    "trigger": 0
   }
 ]

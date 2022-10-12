@@ -90,7 +90,7 @@ export class UTransfer {
     public static exitLand(cctx: SCommandContext, entity: LEntity, result: LandExitResult): void {
         assert(entity == MRLively.camera.focusedEntity());    // Player であるはず
 
-        entity.party()?.journal.finishChallenge(result);
+        entity.party()?.journal.commitLandResult(result);
         const map = MRLively.map;
         const exitMapFloorId = LFloorId.makeFromEventMapData(map.land2().landData().exitMapData);
         cctx.postTransferFloor(entity, exitMapFloorId);
@@ -107,7 +107,7 @@ export class UTransfer {
                 // ExitMap 取得
                 const newFloorId = LFloorId.makeFromEventMapData(floorId.landData().exitMapData);
 
-                entity.party()?.journal.finishChallenge(LandExitResult.Goal);
+                entity.party()?.journal.commitLandResult(LandExitResult.Goal);
                 MRLively.world.transferEntity(entity, newFloorId);
 
                 //$gamePlayer.reserveTransfer(exitRMMZMapId, 0, 0, 2, 0);

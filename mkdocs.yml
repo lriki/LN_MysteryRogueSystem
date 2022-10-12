@@ -65,10 +65,11 @@ nav:
     - アイテム:
       - 回復アイテム: implementation/items/recovery-item.md
   - リファレンス:
-    - reference/index.md
-    - イベントコマンド: reference/EventCommands.md
-    - "@MR属性": reference/MRAttributes.md
-    - Traits: reference/Traits.md
+    - 4-reference/index.md
+    - プラグインコマンド: 4-reference/plugin-commands.md
+    - イベントコマンド: 4-reference/EventCommands.md
+    - "@MR属性": 4-reference/MRAttributes.md
+    - Traits: 4-reference/Traits.md
   - 拡張:
     - index: extensions/index.md
   - 未整理メモ:

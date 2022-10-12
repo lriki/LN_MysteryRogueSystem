@@ -60,7 +60,7 @@ export interface REData_Faction
 // 4xx: ゲームオーバー。
 export enum LandExitResult {
     /** 冒険中 */
-    Ongoing = 100,
+    Challenging = 100,
 
     /** ゴールに到達した。最後のフロアを抜けたか、戻り状態で最初のフロアを抜けたとき。 */
     Goal = 200,

@@ -128,13 +128,11 @@ export class SGameManager {
 
         // Player の初期位置を、RMMZ 初期位置に合わせる
         UTransfer.transterRmmzDirectly($dataSystem.startMapId, $dataSystem.startX, $dataSystem.startY);
-        /*
-        const floorId = LFloorId.makeFromMapTransfarInfo($dataSystem.startMapId, $dataSystem.startX);
-        if (floorId.isRandomMap())
-            REGame.world._transferEntity(firstActor, floorId);
-        else
-            REGame.world._transferEntity(firstActor, floorId, $dataSystem.startX, $dataSystem.startY);
-            */
+        
+        // ニューゲーム時には、チャレンジ開始状態にする (主にテストプレイで直接 Land 内に遷移したときのために)
+        party.startChallenging();
+
+
            
         // test
         //REGame.camera.focusedEntity()?.setActualParam(DBasics.params.hp, 2);

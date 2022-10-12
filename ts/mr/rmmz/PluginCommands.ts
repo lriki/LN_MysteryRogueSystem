@@ -1,4 +1,4 @@
-import { assert, tr2 } from "ts/mr/Common";
+import { assert, tr, tr2 } from "ts/mr/Common";
 import { LandExitResult, MRData } from "ts/mr/data/MRData";
 import { LFloorId } from "ts/mr/lively/LFloorId";
 import { MRLively } from "ts/mr/lively/MRLively";
@@ -16,12 +16,23 @@ import { SItemSellDialog } from "../system/dialogs/SItemSellDialog";
 import { RMMZHelper } from "./RMMZHelper";
 import { LInventoryBehavior } from "../lively/behaviors/LInventoryBehavior";
 import { DFloorClass } from "../data/DLand";
+import { Diag } from "../Diag";
 
 const pluginName: string = "LN_MysteryRogueSystem";
 
 PluginManager.registerCommand(pluginName, "RE.ShowChallengeResult", (args: any) => {
     MRLively.challengeResultShowing = true;
     $gameMap._interpreter.setWaitMode("REResultWinodw");
+});
+
+PluginManager.registerCommand(pluginName, "MR-SetContext", (args: any) => {
+    const key: string = args.key;
+    if (!key || key == "default") {
+        MRLively.system.eventInterpreterContextKey = undefined;
+    }
+    else {
+        MRLively.system.eventInterpreterContextKey = key;
+    }
 });
 
 PluginManager.registerCommand(pluginName, "MR-ShowWarehouseStoreDialog", (args: any) => {
@@ -127,6 +138,26 @@ PluginManager.registerCommand(pluginName, "MR-LivingResult-GetIncludesState", fu
     }
     else {
         $gameVariables.setValue(MRBasics.variables.result, -1);
+    }
+});
+
+PluginManager.registerCommand(pluginName, "MR-StartChallenge", function(this: Game_Interpreter, args: any) {
+    const entity = MRLively.system.getEventCommandTarget();
+    if (entity) { 
+        const party = entity.party();
+        if (party) {
+            party.startChallenging();
+        }
+    }
+});
+
+PluginManager.registerCommand(pluginName, "MR-FinishChallenge", function(this: Game_Interpreter, args: any) {
+    const entity = MRLively.system.getEventCommandTarget();
+    if (entity) { 
+        const party = entity.party();
+        if (party) {
+            party.finishChallenging();
+        }
     }
 });
 

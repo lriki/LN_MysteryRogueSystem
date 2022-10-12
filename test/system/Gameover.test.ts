@@ -57,6 +57,9 @@ test("system.Gameover.Basic", () => {
     const map = MRData.getMap("MR-Safety:テスト拠点");
     UTransfer.transterRmmzDirectly(map.mapId, 0, 0);
 
+    // MR-FinishChallenge
+    player1.party()?.finishChallenging();
+
     // 遷移中になる
     expect(camera.isFloorTransfering()).toBeTruthy();
     expect(camera.transferingNewFloorId().rmmzMapId()).toBe(map.mapId);

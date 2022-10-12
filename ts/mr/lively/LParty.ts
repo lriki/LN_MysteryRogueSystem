@@ -8,6 +8,7 @@ import { LEventResult } from "./LEventServer";
 import { LJournal } from "./LJournal";
 import { MRData } from "../data";
 import { DLandId } from "../data/DCommon";
+import { LInventoryBehavior } from "./behaviors/LInventoryBehavior";
 
 export type LPartyId = number;
 
@@ -41,6 +42,7 @@ export class LParty {
     public constructor() {
         this._leaderEntityId = LEntityId.makeEmpty();
         this.journal = new LJournal();
+        this.journal.startChallenging();
     }
 
     public setup(id: LPartyId) {
@@ -53,6 +55,10 @@ export class LParty {
 
     public isEmpty(): boolean {
         return this._members.length == 0;
+    }
+
+    public get members(): LEntity[] {
+        return this._members.map(e => MRLively.world.entity(e));
     }
 
     public addMember(entity: LEntity): void {
@@ -108,22 +114,60 @@ export class LParty {
         return true;
     }
 
-    public onMemberMovedLand(member: LEntity, newLandId: DLandId, oldLandId: DLandId): void {
-        if (this._leaderEntityId.equals(member.entityId())) {
-            const newLand = MRData.lands[newLandId];
-            const oldLand = MRData.lands[oldLandId];
-            if (newLand.isDungeonLand && !oldLand.isDungeonLand) {
-                // World から Dungeon への移動（突入）
-                this.journal.startChallenge(newLandId);
-            }
-            else if (!newLand.isDungeonLand && oldLand.isDungeonLand) {
-                // Dungeon から World への移動（帰還）
-                
+    /**
+     * 挑戦開始。基本的に拠点での起床時に開始する。拠点マップ(World)に居る時も、冒険中とみなす。（倉庫とかで倒れたりするので）
+     * 
+     * 開始後に繰り返し startChallenging() を呼び出しても良いものとする。
+     * これは主に、Land に入ったときのステータスリセットなどに使う。
+     */
+    public startChallenging(/*entryLandId: DLandId*/): void {
+        //this._entranceLandId = entryLandId;
+        this.journal.startChallenging();
+    }
 
-                // TODO: ちゃんと LandRule を参照するべきだが、とりあえず #8 対応のため一律リセットにしておく
-                member.recoverAll();
+    /** 挑戦終了 */
+    public finishChallenging(): void {
+
+        // ステータスをリセット
+        for (const member of this.members) {
+            member.resetStatus();
+        }
+
+        if (this.journal.isPenaltyResult) {
+            // 何らかのペナルティを伴う挑戦結果だった。
+
+            // アイテムをすべて失う
+            for (const member of this.members) {
+                const inventory = member.findEntityBehavior(LInventoryBehavior);
+                if (inventory) {
+                    inventory.reset();
+                }
             }
         }
+        else {
+            // ペナルティ無し。
+        }
+
+        this.journal.finishChallenging();
+        this.journal.startChallenging();
+    }
+
+    public onMemberMovedLand(member: LEntity, newLandId: DLandId, oldLandId: DLandId): void {
+        // if (this._leaderEntityId.equals(member.entityId())) {
+        //     const newLand = MRData.lands[newLandId];
+        //     const oldLand = MRData.lands[oldLandId];
+        //     if (newLand.isDungeonLand && !oldLand.isDungeonLand) {
+        //         // World から Dungeon への移動（突入）
+        //         this.journal.startChallenging(newLandId);
+        //     }
+        //     else if (!newLand.isDungeonLand && oldLand.isDungeonLand) {
+        //         // Dungeon から World への移動（帰還）
+                
+
+        //         // TODO: ちゃんと LandRule を参照するべきだが、とりあえず #8 対応のため一律リセットにしておく
+        //         member.recoverAll();
+        //     }
+        // }
     }
 }
 
