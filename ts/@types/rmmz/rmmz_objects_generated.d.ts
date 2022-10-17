@@ -4245,19 +4245,19 @@ declare class Game_Actor extends Game_Battler {
      * 
      * @return  
      */
-    equips(): Game_Actor.prototype.EquipsRet;
+    equips(): Array<IDataItem>;
 
     /**
      * 
      * @return  
      */
-    weapons(): Array<any>;
+    weapons(): Array<IDataItem>;
 
     /**
      * 
      * @return  
      */
-    armors(): Array<any>;
+    armors(): Array<IDataItem>;
 
     /**
      * 
@@ -5438,37 +5438,6 @@ declare class Game_Enemy extends Game_Battler {
      * 
      */
     _screenY: number;
-}
-
-/**
- * -----------------------------------------------------------------------------
- * Game_Actors
- * 
- * The wrapper class for an actor array.
- */
-declare class Game_Actors {
-
-    /**
-     * 
-     */
-    new();
-
-    /**
-     * 
-     */
-    initialize(): void;
-
-    /**
-     * 
-     * @param actorId 
-     * @return  
-     */
-    actor(actorId: number): /* !this._data.<i> */ any;
-
-    /**
-     * 
-     */
-    _data: Array<Game_Actor>;
 }
 
 /**

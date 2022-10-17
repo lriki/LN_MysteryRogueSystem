@@ -971,13 +971,13 @@ export class MRDataManager {
         // Import Lands
         // 最初に Land を作る
         MRData.lands = [];
-        MRData.lands.push(new DLand(0)); // [0] dummy
+        MRData.lands.push(new DLand(0, false)); // [0] dummy
 
-        const defaltLand = new DLand(1);
+        const defaltLand = new DLand(1, false);
         MRData.lands.push(defaltLand);  // [1] REシステム管理外の RMMZ マップを表す Land
 
-        const worldLand = new DLand(2);
-        MRData.lands.push(worldLand);   // [2] World
+        // const worldLand = new DLand(2);
+        // MRData.lands.push(worldLand);   // [2] World
         
         {
             const level = DLandIdentificationLevel.Entity;
@@ -988,8 +988,8 @@ export class MRDataManager {
 
         for (var i = 0; i < $dataMapInfos.length; i++) {
             const info = $dataMapInfos[i];
-            if (info && info.name?.startsWith("MR-Land:")) {
-                const land = new DLand(MRData.lands.length);
+            if (info && this.isLandMap(i)) {
+                const land = new DLand(MRData.lands.length, info.name.startsWith("MR-World:"));
                 land.name = info.name;
                 land.rmmzMapId = i;
                 MRData.lands.push(land);
@@ -1040,7 +1040,7 @@ export class MRDataManager {
                             templateMap.name = info.name;
                             templateMap.mapId = mapData.id;
                         }
-                        else if (info.name?.startsWith("MR-Land:")) {
+                        else if (info.name?.startsWith("MR-Land:") || info.name?.startsWith("MR-World:")) {
                             const land = MRData.lands.find(x => x.rmmzMapId == i);
                             assert(land);
                             mapData.landId = land.id;
@@ -1070,8 +1070,7 @@ export class MRDataManager {
                 }
 
                 // null 回避のため、 FloorInfo を作っておく
-                if (mapData.landId == DHelpers.VanillaLandId ||
-                    mapData.landId == DHelpers.WorldLandId) {
+                if (mapData.landId == DHelpers.VanillaLandId) {
                     MRData.lands[mapData.landId].floorInfos[mapData.mapId] = {
                         key: "",
                         template: undefined,
@@ -1327,7 +1326,7 @@ export class MRDataManager {
 
     public static isLandMap(mapId: DMapId) : boolean {
         const info = $dataMapInfos[mapId];
-        if (info && info.name && info.name.startsWith("MR-Land:"))
+        if (info && info.name && (info.name.startsWith("MR-Land:") || info.name.startsWith("MR-World:")))
             return true;
         else
             return false;

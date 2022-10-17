@@ -291,6 +291,15 @@ export class Bitmap {
 }
 
 
+/**
+ * The root object of the display tree.
+ * 
+ * @class
+ * @extends PIXI.Container
+ */
+ export class Stage extends PIXI.Container {
+		
+}
 
 export type RGBA = [number, number, number, number];
 
@@ -307,6 +316,7 @@ export class Sprite extends PIXI.Sprite {
     opacity: number;
     _counter : number;
     z: number;
+    _frame: PIXI.Rectangle;
 
     constructor(bitmap: Bitmap | undefined);
 
@@ -321,7 +331,7 @@ export class Sprite extends PIXI.Sprite {
     show(): void;
     update(): void;
     updateVisibility(): void;
-
+    _refresh(): void;
 }
 
 export class Tilemap extends PIXI.Container {

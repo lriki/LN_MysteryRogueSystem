@@ -196,6 +196,7 @@ declare namespace Window_BattleLog{
  * The superclass of windows for selecting a command.
  */
 declare class Window_Command extends Window_Selectable {
+	_list: any[];
 
 	/**
 	 * 

@@ -204,6 +204,15 @@ export class DLandRule {
  * ダンジョンや町ひとつ分。
  */
 export class DLand {
+    /*
+    World
+    ----------
+    - 基本的に FixedMap のみで構成される特殊な Land。
+    - マップの内容は、マップを移動しても維持する。（倉庫が該当する）
+    - 落とし穴などでフロア間移動しない。
+    */
+
+
     /** ID (0 is Invalid). */
     id: number;
 
@@ -259,7 +268,9 @@ export class DLand {
      */
     private _exitEventMapIndex: number;
 
-    public constructor(id: DLandId) {
+    private _isWorld: boolean;
+
+    public constructor(id: DLandId, isWorld: boolean) {
         this.id = id;
         this.name = "null";
         this.rmmzMapId = 0;
@@ -290,6 +301,7 @@ export class DLand {
         this._exitEventMapIndex = -1;
         this.identifiedKinds = [];
         this.forwardDirection = DLandForwardDirection.Uphill;
+        this._isWorld = isWorld;
     }
 
     //--------------------------------------------------------------------------
@@ -300,7 +312,7 @@ export class DLand {
     }
 
     public validate(): void {
-        if (this.id > 0 && this.isDungeonLand) {
+        if (this.id > 0 && !this.isVanillaLand) {
             if (this._exitEventMapIndex == 0) {
                 Diag.error(this.toDebugName() + tr("の ExitMap が設定されていません。"));
             }
@@ -314,12 +326,12 @@ export class DLand {
     }
 
     public get isWorldLand(): boolean {
-        return DHelpers.isWorldLand(this.id);
+        return this._isWorld;
     }
 
-    public get isDungeonLand(): boolean {
-        return DHelpers.isDungeonLand(this.id);
-    }
+    // public get isDungeonLand(): boolean {
+    //     return DHelpers.isDungeonLand(this.id);
+    // }
     
     public get eventMapIds(): readonly DMapId[] {
         return this._eventMapIds;

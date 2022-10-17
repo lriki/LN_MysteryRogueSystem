@@ -116,6 +116,15 @@ export class DParameterFlavorEffect {
  * 
  */
 export class DParameter {
+    /*
+    [2022/10/17] 依存関係パラメータ
+    ----------
+    ### DParameter とは別クラス (DDependentParameter) で実装する方法はどうしてリジェクトしたの？
+    ダメージ計算や結果表示の際に、DParameter とほぼ同等だけど別の処理を新たに作らなければならないのが大変だったため。
+    依存関係パラメータは見た目上、通常パラメータと同じように抽象化して使いたい。
+    そのため、DDependentParameter 固有の事情をより上位のレイヤーで気にしなければならないのは NG.
+    */
+
     /** ID (0 is Invalid). */
     readonly id: DParameterId;
 

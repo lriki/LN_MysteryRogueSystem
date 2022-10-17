@@ -26,9 +26,9 @@ test("Database.Land", () => {
     const land1 = lands[1];
     expect(land1.isVanillaLand).toBeTruthy();
 
-    // Id=2 は World.
-    const land2 = lands[2];
-    expect(land2.isWorldLand).toBeTruthy();
+    // // Id=2 は World.
+    // const land2 = lands[2];
+    // expect(land2.isWorldLand).toBeTruthy();
 
     // ExitMap はその親 Land に属する。
     {

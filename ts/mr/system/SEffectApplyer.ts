@@ -1,6 +1,6 @@
 import { MRBasics } from "../data/MRBasics";
 import { DSpecificEffectId, DEntityKindId, DSkillId, DSubComponentEffectTargetKey, DAttackElementId, DParameterId } from "../data/DCommon";
-import { DEffect, DEffectHitType, DEffectSet, DOtherEffectQualifying, DParamBuff, DValuePoint, DParameterEffectApplyType, DParameterQualifying, DQualifyings, DSpecialEffectRef } from "../data/DEffect";
+import { DEffect, DEffectHitType, DEffectSet, DOtherEffectQualifying, DParamBuff, DValuePoint, DParameterEffectApplyType, DParameterQualifying, DSpecialEffectRef } from "../data/DEffect";
 import { DItemEffect } from "../data/DItemEffect";
 import { LandExitResult, MRData } from "../data/MRData";
 import { LProjectileBehavior } from "../lively/behaviors/activities/LProjectileBehavior";

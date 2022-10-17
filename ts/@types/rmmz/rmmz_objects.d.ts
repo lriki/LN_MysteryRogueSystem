@@ -145,6 +145,32 @@ declare global {
 
 /**
  * -----------------------------------------------------------------------------
+ * Game_Actors
+ * 
+ * The wrapper class for an actor array.
+ */
+ export class Game_Actors {
+
+    /**
+     * 
+     */
+    initialize(): void;
+
+    /**
+     * 
+     * @param actorId 
+     * @return  
+     */
+    actor(actorId: number): Game_Actor | null;
+
+    /**
+     * 
+     */
+    _data: Array<Game_Actor>;
+}
+
+/**
+ * -----------------------------------------------------------------------------
  * Game_Event
  * 
  * The game object class for an event. It contains functionality for event page

@@ -471,6 +471,10 @@ declare module 'MysteryRogueSystem/test/concretes/trap/WarpTrap.test' {
   export {};
 
 }
+declare module 'MysteryRogueSystem/test/Database.test' {
+  import "./Extension";
+
+}
 declare module 'MysteryRogueSystem/test/Dialog.test' {
   export {};
 
@@ -570,6 +574,10 @@ declare module 'MysteryRogueSystem/test/system/DeathResult.test' {
   export {};
 
 }
+declare module 'MysteryRogueSystem/test/system/Gameover.test' {
+  export {};
+
+}
 declare module 'MysteryRogueSystem/test/system/Identify.test' {
   export {};
 
@@ -619,13 +627,13 @@ declare module 'MysteryRogueSystem/test/TestEnv' {
   import "./Extension";
   import { LFloorId } from "ts/mr/lively/LFloorId";
   import { LMap } from "ts/mr/lively/LMap";
-  import { DLandId } from "ts/mr/data/DLand";
   import { DStateId } from "ts/mr/data/DState";
   import { SDialogContext } from "ts/mr/system/SDialogContext";
   import { SDialog } from "ts/mr/system/SDialog";
   import { DEntityId } from "ts/mr/data/DEntity";
   import { LBlock } from "ts/mr/lively/LBlock";
   import { DEventId } from "ts/mr/data/predefineds/DBasicEvents";
+  import { DLandId } from "ts/mr/data/DCommon";
   global {
       interface Number {
           clamp(min: number, max: number): number;
@@ -1417,6 +1425,9 @@ declare module 'MysteryRogueSystem/ts/mr/data/DCommon' {
   export type DAnimationId = number & {
       readonly brand?: unique symbol;
   };
+  export type DLandId = number;
+  /** DMap のインデックス。 RMMZ の MapId と等しい。 */
+  export type DMapId = number;
   export class DSubComponentEffectTargetKey {
       path: string;
       kindId: DEntityKindId;
@@ -1452,7 +1463,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DCommon' {
 
 }
 declare module 'MysteryRogueSystem/ts/mr/data/DDataImporter' {
-  import { DMap } from "MysteryRogueSystem/ts/mr/data/MRData";
+  import { DMap } from "MysteryRogueSystem/ts/mr/data/DMap";
   export class DDataImporter {
       static importMapData(mapData: DMap, data: IDataMapInfo, parent1: IDataMapInfo, parent2: IDataMapInfo | undefined): void;
       private static findLand;
@@ -2138,6 +2149,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DFlavorEffect' {
 
 }
 declare module 'MysteryRogueSystem/ts/mr/data/DHelper' {
+  import { DLandId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   import { DRmmzEffectScope } from "MysteryRogueSystem/ts/mr/data/DEffect";
   export interface DConstructionExpr {
       name: string;
@@ -2151,7 +2163,8 @@ declare module 'MysteryRogueSystem/ts/mr/data/DHelper' {
       static TILE_ID_A3: number;
       static TILE_ID_A4: number;
       static TILE_ID_MAX: number;
-      static RmmzNormalMapLandId: number;
+      static VanillaLandId: number;
+      static isVanillaLand(landId: DLandId): boolean;
       static getMapTopTile(mapData: IDataMap, x: number, y: number): number;
       static isTileA3(tileId: number): boolean;
       static isTileA4(tileId: number): boolean;
@@ -2305,12 +2318,14 @@ declare module 'MysteryRogueSystem/ts/mr/data/DItemShop' {
 
 }
 declare module 'MysteryRogueSystem/ts/mr/data/DLand' {
-  import { DTerrainPresetId, DTerrainSettingId } from "MysteryRogueSystem/ts/mr/data/DCommon";
+  import { DLandId, DMapId, DTerrainPresetId, DTerrainSettingId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   import { DEntitySpawner2 } from "MysteryRogueSystem/ts/mr/data/DEntity";
   import { DEntityKind } from "MysteryRogueSystem/ts/mr/data/DEntityKind";
-  import { DMap } from "MysteryRogueSystem/ts/mr/data/MRData";
-  export type DLandId = number;
-  export type DMapId = number;
+  import { DMap } from "MysteryRogueSystem/ts/mr/data/DMap";
+  export enum DFloorClass {
+      FloorMap = 0,
+      EventMap = 1
+  }
   export interface DAppearanceTableEntity {
       startFloorNumber: number;
       lastFloorNumber: number;
@@ -2379,6 +2394,33 @@ declare module 'MysteryRogueSystem/ts/mr/data/DLand' {
       /** 概念的な上下移動を伴わない */
       Flat = 2
   }
+  /** Land を抜けた時のステータスに対するルール */
+  export enum DLandExitStatusRule {
+      /** グローバル設定を継承する */
+      Default = 0,
+      /** 無し */
+      None = 1,
+      /** 永続パラメータを含めて、全てのパラメータをリセットする */
+      Initialize = 2
+  }
+  /** Land を抜けた時のインベントリに対するルール */
+  export enum DLandExitInventoryRule {
+      /** グローバル設定を継承する */
+      Default = 0,
+      /** 無し */
+      None = 1,
+      /** 持ち物を全て削除する */
+      Initialize = 2
+  }
+  export class DLandRule {
+      enteredStatus: DLandExitStatusRule;
+      enteredInventory: DLandExitInventoryRule;
+      conqueredStatus: DLandExitStatusRule;
+      conqueredInventory: DLandExitInventoryRule;
+      abandonedStatus: DLandExitStatusRule;
+      abandonedInventory: DLandExitInventoryRule;
+      constructor();
+  }
   /**
    * ダンジョンや町ひとつ分。
    */
@@ -2398,12 +2440,6 @@ declare module 'MysteryRogueSystem/ts/mr/data/DLand' {
       trapTableMapId: number;
       shopTableMapId: number;
       appearanceTable: DAppearanceTableSet;
-      /**
-       * 主にシステムの都合で行先が明示されずに、Land から "出される" ときの移動先となるマップ。
-       * ゲームオーバーや "脱出の巻物" などでダンジョンから抜けるときに参照される。
-       * このマップは通過点として演出や遷移先の指定のみ利用する。REシステム管理下のマップではない。
-       */
-      exitRMMZMapId: number;
       /** @MR-Floor から読み取った Floor 情報 */
       floorInfos: DFloorInfo[];
       /** Land に含まれるフロア ([0] is Invalid) 要素数は MRData.MAX_DUNGEON_FLOORS だが、最大フロア数ではないため注意。 */
@@ -2412,8 +2448,26 @@ declare module 'MysteryRogueSystem/ts/mr/data/DLand' {
       /** (index: DEntityKindId) */
       identifiedKinds: (DLandIdentificationLevel | undefined)[];
       forwardDirection: DLandForwardDirection;
-      constructor(id: DLandId);
+      private _eventMapIds;
+      /**
+       * 主にシステムの都合で行先が明示されずに、Land から "出される" ときの移動先となるマップ。
+       * ゲームオーバーや "脱出の巻物" などでダンジョンから抜けるときに参照される。
+       * このマップは通過点として演出や遷移先の指定のみ利用する。REシステム管理下のマップではない。
+       */
+      private _exitEventMapIndex;
+      private _isWorld;
+      constructor(id: DLandId, isWorld: boolean);
+      toDebugName(): string;
+      validate(): void;
+      get isVanillaLand(): boolean;
+      get isWorldLand(): boolean;
+      get eventMapIds(): readonly DMapId[];
+      get exitMapId(): DMapId;
+      get exitMapData(): DMap;
+      getFloorClass(mapData: DMap): DFloorClass;
       findFixedMapByName(name: string): DMap | undefined;
+      addEventMap(map: DMap): void;
+      addEventMapAsExitMap(map: DMap): void;
       import(mapData: IDataMap): void;
       private parseLandIdentificationLevel;
       checkIdentifiedKind(kind: DEntityKind): boolean;
@@ -2421,6 +2475,40 @@ declare module 'MysteryRogueSystem/ts/mr/data/DLand' {
       static buildFloorTable(mapData: IDataMap): DFloorInfo[];
       static buildAppearanceTableSet(mapData: IDataMap, mapId: number, maxFloors: number): DAppearanceTableSet;
       static buildSubAppearanceTable(land: DLand, mapData: IDataMap, mapId: number, tableSet: DAppearanceTableSet, table: DAppearanceTableEntity[][]): void;
+  }
+
+}
+declare module 'MysteryRogueSystem/ts/mr/data/DMap' {
+  import { DMapId } from "MysteryRogueSystem/ts/mr/data/DCommon";
+  export enum REFloorMapKind {
+      Land = 0,
+      TemplateMap = 1,
+      FixedMap = 2,
+      ShuffleMap = 3,
+      RandomMap = 4
+  }
+  /**
+   * マップデータ。RMMZ の MapInfo 相当で、その ID と一致する。
+   * FloorInfo と似ているが、こちらは RMMZ Map に対する直接の追加情報を意味する。
+   */
+  export class DMap {
+      /** ID (0 is Invalid). */
+      id: DMapId;
+      /** Parent Land. */
+      landId: number;
+      /** RMMZ mapID. (0 is RandomMap) */
+      mapId: number;
+      /** マップ生成 */
+      mapKind: REFloorMapKind;
+      exitMap: boolean;
+      /** 明示的な MRセーフティマップであるか */
+      safetyMap: boolean;
+      /** 非REシステムマップにおいて、RMMZオリジナルのメニューを使うか。(つまり、一切 RE システムと関係ないマップであるか) */
+      defaultSystem: boolean;
+      /** 明示的に RMMZ 標準マップとするか */
+      eventMap: boolean;
+      constructor(id: DMapId);
+      get name(): string;
   }
 
 }
@@ -2907,7 +2995,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DSystem' {
 
 }
 declare module 'MysteryRogueSystem/ts/mr/data/DTemplateMap' {
-  import { DMapId } from "MysteryRogueSystem/ts/mr/data/DLand";
+  import { DMapId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   /** 0 is invalid. */
   export type DBlockVisualPartIndex = number;
   /** 0 is invalid. */
@@ -3187,6 +3275,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DTroop' {
 }
 declare module 'MysteryRogueSystem/ts/mr/data/DValidationHelper' {
   export class DValidationHelper {
+      static makeDataName(typeName: string, id: number, dataName: string): string;
       static makeRmmzTroopName(rmmzTrppoId: number): string;
       static makeRmmzEnemyName(rmmzEnemyId: number): string;
   }
@@ -3444,36 +3533,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/MRData' {
   import { DCommand } from "MysteryRogueSystem/ts/mr/data/DCommand";
   import { DEffect } from "MysteryRogueSystem/ts/mr/data/DEffect";
   import { DActionId } from "MysteryRogueSystem/ts/mr/data/DCommon";
-  export enum REFloorMapKind {
-      Land = 0,
-      TemplateMap = 1,
-      FixedMap = 2,
-      ShuffleMap = 3,
-      RandomMap = 4
-  }
-  /**
-   * マップデータ。RMMZ の MapInfo 相当で、その ID と一致する。
-   * FloorInfo と似ているが、こちらは RMMZ Map に対する直接の追加情報を意味する。
-   */
-  export class DMap {
-      /** ID (0 is Invalid). */
-      id: number;
-      /** Parent Land. */
-      landId: number;
-      /** RMMZ mapID. (0 is RandomMap) */
-      mapId: number;
-      /** マップ生成 */
-      mapKind: REFloorMapKind;
-      exitMap: boolean;
-      /** 明示的な MRセーフティマップであるか */
-      safetyMap: boolean;
-      /** 非REシステムマップにおいて、RMMZオリジナルのメニューを使うか。(つまり、一切 RE システムと関係ないマップであるか) */
-      defaultSystem: boolean;
-      /** 明示的に RMMZ 標準マップとするか */
-      eventMap: boolean;
-      constructor(id: number);
-      get name(): string;
-  }
+  import { DMap } from "MysteryRogueSystem/ts/mr/data/DMap";
   export type DFactionId = number;
   /**
    * 勢力
@@ -3489,6 +3549,8 @@ declare module 'MysteryRogueSystem/ts/mr/data/MRData' {
       friendBits: number;
   }
   export enum LandExitResult {
+      /** 冒険中 */
+      Challenging = 100,
       /** ゴールに到達した。最後のフロアを抜けたか、戻り状態で最初のフロアを抜けたとき。 */
       Goal = 200,
       /** 脱出の巻物などによって冒険を中断した。 */
@@ -3618,7 +3680,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/MRDataExtension' {
 
 }
 declare module 'MysteryRogueSystem/ts/mr/data/MRDataManager' {
-  import { DMapId } from "MysteryRogueSystem/ts/mr/data/DLand";
+  import { DMapId } from 'MysteryRogueSystem/ts/mr/data/DCommon';
   type NextFunc = () => void;
   export class MRDataManager {
       static testMode: boolean;
@@ -4222,6 +4284,12 @@ declare module 'MysteryRogueSystem/ts/mr/data/predefineds/DBasicTraits' {
        * value: 付加する DStateId
        */
       DeathVulnerableElement: DTraitId;
+  }
+
+}
+declare module 'MysteryRogueSystem/ts/mr/Diag' {
+  export class Diag {
+      static error(message: string): void;
   }
 
 }
@@ -4899,7 +4967,7 @@ declare module 'MysteryRogueSystem/ts/mr/lively/activities/LActivity' {
 }
 declare module 'MysteryRogueSystem/ts/mr/lively/ai/LActionDeterminer' {
   import { SCommandContext } from "ts/mr/system/SCommandContext";
-  import { LCandidateSkillAction } from "ts/mr/usecases/UAction";
+  import { LCandidateSkillAction } from "ts/mr/utility/UAction";
   import { LEntity } from "MysteryRogueSystem/ts/mr/lively/LEntity";
   import { LEntityId } from "MysteryRogueSystem/ts/mr/lively/LObject";
   export class LActionDeterminer {
@@ -5278,7 +5346,7 @@ declare module 'MysteryRogueSystem/ts/mr/lively/behaviors/LBehavior' {
   import { SEffect, SEffectorFact } from "ts/mr/system/SEffectApplyer";
   import { DBlockLayerKind, DSpecificEffectId, DSubComponentEffectTargetKey, DActionId } from "ts/mr/data/DCommon";
   import { DSequelId } from "ts/mr/data/DSequel";
-  import { LCandidateSkillAction } from "ts/mr/usecases/UAction";
+  import { LCandidateSkillAction } from "ts/mr/utility/UAction";
   import { DEffect } from "ts/mr/data/DEffect";
   import { DFactionId } from "ts/mr/data/MRData";
   import { LMinimapMarkerClass, LPriceInfo, LReaction } from "MysteryRogueSystem/ts/mr/lively/LCommon";
@@ -5824,7 +5892,7 @@ declare module 'MysteryRogueSystem/ts/mr/lively/behaviors/LGoldBehavior' {
 declare module 'MysteryRogueSystem/ts/mr/lively/behaviors/LGoldThiefBehavior' {
   import { SPhaseResult } from "ts/mr/system/SCommand";
   import { SCommandContext } from "ts/mr/system/SCommandContext";
-  import { LCandidateSkillAction } from "ts/mr/usecases/UAction";
+  import { LCandidateSkillAction } from "ts/mr/utility/UAction";
   import { LEntity } from "MysteryRogueSystem/ts/mr/lively/LEntity";
   import { DecisionPhase, LBehavior } from "MysteryRogueSystem/ts/mr/lively/behaviors/LBehavior";
   /**
@@ -6070,7 +6138,7 @@ declare module 'MysteryRogueSystem/ts/mr/lively/behaviors/LItemImitatorBehavior'
 declare module 'MysteryRogueSystem/ts/mr/lively/behaviors/LItemThiefBehavior' {
   import { SPhaseResult } from "ts/mr/system/SCommand";
   import { SCommandContext } from "ts/mr/system/SCommandContext";
-  import { LCandidateSkillAction } from "ts/mr/usecases/UAction";
+  import { LCandidateSkillAction } from "ts/mr/utility/UAction";
   import { LEntity } from "MysteryRogueSystem/ts/mr/lively/LEntity";
   import { DecisionPhase, LBehavior, LBehaviorGroup } from "MysteryRogueSystem/ts/mr/lively/behaviors/LBehavior";
   /**
@@ -6590,6 +6658,11 @@ declare module 'MysteryRogueSystem/ts/mr/lively/LCamera' {
       private _transferingNewX;
       private _transferingNewY;
       focusedEntityId(): LEntityId;
+      /**
+       * 現在フォーカスのある Entity を取得します。
+       * 取得した Entity は、必ずしも Player ではない点に注意してください。
+       * 操作中の Player を取得したい場合は LSystem.mainPlayerEntity を使用してください。
+       */
       focusedEntity(): LEntity | undefined;
       getFocusedEntity(): LEntity;
       focus(entity: LEntity): void;
@@ -7150,7 +7223,9 @@ declare module 'MysteryRogueSystem/ts/mr/lively/LFieldEffect' {
 
 }
 declare module 'MysteryRogueSystem/ts/mr/lively/LFloorId' {
-  import { DFloorInfo, DLand, DLandId } from "ts/mr/data/DLand";
+  import { DFloorClass, DFloorInfo, DLand } from "ts/mr/data/DLand";
+  import { DLandId } from "MysteryRogueSystem/ts/mr/data/DCommon";
+  import { DMap } from "MysteryRogueSystem/ts/mr/data/DMap";
   import { DFloorPreset } from "MysteryRogueSystem/ts/mr/data/DTerrainPreset";
   /**
    * LandId と フロア番号によってフロアを識別するもの。
@@ -7179,34 +7254,38 @@ declare module 'MysteryRogueSystem/ts/mr/lively/LFloorId' {
   export class LFloorId {
       /** LandId==DHelpers.RmmzNormalMapLandId は、floorNumber が RMMZ の MapId を直接示すことを表す。 */
       private readonly _landId;
+      private readonly _floorClass;
       private readonly _floorNumber;
-      constructor(landId: DLandId, floorNumber: number);
+      constructor(landId: DLandId, floorClass: DFloorClass, floorNumber: number);
       landId(): DLandId;
+      landData(): DLand;
       floorNumber(): number;
+      get eventMapIndex(): number;
+      eventMapData(): DMap;
       get preset(): DFloorPreset;
       isEmpty(): boolean;
       hasAny(): boolean;
       equals(other: LFloorId): boolean;
       clone(): LFloorId;
       static makeEmpty(): LFloorId;
-      static make(landId: DLandId, floorNumber: number): LFloorId;
+      static make(landId: DLandId, floorClass: DFloorClass, floorNumber: number): LFloorId;
       static makeFromKeys(landKey: string, floorKey: string): LFloorId;
+      static makeFromEventMapData(mapData: DMap): LFloorId;
       static makeByRmmzFixedMapName(fixedMapName: string): LFloorId;
-      static makeByRmmzFixedMapId(mapId: number): LFloorId;
       static makeByRmmzNormalMapId(mapId: number): LFloorId;
-      static makeFromMapTransfarInfo(mapId: number, x: number): LFloorId;
-      landData(): DLand;
       floorInfo(): DFloorInfo;
       /** this が示すフロアへ遷移するとなったときに、ロードするべき RMMZ MapId */
       rmmzMapId(): number;
       rmmzFixedMapId(): number;
+      isEventMap(): boolean;
       isNormalMap(): boolean;
-      isRESystem(): boolean;
       isRandomMap(): boolean;
       isFixedMap(): boolean;
       isSafetyMap(): boolean;
       /** Entity を登場させるマップであるか。false の場合は通常の RMMZ マップ。Entity は登場せず、Event を非表示にすることもない。 */
       isTacticsMap(): boolean;
+      /** FloorInfo を取ることができるか */
+      isDungeonMap(): boolean;
       isRMMZDefaultSystemMap(): boolean;
   }
 
@@ -7291,8 +7370,41 @@ declare module 'MysteryRogueSystem/ts/mr/lively/LIdentifyer' {
   }
 
 }
+declare module 'MysteryRogueSystem/ts/mr/lively/LJournal' {
+  import { LandExitResult } from "MysteryRogueSystem/ts/mr/data/MRData";
+  export enum LChallengingStatus {
+      None = 0,
+      Challenging = 1
+  }
+  /**
+   * ひとつの "冒険" に関する情報を表現するクラス
+   *
+   * World から Land に入ったときに初期化される。
+   * Land 間移動では初期化されない。
+   */
+  export class LJournal {
+      private _status;
+      private _exitResult;
+      constructor();
+      /** 最期の冒険の結果。次の冒険を開始するまでは値は維持される。 */
+      get exitResult(): LandExitResult;
+      get exitResultSummary(): number;
+      /** 冒険の継続中であるか */
+      get isChallenging(): boolean;
+      /** ゲームオーバーなど、ペナルティを伴う挑戦結果であるか。 */
+      get isPenaltyResult(): boolean;
+      /** 冒険開始。基本的に拠点での起床時に開始する。拠点マップ(World)に居る時も、冒険中とみなす。（倉庫とかで倒れたりするので） */
+      startChallenging(): void;
+      /** 冒険終了 */
+      finishChallenging(): void;
+      /** 何らかの理由で Land から離脱 */
+      commitLandResult(result: LandExitResult): void;
+  }
+
+}
 declare module 'MysteryRogueSystem/ts/mr/lively/LLand' {
-  import { DLand, DLandId } from "ts/mr/data/DLand";
+  import { DLand } from "ts/mr/data/DLand";
+  import { DLandId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   export class LLand {
       private _landDataId;
       setup_(landDataId: DLandId): void;
@@ -7591,24 +7703,48 @@ declare module 'MysteryRogueSystem/ts/mr/lively/LParty' {
   import { LEntity } from "MysteryRogueSystem/ts/mr/lively/LEntity";
   import { DEventId } from "ts/mr/data/predefineds/DBasicEvents";
   import { LBehavior } from "MysteryRogueSystem/ts/mr/lively/internal";
+  import { LJournal } from "MysteryRogueSystem/ts/mr/lively/LJournal";
+  import { DLandId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   export type LPartyId = number;
   /**
    * 仲間キャラや、グループで動くモンスターをまとめる仕組み。
    * RMMZ の Party と Troop を合わせたようなもの。
    * member がいなくなると、GC される。
+   *
+   * Party には Leader が一人いる。
+   * Leader がフロア移動すると、Party に属する全員が移動する。
+   *
+   * Leader ではないメンバーがフロア移動すると、そのメンバーは Party を脱退する。
+   *
+   * Party は勢力を表すものではない。
+   * 仲間が倒されて Party を離脱しても、友好な Unique Entity として World 上には存在し、再び Party に入ることはできる。
    */
   export class LParty {
       private _id;
       private _members;
+      private _leaderEntityId;
+      readonly journal: LJournal;
+      constructor();
       setup(id: LPartyId): void;
       id(): LPartyId;
       isEmpty(): boolean;
+      get members(): LEntity[];
       addMember(entity: LEntity): void;
       removeMember(entity: LEntity): void;
       private _entries;
       subscribe(eventId: DEventId, behavior: LBehavior): void;
       unsubscribe(eventId: DEventId, behavior: LBehavior): void;
       send(eventId: DEventId, args: any): boolean;
+      /**
+       * 挑戦開始。基本的に拠点での起床時に開始する。拠点マップ(World)に居る時も、冒険中とみなす。（倉庫とかで倒れたりするので）
+       *
+       * 開始後に繰り返し startChallenging() を呼び出しても良いものとする。
+       * これは主に、Land に入ったときのステータスリセットなどに使う。
+       */
+      startChallenging(): void;
+      /** 挑戦終了 */
+      finishChallenging(): void;
+      onMemberMovedLand(member: LEntity, newLandId: DLandId, oldLandId: DLandId): void;
   }
 
 }
@@ -7784,13 +7920,17 @@ declare module 'MysteryRogueSystem/ts/mr/lively/LShopArticle' {
 
 }
 declare module 'MysteryRogueSystem/ts/mr/lively/LSystem' {
+  import { LEntity } from "MysteryRogueSystem/ts/mr/lively/LEntity";
   import { LEntityId } from "MysteryRogueSystem/ts/mr/lively/LObject";
   /**
-   * 未分類グローバル変数
    */
   export class LSystem {
       mainPlayerEntityId: LEntityId;
       uniqueActorUnits: LEntityId[];
+      eventInterpreterContextKey: string | undefined;
+      constructor();
+      get mainPlayerEntity(): LEntity;
+      getEventCommandTarget(): LEntity | undefined;
   }
 
 }
@@ -7802,9 +7942,9 @@ declare module 'MysteryRogueSystem/ts/mr/lively/LWorld' {
   import { LAbility, LAbilityId } from "MysteryRogueSystem/ts/mr/lively/abilities/LAbility";
   import { LFloorId } from "MysteryRogueSystem/ts/mr/lively/LFloorId";
   import { LLand } from "MysteryRogueSystem/ts/mr/lively/LLand";
-  import { DLandId } from "ts/mr/data/DLand";
   import { LParty, LPartyId } from "MysteryRogueSystem/ts/mr/lively/LParty";
   import { DEntityId } from "ts/mr/data/DEntity";
+  import { DLandId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   /**
    * 1ゲーム内に1インスタンス存在する。
    */
@@ -7870,7 +8010,7 @@ declare module 'MysteryRogueSystem/ts/mr/lively/MRGameExtension' {
   }
 
 }
-declare module 'MysteryRogueSystem/ts/mr/lively/REGame' {
+declare module 'MysteryRogueSystem/ts/mr/lively/MRLively' {
   import { LMap } from "MysteryRogueSystem/ts/mr/lively/LMap";
   import { LWorld } from "MysteryRogueSystem/ts/mr/lively/LWorld";
   import { LSystem } from "MysteryRogueSystem/ts/mr/lively/LSystem";
@@ -7889,7 +8029,7 @@ declare module 'MysteryRogueSystem/ts/mr/lively/REGame' {
    *
    * コアスクリプトの $game* と同じ役割。
    */
-  export class REGame {
+  export class MRLively {
       static readonly TILE_LAYER_COUNT: number;
       static ext: MRGameExtension;
       static immediatelyCommandExecuteScheduler: SImmediatelyCommandExecuteScheduler;
@@ -8994,15 +9134,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/map/SMonsterHouseBuilder' {
   }
 
 }
-declare module 'MysteryRogueSystem/ts/mr/system/MRSystemExtension' {
-  import { DEntity } from "MysteryRogueSystem/ts/mr/data/DEntity";
-  import { LEntity } from "MysteryRogueSystem/ts/mr/lively/LEntity";
-  export class MRSystemExtension {
-      onNewEntity(entity: LEntity, data: DEntity): void;
-  }
-
-}
-declare module 'MysteryRogueSystem/ts/mr/system/RESystem' {
+declare module 'MysteryRogueSystem/ts/mr/system/MRSystem' {
   import { SIntegration } from "MysteryRogueSystem/ts/mr/system/SIntegration";
   import { BasicItems } from "ts/mr/data/predefineds/DBasicItems";
   import { EntityProperties, EntityProperty } from "ts/mr/data/predefineds/DBasicProperties";
@@ -9018,7 +9150,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/RESystem' {
   import { SSpecialEffectManager } from "MysteryRogueSystem/ts/mr/system/effects/SSpecialEffectManager";
   import { SFormulaOperand } from "MysteryRogueSystem/ts/mr/system/SFormulaOperand";
   import { LEntityId } from "MysteryRogueSystem/ts/mr/lively/LObject";
-  export class RESystem {
+  export class MRSystem {
       static propertyData: EntityProperty[];
       static properties: EntityProperties;
       static ext: MRSystemExtension;
@@ -9040,6 +9172,14 @@ declare module 'MysteryRogueSystem/ts/mr/system/RESystem' {
       static formulaOperandA: SFormulaOperand;
       static formulaOperandB: SFormulaOperand;
       static formulaOperandC: SFormulaOperand;
+  }
+
+}
+declare module 'MysteryRogueSystem/ts/mr/system/MRSystemExtension' {
+  import { DEntity } from "MysteryRogueSystem/ts/mr/data/DEntity";
+  import { LEntity } from "MysteryRogueSystem/ts/mr/lively/LEntity";
+  export class MRSystemExtension {
+      onNewEntity(entity: LEntity, data: DEntity): void;
   }
 
 }
@@ -10482,7 +10622,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/tasks/STask' {
   }
 
 }
-declare module 'MysteryRogueSystem/ts/mr/usecases/UAction' {
+declare module 'MysteryRogueSystem/ts/mr/utility/UAction' {
   import { DRmmzEffectScope } from "ts/mr/data/DEffect";
   import { DSkill } from "ts/mr/data/DSkill";
   import { LGenerateDropItemCause } from "ts/mr/lively/internal";
@@ -10554,7 +10694,7 @@ declare module 'MysteryRogueSystem/ts/mr/usecases/UAction' {
   }
 
 }
-declare module 'MysteryRogueSystem/ts/mr/usecases/UBlock' {
+declare module 'MysteryRogueSystem/ts/mr/utility/UBlock' {
   import { LBlock } from "ts/mr/lively/LBlock";
   import { LMap } from "ts/mr/lively/LMap";
   import { LEntity } from "MysteryRogueSystem/ts/mr/lively/LEntity";
@@ -10575,14 +10715,14 @@ declare module 'MysteryRogueSystem/ts/mr/usecases/UBlock' {
   }
 
 }
-declare module 'MysteryRogueSystem/ts/mr/usecases/UCommon' {
+declare module 'MysteryRogueSystem/ts/mr/utility/UCommon' {
   export interface SPoint {
       x: number;
       y: number;
   }
 
 }
-declare module 'MysteryRogueSystem/ts/mr/usecases/UEffect' {
+declare module 'MysteryRogueSystem/ts/mr/utility/UEffect' {
   import { LEntity } from "MysteryRogueSystem/ts/mr/lively/LEntity";
   import { LRandom } from "MysteryRogueSystem/ts/mr/lively/LRandom";
   import { SEffect } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
@@ -10620,7 +10760,7 @@ declare module 'MysteryRogueSystem/ts/mr/usecases/UEffect' {
   }
 
 }
-declare module 'MysteryRogueSystem/ts/mr/usecases/UIdentify' {
+declare module 'MysteryRogueSystem/ts/mr/utility/UIdentify' {
   import { DIdentifiedTiming } from "ts/mr/data/DIdentifyer";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "ts/mr/system/SCommandContext";
@@ -10633,7 +10773,7 @@ declare module 'MysteryRogueSystem/ts/mr/usecases/UIdentify' {
   }
 
 }
-declare module 'MysteryRogueSystem/ts/mr/usecases/UInventory' {
+declare module 'MysteryRogueSystem/ts/mr/utility/UInventory' {
   import { LInventoryBehavior } from "MysteryRogueSystem/ts/mr/lively/behaviors/LInventoryBehavior";
   import { LEntity } from "MysteryRogueSystem/ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
@@ -10666,7 +10806,7 @@ declare module 'MysteryRogueSystem/ts/mr/usecases/UInventory' {
   }
 
 }
-declare module 'MysteryRogueSystem/ts/mr/usecases/ULimitations' {
+declare module 'MysteryRogueSystem/ts/mr/utility/ULimitations' {
   export class ULimitations {
       static getItemCountInMap(): number;
       static isItemCountFullyInMap(): boolean;
@@ -10675,7 +10815,7 @@ declare module 'MysteryRogueSystem/ts/mr/usecases/ULimitations' {
   }
 
 }
-declare module 'MysteryRogueSystem/ts/mr/usecases/UMovement' {
+declare module 'MysteryRogueSystem/ts/mr/utility/UMovement' {
   import { LBlock } from "ts/mr/lively/LBlock";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { LMap, MovingMethod } from "ts/mr/lively/LMap";
@@ -10683,7 +10823,7 @@ declare module 'MysteryRogueSystem/ts/mr/usecases/UMovement' {
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
   import { DBlockLayerKind } from "MysteryRogueSystem/ts/mr/data/DCommon";
   import { LRoom } from "MysteryRogueSystem/ts/mr/lively/LRoom";
-  import { SPoint } from "MysteryRogueSystem/ts/mr/usecases/UCommon";
+  import { SPoint } from "MysteryRogueSystem/ts/mr/utility/UCommon";
   import { LFloorId } from "MysteryRogueSystem/ts/mr/lively/LFloorId";
   export class UMovement {
       private static readonly _edgeOffsetTable;
@@ -10837,7 +10977,7 @@ declare module 'MysteryRogueSystem/ts/mr/usecases/UMovement' {
   }
 
 }
-declare module 'MysteryRogueSystem/ts/mr/usecases/UName' {
+declare module 'MysteryRogueSystem/ts/mr/utility/UName' {
   import { LEntity } from "ts/mr/lively/LEntity";
   export class UName {
       /**
@@ -10851,7 +10991,7 @@ declare module 'MysteryRogueSystem/ts/mr/usecases/UName' {
   }
 
 }
-declare module 'MysteryRogueSystem/ts/mr/usecases/UProperty' {
+declare module 'MysteryRogueSystem/ts/mr/utility/UProperty' {
   import { LEntity } from "MysteryRogueSystem/ts/mr/lively/LEntity";
   export class UProperty {
       static setValue(key: string, path: string, value: any): void;
@@ -10888,7 +11028,7 @@ declare module 'MysteryRogueSystem/ts/mr/usecases/UProperty' {
   }
 
 }
-declare module 'MysteryRogueSystem/ts/mr/usecases/USearch' {
+declare module 'MysteryRogueSystem/ts/mr/utility/USearch' {
   import { LBlock } from "MysteryRogueSystem/ts/mr/lively/LBlock";
   import { LEntity } from "MysteryRogueSystem/ts/mr/lively/LEntity";
   import { LRandom } from "MysteryRogueSystem/ts/mr/lively/LRandom";
@@ -10961,7 +11101,7 @@ declare module 'MysteryRogueSystem/ts/mr/usecases/USearch' {
   }
 
 }
-declare module 'MysteryRogueSystem/ts/mr/usecases/USpawner' {
+declare module 'MysteryRogueSystem/ts/mr/utility/USpawner' {
   import { DEntity } from "ts/mr/data/DEntity";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { LFloorId } from "ts/mr/lively/LFloorId";
@@ -10983,7 +11123,7 @@ declare module 'MysteryRogueSystem/ts/mr/usecases/USpawner' {
   }
 
 }
-declare module 'MysteryRogueSystem/ts/mr/usecases/UState' {
+declare module 'MysteryRogueSystem/ts/mr/utility/UState' {
   import { LStateLevelType } from "ts/mr/data/DEffect";
   import { DState, DStateId } from "ts/mr/data/DState";
   import { LEntity } from "ts/mr/lively/LEntity";
@@ -11014,7 +11154,7 @@ declare module 'MysteryRogueSystem/ts/mr/usecases/UState' {
   }
 
 }
-declare module 'MysteryRogueSystem/ts/mr/usecases/UTransfer' {
+declare module 'MysteryRogueSystem/ts/mr/utility/UTransfer' {
   import { LandExitResult } from "ts/mr/data/MRData";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "ts/mr/system/SCommandContext";
@@ -11461,6 +11601,43 @@ declare module 'MysteryRogueSystem/ts/mr/view/dialogs/VWarehouseWithdrawDialog' 
   }
 
 }
+declare module 'MysteryRogueSystem/ts/mr/view/MRView' {
+  import { VMapEditor } from "ts/mr/rmmz/VMapEditor";
+  import { REEntityVisualSet } from "MysteryRogueSystem/ts/mr/view/REEntityVisualSet";
+  import { MRVisualExtension } from "MysteryRogueSystem/ts/mr/view/MRVisualExtension";
+  import { REVisual_Manager } from "MysteryRogueSystem/ts/mr/view/REVisual_Manager";
+  import { VMapGuideGrid } from "MysteryRogueSystem/ts/mr/view/VMapGuideGrid";
+  import { VMessageWindowSet } from "MysteryRogueSystem/ts/mr/view/VMessageWindowSet";
+  import { VSpriteSet } from "MysteryRogueSystem/ts/mr/view/VSpriteSet";
+  import { VChallengeResultWindow } from "MysteryRogueSystem/ts/mr/view/windows/VChallengeResultWindow";
+  /**
+   * REシステムと RMMZ の橋渡しを行うモジュールのルートクラス。
+   *
+   * Game_XXXX モジュールと連携する必要があるため、インスタンスの寿命はグローバル (NewGame のたびに生成)
+   *
+   * 普通のプラグインであれば Scene_Map を拡張してそこに持たせるべきな情報もこちらに持たせているが、
+   * これは他プラグインとの競合対策や Scene_Map の拡張による複雑化防止のため。
+   */
+  export class MRView {
+      static ext: MRVisualExtension;
+      static manager: REVisual_Manager | undefined;
+      static mapBuilder: VMapEditor | undefined;
+      static scene: Scene_Map;
+      static entityVisualSet: REEntityVisualSet | undefined;
+      static spriteset: Spriteset_Map | undefined;
+      static _challengeResultWindow: VChallengeResultWindow;
+      static _messageWindowSet: VMessageWindowSet;
+      static spriteSet2: VSpriteSet | undefined;
+      static guideGrid: VMapGuideGrid | undefined;
+      static _syncCamera: boolean;
+      static _playerPosRefreshNeed: boolean;
+      static initialize(): void;
+      static onSceneChanged(scene: Scene_Map): void;
+      static finalize(): void;
+      static update(): void;
+  }
+
+}
 declare module 'MysteryRogueSystem/ts/mr/view/MRVisualExtension' {
   export class MRVisualExtension {
       onMapVisualSetup(): void;
@@ -11498,43 +11675,6 @@ declare module 'MysteryRogueSystem/ts/mr/view/REEntityVisualSet' {
       private handleFlushSequelSet;
       createVisual2(entity: LEntity): void;
       private createVisual;
-  }
-
-}
-declare module 'MysteryRogueSystem/ts/mr/view/REVisual' {
-  import { VMapEditor } from "ts/mr/rmmz/VMapEditor";
-  import { REEntityVisualSet } from "MysteryRogueSystem/ts/mr/view/REEntityVisualSet";
-  import { MRVisualExtension } from "MysteryRogueSystem/ts/mr/view/MRVisualExtension";
-  import { REVisual_Manager } from "MysteryRogueSystem/ts/mr/view/REVisual_Manager";
-  import { VMapGuideGrid } from "MysteryRogueSystem/ts/mr/view/VMapGuideGrid";
-  import { VMessageWindowSet } from "MysteryRogueSystem/ts/mr/view/VMessageWindowSet";
-  import { VSpriteSet } from "MysteryRogueSystem/ts/mr/view/VSpriteSet";
-  import { VChallengeResultWindow } from "MysteryRogueSystem/ts/mr/view/windows/VChallengeResultWindow";
-  /**
-   * REシステムと RMMZ の橋渡しを行うモジュールのルートクラス。
-   *
-   * Game_XXXX モジュールと連携する必要があるため、インスタンスの寿命はグローバル (NewGame のたびに生成)
-   *
-   * 普通のプラグインであれば Scene_Map を拡張してそこに持たせるべきな情報もこちらに持たせているが、
-   * これは他プラグインとの競合対策や Scene_Map の拡張による複雑化防止のため。
-   */
-  export class REVisual {
-      static ext: MRVisualExtension;
-      static manager: REVisual_Manager | undefined;
-      static mapBuilder: VMapEditor | undefined;
-      static scene: Scene_Map;
-      static entityVisualSet: REEntityVisualSet | undefined;
-      static spriteset: Spriteset_Map | undefined;
-      static _challengeResultWindow: VChallengeResultWindow;
-      static _messageWindowSet: VMessageWindowSet;
-      static spriteSet2: VSpriteSet | undefined;
-      static guideGrid: VMapGuideGrid | undefined;
-      static _syncCamera: boolean;
-      static _playerPosRefreshNeed: boolean;
-      static initialize(): void;
-      static onSceneChanged(scene: Scene_Map): void;
-      static finalize(): void;
-      static update(): void;
   }
 
 }

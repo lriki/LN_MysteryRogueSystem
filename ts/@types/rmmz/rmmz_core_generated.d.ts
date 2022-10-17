@@ -915,20 +915,6 @@ declare interface ColorFilter {
 	_fragmentSrc(): string;
 }
 
-/**
- * The root object of the display tree.
- * 
- * @class
- * @extends PIXI.Container
- */
-declare interface Stage {
-		
-	/**
-	 * 
-	 * @return  
-	 */
-	new (): Stage;
-}
 
 
 /**

@@ -267,17 +267,6 @@ export interface DParamBuff {
     //formula: string;
 }
 
-// export enum DEffectRejectionLevel {
-//     None = 0,   // 制約は無効 (「盗み防止」があっても絶対に盗み発動する)
-//     Ones = 1,   // 制約を受けた効果だけ防止する (HPダメージと毒効果の2つがある場合、「毒防止」をもっていれば毒効果だけ無効化する)
-//     All = 2,    // Effect 全体の発動自体を無効にする (転び石効果で「転倒防止」された場合、HPダメージも含めて無効化する)
-// }
-
-export interface DQualifyings {
-
-
-}
-
 export interface DSpecialEffectRef {
     specialEffectId: DSpecificEffectId;
     entityId?: DEntityId;

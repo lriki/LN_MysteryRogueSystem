@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 //const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const METADATA = fs.readFileSync("./plugin-description.txt").toString();
 
@@ -17,8 +18,8 @@ module.exports = {
     },
     resolve: {
         extensions: ['.ts', '.js', ".tsx"],
-        
-        plugins: [new TsconfigPathsPlugin( { configFile: 'tsconfig.json' } )]
+
+        plugins: [new TsconfigPathsPlugin({ configFile: 'tsconfig.json' })]
         //roots: [ path.resolve(__dirname, '.') ]
         //alias: {
         //    "@rmmz": "./rmmz/index.d.ts",
@@ -50,13 +51,32 @@ module.exports = {
     //         }),
     //     ],
     // },
-    plugins: [
-        new webpack.BannerPlugin(
-            {
-                banner: METADATA,
-                raw: true,
-                entryOnly: true
-            }
-        )
-    ]
+    optimization: {
+        minimizer: [new TerserPlugin({
+            terserOptions: {
+                format: {
+                    preamble: METADATA,
+                }
+            },
+            // extractComments: {
+            //     condition: /^\**!|@preserve|@license|@cc_on/i,
+            // }
+            // extractComments: {
+            //     banner: METADATA,
+            // }
+            // extractComments: false,
+            // {
+            //     terserOptions: {
+            // }
+        })],
+    },
+    // plugins: [
+    //     new webpack.BannerPlugin(
+    //         {
+    //             banner: METADATA,
+    //             raw: true,
+    //             entryOnly: true
+    //         }
+    //     )
+    // ]
 }

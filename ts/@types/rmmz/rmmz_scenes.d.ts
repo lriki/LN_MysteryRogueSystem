@@ -3,13 +3,14 @@
 // Definitions by: [YOUR_NAME_HERE] <[YOUR_URL_HERE]> 
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
 
+
 /**
  * -----------------------------------------------------------------------------
  * Scene_Base
  * 
  * The superclass of all scenes within the game.
  */
-declare class Scene_Base {
+declare class Scene_Base extends Stage {
 
 	_windowLayer: WindowLayer;
     _fadeWhite: number;

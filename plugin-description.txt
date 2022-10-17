@@ -50,7 +50,7 @@
  * @param RandomPaddingY
  * @text ランダムマップの外周幅 (左右)
  * @desc ランダムマップ作成時の、マップ外周の侵入不可領域の大きさです。ゲーム画面のサイズに応じて、プレイヤーキャラを画面中央に表示するために変更できます。
-* @parent Group_Map
+ * @parent Group_Map
  * @default 6
  * @type number
  *

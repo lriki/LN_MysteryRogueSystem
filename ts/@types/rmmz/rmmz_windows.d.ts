@@ -34,6 +34,9 @@ declare class Window extends PIXI.Container {
 	public windowskin: Bitmap;
 
 	_clientArea: Sprite;
+	_contentsSprite: Sprite;
+	_contentsBackSprite: Sprite;
+	_container: PIXI.Container;
 
     constructor();
 
@@ -93,6 +96,8 @@ export class Window_Base extends Window {
 	 */
 	constructor(rect : /* Window_Base.prototype.+Window_NumberInput */ any);
 		
+	initialize(rect : Rectangle): void;
+
 	/**
 	 * 
 	 * @param options 

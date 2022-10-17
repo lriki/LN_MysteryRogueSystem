@@ -2,7 +2,7 @@
   null,
   {
     "id": 1,
-    "expanded": true,
+    "expanded": false,
     "name": "🗂MR-Database",
     "order": 1,
     "parentId": 0,
@@ -220,7 +220,7 @@
     "id": 25,
     "expanded": true,
     "name": "🗂テスト用マップ",
-    "order": 52,
+    "order": 54,
     "parentId": 0,
     "scrollX": 811,
     "scrollY": 461
@@ -229,7 +229,7 @@
     "id": 26,
     "expanded": false,
     "name": "MR-Land:UnitTestDungeon1",
-    "order": 53,
+    "order": 55,
     "parentId": 25,
     "scrollX": 1129.2,
     "scrollY": 549
@@ -238,7 +238,7 @@
     "id": 27,
     "expanded": false,
     "name": "[Fixed]",
-    "order": 60,
+    "order": 62,
     "parentId": 26,
     "scrollX": 811,
     "scrollY": 461.5
@@ -247,7 +247,7 @@
     "id": 28,
     "expanded": false,
     "name": "FlatMap50x50",
-    "order": 62,
+    "order": 64,
     "parentId": 27,
     "scrollX": 819,
     "scrollY": 463.5
@@ -265,17 +265,17 @@
     "id": 30,
     "expanded": false,
     "name": "ExitMap",
-    "order": 59,
+    "order": 61,
     "parentId": 49,
     "scrollX": 811,
     "scrollY": 461.5
   },
   {
     "id": 31,
-    "expanded": false,
-    "name": "MRシステムマップ",
-    "order": 124,
-    "parentId": 25,
+    "expanded": true,
+    "name": "MR-(Reserved.Map31)",
+    "order": 52,
+    "parentId": 111,
     "scrollX": 811,
     "scrollY": 461.5
   },
@@ -283,7 +283,7 @@
     "id": 32,
     "expanded": false,
     "name": "MR-Safety:インデックス",
-    "order": 123,
+    "order": 125,
     "parentId": 35,
     "scrollX": 982.8,
     "scrollY": 891
@@ -291,9 +291,9 @@
   {
     "id": 33,
     "expanded": true,
-    "name": "緑燐の丘 1F",
-    "order": 130,
-    "parentId": 94,
+    "name": "MR-Bench",
+    "order": 53,
+    "parentId": 1,
     "scrollX": 811,
     "scrollY": 461.5
   },
@@ -301,7 +301,7 @@
     "id": 34,
     "expanded": true,
     "name": "Sandbox",
-    "order": 61,
+    "order": 63,
     "parentId": 27,
     "scrollX": 819,
     "scrollY": 462.5
@@ -310,7 +310,7 @@
     "id": 35,
     "expanded": false,
     "name": "標準システムマップ",
-    "order": 120,
+    "order": 122,
     "parentId": 25,
     "scrollX": 973.1999999999999,
     "scrollY": 548.4
@@ -319,16 +319,16 @@
     "id": 36,
     "expanded": false,
     "name": "MR-Safety:テスト拠点",
-    "order": 121,
+    "order": 123,
     "parentId": 35,
-    "scrollX": 973.1999999999999,
+    "scrollX": 982.8,
     "scrollY": 891
   },
   {
     "id": 37,
     "expanded": false,
     "name": "宿屋",
-    "order": 122,
+    "order": 124,
     "parentId": 35,
     "scrollX": 973.1999999999999,
     "scrollY": 549
@@ -337,8 +337,8 @@
     "id": 38,
     "expanded": false,
     "name": "ダンジョン1",
-    "order": 125,
-    "parentId": 31,
+    "order": 126,
+    "parentId": 25,
     "scrollX": 811,
     "scrollY": 461.5
   },
@@ -346,7 +346,7 @@
     "id": 39,
     "expanded": false,
     "name": "CharacterAI",
-    "order": 63,
+    "order": 65,
     "parentId": 27,
     "scrollX": 819,
     "scrollY": 463
@@ -355,7 +355,7 @@
     "id": 40,
     "expanded": true,
     "name": "Sandbox-罠",
-    "order": 64,
+    "order": 66,
     "parentId": 27,
     "scrollX": 819,
     "scrollY": 463
@@ -364,7 +364,7 @@
     "id": 41,
     "expanded": true,
     "name": "Sandbox-軍隊ウルフ",
-    "order": 65,
+    "order": 67,
     "parentId": 27,
     "scrollX": 819,
     "scrollY": 454.5
@@ -373,7 +373,7 @@
     "id": 42,
     "expanded": true,
     "name": "Sandbox-ミミック",
-    "order": 66,
+    "order": 68,
     "parentId": 27,
     "scrollX": 819,
     "scrollY": 463.5
@@ -382,7 +382,7 @@
     "id": 43,
     "expanded": true,
     "name": "Sandbox-巻物",
-    "order": 67,
+    "order": 69,
     "parentId": 27,
     "scrollX": 819,
     "scrollY": 463.5
@@ -391,7 +391,7 @@
     "id": 44,
     "expanded": true,
     "name": "Sandbox-武器",
-    "order": 68,
+    "order": 70,
     "parentId": 27,
     "scrollX": 811,
     "scrollY": 481.5
@@ -400,7 +400,7 @@
     "id": 45,
     "expanded": true,
     "name": "Sandbox-盾",
-    "order": 69,
+    "order": 71,
     "parentId": 27,
     "scrollX": 811,
     "scrollY": 453.5
@@ -409,7 +409,7 @@
     "id": 46,
     "expanded": true,
     "name": "Sandbox-矢",
-    "order": 70,
+    "order": 72,
     "parentId": 27,
     "scrollX": 819,
     "scrollY": 462.5
@@ -418,7 +418,7 @@
     "id": 47,
     "expanded": true,
     "name": "Sandbox-壺",
-    "order": 71,
+    "order": 73,
     "parentId": 27,
     "scrollX": 811,
     "scrollY": 454.5
@@ -427,7 +427,7 @@
     "id": 48,
     "expanded": true,
     "name": "Sandbox-草",
-    "order": 72,
+    "order": 74,
     "parentId": 27,
     "scrollX": 811,
     "scrollY": 464.5
@@ -436,7 +436,7 @@
     "id": 49,
     "expanded": false,
     "name": "[System]",
-    "order": 58,
+    "order": 60,
     "parentId": 26,
     "scrollX": 811,
     "scrollY": 461.5
@@ -445,7 +445,7 @@
     "id": 50,
     "expanded": false,
     "name": "MR-Land:IdentiferTest1",
-    "order": 96,
+    "order": 98,
     "parentId": 25,
     "scrollX": 982.8,
     "scrollY": 539.4
@@ -454,7 +454,7 @@
     "id": 51,
     "expanded": false,
     "name": "[Fixed]",
-    "order": 99,
+    "order": 101,
     "parentId": 50,
     "scrollX": 811,
     "scrollY": 453.5
@@ -463,7 +463,7 @@
     "id": 52,
     "expanded": false,
     "name": "ExitMap",
-    "order": 98,
+    "order": 100,
     "parentId": 108,
     "scrollX": 811,
     "scrollY": 453
@@ -472,7 +472,7 @@
     "id": 53,
     "expanded": true,
     "name": "Sandbox-識別",
-    "order": 101,
+    "order": 103,
     "parentId": 51,
     "scrollX": 819,
     "scrollY": 462
@@ -490,7 +490,7 @@
     "id": 55,
     "expanded": true,
     "name": "Sandbox-杖_使用回数テスト",
-    "order": 95,
+    "order": 97,
     "parentId": 27,
     "scrollX": 811,
     "scrollY": 454
@@ -499,7 +499,7 @@
     "id": 56,
     "expanded": true,
     "name": "Sandbox-店",
-    "order": 73,
+    "order": 75,
     "parentId": 27,
     "scrollX": 832,
     "scrollY": 499.5
@@ -508,7 +508,7 @@
     "id": 57,
     "expanded": true,
     "name": "Sandbox-ステート",
-    "order": 74,
+    "order": 76,
     "parentId": 27,
     "scrollX": 811,
     "scrollY": 453.5
@@ -517,7 +517,7 @@
     "id": 58,
     "expanded": false,
     "name": "UnitTestFlatMap50x50",
-    "order": 100,
+    "order": 102,
     "parentId": 51,
     "scrollX": 811,
     "scrollY": 453.5
@@ -526,7 +526,7 @@
     "id": 59,
     "expanded": true,
     "name": "Sandbox-杖",
-    "order": 75,
+    "order": 77,
     "parentId": 27,
     "scrollX": 819,
     "scrollY": 498.5
@@ -535,7 +535,7 @@
     "id": 60,
     "expanded": true,
     "name": "Sandbox-マドハンド",
-    "order": 76,
+    "order": 78,
     "parentId": 27,
     "scrollX": 819,
     "scrollY": 463.5
@@ -544,7 +544,7 @@
     "id": 61,
     "expanded": true,
     "name": "Sandbox-自爆屋",
-    "order": 77,
+    "order": 79,
     "parentId": 27,
     "scrollX": 869,
     "scrollY": 507
@@ -553,7 +553,7 @@
     "id": 62,
     "expanded": true,
     "name": "Sandbox-街",
-    "order": 78,
+    "order": 80,
     "parentId": 27,
     "scrollX": 819,
     "scrollY": 463
@@ -562,7 +562,7 @@
     "id": 63,
     "expanded": true,
     "name": "Sandbox-盗み",
-    "order": 79,
+    "order": 81,
     "parentId": 27,
     "scrollX": 811,
     "scrollY": 463
@@ -571,7 +571,7 @@
     "id": 64,
     "expanded": false,
     "name": "[Table]",
-    "order": 54,
+    "order": 56,
     "parentId": 26,
     "scrollX": 982.8,
     "scrollY": 539.4
@@ -580,7 +580,7 @@
     "id": 65,
     "expanded": true,
     "name": "Item",
-    "order": 55,
+    "order": 57,
     "parentId": 64,
     "scrollX": 819,
     "scrollY": 453.5
@@ -589,7 +589,7 @@
     "id": 66,
     "expanded": true,
     "name": "Sandbox-エネミー基本速度",
-    "order": 80,
+    "order": 82,
     "parentId": 27,
     "scrollX": 817,
     "scrollY": 463
@@ -598,7 +598,7 @@
     "id": 67,
     "expanded": true,
     "name": "Shop",
-    "order": 56,
+    "order": 58,
     "parentId": 64,
     "scrollX": 819,
     "scrollY": 453.5
@@ -607,7 +607,7 @@
     "id": 68,
     "expanded": true,
     "name": "Sandbox-射撃_矢",
-    "order": 81,
+    "order": 83,
     "parentId": 27,
     "scrollX": 819,
     "scrollY": 462.5
@@ -616,7 +616,7 @@
     "id": 69,
     "expanded": false,
     "name": "MR-Land:RandomMaps",
-    "order": 102,
+    "order": 104,
     "parentId": 25,
     "scrollX": 973.1999999999999,
     "scrollY": 549
@@ -625,7 +625,7 @@
     "id": 70,
     "expanded": false,
     "name": "[Table]",
-    "order": 103,
+    "order": 105,
     "parentId": 69,
     "scrollX": 811,
     "scrollY": 453.5
@@ -634,7 +634,7 @@
     "id": 71,
     "expanded": false,
     "name": "[System]",
-    "order": 107,
+    "order": 109,
     "parentId": 69,
     "scrollX": 0,
     "scrollY": 0
@@ -643,7 +643,7 @@
     "id": 72,
     "expanded": true,
     "name": "[Fixed]",
-    "order": 109,
+    "order": 111,
     "parentId": 69,
     "scrollX": 811,
     "scrollY": 453.5
@@ -652,7 +652,7 @@
     "id": 73,
     "expanded": false,
     "name": "ExitMap",
-    "order": 108,
+    "order": 110,
     "parentId": 71,
     "scrollX": 811,
     "scrollY": 453.5
@@ -661,7 +661,7 @@
     "id": 74,
     "expanded": true,
     "name": "Item",
-    "order": 104,
+    "order": 106,
     "parentId": 70,
     "scrollX": 811,
     "scrollY": 453.5
@@ -670,7 +670,7 @@
     "id": 75,
     "expanded": true,
     "name": "Shop",
-    "order": 105,
+    "order": 107,
     "parentId": 70,
     "scrollX": 811,
     "scrollY": 453.5
@@ -679,7 +679,7 @@
     "id": 76,
     "expanded": true,
     "name": "Enemy",
-    "order": 106,
+    "order": 108,
     "parentId": 70,
     "scrollX": 819,
     "scrollY": 453.5
@@ -688,7 +688,7 @@
     "id": 77,
     "expanded": true,
     "name": "Sandbox-スライム系",
-    "order": 82,
+    "order": 84,
     "parentId": 27,
     "scrollX": 811,
     "scrollY": 453.5
@@ -697,7 +697,7 @@
     "id": 78,
     "expanded": true,
     "name": "Sandbox-ウルフ系",
-    "order": 83,
+    "order": 85,
     "parentId": 27,
     "scrollX": 824,
     "scrollY": 499
@@ -706,7 +706,7 @@
     "id": 79,
     "expanded": true,
     "name": "Sandbox-バット系",
-    "order": 84,
+    "order": 86,
     "parentId": 27,
     "scrollX": 819,
     "scrollY": 453.5
@@ -715,7 +715,7 @@
     "id": 80,
     "expanded": true,
     "name": "Sandbox-ゴブリン系",
-    "order": 85,
+    "order": 87,
     "parentId": 27,
     "scrollX": 811,
     "scrollY": 461.5
@@ -724,7 +724,7 @@
     "id": 81,
     "expanded": true,
     "name": "Sandbox-メイジ系",
-    "order": 86,
+    "order": 88,
     "parentId": 27,
     "scrollX": 811,
     "scrollY": 461.5
@@ -733,7 +733,7 @@
     "id": 82,
     "expanded": true,
     "name": "Sandbox-インプ系",
-    "order": 87,
+    "order": 89,
     "parentId": 27,
     "scrollX": 811,
     "scrollY": 461.5
@@ -742,7 +742,7 @@
     "id": 83,
     "expanded": true,
     "name": "Sandbox-ゾンビ系",
-    "order": 88,
+    "order": 90,
     "parentId": 27,
     "scrollX": 811,
     "scrollY": 461.5
@@ -751,7 +751,7 @@
     "id": 84,
     "expanded": true,
     "name": "Sandbox-猫系",
-    "order": 89,
+    "order": 91,
     "parentId": 27,
     "scrollX": 811,
     "scrollY": 461.5
@@ -760,7 +760,7 @@
     "id": 85,
     "expanded": true,
     "name": "Sandbox-オーク系",
-    "order": 90,
+    "order": 92,
     "parentId": 27,
     "scrollX": 811,
     "scrollY": 461.5
@@ -769,7 +769,7 @@
     "id": 86,
     "expanded": true,
     "name": "Sandbox-ゴーレム系",
-    "order": 91,
+    "order": 93,
     "parentId": 27,
     "scrollX": 811,
     "scrollY": 462
@@ -778,7 +778,7 @@
     "id": 87,
     "expanded": true,
     "name": "Sandbox-ミミック系",
-    "order": 92,
+    "order": 94,
     "parentId": 27,
     "scrollX": 819,
     "scrollY": 461.5
@@ -787,7 +787,7 @@
     "id": 88,
     "expanded": true,
     "name": "Sandbox-ドラゴン系",
-    "order": 93,
+    "order": 95,
     "parentId": 27,
     "scrollX": 819,
     "scrollY": 462
@@ -796,7 +796,7 @@
     "id": 89,
     "expanded": true,
     "name": "Sandbox-腕輪",
-    "order": 94,
+    "order": 96,
     "parentId": 27,
     "scrollX": 819,
     "scrollY": 499
@@ -805,7 +805,7 @@
     "id": 90,
     "expanded": true,
     "name": "Trap",
-    "order": 57,
+    "order": 59,
     "parentId": 64,
     "scrollX": 819,
     "scrollY": 453.5
@@ -814,16 +814,16 @@
     "id": 91,
     "expanded": true,
     "name": "イベントマップ",
-    "order": 126,
+    "order": 127,
     "parentId": 38,
     "scrollX": 811,
     "scrollY": 461
   },
   {
     "id": 92,
-    "expanded": false,
+    "expanded": true,
     "name": "MR-Land:ダンジョン1",
-    "order": 127,
+    "order": 128,
     "parentId": 38,
     "scrollX": 811,
     "scrollY": 461.5
@@ -832,16 +832,16 @@
     "id": 93,
     "expanded": false,
     "name": "[Shuffle]",
-    "order": 128,
+    "order": 129,
     "parentId": 92,
     "scrollX": 811,
     "scrollY": 452.5
   },
   {
     "id": 94,
-    "expanded": false,
+    "expanded": true,
     "name": "[Fixed]",
-    "order": 129,
+    "order": 130,
     "parentId": 92,
     "scrollX": 811,
     "scrollY": 461.5
@@ -869,13 +869,13 @@
     "expanded": false,
     "name": "初心者の館（仮）",
     "order": 134,
-    "parentId": 31,
+    "parentId": 25,
     "scrollX": 811,
     "scrollY": 453.5
   },
   {
     "id": 98,
-    "expanded": false,
+    "expanded": true,
     "name": "MR-Land:ダンジョンX",
     "order": 135,
     "parentId": 97,
@@ -906,17 +906,17 @@
     "name": "[Table]",
     "order": 144,
     "parentId": 104,
-    "scrollX": 811,
-    "scrollY": 461
+    "scrollX": 973.1999999999999,
+    "scrollY": 539.4
   },
   {
     "id": 102,
     "expanded": true,
-    "name": "ワールドマップ",
+    "name": "1F-ワールドマップ",
     "order": 147,
     "parentId": 105,
-    "scrollX": 1304,
-    "scrollY": 1113.5
+    "scrollX": 1294.8,
+    "scrollY": 1020
   },
   {
     "id": 103,
@@ -930,11 +930,11 @@
   {
     "id": 104,
     "expanded": false,
-    "name": "MR-Land:(Test)ワールドマップ",
+    "name": "MR-World:(Test)ワールドマップ",
     "order": 143,
-    "parentId": 31,
-    "scrollX": 811,
-    "scrollY": 453.5
+    "parentId": 25,
+    "scrollX": 973.1999999999999,
+    "scrollY": 539.4
   },
   {
     "id": 105,
@@ -942,8 +942,8 @@
     "name": "[Fixed]",
     "order": 146,
     "parentId": 104,
-    "scrollX": 811,
-    "scrollY": 453.5
+    "scrollX": 973.1999999999999,
+    "scrollY": 538.8
   },
   {
     "id": 106,
@@ -958,7 +958,7 @@
     "id": 107,
     "expanded": false,
     "name": "BossMap(ボス戦後Event)",
-    "order": 119,
+    "order": 121,
     "parentId": 119,
     "scrollX": 811,
     "scrollY": 453
@@ -967,7 +967,7 @@
     "id": 108,
     "expanded": false,
     "name": "[System]",
-    "order": 97,
+    "order": 99,
     "parentId": 50,
     "scrollX": 0,
     "scrollY": 0
@@ -1003,7 +1003,7 @@
     "id": 112,
     "expanded": false,
     "name": "MR-Land:BOSSイベント付き",
-    "order": 110,
+    "order": 112,
     "parentId": 25,
     "scrollX": 811,
     "scrollY": 461.5
@@ -1012,7 +1012,7 @@
     "id": 113,
     "expanded": false,
     "name": "[Table]",
-    "order": 111,
+    "order": 113,
     "parentId": 112,
     "scrollX": 0,
     "scrollY": 0
@@ -1021,7 +1021,7 @@
     "id": 114,
     "expanded": false,
     "name": "Enemy",
-    "order": 112,
+    "order": 114,
     "parentId": 113,
     "scrollX": 816,
     "scrollY": 640
@@ -1030,7 +1030,7 @@
     "id": 115,
     "expanded": false,
     "name": "[System]",
-    "order": 113,
+    "order": 115,
     "parentId": 112,
     "scrollX": 0,
     "scrollY": 0
@@ -1039,7 +1039,7 @@
     "id": 116,
     "expanded": false,
     "name": "ExitMap",
-    "order": 114,
+    "order": 116,
     "parentId": 115,
     "scrollX": 0,
     "scrollY": 0
@@ -1048,7 +1048,7 @@
     "id": 117,
     "expanded": false,
     "name": "[Fixed]",
-    "order": 115,
+    "order": 117,
     "parentId": 112,
     "scrollX": 0,
     "scrollY": 0
@@ -1057,7 +1057,7 @@
     "id": 118,
     "expanded": false,
     "name": "BossMap",
-    "order": 116,
+    "order": 118,
     "parentId": 117,
     "scrollX": 811,
     "scrollY": 453.5
@@ -1066,7 +1066,7 @@
     "id": 119,
     "expanded": false,
     "name": "[Event]",
-    "order": 117,
+    "order": 119,
     "parentId": 112,
     "scrollX": 811,
     "scrollY": 453
@@ -1084,7 +1084,7 @@
     "id": 121,
     "expanded": false,
     "name": "BossMap(ボス戦前Event)",
-    "order": 118,
+    "order": 120,
     "parentId": 119,
     "scrollX": 811,
     "scrollY": 453
