@@ -3656,7 +3656,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {
@@ -3691,7 +3691,7 @@
     },
     {
       "id": 4,
-      "name": "スライム_A",
+      "name": "スライムA",
       "note": "",
       "pages": [
         {
@@ -3730,7 +3730,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_スライム_A\","
+                "    data: \"kEntity_スライムA\","
               ]
             },
             {
@@ -3765,7 +3765,7 @@
     },
     {
       "id": 5,
-      "name": "kPrefab_ふきとばしの杖_A",
+      "name": "kPrefab_ふきとばしの杖A",
       "note": "",
       "pages": [
         {
@@ -3804,7 +3804,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ふきとばしの杖_A\","
+                "    data: \"kEntity_ふきとばしの杖A\","
               ]
             },
             {
@@ -3878,7 +3878,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_眠りガス_A\","
+                "    data: \"kEntity_眠りガスA\","
               ]
             },
             {
@@ -4248,7 +4248,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {
@@ -4322,7 +4322,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    troop: \"kTroop_軍隊ウルフ_A_x4\","
+                "    troop: \"kTroop_軍隊ウルフA_x4\","
               ]
             },
             {
@@ -4551,7 +4551,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {
@@ -4625,7 +4625,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_ドラゴン_A\","
+                "    data: \"kEnemy_ドラゴンA\","
               ]
             },
             {
@@ -4847,7 +4847,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {
@@ -4921,7 +4921,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_梅キツネ_A\","
+                "    data: \"kEnemy_梅キツネA\","
               ]
             },
             {
@@ -5743,7 +5743,7 @@
     },
     {
       "id": 31,
-      "name": "スライム_A",
+      "name": "スライムA",
       "note": "",
       "pages": [
         {
@@ -5782,7 +5782,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_スライム_A\","
+                "    data: \"kEntity_スライムA\","
               ]
             },
             {
@@ -5930,7 +5930,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {
@@ -6004,7 +6004,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ポイズンキラー_A\","
+                "    data: \"kEntity_ポイズンキラーA\","
               ]
             },
             {
@@ -6078,7 +6078,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_皮の盾_A\","
+                "    data: \"kEntity_皮の盾A\","
               ]
             },
             {
@@ -6152,7 +6152,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_薬草_A\","
+                "    data: \"kEntity_薬草A\","
               ]
             },
             {
@@ -6226,7 +6226,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_眠りガス_A\","
+                "    data: \"kEntity_眠りガスA\","
               ]
             },
             {
@@ -6261,7 +6261,7 @@
     },
     {
       "id": 38,
-      "name": "kPrefab_ふきとばしの杖_A",
+      "name": "kPrefab_ふきとばしの杖A",
       "note": "",
       "pages": [
         {
@@ -6300,7 +6300,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ふきとばしの杖_A\","
+                "    data: \"kEntity_ふきとばしの杖A\","
               ]
             },
             {
@@ -8076,7 +8076,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {
@@ -8111,7 +8111,7 @@
     },
     {
       "id": 63,
-      "name": "スライム_A",
+      "name": "スライムA",
       "note": "",
       "pages": [
         {
@@ -8150,7 +8150,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_スライム_A\","
+                "    data: \"kEntity_スライムA\","
               ]
             },
             {
@@ -8224,7 +8224,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_眠りガス_A\","
+                "    data: \"kEntity_眠りガスA\","
               ]
             },
             {
@@ -8372,7 +8372,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {
@@ -8407,7 +8407,7 @@
     },
     {
       "id": 67,
-      "name": "スライム_A",
+      "name": "スライムA",
       "note": "",
       "pages": [
         {
@@ -8446,7 +8446,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_スライム_A\","
+                "    data: \"kEntity_スライムA\","
               ]
             },
             {
@@ -8520,7 +8520,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {

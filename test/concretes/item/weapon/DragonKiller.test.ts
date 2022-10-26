@@ -22,8 +22,8 @@ test("concretes.item.weapon.DragonKiller", () => {
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
     player1.addState(TestEnv.StateId_CertainDirectAttack);
 
-    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ダミードラゴンキラー_A").id, [], "weapon1"));
-    const weapon2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ドラゴンキラー_A").id, [], "weapon1"));
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ダミードラゴンキラーA").id, [], "weapon1"));
+    const weapon2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ドラゴンキラーA").id, [], "weapon1"));
     inventory.addEntity(weapon1);
     inventory.addEntity(weapon2);
 

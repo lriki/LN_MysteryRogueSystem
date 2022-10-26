@@ -23,14 +23,14 @@ test("concretes.item.shield.PoisonGuardShield", () => {
     const pow1 = player1.getActualParam(MRBasics.params.pow);
     player1.addState(MRData.getState("kState_UT罠必中").id);
 
-    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_うろこの盾_A").id, [], "shield1"));
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_毒草_B").id, [], "item1"));
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_うろこの盾A").id, [], "shield1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_毒草B").id, [], "item1"));
     inventory.addEntity(shield1);
     inventory.addEntity(item1);
     equipmentUser.equipOnUtil(shield1);
 
     // trap 生成&配置
-    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_毒矢の罠_A").id, [], "trap1"));
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_毒矢の罠A").id, [], "trap1"));
     MRLively.world.transferEntity(trap1, floorId, 11, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -67,11 +67,11 @@ test("concretes.item.shield.PoisonGuardShield2", () => {
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
     const pow1 = player1.getActualParam(MRBasics.params.pow);
 
-    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_うろこの盾_A").id, [], "shield1"));
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_うろこの盾A").id, [], "shield1"));
     inventory.addEntity(shield1);
     equipmentUser.equipOnUtil(shield1);
 
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ゾンビ_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ゾンビA").id, [], "enemy1"));
     enemy1.addState(MRData.getState("kState_Anger").id);
     MRLively.world.transferEntity(enemy1, floorId, 12, 10);
 

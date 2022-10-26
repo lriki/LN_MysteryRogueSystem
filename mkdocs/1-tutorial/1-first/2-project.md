@@ -15,8 +15,8 @@
 ```
 <MR-Type: Entity>
 <MR-Category: Actor>
-<MR-Key: kEntity_Actor_A>
-<MR-Prefab: kPrefab_Actor_A>
+<MR-Key: kEntity_ActorA>
+<MR-Prefab: kPrefab_ActorA>
 ```
 
 ![](img/project-1.png)

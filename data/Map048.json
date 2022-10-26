@@ -4276,7 +4276,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {
@@ -4360,7 +4360,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_EntryPoint_A\","
+                "    data: \"kEntity_EntryPointA\","
               ]
             },
             {
@@ -4405,7 +4405,7 @@
     },
     {
       "id": 3,
-      "name": "すばやさ草_A",
+      "name": "すばやさ草A",
       "note": "",
       "pages": [
         {
@@ -4444,7 +4444,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_すばやさ草_A\","
+                "    data: \"kEntity_すばやさ草A\","
               ]
             },
             {
@@ -4518,7 +4518,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ちからの草_A\","
+                "    data: \"kEntity_ちからの草A\","
               ]
             },
             {
@@ -4553,7 +4553,7 @@
     },
     {
       "id": 5,
-      "name": "しあわせ草_A",
+      "name": "しあわせ草A",
       "note": "",
       "pages": [
         {
@@ -4592,7 +4592,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_しあわせ草_A\","
+                "    data: \"kEntity_しあわせ草A\","
               ]
             },
             {
@@ -4627,7 +4627,7 @@
     },
     {
       "id": 6,
-      "name": "スライム_A",
+      "name": "スライムA",
       "note": "",
       "pages": [
         {
@@ -4666,7 +4666,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_スライム_A\","
+                "    data: \"kEntity_スライムA\","
               ]
             },
             {
@@ -4708,7 +4708,7 @@
     },
     {
       "id": 7,
-      "name": "めつぶし草_A",
+      "name": "めつぶし草A",
       "note": "",
       "pages": [
         {
@@ -4747,7 +4747,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_めつぶし草_A\","
+                "    data: \"kEntity_めつぶし草A\","
               ]
             },
             {
@@ -4782,7 +4782,7 @@
     },
     {
       "id": 8,
-      "name": "高跳び草_A",
+      "name": "高跳び草A",
       "note": "",
       "pages": [
         {
@@ -4821,7 +4821,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_高跳び草_A\","
+                "    data: \"kEntity_高跳び草A\","
               ]
             },
             {
@@ -4856,7 +4856,7 @@
     },
     {
       "id": 9,
-      "name": "混乱草_A",
+      "name": "混乱草A",
       "note": "",
       "pages": [
         {
@@ -4895,7 +4895,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_混乱草_A\","
+                "    data: \"kEntity_混乱草A\","
               ]
             },
             {
@@ -4930,7 +4930,7 @@
     },
     {
       "id": 10,
-      "name": "めぐすり草_A",
+      "name": "めぐすり草A",
       "note": "",
       "pages": [
         {
@@ -4969,7 +4969,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_めぐすり草_A\","
+                "    data: \"kEntity_めぐすり草A\","
               ]
             },
             {
@@ -5004,7 +5004,7 @@
     },
     {
       "id": 11,
-      "name": "黒幕バット_A",
+      "name": "黒幕バットA",
       "note": "",
       "pages": [
         {
@@ -5043,7 +5043,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_黒幕バット_A\","
+                "    data: \"kEnemy_黒幕バットA\","
               ]
             },
             {
@@ -5085,7 +5085,7 @@
     },
     {
       "id": 12,
-      "name": "眠りガス_A",
+      "name": "眠りガスA",
       "note": "",
       "pages": [
         {
@@ -5124,7 +5124,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_眠りガス_A\","
+                "    data: \"kEntity_眠りガスA\","
               ]
             },
             {
@@ -5166,7 +5166,7 @@
     },
     {
       "id": 13,
-      "name": "まどわし草_A",
+      "name": "まどわし草A",
       "note": "",
       "pages": [
         {
@@ -5205,7 +5205,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_まどわし草_A\","
+                "    data: \"kEntity_まどわし草A\","
               ]
             },
             {
@@ -5240,7 +5240,7 @@
     },
     {
       "id": 14,
-      "name": "毒草_A",
+      "name": "毒草A",
       "note": "",
       "pages": [
         {
@@ -5279,7 +5279,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_毒草_A\","
+                "    data: \"kEntity_毒草A\","
               ]
             },
             {
@@ -5314,7 +5314,7 @@
     },
     {
       "id": 15,
-      "name": "薬草_A",
+      "name": "薬草A",
       "note": "",
       "pages": [
         {
@@ -5353,7 +5353,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_薬草_A\","
+                "    data: \"kEntity_薬草A\","
               ]
             },
             {
@@ -5427,7 +5427,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_ゾンビ_A\","
+                "    data: \"kEnemy_ゾンビA\","
               ]
             },
             {
@@ -5508,7 +5508,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_投擲反射石_A\","
+                "    data: \"kEntity_投擲反射石A\","
               ]
             },
             {
@@ -5551,7 +5551,7 @@
     null,
     {
       "id": 19,
-      "name": "毒消し草_A",
+      "name": "毒消し草A",
       "note": "",
       "pages": [
         {
@@ -5590,7 +5590,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_毒消し草_A\","
+                "    data: \"kEntity_毒消し草A\","
               ]
             },
             {
@@ -5625,7 +5625,7 @@
     },
     {
       "id": 20,
-      "name": "睡眠草_A",
+      "name": "睡眠草A",
       "note": "",
       "pages": [
         {
@@ -5664,7 +5664,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_睡眠草_A\","
+                "    data: \"kEntity_睡眠草A\","
               ]
             },
             {
@@ -5699,7 +5699,7 @@
     },
     {
       "id": 21,
-      "name": "火炎草_A",
+      "name": "火炎草A",
       "note": "",
       "pages": [
         {
@@ -5738,7 +5738,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_火炎草_A\","
+                "    data: \"kEntity_火炎草A\","
               ]
             },
             {
@@ -5773,7 +5773,7 @@
     },
     {
       "id": 22,
-      "name": "弟切草_A",
+      "name": "弟切草A",
       "note": "",
       "pages": [
         {
@@ -5812,7 +5812,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_弟切草_A\","
+                "    data: \"kEntity_弟切草A\","
               ]
             },
             {
@@ -5847,7 +5847,7 @@
     },
     {
       "id": 23,
-      "name": "雑草_A",
+      "name": "雑草A",
       "note": "",
       "pages": [
         {
@@ -5886,7 +5886,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_雑草_A\","
+                "    data: \"kEntity_雑草A\","
               ]
             },
             {
@@ -5921,7 +5921,7 @@
     },
     {
       "id": 24,
-      "name": "すばやさ草_A",
+      "name": "すばやさ草A",
       "note": "",
       "pages": [
         {
@@ -5960,7 +5960,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_すばやさ草_A\","
+                "    data: \"kEntity_すばやさ草A\","
               ]
             },
             {
@@ -5995,7 +5995,7 @@
     },
     {
       "id": 25,
-      "name": "めつぶし草_A",
+      "name": "めつぶし草A",
       "note": "",
       "pages": [
         {
@@ -6034,7 +6034,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_めつぶし草_A\","
+                "    data: \"kEntity_めつぶし草A\","
               ]
             },
             {
@@ -6069,7 +6069,7 @@
     },
     {
       "id": 26,
-      "name": "高跳び草_A",
+      "name": "高跳び草A",
       "note": "",
       "pages": [
         {
@@ -6108,7 +6108,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_高跳び草_A\","
+                "    data: \"kEntity_高跳び草A\","
               ]
             },
             {
@@ -6143,7 +6143,7 @@
     },
     {
       "id": 27,
-      "name": "混乱草_A",
+      "name": "混乱草A",
       "note": "",
       "pages": [
         {
@@ -6182,7 +6182,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_混乱草_A\","
+                "    data: \"kEntity_混乱草A\","
               ]
             },
             {
@@ -6217,7 +6217,7 @@
     },
     {
       "id": 28,
-      "name": "毒消し草_A",
+      "name": "毒消し草A",
       "note": "",
       "pages": [
         {
@@ -6256,7 +6256,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_毒消し草_A\","
+                "    data: \"kEntity_毒消し草A\","
               ]
             },
             {
@@ -6292,7 +6292,7 @@
     null,
     {
       "id": 30,
-      "name": "睡眠草_A",
+      "name": "睡眠草A",
       "note": "",
       "pages": [
         {
@@ -6331,7 +6331,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_睡眠草_A\","
+                "    data: \"kEntity_睡眠草A\","
               ]
             },
             {

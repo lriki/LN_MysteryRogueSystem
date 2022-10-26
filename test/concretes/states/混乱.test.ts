@@ -21,7 +21,7 @@ test("concretes.states.混乱.move", () => {
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [stateId], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
 
     // 10 ターン分 シミュレーション実行
@@ -50,19 +50,19 @@ test("concretes.states.混乱.attack", () => {
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [MRData.getState("kState_UT混乱").id, MRData.getState("kState_UTからぶり").id], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [MRData.getState("kState_UT混乱").id, MRData.getState("kState_UTからぶり").id], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
 
     // 周りを移動できない Enemy で囲ってみる
     const enemies = [
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [MRData.getState("kState_睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [MRData.getState("kState_睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [MRData.getState("kState_睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [MRData.getState("kState_睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [MRData.getState("kState_睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [MRData.getState("kState_睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [MRData.getState("kState_睡眠").id], "enemy1")),
-        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [MRData.getState("kState_睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [MRData.getState("kState_睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [MRData.getState("kState_睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [MRData.getState("kState_睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [MRData.getState("kState_睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [MRData.getState("kState_睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [MRData.getState("kState_睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [MRData.getState("kState_睡眠").id], "enemy1")),
+        SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [MRData.getState("kState_睡眠").id], "enemy1")),
     ];
     MRLively.world.transferEntity(enemies[0], TestEnv.FloorId_FlatMap50x50, 19, 9);
     MRLively.world.transferEntity(enemies[1], TestEnv.FloorId_FlatMap50x50, 20, 9);
@@ -139,12 +139,12 @@ test("concretes.states.混乱.throw", () => {
     const inventory = actor1.getEntityBehavior(LInventoryBehavior);
     const items = [];
     for (let i = 0; i < 5; i++) {
-        items[i] = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草_A").id, [], "enemy1"));
+        items[i] = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草A").id, [], "enemy1"));
         inventory.addEntity(items[i]);
     }
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
 
     MRSystem.scheduler.stepSimulation();

@@ -3469,7 +3469,7 @@
     null,
     {
       "id": 1,
-      "name": "眠りガス_A",
+      "name": "眠りガスA",
       "note": "",
       "pages": [
         {
@@ -3508,7 +3508,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_眠りガス_A\","
+                "    data: \"kEntity_眠りガスA\","
               ]
             },
             {

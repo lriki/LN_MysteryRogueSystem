@@ -22,10 +22,10 @@ test("concretes.item.scroll.PlatingScroll", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_メッキの巻物_A").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_メッキの巻物_A").id, [], "item1"));
-    const item3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_メッキの巻物_A").id, [], "item1"));
-    const item4 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_メッキの巻物_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_メッキの巻物A").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_メッキの巻物A").id, [], "item1"));
+    const item3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_メッキの巻物A").id, [], "item1"));
+    const item4 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_メッキの巻物A").id, [], "item1"));
     inventory.addEntity(item1);
     inventory.addEntity(item2);
     inventory.addEntity(item3);
@@ -34,7 +34,7 @@ test("concretes.item.scroll.PlatingScroll", () => {
     // 対象アイテム
     const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1, [], "weapon1"));
     const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Shield1, [], "shield2"));
-    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_目覚めの指輪_A").id, [], "ring1"));
+    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_目覚めの指輪A").id, [], "ring1"));
     const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb, [], "grass1"));
     inventory.addEntity(weapon1);
     inventory.addEntity(shield1);

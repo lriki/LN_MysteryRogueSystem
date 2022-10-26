@@ -8,7 +8,7 @@ const MR = require("MysteryRogueSystem/ts/main");
 
 MR.db.effects = {
     //--------------------------------------------------------------------------
-    "kEffect_すばやさ草_A": Effect({
+    "kEffect_すばやさ草A": Effect({
         parameterBuffs: [
             ParameterBuffEffect({
                 parameterKey: "agi",    // すばやさの、

@@ -23,7 +23,7 @@ test("concretes.enemies.PowerDowner", () => {
     const pow1 = player1.getActualParam(MRBasics.params.pow);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ゾンビ_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ゾンビA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, floorId, 11, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------

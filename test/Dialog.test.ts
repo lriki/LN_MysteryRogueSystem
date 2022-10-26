@@ -20,7 +20,7 @@ test("Dialog.FeetDialogSequelTiming", () => {
 
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
 
-    const exitPoint1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ExitPoint_A").id, [], ""));
+    const exitPoint1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ExitPointA").id, [], ""));
     MRLively.world.transferEntity(exitPoint1, floorId, 11, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------

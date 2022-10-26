@@ -128,13 +128,13 @@ export class SEntityFactory {
     }
 
     public static newBasicExitPoint(): LEntity {
-        const e = MRLively.world.spawnEntity(MRData.getEntity("kEntity_ExitPoint_A").id);
+        const e = MRLively.world.spawnEntity(MRData.getEntity("kEntity_ExitPointA").id);
         this.buildExitPoint(e);
         return e;
     }
 
     // public static newEntryPoint(entityId: DEntityId): LEntity {
-    //     assert(REData.getEntity("kEntity_EntryPoint_A").id == entityId);
+    //     assert(REData.getEntity("kEntity_EntryPointA").id == entityId);
     //     const e = REGame.world.spawnEntity(entityId);
     //     this.buildEntryPoint(e);
     //     return e;
@@ -146,8 +146,8 @@ export class SEntityFactory {
     }
 
     // public static newExitPoint(entityId: DEntityId): LEntity {
-    //     assert(REData.getEntity("kEntity_ExitPoint_A").id == entityId);
-    //     const e = REGame.world.spawnEntity(REData.getEntity("kEntity_ExitPoint_A").id);
+    //     assert(REData.getEntity("kEntity_ExitPointA").id == entityId);
+    //     const e = REGame.world.spawnEntity(REData.getEntity("kEntity_ExitPointA").id);
     //     this.buildExitPoint(e);
     //     return e;
     // }
@@ -260,23 +260,23 @@ export class SEntityFactory {
     // そのためここで直定義して一通り作ってみた後、再検討する。
     static setupDirectly_Item(entity: LEntity, entityData: DEntity) {
         switch (entityData.entity.key) {
-            case "kEntity_聖域の巻物_A":
+            case "kEntity_聖域の巻物A":
                 entity.addBehavior(LSanctuaryBehavior);
                 entity.addBehavior(LGlueToGroundBehavior);
                 break;
-            // case "kEntity_突風の罠_A":
+            // case "kEntity_突風の罠A":
             //     break;
-            case "kEntity_保存の壺_A":
+            case "kEntity_保存の壺A":
                 entity.addBehavior(LInventoryBehavior);
                 entity.addBehavior(LStorageBehavior);
                 break;
-            case "kEntity_Gold_A":
+            case "kEntity_GoldA":
                 entity.addBehavior(LGoldBehavior);
                 break;
-            case "kEntity_転ばぬ先の杖_A":
+            case "kEntity_転ばぬ先の杖A":
                 entity.addBehavior(LStumblePreventionBehavior);
                 break;
-            case "kEntity_RevivalGrass_A":
+            case "kEntity_RevivalGrassA":
                 entity.addBehavior(LActivityCharmBehavior);
                 break;
 
@@ -288,19 +288,19 @@ export class SEntityFactory {
     static setupDirectly_Enemy(entity: LEntity, entityData: DEntity) {
         switch (entityData.entity.key) {
             case "kEnemy_バットA":
-            case "kEnemy_黒幕バット_A":
+            case "kEnemy_黒幕バットA":
                 entity.addBehavior(LRatedRandomAIBehavior);
                 break;
             case "kEnemy_ウルフA":
                 entity.addBehavior(LParamBehavior).setParamBase(MRBasics.params.agi, 100);
                 break;
-            case "kEnemy_苗色スライム_A":
+            case "kEnemy_苗色スライムA":
                 entity.addBehavior(LEntityDivisionBehavior);
                 break;
-            case "kEnemy_軍隊ウルフ_A":
+            case "kEnemy_軍隊ウルフA":
                 entity.addBehavior(LFlockBehavior);
                 break;
-            case "kEnemy_バインドゴーレム_A":
+            case "kEnemy_バインドゴーレムA":
                 entity.addBehavior(LGrabFootBehavior);
                 break;
                 
@@ -308,13 +308,13 @@ export class SEntityFactory {
                 const b = entity.getEntityBehavior(LUnitBehavior);
                 b.setFactionId(MRData.system.factions.neutral);
                 break;
-            case "kEnemy_瑠璃猫_A":
+            case "kEnemy_瑠璃猫A":
                 entity.addBehavior(LItemThiefBehavior);
                 break;
-            case "kEnemy_小金猫_A":
+            case "kEnemy_小金猫A":
                 entity.addBehavior(LGoldThiefBehavior);
                 break;
-            case "kEnemy_金剛猫_A":
+            case "kEnemy_金剛猫A":
                 entity.addBehavior(LEscapeBehavior);
                 entity.addBehavior(LParamBehavior).setParamBase(MRBasics.params.agi, 100);
                 break;

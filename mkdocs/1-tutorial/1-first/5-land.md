@@ -119,17 +119,17 @@ MRシステムでは、ひとつの冒険の開始から終了（例えば、拠
 
 ![](img/land-8.png)
 
-`kEntity_ExitPoint_A` という文字列があります。既に説明したように、これは `MR-Key` が `kEntity_ExitPoint_A` である階段エンティティを出現させることを意味します。
+`kEntity_ExitPointA` という文字列があります。既に説明したように、これは `MR-Key` が `kEntity_ExitPointA` である階段エンティティを出現させることを意味します。
 
-`kEntity_ExitPoint_A` はデータベースの [アイテム] で定義されています。
+`kEntity_ExitPointA` はデータベースの [アイテム] で定義されています。
 
 ![](img/land-9.png)
 
-このアイテムのメモ欄を見てみると、 `<MR-Prefab: kPrefab_ExitPoint_A>` という設定があります。
+このアイテムのメモ欄を見てみると、 `<MR-Prefab: kPrefab_ExitPointA>` という設定があります。
 
-これはエンティティがマップ上に出現した時、その見た目には `kPrefab_ExitPoint_A` という名前のイベント(プレハブ)を使うことを意味します。
+これはエンティティがマップ上に出現した時、その見た目には `kPrefab_ExitPointA` という名前のイベント(プレハブ)を使うことを意味します。
 
-`kPrefab_ExitPoint_A` は、 `MR-Prefab` マップで定義されています。
+`kPrefab_ExitPointA` は、 `MR-Prefab` マップで定義されています。
 
 このようにエンティティとプレハブは互いに重要な関係を持ちます。
 

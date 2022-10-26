@@ -22,7 +22,7 @@ export class LStumblePreventionBehavior extends LBehavior {
         if (rejection.kind == "Effect") {
             // Effect の発動自体を防ぎたい。
             // もし EffectBehavior だけでガードすると、転び石のダメージは防げない。
-            if (rejection.effect.key == "kEntity_転び石_A") {
+            if (rejection.effect.key == "kEntity_転び石A") {
                 return this.rejectStumble(cctx, self);
             }
         }
@@ -47,7 +47,7 @@ export class LStumblePreventionBehavior extends LBehavior {
 
     // onPreviewEffectRejection(cctx: SCommandContext, self: LEntity, effect: DEffect): SCommandResponse {
 
-    //     if (effect.sourceKey == "kEntity_転び石_A") {
+    //     if (effect.sourceKey == "kEntity_転び石A") {
     //         if (self.actualParam(REBasics.params.remaining) > 0) {
     //             // 使用回数を減らして効果を防止する
     //             self.gainActualParam(REBasics.params.remaining, -1);

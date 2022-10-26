@@ -4276,7 +4276,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {
@@ -4350,7 +4350,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_EntryPoint_A\","
+                "    data: \"kEntity_EntryPointA\","
               ]
             },
             {
@@ -4466,7 +4466,7 @@
     },
     {
       "id": 4,
-      "name": "疾風ウルフ_A",
+      "name": "疾風ウルフA",
       "note": "",
       "pages": [
         {
@@ -4505,7 +4505,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_疾風ウルフ_A\","
+                "    data: \"kEnemy_疾風ウルフA\","
               ]
             },
             {
@@ -4547,7 +4547,7 @@
     },
     {
       "id": 5,
-      "name": "軍隊ウルフ_A",
+      "name": "軍隊ウルフA",
       "note": "",
       "pages": [
         {
@@ -4586,7 +4586,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    troop: \"kTroop_軍隊ウルフ_A_x4\","
+                "    troop: \"kTroop_軍隊ウルフA_x4\","
               ]
             },
             {
@@ -4667,7 +4667,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_RevivalGrass_A\","
+                "    data: \"kEntity_RevivalGrassA\","
               ]
             },
             {

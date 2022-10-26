@@ -18,7 +18,7 @@ test("concretes.enemies.WarpMagician", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_追放メイジ_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_追放メイジA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, floorId, 11, 10);
 
     MRSystem.scheduler.stepSimulation();

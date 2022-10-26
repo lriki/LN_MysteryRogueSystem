@@ -52,7 +52,7 @@
     ],
     "iconIndex": 97,
     "name": "こん棒",
-    "note": "<MR-Type: Entity>\n<MR-Category: Weapon>\n<MR-Key: kEntity_こん棒_A>\n<MR-Prefab: kPrefab_こん棒_A>\n<RE-EquipmentImage:RE-Weapon-1,Right>\n\n",
+    "note": "<MR-Type: Entity>\n<MR-Category: Weapon>\n<MR-Key: kEntity_こん棒A>\n<MR-Prefab: kPrefab_こん棒A>\n<RE-EquipmentImage:RE-Weapon-1,Right>\n\n",
     "params": [
       0,
       0,
@@ -85,7 +85,7 @@
     ],
     "iconIndex": 97,
     "name": "青銅の剣",
-    "note": "<MR-Type: Entity>\n<MR-Category: Weapon>\n<MR-Key: kEntity_青銅の剣_A>\n<MR-Prefab: kPrefab_青銅の剣_A>\n<RE-EquipmentImage:RE-Weapon-1,Right>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Weapon>\n<MR-Key: kEntity_青銅の剣A>\n<MR-Prefab: kPrefab_青銅の剣A>\n<RE-EquipmentImage:RE-Weapon-1,Right>",
     "params": [
       0,
       0,
@@ -118,7 +118,7 @@
     ],
     "iconIndex": 97,
     "name": "ポイズンキラー",
-    "note": "<MR-Type: Entity>\n<MR-Category: Weapon>\n<MR-Key: kEntity_ポイズンキラー_A>\n<MR-Prefab: kPrefab_ポイズンキラー_A>\n<RE-EquipmentImage:RE-Weapon-1,Right>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Weapon>\n<MR-Key: kEntity_ポイズンキラーA>\n<MR-Prefab: kPrefab_ポイズンキラーA>\n<RE-EquipmentImage:RE-Weapon-1,Right>",
     "params": [
       0,
       0,
@@ -151,7 +151,7 @@
     ],
     "iconIndex": 97,
     "name": "金の剣",
-    "note": "<MR-Type: Entity>\n<MR-Category: Weapon>\n<MR-Key: kEntity_金の剣_A>\n<MR-Prefab: kPrefab_金の剣_A>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Weapon>\n<MR-Key: kEntity_金の剣A>\n<MR-Prefab: kPrefab_金の剣A>",
     "params": [
       0,
       0,
@@ -184,7 +184,7 @@
     ],
     "iconIndex": 0,
     "name": "鋼の剣",
-    "note": "<MR-Type: Entity>\n<MR-Category: Weapon>\n<MR-Key: kEntity_鋼の剣_A>\n<MR-Prefab: kPrefab_鋼の剣_A>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Weapon>\n<MR-Key: kEntity_鋼の剣A>\n<MR-Prefab: kPrefab_鋼の剣A>",
     "params": [
       0,
       0,
@@ -217,7 +217,7 @@
     ],
     "iconIndex": 97,
     "name": "ドラゴンキラー",
-    "note": "<MR-Type: Entity>\n<MR-Category: Weapon>\n<MR-Key: kEntity_ドラゴンキラー_A>\n<MR-Prefab: kPrefab_ドラゴンキラー_A>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Weapon>\n<MR-Key: kEntity_ドラゴンキラーA>\n<MR-Prefab: kPrefab_ドラゴンキラーA>",
     "params": [
       0,
       0,
@@ -250,7 +250,7 @@
     ],
     "iconIndex": 101,
     "name": "隕石の剣",
-    "note": "<MR-Type: Entity>\n<MR-Category: Weapon>\n<MR-Key: kEntity_隕石の剣_A>\n<MR-Prefab: kPrefab_隕石の剣_A>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Weapon>\n<MR-Key: kEntity_隕石の剣A>\n<MR-Prefab: kPrefab_隕石の剣A>",
     "params": [
       0,
       0,
@@ -283,7 +283,7 @@
     ],
     "iconIndex": 0,
     "name": "[Test]ダミードラゴンキラー",
-    "note": "<MR-Type: Entity>\n<MR-Category: Weapon>\n<MR-Key: kEntity_ダミードラゴンキラー_A>\n<MR-Prefab: kPrefab_ドラゴンキラー_A>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Weapon>\n<MR-Key: kEntity_ダミードラゴンキラーA>\n<MR-Prefab: kPrefab_ドラゴンキラーA>",
     "params": [
       0,
       0,
@@ -382,7 +382,7 @@
     ],
     "iconIndex": 102,
     "name": "木の矢",
-    "note": "<MR-Type: Entity>\n<MR-Category: Arrow>\n<MR-Key: kEntity_木の矢_A>\n<MR-Prefab: kPrefab_木の矢_A>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Arrow>\n<MR-Key: kEntity_木の矢A>\n<MR-Prefab: kPrefab_木の矢A>",
     "params": [
       0,
       0,
@@ -415,7 +415,7 @@
     ],
     "iconIndex": 102,
     "name": "鉄の矢",
-    "note": "<MR-Type: Entity>\n<MR-Category: Arrow>\n<MR-Key: kEntity_鉄の矢_A>\n<MR-Prefab: kPrefab_鉄の矢_A>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Arrow>\n<MR-Key: kEntity_鉄の矢A>\n<MR-Prefab: kPrefab_鉄の矢A>",
     "params": [
       0,
       0,
@@ -448,7 +448,7 @@
     ],
     "iconIndex": 102,
     "name": "銀の矢",
-    "note": "<MR-Type: Entity>\n<MR-Category: Arrow>\n<MR-Key: kEntity_銀の矢_A>\n<MR-Prefab: kPrefab_銀の矢_A>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Arrow>\n<MR-Key: kEntity_銀の矢A>\n<MR-Prefab: kPrefab_銀の矢A>",
     "params": [
       0,
       0,
@@ -481,7 +481,7 @@
     ],
     "iconIndex": 0,
     "name": "毒矢",
-    "note": "<MR-Type: Entity>\n<MR-Category: Arrow>\n<MR-Key: kEntity_毒矢_A>\n<MR-Prefab: kPrefab_毒矢_A>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Arrow>\n<MR-Key: kEntity_毒矢A>\n<MR-Prefab: kPrefab_毒矢A>",
     "params": [
       0,
       0,

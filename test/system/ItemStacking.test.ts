@@ -22,17 +22,17 @@ test("system.ItemStacking.FullyInventoryIssue", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // 5本の矢を作り、持ち物に入れる
-    const arrow1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢_A").id, [], "item1").withStackCount(5));
+    const arrow1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢A").id, [], "item1").withStackCount(5));
     inventory.addEntity(arrow1);
 
     // 5本の矢を作り、足元に置く
-    const arrow2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢_A").id, [], "item1").withStackCount(5));
+    const arrow2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢A").id, [], "item1").withStackCount(5));
     MRLively.world.transferEntity(arrow2, floorId, 10, 10);
 
     // 残り持てる数だけ適当なアイテムを持たせる
     const remaining = inventory.remaining;
     for (let i = 0; i < remaining; i++) {
-        const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草_A").id, [], "item"));
+        const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草A").id, [], "item"));
         inventory.addEntity(item);
     }
 

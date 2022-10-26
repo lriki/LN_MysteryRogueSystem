@@ -367,7 +367,7 @@
     ],
     "gold": 0,
     "name": "スライム",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEntity_スライム_A>\n<MR-Prefab: kPrefab_スライム_A>\n----------\n特殊能力: なし",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEntity_スライムA>\n<MR-Prefab: kPrefab_スライムA>\n----------\n特殊能力: なし",
     "params": [
       50,
       0,
@@ -436,7 +436,7 @@
     ],
     "gold": 0,
     "name": "飴色スライム",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_飴色スライム_A>\n<MR-Prefab: kPrefab_飴色スライム_A>\n----------\n特殊能力: なし",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_飴色スライムA>\n<MR-Prefab: kPrefab_飴色スライムA>\n----------\n特殊能力: なし",
     "params": [
       70,
       0,
@@ -505,7 +505,7 @@
     ],
     "gold": 0,
     "name": "苗色スライム",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_苗色スライム_A>\n<MR-Prefab: kPrefab_苗色スライム_A>\n----------\n特殊能力: 攻撃を受けると分裂する。",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_苗色スライムA>\n<MR-Prefab: kPrefab_苗色スライムA>\n----------\n特殊能力: 攻撃を受けると分裂する。",
     "params": [
       100,
       0,
@@ -767,7 +767,7 @@
     ],
     "gold": 0,
     "name": "軍隊ウルフ",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_軍隊ウルフ_A>\n<MR-Prefab: kPrefab_軍隊ウルフ_A>\n----------\n特殊能力: なし（敵グループによりまとめて出現）",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_軍隊ウルフA>\n<MR-Prefab: kPrefab_軍隊ウルフA>\n----------\n特殊能力: なし（敵グループによりまとめて出現）",
     "params": [
       600,
       0,
@@ -836,7 +836,7 @@
     ],
     "gold": 0,
     "name": "疾風ウルフ",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_疾風ウルフ_A>\n<MR-Prefab: kPrefab_疾風ウルフ_A>\n----------\n特殊能力: 2倍速",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_疾風ウルフA>\n<MR-Prefab: kPrefab_疾風ウルフA>\n----------\n特殊能力: 2倍速",
     "params": [
       780,
       0,
@@ -1098,7 +1098,7 @@
     ],
     "gold": 0,
     "name": "親分バット",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_親分バット_A>\n<MR-Prefab: kPrefab_親分バット_A>\n----------\n特殊能力: なし",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_親分バットA>\n<MR-Prefab: kPrefab_親分バットA>\n----------\n特殊能力: なし",
     "params": [
       270,
       0,
@@ -1167,7 +1167,7 @@
     ],
     "gold": 0,
     "name": "黒幕バット",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_黒幕バット_A>\n<MR-Prefab: kPrefab_黒幕バット_A>\n----------\n特殊能力: 不可視",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_黒幕バットA>\n<MR-Prefab: kPrefab_黒幕バットA>\n----------\n特殊能力: 不可視",
     "params": [
       600,
       0,
@@ -1429,7 +1429,7 @@
     ],
     "gold": 0,
     "name": "主任ゴブリン",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_チーフゴブリン_A>\n<MR-Prefab: kPrefab_チーフゴブリン_A>\n----------\n特殊能力: なし",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_主任ゴブリンA>\n<MR-Prefab: kPrefab_主任ゴブリンA>\n----------\n特殊能力: なし",
     "params": [
       160,
       0,
@@ -1498,7 +1498,7 @@
     ],
     "gold": 0,
     "name": "課長ゴブリン",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_ホスゴブリン_A>\n<MR-Prefab: kPrefab_ホスゴブリン_A>\n----------\n特殊能力: なし",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_課長ゴブリンA>\n<MR-Prefab: kPrefab_課長ゴブリンA>\n----------\n特殊能力: なし",
     "params": [
       510,
       0,
@@ -1774,7 +1774,7 @@
     ],
     "gold": 0,
     "name": "追放メイジ",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_追放メイジ_A>\n<MR-Prefab: kPrefab_追放メイジ_A>\n----------\n特殊能力: ワープ魔法",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_追放メイジA>\n<MR-Prefab: kPrefab_追放メイジA>\n----------\n特殊能力: ワープ魔法",
     "params": [
       230,
       0,
@@ -1850,7 +1850,7 @@
     ],
     "gold": 0,
     "name": "混沌メイジ",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_混沌メイジ_A>\n<MR-Prefab: kPrefab_混沌メイジ_A>\n----------\n特殊能力: 混乱魔法",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_混沌メイジA>\n<MR-Prefab: kPrefab_混沌メイジA>\n----------\n特殊能力: 混乱魔法",
     "params": [
       620,
       0,
@@ -2050,7 +2050,7 @@
     ],
     "gold": 0,
     "name": "インプ",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_インプ_A>\n<MR-Prefab: kPrefab_インプ_A>\n----------\n特殊能力: 矢を撃つ",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_インプA>\n<MR-Prefab: kPrefab_インプA>\n----------\n特殊能力: 矢を撃つ",
     "params": [
       90,
       0,
@@ -2126,7 +2126,7 @@
     ],
     "gold": 0,
     "name": "くねくねインプ",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_くねくねインプ_A>\n<MR-Prefab: kPrefab_くねくねインプ_A>\n----------\n特殊能力: レベルダウン",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_くねくねインプA>\n<MR-Prefab: kPrefab_くねくねインプA>\n----------\n特殊能力: レベルダウン",
     "params": [
       360,
       0,
@@ -2202,7 +2202,7 @@
     ],
     "gold": 0,
     "name": "なよなよインプ",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_なよなよインプ_A>\n<MR-Prefab: kPrefab_なよなよインプ_A>\n----------\n特殊能力: 毒攻撃（ちから-3）",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_なよなよインプA>\n<MR-Prefab: kPrefab_なよなよインプA>\n----------\n特殊能力: 毒攻撃（ちから-3）",
     "params": [
       700,
       0,
@@ -2402,7 +2402,7 @@
     ],
     "gold": 0,
     "name": "ゾンビ",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_ゾンビ_A>\n<MR-Prefab: kPrefab_ゾンビ_A>\n<MR-Race: kRace_アンデッド系>\n<MR-Race: kRace_ドレイン系>\n----------\n特殊能力: 毒攻撃（ちから-1）",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_ゾンビA>\n<MR-Prefab: kPrefab_ゾンビA>\n<MR-Race: kRace_アンデッド系>\n<MR-Race: kRace_ドレイン系>\n----------\n特殊能力: 毒攻撃（ちから-1）",
     "params": [
       170,
       0,
@@ -2478,7 +2478,7 @@
     ],
     "gold": 0,
     "name": "ラストゾンビ",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_ラストゾンビ_A>\n<MR-Prefab: kPrefab_ラストゾンビ_A>\n----------\n特殊能力: 装備を劣化させる。",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_ラストゾンビA>\n<MR-Prefab: kPrefab_ラストゾンビA>\n----------\n特殊能力: 装備を劣化させる。",
     "params": [
       300,
       0,
@@ -2733,7 +2733,7 @@
     ],
     "gold": 1000,
     "name": "小金猫",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_小金猫_A>\n<MR-Prefab: kPrefab_小金猫_A>\n<MR-Trait: ItemDropRate(0,1.0)>\n----------\n特殊能力: ゴールドを盗む。",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_小金猫A>\n<MR-Prefab: kPrefab_小金猫A>\n<MR-Trait: ItemDropRate(0,1.0)>\n----------\n特殊能力: ゴールドを盗む。",
     "params": [
       200,
       0,
@@ -2802,7 +2802,7 @@
     ],
     "gold": 0,
     "name": "瑠璃猫",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_瑠璃猫_A>\n<MR-Prefab: kPrefab_瑠璃猫_A>\n<MR-Trait: ItemDropRate(0,1.0)>\n----------\n特殊能力: アイテムを盗む。",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_瑠璃猫A>\n<MR-Prefab: kPrefab_瑠璃猫A>\n<MR-Trait: ItemDropRate(0,1.0)>\n----------\n特殊能力: アイテムを盗む。",
     "params": [
       400,
       0,
@@ -2871,7 +2871,7 @@
     ],
     "gold": 0,
     "name": "金剛猫",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_金剛猫_A>\n<MR-Prefab: kPrefab_金剛猫_A>\n----------\n特殊能力: 逃げる。",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_金剛猫A>\n<MR-Prefab: kPrefab_金剛猫A>\n----------\n特殊能力: 逃げる。",
     "params": [
       3,
       0,
@@ -3064,7 +3064,7 @@
     ],
     "gold": 0,
     "name": "オーク",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_オーク_A>\n<MR-Prefab: kPrefab_オーク_A>\n----------\n特殊能力: なし",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_オークA>\n<MR-Prefab: kPrefab_オークA>\n----------\n特殊能力: なし",
     "params": [
       350,
       0,
@@ -3133,7 +3133,7 @@
     ],
     "gold": 0,
     "name": "パワーオーク",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_パワーオーク_A>\n<MR-Prefab: kPrefab_パワーオーク_A>\n----------\n特殊能力: なし",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_パワーオークA>\n<MR-Prefab: kPrefab_パワーオークA>\n----------\n特殊能力: なし",
     "params": [
       750,
       0,
@@ -3388,7 +3388,7 @@
     ],
     "gold": 0,
     "name": "ゴーレム",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_ゴーレム_A>\n<MR-Prefab: kPrefab_ゴーレム_A>\n----------\n特殊能力: なし",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_ゴーレムA>\n<MR-Prefab: kPrefab_ゴーレムA>\n----------\n特殊能力: なし",
     "params": [
       450,
       0,
@@ -3457,7 +3457,7 @@
     ],
     "gold": 0,
     "name": "マーブルゴーレム",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_マーブルゴーレム_A>\n<MR-Prefab: kPrefab_マーブルゴーレム_A>\n----------\n特殊能力: なし",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_マーブルゴーレムA>\n<MR-Prefab: kPrefab_マーブルゴーレムA>\n----------\n特殊能力: なし",
     "params": [
       520,
       0,
@@ -3526,7 +3526,7 @@
     ],
     "gold": 0,
     "name": "バインドゴーレム",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_バインドゴーレム_A>\n<MR-Prefab: kPrefab_バインドゴーレム_A>\n----------\n特殊能力: 足をつかむ",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_バインドゴーレムA>\n<MR-Prefab: kPrefab_バインドゴーレムA>\n----------\n特殊能力: 足をつかむ",
     "params": [
       720,
       0,
@@ -3719,7 +3719,7 @@
     ],
     "gold": 0,
     "name": "梅キツネ",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_梅キツネ_A>\n<MR-Prefab: kPrefab_梅キツネ_A>\n----------\n特殊能力: アイテムに化ける",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_梅キツネA>\n<MR-Prefab: kPrefab_梅キツネA>\n----------\n特殊能力: アイテムに化ける",
     "params": [
       500,
       0,
@@ -4036,7 +4036,7 @@
     ],
     "gold": 0,
     "name": "ボム",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_ボム_A>\n<MR-Prefab: kPrefab_ボム_A>\n----------\n特殊能力: HPが少なくなると爆発する。",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_ボムA>\n<MR-Prefab: kPrefab_ボムA>\n----------\n特殊能力: HPが少なくなると爆発する。",
     "params": [
       700,
       0,
@@ -4360,7 +4360,7 @@
     ],
     "gold": 0,
     "name": "ドラゴン",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_ドラゴン_A>\n<MR-Prefab: kPrefab_ドラゴン_A>\n----------\n特殊能力: 炎を吐く。",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_ドラゴンA>\n<MR-Prefab: kPrefab_ドラゴンA>\n----------\n特殊能力: 炎を吐く。",
     "params": [
       10000,
       0,
@@ -4670,7 +4670,7 @@
     ],
     "gold": 0,
     "name": "[Test]サンドバッグドラゴン",
-    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_Test_サンドバッグドラゴン>\n<MR-Prefab: kPrefab_ドラゴン_A>\n<MR-Race: kRace_ドラゴン系>",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_Test_サンドバッグドラゴン>\n<MR-Prefab: kPrefab_ドラゴンA>\n<MR-Race: kRace_ドラゴン系>",
     "params": [
       99999,
       0,

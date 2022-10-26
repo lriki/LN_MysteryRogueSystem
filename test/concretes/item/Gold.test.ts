@@ -24,17 +24,17 @@ test("concretes.item.Gold", () => {
     const inventory1 = actor1.getEntityBehavior(LInventoryBehavior);
     
     // gold1 - 地面に配置
-    const gold1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_Gold_A").id, [], "gold1"));
+    const gold1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_GoldA").id, [], "gold1"));
     gold1.getEntityBehavior(LGoldBehavior).setGold(1000);
     MRLively.world.transferEntity(gold1, TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
 
     // gold2 - インベントリに入れる
-    const gold2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_Gold_A").id, [], "gold2"));
+    const gold2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_GoldA").id, [], "gold2"));
     gold2.getEntityBehavior(LGoldBehavior).setGold(200);
     inventory1.addEntity(gold2);
 
     // Enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 13, 10);
     const hp1 = enemy1.getActualParam(MRBasics.params.hp);
 

@@ -128,11 +128,11 @@ test("concretes.states.速度変化.Issue1", () => {
     //actor1.addBuff(buff1);
     //const param = actor1.params().param(DBasics.params.agi);
     //assert(param);
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_すばやさ草_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_すばやさ草A").id, [], "item1"));
     actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 30, 10);
 
     const wait = () => {

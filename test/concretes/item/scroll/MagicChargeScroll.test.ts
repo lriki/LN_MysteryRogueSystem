@@ -22,8 +22,8 @@ test("concretes.item.scroll.MagicChargeScroll", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_祈りの巻物_A").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_転ばぬ先の杖_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_祈りの巻物A").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_転ばぬ先の杖A").id, [], "item1"));
     inventory.addEntity(item1);
     inventory.addEntity(item2);
     const remaining1 = item2.getActualParam(MRBasics.params.remaining);

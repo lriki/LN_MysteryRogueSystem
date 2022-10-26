@@ -21,7 +21,7 @@ test("concretes.activity.Shortcut", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     
     // アイテム 入手
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢A").id, [], "item1"));
     item1._stackCount = 3;
     inventory.addEntity(item1);
 

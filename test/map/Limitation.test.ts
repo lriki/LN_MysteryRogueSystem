@@ -29,11 +29,11 @@ test("map.Limitation.Item", () => {
     for (let i = 0; i < (paramMaxItemsInMap - existsItems); i++) {
         const x = i % 20;
         const y = Math.floor(i / 20);
-        const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草_A").id, [], "item1"));
+        const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草A").id, [], "item1"));
         MRLively.world.transferEntity(item1, floorId, 10 + x, 10 + y);
     }
     
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草A").id, [], "item1"));
     inventory.addEntity(item1);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------

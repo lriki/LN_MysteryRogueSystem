@@ -26,7 +26,7 @@
     "maxLevel": 99,
     "name": "ヒカリ",
     "nickname": "",
-    "note": "<MR-Type: Entity>\n<MR-Category: Actor>\n<MR-Key: kEntity_Actor_A>\n<MR-Prefab: kPrefab_Actor_A>\n<MR-Behavior: Eater(1, \"aa\")>\n<MR-Behavior: Waver(1, \"aa\")>\n",
+    "note": "<MR-Type: Entity>\n<MR-Category: Actor>\n<MR-Key: kEntity_ActorA>\n<MR-Prefab: kPrefab_ActorA>\n<MR-Behavior: Eater(1, \"aa\")>\n<MR-Behavior: Waver(1, \"aa\")>\n",
     "profile": ""
   },
   {
@@ -49,7 +49,7 @@
     "maxLevel": 99,
     "name": "アクターB",
     "nickname": "",
-    "note": "<MR-Type: Entity>\n<MR-Category: Actor>\n<MR-Key: kEntity_Actor_B>\n<MR-Prefab: kPrefab_Actor_B>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Actor>\n<MR-Key: kEntity_ActorB>\n<MR-Prefab: kPrefab_ActorB>",
     "profile": ""
   },
   {
@@ -72,7 +72,7 @@
     "maxLevel": 99,
     "name": "アクターC",
     "nickname": "",
-    "note": "<MR-Type: Entity>\n<MR-Category: Actor>\n<MR-Key: kEntity_Actor_C>\n<MR-Prefab: kPrefab_Actor_C>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Actor>\n<MR-Key: kEntity_ActorC>\n<MR-Prefab: kPrefab_ActorC>",
     "profile": ""
   },
   {
@@ -95,7 +95,7 @@
     "maxLevel": 99,
     "name": "アクターD",
     "nickname": "",
-    "note": "<MR-Type: Entity>\n<MR-Category: Actor>\n<MR-Key: kEntity_Actor_D>\n<MR-Prefab: kPrefab_Actor_D>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Actor>\n<MR-Key: kEntity_ActorCD>\n<MR-Prefab: kPrefab_ActorCD>",
     "profile": ""
   },
   {
@@ -118,7 +118,7 @@
     "maxLevel": 99,
     "name": "倉庫",
     "nickname": "",
-    "note": "<MR-Type: Entity>\n<MR-Category: Actor>\n<MR-Key: kEntity_Warehouse_A>\n<MR-Prefab: kPrefab_Warehouse_A>",
+    "note": "<MR-Type: Entity>\n<MR-Category: Actor>\n<MR-Key: kEntity_WarehouseA>\n<MR-Prefab: kPrefab_WarehouseA>",
     "profile": ""
   }
 ]

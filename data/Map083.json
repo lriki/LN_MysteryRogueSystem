@@ -4276,7 +4276,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {
@@ -4350,7 +4350,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_EntryPoint_A\","
+                "    data: \"kEntity_EntryPointA\","
               ]
             },
             {
@@ -4424,7 +4424,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_ゾンビ_A\","
+                "    data: \"kEnemy_ゾンビA\","
               ]
             },
             {
@@ -4505,7 +4505,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_ラストゾンビ_A\","
+                "    data: \"kEnemy_ラストゾンビA\","
               ]
             },
             {
@@ -4547,7 +4547,7 @@
     },
     {
       "id": 5,
-      "name": "こん棒_A",
+      "name": "こん棒A",
       "note": "",
       "pages": [
         {
@@ -4586,7 +4586,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_こん棒_A\","
+                "    data: \"kEntity_こん棒A\","
               ]
             },
             {
@@ -4660,7 +4660,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_皮の盾_A\","
+                "    data: \"kEntity_皮の盾A\","
               ]
             },
             {

@@ -25,7 +25,7 @@ test("concretes.item.scroll.ReinforcementScroll.Weapon.basic", () => {
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_天の恵みの巻物_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_天の恵みの巻物A").id, [], "item1"));
     inventory.addEntity(item1);
     
     // 装備
@@ -69,7 +69,7 @@ test("concretes.item.scroll.ReinforcementScroll.miss", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_天の恵みの巻物_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_天の恵みの巻物A").id, [], "item1"));
     inventory.addEntity(item1);
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -101,7 +101,7 @@ test("concretes.item.scroll.ReinforcementScroll.Weapon.Up3", () => {
     const count = inventory.capacity - 1;
     const items = [];
     for (let i = 0; i < count; i++) {
-        const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_天の恵みの巻物_A").id, [], "item1"));
+        const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_天の恵みの巻物A").id, [], "item1"));
         inventory.addEntity(item);
         items.push(item);
     }
@@ -148,7 +148,7 @@ test("concretes.item.scroll.ReinforcementScroll.Shield.basic", () => {
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_地の恵みの巻物_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_地の恵みの巻物A").id, [], "item1"));
     inventory.addEntity(item1);
     
     // 装備

@@ -19,7 +19,7 @@ test("Abilities.Enemy.Division", () => {
     player1.addState(TestEnv.StateId_CertainDirectAttack);   // 攻撃必中にする
 
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_苗色スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_苗色スライムA").id, [], "enemy1"));
     enemy1.addState(MRData.getState("kState_UTからぶり").id);   // Player を倒さないように
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     

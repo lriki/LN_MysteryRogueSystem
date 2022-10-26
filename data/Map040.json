@@ -4276,7 +4276,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {
@@ -4350,7 +4350,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_EntryPoint_A\","
+                "    data: \"kEntity_EntryPointA\","
               ]
             },
             {
@@ -4385,7 +4385,7 @@
     },
     {
       "id": 3,
-      "name": "木の矢の罠_A",
+      "name": "木の矢の罠A",
       "note": "",
       "pages": [
         {
@@ -4424,7 +4424,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_木の矢の罠_A\","
+                "    data: \"kEntity_木の矢の罠A\","
               ]
             },
             {
@@ -4466,7 +4466,7 @@
     },
     {
       "id": 4,
-      "name": "転び石_A",
+      "name": "転び石A",
       "note": "",
       "pages": [
         {
@@ -4505,7 +4505,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_転び石_A\","
+                "    data: \"kEntity_転び石A\","
               ]
             },
             {
@@ -4547,7 +4547,7 @@
     },
     {
       "id": 5,
-      "name": "眠りガス_A",
+      "name": "眠りガスA",
       "note": "",
       "pages": [
         {
@@ -4586,7 +4586,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_眠りガス_A\","
+                "    data: \"kEntity_眠りガスA\","
               ]
             },
             {
@@ -4628,7 +4628,7 @@
     },
     {
       "id": 6,
-      "name": "薬草_A",
+      "name": "薬草A",
       "note": "",
       "pages": [
         {
@@ -4667,7 +4667,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_薬草_A\","
+                "    data: \"kEntity_薬草A\","
               ]
             },
             {
@@ -4702,7 +4702,7 @@
     },
     {
       "id": 7,
-      "name": "薬草_A",
+      "name": "薬草A",
       "note": "",
       "pages": [
         {
@@ -4741,7 +4741,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_薬草_A\","
+                "    data: \"kEntity_薬草A\","
               ]
             },
             {
@@ -4776,7 +4776,7 @@
     },
     {
       "id": 8,
-      "name": "薬草_A",
+      "name": "薬草A",
       "note": "",
       "pages": [
         {
@@ -4815,7 +4815,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_薬草_A\","
+                "    data: \"kEntity_薬草A\","
               ]
             },
             {
@@ -4850,7 +4850,7 @@
     },
     {
       "id": 9,
-      "name": "突風の罠_A",
+      "name": "突風の罠A",
       "note": "",
       "pages": [
         {
@@ -4889,7 +4889,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_突風の罠_A\","
+                "    data: \"kEntity_突風の罠A\","
               ]
             },
             {
@@ -4931,7 +4931,7 @@
     },
     {
       "id": 10,
-      "name": "地雷_A",
+      "name": "地雷A",
       "note": "",
       "pages": [
         {
@@ -4970,7 +4970,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_地雷_A\","
+                "    data: \"kEntity_地雷A\","
               ]
             },
             {
@@ -5012,7 +5012,7 @@
     },
     {
       "id": 11,
-      "name": "毒矢の罠_A",
+      "name": "毒矢の罠A",
       "note": "",
       "pages": [
         {
@@ -5051,7 +5051,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_毒矢の罠_A\","
+                "    data: \"kEntity_毒矢の罠A\","
               ]
             },
             {
@@ -5093,7 +5093,7 @@
     },
     {
       "id": 12,
-      "name": "バネ_A",
+      "name": "バネA",
       "note": "",
       "pages": [
         {
@@ -5132,7 +5132,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_バネ_A\","
+                "    data: \"kEntity_バネA\","
               ]
             },
             {
@@ -5174,7 +5174,7 @@
     },
     {
       "id": 13,
-      "name": "薬草_A",
+      "name": "薬草A",
       "note": "",
       "pages": [
         {
@@ -5213,7 +5213,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_薬草_A\","
+                "    data: \"kEntity_薬草A\","
               ]
             },
             {
@@ -5248,7 +5248,7 @@
     },
     {
       "id": 14,
-      "name": "転ばぬ先の杖_A",
+      "name": "転ばぬ先の杖A",
       "note": "",
       "pages": [
         {
@@ -5287,7 +5287,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_転ばぬ先の杖_A\","
+                "    data: \"kEntity_転ばぬ先の杖A\","
               ]
             },
             {
@@ -5322,7 +5322,7 @@
     },
     {
       "id": 15,
-      "name": "トラバサミ_A",
+      "name": "トラバサミA",
       "note": "",
       "pages": [
         {
@@ -5361,7 +5361,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_トラバサミ_A\","
+                "    data: \"kEntity_トラバサミA\","
               ]
             },
             {
@@ -5403,7 +5403,7 @@
     },
     {
       "id": 16,
-      "name": "地雷_A",
+      "name": "地雷A",
       "note": "",
       "pages": [
         {
@@ -5442,7 +5442,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_地雷_A\","
+                "    data: \"kEntity_地雷A\","
               ]
             },
             {
@@ -5484,7 +5484,7 @@
     },
     {
       "id": 17,
-      "name": "錆ワナ_A",
+      "name": "錆ワナA",
       "note": "",
       "pages": [
         {
@@ -5523,7 +5523,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_錆ワナ_A\","
+                "    data: \"kEntity_錆ワナA\","
               ]
             },
             {
@@ -5565,7 +5565,7 @@
     },
     {
       "id": 18,
-      "name": "こん棒_A",
+      "name": "こん棒A",
       "note": "",
       "pages": [
         {
@@ -5604,7 +5604,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_こん棒_A\","
+                "    data: \"kEntity_こん棒A\","
               ]
             },
             {
@@ -5678,7 +5678,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_皮の盾_A\","
+                "    data: \"kEntity_皮の盾A\","
               ]
             },
             {
@@ -5713,7 +5713,7 @@
     },
     {
       "id": 20,
-      "name": "落とし穴_A （仮実装）",
+      "name": "落とし穴A （仮実装）",
       "note": "",
       "pages": [
         {
@@ -5752,7 +5752,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_落とし穴_A\","
+                "    data: \"kEntity_落とし穴A\","
               ]
             },
             {
@@ -5795,7 +5795,7 @@
     null,
     {
       "id": 22,
-      "name": "地雷_A",
+      "name": "地雷A",
       "note": "",
       "pages": [
         {
@@ -5834,7 +5834,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_地雷_A\","
+                "    data: \"kEntity_地雷A\","
               ]
             },
             {
@@ -5876,7 +5876,7 @@
     },
     {
       "id": 23,
-      "name": "地雷_A",
+      "name": "地雷A",
       "note": "",
       "pages": [
         {
@@ -5915,7 +5915,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_地雷_A\","
+                "    data: \"kEntity_地雷A\","
               ]
             },
             {
@@ -5957,7 +5957,7 @@
     },
     {
       "id": 24,
-      "name": "薬草_A",
+      "name": "薬草A",
       "note": "",
       "pages": [
         {
@@ -5996,7 +5996,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_薬草_A\","
+                "    data: \"kEntity_薬草A\","
               ]
             },
             {

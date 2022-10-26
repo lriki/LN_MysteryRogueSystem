@@ -27,7 +27,7 @@ test("concretes.enemy.LevelDowner.Basic", () => {
     const hp1 = player1.getActualParam(MRBasics.params.hp);
 
     // Enemy
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_くねくねインプ_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_くねくねインプA").id, [], "enemy1"));
     enemy1.addState(MRData.getState("kState_UTからぶり").id);
     MRLively.world.transferEntity(enemy1, floorId, 11, 4);
 
@@ -65,7 +65,7 @@ test("concretes.enemy.LevelDowner.RemainingExpAtLevelDown", () => {
     expect(player1.getActualParam(MRBasics.params.level)).toBe(99);
 
     // Enemy
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_くねくねインプ_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_くねくねインプA").id, [], "enemy1"));
     enemy1.dir = 4;
     MRLively.world.transferEntity(enemy1, floorId, 11, 10);
 

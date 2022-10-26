@@ -24,49 +24,49 @@ test("SpeedLevel.TurnOrderTable", () => {
     actor1.findEntityBehavior(LUnitBehavior)?.setSpeedLevel(1);
 
     // enemy1 - x1 速
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     enemy1.findEntityBehavior(LUnitBehavior)?.setSpeedLevel(1);
     enemy1.addState(TestEnv.StateId_debug_MoveRight);
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 1, 6);
 
     // enemy2 - x1 速
-    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy2"));
+    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy2"));
     enemy2.findEntityBehavior(LUnitBehavior)?.setSpeedLevel(1);
     enemy2.addState(TestEnv.StateId_debug_MoveRight);
     MRLively.world.transferEntity(enemy2, TestEnv.FloorId_FlatMap50x50, 1, 7);
 
     // enemy3 - x2 速
-    const enemy3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy3"));
+    const enemy3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy3"));
     enemy3.findEntityBehavior(LUnitBehavior)?.setSpeedLevel(2);
     enemy3.addState(TestEnv.StateId_debug_MoveRight);
     MRLively.world.transferEntity(enemy3, TestEnv.FloorId_FlatMap50x50, 1, 8);
 
     // enemy4 - x2 速
-    const enemy4 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy4"));
+    const enemy4 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy4"));
     enemy4.findEntityBehavior(LUnitBehavior)?.setSpeedLevel(2);
     enemy4.addState(TestEnv.StateId_debug_MoveRight);
     MRLively.world.transferEntity(enemy4, TestEnv.FloorId_FlatMap50x50, 1, 9);
 
     // enemy5 - x3 速
-    const enemy5 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy5"));
+    const enemy5 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy5"));
     enemy5.findEntityBehavior(LUnitBehavior)?.setSpeedLevel(3);
     enemy5.addState(TestEnv.StateId_debug_MoveRight);
     MRLively.world.transferEntity(enemy5, TestEnv.FloorId_FlatMap50x50, 1, 10);
 
     // enemy6 - x3 速
-    const enemy6 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy6"));
+    const enemy6 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy6"));
     enemy6.findEntityBehavior(LUnitBehavior)?.setSpeedLevel(3);
     enemy6.addState(TestEnv.StateId_debug_MoveRight);
     MRLively.world.transferEntity(enemy6, TestEnv.FloorId_FlatMap50x50, 1, 11);
 
     // enemy7 - x0.5 速
-    const enemy7 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy7"));
+    const enemy7 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy7"));
     enemy7.findEntityBehavior(LUnitBehavior)?.setSpeedLevel(-1);
     enemy7.addState(TestEnv.StateId_debug_MoveRight);
     MRLively.world.transferEntity(enemy7, TestEnv.FloorId_FlatMap50x50, 1, 12);
 
     // enemy8 - x0.5 速
-    const enemy8 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy8"));
+    const enemy8 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy8"));
     enemy8.findEntityBehavior(LUnitBehavior)?.setSpeedLevel(-1);
     enemy8.addState(TestEnv.StateId_debug_MoveRight);
     MRLively.world.transferEntity(enemy8, TestEnv.FloorId_FlatMap50x50, 1, 13);
@@ -232,7 +232,7 @@ test("SpeedLevel.Sequel", () => {
     actor1.findEntityBehavior(LUnitBehavior)?.setSpeedLevel(1);
 
     // enemy1 - x2 速
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     enemy1.findEntityBehavior(LUnitBehavior)?.setSpeedLevel(2);
     MRLively.world.transferEntity(enemy1, floorId, 15, 10);
 
@@ -265,7 +265,7 @@ test("SpeedLevel.ChangeSpeed1", () => {
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 11);
     enemy1.addState(TestEnv.StateId_debug_MoveRight);
 
@@ -295,12 +295,12 @@ test("SpeedLevel.ChangeSpeed2", () => {
 
     // Players
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_すばやさ草_A").id, [], "item3"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_すばやさ草A").id, [], "item3"));
     actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
     actor1.addState(MRData.getState("kState_UnitTest_投擲必中").id);
 
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 11);
     enemy1.addState(TestEnv.StateId_debug_MoveRight);
 
@@ -337,7 +337,7 @@ test("SpeedLevel.ChangeSpeed3", () => {
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 11);
     enemy1.addState(TestEnv.StateId_debug_MoveRight);
     enemy1.getEntityBehavior(LUnitBehavior).setSpeedLevel(2); // 倍速化
@@ -362,7 +362,7 @@ test("SpeedLevel.ChangeSpeed4", () => {
     actor1.getEntityBehavior(LUnitBehavior).setSpeedLevel(3);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 11);
     enemy1.addState(TestEnv.StateId_debug_MoveRight);
     enemy1.getEntityBehavior(LUnitBehavior).setSpeedLevel(2);
@@ -385,7 +385,7 @@ test("SpeedLevel.ChangeSpeed5", () => {
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 11);
     enemy1.addState(TestEnv.StateId_debug_MoveRight);
 
@@ -410,7 +410,7 @@ test("SpeedLevel.State", () => {
     actor1.findEntityBehavior(LUnitBehavior)?.setSpeedLevel(1);
 
     // enemy2 - x2 速
-    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy2"));
+    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy2"));
     enemy2.findEntityBehavior(LUnitBehavior)?.setSpeedLevel(2);
     enemy2.addState(TestEnv.StateId_debug_MoveRight);
     enemy2.addState(stateId);

@@ -4276,7 +4276,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {
@@ -4360,7 +4360,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_EntryPoint_A\","
+                "    data: \"kEntity_EntryPointA\","
               ]
             },
             {
@@ -4405,7 +4405,7 @@
     },
     {
       "id": 3,
-      "name": "すばやさ草_A",
+      "name": "すばやさ草A",
       "note": "",
       "pages": [
         {
@@ -4444,7 +4444,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_すばやさ草_A\","
+                "    data: \"kEntity_すばやさ草A\","
               ]
             },
             {
@@ -4518,7 +4518,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_きえさり草_A\","
+                "    data: \"kEntity_きえさり草A\","
               ]
             },
             {
@@ -4592,7 +4592,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_封印の杖_A\","
+                "    data: \"kEntity_封印の杖A\","
               ]
             },
             {
@@ -4892,7 +4892,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_スライム_A\","
+                "    data: \"kEntity_スライムA\","
               ]
             },
             {
@@ -4935,7 +4935,7 @@
     null,
     {
       "id": 10,
-      "name": "めつぶし草_A",
+      "name": "めつぶし草A",
       "note": "",
       "pages": [
         {
@@ -4974,7 +4974,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_めつぶし草_A\","
+                "    data: \"kEntity_めつぶし草A\","
               ]
             },
             {
@@ -5012,7 +5012,7 @@
     null,
     {
       "id": 14,
-      "name": "くちなしの巻物_A",
+      "name": "くちなしの巻物A",
       "note": "",
       "pages": [
         {
@@ -5051,7 +5051,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_くちなしの巻物_A\","
+                "    data: \"kEntity_くちなしの巻物A\","
               ]
             },
             {
@@ -5086,7 +5086,7 @@
     },
     {
       "id": 15,
-      "name": "混乱草_A",
+      "name": "混乱草A",
       "note": "",
       "pages": [
         {
@@ -5125,7 +5125,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_混乱草_A\","
+                "    data: \"kEntity_混乱草A\","
               ]
             },
             {
@@ -5160,7 +5160,7 @@
     },
     {
       "id": 16,
-      "name": "まどわし草_A",
+      "name": "まどわし草A",
       "note": "",
       "pages": [
         {
@@ -5199,7 +5199,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_まどわし草_A\","
+                "    data: \"kEntity_まどわし草A\","
               ]
             },
             {
@@ -5273,7 +5273,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_しびれ草_A\","
+                "    data: \"kEntity_しびれ草A\","
               ]
             },
             {

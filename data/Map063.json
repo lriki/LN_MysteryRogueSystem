@@ -4276,7 +4276,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {
@@ -4360,7 +4360,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_EntryPoint_A\","
+                "    data: \"kEntity_EntryPointA\","
               ]
             },
             {
@@ -4444,7 +4444,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_火炎草_A\","
+                "    data: \"kEntity_火炎草A\","
               ]
             },
             {
@@ -4518,7 +4518,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_火炎草_A\","
+                "    data: \"kEntity_火炎草A\","
               ]
             },
             {
@@ -4592,7 +4592,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_瑠璃猫_A\","
+                "    data: \"kEnemy_瑠璃猫A\","
               ]
             },
             {
@@ -4673,7 +4673,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_火炎草_A\","
+                "    data: \"kEntity_火炎草A\","
               ]
             },
             {
@@ -4747,7 +4747,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_Gold_A\","
+                "    data: \"kEntity_GoldA\","
               ]
             },
             {
@@ -4828,7 +4828,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_小金猫_A\","
+                "    data: \"kEnemy_小金猫A\","
               ]
             },
             {
@@ -4909,7 +4909,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_Gold_A\","
+                "    data: \"kEntity_GoldA\","
               ]
             },
             {
@@ -4990,7 +4990,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_火炎草_A\","
+                "    data: \"kEntity_火炎草A\","
               ]
             },
             {
@@ -5064,7 +5064,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_瑠璃猫_A\","
+                "    data: \"kEnemy_瑠璃猫A\","
               ]
             },
             {
@@ -5145,7 +5145,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_小金猫_A\","
+                "    data: \"kEnemy_小金猫A\","
               ]
             },
             {

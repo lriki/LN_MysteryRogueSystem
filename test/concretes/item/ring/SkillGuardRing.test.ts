@@ -27,11 +27,11 @@ test("concretes.item.ring.SkillGuardRing", () => {
     const hp1 = player1.getActualParam(MRBasics.params.hp);
 
     // Item
-    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_インプよけの指輪_A").id, [], "ring1"));
+    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_インプよけの指輪A").id, [], "ring1"));
     inventory.addEntity(ring1);
 
     // Enemy
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_くねくねインプ_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_くねくねインプA").id, [], "enemy1"));
     enemy1.addState(MRData.getState("kState_UTからぶり").id);
     MRLively.world.transferEntity(enemy1, floorId, 11, 4);
 

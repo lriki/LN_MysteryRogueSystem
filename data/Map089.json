@@ -4276,7 +4276,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {
@@ -4360,7 +4360,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_EntryPoint_A\","
+                "    data: \"kEntity_EntryPointA\","
               ]
             },
             {
@@ -4405,7 +4405,7 @@
     },
     {
       "id": 3,
-      "name": "目覚めの指輪_A",
+      "name": "目覚めの指輪A",
       "note": "",
       "pages": [
         {
@@ -4444,7 +4444,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_目覚めの指輪_A\","
+                "    data: \"kEntity_目覚めの指輪A\","
               ]
             },
             {
@@ -4479,7 +4479,7 @@
     },
     {
       "id": 4,
-      "name": "インプよけの指輪_A",
+      "name": "インプよけの指輪A",
       "note": "",
       "pages": [
         {
@@ -4518,7 +4518,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_インプよけの指輪_A\","
+                "    data: \"kEntity_インプよけの指輪A\","
               ]
             },
             {
@@ -4592,7 +4592,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_きれいな指輪_A\","
+                "    data: \"kEntity_きれいな指輪A\","
               ]
             },
             {
@@ -4627,7 +4627,7 @@
     },
     {
       "id": 6,
-      "name": "ちからの指輪_A",
+      "name": "ちからの指輪A",
       "note": "",
       "pages": [
         {
@@ -4666,7 +4666,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ちからの指輪_A\","
+                "    data: \"kEntity_ちからの指輪A\","
               ]
             },
             {
@@ -4701,7 +4701,7 @@
     },
     {
       "id": 7,
-      "name": "睡眠よけの指輪_A",
+      "name": "睡眠よけの指輪A",
       "note": "",
       "pages": [
         {
@@ -4740,7 +4740,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_睡眠よけの指輪_A\","
+                "    data: \"kEntity_睡眠よけの指輪A\","
               ]
             },
             {
@@ -4856,7 +4856,7 @@
     },
     {
       "id": 9,
-      "name": "眠りガス_A",
+      "name": "眠りガスA",
       "note": "",
       "pages": [
         {
@@ -4895,7 +4895,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_眠りガス_A\","
+                "    data: \"kEntity_眠りガスA\","
               ]
             },
             {
@@ -4937,7 +4937,7 @@
     },
     {
       "id": 10,
-      "name": "忍び足の指輪_A",
+      "name": "忍び足の指輪A",
       "note": "",
       "pages": [
         {
@@ -4976,7 +4976,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_忍び足の指輪_A\","
+                "    data: \"kEntity_忍び足の指輪A\","
               ]
             },
             {
@@ -5011,7 +5011,7 @@
     },
     {
       "id": 11,
-      "name": "高跳びの指輪_A",
+      "name": "高跳びの指輪A",
       "note": "",
       "pages": [
         {
@@ -5050,7 +5050,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_高跳びの指輪_A\","
+                "    data: \"kEntity_高跳びの指輪A\","
               ]
             },
             {
@@ -5085,7 +5085,7 @@
     },
     {
       "id": 12,
-      "name": "ハラヘリの指輪_A",
+      "name": "ハラヘリの指輪A",
       "note": "",
       "pages": [
         {
@@ -5124,7 +5124,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ハラヘリの指輪_A\","
+                "    data: \"kEntity_ハラヘリの指輪A\","
               ]
             },
             {
@@ -5159,7 +5159,7 @@
     },
     {
       "id": 13,
-      "name": "毒消しの指輪_A",
+      "name": "毒消しの指輪A",
       "note": "",
       "pages": [
         {
@@ -5198,7 +5198,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_毒消しの指輪_A\","
+                "    data: \"kEntity_毒消しの指輪A\","
               ]
             },
             {
@@ -5233,7 +5233,7 @@
     },
     {
       "id": 14,
-      "name": "毒矢の罠_A",
+      "name": "毒矢の罠A",
       "note": "",
       "pages": [
         {
@@ -5272,7 +5272,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_毒矢の罠_A\","
+                "    data: \"kEntity_毒矢の罠A\","
               ]
             },
             {
@@ -5314,7 +5314,7 @@
     },
     {
       "id": 15,
-      "name": "黒幕バット_A",
+      "name": "黒幕バットA",
       "note": "",
       "pages": [
         {
@@ -5353,7 +5353,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_黒幕バット_A\","
+                "    data: \"kEnemy_黒幕バットA\","
               ]
             },
             {
@@ -5395,7 +5395,7 @@
     },
     {
       "id": 16,
-      "name": "影読みの指輪_A",
+      "name": "影読みの指輪A",
       "note": "",
       "pages": [
         {
@@ -5434,7 +5434,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_影読みの指輪_A\","
+                "    data: \"kEntity_影読みの指輪A\","
               ]
             },
             {
@@ -5508,7 +5508,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_くねくねインプ_A\","
+                "    data: \"kEnemy_くねくねインプA\","
               ]
             },
             {
@@ -5550,7 +5550,7 @@
     },
     {
       "id": 18,
-      "name": "なよなよインプ_A",
+      "name": "なよなよインプA",
       "note": "",
       "pages": [
         {
@@ -5589,7 +5589,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_なよなよインプ_A\","
+                "    data: \"kEnemy_なよなよインプA\","
               ]
             },
             {
@@ -5631,7 +5631,7 @@
     },
     {
       "id": 19,
-      "name": "ハラヘラズの指輪_A",
+      "name": "ハラヘラズの指輪A",
       "note": "",
       "pages": [
         {
@@ -5670,7 +5670,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ハラヘラズの指輪_A\","
+                "    data: \"kEntity_ハラヘラズの指輪A\","
               ]
             },
             {
@@ -5705,7 +5705,7 @@
     },
     {
       "id": 20,
-      "name": "罠よけの指輪_A",
+      "name": "罠よけの指輪A",
       "note": "",
       "pages": [
         {
@@ -5744,7 +5744,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_罠よけの指輪_A\","
+                "    data: \"kEntity_罠よけの指輪A\","
               ]
             },
             {
@@ -5779,7 +5779,7 @@
     },
     {
       "id": 21,
-      "name": "眠りガス_A",
+      "name": "眠りガスA",
       "note": "",
       "pages": [
         {
@@ -5818,7 +5818,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_眠りガス_A\","
+                "    data: \"kEntity_眠りガスA\","
               ]
             },
             {
@@ -5860,7 +5860,7 @@
     },
     {
       "id": 22,
-      "name": "スライム_A",
+      "name": "スライムA",
       "note": "",
       "pages": [
         {
@@ -5899,7 +5899,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_スライム_A\","
+                "    data: \"kEntity_スライムA\","
               ]
             },
             {

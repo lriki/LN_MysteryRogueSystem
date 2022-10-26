@@ -92,10 +92,10 @@ export class TestEnv {
         this.StateId_debug_MoveRight = MRData.getState("kState_Test_MoveRight").id
         this.StateId_Sleep = MRData.getState("kState_睡眠").id;
         this.StateId_CertainDirectAttack = MRData.states.findIndex(x => x.key == "kState_UnitTest_攻撃必中");
-        this.EntityId_Herb = MRData.getEntity("kEntity_薬草_A").id;
-        this.EntityId_Weapon1 = MRData.getEntity("kEntity_こん棒_A").id;
-        this.EntityId_Shield1 = MRData.getEntity("kEntity_皮の盾_A").id;
-        this.EntityId_SleepTrap = MRData.getEntity("kEntity_眠りガス_A").id;
+        this.EntityId_Herb = MRData.getEntity("kEntity_薬草A").id;
+        this.EntityId_Weapon1 = MRData.getEntity("kEntity_こん棒A").id;
+        this.EntityId_Shield1 = MRData.getEntity("kEntity_皮の盾A").id;
+        this.EntityId_SleepTrap = MRData.getEntity("kEntity_眠りガスA").id;
         
         // デバッグしやすいように共通の名前を付けておく
         //const actor1 = REGame.world.entity(REGame.system.mainPlayerEntityId);
@@ -114,7 +114,7 @@ export class TestEnv {
     }
 
     public static createReflectionObject(floorId: LFloorId, mx: number, my: number): LEntity {
-        const object1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_投擲反射石_A").id, [MRData.getState("kState_System_ItemStanding").id], "object1"));
+        const object1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_投擲反射石A").id, [MRData.getState("kState_System_ItemStanding").id], "object1"));
         MRLively.world.transferEntity(object1, floorId, 13, 10);
         return object1;
     }

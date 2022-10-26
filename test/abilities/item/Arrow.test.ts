@@ -27,17 +27,17 @@ test("Items.Arrow", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢A").id, [], "item1"));
     inventory.addEntity(item1);
     const stack1 = item1._stackCount;
     
     // item2
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢_A").id, [], "item2"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢A").id, [], "item2"));
     MRLively.world.transferEntity(item2, floorId, 10, 10);  // Player の足元へ
     const stack2 = item2._stackCount;
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_飴色スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_飴色スライムA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, floorId, 13, 10);
     const initialHP = enemy1.getActualParam(MRBasics.params.hp);
 

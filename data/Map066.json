@@ -4276,7 +4276,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {
@@ -4360,7 +4360,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_EntryPoint_A\","
+                "    data: \"kEntity_EntryPointA\","
               ]
             },
             {
@@ -4444,7 +4444,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_封印の杖_A\","
+                "    data: \"kEntity_封印の杖A\","
               ]
             },
             {
@@ -4518,7 +4518,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_金剛猫_A\","
+                "    data: \"kEnemy_金剛猫A\","
               ]
             },
             {
@@ -4560,7 +4560,7 @@
     },
     {
       "id": 5,
-      "name": "疾風ウルフ_A",
+      "name": "疾風ウルフA",
       "note": "",
       "pages": [
         {
@@ -4599,7 +4599,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_疾風ウルフ_A\","
+                "    data: \"kEnemy_疾風ウルフA\","
               ]
             },
             {

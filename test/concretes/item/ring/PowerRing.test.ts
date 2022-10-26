@@ -20,7 +20,7 @@ test("concretes.item.ring.PowerRing", () => {
     const power1 = player1.getActualParam(MRBasics.params.pow);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
-    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ちからの指輪_A").id, [], "ring1"));
+    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ちからの指輪A").id, [], "ring1"));
     inventory.addEntity(ring1);
 
     MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------

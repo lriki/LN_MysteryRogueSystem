@@ -24,12 +24,12 @@ test("concretes.item.shield.LeatherShield.test", () => {
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
     const fp1 = player1.getActualParam(MRBasics.params.fp);
 
-    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_皮の盾_A").id, [], "shield1"));
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_皮の盾A").id, [], "shield1"));
     inventory.addEntity(shield1);
     equipmentUser.equipOnUtil(shield1);
 
     // trap1 生成&配置
-    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_錆ワナ_A").id, [], "trap1"));
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_錆ワナA").id, [], "trap1"));
     MRLively.world.transferEntity(trap1, floorId, 11, 10);
     const shield1_UP1 = shield1.getActualParam(MRBasics.params.upgradeValue);
 

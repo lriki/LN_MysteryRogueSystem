@@ -19,7 +19,7 @@
 
 ```sh
 @MR-Spawner
-  data: "kEntity_スライム_A",
+  data: "kEntity_スライムA",
 ```
 
 @MR-Event

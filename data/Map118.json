@@ -4237,7 +4237,7 @@
     null,
     {
       "id": 1,
-      "name": "スライム_A",
+      "name": "スライムA",
       "note": "",
       "pages": [
         {
@@ -4276,7 +4276,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_スライム_A\","
+                "    data: \"kEntity_スライムA\","
               ]
             },
             {
@@ -4311,7 +4311,7 @@
     },
     {
       "id": 2,
-      "name": "スライム_A",
+      "name": "スライムA",
       "note": "",
       "pages": [
         {
@@ -4350,7 +4350,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_スライム_A\","
+                "    data: \"kEntity_スライムA\","
               ]
             },
             {
@@ -4385,7 +4385,7 @@
     },
     {
       "id": 3,
-      "name": "スライム_A",
+      "name": "スライムA",
       "note": "",
       "pages": [
         {
@@ -4424,7 +4424,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_スライム_A\","
+                "    data: \"kEntity_スライムA\","
               ]
             },
             {
@@ -4459,7 +4459,7 @@
     },
     {
       "id": 4,
-      "name": "スライム_A",
+      "name": "スライムA",
       "note": "",
       "pages": [
         {
@@ -4498,7 +4498,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_スライム_A\","
+                "    data: \"kEntity_スライムA\","
               ]
             },
             {
@@ -4579,7 +4579,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_EntryPoint_Marker_A\","
+                "    data: \"kEntity_EntryPoint_MarkerA\","
               ]
             },
             {
@@ -4704,7 +4704,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {

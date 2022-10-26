@@ -4276,7 +4276,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {
@@ -4360,7 +4360,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_EntryPoint_A\","
+                "    data: \"kEntity_EntryPointA\","
               ]
             },
             {
@@ -4405,7 +4405,7 @@
     },
     {
       "id": 3,
-      "name": "木の矢_A",
+      "name": "木の矢A",
       "note": "",
       "pages": [
         {
@@ -4444,7 +4444,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_木の矢_A\","
+                "    data: \"kEntity_木の矢A\","
               ]
             },
             {
@@ -4480,7 +4480,7 @@
     null,
     {
       "id": 5,
-      "name": "木の矢_A(98)",
+      "name": "木の矢A(98)",
       "note": "",
       "pages": [
         {
@@ -4519,7 +4519,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_木の矢_A\","
+                "    data: \"kEntity_木の矢A\","
               ]
             },
             {
@@ -4561,7 +4561,7 @@
     },
     {
       "id": 6,
-      "name": "木の矢_A",
+      "name": "木の矢A",
       "note": "",
       "pages": [
         {
@@ -4600,7 +4600,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_木の矢_A\","
+                "    data: \"kEntity_木の矢A\","
               ]
             },
             {
@@ -4636,7 +4636,7 @@
     null,
     {
       "id": 8,
-      "name": "インプ_A",
+      "name": "インプA",
       "note": "",
       "pages": [
         {
@@ -4675,7 +4675,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_インプ_A\","
+                "    data: \"kEnemy_インプA\","
               ]
             },
             {
@@ -4718,7 +4718,7 @@
     null,
     {
       "id": 10,
-      "name": "銀の矢_A",
+      "name": "銀の矢A",
       "note": "",
       "pages": [
         {
@@ -4757,7 +4757,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_銀の矢_A\","
+                "    data: \"kEntity_銀の矢A\","
               ]
             },
             {
@@ -4792,7 +4792,7 @@
     },
     {
       "id": 11,
-      "name": "銀の矢_A",
+      "name": "銀の矢A",
       "note": "",
       "pages": [
         {
@@ -4831,7 +4831,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_銀の矢_A\","
+                "    data: \"kEntity_銀の矢A\","
               ]
             },
             {

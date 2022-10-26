@@ -20,7 +20,7 @@ test("concretes.states.目つぶし", () => {
     actor1.addState(stateId);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [stateId], "enemy1"));
     enemy1.dir = 6; // 右へ
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 10);
 

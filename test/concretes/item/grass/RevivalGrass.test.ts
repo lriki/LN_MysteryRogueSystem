@@ -24,11 +24,11 @@ test("concretes.item.grass.RevivalGrass.Basic", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // アイテム作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_RevivalGrass_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_RevivalGrassA").id, [], "item1"));
     inventory.addEntity(item1);
 
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 10, 11);
     enemy1.getEntityBehavior(LUnitBehavior).setSpeedLevel(2); // 倍速化
 
@@ -50,6 +50,6 @@ test("concretes.item.grass.RevivalGrass.Basic", () => {
     //expect(hp2).toBe(hp1);
     // TODO: 未実装
 
-    //expect(inventory.entities()[0].dataId() == REData.getEntity("kEntity_雑草_A").id).toBe(true);
+    //expect(inventory.entities()[0].dataId() == REData.getEntity("kEntity_雑草A").id).toBe(true);
 });
 

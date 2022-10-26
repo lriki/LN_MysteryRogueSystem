@@ -19,7 +19,7 @@ test("Trap.TriggerRate", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     const hp1 = player1.getActualParam(MRBasics.params.hp);
 
-    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_地雷_A").id, [], "trap1"));
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_地雷A").id, [], "trap1"));
     MRLively.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     const trapBehavior = trap1.getEntityBehavior(LTrapBehavior);
     
@@ -105,7 +105,7 @@ test("Trap.Enemy", () => {
     // TODO: 罠state:必ず発動
 
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -133,7 +133,7 @@ test("Trap.Attack", () => {
     MRLively.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10); // 罠の上に配置
     const hp1 = enemy1.getActualParam(MRBasics.params.hp);
 

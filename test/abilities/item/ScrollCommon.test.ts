@@ -24,7 +24,7 @@ test("Item.ScrollCommon", () => {
     const inventory = actor1.getEntityBehavior(LInventoryBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_脱出の巻物_A").id));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_脱出の巻物A").id));
     item1._name = "item1";
     inventory.addEntity(item1);
     

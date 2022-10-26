@@ -22,7 +22,7 @@ test("concretes.states.からぶり", () => {
     const actorHP1 = actor1.getActualParam(MRBasics.params.hp);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [MRData.getState("kState_UTからぶり").id], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [MRData.getState("kState_UTからぶり").id], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     const enemyHP1 = enemy1.getActualParam(MRBasics.params.hp);
 

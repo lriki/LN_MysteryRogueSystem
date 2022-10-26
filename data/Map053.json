@@ -4276,7 +4276,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {
@@ -4360,7 +4360,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_EntryPoint_A\","
+                "    data: \"kEntity_EntryPointA\","
               ]
             },
             {
@@ -4405,7 +4405,7 @@
     },
     {
       "id": 3,
-      "name": "変化の杖_A",
+      "name": "変化の杖A",
       "note": "",
       "pages": [
         {
@@ -4444,7 +4444,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_変化の杖_A\","
+                "    data: \"kEntity_変化の杖A\","
               ]
             },
             {
@@ -4518,7 +4518,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_スライム_A\","
+                "    data: \"kEntity_スライムA\","
               ]
             },
             {
@@ -4560,7 +4560,7 @@
     },
     {
       "id": 5,
-      "name": "変化の杖_A",
+      "name": "変化の杖A",
       "note": "",
       "pages": [
         {
@@ -4599,7 +4599,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_変化の杖_A\","
+                "    data: \"kEntity_変化の杖A\","
               ]
             },
             {
@@ -4673,7 +4673,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_木の矢_A\","
+                "    data: \"kEntity_木の矢A\","
               ]
             },
             {
@@ -4747,7 +4747,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_薬草_A\","
+                "    data: \"kEntity_薬草A\","
               ]
             },
             {
@@ -4822,7 +4822,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ふきとばしの杖_A\","
+                "    data: \"kEntity_ふきとばしの杖A\","
               ]
             },
             {
@@ -4896,7 +4896,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ふきとばしの杖_A\","
+                "    data: \"kEntity_ふきとばしの杖A\","
               ]
             },
             {
@@ -4970,7 +4970,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_薬草_A\","
+                "    data: \"kEntity_薬草A\","
               ]
             },
             {
@@ -5005,7 +5005,7 @@
     },
     {
       "id": 12,
-      "name": "ポイズンキラー_A",
+      "name": "ポイズンキラーA",
       "note": "",
       "pages": [
         {
@@ -5044,7 +5044,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ポイズンキラー_A\","
+                "    data: \"kEntity_ポイズンキラーA\","
               ]
             },
             {
@@ -5125,7 +5125,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_皮の盾_A\","
+                "    data: \"kEntity_皮の盾A\","
               ]
             },
             {
@@ -5206,7 +5206,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_皮の盾_A\","
+                "    data: \"kEntity_皮の盾A\","
               ]
             },
             {
@@ -5241,7 +5241,7 @@
     },
     {
       "id": 15,
-      "name": "識別の巻物_A",
+      "name": "識別の巻物A",
       "note": "",
       "pages": [
         {
@@ -5280,7 +5280,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_識別の巻物_A\","
+                "    data: \"kEntity_識別の巻物A\","
               ]
             },
             {
@@ -5315,7 +5315,7 @@
     },
     {
       "id": 16,
-      "name": "識別の巻物_A",
+      "name": "識別の巻物A",
       "note": "",
       "pages": [
         {
@@ -5354,7 +5354,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_識別の巻物_A\","
+                "    data: \"kEntity_識別の巻物A\","
               ]
             },
             {

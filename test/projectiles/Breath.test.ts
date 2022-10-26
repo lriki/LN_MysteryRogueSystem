@@ -21,7 +21,7 @@ test("projectiles.Breath", () => {
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     // アイテムを作ってインベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ドラゴン草_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ドラゴン草A").id, [], "item1"));
     actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
     // 投げ当てテスト用に壁を作る

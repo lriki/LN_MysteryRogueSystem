@@ -21,6 +21,6 @@ test("Abilities.Enemy.Flock", () => {
 
     // ひとまず、Troop 指定で Spawn 出来ていることを確認する。
     const entites = MRLively.map.entities();
-    const enemy1 = entites.find(x => x.data.entity.key == "kEnemy_軍隊ウルフ_A");
+    const enemy1 = entites.find(x => x.data.entity.key == "kEnemy_軍隊ウルフA");
     expect(enemy1 != undefined).toBe(true);
 });

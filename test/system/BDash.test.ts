@@ -21,7 +21,7 @@ test("system.BDash.ArrowDamageStop", () => {
     const hp1 = player1.getActualParam(MRBasics.params.hp);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_インプ_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_インプA").id, [], "enemy1"));
     enemy1.addState(MRData.getState("kState_UnitTest_投擲必中").id);    // 投擲必中
     MRLively.world.transferEntity(enemy1, floorId, 15, 10);
 

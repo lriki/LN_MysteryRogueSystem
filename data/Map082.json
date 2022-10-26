@@ -4276,7 +4276,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {
@@ -4350,7 +4350,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_EntryPoint_A\","
+                "    data: \"kEntity_EntryPointA\","
               ]
             },
             {
@@ -4385,7 +4385,7 @@
     },
     {
       "id": 3,
-      "name": "インプ_A",
+      "name": "インプA",
       "note": "",
       "pages": [
         {
@@ -4424,7 +4424,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_インプ_A\","
+                "    data: \"kEnemy_インプA\","
               ]
             },
             {
@@ -4505,7 +4505,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_くねくねインプ_A\","
+                "    data: \"kEnemy_くねくねインプA\","
               ]
             },
             {
@@ -4547,7 +4547,7 @@
     },
     {
       "id": 5,
-      "name": "なよなよインプ_A",
+      "name": "なよなよインプA",
       "note": "",
       "pages": [
         {
@@ -4586,7 +4586,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_なよなよインプ_A\","
+                "    data: \"kEnemy_なよなよインプA\","
               ]
             },
             {

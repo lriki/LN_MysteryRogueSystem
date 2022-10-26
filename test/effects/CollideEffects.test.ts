@@ -23,8 +23,8 @@ test("effects.CollideEffects.Weapon", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     player1.addState(MRData.getState("kState_UnitTest_投擲必中").id);
 
-    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ダミードラゴンキラー_A").id, [], "weapon1"));
-    const weapon2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ドラゴンキラー_A").id, [], "weapon2"));
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ダミードラゴンキラーA").id, [], "weapon1"));
+    const weapon2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ドラゴンキラーA").id, [], "weapon2"));
     inventory.addEntity(weapon1);
     inventory.addEntity(weapon2);
 
@@ -75,7 +75,7 @@ test("effects.CollideEffects.Shield", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     player1.addState(MRData.getState("kState_UnitTest_投擲必中").id);
 
-    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_皮の盾_A").id, [], "shield1"));
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_皮の盾A").id, [], "shield1"));
     inventory.addEntity(shield1);
 
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_Test_サンドバッグドラゴン").id, [], "enemy1"));

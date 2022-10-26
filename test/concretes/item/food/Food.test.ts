@@ -22,8 +22,8 @@ test("concretes.item.food.LittleFood", () => {
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
 
     // アイテム作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_おにぎり_A").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_おにぎり_A").id, [], "item2"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_おにぎりA").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_おにぎりA").id, [], "item2"));
     inventory1.addEntity(item1);
     inventory1.addEntity(item2);
     
@@ -82,13 +82,13 @@ test("concretes.item.food.CorrodedFood", () => {
     const pow1 = player1.getActualParam(MRBasics.params.pow);
 
     // アイテム作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_腐ったおにぎり_A").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_腐ったおにぎり_A").id, [], "item2"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_腐ったおにぎりA").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_腐ったおにぎりA").id, [], "item2"));
     inventory1.addEntity(item1);
     inventory1.addEntity(item2);
     
     // Enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, floorId, 15, 10);
     const enemy1Hp1 = enemy1.getActualParam(MRBasics.params.hp);
     const enemy1Pow1 = enemy1.getActualParam(MRBasics.params.pow);

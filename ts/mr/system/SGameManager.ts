@@ -138,28 +138,28 @@ export class SGameManager {
         //REGame.camera.focusedEntity()?.setActualParam(DBasics.params.hp, 2);
         if (0) {
             const inventory = firstActor.getEntityBehavior(LInventoryBehavior);
-            //const inventory = REGame.world.getFirstEntityByKey("kEntity_Warehouse_A").getEntityBehavior(LInventoryBehavior);
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_すばやさ草_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ちからの草_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_しあわせ草_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_めつぶし草_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_高跳び草_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_混乱草_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_めぐすり草_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_まどわし草_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_毒草_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_毒消し草_A").id, [], "item1")));
-            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_睡眠草_A").id, [], "item1")));
+            //const inventory = REGame.world.getFirstEntityByKey("kEntity_WarehouseA").getEntityBehavior(LInventoryBehavior);
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_すばやさ草A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ちからの草A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_しあわせ草A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_めつぶし草A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_高跳び草A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_混乱草A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_めぐすり草A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_まどわし草A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_毒草A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_毒消し草A").id, [], "item1")));
+            inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_睡眠草A").id, [], "item1")));
 
-            const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_青銅の盾_A").id, [], "item1"));
+            const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_青銅の盾A").id, [], "item1"));
             inventory.addEntity(shield1);
             firstActor.getEntityBehavior(LEquipmentUserBehavior).equipOnUtil(shield1);
             
             // 容量-1 までアイテムを詰め込む
-            const inventory2 = MRLively.world.getFirstEntityByKey("kEntity_Warehouse_A").getEntityBehavior(LInventoryBehavior);
+            const inventory2 = MRLively.world.getFirstEntityByKey("kEntity_WarehouseA").getEntityBehavior(LInventoryBehavior);
             for (let i = 0; i < inventory2.capacity - 1; i++) {
-                const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草_A").id, [], "item"));
+                const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草A").id, [], "item"));
                 inventory2.addEntity(item);
             }
 

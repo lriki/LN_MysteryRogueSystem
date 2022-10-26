@@ -24,7 +24,7 @@ test("system.Visibility.Basic", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item1 (同じ部屋)
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_地獄耳の巻物_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_地獄耳の巻物A").id, [], "item1"));
     MRLively.world.transferEntity(item1, floorId, 11, 3);
 
     // trap1 (同じ部屋・露出していない)
@@ -32,15 +32,15 @@ test("system.Visibility.Basic", () => {
     MRLively.world.transferEntity(trap1, floorId, 12, 4);
 
     // enemy1 (同じ部屋)
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, floorId, 10, 4);
 
     // exit1 (同じ部屋)
-    const exit1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ExitPoint_A").id, [], "exit1"));
+    const exit1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ExitPointA").id, [], "exit1"));
     MRLively.world.transferEntity(exit1, floorId, 12, 5);
 
     // item2 (踏破していない別の部屋)
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_地獄耳の巻物_A").id, [], "item2"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_地獄耳の巻物A").id, [], "item2"));
     MRLively.world.transferEntity(item2, floorId, 19, 9);
 
     // trap2 (踏破していない別の部屋)
@@ -48,11 +48,11 @@ test("system.Visibility.Basic", () => {
     MRLively.world.transferEntity(trap2, floorId, 19, 10);
 
     // enemy2 (踏破していない別の部屋)
-    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy2"));
+    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy2"));
     MRLively.world.transferEntity(enemy2, floorId, 19, 4);
 
     // exit2 (踏破していない別の部屋)
-    const exit2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ExitPoint_A").id, [], "exit2"));
+    const exit2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ExitPointA").id, [], "exit2"));
     MRLively.world.transferEntity(exit2, floorId, 18, 9);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------

@@ -24,7 +24,7 @@ test("concretes.states.Seal.Skill", () => {
     const hp1 = player1.getActualParam(MRBasics.params.hp);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ゾンビ_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ゾンビA").id, [], "enemy1"));
     enemy1.addState(MRData.getState("kState_System_Seal").id);
     enemy1.addState(MRData.getState("kState_UT10ダメージ").id);
     MRLively.world.transferEntity(enemy1, floorId, 11, 10);

@@ -25,7 +25,7 @@ test("concretes.enemy.SelfExplosion.NotExplosion", () => {
     player1.addState(TestEnv.StateId_CertainDirectAttack);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ボム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ボムA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     SDebugHelpers.setHP(enemy1, 1); // HP1 にして攻撃が当たったら倒れるようにする
@@ -58,18 +58,18 @@ test("concretes.enemy.SelfExplosion.Explosion", () => {
     const player1HP1 = player1.getActualParam(MRBasics.params.hp);
     
     // アイテム 入手
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ふきとばしの杖_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ふきとばしの杖A").id, [], "item1"));
     inventory.addEntity(item1);
 
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ボム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ボムA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     const enemy1HP1 = enemy1.getActualParam(MRBasics.params.hp);
     assert(enemy1HP1 > 10);     // テスト用に、最低これだけは確保しておく
     SDebugHelpers.setHP(enemy1, 10); // 爆発する一歩手前にしておく
 
     // enemy2
-    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy2"));
+    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy2"));
     MRLively.world.transferEntity(enemy2, TestEnv.FloorId_FlatMap50x50, 11, 11);
     
     // ふきとばし効果でダメージを与えたいので、Enemy1 の後ろに壁を作る
@@ -105,7 +105,7 @@ test("concretes.enemy.SelfExplosion.Explosion.Dead", () => {
     SDebugHelpers.setHP(player1, 1);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ボム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ボムA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     SDebugHelpers.setHP(enemy1, 15);
 

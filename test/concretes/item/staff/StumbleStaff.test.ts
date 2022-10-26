@@ -21,11 +21,11 @@ test("concretes.item.staff.StumbleStaff.basic", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     
     // アイテム 入手
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_転ばぬ先の杖_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_転ばぬ先の杖A").id, [], "item1"));
     inventory.addEntity(item1);
 
     // enemy
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -55,14 +55,14 @@ test("concretes.activity.Stumble.prevention", () => {
     const hp1 = player1.getActualParam(MRBasics.params.hp);
     
     // アイテム 入手
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_転ばぬ先の杖_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_転ばぬ先の杖A").id, [], "item1"));
     inventory.addEntity(item1);
     const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1, [], "weapon1"));
     inventory.addEntity(weapon1);
     const rem1 = item1.getActualParam(MRBasics.params.remaining);
 
     // trap1 生成&配置
-    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_転び石_A").id, [], "trap1"));
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_転び石A").id, [], "trap1"));
     MRLively.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------

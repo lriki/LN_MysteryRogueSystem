@@ -21,11 +21,11 @@ test("concretes.trap.RustTrap", () => {
     player1.addState(MRData.getState("kState_UT罠必中").id);
 
     // アイテム 入手
-    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_青銅の盾_A").id, [], "shield1"));
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_青銅の盾A").id, [], "shield1"));
     inventory.addEntity(shield1);
 
     // trap1 生成&配置
-    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_錆ワナ_A").id, [], "trap1"));
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_錆ワナA").id, [], "trap1"));
     MRLively.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     const shield1_UP1 = shield1.getActualParam(MRBasics.params.upgradeValue);
 

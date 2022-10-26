@@ -20,7 +20,7 @@ test("ai.Escape.1", () => {
     player1.addState(stateId);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [stateId], "enemy1"));
     MRLively.world.transferEntity(enemy1, floorId, 11, 4);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -94,7 +94,7 @@ test("ai.Escape.2", () => {
     player1.addState(stateId);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [stateId], "enemy1"));
     MRLively.world.transferEntity(enemy1, floorId, 13, 4);   // 部屋入り口へ配置
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -135,7 +135,7 @@ test("ai.Escape.3", () => {
     player1.addState(stateId);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [stateId], "enemy1"));
     MRLively.world.transferEntity(enemy1, floorId, 13, 4);   // 部屋入り口へ配置
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -177,7 +177,7 @@ test("ai.Escape.SpeedLevel2", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 4);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_金剛猫_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_金剛猫A").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, floorId, 12, 4);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -204,8 +204,8 @@ test("ai.Escape.Issue1", () => {
     const player1 = TestEnv.setupPlayer(floorId, 11, 4); // 部屋中央へ配置
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_金剛猫_A").id, [], "enemy1"));
-    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_金剛猫_A").id, [stateId], "enemy2"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_金剛猫A").id, [], "enemy1"));
+    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_金剛猫A").id, [stateId], "enemy2"));
     MRLively.world.transferEntity(enemy1, floorId, 13, 4);   // 部屋入り口
     MRLively.world.transferEntity(enemy2, floorId, 14, 4);   // 通路
 
@@ -229,8 +229,8 @@ test("ai.Escape.Issue2", () => {
 
     const player1 = TestEnv.setupPlayer(floorId, 7, 13);
     
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_金剛猫_A").id, [], "enemy1"));
-    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy2"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_金剛猫A").id, [], "enemy1"));
+    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy2"));
     MRLively.world.transferEntity(enemy1, floorId, 7, 13);
     MRLively.world.transferEntity(enemy2, floorId, 8, 13);
     enemy1.dir = 6;

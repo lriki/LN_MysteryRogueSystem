@@ -22,12 +22,12 @@ test("system.Inventory.Fully", () => {
 
     // 持てる数だけアイテムを入れる
     for (let i = 0; i < inventory.capacity; i++) {
-        const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草_A").id, [], "item"));
+        const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草A").id, [], "item"));
         inventory.addEntity(item);
     }
 
     // item1 生成&配置
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草A").id, [], "item1"));
     MRLively.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -51,14 +51,14 @@ test("system.Inventory.Sort", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
 
-    const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_すばやさ草_A").id, [], "grass1"));
-    const grass2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ちからの草_A").id, [], "grass2"));
-    const grass3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_しあわせ草_A").id, [], "grass3"));
-    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_こん棒_A").id, [], "weapon1"));
-    const weapon2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_青銅の剣_A").id, [], "weapon2"));
-    const weapon3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_隕石の剣_A").id, [], "weapon3"));
-    const arrow1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_鉄の矢_A").id, [], "arrow1").withStackCount(1));
-    const arrow2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_鉄の矢_A").id, [], "arrow2").withStackCount(2));
+    const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_すばやさ草A").id, [], "grass1"));
+    const grass2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ちからの草A").id, [], "grass2"));
+    const grass3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_しあわせ草A").id, [], "grass3"));
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_こん棒A").id, [], "weapon1"));
+    const weapon2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_青銅の剣A").id, [], "weapon2"));
+    const weapon3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_隕石の剣A").id, [], "weapon3"));
+    const arrow1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_鉄の矢A").id, [], "arrow1").withStackCount(1));
+    const arrow2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_鉄の矢A").id, [], "arrow2").withStackCount(2));
 
     inventory.addEntity(grass1);
     inventory.addEntity(weapon2);

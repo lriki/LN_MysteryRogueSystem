@@ -24,13 +24,13 @@ test("system.Warehouse.Store.Basic", () => {
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
     const equipmentUser1 = player1.getEntityBehavior(LEquipmentUserBehavior);
 
-    const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草_A").id, [], "grass1"));
-    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_こん棒_A").id, [], "weapon1"));
+    const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草A").id, [], "grass1"));
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_こん棒A").id, [], "weapon1"));
     inventory1.addEntity(grass1);
     inventory1.addEntity(weapon1);
     equipmentUser1.equipOnUtil(weapon1);
 
-    const warehouse1 = MRLively.world.getFirstEntityByKey("kEntity_Warehouse_A");
+    const warehouse1 = MRLively.world.getFirstEntityByKey("kEntity_WarehouseA");
     const inventory2 = warehouse1.getEntityBehavior(LInventoryBehavior);
 
     // Dialog を開く
@@ -68,17 +68,17 @@ test("system.Warehouse.Store.Fully", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
 
-    const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草_A").id, [], "grass1"));
-    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_こん棒_A").id, [], "weapon1"));
+    const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草A").id, [], "grass1"));
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_こん棒A").id, [], "weapon1"));
     inventory1.addEntity(grass1);
     inventory1.addEntity(weapon1);
 
-    const warehouse1 = MRLively.world.getFirstEntityByKey("kEntity_Warehouse_A");
+    const warehouse1 = MRLively.world.getFirstEntityByKey("kEntity_WarehouseA");
     const inventory2 = warehouse1.getEntityBehavior(LInventoryBehavior);
 
     // 容量-1 までアイテムを詰め込む
     for (let i = 0; i < inventory2.capacity - 1; i++) {
-        const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草_A").id, [], "item"));
+        const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草A").id, [], "item"));
         inventory2.addEntity(item);
     }
 
@@ -113,11 +113,11 @@ test("system.Warehouse.Withdraw.Basic", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
 
-    const warehouse1 = MRLively.world.getFirstEntityByKey("kEntity_Warehouse_A");
+    const warehouse1 = MRLively.world.getFirstEntityByKey("kEntity_WarehouseA");
     const inventory2 = warehouse1.getEntityBehavior(LInventoryBehavior);
 
-    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_こん棒_A").id, [], "weapon1"));
-    const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草_A").id, [], "grass1"));
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_こん棒A").id, [], "weapon1"));
+    const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草A").id, [], "grass1"));
     inventory2.addEntity(weapon1);
     inventory2.addEntity(grass1);
 
@@ -155,17 +155,17 @@ test("system.Warehouse.Withdraw.Fully", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
 
-    const warehouse1 = MRLively.world.getFirstEntityByKey("kEntity_Warehouse_A");
+    const warehouse1 = MRLively.world.getFirstEntityByKey("kEntity_WarehouseA");
     const inventory2 = warehouse1.getEntityBehavior(LInventoryBehavior);
     
     // 容量-1 までアイテムを詰め込む
     for (let i = 0; i < inventory2.capacity - 1; i++) {
-        const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草_A").id, [], "item"));
+        const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草A").id, [], "item"));
         inventory1.addEntity(item);
     }
 
-    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_こん棒_A").id, [], "weapon1"));
-    const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草_A").id, [], "grass1"));
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_こん棒A").id, [], "weapon1"));
+    const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草A").id, [], "grass1"));
     inventory2.addEntity(weapon1);
     inventory2.addEntity(grass1);
 
@@ -200,11 +200,11 @@ test("system.Warehouse.Sell", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
 
-    const warehouse1 = MRLively.world.getFirstEntityByKey("kEntity_Warehouse_A");
+    const warehouse1 = MRLively.world.getFirstEntityByKey("kEntity_WarehouseA");
     const inventory2 = warehouse1.getEntityBehavior(LInventoryBehavior);
 
-    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_こん棒_A").id, [], "weapon1"));
-    const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草_A").id, [], "grass1"));
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_こん棒A").id, [], "weapon1"));
+    const grass1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草A").id, [], "grass1"));
     inventory2.addEntity(weapon1);
     inventory2.addEntity(grass1);
 
@@ -236,10 +236,10 @@ test("system.Warehouse.Sell", () => {
 test("system.Warehouse.ChangeCapacity", () => {
     TestEnv.newGame();
 
-    const warehouse1 = MRLively.world.getFirstEntityByKey("kEntity_Warehouse_A");
+    const warehouse1 = MRLively.world.getFirstEntityByKey("kEntity_WarehouseA");
     const inventory2 = warehouse1.getEntityBehavior(LInventoryBehavior);
 
-    UProperty.setValue("kEntity_Warehouse_A", "Entity:Inventory.capacity", 100);
+    UProperty.setValue("kEntity_WarehouseA", "Entity:Inventory.capacity", 100);
 
     expect(inventory2.capacity).toBe(100);
 });

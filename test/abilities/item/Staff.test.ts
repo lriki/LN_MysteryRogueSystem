@@ -28,7 +28,7 @@ test("Items.Staff.Knockback", () => {
     const inventory = actor1.getEntityBehavior(LInventoryBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ふきとばしの杖_A").id));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ふきとばしの杖A").id));
     item1._name = "item1";
     inventory.addEntity(item1);
 
@@ -40,7 +40,7 @@ test("Items.Staff.Knockback", () => {
     item1.setParamCurrentValue(MRBasics.params.remaining, 1);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -107,7 +107,7 @@ test("Items.Staff.Identify", () => {
     const inventory = actor1.getEntityBehavior(LInventoryBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ふきとばしの杖_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ふきとばしの杖A").id, [], "item1"));
     inventory.addEntity(item1);
 
     const nameView1 = item1.getDisplayName();

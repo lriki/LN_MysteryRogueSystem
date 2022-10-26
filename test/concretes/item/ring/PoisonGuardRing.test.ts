@@ -23,12 +23,12 @@ test("concretes.item.ring.PoisonGuardRing.test", () => {
     const pow1 = player1.getActualParam(MRBasics.params.pow);
     player1.addState(MRData.getState("kState_UT罠必中").id);
 
-    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_毒消しの指輪_A").id, [], "ring1"));
+    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_毒消しの指輪A").id, [], "ring1"));
     inventory.addEntity(ring1);
     equipmentUser.equipOnUtil(ring1);
 
     // trap 生成&配置
-    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_毒矢の罠_A").id, [], "trap1"));
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_毒矢の罠A").id, [], "trap1"));
     MRLively.world.transferEntity(trap1, floorId, 11, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------

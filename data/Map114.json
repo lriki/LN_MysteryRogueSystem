@@ -349,7 +349,7 @@
     null,
     {
       "id": 1,
-      "name": "スライム_A",
+      "name": "スライムA",
       "note": "",
       "pages": [
         {
@@ -388,7 +388,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_スライム_A\","
+                "    data: \"kEntity_スライムA\","
               ]
             },
             {

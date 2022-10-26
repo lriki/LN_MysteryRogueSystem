@@ -9037,7 +9037,7 @@
     null,
     {
       "id": 1,
-      "name": "kPrefab_Actor_A",
+      "name": "kPrefab_ActorA",
       "note": "<REPos:[1,2,3]>",
       "pages": [
         {
@@ -9104,7 +9104,7 @@
     },
     {
       "id": 2,
-      "name": "kPrefab_Actor_B",
+      "name": "kPrefab_ActorB",
       "note": "<REPos:[1,2,3]>",
       "pages": [
         {
@@ -9171,7 +9171,7 @@
     },
     {
       "id": 3,
-      "name": "kPrefab_Actor_C",
+      "name": "kPrefab_ActorC",
       "note": "<REPos:[1,2,3]>",
       "pages": [
         {
@@ -9238,7 +9238,7 @@
     },
     {
       "id": 4,
-      "name": "kPrefab_Actor_D",
+      "name": "kPrefab_ActorCD",
       "note": "<REPos:[1,2,3]>",
       "pages": [
         {
@@ -9305,7 +9305,7 @@
     },
     {
       "id": 5,
-      "name": "kPrefab_スライム_A",
+      "name": "kPrefab_スライムA",
       "note": "",
       "pages": [
         {
@@ -9372,7 +9372,7 @@
     },
     {
       "id": 6,
-      "name": "kPrefab_木の矢_A",
+      "name": "kPrefab_木の矢A",
       "note": "",
       "pages": [
         {
@@ -9504,7 +9504,7 @@
     },
     {
       "id": 7,
-      "name": "kPrefab_ExitPoint_A",
+      "name": "kPrefab_ExitPointA",
       "note": "",
       "pages": [
         {
@@ -9691,7 +9691,7 @@
     },
     {
       "id": 8,
-      "name": "kPrefab_すばやさ草_A",
+      "name": "kPrefab_すばやさ草A",
       "note": "",
       "pages": [
         {
@@ -9758,7 +9758,7 @@
     },
     {
       "id": 9,
-      "name": "kPrefab_眠りガス_A",
+      "name": "kPrefab_眠りガスA",
       "note": "",
       "pages": [
         {
@@ -9825,7 +9825,7 @@
     },
     {
       "id": 10,
-      "name": "kPrefab_こん棒_A",
+      "name": "kPrefab_こん棒A",
       "note": "",
       "pages": [
         {
@@ -9892,7 +9892,7 @@
     },
     {
       "id": 11,
-      "name": "kPrefab_皮の盾_A",
+      "name": "kPrefab_皮の盾A",
       "note": "",
       "pages": [
         {
@@ -9959,7 +9959,7 @@
     },
     {
       "id": 12,
-      "name": "kPrefab_目覚めの指輪_A",
+      "name": "kPrefab_目覚めの指輪A",
       "note": "",
       "pages": [
         {
@@ -10026,7 +10026,7 @@
     },
     {
       "id": 13,
-      "name": "kPrefab_ふきとばしの杖_A",
+      "name": "kPrefab_ふきとばしの杖A",
       "note": "",
       "pages": [
         {
@@ -10093,7 +10093,7 @@
     },
     {
       "id": 14,
-      "name": "kPrefab_System_MagicBullet_A",
+      "name": "kPrefab_System_MagicBulletA",
       "note": "",
       "pages": [
         {
@@ -10160,7 +10160,7 @@
     },
     {
       "id": 15,
-      "name": "kPrefab_青銅の剣_A",
+      "name": "kPrefab_青銅の剣A",
       "note": "",
       "pages": [
         {
@@ -10227,7 +10227,7 @@
     },
     {
       "id": 16,
-      "name": "kPrefab_ポイズンキラー_A",
+      "name": "kPrefab_ポイズンキラーA",
       "note": "",
       "pages": [
         {
@@ -10294,7 +10294,7 @@
     },
     {
       "id": 17,
-      "name": "kPrefab_金の剣_A",
+      "name": "kPrefab_金の剣A",
       "note": "",
       "pages": [
         {
@@ -10361,7 +10361,7 @@
     },
     {
       "id": 18,
-      "name": "kPrefab_ドラゴンキラー_A",
+      "name": "kPrefab_ドラゴンキラーA",
       "note": "",
       "pages": [
         {
@@ -10428,7 +10428,7 @@
     },
     {
       "id": 19,
-      "name": "kPrefab_鋼の剣_A",
+      "name": "kPrefab_鋼の剣A",
       "note": "",
       "pages": [
         {
@@ -10495,7 +10495,7 @@
     },
     {
       "id": 20,
-      "name": "kPrefab_隕石の剣_A",
+      "name": "kPrefab_隕石の剣A",
       "note": "",
       "pages": [
         {
@@ -10562,7 +10562,7 @@
     },
     {
       "id": 21,
-      "name": "kPrefab_青銅の盾_A",
+      "name": "kPrefab_青銅の盾A",
       "note": "",
       "pages": [
         {
@@ -10629,7 +10629,7 @@
     },
     {
       "id": 22,
-      "name": "kPrefab_うろこの盾_A",
+      "name": "kPrefab_うろこの盾A",
       "note": "",
       "pages": [
         {
@@ -10696,7 +10696,7 @@
     },
     {
       "id": 23,
-      "name": "kPrefab_金の盾_A",
+      "name": "kPrefab_金の盾A",
       "note": "",
       "pages": [
         {
@@ -10763,7 +10763,7 @@
     },
     {
       "id": 24,
-      "name": "kPrefab_鋼の盾_A",
+      "name": "kPrefab_鋼の盾A",
       "note": "",
       "pages": [
         {
@@ -10830,7 +10830,7 @@
     },
     {
       "id": 25,
-      "name": "kPrefab_ドラゴンシールド_A",
+      "name": "kPrefab_ドラゴンシールドA",
       "note": "",
       "pages": [
         {
@@ -10897,7 +10897,7 @@
     },
     {
       "id": 26,
-      "name": "kPrefab_隕石の盾_A",
+      "name": "kPrefab_隕石の盾A",
       "note": "",
       "pages": [
         {
@@ -10964,7 +10964,7 @@
     },
     {
       "id": 27,
-      "name": "kPrefab_ちからの指輪_A",
+      "name": "kPrefab_ちからの指輪A",
       "note": "",
       "pages": [
         {
@@ -11031,7 +11031,7 @@
     },
     {
       "id": 28,
-      "name": "kPrefab_高跳びの指輪_A",
+      "name": "kPrefab_高跳びの指輪A",
       "note": "",
       "pages": [
         {
@@ -11098,7 +11098,7 @@
     },
     {
       "id": 29,
-      "name": "kPrefab_睡眠よけの指輪_A",
+      "name": "kPrefab_睡眠よけの指輪A",
       "note": "",
       "pages": [
         {
@@ -11165,7 +11165,7 @@
     },
     {
       "id": 30,
-      "name": "kPrefab_ハラヘリの指輪_A",
+      "name": "kPrefab_ハラヘリの指輪A",
       "note": "",
       "pages": [
         {
@@ -11232,7 +11232,7 @@
     },
     {
       "id": 31,
-      "name": "kPrefab_毒消しの指輪_A",
+      "name": "kPrefab_毒消しの指輪A",
       "note": "",
       "pages": [
         {
@@ -11299,7 +11299,7 @@
     },
     {
       "id": 32,
-      "name": "kPrefab_影読みの指輪_A",
+      "name": "kPrefab_影読みの指輪A",
       "note": "",
       "pages": [
         {
@@ -11366,7 +11366,7 @@
     },
     {
       "id": 33,
-      "name": "kPrefab_インプよけの指輪_A",
+      "name": "kPrefab_インプよけの指輪A",
       "note": "",
       "pages": [
         {
@@ -11433,7 +11433,7 @@
     },
     {
       "id": 34,
-      "name": "kPrefab_忍び足の指輪_A",
+      "name": "kPrefab_忍び足の指輪A",
       "note": "",
       "pages": [
         {
@@ -11500,7 +11500,7 @@
     },
     {
       "id": 35,
-      "name": "kPrefab_罠よけの指輪_A",
+      "name": "kPrefab_罠よけの指輪A",
       "note": "",
       "pages": [
         {
@@ -11567,7 +11567,7 @@
     },
     {
       "id": 36,
-      "name": "kPrefab_ハラヘラズの指輪_A",
+      "name": "kPrefab_ハラヘラズの指輪A",
       "note": "",
       "pages": [
         {
@@ -11634,7 +11634,7 @@
     },
     {
       "id": 37,
-      "name": "kPrefab_きれいな指輪_A",
+      "name": "kPrefab_きれいな指輪A",
       "note": "",
       "pages": [
         {
@@ -11835,7 +11835,7 @@
     },
     {
       "id": 40,
-      "name": "kPrefab_飴色スライム_A",
+      "name": "kPrefab_飴色スライムA",
       "note": "",
       "pages": [
         {
@@ -12036,7 +12036,7 @@
     },
     {
       "id": 43,
-      "name": "kPrefab_インプ_A",
+      "name": "kPrefab_インプA",
       "note": "",
       "pages": [
         {
@@ -12103,7 +12103,7 @@
     },
     {
       "id": 44,
-      "name": "kPrefab_ゾンビ_A",
+      "name": "kPrefab_ゾンビA",
       "note": "",
       "pages": [
         {
@@ -12170,7 +12170,7 @@
     },
     {
       "id": 45,
-      "name": "kPrefab_苗色スライム_A",
+      "name": "kPrefab_苗色スライムA",
       "note": "",
       "pages": [
         {
@@ -12237,7 +12237,7 @@
     },
     {
       "id": 46,
-      "name": "kPrefab_チーフゴブリン_A",
+      "name": "kPrefab_主任ゴブリンA",
       "note": "",
       "pages": [
         {
@@ -12304,7 +12304,7 @@
     },
     {
       "id": 47,
-      "name": "kPrefab_瑠璃猫_A",
+      "name": "kPrefab_瑠璃猫A",
       "note": "",
       "pages": [
         {
@@ -12371,7 +12371,7 @@
     },
     {
       "id": 48,
-      "name": "kPrefab_追放メイジ_A",
+      "name": "kPrefab_追放メイジA",
       "note": "",
       "pages": [
         {
@@ -12438,7 +12438,7 @@
     },
     {
       "id": 49,
-      "name": "kPrefab_親分バット_A",
+      "name": "kPrefab_親分バットA",
       "note": "",
       "pages": [
         {
@@ -12505,7 +12505,7 @@
     },
     {
       "id": 50,
-      "name": "kPrefab_小金猫_A",
+      "name": "kPrefab_小金猫A",
       "note": "",
       "pages": [
         {
@@ -12572,7 +12572,7 @@
     },
     {
       "id": 51,
-      "name": "kPrefab_オーク_A",
+      "name": "kPrefab_オークA",
       "note": "",
       "pages": [
         {
@@ -12639,7 +12639,7 @@
     },
     {
       "id": 52,
-      "name": "kPrefab_ラストゾンビ_A",
+      "name": "kPrefab_ラストゾンビA",
       "note": "",
       "pages": [
         {
@@ -12706,7 +12706,7 @@
     },
     {
       "id": 53,
-      "name": "kPrefab_金剛猫_A",
+      "name": "kPrefab_金剛猫A",
       "note": "",
       "pages": [
         {
@@ -12773,7 +12773,7 @@
     },
     {
       "id": 54,
-      "name": "kPrefab_軍隊ウルフ_A",
+      "name": "kPrefab_軍隊ウルフA",
       "note": "",
       "pages": [
         {
@@ -12840,7 +12840,7 @@
     },
     {
       "id": 55,
-      "name": "kPrefab_ゴーレム_A",
+      "name": "kPrefab_ゴーレムA",
       "note": "",
       "pages": [
         {
@@ -12907,7 +12907,7 @@
     },
     {
       "id": 56,
-      "name": "kPrefab_ボム_A",
+      "name": "kPrefab_ボムA",
       "note": "",
       "pages": [
         {
@@ -13039,7 +13039,7 @@
     },
     {
       "id": 57,
-      "name": "kPrefab_梅キツネ_A",
+      "name": "kPrefab_梅キツネA",
       "note": "",
       "pages": [
         {
@@ -13106,7 +13106,7 @@
     },
     {
       "id": 58,
-      "name": "kPrefab_黒幕バット_A",
+      "name": "kPrefab_黒幕バットA",
       "note": "",
       "pages": [
         {
@@ -13173,7 +13173,7 @@
     },
     {
       "id": 59,
-      "name": "kPrefab_マーブルゴーレム_A",
+      "name": "kPrefab_マーブルゴーレムA",
       "note": "",
       "pages": [
         {
@@ -13240,7 +13240,7 @@
     },
     {
       "id": 60,
-      "name": "kPrefab_くねくねインプ_A",
+      "name": "kPrefab_くねくねインプA",
       "note": "",
       "pages": [
         {
@@ -13307,7 +13307,7 @@
     },
     {
       "id": 61,
-      "name": "kPrefab_バインドゴーレム_A",
+      "name": "kPrefab_バインドゴーレムA",
       "note": "",
       "pages": [
         {
@@ -13374,7 +13374,7 @@
     },
     {
       "id": 62,
-      "name": "kPrefab_ホスゴブリン_A",
+      "name": "kPrefab_課長ゴブリンA",
       "note": "",
       "pages": [
         {
@@ -13441,7 +13441,7 @@
     },
     {
       "id": 63,
-      "name": "kPrefab_混沌メイジ_A",
+      "name": "kPrefab_混沌メイジA",
       "note": "",
       "pages": [
         {
@@ -13508,7 +13508,7 @@
     },
     {
       "id": 64,
-      "name": "kPrefab_なよなよインプ_A",
+      "name": "kPrefab_なよなよインプA",
       "note": "",
       "pages": [
         {
@@ -13575,7 +13575,7 @@
     },
     {
       "id": 65,
-      "name": "kPrefab_疾風ウルフ_A",
+      "name": "kPrefab_疾風ウルフA",
       "note": "",
       "pages": [
         {
@@ -13642,7 +13642,7 @@
     },
     {
       "id": 66,
-      "name": "kPrefab_パワーオーク_A",
+      "name": "kPrefab_パワーオークA",
       "note": "",
       "pages": [
         {
@@ -13709,7 +13709,7 @@
     },
     {
       "id": 67,
-      "name": "kPrefab_ドラゴン_A",
+      "name": "kPrefab_ドラゴンA",
       "note": "",
       "pages": [
         {
@@ -13776,7 +13776,7 @@
     },
     {
       "id": 68,
-      "name": "kPrefab_EntryPoint_A",
+      "name": "kPrefab_EntryPointA",
       "note": "",
       "pages": [
         {
@@ -13888,7 +13888,7 @@
     },
     {
       "id": 69,
-      "name": "kPrefab_ちからの草_A",
+      "name": "kPrefab_ちからの草A",
       "note": "",
       "pages": [
         {
@@ -13955,7 +13955,7 @@
     },
     {
       "id": 70,
-      "name": "kPrefab_しあわせ草_A",
+      "name": "kPrefab_しあわせ草A",
       "note": "",
       "pages": [
         {
@@ -14022,7 +14022,7 @@
     },
     {
       "id": 71,
-      "name": "kPrefab_めつぶし草_A",
+      "name": "kPrefab_めつぶし草A",
       "note": "",
       "pages": [
         {
@@ -14089,7 +14089,7 @@
     },
     {
       "id": 72,
-      "name": "kPrefab_高跳び草_A",
+      "name": "kPrefab_高跳び草A",
       "note": "",
       "pages": [
         {
@@ -14156,7 +14156,7 @@
     },
     {
       "id": 73,
-      "name": "kPrefab_混乱草_A",
+      "name": "kPrefab_混乱草A",
       "note": "",
       "pages": [
         {
@@ -14223,7 +14223,7 @@
     },
     {
       "id": 74,
-      "name": "kPrefab_めぐすり草_A",
+      "name": "kPrefab_めぐすり草A",
       "note": "",
       "pages": [
         {
@@ -14290,7 +14290,7 @@
     },
     {
       "id": 75,
-      "name": "kPrefab_まどわし草_A",
+      "name": "kPrefab_まどわし草A",
       "note": "",
       "pages": [
         {
@@ -14357,7 +14357,7 @@
     },
     {
       "id": 76,
-      "name": "kPrefab_毒草_A",
+      "name": "kPrefab_毒草A",
       "note": "",
       "pages": [
         {
@@ -14424,7 +14424,7 @@
     },
     {
       "id": 77,
-      "name": "kPrefab_薬草_A",
+      "name": "kPrefab_薬草A",
       "note": "",
       "pages": [
         {
@@ -14491,7 +14491,7 @@
     },
     {
       "id": 78,
-      "name": "kPrefab_毒消し草_A",
+      "name": "kPrefab_毒消し草A",
       "note": "",
       "pages": [
         {
@@ -14558,7 +14558,7 @@
     },
     {
       "id": 79,
-      "name": "kPrefab_睡眠草_A",
+      "name": "kPrefab_睡眠草A",
       "note": "",
       "pages": [
         {
@@ -14625,7 +14625,7 @@
     },
     {
       "id": 80,
-      "name": "kPrefab_火炎草_A",
+      "name": "kPrefab_火炎草A",
       "note": "",
       "pages": [
         {
@@ -14692,7 +14692,7 @@
     },
     {
       "id": 81,
-      "name": "kPrefab_弟切草_A",
+      "name": "kPrefab_弟切草A",
       "note": "",
       "pages": [
         {
@@ -14759,7 +14759,7 @@
     },
     {
       "id": 82,
-      "name": "kPrefab_鉄の矢_A",
+      "name": "kPrefab_鉄の矢A",
       "note": "",
       "pages": [
         {
@@ -14891,7 +14891,7 @@
     },
     {
       "id": 83,
-      "name": "kPrefab_銀の矢_A",
+      "name": "kPrefab_銀の矢A",
       "note": "",
       "pages": [
         {
@@ -15023,7 +15023,7 @@
     },
     {
       "id": 84,
-      "name": "kPrefab_腐ったおにぎり_A",
+      "name": "kPrefab_腐ったおにぎりA",
       "note": "",
       "pages": [
         {
@@ -15090,7 +15090,7 @@
     },
     {
       "id": 85,
-      "name": "kPrefab_おにぎり_A",
+      "name": "kPrefab_おにぎりA",
       "note": "",
       "pages": [
         {
@@ -15157,7 +15157,7 @@
     },
     {
       "id": 86,
-      "name": "kPrefab_大きなおにぎり_A",
+      "name": "kPrefab_大きなおにぎりA",
       "note": "",
       "pages": [
         {
@@ -15224,7 +15224,7 @@
     },
     {
       "id": 87,
-      "name": "kPrefab_くちなしの巻物_A",
+      "name": "kPrefab_くちなしの巻物A",
       "note": "",
       "pages": [
         {
@@ -15291,7 +15291,7 @@
     },
     {
       "id": 88,
-      "name": "kPrefab_ワナの巻物_A",
+      "name": "kPrefab_ワナの巻物A",
       "note": "",
       "pages": [
         {
@@ -15358,7 +15358,7 @@
     },
     {
       "id": 89,
-      "name": "kPrefab_識別の巻物_A",
+      "name": "kPrefab_識別の巻物A",
       "note": "",
       "pages": [
         {
@@ -15425,7 +15425,7 @@
     },
     {
       "id": 90,
-      "name": "kPrefab_メッキの巻物_A",
+      "name": "kPrefab_メッキの巻物A",
       "note": "",
       "pages": [
         {
@@ -15492,7 +15492,7 @@
     },
     {
       "id": 91,
-      "name": "kPrefab_地獄耳の巻物_A",
+      "name": "kPrefab_地獄耳の巻物A",
       "note": "",
       "pages": [
         {
@@ -15559,7 +15559,7 @@
     },
     {
       "id": 92,
-      "name": "kPrefab_千里眼の巻物_A",
+      "name": "kPrefab_千里眼の巻物A",
       "note": "",
       "pages": [
         {
@@ -15626,7 +15626,7 @@
     },
     {
       "id": 93,
-      "name": "kPrefab_あかりの巻物_A",
+      "name": "kPrefab_あかりの巻物A",
       "note": "",
       "pages": [
         {
@@ -15693,7 +15693,7 @@
     },
     {
       "id": 94,
-      "name": "kPrefab_天の恵みの巻物_A",
+      "name": "kPrefab_天の恵みの巻物A",
       "note": "",
       "pages": [
         {
@@ -15760,7 +15760,7 @@
     },
     {
       "id": 95,
-      "name": "kPrefab_地の恵みの巻物_A",
+      "name": "kPrefab_地の恵みの巻物A",
       "note": "",
       "pages": [
         {
@@ -15827,7 +15827,7 @@
     },
     {
       "id": 96,
-      "name": "kPrefab_おはらいの巻物_A",
+      "name": "kPrefab_おはらいの巻物A",
       "note": "",
       "pages": [
         {
@@ -15894,7 +15894,7 @@
     },
     {
       "id": 97,
-      "name": "kPrefab_食料の巻物_A",
+      "name": "kPrefab_食料の巻物A",
       "note": "",
       "pages": [
         {
@@ -15961,7 +15961,7 @@
     },
     {
       "id": 98,
-      "name": "kPrefab_祈りの巻物_A",
+      "name": "kPrefab_祈りの巻物A",
       "note": "",
       "pages": [
         {
@@ -16028,7 +16028,7 @@
     },
     {
       "id": 99,
-      "name": "kPrefab_かなしばりの巻物_A",
+      "name": "kPrefab_かなしばりの巻物A",
       "note": "",
       "pages": [
         {
@@ -16095,7 +16095,7 @@
     },
     {
       "id": 100,
-      "name": "kPrefab_真空切りの巻物_A",
+      "name": "kPrefab_真空切りの巻物A",
       "note": "",
       "pages": [
         {
@@ -16162,7 +16162,7 @@
     },
     {
       "id": 101,
-      "name": "kPrefab_時の砂の巻物_A",
+      "name": "kPrefab_時の砂の巻物A",
       "note": "",
       "pages": [
         {
@@ -16229,7 +16229,7 @@
     },
     {
       "id": 102,
-      "name": "kPrefab_脱出の巻物_A",
+      "name": "kPrefab_脱出の巻物A",
       "note": "",
       "pages": [
         {
@@ -16296,7 +16296,7 @@
     },
     {
       "id": 103,
-      "name": "kPrefab_聖域の巻物_A",
+      "name": "kPrefab_聖域の巻物A",
       "note": "",
       "pages": [
         {
@@ -16363,7 +16363,7 @@
     },
     {
       "id": 104,
-      "name": "kPrefab_System_炎のブレス_A",
+      "name": "kPrefab_System_炎のブレスA",
       "note": "",
       "pages": [
         {
@@ -16430,7 +16430,7 @@
     },
     {
       "id": 105,
-      "name": "kPrefab_Warehouse_A",
+      "name": "kPrefab_WarehouseA",
       "note": "<REPos:[1,2,3]>",
       "pages": [
         {
@@ -16497,7 +16497,7 @@
     },
     {
       "id": 106,
-      "name": "kPrefab_大損の杖_A",
+      "name": "kPrefab_大損の杖A",
       "note": "",
       "pages": [
         {
@@ -16564,7 +16564,7 @@
     },
     {
       "id": 107,
-      "name": "kPrefab_透明の杖_A",
+      "name": "kPrefab_透明の杖A",
       "note": "",
       "pages": [
         {
@@ -16631,7 +16631,7 @@
     },
     {
       "id": 108,
-      "name": "kPrefab_倍速の杖_A",
+      "name": "kPrefab_倍速の杖A",
       "note": "",
       "pages": [
         {
@@ -16698,7 +16698,7 @@
     },
     {
       "id": 109,
-      "name": "kPrefab_いかずちの杖_A",
+      "name": "kPrefab_いかずちの杖A",
       "note": "",
       "pages": [
         {
@@ -16765,7 +16765,7 @@
     },
     {
       "id": 110,
-      "name": "kPrefab_混乱の杖_A",
+      "name": "kPrefab_混乱の杖A",
       "note": "",
       "pages": [
         {
@@ -16832,7 +16832,7 @@
     },
     {
       "id": 111,
-      "name": "kPrefab_分裂の杖_A",
+      "name": "kPrefab_分裂の杖A",
       "note": "",
       "pages": [
         {
@@ -16899,7 +16899,7 @@
     },
     {
       "id": 112,
-      "name": "kPrefab_睡眠の杖_A",
+      "name": "kPrefab_睡眠の杖A",
       "note": "",
       "pages": [
         {
@@ -16966,7 +16966,7 @@
     },
     {
       "id": 113,
-      "name": "kPrefab_封印の杖_A",
+      "name": "kPrefab_封印の杖A",
       "note": "",
       "pages": [
         {
@@ -17033,7 +17033,7 @@
     },
     {
       "id": 114,
-      "name": "kPrefab_変化の杖_A",
+      "name": "kPrefab_変化の杖A",
       "note": "",
       "pages": [
         {
@@ -17100,7 +17100,7 @@
     },
     {
       "id": 115,
-      "name": "kPrefab_高跳びの杖_A",
+      "name": "kPrefab_高跳びの杖A",
       "note": "",
       "pages": [
         {
@@ -17167,7 +17167,7 @@
     },
     {
       "id": 116,
-      "name": "kPrefab_鈍足の杖_A",
+      "name": "kPrefab_鈍足の杖A",
       "note": "",
       "pages": [
         {
@@ -17234,7 +17234,7 @@
     },
     {
       "id": 117,
-      "name": "kPrefab_もろはの杖_A",
+      "name": "kPrefab_もろはの杖A",
       "note": "",
       "pages": [
         {
@@ -17301,7 +17301,7 @@
     },
     {
       "id": 118,
-      "name": "kPrefab_転ばぬ先の杖_A",
+      "name": "kPrefab_転ばぬ先の杖A",
       "note": "",
       "pages": [
         {
@@ -17368,7 +17368,7 @@
     },
     {
       "id": 119,
-      "name": "kPrefab_死の杖_A",
+      "name": "kPrefab_死の杖A",
       "note": "",
       "pages": [
         {
@@ -17435,7 +17435,7 @@
     },
     {
       "id": 120,
-      "name": "kPrefab_保存の壺_A",
+      "name": "kPrefab_保存の壺A",
       "note": "",
       "pages": [
         {
@@ -17502,7 +17502,7 @@
     },
     {
       "id": 121,
-      "name": "kPrefab_変化の壺_A",
+      "name": "kPrefab_変化の壺A",
       "note": "",
       "pages": [
         {
@@ -17569,7 +17569,7 @@
     },
     {
       "id": 122,
-      "name": "kPrefab_回復の壺_A",
+      "name": "kPrefab_回復の壺A",
       "note": "",
       "pages": [
         {
@@ -17636,7 +17636,7 @@
     },
     {
       "id": 123,
-      "name": "kPrefab_合成の壺_A",
+      "name": "kPrefab_合成の壺A",
       "note": "",
       "pages": [
         {
@@ -17770,7 +17770,7 @@
     },
     {
       "id": 125,
-      "name": "kPrefab_ドラゴン草_A",
+      "name": "kPrefab_ドラゴン草A",
       "note": "",
       "pages": [
         {
@@ -17971,7 +17971,7 @@
     },
     {
       "id": 128,
-      "name": "kPrefab_しびれ草_A",
+      "name": "kPrefab_しびれ草A",
       "note": "",
       "pages": [
         {
@@ -18038,7 +18038,7 @@
     },
     {
       "id": 129,
-      "name": "kPrefab_きえさり草_A",
+      "name": "kPrefab_きえさり草A",
       "note": "",
       "pages": [
         {
@@ -18239,7 +18239,7 @@
     },
     {
       "id": 132,
-      "name": "kPrefab_Gold_A",
+      "name": "kPrefab_GoldA",
       "note": "",
       "pages": [
         {
@@ -18306,7 +18306,7 @@
     },
     {
       "id": 133,
-      "name": "kPrefab_雑草_A",
+      "name": "kPrefab_雑草A",
       "note": "",
       "pages": [
         {
@@ -18373,7 +18373,7 @@
     },
     {
       "id": 134,
-      "name": "kPrefab_地雷_A",
+      "name": "kPrefab_地雷A",
       "note": "",
       "pages": [
         {
@@ -18440,7 +18440,7 @@
     },
     {
       "id": 135,
-      "name": "kPrefab_トラバサミ_A",
+      "name": "kPrefab_トラバサミA",
       "note": "",
       "pages": [
         {
@@ -18507,7 +18507,7 @@
     },
     {
       "id": 136,
-      "name": "kPrefab_バネ_A",
+      "name": "kPrefab_バネA",
       "note": "",
       "pages": [
         {
@@ -18574,7 +18574,7 @@
     },
     {
       "id": 137,
-      "name": "kPrefab_転び石_A",
+      "name": "kPrefab_転び石A",
       "note": "",
       "pages": [
         {
@@ -18641,7 +18641,7 @@
     },
     {
       "id": 138,
-      "name": "kPrefab_木の矢の罠_A",
+      "name": "kPrefab_木の矢の罠A",
       "note": "",
       "pages": [
         {
@@ -18708,7 +18708,7 @@
     },
     {
       "id": 139,
-      "name": "kPrefab_毒矢の罠_A",
+      "name": "kPrefab_毒矢の罠A",
       "note": "",
       "pages": [
         {
@@ -18775,7 +18775,7 @@
     },
     {
       "id": 140,
-      "name": "kPrefab_錆ワナ_A",
+      "name": "kPrefab_錆ワナA",
       "note": "",
       "pages": [
         {
@@ -18842,7 +18842,7 @@
     },
     {
       "id": 141,
-      "name": "kPrefab_落とし穴_A",
+      "name": "kPrefab_落とし穴A",
       "note": "",
       "pages": [
         {
@@ -18974,7 +18974,7 @@
     },
     {
       "id": 142,
-      "name": "kPrefab_突風の罠_A",
+      "name": "kPrefab_突風の罠A",
       "note": "",
       "pages": [
         {
@@ -19041,7 +19041,7 @@
     },
     {
       "id": 143,
-      "name": "kPrefab_毒矢_A",
+      "name": "kPrefab_毒矢A",
       "note": "",
       "pages": [
         {
@@ -19173,7 +19173,7 @@
     },
     {
       "id": 144,
-      "name": "kPrefab_RevivalGrass_A",
+      "name": "kPrefab_RevivalGrassA",
       "note": "",
       "pages": [
         {
@@ -19240,7 +19240,7 @@
     },
     {
       "id": 145,
-      "name": "kPrefab_投擲反射石_A",
+      "name": "kPrefab_投擲反射石A",
       "note": "",
       "pages": [
         {
@@ -19372,7 +19372,7 @@
     },
     {
       "id": 146,
-      "name": "kPrefab_毒草_B",
+      "name": "kPrefab_毒草B",
       "note": "",
       "pages": [
         {
@@ -19439,7 +19439,7 @@
     },
     {
       "id": 147,
-      "name": "kPrefab_ExitPoint_Marker_A",
+      "name": "kPrefab_ExitPoint_MarkerA",
       "note": "",
       "pages": [
         {
@@ -19616,7 +19616,7 @@
     },
     {
       "id": 148,
-      "name": "kPrefab_EntryPoint_Marker_A",
+      "name": "kPrefab_EntryPoint_MarkerA",
       "note": "",
       "pages": [
         {

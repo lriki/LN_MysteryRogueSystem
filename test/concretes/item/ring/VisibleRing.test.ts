@@ -23,12 +23,12 @@ test("concretes.item.ring.VisibleRing", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
 
-    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_影読みの指輪_A").id, [], "ring1"));
+    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_影読みの指輪A").id, [], "ring1"));
     inventory.addEntity(ring1);
    //equipmentUser.equipOnUtil(ring1);
 
     // Enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_黒幕バット_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_黒幕バットA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, floorId, 13, 10);
 
     MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------

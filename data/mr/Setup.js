@@ -25,17 +25,17 @@ const MR = require("MysteryRogueSystem/ts/main");
 
 MR.db.entities = {
 
-    "kEntity_ドラゴンキラー_A": {
+    "kEntity_ドラゴンキラーA": {
         setup: (entity) => {
             entity.equipmentTraits.push({code: MRBasics.traits.RaceRate, dataId: MRData.getRace("kRace_ドラゴン系").id, value: 1.5});
         }
     },
-    "kEntity_目覚めの指輪_A": {
+    "kEntity_目覚めの指輪A": {
         setup: (entity) => {
             entity.equipmentTraits.push({code: MRBasics.traits.AwakeStep, dataId: 0, value: 0});
         }
     },
-    "kEntity_忍び足の指輪_A": {
+    "kEntity_忍び足の指輪A": {
         setup: (entity) => {
             entity.equipmentTraits.push({code: MRBasics.traits.SilentStep, dataId: 0, value: 0});
         }
@@ -52,17 +52,17 @@ const { MRData } = require("../../ts/mr/data/MRData");
 
 // db.entities = {
 
-//     // "kEntity_ドラゴンキラー_A": {
+//     // "kEntity_ドラゴンキラーA": {
 //     //     equipmentTraits: [
 //     //         { code: "RaceRate", data: "kRace_ドラゴン系", value: 1.5 }
 //     //     ]
 //     // },
-//     // "kEntity_目覚めの指輪_A": {
+//     // "kEntity_目覚めの指輪A": {
 //     //     equipmentTraits: [
 //     //         { code: "AwakeStep" }
 //     //     ]
 //     // },
-//     // "kEntity_忍び足の指輪_A": {
+//     // "kEntity_忍び足の指輪A": {
 //     //     equipmentTraits: [
 //     //         { code: "SilentStep" }
 //     //     ]
@@ -85,7 +85,7 @@ SetupScript で、 Reacton と関連付ける必要がある。
 [食べる] と [投げる] では、効果が同じでも、FPの回復有無が違うので、異なる Emittor が必要になる。
 
 ```
-"kEntity_薬草_A": Entity({
+"kEntity_薬草A": Entity({
     reactions: [
         Reaction({
             action: "kAction_食べる",
@@ -101,9 +101,9 @@ SetupScript で、 Reacton と関連付ける必要がある。
 
 ```
 emittors = {
-    "kEmittor_薬草_A": Emittor({
+    "kEmittor_薬草A": Emittor({
     }),
-    "kEmittor_薬草_A_食べる": Emittor({
+    "kEmittor_薬草A_食べる": Emittor({
         base: "kEmittor_薬草A",
         effects: [
             "kEffect_満腹度微回復",

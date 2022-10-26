@@ -28,12 +28,12 @@ test("concretes.enemy.Rust", () => {
     const weapon1_UP1 = weapon1.getActualParam(MRBasics.params.upgradeValue);
 
     // 盾 入手
-    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_青銅の盾_A").id, [], "shield1"));
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_青銅の盾A").id, [], "shield1"));
     inventory2.addEntity(shield1);
     const shield1_UP1 = shield1.getActualParam(MRBasics.params.upgradeValue);
 
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ラストゾンビ_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ラストゾンビA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     MRSystem.scheduler.stepSimulation();

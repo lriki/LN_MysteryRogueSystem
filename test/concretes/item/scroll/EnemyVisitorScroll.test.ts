@@ -24,13 +24,13 @@ test("concretes.item.scroll.EnemyVisitorScroll", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_地獄耳の巻物_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_地獄耳の巻物A").id, [], "item1"));
     inventory.addEntity(item1);
 
     // enemy
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_黒幕バット_A").id, [], "enemy2"));
-    const enemy3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_梅キツネ_A").id, [MRData.getState("kState_UTアイテム擬態").id], "enemy3"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
+    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_黒幕バットA").id, [], "enemy2"));
+    const enemy3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_梅キツネA").id, [MRData.getState("kState_UTアイテム擬態").id], "enemy3"));
     MRLively.world.transferEntity(enemy1, floorId, 19, 4);
     MRLively.world.transferEntity(enemy2, floorId, 20, 4);
     MRLively.world.transferEntity(enemy3, floorId, 20, 5);

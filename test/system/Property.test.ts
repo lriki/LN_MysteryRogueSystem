@@ -27,7 +27,7 @@ test("system.Property.basic", () => {
 
     // アイテム数を取得してみる
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
-    inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_すばやさ草_A").id, [], "item1")));
+    inventory.addEntity(SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_すばやさ草A").id, [], "item1")));
     const count = UProperty.getValueFromEntity(player1, "Entity:Inventory.items.length");
     expect(count).toBe(1);
 

@@ -118,10 +118,10 @@ export class DSystem {
         this.states.seal = seal.id;
         this.states.plating = MRData.getState("kState_System_Plating").id;
 
-        this.fallbackEnemyEntityId = MRData.getEnemy("kEntity_スライム_A").entityId;
-        this.fallbackItemEntityId = MRData.getItem("kEntity_雑草_A").id;
-        this.fallbackGoldEntityId = MRData.getItem("kEntity_Gold_A").id;
-        //this.fallbackTrapEntityId = REData.getItem("kEntity_トラバサミ_A").id;
+        this.fallbackEnemyEntityId = MRData.getEnemy("kEntity_スライムA").entityId;
+        this.fallbackItemEntityId = MRData.getItem("kEntity_雑草A").id;
+        this.fallbackGoldEntityId = MRData.getItem("kEntity_GoldA").id;
+        //this.fallbackTrapEntityId = REData.getItem("kEntity_トラバサミA").id;
 
         for (let i = 1; i < MRData.enemies.length; i++) {
             const data = MRData.enemyData(i);

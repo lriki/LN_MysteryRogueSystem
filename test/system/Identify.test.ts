@@ -24,7 +24,7 @@ test("system.Identify.Details", () => {
     const player1 = TestEnv.setupPlayer(LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_識別の巻物_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_識別の巻物A").id, [], "item1"));
     inventory.addEntity(item1);
 
     // 説明文は表示されないこと。
@@ -39,7 +39,7 @@ test("system.Identify.Details.KindIdetified", () => {
     const player1 = TestEnv.setupPlayer(floor1, 10, 10);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草A").id, [], "item1"));
     inventory.addEntity(item1);
 
     const name1 = UName.makeNameAsItem(item1);
@@ -53,7 +53,7 @@ test("system.Identify.Nickname", () => {
     const player1 = TestEnv.setupPlayer(floor1, 10, 10);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_識別の巻物_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_識別の巻物A").id, [], "item1"));
     inventory.addEntity(item1);
 
     MRLively.identifyer.setNickname(item1.dataId, "Nickname");
@@ -71,8 +71,8 @@ test("system.Identify.Grass", () => {
     TestEnv.performFloorTransfer();
 
     // アイテム作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_薬草_A").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_薬草_A").id, [], "item2"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_薬草A").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_薬草A").id, [], "item2"));
     actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
     actor1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 

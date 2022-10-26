@@ -24,10 +24,10 @@ test("system.SaveLoad.EventServerIssue", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10, 6);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢A").id, [], "item1"));
     inventory.addEntity(item1);
     
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [stateId], "enemy1"));
     MRLively.world.transferEntity(enemy1, floorId, 20, 20);
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------

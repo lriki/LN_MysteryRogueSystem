@@ -4276,7 +4276,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {
@@ -4360,7 +4360,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_EntryPoint_A\","
+                "    data: \"kEntity_EntryPointA\","
               ]
             },
             {
@@ -4410,7 +4410,7 @@
     null,
     {
       "id": 8,
-      "name": "インプ_A",
+      "name": "インプA",
       "note": "",
       "pages": [
         {
@@ -4449,7 +4449,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_インプ_A\","
+                "    data: \"kEnemy_インプA\","
               ]
             },
             {

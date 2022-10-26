@@ -21,8 +21,8 @@ test("concretes.states.くちなし.Basic", () => {
     actor1.addState(stateId);
 
     // アイテム作成 & インベントリに入れる
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_薬草_A").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_識別の巻物_A").id, [], "item2"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_薬草A").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_識別の巻物A").id, [], "item2"));
     actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
     actor1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 

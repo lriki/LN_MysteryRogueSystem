@@ -22,7 +22,7 @@ test("concretes.trap.Pitfall.Uphill.OnFirstFloor", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
 
     // trap 生成&配置
-    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_落とし穴_A").id, [], "trap1"));
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_落とし穴A").id, [], "trap1"));
     MRLively.world.transferEntity(trap1, floorId, 11, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -48,7 +48,7 @@ test("concretes.trap.Pitfall.Downhill", () => {
     player1.addState(MRData.getState("kState_UT罠必中").id);
 
     // trap 生成&配置
-    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_落とし穴_A").id, [], "trap1"));
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_落とし穴A").id, [], "trap1"));
     MRLively.world.transferEntity(trap1, floorId, 11, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -74,7 +74,7 @@ test("concretes.trap.Pitfall.Flat", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
 
     // trap 生成&配置
-    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_落とし穴_A").id, [], "trap1"));
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_落とし穴A").id, [], "trap1"));
     MRLively.world.transferEntity(trap1, floorId, 11, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------

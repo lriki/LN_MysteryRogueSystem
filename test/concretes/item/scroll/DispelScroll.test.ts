@@ -23,7 +23,7 @@ test("concretes.item.scroll.DispelScroll", () => {
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_おはらいの巻物_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_おはらいの巻物A").id, [], "item1"));
     inventory.addEntity(item1);
     
     // 装備 (呪い付き)

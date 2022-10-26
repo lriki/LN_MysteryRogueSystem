@@ -4276,7 +4276,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {
@@ -4360,7 +4360,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_EntryPoint_A\","
+                "    data: \"kEntity_EntryPointA\","
               ]
             },
             {
@@ -4405,7 +4405,7 @@
     },
     {
       "id": 3,
-      "name": "こん棒_A",
+      "name": "こん棒A",
       "note": "",
       "pages": [
         {
@@ -4444,7 +4444,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_こん棒_A\","
+                "    data: \"kEntity_こん棒A\","
               ]
             },
             {
@@ -4479,7 +4479,7 @@
     },
     {
       "id": 4,
-      "name": "青銅の剣_A",
+      "name": "青銅の剣A",
       "note": "",
       "pages": [
         {
@@ -4518,7 +4518,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_青銅の剣_A\","
+                "    data: \"kEntity_青銅の剣A\","
               ]
             },
             {
@@ -4553,7 +4553,7 @@
     },
     {
       "id": 5,
-      "name": "ポイズンキラー_A",
+      "name": "ポイズンキラーA",
       "note": "",
       "pages": [
         {
@@ -4592,7 +4592,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ポイズンキラー_A\","
+                "    data: \"kEntity_ポイズンキラーA\","
               ]
             },
             {
@@ -4627,7 +4627,7 @@
     },
     {
       "id": 6,
-      "name": "金の剣_A",
+      "name": "金の剣A",
       "note": "",
       "pages": [
         {
@@ -4666,7 +4666,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_金の剣_A\","
+                "    data: \"kEntity_金の剣A\","
               ]
             },
             {
@@ -4701,7 +4701,7 @@
     },
     {
       "id": 7,
-      "name": "ドラゴンキラー_A",
+      "name": "ドラゴンキラーA",
       "note": "",
       "pages": [
         {
@@ -4740,7 +4740,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ドラゴンキラー_A\","
+                "    data: \"kEntity_ドラゴンキラーA\","
               ]
             },
             {
@@ -4775,7 +4775,7 @@
     },
     {
       "id": 8,
-      "name": "鋼の剣_A",
+      "name": "鋼の剣A",
       "note": "",
       "pages": [
         {
@@ -4814,7 +4814,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_鋼の剣_A\","
+                "    data: \"kEntity_鋼の剣A\","
               ]
             },
             {
@@ -4849,7 +4849,7 @@
     },
     {
       "id": 9,
-      "name": "隕石の剣_A",
+      "name": "隕石の剣A",
       "note": "",
       "pages": [
         {
@@ -4888,7 +4888,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_隕石の剣_A\","
+                "    data: \"kEntity_隕石の剣A\","
               ]
             },
             {
@@ -4923,7 +4923,7 @@
     },
     {
       "id": 10,
-      "name": "スライム_A",
+      "name": "スライムA",
       "note": "",
       "pages": [
         {
@@ -4962,7 +4962,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_スライム_A\","
+                "    data: \"kEntity_スライムA\","
               ]
             },
             {

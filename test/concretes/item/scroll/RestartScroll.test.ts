@@ -26,11 +26,11 @@ test("concretes.item.scroll.RestartScroll", async () => {
     player1.addState(TestEnv.StateId_CertainDirectAttack);   // 攻撃必中にする
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_時の砂の巻物_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_時の砂の巻物A").id, [], "item1"));
     inventory1.addEntity(item1);
 
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, floorId, 13, 10);
     const enemy1HP1 = enemy1.getActualParam(MRBasics.params.hp);
 

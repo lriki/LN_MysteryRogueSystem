@@ -4276,7 +4276,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {
@@ -4355,7 +4355,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_EntryPoint_A\","
+                "    data: \"kEntity_EntryPointA\","
               ]
             },
             {
@@ -4390,7 +4390,7 @@
     },
     {
       "id": 3,
-      "name": "薬草_A",
+      "name": "薬草A",
       "note": "",
       "pages": [
         {
@@ -4429,7 +4429,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_薬草_A\","
+                "    data: \"kEntity_薬草A\","
               ]
             },
             {
@@ -4503,7 +4503,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_青銅の盾_A\","
+                "    data: \"kEntity_青銅の盾A\","
               ]
             },
             {
@@ -4577,7 +4577,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_スライム_A\","
+                "    data: \"kEntity_スライムA\","
               ]
             },
             {
@@ -4658,7 +4658,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_眠りガス_A\","
+                "    data: \"kEntity_眠りガスA\","
               ]
             },
             {
@@ -4693,7 +4693,7 @@
     },
     {
       "id": 7,
-      "name": "薬草_A",
+      "name": "薬草A",
       "note": "",
       "pages": [
         {
@@ -4732,7 +4732,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_薬草_A\","
+                "    data: \"kEntity_薬草A\","
               ]
             },
             {
@@ -4767,7 +4767,7 @@
     },
     {
       "id": 8,
-      "name": "ポイズンキラー_A",
+      "name": "ポイズンキラーA",
       "note": "",
       "pages": [
         {
@@ -4806,7 +4806,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ポイズンキラー_A\","
+                "    data: \"kEntity_ポイズンキラーA\","
               ]
             },
             {
@@ -4880,7 +4880,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_皮の盾_A\","
+                "    data: \"kEntity_皮の盾A\","
               ]
             },
             {
@@ -4961,7 +4961,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ふきとばしの杖_A\","
+                "    data: \"kEntity_ふきとばしの杖A\","
               ]
             },
             {
@@ -5035,7 +5035,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_火炎草_A\","
+                "    data: \"kEntity_火炎草A\","
               ]
             },
             {
@@ -5070,7 +5070,7 @@
     },
     {
       "id": 12,
-      "name": "混乱草_A",
+      "name": "混乱草A",
       "note": "",
       "pages": [
         {
@@ -5109,7 +5109,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_混乱草_A\","
+                "    data: \"kEntity_混乱草A\","
               ]
             },
             {
@@ -5144,7 +5144,7 @@
     },
     {
       "id": 13,
-      "name": "聖域の巻物_A",
+      "name": "聖域の巻物A",
       "note": "",
       "pages": [
         {
@@ -5183,7 +5183,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_聖域の巻物_A\","
+                "    data: \"kEntity_聖域の巻物A\","
               ]
             },
             {
@@ -5257,7 +5257,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    troop: \"kTroop_軍隊ウルフ_A_x4\","
+                "    troop: \"kTroop_軍隊ウルフA_x4\","
               ]
             },
             {
@@ -5299,7 +5299,7 @@
     },
     {
       "id": 15,
-      "name": "スライム_A",
+      "name": "スライムA",
       "note": "",
       "pages": [
         {
@@ -5338,7 +5338,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_スライム_A\","
+                "    data: \"kEntity_スライムA\","
               ]
             },
             {
@@ -5380,7 +5380,7 @@
     },
     {
       "id": 16,
-      "name": "変化の杖_A",
+      "name": "変化の杖A",
       "note": "",
       "pages": [
         {
@@ -5419,7 +5419,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_変化の杖_A\","
+                "    data: \"kEntity_変化の杖A\","
               ]
             },
             {
@@ -5454,7 +5454,7 @@
     },
     {
       "id": 17,
-      "name": "木の矢_A",
+      "name": "木の矢A",
       "note": "",
       "pages": [
         {
@@ -5493,7 +5493,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_木の矢_A\","
+                "    data: \"kEntity_木の矢A\","
               ]
             },
             {
@@ -5528,7 +5528,7 @@
     },
     {
       "id": 18,
-      "name": "脱出の巻物_A",
+      "name": "脱出の巻物A",
       "note": "",
       "pages": [
         {
@@ -5567,7 +5567,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_脱出の巻物_A\","
+                "    data: \"kEntity_脱出の巻物A\","
               ]
             },
             {
@@ -5641,7 +5641,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ドラゴン草_A\","
+                "    data: \"kEntity_ドラゴン草A\","
               ]
             },
             {
@@ -5715,7 +5715,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ちからの草_A\","
+                "    data: \"kEntity_ちからの草A\","
               ]
             },
             {
@@ -5789,7 +5789,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_Gold_A\","
+                "    data: \"kEntity_GoldA\","
               ]
             },
             {
@@ -5870,7 +5870,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_ゾンビ_A\","
+                "    data: \"kEnemy_ゾンビA\","
               ]
             },
             {
@@ -5912,7 +5912,7 @@
     },
     {
       "id": 23,
-      "name": "なよなよインプ_A",
+      "name": "なよなよインプA",
       "note": "",
       "pages": [
         {
@@ -5951,7 +5951,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_なよなよインプ_A\","
+                "    data: \"kEnemy_なよなよインプA\","
               ]
             },
             {
@@ -6032,7 +6032,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_ラストゾンビ_A\","
+                "    data: \"kEnemy_ラストゾンビA\","
               ]
             },
             {
@@ -6074,7 +6074,7 @@
     },
     {
       "id": 25,
-      "name": "こん棒_A",
+      "name": "こん棒A",
       "note": "",
       "pages": [
         {
@@ -6113,7 +6113,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_こん棒_A\","
+                "    data: \"kEntity_こん棒A\","
               ]
             },
             {
@@ -6187,7 +6187,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_皮の盾_A\","
+                "    data: \"kEntity_皮の盾A\","
               ]
             },
             {
@@ -6261,7 +6261,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_くねくねインプ_A\","
+                "    data: \"kEnemy_くねくねインプA\","
               ]
             },
             {
@@ -6303,7 +6303,7 @@
     },
     {
       "id": 28,
-      "name": "黒幕バット_A",
+      "name": "黒幕バットA",
       "note": "",
       "pages": [
         {
@@ -6342,7 +6342,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_黒幕バット_A\","
+                "    data: \"kEnemy_黒幕バットA\","
               ]
             },
             {
@@ -6384,7 +6384,7 @@
     },
     {
       "id": 29,
-      "name": "ポイズンキラー_A",
+      "name": "ポイズンキラーA",
       "note": "",
       "pages": [
         {
@@ -6423,7 +6423,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ポイズンキラー_A\","
+                "    data: \"kEntity_ポイズンキラーA\","
               ]
             },
             {
@@ -6458,7 +6458,7 @@
     },
     {
       "id": 30,
-      "name": "ポイズンキラー_A",
+      "name": "ポイズンキラーA",
       "note": "",
       "pages": [
         {
@@ -6497,7 +6497,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ポイズンキラー_A\","
+                "    data: \"kEntity_ポイズンキラーA\","
               ]
             },
             {
@@ -6532,7 +6532,7 @@
     },
     {
       "id": 31,
-      "name": "天の恵みの巻物_A",
+      "name": "天の恵みの巻物A",
       "note": "",
       "pages": [
         {
@@ -6571,7 +6571,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_天の恵みの巻物_A\","
+                "    data: \"kEntity_天の恵みの巻物A\","
               ]
             },
             {
@@ -6606,7 +6606,7 @@
     },
     {
       "id": 32,
-      "name": "食料の巻物_A",
+      "name": "食料の巻物A",
       "note": "",
       "pages": [
         {
@@ -6645,7 +6645,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_食料の巻物_A\","
+                "    data: \"kEntity_食料の巻物A\","
               ]
             },
             {
@@ -6680,7 +6680,7 @@
     },
     {
       "id": 33,
-      "name": "おにぎり_A",
+      "name": "おにぎりA",
       "note": "",
       "pages": [
         {
@@ -6719,7 +6719,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_おにぎり_A\","
+                "    data: \"kEntity_おにぎりA\","
               ]
             },
             {

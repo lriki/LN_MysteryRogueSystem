@@ -22,10 +22,10 @@ test("concretes.item.shield.ElementGuardShield", () => {
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
     const hp1 = player1.getActualParam(MRBasics.params.hp);
 
-    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ドラゴンシールド_A").id, [], "shield1"));
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ドラゴンシールドA").id, [], "shield1"));
     inventory.addEntity(shield1);
 
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ドラゴン_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ドラゴンA").id, [], "enemy1"));
     enemy1.addState(MRData.getState("kState_Anger").id);
     MRLively.world.transferEntity(enemy1, floorId, 11, 10);
 

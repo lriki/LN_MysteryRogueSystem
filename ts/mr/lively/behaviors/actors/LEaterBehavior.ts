@@ -10,7 +10,7 @@ import { SActivityContext } from "ts/mr/system/SActivityContext";
 import { DActionId } from "ts/mr/data/DCommon";
 
 /**
- * @deprecated see kEntity_すばやさ草_A
+ * @deprecated see kEntity_すばやさ草A
  */
 @MRSerializable
 export class LEaterBehavior extends LBehavior {

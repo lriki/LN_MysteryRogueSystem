@@ -22,7 +22,7 @@ test("concretes.enemies.ArrowShooter.Basic", () => {
     const hp1 = player1.getActualParam(MRBasics.params.hp);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_インプ_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_インプA").id, [], "enemy1"));
     enemy1.addState(MRData.getState("kState_UnitTest_投擲必中").id);    // 投擲必中
     MRLively.world.transferEntity(enemy1, floorId, 12, 10);
 
@@ -62,7 +62,7 @@ test("concretes.enemies.ArrowShooter.OutOfSight", () => {
     const player1 = TestEnv.setupPlayer(floorId, 3, 4);
     
     // enemy1 (Player とは別の部屋に配置)
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_インプ_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_インプA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, floorId, 9, 4);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -87,7 +87,7 @@ test("concretes.enemies.ArrowShooter.ArrowStack", () => {
 
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_インプ_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_インプA").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, floorId, 13, 10);
 
     // Player と Enemy の間に壁を作る

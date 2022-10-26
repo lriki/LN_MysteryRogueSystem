@@ -22,14 +22,14 @@ test("concretes.item.ring.AwakeStepRing", () => {
     const player1 = TestEnv.setupPlayer(floorId, 16, 4);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
-    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_目覚めの指輪_A").id, [], "ring1"));
+    const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_目覚めの指輪A").id, [], "ring1"));
     inventory.addEntity(ring1);
     
     const name = UName.makeNameAsItem(ring1);
     expect(name.includes("+")).toBe(false); // Issue 修正確認。修正値は持たない
 
     // Enemy1 (仮眠状態)
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [stateId], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [stateId], "enemy1"));
     MRLively.world.transferEntity(enemy1, floorId, 19, 4);
 
     MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------

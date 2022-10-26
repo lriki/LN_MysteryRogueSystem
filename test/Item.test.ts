@@ -26,7 +26,7 @@ test("Items.Stack", () => {
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 矢1本
-    const info1 = DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢_A").id);
+    const info1 = DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢A").id);
     info1.stackCount = 1;
     const item1 = SEntityFactory.newEntity(info1);
     MRLively.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
@@ -38,7 +38,7 @@ test("Items.Stack", () => {
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 矢2本
-    const info2 = DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢_A").id);
+    const info2 = DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢A").id);
     info2.stackCount = 2;
     const item2 = SEntityFactory.newEntity(info2);
     MRLively.world.transferEntity(item2, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
@@ -52,7 +52,7 @@ test("Items.Stack", () => {
     expect(item1._stackCount).toBe(3);  // 3本にまとめられている
 
     // 矢99本
-    const info3 = DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢_A").id);
+    const info3 = DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢A").id);
     info3.stackCount = 99;
     const item3 = SEntityFactory.newEntity(info3);
     MRLively.world.transferEntity(item3, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
@@ -66,7 +66,7 @@ test("Items.Stack", () => {
     expect(item1._stackCount).toBe(99);  // 99本が最大
 
     // 矢1本
-    const item4 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢_A").id));
+    const item4 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢A").id));
     MRLively.world.transferEntity(item4, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
 
     // 足元のアイテムを拾う

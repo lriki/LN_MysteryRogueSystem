@@ -5592,7 +5592,7 @@
                 "MR-ShowWarehouseStoreDialog",
                 "ShowWarehouseStoreDialog",
                 {
-                  "serviceProviderKey": "kEntity_Warehouse_A",
+                  "serviceProviderKey": "kEntity_WarehouseA",
                   "serviceUserKey": "${Player}"
                 }
               ]
@@ -5601,7 +5601,7 @@
               "code": 657,
               "indent": 1,
               "parameters": [
-                "serviceProviderKey = kEntity_Warehouse_A"
+                "serviceProviderKey = kEntity_WarehouseA"
               ]
             },
             {
@@ -5681,7 +5681,7 @@
                 "MR-ShowWarehouseWithdrawDialog",
                 "ShowWarehouseWithdrawDialog",
                 {
-                  "serviceProviderKey": "kEntity_Warehouse_A",
+                  "serviceProviderKey": "kEntity_WarehouseA",
                   "serviceUserKey": "${Player}"
                 }
               ]
@@ -5690,7 +5690,7 @@
               "code": 657,
               "indent": 1,
               "parameters": [
-                "serviceProviderKey = kEntity_Warehouse_A"
+                "serviceProviderKey = kEntity_WarehouseA"
               ]
             },
             {
@@ -5770,9 +5770,9 @@
                 "MR-ShowItemSellDialog",
                 "MR-ShowItemSellDialog",
                 {
-                  "serviceProviderKey": "kEntity_Warehouse_A",
+                  "serviceProviderKey": "kEntity_WarehouseA",
                   "serviceUserKey": "${Player}",
-                  "inventoryOwnerKey": "kEntity_Warehouse_A"
+                  "inventoryOwnerKey": "kEntity_WarehouseA"
                 }
               ]
             },
@@ -5780,7 +5780,7 @@
               "code": 657,
               "indent": 1,
               "parameters": [
-                "serviceProviderKey = kEntity_Warehouse_A"
+                "serviceProviderKey = kEntity_WarehouseA"
               ]
             },
             {
@@ -5794,7 +5794,7 @@
               "code": 657,
               "indent": 1,
               "parameters": [
-                "inventoryOwnerKey = kEntity_Warehouse_A"
+                "inventoryOwnerKey = kEntity_WarehouseA"
               ]
             },
             {
@@ -6051,7 +6051,7 @@
                 "MR-SetProperty",
                 "MR-SetProperty",
                 {
-                  "entityKey": "kEntity_Warehouse_A",
+                  "entityKey": "kEntity_WarehouseA",
                   "property": "Entity:Inventory.capacity",
                   "value": "30"
                 }
@@ -6061,7 +6061,7 @@
               "code": 657,
               "indent": 1,
               "parameters": [
-                "entityKey = kEntity_Warehouse_A"
+                "entityKey = kEntity_WarehouseA"
               ]
             },
             {

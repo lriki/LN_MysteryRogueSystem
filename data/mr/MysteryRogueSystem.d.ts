@@ -5326,7 +5326,7 @@ declare module 'MysteryRogueSystem/ts/mr/lively/behaviors/actors/LEaterBehavior'
   import { SActivityContext } from "ts/mr/system/SActivityContext";
   import { DActionId } from "ts/mr/data/DCommon";
   /**
-   * @deprecated see kEntity_すばやさ草_A
+   * @deprecated see kEntity_すばやさ草A
    */
   export class LEaterBehavior extends LBehavior {
       clone(newOwner: LEntity): LBehavior;

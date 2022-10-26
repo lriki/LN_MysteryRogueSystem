@@ -23,14 +23,14 @@ test("concretes.item.arrow.PenetrationArrow", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item1
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_銀の矢_A").id));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_銀の矢A").id));
     item1._name = "item1";
     inventory.addEntity(item1);
     item1._stackCount = 1;  // 消滅のチェックをしたいので、スタック数1に調整する
     
     // enemy
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
-    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy2"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
+    const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy2"));
     MRLively.world.transferEntity(enemy1, floorId, 15, 10);
     MRLively.world.transferEntity(enemy2, floorId, 17, 10);
     const enemy1HP1 = enemy1.getActualParam(MRBasics.params.hp);

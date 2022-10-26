@@ -25,11 +25,11 @@ test("concretes.enemy.GoldThief.Basic", () => {
     const inventory1 = actor1.getEntityBehavior(LInventoryBehavior);
     inventory1.gainGold(10000);
 
-    const gold1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_Gold_A").id, [], "gold1"));
+    const gold1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_GoldA").id, [], "gold1"));
     gold1.getEntityBehavior(LGoldBehavior).setGold(1000);
     MRLively.world.transferEntity(gold1, floorId, 13, 10);
     
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_小金猫_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_小金猫A").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, floorId, 12, 10);
     const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
     
@@ -96,7 +96,7 @@ test("concretes.enemy.GoldThief.DropItem", () => {
     actor1.addState(TestEnv.StateId_CertainDirectAttack);
     
     // enemy1
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_小金猫_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_小金猫A").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, floorId, 11, 10);
     
     MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

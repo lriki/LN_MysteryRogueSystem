@@ -4276,7 +4276,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {
@@ -4350,7 +4350,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_EntryPoint_A\","
+                "    data: \"kEntity_EntryPointA\","
               ]
             },
             {
@@ -4424,7 +4424,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_ゴーレム_A\","
+                "    data: \"kEnemy_ゴーレムA\","
               ]
             },
             {
@@ -4505,7 +4505,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_マーブルゴーレム_A\","
+                "    data: \"kEnemy_マーブルゴーレムA\","
               ]
             },
             {
@@ -4586,7 +4586,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_バインドゴーレム_A\","
+                "    data: \"kEnemy_バインドゴーレムA\","
               ]
             },
             {

@@ -21,8 +21,8 @@ test("concretes.item.scroll.ChangeToFoodScroll", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_食料の巻物_A").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_食料の巻物_A").id, [], "item2"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_食料の巻物A").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_食料の巻物A").id, [], "item2"));
     inventory.addEntity(item1);
     inventory.addEntity(item2);
 
@@ -38,7 +38,7 @@ test("concretes.item.scroll.ChangeToFoodScroll", () => {
 
     const items = inventory.items;
     expect(items.length).toBe(1);
-    expect(items[0].data.entity.key).toBe("kEntity_大きなおにぎり_A");
+    expect(items[0].data.entity.key).toBe("kEntity_大きなおにぎりA");
     expect(item2.isDestroyed()).toBeFalsy();    // Entity が変異しただけなので、インスタンス自体は削除されていない
     expect(MRLively.messageHistory.includesText("変化した")).toBeTruthy();
 });
@@ -53,10 +53,10 @@ test("concretes.item.scroll.EquipmentIssuse", () => {
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
 
     // item
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_食料の巻物_A").id, [], "item1"));
-    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_食料の巻物_A").id, [], "item2"));
-    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_こん棒_A").id, [], "weapon1"));
-    const arrow1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢_A").id, [], "arrow1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_食料の巻物A").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_食料の巻物A").id, [], "item2"));
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_こん棒A").id, [], "weapon1"));
+    const arrow1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢A").id, [], "arrow1"));
     inventory.addEntity(item1);
     inventory.addEntity(item2);
     inventory.addEntity(weapon1);

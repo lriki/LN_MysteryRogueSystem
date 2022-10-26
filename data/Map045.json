@@ -4276,7 +4276,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {
@@ -4360,7 +4360,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_EntryPoint_A\","
+                "    data: \"kEntity_EntryPointA\","
               ]
             },
             {
@@ -4444,7 +4444,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_皮の盾_A\","
+                "    data: \"kEntity_皮の盾A\","
               ]
             },
             {
@@ -4518,7 +4518,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_ドラゴン_A\","
+                "    data: \"kEnemy_ドラゴンA\","
               ]
             },
             {
@@ -4592,7 +4592,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_青銅の盾_A\","
+                "    data: \"kEntity_青銅の盾A\","
               ]
             },
             {
@@ -4666,7 +4666,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_うろこの盾_A\","
+                "    data: \"kEntity_うろこの盾A\","
               ]
             },
             {
@@ -4740,7 +4740,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_金の盾_A\","
+                "    data: \"kEntity_金の盾A\","
               ]
             },
             {
@@ -4814,7 +4814,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_鋼の盾_A\","
+                "    data: \"kEntity_鋼の盾A\","
               ]
             },
             {
@@ -4888,7 +4888,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ドラゴンシールド_A\","
+                "    data: \"kEntity_ドラゴンシールドA\","
               ]
             },
             {
@@ -4962,7 +4962,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_隕石の盾_A\","
+                "    data: \"kEntity_隕石の盾A\","
               ]
             },
             {
@@ -4997,7 +4997,7 @@
     },
     {
       "id": 11,
-      "name": "錆ワナ_A",
+      "name": "錆ワナA",
       "note": "",
       "pages": [
         {
@@ -5036,7 +5036,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_錆ワナ_A\","
+                "    data: \"kEntity_錆ワナA\","
               ]
             },
             {
@@ -5078,7 +5078,7 @@
     },
     {
       "id": 12,
-      "name": "毒草_A",
+      "name": "毒草A",
       "note": "",
       "pages": [
         {
@@ -5117,7 +5117,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_毒草_A\","
+                "    data: \"kEntity_毒草A\","
               ]
             },
             {
@@ -5191,7 +5191,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_ゾンビ_A\","
+                "    data: \"kEnemy_ゾンビA\","
               ]
             },
             {
@@ -5233,7 +5233,7 @@
     },
     {
       "id": 14,
-      "name": "錆ワナ_A",
+      "name": "錆ワナA",
       "note": "",
       "pages": [
         {
@@ -5272,7 +5272,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_錆ワナ_A\","
+                "    data: \"kEntity_錆ワナA\","
               ]
             },
             {

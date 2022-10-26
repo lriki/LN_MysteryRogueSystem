@@ -23,7 +23,7 @@ test("concretes.dialogs.ItemListDialog.test", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
     
-    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草_A").id, [], "item1"));
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草A").id, [], "item1"));
     inventory1.addEntity(item1);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------

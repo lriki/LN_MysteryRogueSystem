@@ -4276,7 +4276,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_ExitPoint_A\","
+                "    data: \"kEntity_ExitPointA\","
               ]
             },
             {
@@ -4350,7 +4350,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_EntryPoint_A\","
+                "    data: \"kEntity_EntryPointA\","
               ]
             },
             {
@@ -4386,7 +4386,7 @@
     null,
     {
       "id": 4,
-      "name": "スライム_A",
+      "name": "スライムA",
       "note": "",
       "pages": [
         {
@@ -4425,7 +4425,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEntity_スライム_A\","
+                "    data: \"kEntity_スライムA\","
               ]
             },
             {
@@ -4467,7 +4467,7 @@
     },
     {
       "id": 5,
-      "name": "飴色スライム_A",
+      "name": "飴色スライムA",
       "note": "",
       "pages": [
         {
@@ -4506,7 +4506,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_飴色スライム_A\","
+                "    data: \"kEnemy_飴色スライムA\","
               ]
             },
             {
@@ -4548,7 +4548,7 @@
     },
     {
       "id": 6,
-      "name": "苗色スライム_AA",
+      "name": "苗色スライムAA",
       "note": "",
       "pages": [
         {
@@ -4587,7 +4587,7 @@
               "code": 408,
               "indent": 0,
               "parameters": [
-                "    data: \"kEnemy_苗色スライム_A\","
+                "    data: \"kEnemy_苗色スライムA\","
               ]
             },
             {

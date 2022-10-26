@@ -27,7 +27,7 @@ test("concretes.item.scroll.TrapScroll", () => {
     // item1
     let items = [];
     for (let i = 0; i < 4; i++) {
-        const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ワナの巻物_A").id, [], `item${i}`));
+        const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ワナの巻物A").id, [], `item${i}`));
         inventory.addEntity(item);
         items.push(item);
     }

@@ -30,7 +30,7 @@ test("system.Leveling.levelUp", () => {
     player1.setParamCurrentValue(MRBasics.params.exp, nextExp - 1);   // あと 1 で次のレベルになるようにしておく
     player1.addState(TestEnv.StateId_CertainDirectAttack);      // 攻撃必中にする
     
-    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     enemy1.setParamCurrentValue(MRBasics.params.hp, 1);               // 1 ダメージで倒せるようにしておく
     MRLively.world.transferEntity(enemy1, floorId, 11, 10);
 
