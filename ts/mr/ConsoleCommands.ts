@@ -40,7 +40,7 @@ function setFP(entityId: number, value: number) {
 function setPlayerParameter(key: string, value: number) {
     const player = MRLively.camera.focusedEntity();
     if (!player) return;
-    player.setActualParam(MRData.parameter(key).id, value);
+    player.setParamCurrentValue(MRData.parameter(key).id, value);
 }
 
 function setVariable(id: number, value: number) {
@@ -69,7 +69,7 @@ function visitAll() {
 function levelMax() {
     const player = MRLively.camera.focusedEntity();
     if (player) {
-        player.setActualParam(MRBasics.params.level, 99);
+        player.setParamCurrentValue(MRBasics.params.level, 99);
     }
 }
 

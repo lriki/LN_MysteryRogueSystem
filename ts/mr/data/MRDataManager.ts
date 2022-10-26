@@ -19,7 +19,7 @@ import { DTroop } from './DTroop';
 import { DStateGroup } from './DStateGroup';
 import { MRSetup } from './MRSetup';
 import { DAttackElement } from './DAttackElement';
-import { DParamMessageValueSource, DParameter } from './DParameter';
+import { DParamMessageValueSource, DParameter, DParameterType } from './DParameter';
 import { DDataImporter } from './DDataImporter';
 import { DDropItem } from './DEnemy';
 import { DTextManager } from './DTextManager';
@@ -139,7 +139,7 @@ export class MRDataManager {
             DParameter.makeBuiltin(14, "cap", "Capacity", tr2("最大容量"), -1, 8, 0, Infinity, false),
             DParameter.makeBuiltin(15, "gold", "Gold", tr2("最大ゴールド"), -1, 999999, 10, Infinity, false),
             DParameter.makeBuiltin(16, "level", tr2("レベル"), tr2("最大レベル"), -1, 99, 1, Infinity, false),
-            DParameter.makeBuiltin(17, "exp", tr2("経験値"), tr2("最大経験値"), -1, 999999, 0, Infinity, false),
+            DParameter.makeBuiltin(17, "exp", tr2("経験値"), tr2("最大経験値"), -1, 9999999, 0, Infinity, false),
         ];
         MRBasics.params = {
             hp: MRData.parameters.findIndex(x => x.code == "hp"),
@@ -184,6 +184,10 @@ export class MRDataManager {
         MRData.parameters[MRBasics.params.upgradeValue].targetGainMessage = DTextManager.actorGain;
         MRData.parameters[MRBasics.params.upgradeValue].targetLossMessage = DTextManager.enemyLoss;
         MRData.parameters[MRBasics.params.level].initialValue = 1;
+        //MRData.parameters[MRBasics.params.level].type = DParameterType.Dependent;
+        MRData.parameters[MRBasics.params.level].allowDamage = false;
+        MRData.parameters[MRBasics.params.level].initialIdealValue = 0;
+        MRData.parameters[MRBasics.params.level].maxEffortLimit = 99;
         MRData.parameters[MRBasics.params.exp].initialValue = 0;
         MRData.parameters[MRBasics.params.level].selfGainMessage = DTextManager.levelUp;
         //REData.parameters[REBasics.params.level].selfLossMessage = DTextManager.actorLoss;
@@ -781,6 +785,7 @@ export class MRDataManager {
         $dataItems.forEach(x => {
             const [entity, item] = MRData.newItem();
             if (x) {
+                const meta = DMetadataParser.parse(x.meta);
                 entity.entity = parseMetaToEntityProperties(x.meta);
                 entity.display.name = x.name;
                 entity.display.iconIndex = x.iconIndex ?? 0;
@@ -789,11 +794,19 @@ export class MRDataManager {
                 entity.purchasePrice = Math.max(entity.sellingPrice2 / 2, 1);
 
                 const emittor = MRData.newEmittor(entity.entity.key);
-                const effect = MRData.newEffect(entity.entity.key);
+                const effect = MRData.newEffect(meta.effectKey ?? entity.entity.key);
                 effect.critical = false;
                 effect.successRate = x.successRate;
                 effect.hitType = x.hitType;
-                effect.rmmzAnimationId = x.animationId;
+                if (x.animationId < 0) {
+                    effect.flavorEffect = undefined;
+                }
+                else if (x.animationId === 0) {
+                    effect.flavorEffect = null;
+                }
+                else {
+                    effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(x.animationId);
+                }
                 effect.rmmzSpecialEffectQualifyings = x.effects;
 
                 if (x.damage.type > 0) {
@@ -1213,6 +1226,7 @@ export class MRDataManager {
             "mr/Setup.js",
             "mr/Actions.js",
             "mr/Parameters.js",
+            "mr/Effects.js",
         ];
         const scriptDB = new DSetupScript();
 

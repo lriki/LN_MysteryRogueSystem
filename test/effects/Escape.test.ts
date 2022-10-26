@@ -19,7 +19,7 @@ test("concretes.effect.Escape", () => {
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     actor1.addState(TestEnv.StateId_CertainDirectAttack);
-    const hp1 = actor1.actualParam(MRBasics.params.hp);
+    const hp1 = actor1.getActualParam(MRBasics.params.hp);
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_撤退テストA").id, [], "enemy1"));

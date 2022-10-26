@@ -30,7 +30,7 @@ test("concretes.item.weapon.DragonKiller", () => {
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_Test_サンドバッグドラゴン").id, [], "enemy1"));
     enemy1.addState(MRData.getState("kState_UTからぶり").id);
     MRLively.world.transferEntity(enemy1, floorId, 11, 10);
-    const enemy1HP1 = enemy1.actualParam(MRBasics.params.hp);
+    const enemy1HP1 = enemy1.getActualParam(MRBasics.params.hp);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -45,7 +45,7 @@ test("concretes.item.weapon.DragonKiller", () => {
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const enemy1HP2 = enemy1.actualParam(MRBasics.params.hp);
+    const enemy1HP2 = enemy1.getActualParam(MRBasics.params.hp);
     
     //----------------------------------------------------------------------------------------------------
     // 特攻有りダメージと比較する
@@ -58,7 +58,7 @@ test("concretes.item.weapon.DragonKiller", () => {
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const enemy1HP3 = enemy1.actualParam(MRBasics.params.hp);
+    const enemy1HP3 = enemy1.getActualParam(MRBasics.params.hp);
 
     const damage1 = enemy1HP1 - enemy1HP2;
     const damage2 = enemy1HP2 - enemy1HP3;

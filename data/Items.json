@@ -303,7 +303,7 @@
     "iconIndex": 181,
     "itypeId": 1,
     "name": "すばやさ草",
-    "note": "<MR-Type: Entity>\n<MR-Category: Grass>\n<MR-Key: kEntity_すばやさ草_A>\n<MR-Prefab: kPrefab_すばやさ草_A>\n",
+    "note": "<MR-Type: Entity>\n<MR-Category: Grass>\n<MR-Key: kEntity_すばやさ草_A>\n<MR-Prefab: kPrefab_すばやさ草_A>\n<MR-EffectKey: kEffect_すばやさ草_A>\n",
     "occasion": 0,
     "price": 200,
     "repeats": 1,

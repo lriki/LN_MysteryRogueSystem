@@ -29,7 +29,7 @@ import { DRace } from "./DRace";
 import { DFloorPreset, DTerrainSetting, DTerrainShape } from "./DTerrainPreset";
 import { DCommand } from "./DCommand";
 import { DEffect } from "./DEffect";
-import { DActionId, DEffectId, DSkillId } from "./DCommon";
+import { DActionId, DEffectId, DParameterId, DSkillId } from "./DCommon";
 import { DMap } from "./DMap";
 
 
@@ -293,7 +293,7 @@ export class MRData
         return data;
     }
 
-    static parameter(key: DActionId | string): DParameter {
+    static parameter(key: DParameterId | string): DParameter {
         let data;
         if (typeof key === "number") {
             data = this.parameters[key];
@@ -375,9 +375,19 @@ export class MRData
     }
 
     static cloneEffect(src: DEffect): DEffect {
-        const data = this.newEffect(src.sourceKey);
+        const data = this.newEffect(src.key);
         data.copyFrom(src);
         return data;
+    }
+
+    static findEffect(pattern: string): DEffect | undefined {
+        return this.findHelper(this.effects, pattern, x => x.key == pattern);
+    }
+
+    static getEffect(pattern: string): DEffect {
+        const d = this.findEffect(pattern);
+        if (d) return d;
+        throw new Error(`Effect "${pattern}" not found.`);
     }
 
     //--------------------------------------------------------------------------
@@ -391,7 +401,7 @@ export class MRData
 
     static cloneEmittor(src: DEmittor): DEmittor {
         const newId = this.emittors.length;
-        const data = new DEmittor(newId, src.effectSet.selfEffect.sourceKey);
+        const data = new DEmittor(newId, src.effectSet.selfEffect.key);
         data.copyFrom(src);
         this.emittors.push(data);
         return data;
@@ -713,5 +723,14 @@ export class MRData
 
     public static verify(): void {
         this.entities.forEach(x => x.verify());
+    }
+
+    public static findHelper<T>(list: T[], pattern: string, predicate: (x: T) => boolean): T | undefined {
+        const id = parseInt(pattern);
+        if (!isNaN(id)) 
+            return list[id];
+        else {
+            return list.find(predicate);
+        }
     }
 }

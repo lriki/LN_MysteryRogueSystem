@@ -34,7 +34,7 @@ export class DFlavorEffect {
     /** 再生するモーションの ID */
     public motionId: DSequelId;
 
-    public constructor(options?: IFlavorEffect) {
+    public constructor(options?: IFlavorEffectProps) {
         options = options || {};
         if (options.text === undefined) {
             this.text = [];
@@ -46,12 +46,19 @@ export class DFlavorEffect {
             this.text = [options.text];
         }
         this.sound = options.sound ? new DSound(options.sound) : undefined;
-        this.rmmzAnimationId = options.rmmzAnimationId ?? 0;
+        this.rmmzAnimationId = options.animationId ?? 0;
         this.motionId = options.motionId ?? 0;
+    }
+
+    // utility
+    public static fromRmmzAnimationId(rmmzAnimationId: number): DFlavorEffect {
+        const result = new DFlavorEffect();
+        result.rmmzAnimationId = rmmzAnimationId;
+        return result;
     }
 }
 
-export interface IFlavorEffect {
+export interface IFlavorEffectProps {
     /** ログ表示テキスト (%1=self, %2=パラメータ名, %3=変化量の絶対値, %4=古い値, %5=新しい値) */
     text?: string | string[] | undefined;
 
@@ -59,7 +66,7 @@ export interface IFlavorEffect {
     sound?: ISound | undefined;
 
     /** 再生するアニメーションの ID */
-    rmmzAnimationId?: number;
+    animationId?: number;
     
     /** 再生するモーションの ID */
     motionId?: DSequelId;

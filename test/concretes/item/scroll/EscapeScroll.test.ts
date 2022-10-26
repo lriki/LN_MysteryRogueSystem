@@ -32,7 +32,7 @@ test("concretes.item.EscapeScroll.Basic", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
-    const initialHP = enemy1.actualParam(MRBasics.params.hp);
+    const initialHP = enemy1.getActualParam(MRBasics.params.hp);
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
@@ -48,7 +48,7 @@ test("concretes.item.EscapeScroll.Basic", () => {
         
         MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
-        expect(initialHP - enemy1.actualParam(MRBasics.params.hp)).toBe(1);  // 1ダメージを受けているはず
+        expect(initialHP - enemy1.getActualParam(MRBasics.params.hp)).toBe(1);  // 1ダメージを受けているはず
         expect(item2.isDestroyed()).toBe(true); // item2 は消える
     }
 

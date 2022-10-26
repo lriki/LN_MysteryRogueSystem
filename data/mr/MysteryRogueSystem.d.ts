@@ -1474,6 +1474,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
   import { DSubEntityFindKey, DSpecificEffectId, DBlockLayerKind, DBlockLayerScope, DEntityKindId, DRaceId, DAttackElementId, DEffectId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   import { DEntityId } from "MysteryRogueSystem/ts/mr/data/DEntity";
   import { DParameterId } from "ts/mr/data/DCommon";
+  import { DFlavorEffect, IFlavorEffectProps } from "MysteryRogueSystem/ts/mr/data/DFlavorEffect";
   export enum DParameterEffectApplyType {
       /** なし */
       None = 0,
@@ -1487,7 +1488,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
   export enum DValuePoint {
       Current = 0,
       Minimum = 1,
-      Maximum = 2
+      Growth = 2
   }
   export class DParameterQualifying {
       _parameterId: DParameterId;
@@ -1594,22 +1595,23 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
       constructor();
   }
   export enum DBuffMode {
-      Strength = 0,
-      Weakness = 1
+      Strength = "strength",
+      Weakness = "weakness"
   }
-  export enum DBuffOp {
+  export enum DBuffType {
       Add = 0,
       Mul = 1
   }
+  export enum DBuffLevelOp {
+      Set = 0,
+      Add = 1
+  }
   export interface DParamBuff {
       paramId: DParameterId;
-      mode: DBuffMode;
+      type: DBuffType;
+      levelType: DBuffLevelOp;
       level: number;
-      levelType: LStateLevelType;
-      op: DBuffOp;
       turn: number;
-  }
-  export interface DQualifyings {
   }
   export interface DSpecialEffectRef {
       specialEffectId: DSpecificEffectId;
@@ -1625,17 +1627,11 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
       fallback: boolean;
   }
   export class DEffect {
-      id: DEffectId;
-      sourceKey: string;
+      readonly id: DEffectId;
+      readonly key: string;
       subEntityFindKey: DSubEntityFindKey;
       conditions: DEffectConditions;
-      /**
-       * 対象へダメージを与えるときにクリティカル判定を行うかかどうか。
-       * 前方3方向など複数攻撃対象がいる場合は個別にクリティカルが発生することになる。
-       * 攻撃の発生元での会心判定は Action として行うこと。
-       *
-       * IDataSkill.damage.critical
-       */
+      /** @see {@link IEffectProps.critical} */
       critical: boolean;
       /**
         * IDataSkill.successRate
@@ -1648,8 +1644,11 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
         * ターゲット側アニメーション。
         * なお、ユーザー側アニメーションは Effect ではなく Item や Skill 側に付く点に注意。
         * Item が複数の Effect を持つときでも、ユーザー側は Item 自体に対応する見た目の動作をとる。
+        *
+        * undefined はデフォルトのアニメーションを使う。
+        * null はアニメーションを再生しないことを示す。
         */
-      rmmzAnimationId: number;
+      flavorEffect: DFlavorEffect | undefined | null;
       /**
         * IDataSkill.damage
         * IDataItem.damage
@@ -1675,7 +1674,8 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
        * こちらはレベルと共に指定できる。
        */
       buffQualifying: DParamBuff[];
-      constructor(id: DEffectId, sourceKey: string);
+      constructor(id: DEffectId, key: string);
+      applyProps(props: IEffectProps): void;
       copyFrom(src: DEffect): void;
       hasAnyValidEffect(): boolean;
       hasCondition(): boolean;
@@ -1718,6 +1718,33 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
       addEffect(value: DEffect): void;
       copyFrom(src: DEffectSet): void;
       hitType(): DEffectHitType;
+  }
+  export interface IEffectProps {
+      /**
+       * 対象へダメージを与えるときにクリティカル判定を行うかかどうか。
+       *
+       * 前方3方向など複数攻撃対象がいる場合は個別にクリティカルが発生することになる。
+       * 攻撃の発生元での会心判定は Action として行うこと。
+       *
+       * IDataSkill.damage.critical
+       */
+      critical?: boolean;
+      /**
+       * パラメータへのバフ・デバフ効果。
+       */
+      parameterBuffs?: IParameterBuffEffectProps[];
+      /**
+       * この Effect が発生するときに再生する FlavorEffect。
+       */
+      flavorEffect?: IFlavorEffectProps;
+  }
+  export interface IParameterBuffEffectProps {
+      parameterKey: string;
+      type: ("constant" | "ratio");
+      /** (省略した場合は add) */
+      levelOp?: ("add" | "set");
+      level: number;
+      turn: number;
   }
 
 }
@@ -1845,6 +1872,15 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEntity' {
        *
        * ひとつも登録されていない場合は何も起こらないが、Behavior への通知は行われる。
        * これによって、 Emittor に依らない特殊効果をコードで実装することもできる。
+       *
+       * Emittor と Reaction は違うもの？
+       * ----------
+       * 同一にはしない。1つの Emittor は、複数の Reaction に反応することができる。
+       * これは例えば、アイテムを使った時と投げ当てた時に同じ効果を起こすということを表現するため。
+       * ただ、v0.7.0 時点では、吹き飛ばしの杖が吹き飛ばしスキルの効果を参照しているだけなので、十分に活用できているとは言い難い。
+       * 草系アイテムは使った時と投げ合当てた時で同様の効果を起こすが、食べた時はFPも回復するので、今は cloneEmittor して使っている。
+       * いずれにしても、Reaction は Emittor と Action(コマンド) を追加情報とともに紐づけるものであるが、
+       * Emittor は Action(コマンド) とは全く別物であるため、くっつけないほうがよいだろう。
        */
       private _emittorIds;
       primariyUse: boolean;
@@ -2134,15 +2170,16 @@ declare module 'MysteryRogueSystem/ts/mr/data/DFlavorEffect' {
       rmmzAnimationId: number;
       /** 再生するモーションの ID */
       motionId: DSequelId;
-      constructor(options?: IFlavorEffect);
+      constructor(options?: IFlavorEffectProps);
+      static fromRmmzAnimationId(rmmzAnimationId: number): DFlavorEffect;
   }
-  export interface IFlavorEffect {
+  export interface IFlavorEffectProps {
       /** ログ表示テキスト (%1=self, %2=パラメータ名, %3=変化量の絶対値, %4=古い値, %5=新しい値) */
       text?: string | string[] | undefined;
       /** 再生する効果音 */
       sound?: ISound | undefined;
       /** 再生するアニメーションの ID */
-      rmmzAnimationId?: number;
+      animationId?: number;
       /** 再生するモーションの ID */
       motionId?: DSequelId;
   }
@@ -2172,6 +2209,9 @@ declare module 'MysteryRogueSystem/ts/mr/data/DHelper' {
       static getAutotileKind(tileId: number): number;
       static autotileKindToTileId(autotileKind: number): number;
       static isWallSideAutoTile(autotileKind: number): boolean;
+      static stringToEnum<T>(value: string | undefined, pattern: {
+          [key: string]: T;
+      }): T;
       private static checkItemScope;
       static isForOpponent(itemScope: DRmmzEffectScope): boolean;
       static isForAliveFriend(itemScope: DRmmzEffectScope): boolean;
@@ -2525,9 +2565,13 @@ declare module 'MysteryRogueSystem/ts/mr/data/DParameter' {
   import { DParameterId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   import { DValuePoint } from "MysteryRogueSystem/ts/mr/data/DEffect";
   import { DFactionType } from "MysteryRogueSystem/ts/mr/data/DFaction";
-  import { DFlavorEffect, IFlavorEffect } from "MysteryRogueSystem/ts/mr/data/DFlavorEffect";
+  import { DFlavorEffect, IFlavorEffectProps } from "MysteryRogueSystem/ts/mr/data/DFlavorEffect";
   export type DXParamId = number;
   export type DSParamId = number;
+  export enum DParameterType {
+      Normal = 0,
+      Dependent = 1
+  }
   export enum DParamMessageValueSource {
       Relative = 0,
       Absolute = 1
@@ -2625,6 +2669,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DParameter' {
       /** Name */
       readonly key: string;
       readonly code: string;
+      type: DParameterType;
       displayName: string;
       displayNameMaximum: string;
       /** RMMZ 標準パラメータであるか。敵味方にかかわらず、すべての Battler はこのパラメータインスタンスを持つ。0 は HP. -1 が無効値。 */
@@ -2634,8 +2679,10 @@ declare module 'MysteryRogueSystem/ts/mr/data/DParameter' {
       /** 初期値。undefined の場合、Ideal.
        * Level なら 1, Exp なら 0, HP なら Ideal など。 */
       initialValue: number | undefined;
-      minValue: number;
-      maxValue: number;
+      minEffortLimit: number;
+      maxEffortLimit: number;
+      minLimit: number;
+      maxLimit: number;
       /** [全回復] の対象とするか */
       recoverTarget: boolean;
       magnification: number;
@@ -2655,19 +2702,26 @@ declare module 'MysteryRogueSystem/ts/mr/data/DParameter' {
       /** @deprecated */
       opponentSideMessages: DParamMessage[];
       parameterFlavorEffects: DParameterFlavorEffect[];
-      static makeBuiltin(id: DParameterId, code: string, displayName: string, displayNameMaximun: string, battlerParamId: number, initialIdealValue: number, minValue: number, maxValue: number, recoverTarget: boolean): DParameter;
+      allowDamage: boolean;
+      static makeBuiltin(id: DParameterId, code: string, displayName: string, displayNameMaximun: string, battlerParamId: number, initialIdealValue: number, minLimit: number, maxLimit: number, recoverTarget: boolean): DParameter;
       constructor(id: DParameterId, key: string, displayName: string);
       makeDisplayValue(value: number): number;
       getParameterFlavorEffectByLooksFaction(value: DFactionType): DParameterFlavorEffect[];
       addFlavorEffect(options: IParameterFlavorEffect): DParameterFlavorEffect;
       addTextFlavorEffect(looksFaction: DFactionType, applyTarget: DValuePoint, addition: DValueAddition, text: string): DParameterFlavorEffect;
   }
+  export interface IParameterProps {
+      /** パラメータの識別子です。ダメージ計算式での "a.atk" のように、. に続けて指定できる、パラメータの名前です。英数字とする必要があります。 */
+      /** パラメータの表示名です。 GUI に表示する名前です。 */
+      name?: string;
+      flavorEffects?: IParameterFlavorEffect[];
+  }
   export interface IParameterFlavorEffect {
       looksFaction?: DFactionType;
       point?: DValuePoint;
       addition?: DValueAddition;
       conditionFormula?: string;
-      flavorEffect: IFlavorEffect;
+      flavorEffect: IFlavorEffectProps;
   }
 
 }
@@ -2790,7 +2844,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DSkill' {
   import { DSpecificEffectId as DSpecialEffectId, DSkillId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   import { DRmmzEffectScope } from "MysteryRogueSystem/ts/mr/data/DEffect";
   import { DEmittor, DEmittorId } from "MysteryRogueSystem/ts/mr/data/DEmittor";
-  import { DFlavorEffect, IFlavorEffect } from "MysteryRogueSystem/ts/mr/data/DFlavorEffect";
+  import { DFlavorEffect, IFlavorEffectProps } from "MysteryRogueSystem/ts/mr/data/DFlavorEffect";
   export class DSkill {
       /** ID (0 is Invalid). */
       readonly id: DSkillId;
@@ -2812,7 +2866,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DSkill' {
       flavorEffect: DFlavorEffect | undefined;
       constructor(id: DSkillId, key: string);
       emittor(): DEmittor;
-      setFlavorEffect(options: IFlavorEffect): void;
+      setFlavorEffect(options: IFlavorEffectProps): void;
   }
   export class DSpecialEffect {
       id: DSpecialEffectId;
@@ -2955,6 +3009,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DStateGroup' {
 declare module 'MysteryRogueSystem/ts/mr/data/DSystem' {
   import { DSkillId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   import { DEntityId } from "MysteryRogueSystem/ts/mr/data/DEntity";
+  import { DFlavorEffect } from "MysteryRogueSystem/ts/mr/data/DFlavorEffect";
   import { DStateId } from "MysteryRogueSystem/ts/mr/data/DState";
   import { DFactionId } from "MysteryRogueSystem/ts/mr/data/MRData";
   export interface DSystemFactions {
@@ -2989,6 +3044,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DSystem' {
       fallbackItemEntityId: DEntityId;
       fallbackGoldEntityId: DEntityId;
       initialPartyMembers: DEntityId[];
+      readonly bareHandsFlavorEffect: DFlavorEffect;
       constructor();
       link(testMode: boolean): void;
   }
@@ -3360,6 +3416,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/importers/DMetadataParser' {
   import { DBehaviorInstantiation } from "MysteryRogueSystem/ts/mr/data/DEntityProperties";
   export class DMetadata {
       key: string;
+      effectKey: string | undefined;
       type: string;
       kind: string;
       capacity: string | undefined;
@@ -3377,10 +3434,23 @@ declare module 'MysteryRogueSystem/ts/mr/data/importers/DMetadataParser' {
   }
 
 }
+declare module 'MysteryRogueSystem/ts/mr/data/importers/DSetupScripEvaluator' {
+  import { db } from "MysteryRogueSystem/ts/mr/data/importers/DSetupScript";
+  import { IEffectProps, IParameterBuffEffectProps } from "MysteryRogueSystem/ts/mr/data/DEffect";
+  import { IFlavorEffectProps } from "MysteryRogueSystem/ts/mr/data/DFlavorEffect";
+  global {
+      function Effect(props: IEffectProps): IEffectProps;
+      function ParameterBuffEffect(props: IParameterBuffEffectProps): IParameterBuffEffectProps;
+      function FlavorEffect(props: IFlavorEffectProps): IFlavorEffectProps;
+  }
+  export function evalScript(obj: db, script: string): void;
+
+}
 declare module 'MysteryRogueSystem/ts/mr/data/importers/DSetupScript' {
   import { DEntity } from "MysteryRogueSystem/ts/mr/data/DEntity";
   import { DParameter } from "MysteryRogueSystem/ts/mr/data/DParameter";
   import { DSkill } from "MysteryRogueSystem/ts/mr/data/DSkill";
+  import { IEffectProps } from "MysteryRogueSystem/ts/mr/data/DEffect";
   export interface DSParameters {
       setup: (parameter: DParameter) => void;
   }
@@ -3400,12 +3470,17 @@ declare module 'MysteryRogueSystem/ts/mr/data/importers/DSetupScript' {
       static entities: {
           [key: string]: DSEntity;
       };
+      static effects: {
+          [key: string]: IEffectProps;
+      } | undefined;
   }
   export class DSetupScript {
       constructor();
       addScript(script: string): void;
       registerData(): void;
       setupData(): void;
+      private createEffects;
+      private setupEffects;
       setupItem(entity: DEntity): void;
   }
 
@@ -3424,6 +3499,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/index' {
   export * from "MysteryRogueSystem/ts/mr/data/DFlavorEffect";
   export * from "MysteryRogueSystem/ts/mr/data/DParameter";
   export * from "MysteryRogueSystem/ts/mr/data/importers/DSetupScript";
+  export * from "MysteryRogueSystem/ts/mr/data/importers/DSetupScripEvaluator";
   export * from "MysteryRogueSystem/ts/mr/data/DTextManager";
   export * from "MysteryRogueSystem/ts/mr/data/MRData";
   export * from "MysteryRogueSystem/ts/mr/data/MRBasics";
@@ -3532,7 +3608,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/MRData' {
   import { DFloorPreset, DTerrainSetting, DTerrainShape } from "MysteryRogueSystem/ts/mr/data/DTerrainPreset";
   import { DCommand } from "MysteryRogueSystem/ts/mr/data/DCommand";
   import { DEffect } from "MysteryRogueSystem/ts/mr/data/DEffect";
-  import { DActionId } from "MysteryRogueSystem/ts/mr/data/DCommon";
+  import { DParameterId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   import { DMap } from "MysteryRogueSystem/ts/mr/data/DMap";
   export type DFactionId = number;
   /**
@@ -3618,7 +3694,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/MRData' {
       static newCommand(name: string): DCommand;
       static addSequel(name: string): DSequelId;
       static addParams(key: string, displayName: string): DParameter;
-      static parameter(key: DActionId | string): DParameter;
+      static parameter(key: DParameterId | string): DParameter;
       static newEntity(): DEntity;
       static findEntity(pattern: string): DEntity | undefined;
       static getEntity(pattern: string): DEntity;
@@ -3628,6 +3704,8 @@ declare module 'MysteryRogueSystem/ts/mr/data/MRData' {
       static getMap(pattern: string): DMap;
       static newEffect(key: string): DEffect;
       static cloneEffect(src: DEffect): DEffect;
+      static findEffect(pattern: string): DEffect | undefined;
+      static getEffect(pattern: string): DEffect;
       static newEmittor(sourceKey: string): DEmittor;
       static cloneEmittor(src: DEmittor): DEmittor;
       static getEmittorById(id: DEmittorId): DEmittor;
@@ -3670,6 +3748,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/MRData' {
       static findSkill(pattern: string): DSkill | undefined;
       static getSkill(pattern: string): DSkill;
       static verify(): void;
+      static findHelper<T>(list: T[], pattern: string, predicate: (x: T) => boolean): T | undefined;
   }
 
 }
@@ -4025,7 +4104,26 @@ declare module 'MysteryRogueSystem/ts/mr/data/predefineds/DBasicParameters' {
       remaining: DParameterId;
       capacity: DParameterId;
       gold: DParameterId;
+      /**
+       * レベル
+       *
+       * Level は IdealPlus で変動させる。IdealBase, Damage は常に 0 でなければならない。
+       * Level にはバフを適用できる。例えば「一定ターンの間、レベルが半分になる」効果を実装できる。
+       * しかしこのとき、次のレベルに必要な Exp を計算する際のレベル値を ActualValue から取得してしまうと、半減したレベルで計算してしまい、
+       * 現在の Exp と次のレベルに必要な Exp の矛盾が発生してしまう。
+       * このためバフ適用前の値である IdealValue からレベルを取得する必要がある。
+       *
+       * Parameter としては制限の多いものとなるが、 Parameter 扱いしておくことで増減やダメージ計算式のオペランドとして利用する際に
+       * レベル専用の処理が不要となるため、値は汎用的に利用できるようになる。
+       */
       level: DParameterId;
+      /**
+       * 経験値
+       *
+       * Exp は ActualValue で変動させる。IdelBase, IdealPlus は常に 0 でなければならない。
+       * Param 扱いするのは、経験値を増加させるアイテムの実装を容易にするため。
+       * 例えば「経験値を 500 与える」効果は、HP 等と同じように回復効果として設定できるようになり、 Exp 専用の処理は不要となる。
+       */
       exp: DParameterId;
   }
   export interface DBasicXParams {
@@ -5290,6 +5388,7 @@ declare module 'MysteryRogueSystem/ts/mr/lively/behaviors/LBattlerBehavior' {
   import { LParamSet } from "MysteryRogueSystem/ts/mr/lively/LParam";
   import { SEffectorFact } from "ts/mr/system/SEffectApplyer";
   import { LReaction } from "MysteryRogueSystem/ts/mr/lively/LCommon";
+  import { DFlavorEffect } from "ts/mr/data/DFlavorEffect";
   export class LBattlerBehavior extends LBehavior {
       constructor();
       clone(newOwner: LEntity): LBehavior;
@@ -5297,8 +5396,8 @@ declare module 'MysteryRogueSystem/ts/mr/lively/behaviors/LBattlerBehavior' {
       onAttached(self: LEntity): void;
       onQueryReactions(self: LEntity, reactions: LReaction[]): void;
       isGuard(): boolean;
-      attackAnimationId(): number;
-      bareHandsAnimationId(): number;
+      attackAnimationId(): DFlavorEffect;
+      bareHandsAnimationId(): DFlavorEffect;
       onCollectEffector(owner: LEntity, data: SEffectorFact): void;
       onPermanentDeath(self: LEntity, cctx: SCommandContext): SCommandResponse;
   }
@@ -5527,7 +5626,12 @@ declare module 'MysteryRogueSystem/ts/mr/lively/behaviors/LBehavior' {
       onQueryReactions(self: LEntity, reactions: LReaction[]): void;
       onQueryCharacterAI(characterAIs: LCharacterAI[]): void;
       onQueryAttackAnimationId(self: LEntity, index: number): DAnimationId | undefined;
+      onParamIdealPlusChanged(self: LEntity, paramId: DParameterId, newValue: number, oldValue: number): void;
       onParamChanged(self: LEntity, paramId: DParameterId, newValue: number, oldValue: number): void;
+      /** 指定された依存パラメータの値を取得する。 */
+      onGetDependentParameterIdealBaseValue(self: LEntity, parameterId: DParameterId): number | undefined;
+      /** 指定された依存パラメータの値を設定する。 */
+      onSetDependentParameterIdealBaseValue(self: LEntity, parameterId: DParameterId, value: number): void;
       onRefreshConditions(self: LEntity): void;
       onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult;
       onCommand(self: LEntity, cctx: SCommandContext, chain: SSubTaskChain, cmd: SCommand): SCommandResponse;
@@ -5621,6 +5725,7 @@ declare module 'MysteryRogueSystem/ts/mr/lively/behaviors/LDecisionBehavior' {
   import { DecisionPhase, LBehavior } from "MysteryRogueSystem/ts/mr/lively/behaviors/LBehavior";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { LCharacterAI } from "MysteryRogueSystem/ts/mr/lively/ai/LCharacterAI";
+  import { LActivity } from "MysteryRogueSystem/ts/mr/lively/activities/LActivity";
   import { LCharacterAI_Normal } from "MysteryRogueSystem/ts/mr/lively/ai/LStandardAI";
   /**
    * Scheduler から通知された各タイミングにおいて、行動決定を行う Behavior.
@@ -5630,6 +5735,7 @@ declare module 'MysteryRogueSystem/ts/mr/lively/behaviors/LDecisionBehavior' {
    */
   export class LDecisionBehavior extends LBehavior {
       _characterAI: LCharacterAI_Normal;
+      forceMajorActivity: LActivity | undefined;
       clone(newOwner: LEntity): LBehavior;
       characterAI(): LCharacterAI_Normal;
       onQueryCharacterAI(characterAIs: LCharacterAI[]): void;
@@ -5819,12 +5925,14 @@ declare module 'MysteryRogueSystem/ts/mr/lively/behaviors/LExperienceBehavior' {
       clone(newOwner: LEntity): LBehavior;
       onAttached(self: LEntity): void;
       onResetStatus(self: LEntity): void;
+      onParamIdealPlusChanged(self: LEntity, paramId: DParameterId, newValue: number, oldValue: number): void;
       onParamChanged(self: LEntity, paramId: DParameterId, newValue: number, oldValue: number): void;
       onRefreshConditions(self: LEntity): void;
       private resetLevel;
       level(self: LEntity): number;
-      setLevel(self: LEntity, value: number): void;
       currentExp(self: LEntity): number;
+      setLevel(self: LEntity, value: number): void;
+      private gainLevel;
       nextLevelExp(self: LEntity): number;
       private actor;
       private maxLevel;
@@ -5832,9 +5940,11 @@ declare module 'MysteryRogueSystem/ts/mr/lively/behaviors/LExperienceBehavior' {
       private currentClass;
       expForLevel(self: LEntity, level: number): number;
       private currentLevelExp;
-      private refreshLevel;
-      private levelUp;
-      private levelDown;
+      setExp(self: LEntity, value: number): void;
+      private refreshExpFromLevel;
+      private refreshLevelFromExp;
+      private onLevelUp;
+      private onLevelDown;
   }
 
 }
@@ -6472,6 +6582,7 @@ declare module 'MysteryRogueSystem/ts/mr/lively/Extensions' {
           front(): T;
           back(): T;
           backOrUndefined(): T | undefined;
+          binarySearchIndex(target: T): number;
       }
   }
   export {};
@@ -6837,6 +6948,12 @@ declare module 'MysteryRogueSystem/ts/mr/lively/LEntity' {
       min: number;
       max: number;
   }
+  export enum LParamChangedAction {
+      None = 0,
+      WithRefresh = 2,
+      WithNotification = 4,
+      All = 6
+  }
   /**
    * [2021/5/27] 祝福・呪い・封印
    * ----------
@@ -6968,20 +7085,21 @@ declare module 'MysteryRogueSystem/ts/mr/lively/LEntity' {
        * 拠点へ戻ったときなどで完全リセットしたいときに使う。
        */
       resetStatus(): void;
-      params(): LParamSet;
-      idealParam(paramId: DParameterId): number;
-      private idealParamBase;
-      idealParamPlus(paramId: DParameterId): number;
-      idealParamBasePlus(paramId: DParameterId): number;
-      idealParamRate(paramId: DParameterId): number;
-      paramBuffRate(paramId: DParameterId): number;
-      paramBuffPlus(paramId: DParameterId): number;
-      paramMin(paramId: DParameterId): number;
-      paramMax(paramId: DParameterId): number;
-      actualParam(paramId: DParameterId): number;
+      get params(): LParamSet;
+      /**
+       * 装備効果やバフが反映された、実際の最大値 （UIの表示やダメージ計算に使用する、一般的な最大値） を取得する。
+       * @param paramId
+       */
+      getParamActualMax(paramId: DParameterId): number;
+      getEffortValue(paramId: DParameterId): number;
+      setEffortValue(paramId: DParameterId, value: number, action?: LParamChangedAction): void;
+      getActualParam(paramId: DParameterId): number;
       /** 直接設定 */
-      setActualParam(paramId: DParameterId, value: number): void;
+      setParamCurrentValue(paramId: DParameterId, value: number): void;
+      private notifyParamIdealPlusChanged;
       private notifyParamChanged;
+      private getDependentParameterCurrentValue;
+      private setDependentParameterCurrentValue;
       setActualDamgeParam(paramId: DParameterId, value: number): void;
       gainActualParam(paramId: DParameterId, value: number, refresh: boolean): void;
       private resetInitialActualParam;
@@ -7649,32 +7767,112 @@ declare module 'MysteryRogueSystem/ts/mr/lively/LParam' {
       level: number;
       turn: number;
   }
+  /**
+   * パラメータひとつ分の情報を保持するクラス。
+   *
+   * コアスクリプトでは Level, Exp, HP, MP, TP は Param ではない。
+   * MaxHP, MaxMP は Param である。
+   * 例えば「HP の param」は MaxHP のことである。
+   *
+   * パラメータの仕様
+   * ----------
+   *
+   * -9999 ...  -10                  0                        11                 20            ... 9999
+   * +          +....................+------------------------+..................+                 +
+   * | . . . .  |                    |                        |                  |     . . . . . . |
+   * +          +....................+------------------------+..................+                 +
+   *            |<-- --IdealMin -----|-- IdealMax(Base+Effort) -->|
+   *                                                              |- Rate&Buff ->|
+   *            |<--- ActualMinValue |--------- ActualMaxValue ----------------->|
+   *                                                          |<---- Damage -----|
+   *                                 |<---- ActualValue ----->|
+   * |<---- MinLimit                 |                                                MaxLimit --->|
+   *
+   *
+   * ### MinLimit, MaxLimit (下限値, 上限値)
+   * システム上とりえる最小値、最大値。
+   * ユニットがどれほど成長・弱体化しても、この範囲を超えることは無い。
+   *
+   * ### IdealMinValue, IdealMaxValue (基本値の下限値, 基本値の上限値)
+   * ユニットのレベルによって変化する値の範囲。
+   * IdealMaxValue は、コアスクリプトの paramBasePlus() に該当する。
+   * - Base: アクターの場合、レベルによって変化する値。エネミーの場合はエディタで入力された値。
+   * - Plus: 装備による追加値 + 成長アイテムによる永続的な追加値。
+   *
+   * IdealMinValue は一般的には 0 であるが、装備の「つよさ」の最小値はその武器の攻撃力をマイナスにしたものとなる。
+   *
+   * ### ActualMinValue, ActualMaxValue (実際の下限値, 実際の上限値)
+   * ActualMaxValue は コアスクリプトの param() に該当する。IdealMaxValue に対して、Trait等によるボーナスやバフを適用したもの。
+   * ActualMinValue は今のところ、IdealMinValue と同じ値である。
+   *
+   * ### ActualValue
+   * ActualMaxValue から Damage を減算したもの。
+   * ダメージ計算に用いたり、ステータス画面に表示したりするもの。
+   *
+   * Refresh タイミング
+   * ----------
+   * コアスクリプトでは setHP() などで値が変わると、refresh() が呼ばれる。
+   * 対して MRシステムでは、EffectContext による一連の処理が終わったタイミングで refresh() が呼ばれる。
+   * この refresh 時にステートの付け外しが行われるが、その時にも IdealMaxValue の評価などが毎回行われるため、非常に処理に時間がかかる。
+   *
+   * ダメージ値は減算方式
+   * ----------
+   * 現在値は、最大値からダメージ値を減算することで求める。
+   * 本システムは atk,def などのすべての基本パラメータは HP と同じように0~最大値の間で変化が起こるようになっているが、
+   * 増分計算だと装備品の有無やモンスターの特技、能力の成長アイテムなどで変わるときにその前後の変化量から現在値を調整する処理が必要になり複雑になる。
+   *
+   * 例えば、HP最大時に薬草アイテムを使って、増えた分の HP だけ現在値を増やす処理。
+   * 原作薬草だと 2 増えるが、最大 HP がバフを受けている場合、もっと大きく増える。
+   * 最大 HP が増えた時は、HP を全快させるのが自然だろう。
+   * しかしそのような処理にすると、例えばちからの最大値だけ増やすアイテムを使った時に、ちからを全快できたりする。
+   * 個々のパラメータごとに処理を変えるか、あるいは Effect 側に回復の有無を設定するか… いずれにしても設定が増えることになってしまう。
+   *
+   * MRシステムはツクール標準と比べて、パラメータシステムがかなり複雑となっている。
+   * 加算方式の場合、ただでさえ問題調査が難しくなりがちな副作用に起因した問題が、さらに増えることが予想される。
+   *
+   * 減算方式のデメリットは、最大HPが減ったときに、現在のダメージ量が新しい最大HPを上回る場合があること。
+   * これについては値 0 になることを許可するか、 1 になるように補正する。
+   */
   export class LParam {
-      private _dataId;
-      private _actualParamDamge;
-      private _idealParamPlus;
+      readonly parameterId: DParameterId;
+      private _damageValue;
+      private _effortValue;
       private _buff;
       private _initialActualValue;
-      private _addBuff;
-      private _mulBuff;
+      private _constantBuff;
+      private _ratioBuff;
+      private _damageValueChanged;
       constructor(id: DParameterId);
-      clone(): LParam;
       reset(): void;
-      parameterId(): DParameterId;
-      data(): DParameter;
+      clone(): LParam;
+      get data(): DParameter;
+      get isDependent(): boolean;
+      get isAllowDamage(): boolean;
+      getMinLimit(): number;
+      getMaxLimit(): number;
+      effortValue(): number;
+      setEffortValue(value: number): void;
+      gainEffortValue(value: number): void;
+      clearEffortValue(): void;
+      getIdealMinValue(self: LEntity): number;
+      getIdealMaxValue(self: LEntity): number;
+      private getIdealMaxBase;
+      private getIdealMaxPlus;
+      getActualMin(self: LEntity): number;
+      getActualMax(self: LEntity): number;
+      private idealParamRate;
+      private paramBuffRate;
       actualParamDamge(): number;
-      getAddBuff(): LParamBuff;
-      getMulBuff(): LParamBuff;
+      get isDamageValueChanged(): boolean;
+      clearDamageValueChanged(): void;
       setActualDamgeParam(value: number): void;
       gainActualParam(value: number): void;
-      idealParamPlus(): number;
-      setIdealParamPlus(value: number): void;
-      gainIdealParamPlus(value: number): void;
+      getConstantBuff(): LParamBuff;
+      getRatioBuff(): LParamBuff;
       buff(): number;
       buffPlus(): number;
       buffRate(): number;
       clearDamage(owner: LEntity): void;
-      clearParamPlus(): void;
       resetInitialActualValue(value: number): void;
       initialActualValue(): number;
       addBuff(buff: DParamBuff): void;
@@ -7684,6 +7882,12 @@ declare module 'MysteryRogueSystem/ts/mr/lively/LParam' {
   export class LParamSet {
       private _params;
       constructor();
+      getMinLimit(parameterId: DParameterId): number;
+      getMaxLimit(parameterId: DParameterId): number;
+      getIdealMinValue(self: LEntity, parameterId: DParameterId): number;
+      getIdealMaxValue(self: LEntity, parameterId: DParameterId): number;
+      getActualMin(self: LEntity, parameterId: DParameterId): number;
+      getActualMax(self: LEntity, parameterId: DParameterId): number;
       copyTo(other: LParamSet): void;
       clear(): void;
       acquireParam(paramId: DParameterId): LParam;
@@ -7692,9 +7896,8 @@ declare module 'MysteryRogueSystem/ts/mr/lively/LParam' {
       params(): (LParam | undefined)[];
       param(paramId: DParameterId): LParam | undefined;
       hasParam(paramId: DParameterId): boolean;
-      getParam(paramId: DParameterId): LParam;
-      updateBuffs(owner: LEntity): void;
-      refresh(owner: LEntity): void;
+      updateBuffs(self: LEntity): void;
+      refresh(self: LEntity): void;
   }
   export {};
 

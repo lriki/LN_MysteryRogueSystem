@@ -39,7 +39,7 @@ test("Items.Arrow", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_飴色スライム_A").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, floorId, 13, 10);
-    const initialHP = enemy1.actualParam(MRBasics.params.hp);
+    const initialHP = enemy1.getActualParam(MRBasics.params.hp);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -66,7 +66,7 @@ test("Items.Arrow", () => {
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const hp = enemy1.actualParam(MRBasics.params.hp);
+    const hp = enemy1.getActualParam(MRBasics.params.hp);
     expect(hp < initialHP).toBeTruthy();      // ダメージを受けているはず
     expect(item1._stackCount).toBe(stack1 + stack2 - 1);      // スタックが減っている
 });

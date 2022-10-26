@@ -94,7 +94,7 @@ export class LEquipmentBehavior extends LBehavior {
         const data = self.data;
 
         if (data.upgradeMax > 0) {
-            self.params().acquireParam(MRBasics.params.upgradeValue);
+            self.params.acquireParam(MRBasics.params.upgradeValue);
         }
     }
     

@@ -54,7 +54,27 @@ export interface DBasicParameters {
     capacity: DParameterId; // (壺の)容量
     gold: DParameterId; // 金額 (所持金ではない。拾った時にGoldアイテムだけが持つパラメータ)
 
+    /**
+     * レベル
+     * 
+     * Level は IdealPlus で変動させる。IdealBase, Damage は常に 0 でなければならない。
+     * Level にはバフを適用できる。例えば「一定ターンの間、レベルが半分になる」効果を実装できる。
+     * しかしこのとき、次のレベルに必要な Exp を計算する際のレベル値を ActualValue から取得してしまうと、半減したレベルで計算してしまい、
+     * 現在の Exp と次のレベルに必要な Exp の矛盾が発生してしまう。
+     * このためバフ適用前の値である IdealValue からレベルを取得する必要がある。
+     * 
+     * Parameter としては制限の多いものとなるが、 Parameter 扱いしておくことで増減やダメージ計算式のオペランドとして利用する際に
+     * レベル専用の処理が不要となるため、値は汎用的に利用できるようになる。
+     */
     level: DParameterId;
+
+    /**
+     * 経験値
+     * 
+     * Exp は ActualValue で変動させる。IdelBase, IdealPlus は常に 0 でなければならない。
+     * Param 扱いするのは、経験値を増加させるアイテムの実装を容易にするため。
+     * 例えば「経験値を 500 与える」効果は、HP 等と同じように回復効果として設定できるようになり、 Exp 専用の処理は不要となる。
+     */
     exp: DParameterId;
 }
 

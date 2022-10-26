@@ -22,13 +22,13 @@ test("Survival.FP", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     player1.addState(MRData.getState("kState_UnitTest_投擲必中").id);
 
-    expect(player1.actualParam(MRBasics.params.fp)).toBe(10000); // 初期 FP は 10000
+    expect(player1.getActualParam(MRBasics.params.fp)).toBe(10000); // 初期 FP は 10000
     
     //----------------------------------------------------------------------------------------------------
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    expect(player1.actualParam(MRBasics.params.fp)).toBe(10000); // Dialog 開いた状態なので未行動。FP消費はされていない。
+    expect(player1.getActualParam(MRBasics.params.fp)).toBe(10000); // Dialog 開いた状態なので未行動。FP消費はされていない。
 
     const dialogContext = MRSystem.dialogContext;
 
@@ -40,9 +40,9 @@ test("Survival.FP", () => {
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    expect(player1.actualParam(MRBasics.params.fp)).toBe(9990);  // FP が減少していること
+    expect(player1.getActualParam(MRBasics.params.fp)).toBe(9990);  // FP が減少していること
 
-    const prevHP = player1.actualParam(MRBasics.params.hp);
+    const prevHP = player1.getActualParam(MRBasics.params.hp);
 
     //----------------------------------------------------------------------------------------------------
     // FP 0 にしてから移動してみる
@@ -53,7 +53,7 @@ test("Survival.FP", () => {
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    expect(player1.actualParam(MRBasics.params.hp)).toBe(prevHP - 1);   // HP が減少していること
+    expect(player1.getActualParam(MRBasics.params.hp)).toBe(prevHP - 1);   // HP が減少していること
 
     //----------------------------------------------------------------------------------------------------
 
@@ -68,7 +68,7 @@ test("Survival.FP", () => {
     
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-    expect(player1.actualParam(MRBasics.params.fp)).toBe(490);  // 草を食べた分だけ FP が回復していること
+    expect(player1.getActualParam(MRBasics.params.fp)).toBe(490);  // 草を食べた分だけ FP が回復していること
     // NOTE: 原作では、食料を食べた直後、9回移動すると満腹度が1減る。
     // つまり、1ターン内で食べた直後に満腹度の減算が発生している。
 
@@ -91,5 +91,5 @@ test("Survival.FP", () => {
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     expect(MRLively.world.findEntity(item2.entityId())).toBe(undefined);  // UT薬草は Player と衝突したので消滅している
-    expect(player1.actualParam(MRBasics.params.fp)).toBe(480);            // 投げ当てたときの効果は発動するが、FP は回復しない
+    expect(player1.getActualParam(MRBasics.params.fp)).toBe(480);            // 投げ当てたときの効果は発動するが、FP は回復しない
 });

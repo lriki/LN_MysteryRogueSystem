@@ -17,7 +17,7 @@ test("concretes.item.ring.PowerRing", () => {
     const floorId = TestEnv.FloorId_CharacterAI;
 
     const player1 = TestEnv.setupPlayer(floorId, 16, 4);
-    const power1 = player1.actualParam(MRBasics.params.pow);
+    const power1 = player1.getActualParam(MRBasics.params.pow);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ちからの指輪_A").id, [], "ring1"));
@@ -33,6 +33,6 @@ test("concretes.item.ring.PowerRing", () => {
     
     MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
-    const power2 = player1.actualParam(MRBasics.params.pow);
+    const power2 = player1.getActualParam(MRBasics.params.pow);
     expect(power2).toBe(power1 + 3);
 });

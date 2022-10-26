@@ -31,7 +31,7 @@ test("concretes.item.arrow.WoodArrow", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, floorId, 13, 10);
-    const initialHP = enemy1.actualParam(MRBasics.params.hp);
+    const initialHP = enemy1.getActualParam(MRBasics.params.hp);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -46,7 +46,7 @@ test("concretes.item.arrow.WoodArrow", () => {
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const hp = enemy1.actualParam(MRBasics.params.hp);
+    const hp = enemy1.getActualParam(MRBasics.params.hp);
     expect(hp < initialHP).toBeTruthy();      // ダメージを受けているはず
 });
 

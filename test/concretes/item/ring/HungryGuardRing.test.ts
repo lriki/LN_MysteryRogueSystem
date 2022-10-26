@@ -19,7 +19,7 @@ test("concretes.item.ring.HungryGuardRing.test", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
-    const fp1 = player1.actualParam(MRBasics.params.fp);
+    const fp1 = player1.getActualParam(MRBasics.params.fp);
 
     const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ハラヘラズの指輪_A").id, [], "ring1"));
     inventory.addEntity(ring1);
@@ -34,6 +34,6 @@ test("concretes.item.ring.HungryGuardRing.test", () => {
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
-    const fp2 = player1.actualParam(MRBasics.params.fp);
+    const fp2 = player1.getActualParam(MRBasics.params.fp);
     expect(fp2).toBe(fp1);  // FP は減少していない
 });

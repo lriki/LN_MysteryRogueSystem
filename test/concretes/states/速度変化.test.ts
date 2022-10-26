@@ -3,7 +3,7 @@ import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { assert } from "ts/mr/Common";
-import { DBuffMode, DBuffOp, DParamBuff, LStateLevelType } from "ts/mr/data/DEffect";
+import { DBuffLevelOp, DBuffMode, DBuffType, DParamBuff, LStateLevelType } from "ts/mr/data/DEffect";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
@@ -22,18 +22,16 @@ test("concretes.states.速度変化", () => {
     //const stateId = REData.getStateFuzzy("kState_UT速度バフ").id;
     const buff1: DParamBuff = {
         paramId: MRBasics.params.agi,
-        mode: DBuffMode.Strength,
         level: 1,
-        levelType: LStateLevelType.RelativeValue,
-        op: DBuffOp.Add,
+        levelType: DBuffLevelOp.Add,
+        type: DBuffType.Add,
         turn: 10,
     };
     const buff2: DParamBuff = {
         paramId: MRBasics.params.agi,
-        mode: DBuffMode.Strength,
         level: -1,
-        levelType: LStateLevelType.AbsoluteValue,
-        op: DBuffOp.Add,
+        levelType: DBuffLevelOp.Set,
+        type: DBuffType.Add,
         turn: 10,
     };
 
@@ -47,9 +45,9 @@ test("concretes.states.速度変化", () => {
 
     // 倍速化
     actor1.addBuff(buff1);
-    const param = actor1.params().param(MRBasics.params.agi);
+    const param = actor1.params.param(MRBasics.params.agi);
     assert(param);
-    expect(param.getAddBuff().level).toBe(1);
+    expect(param.getConstantBuff().level).toBe(1);
     expect(LScheduler2.getSpeedLevel(actor1)).toBe(2);
     expect(!!actor1.states().find(x => x.stateDataId() == MRData.getState("kState_UT鈍足").id)).toBe(false);
     expect(!!actor1.states().find(x => x.stateDataId() == MRData.getState("kState_UT倍速").id)).toBe(true);
@@ -57,7 +55,7 @@ test("concretes.states.速度変化", () => {
 
     // 3倍速化
     actor1.addBuff(buff1);
-    expect(param.getAddBuff().level).toBe(2);
+    expect(param.getConstantBuff().level).toBe(2);
     expect(LScheduler2.getSpeedLevel(actor1)).toBe(3);
     expect(!!actor1.states().find(x => x.stateDataId() == MRData.getState("kState_UT鈍足").id)).toBe(false);
     expect(!!actor1.states().find(x => x.stateDataId() == MRData.getState("kState_UT倍速").id)).toBe(false);
@@ -65,7 +63,7 @@ test("concretes.states.速度変化", () => {
     
     // 鈍足化
     actor1.addBuff(buff2);
-    expect(param.getAddBuff().level).toBe(-1);
+    expect(param.getConstantBuff().level).toBe(-1);
     expect(LScheduler2.getSpeedLevel(actor1)).toBe(-1);
     expect(!!actor1.states().find(x => x.stateDataId() == MRData.getState("kState_UT鈍足").id)).toBe(true);
     expect(!!actor1.states().find(x => x.stateDataId() == MRData.getState("kState_UT倍速").id)).toBe(false);
@@ -85,24 +83,23 @@ test("concretes.states.速度変化.remove", () => {
     TestEnv.newGame();
     const buff1: DParamBuff = {
         paramId: MRBasics.params.agi,
-        mode: DBuffMode.Strength,
         level: 1,
-        levelType: LStateLevelType.RelativeValue,
-        op: DBuffOp.Add,
+        levelType: DBuffLevelOp.Add,
+        type: DBuffType.Add,
         turn: 10,
     };
 
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     actor1.addBuff(buff1);
-    const param = actor1.params().param(MRBasics.params.agi);
+    const param = actor1.params.param(MRBasics.params.agi);
     assert(param);
 
     // 10 ターン分 シミュレーション実行
     MRSystem.scheduler.stepSimulation();
     for (let i = 0; i < 10; i++) {
         // 10 ターンの間はステートが追加されている
-        expect(param.getAddBuff().level > 0).toBe(true);
+        expect(param.getConstantBuff().level > 0).toBe(true);
 
         // 待機
         MRSystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
@@ -112,7 +109,7 @@ test("concretes.states.速度変化.remove", () => {
     }
 
     // 10 ターンで解除
-    expect(param.getAddBuff().level == 0).toBe(true);
+    expect(param.getConstantBuff().level == 0).toBe(true);
 });
 
 
@@ -120,10 +117,9 @@ test("concretes.states.速度変化.Issue1", () => {
     TestEnv.newGame();
     const buff1: DParamBuff = {
         paramId: MRBasics.params.agi,
-        mode: DBuffMode.Strength,
         level: 1,
-        levelType: LStateLevelType.RelativeValue,
-        op: DBuffOp.Add,
+        levelType: DBuffLevelOp.Add,
+        type: DBuffType.Add,
         turn: 10,
     };
 
@@ -154,9 +150,9 @@ test("concretes.states.速度変化.Issue1", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 
     expect(enemy1.mx).toBe(30);
-    const buf = actor1.params().params()[MRBasics.params.agi];
+    const buf = actor1.params.params()[MRBasics.params.agi];
     assert(buf);
-    buf.getAddBuff().turn = 2;  // テスト用に残りターン数調整。あと2回ManualAction取ると通常速度に戻るイメージ。
+    buf.getConstantBuff().turn = 2;  // テスト用に残りターン数調整。あと2回ManualAction取ると通常速度に戻るイメージ。
     wait();
     MRSystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 

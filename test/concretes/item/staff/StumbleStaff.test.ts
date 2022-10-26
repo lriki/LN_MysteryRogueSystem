@@ -52,14 +52,14 @@ test("concretes.activity.Stumble.prevention", () => {
     player1.addState(MRData.getState("kState_UT罠必中").id);
     player1.dir = 6;
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
-    const hp1 = player1.actualParam(MRBasics.params.hp);
+    const hp1 = player1.getActualParam(MRBasics.params.hp);
     
     // アイテム 入手
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_転ばぬ先の杖_A").id, [], "item1"));
     inventory.addEntity(item1);
     const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1, [], "weapon1"));
     inventory.addEntity(weapon1);
-    const rem1 = item1.actualParam(MRBasics.params.remaining);
+    const rem1 = item1.getActualParam(MRBasics.params.remaining);
 
     // trap1 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_転び石_A").id, [], "trap1"));
@@ -77,8 +77,8 @@ test("concretes.activity.Stumble.prevention", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 転倒は予防され、アイテムは落下していないこと。また杖の使用回数が減っていること。
-    const hp2 = player1.actualParam(MRBasics.params.hp);
-    const rem2 = item1.actualParam(MRBasics.params.remaining);
+    const hp2 = player1.getActualParam(MRBasics.params.hp);
+    const rem2 = item1.getActualParam(MRBasics.params.remaining);
     expect(hp2).toBe(hp1);
     expect(inventory.contains(item1)).toBe(true);
     expect(rem2).toBe(rem1 - 1);

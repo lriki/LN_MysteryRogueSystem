@@ -27,7 +27,7 @@ test("concretes.item.staff.DamageStaff.basic", () => {
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
-    const enemy1HP1 = enemy1.actualParam(MRBasics.params.hp);
+    const enemy1HP1 = enemy1.getActualParam(MRBasics.params.hp);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
@@ -40,6 +40,6 @@ test("concretes.item.staff.DamageStaff.basic", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // ダメージを受けている
-    const enemy1HP2 = enemy1.actualParam(MRBasics.params.hp);
+    const enemy1HP2 = enemy1.getActualParam(MRBasics.params.hp);
     expect(enemy1HP2 < enemy1HP1).toBeTruthy();
 });

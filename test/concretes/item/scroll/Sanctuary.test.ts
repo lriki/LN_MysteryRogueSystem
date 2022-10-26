@@ -18,7 +18,7 @@ beforeAll(() => {
 test("concretes.item.scroll.Sanctuary.NoEffect", () => {
     TestEnv.newGame();
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10, 6);
-    const hp1 = player1.actualParam(MRBasics.params.hp);
+    const hp1 = player1.getActualParam(MRBasics.params.hp);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
@@ -51,14 +51,14 @@ test("concretes.item.scroll.Sanctuary.NoEffect", () => {
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // Enemy は攻撃してくる
-    const hp2 = player1.actualParam(MRBasics.params.hp);
+    const hp2 = player1.getActualParam(MRBasics.params.hp);
     expect(hp2).toBeLessThan(hp1);
 });
 
 test("concretes.item.scroll.Sanctuary.Basic", () => {
     TestEnv.newGame();
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10, 6);
-    const hp1 = player1.actualParam(MRBasics.params.hp);
+    const hp1 = player1.getActualParam(MRBasics.params.hp);
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
 
     // enemy1
@@ -80,7 +80,7 @@ test("concretes.item.scroll.Sanctuary.Basic", () => {
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 攻撃してこない。Enemy は聖域を避け、左折の法則に従って進行方向の左前に進んでいる
-    const hp2 = player1.actualParam(MRBasics.params.hp);
+    const hp2 = player1.getActualParam(MRBasics.params.hp);
     expect(hp1).toBe(hp2);
     expect(enemy1.mx).toBe(10);
     expect(enemy1.my).toBe(11);

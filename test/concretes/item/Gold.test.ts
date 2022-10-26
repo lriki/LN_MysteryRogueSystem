@@ -36,7 +36,7 @@ test("concretes.item.Gold", () => {
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 13, 10);
-    const hp1 = enemy1.actualParam(MRBasics.params.hp);
+    const hp1 = enemy1.getActualParam(MRBasics.params.hp);
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -57,7 +57,7 @@ test("concretes.item.Gold", () => {
     MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // 投げ当てた時は、1/10 の固定ダメージ
-    const hp2 = enemy1.actualParam(MRBasics.params.hp);
+    const hp2 = enemy1.getActualParam(MRBasics.params.hp);
     expect(hp1 - hp2).toBe(20);
     expect(gold2.isDestroyed()).toBe(true);
 });

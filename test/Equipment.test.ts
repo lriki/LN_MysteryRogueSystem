@@ -225,25 +225,25 @@ test("Equipment.UpgradeValue", () => {
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const atk1 = player1.actualParam(MRBasics.params.atk);
-    const def1 = player1.actualParam(MRBasics.params.def);
+    const atk1 = player1.getActualParam(MRBasics.params.atk);
+    const def1 = player1.getActualParam(MRBasics.params.def);
     
     //----------------------------------------------------------------------------------------------------
 
     // 武器修正値+1
-    weapon1.setActualParam(MRBasics.params.upgradeValue, 1);
+    weapon1.setParamCurrentValue(MRBasics.params.upgradeValue, 1);
 
-    const atk2 = player1.actualParam(MRBasics.params.atk);
-    const def2 = player1.actualParam(MRBasics.params.def);
+    const atk2 = player1.getActualParam(MRBasics.params.atk);
+    const def2 = player1.getActualParam(MRBasics.params.def);
 
     expect(atk2 > atk1).toBe(true);
     expect(def2 == def1).toBe(true);    // def には影響していないはず
 
     // 盾修正値+1
-    shield1.setActualParam(MRBasics.params.upgradeValue, 1);
+    shield1.setParamCurrentValue(MRBasics.params.upgradeValue, 1);
 
-    const atk3 = player1.actualParam(MRBasics.params.atk);
-    const def3 = player1.actualParam(MRBasics.params.def);
+    const atk3 = player1.getActualParam(MRBasics.params.atk);
+    const def3 = player1.getActualParam(MRBasics.params.def);
 
     expect(atk3 == atk2).toBe(true);    // atk には影響していないはず
     expect(def3 > def2).toBe(true); 
@@ -259,7 +259,7 @@ test("Equipment.IdentifyUpgradeValue", () => {
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_こん棒_A").id, [], "item1"));
 
     // 修正値+2
-    item1.setActualParam(MRBasics.params.upgradeValue, 2);
+    item1.setParamCurrentValue(MRBasics.params.upgradeValue, 2);
 
     // 識別前は表示名に +2 が含まれない
     const name1 = UName.makeNameAsItem(item1);

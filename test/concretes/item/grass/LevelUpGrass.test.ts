@@ -38,7 +38,7 @@ test("concretes.item.grass.LevelUpGrass", () => {
     
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-    const a2 = player1.actualParam(MRBasics.params.level);
+    const a2 = player1.getActualParam(MRBasics.params.level);
     const level2 = experience.level(player1);
     expect(level2).toBe(level1 + 1);
     

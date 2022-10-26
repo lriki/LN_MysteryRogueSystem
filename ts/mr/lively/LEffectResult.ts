@@ -34,7 +34,7 @@ export class LParamEffectResult {
 
     public paramDisplayName(): string {
         const data = MRData.parameters[this.paramId];
-        if (this.applyTarget == DValuePoint.Maximum) {
+        if (this.applyTarget == DValuePoint.Growth) {
             return data.displayNameMaximum;
         }
         else {
@@ -51,7 +51,7 @@ export class LParamEffectResult {
                 return this.damage;
         }
         else if (paramData.messageValueSource == DParamMessageValueSource.Absolute) {
-            return entity.actualParam(this.paramId);
+            return entity.getActualParam(this.paramId);
         }
         else {
             throw new Error("Unreachable.");
@@ -356,7 +356,7 @@ export class LEffectResult {
                 // Game_Actor.prototype.displayLevelUp
                 if (this.levelup || this.leveldown) {
                     if (this.levelup) {
-                        const text = DTextManager.levelUp.format(targetName, DTextManager.level, entity.actualParam(MRBasics.params.level));
+                        const text = DTextManager.levelUp.format(targetName, DTextManager.level, entity.getActualParam(MRBasics.params.level));
                         cctx.postMessage(text);
                         SSoundManager.playLevelUp();
                     }
@@ -385,7 +385,7 @@ export class LEffectResult {
         if (flavorEffect && flavorEffect.text.length > 0) {
             const paramName = paramResult.paramDisplayName();
             const relValue = Math.abs(paramResult.damage);
-            const newValue = entity.actualParam(paramResult.paramId);
+            const newValue = entity.getActualParam(paramResult.paramId);
             const oldValue = newValue - paramResult.damage;
             messageArgs = [
                 entityDisplayName,
@@ -462,8 +462,8 @@ export class LEffectResult {
             const param = MRData.parameters[paramResult.paramId];
             const value = paramResult.newValue;
             const old = paramResult.oldValue;
-            const min = entity.paramMin(param.id);
-            const max = entity.idealParam(param.id);
+            const min = entity.params.getActualMin(entity, param.id);
+            const max = entity.getParamActualMax(param.id);
             const r = eval(effect.conditionFormula);
             if (!r) {
                 return false;

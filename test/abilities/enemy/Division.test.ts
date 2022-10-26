@@ -25,7 +25,7 @@ test("Abilities.Enemy.Division", () => {
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
-    const atk1 = enemy1.actualParam(MRBasics.params.atk);
+    const atk1 = enemy1.getActualParam(MRBasics.params.atk);
 
     //----------------------------------------------------------------------------------------------------
 
@@ -41,7 +41,7 @@ test("Abilities.Enemy.Division", () => {
     const eintites = MRLively.map.entities();
     const enemy2 = eintites[eintites.length - 1];
 
-    const atk2 = enemy1.actualParam(MRBasics.params.atk);
+    const atk2 = enemy1.getActualParam(MRBasics.params.atk);
     expect(atk2).toBe(atk1);    // 分裂後にパラメータが増えてしまう問題の修正確認
 
     expect(enemy1.isDeathStateAffected()).toBeFalsy();  // 倒しちゃってない？

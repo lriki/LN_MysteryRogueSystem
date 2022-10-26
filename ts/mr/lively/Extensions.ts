@@ -20,6 +20,7 @@ declare global {
         front(): T;
         back(): T;
         backOrUndefined(): T | undefined;
+        binarySearchIndex(target: T): number;
     }
 
     // interface ReadonlyArray<T> {
@@ -143,5 +144,24 @@ Array.prototype.backOrUndefined = function<T>(): T | undefined {
 //     }
 //     return result;
 // }
+
+
+Array.prototype.binarySearchIndex = function<T>(target: T): number {
+    let idx = -1;
+    let iMin = 0;
+    let iMax = this.length - 1;
+    while (iMin <= iMax) {
+        let iMid = Math.floor((iMin + iMax) / 2);
+        if (this[iMid] === target) {
+            idx = iMid;
+            break;
+        } else if (this[iMid] < target) {
+            iMin = iMid + 1;
+        } else {
+            iMax = iMid - 1;
+        }
+    }
+    return idx;
+}
 
 export {}

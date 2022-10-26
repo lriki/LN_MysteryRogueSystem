@@ -42,7 +42,7 @@ export class SGoldStealSpecialEffect extends SSpecialEffect {
         const steal = Math.min(damage, gold);
 
         const entity = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.system.fallbackGoldEntityId, []));
-        entity.setActualParam(MRBasics.params.gold, steal);
+        entity.setParamCurrentValue(MRBasics.params.gold, steal);
 
         inventory.gainGold(-steal);
         return entity;

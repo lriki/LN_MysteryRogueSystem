@@ -19,7 +19,7 @@ test("concretes.enemies.ArrowShooter.Basic", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
-    const hp1 = player1.actualParam(MRBasics.params.hp);
+    const hp1 = player1.getActualParam(MRBasics.params.hp);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_インプ_A").id, [], "enemy1"));
@@ -37,7 +37,7 @@ test("concretes.enemies.ArrowShooter.Basic", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 離れていれば 100% 矢を撃ってくる
-    const hp2 = player1.actualParam(MRBasics.params.hp);
+    const hp2 = player1.getActualParam(MRBasics.params.hp);
     expect(hp2 < hp1).toBe(true);
 
     //----------------------------------------------------------------------------------------------------
@@ -49,7 +49,7 @@ test("concretes.enemies.ArrowShooter.Basic", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 隣接していても 100% 矢を撃ってくる
-    const hp3 = player1.actualParam(MRBasics.params.hp);
+    const hp3 = player1.getActualParam(MRBasics.params.hp);
     expect(hp3 < hp2).toBe(true);
 });
 

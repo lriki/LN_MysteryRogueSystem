@@ -44,7 +44,7 @@ export class TestUtils {
         //expect(!!emittor.effectSet.effects[0].parameterQualifyings.find(x => x._parameterId == REBasics.params.fp && x.formula == "500"));
 
         // おなかを減らしておく
-        actor.setActualParam(MRBasics.params.fp, 5000);
+        actor.setParamCurrentValue(MRBasics.params.fp, 5000);
     }
     
     public static testCommonGrassEnd(actor: LEntity, item: LEntity) {
@@ -52,7 +52,7 @@ export class TestUtils {
         expect(item.isDestroyed()).toBeTruthy();
 
         // FP が回復しているはず
-        expect(actor.actualParam(MRBasics.params.fp) > 5000).toBeTruthy();
+        expect(actor.getActualParam(MRBasics.params.fp) > 5000).toBeTruthy();
 
         // 食べられたら識別済みになる
         const name = UName.makeNameAsItem(item);

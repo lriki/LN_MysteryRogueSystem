@@ -19,7 +19,7 @@ test("concretes.item.grass.PowerGrass.Basic", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
-    const pow1 = player1.actualParam(MRBasics.params.pow);
+    const pow1 = player1.getActualParam(MRBasics.params.pow);
     expect(pow1).toBe(8);
 
     // アイテム作成 & インベントリに入れる
@@ -35,7 +35,7 @@ test("concretes.item.grass.PowerGrass.Basic", () => {
 
     //----------------------------------------------------------------------------------------------------
 
-    player1.setActualParam(MRBasics.params.pow, pow1 - 1);
+    player1.setParamCurrentValue(MRBasics.params.pow, pow1 - 1);
 
     // [食べる] 1個め
     MRSystem.dialogContext.postActivity(LActivity.makeEat(player1, item1).withConsumeAction());
@@ -44,7 +44,7 @@ test("concretes.item.grass.PowerGrass.Basic", () => {
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // ちからが回復する
-    const pow2 = player1.actualParam(MRBasics.params.pow);
+    const pow2 = player1.getActualParam(MRBasics.params.pow);
     expect(pow2).toBe(pow1);
 
     // メッセージは "回復した" でOK. 原作は違ったかもしれないが、これを細かくデータ駆動で指定するのはちょっと大変。
@@ -61,8 +61,8 @@ test("concretes.item.grass.PowerGrass.Basic", () => {
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 最大値も含め、ちからが増えている
-    const powMax = player1.idealParam(MRBasics.params.pow);
-    const pow3 = player1.actualParam(MRBasics.params.pow);
+    const powMax = player1.getParamActualMax(MRBasics.params.pow);
+    const pow3 = player1.getActualParam(MRBasics.params.pow);
     expect(powMax).toBe(pow2 + 1);
     expect(pow3).toBe(pow2 + 1);
 

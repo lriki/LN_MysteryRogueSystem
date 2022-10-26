@@ -26,7 +26,7 @@ test("concretes.item.scroll.MagicChargeScroll", () => {
     const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_転ばぬ先の杖_A").id, [], "item1"));
     inventory.addEntity(item1);
     inventory.addEntity(item2);
-    const remaining1 = item2.actualParam(MRBasics.params.remaining);
+    const remaining1 = item2.getActualParam(MRBasics.params.remaining);
 
     TestUtils.testCommonScrollBegin(player1, item1);
 
@@ -40,7 +40,7 @@ test("concretes.item.scroll.MagicChargeScroll", () => {
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const remaining2 = item2.actualParam(MRBasics.params.remaining);
+    const remaining2 = item2.getActualParam(MRBasics.params.remaining);
     expect(remaining2).toBe(remaining1 + 5);
     TestUtils.testCommonScrollEnd(player1, item1);
 });

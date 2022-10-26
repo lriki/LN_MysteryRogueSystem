@@ -9,22 +9,22 @@ import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { TestEnv } from "test/TestEnv";
 import { LExperienceBehavior } from "ts/mr/lively/behaviors/LExperienceBehavior";
+import { LDecisionBehavior } from "ts/mr/lively/behaviors/LDecisionBehavior";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
-test("concretes.enemy.LevelDowner", () => {
+test("concretes.enemy.LevelDowner.Basic", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_FlatMap50x50;
 
     // Player
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
-    const inventory = player1.getEntityBehavior(LInventoryBehavior);
-    const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
     const experience = player1.getEntityBehavior(LExperienceBehavior);
     experience.setLevel(player1, 99);
-    const hp1 = player1.actualParam(MRBasics.params.hp);
+    expect(player1.getActualParam(MRBasics.params.level)).toBe(99);
+    const hp1 = player1.getActualParam(MRBasics.params.hp);
 
     // Enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_くねくねインプ_A").id, [], "enemy1"));
@@ -35,7 +35,7 @@ test("concretes.enemy.LevelDowner", () => {
 
     const message = MRLively.messageHistory;
     for (let i = 0; i < 50; i++) {
-        player1.setActualParam(MRBasics.params.hp, hp1);
+        player1.setParamCurrentValue(MRBasics.params.hp, hp1);
         MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
         MRSystem.dialogContext.activeDialog().submit();
         
@@ -50,6 +50,45 @@ test("concretes.enemy.LevelDowner", () => {
         }
     }
 
-    expect(experience.level(player1) < 99).toBe(true);
+    const level1 = experience.level(player1);
+    expect(level1).toBeLessThan(99);
+});
+
+test("concretes.enemy.LevelDowner.RemainingExpAtLevelDown", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_FlatMap50x50;
+
+    // Player
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
+    const experience = player1.getEntityBehavior(LExperienceBehavior);
+    experience.setLevel(player1, 99);
+    expect(player1.getActualParam(MRBasics.params.level)).toBe(99);
+
+    // Enemy
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_くねくねインプ_A").id, [], "enemy1"));
+    enemy1.dir = 4;
+    MRLively.world.transferEntity(enemy1, floorId, 11, 10);
+
+    MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+    
+    // Player - [待機]
+    MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
+
+    // Enemy - [スキル]
+    const skill1 = MRData.getSkill("kSkill_レベルダウン");
+    const activity1 = LActivity.makePerformSkill(enemy1, skill1.id, 4).withConsumeAction();
+    enemy1.getEntityBehavior(LDecisionBehavior).forceMajorActivity = activity1;
+
+    MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
+    
+    // レベルダウンし、Exp は次のレベルまでの -1 になっている。
+    const level1 = experience.level(player1);
+    const exp1 = experience.currentExp(player1);
+    const exp2 = experience.nextLevelExp(player1);
+    expect(level1).toBeLessThan(99);
+    expect(exp1).toBe(exp2 - 1);
 });
 

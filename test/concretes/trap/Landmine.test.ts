@@ -18,7 +18,7 @@ test("concretes.trap.Landmine.DamageAndDestruct", () => {
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     const hp1 = 8;
-    player1.setActualParam(MRBasics.params.hp, hp1);    // テストしやすいように、割り切れる HP にしておく
+    player1.setParamCurrentValue(MRBasics.params.hp, hp1);    // テストしやすいように、割り切れる HP にしておく
 
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
@@ -43,7 +43,7 @@ test("concretes.trap.Landmine.DamageAndDestruct", () => {
     MRLively.world.random().resetSeed(5);     // 乱数調整
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
-    const hp2 = player1.actualParam(MRBasics.params.hp);
+    const hp2 = player1.getActualParam(MRBasics.params.hp);
     expect(hp2).toBe(hp1 / 2);  // HP半分になっている
     expect(player1.isDestroyed()).toBe(false);  // 消滅していないこと
     expect(trap1.isDestroyed()).toBe(false);    // 消滅していないこと
@@ -57,7 +57,7 @@ test("concretes.trap.Landmine.DamageAndDestruct", () => {
     //----------------------------------------------------------------------------------------------------
     // 端数切り上げのダメージになっているかチェック
 
-    player1.setActualParam(MRBasics.params.hp, 3);
+    player1.setParamCurrentValue(MRBasics.params.hp, 3);
 
     // [踏む]
     MRSystem.dialogContext.postActivity(LActivity.makeTrample(player1).withConsumeAction());
@@ -65,13 +65,13 @@ test("concretes.trap.Landmine.DamageAndDestruct", () => {
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const hp3 = player1.actualParam(MRBasics.params.hp);
+    const hp3 = player1.getActualParam(MRBasics.params.hp);
     expect(hp3).toBe(2);    // 端数切り上げで 2 ダメージ -> 自動回復で1回復
 
     //----------------------------------------------------------------------------------------------------
     // HP1 の時に爆発したら戦闘不能になるかチェック
 
-    player1.setActualParam(MRBasics.params.hp, 1);
+    player1.setParamCurrentValue(MRBasics.params.hp, 1);
 
     // [踏む]
     MRSystem.dialogContext.postActivity(LActivity.makeTrample(player1).withConsumeAction());
@@ -79,7 +79,7 @@ test("concretes.trap.Landmine.DamageAndDestruct", () => {
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const hp4 = player1.actualParam(MRBasics.params.hp);
+    const hp4 = player1.getActualParam(MRBasics.params.hp);
     expect(hp4).toBe(0);                                // HP0
     expect(player1.isDeathStateAffected()).toBe(true);  // 戦闘不能
     expect(player1.isDestroyed()).toBe(false);          // 消滅していないこと
@@ -96,7 +96,7 @@ test("concretes.trap.Landmine.InducedExplosion", () => {
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     const hp1 = 16;
-    player1.setActualParam(MRBasics.params.hp, hp1);    // テストしやすいように、割り切れる HP にしておく
+    player1.setParamCurrentValue(MRBasics.params.hp, hp1);    // テストしやすいように、割り切れる HP にしておく
 
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_地雷_A").id, [], "trap1"));
@@ -119,7 +119,7 @@ test("concretes.trap.Landmine.InducedExplosion", () => {
     MRLively.world.random().resetSeed(5);     // 乱数調整
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const hp2 = player1.actualParam(MRBasics.params.hp);
+    const hp2 = player1.getActualParam(MRBasics.params.hp);
     expect(hp2).toBe(hp1 / 4);  // HP半分を２回受けている
     expect(player1.isDestroyed()).toBe(false);  // 消滅していないこと
     expect(trap1.isDestroyed()).toBe(false);    // 消滅していないこと

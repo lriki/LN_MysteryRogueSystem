@@ -22,6 +22,8 @@ import { LActionTokenConsumeType } from "../LCommon";
 export class LDecisionBehavior extends LBehavior {
     _characterAI: LCharacterAI_Normal = new LCharacterAI_Normal();
 
+    forceMajorActivity: LActivity | undefined;  // for test
+
     public clone(newOwner: LEntity): LBehavior {
         const b = MRLively.world.spawn(LDecisionBehavior);
         b._characterAI = this._characterAI.clone() as LCharacterAI_Normal;
@@ -57,6 +59,9 @@ export class LDecisionBehavior extends LBehavior {
 
         }
         else if (phase == DecisionPhase.AIMinor) {
+            if (this.forceMajorActivity) {
+                return SPhaseResult.Pass;
+            }
             return this._characterAI.thinkMoving(cctx, self);
         }
         else if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
@@ -64,8 +69,11 @@ export class LDecisionBehavior extends LBehavior {
             return SPhaseResult.Pass;
         }
         else if (phase == DecisionPhase.AIMajor) {
+            if (this.forceMajorActivity) {
+                cctx.postActivity(this.forceMajorActivity);
+                return SPhaseResult.Handled;
+            }
             return this._characterAI.thinkAction(cctx, self);
-            
         }
 
         return SPhaseResult.Pass;

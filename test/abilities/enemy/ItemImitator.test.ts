@@ -16,7 +16,7 @@ test("abilities.enemy.ItemImitator", () => {
 
     // player1
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    const initialHP = player1.actualParam(MRBasics.params.hp);
+    const initialHP = player1.getActualParam(MRBasics.params.hp);
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [MRData.getState("kState_UTアイテム擬態").id], "enemy1"));
@@ -41,7 +41,7 @@ test("abilities.enemy.ItemImitator", () => {
     // 移動は失敗している
     expect(player1.mx).toBe(10);
     
-    const hp = player1.actualParam(MRBasics.params.hp);
+    const hp = player1.getActualParam(MRBasics.params.hp);
     expect(hp < initialHP).toBe(true);  // ダメージを受けているはず
 });
 

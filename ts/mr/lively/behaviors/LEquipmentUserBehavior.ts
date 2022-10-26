@@ -136,7 +136,7 @@ NOTE:
         const data = item.data;
         const equipmentData = data.equipment;
         if (equipmentData) {
-            const upgrade = item.actualParam(MRBasics.params.upgradeValue);
+            const upgrade = item.getActualParam(MRBasics.params.upgradeValue);
             const ep = equipmentData.parameters[paramId];
             if (ep) {
                 return (ep.value + (upgrade * ep.upgradeRate));

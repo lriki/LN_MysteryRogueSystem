@@ -41,8 +41,8 @@ test("concretes.enemy.SelfExplosion.NotExplosion", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
 
-    const player1HP1 = player1.idealParam(MRBasics.params.hp);
-    const player1HP2 = player1.actualParam(MRBasics.params.hp);
+    const player1HP1 = player1.getParamActualMax(MRBasics.params.hp);
+    const player1HP2 = player1.getActualParam(MRBasics.params.hp);
     expect(player1.isDeathStateAffected()).toBe(false); // Player は生きている
     expect(player1HP2).toBe(player1HP1);                // 爆発していないので、ダメージは受けていない
     expect(enemy1.isDestroyed()).toBeTruthy();          // Enemy は倒れている
@@ -55,7 +55,7 @@ test("concretes.enemy.SelfExplosion.Explosion", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10, 6);
     player1.addState(TestEnv.StateId_CertainDirectAttack);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
-    const player1HP1 = player1.actualParam(MRBasics.params.hp);
+    const player1HP1 = player1.getActualParam(MRBasics.params.hp);
     
     // アイテム 入手
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ふきとばしの杖_A").id, [], "item1"));
@@ -64,7 +64,7 @@ test("concretes.enemy.SelfExplosion.Explosion", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ボム_A").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
-    const enemy1HP1 = enemy1.actualParam(MRBasics.params.hp);
+    const enemy1HP1 = enemy1.getActualParam(MRBasics.params.hp);
     assert(enemy1HP1 > 10);     // テスト用に、最低これだけは確保しておく
     SDebugHelpers.setHP(enemy1, 10); // 爆発する一歩手前にしておく
 
@@ -87,7 +87,7 @@ test("concretes.enemy.SelfExplosion.Explosion", () => {
 
     expect(enemy1.mx).toBe(11);  // 一応、爆発位置を確認
 
-    const player1HP2 = player1.actualParam(MRBasics.params.hp);
+    const player1HP2 = player1.getActualParam(MRBasics.params.hp);
     expect(player1.isDeathStateAffected()).toBe(false); // Player は生きている
     expect(player1HP2).toBe(2);                         // Player は爆発のダメージ受けている。HP1 になる -> 自動回復するので 2 となる。
     expect(enemy1.isDeathStateAffected()).toBe(false);  // Enemy1 は爆発で消滅している
@@ -119,7 +119,7 @@ test("concretes.enemy.SelfExplosion.Explosion.Dead", () => {
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const player1HP2 = player1.actualParam(MRBasics.params.hp);
+    const player1HP2 = player1.getActualParam(MRBasics.params.hp);
     expect(player1.isDeathStateAffected()).toBeTruthy(); 
     expect(player1HP2).toBe(0);
 });

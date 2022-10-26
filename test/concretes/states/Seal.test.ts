@@ -20,8 +20,8 @@ test("concretes.states.Seal.Skill", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
-    const pow1 = player1.actualParam(MRBasics.params.pow);
-    const hp1 = player1.actualParam(MRBasics.params.hp);
+    const pow1 = player1.getActualParam(MRBasics.params.pow);
+    const hp1 = player1.getActualParam(MRBasics.params.hp);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ゾンビ_A").id, [], "enemy1"));
@@ -35,7 +35,7 @@ test("concretes.states.Seal.Skill", () => {
 
     for (let i = 0; i < 100; i++) {
         // HPを戻しておく
-        player1.setActualParam(MRBasics.params.hp, hp1);
+        player1.setParamCurrentValue(MRBasics.params.hp, hp1);
 
         // 待機
         MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
@@ -44,7 +44,7 @@ test("concretes.states.Seal.Skill", () => {
         MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
         // スキルは発動できないので、ちからは減っていない
-        const pow2 = player1.actualParam(MRBasics.params.pow);
+        const pow2 = player1.getActualParam(MRBasics.params.pow);
         expect(pow2).toBe(pow1);
     }
 });

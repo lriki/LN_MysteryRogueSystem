@@ -20,7 +20,7 @@ test("concretes.item.grass.RevivalGrass.Basic", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
-    const hp1 = player1.actualParam(MRBasics.params.hp);
+    const hp1 = player1.getActualParam(MRBasics.params.hp);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // アイテム作成 & インベントリに入れる
@@ -36,7 +36,7 @@ test("concretes.item.grass.RevivalGrass.Basic", () => {
 
     //----------------------------------------------------------------------------------------------------
 
-    player1.setActualParam(MRBasics.params.hp, 1);
+    player1.setParamCurrentValue(MRBasics.params.hp, 1);
 
     // 待機
     MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
@@ -46,7 +46,7 @@ test("concretes.item.grass.RevivalGrass.Basic", () => {
 
     // 倒されるが、復活して HP が回復している。
     // また Enemy は倍速であるが復活した直後はターンは回らず、Scheduler はリセットされる。
-    const hp2 = player1.actualParam(MRBasics.params.hp);
+    const hp2 = player1.getActualParam(MRBasics.params.hp);
     //expect(hp2).toBe(hp1);
     // TODO: 未実装
 

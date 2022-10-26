@@ -48,8 +48,8 @@ test("concretes.item.scroll.ReinforcementScroll.Weapon.basic", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 武器だけ +1 と解呪
-    expect(weapon1.actualParam(MRBasics.params.upgradeValue)).toBe(1);
-    expect(shield1.actualParam(MRBasics.params.upgradeValue)).toBe(0);
+    expect(weapon1.getActualParam(MRBasics.params.upgradeValue)).toBe(1);
+    expect(shield1.getActualParam(MRBasics.params.upgradeValue)).toBe(0);
     expect(weapon1.isStateAffected(stateId)).toBe(false);
     expect(shield1.isStateAffected(stateId)).toBe(true);
     expect(MRLively.messageHistory.includesText("効かなかった")).toBe(false);
@@ -115,7 +115,7 @@ test("concretes.item.scroll.ReinforcementScroll.Weapon.Up3", () => {
 
     //----------------------------------------------------------------------------------------------------
 
-    let last = weapon1.actualParam(MRBasics.params.upgradeValue);
+    let last = weapon1.getActualParam(MRBasics.params.upgradeValue);
     let total = 0;
     for (let i = 0; i < count; i++) {
         const item = items[i];
@@ -126,7 +126,7 @@ test("concretes.item.scroll.ReinforcementScroll.Weapon.Up3", () => {
         
         MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-        const v = weapon1.actualParam(MRBasics.params.upgradeValue);
+        const v = weapon1.getActualParam(MRBasics.params.upgradeValue);
         const d = v - last;
         expect(d == 1 || d == 3).toBe(true);    // +1 または +3 で増加
         total += d;
@@ -171,8 +171,8 @@ test("concretes.item.scroll.ReinforcementScroll.Shield.basic", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 防具だけ +1 と解呪
-    expect(weapon1.actualParam(MRBasics.params.upgradeValue)).toBe(0);
-    expect(shield1.actualParam(MRBasics.params.upgradeValue)).toBe(1);
+    expect(weapon1.getActualParam(MRBasics.params.upgradeValue)).toBe(0);
+    expect(shield1.getActualParam(MRBasics.params.upgradeValue)).toBe(1);
     expect(weapon1.isStateAffected(stateId)).toBe(true);
     expect(shield1.isStateAffected(stateId)).toBe(false);
     expect(MRLively.messageHistory.includesText("効かなかった")).toBe(false);

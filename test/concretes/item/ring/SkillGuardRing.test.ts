@@ -24,7 +24,7 @@ test("concretes.item.ring.SkillGuardRing", () => {
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
     const experience = player1.getEntityBehavior(LExperienceBehavior);
     experience.setLevel(player1, 99);
-    const hp1 = player1.actualParam(MRBasics.params.hp);
+    const hp1 = player1.getActualParam(MRBasics.params.hp);
 
     // Item
     const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_インプよけの指輪_A").id, [], "ring1"));
@@ -40,7 +40,7 @@ test("concretes.item.ring.SkillGuardRing", () => {
     //----------------------------------------------------------------------------------------------------
     // 先にレベル下げが働くことをチェックしておく
     for (let i = 0; i < 50; i++) {
-        player1.setActualParam(MRBasics.params.hp, hp1);
+        player1.setParamCurrentValue(MRBasics.params.hp, hp1);
         MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
         MRSystem.dialogContext.activeDialog().submit();
         
@@ -56,7 +56,7 @@ test("concretes.item.ring.SkillGuardRing", () => {
 
     let count = 0;
     for (let i = 0; i < 50; i++) {
-        player1.setActualParam(MRBasics.params.hp, hp1);
+        player1.setParamCurrentValue(MRBasics.params.hp, hp1);
         MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
         MRSystem.dialogContext.activeDialog().submit();
         const level1 = experience.level(player1);

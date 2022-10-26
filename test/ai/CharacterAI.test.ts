@@ -84,7 +84,7 @@ test("ai.CharacterAI.ActionPattern", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_CharacterAI, 2, 4);
-    const initialHP = player1.actualParam(MRBasics.params.hp);
+    const initialHP = player1.getActualParam(MRBasics.params.hp);
 
     // enemy1 
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ドラゴン_A").id));
@@ -102,7 +102,7 @@ test("ai.CharacterAI.ActionPattern", () => {
     MRLively.world.random().resetSeed(4);     // 炎を吐く乱数調整
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
-    const hp = player1.actualParam(MRBasics.params.hp);
+    const hp = player1.getActualParam(MRBasics.params.hp);
     expect(hp < initialHP).toBe(true);  // ダメージを受けているはず
 });
 

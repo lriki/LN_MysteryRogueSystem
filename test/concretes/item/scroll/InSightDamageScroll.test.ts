@@ -19,7 +19,7 @@ test("concretes.item.scroll.InSightDamageScroll", () => {
     // Player
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
-    const player1HP1 = player1.actualParam(MRBasics.params.hp);
+    const player1HP1 = player1.getActualParam(MRBasics.params.hp);
 
     // item1
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_真空切りの巻物_A").id, [], "item1"));
@@ -30,8 +30,8 @@ test("concretes.item.scroll.InSightDamageScroll", () => {
     const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy2"));
     MRLively.world.transferEntity(enemy1, floorId, 15, 10);
     MRLively.world.transferEntity(enemy2, floorId, 10, 15);
-    const enemy1HP1 = enemy1.actualParam(MRBasics.params.hp);
-    const enemy2HP1 = enemy2.actualParam(MRBasics.params.hp);
+    const enemy1HP1 = enemy1.getActualParam(MRBasics.params.hp);
+    const enemy2HP1 = enemy2.getActualParam(MRBasics.params.hp);
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
@@ -43,9 +43,9 @@ test("concretes.item.scroll.InSightDamageScroll", () => {
     
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-    const player1HP2 = player1.actualParam(MRBasics.params.hp);
-    const enemy1HP2 = enemy1.actualParam(MRBasics.params.hp);
-    const enemy2HP2 = enemy2.actualParam(MRBasics.params.hp);
+    const player1HP2 = player1.getActualParam(MRBasics.params.hp);
+    const enemy1HP2 = enemy1.getActualParam(MRBasics.params.hp);
+    const enemy2HP2 = enemy2.getActualParam(MRBasics.params.hp);
     expect(player1HP2).toBe(player1HP1);
     expect(enemy1HP2).toBeLessThan(enemy1HP1);
     expect(enemy2HP2).toBeLessThan(enemy2HP1);

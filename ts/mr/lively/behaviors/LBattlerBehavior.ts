@@ -1,4 +1,4 @@
-import { LandExitResult } from "ts/mr/data/MRData";
+import { LandExitResult, MRData } from "ts/mr/data/MRData";
 import { MRLively } from "../MRLively";
 import { LBehavior, LGenerateDropItemCause } from "ts/mr/lively/behaviors/LBehavior";
 import { LEntity } from "../LEntity";
@@ -11,6 +11,7 @@ import { SEffectorFact } from "ts/mr/system/SEffectApplyer";
 import { UAction } from "ts/mr/utility/UAction";
 import { MRSerializable } from "ts/mr/Common";
 import { LReaction } from "../LCommon";
+import { DFlavorEffect } from "ts/mr/data/DFlavorEffect";
 
 @MRSerializable
 export class LBattlerBehavior extends LBehavior {
@@ -41,7 +42,7 @@ export class LBattlerBehavior extends LBehavior {
     }
 
     public paramSet(): LParamSet {
-        return this.ownerEntity().params();
+        return this.ownerEntity().params;
     }
 
     onAttached(self: LEntity): void {
@@ -72,13 +73,13 @@ export class LBattlerBehavior extends LBehavior {
     
 
     // Game_Actor.prototype.attackAnimationId1
-    public attackAnimationId(): number {
+    public attackAnimationId(): DFlavorEffect {
         return this.bareHandsAnimationId();
     }
     
     // Game_Actor.prototype.bareHandsAnimationId
-    public bareHandsAnimationId(): number {
-        return 1;
+    public bareHandsAnimationId(): DFlavorEffect {
+        return MRData.system.bareHandsFlavorEffect;
     }
 
     //------------------------------------------------------------

@@ -73,7 +73,7 @@ test("concretes.enemy.GoldThief.Basic", () => {
     const item1 = inventory2.items[0];
     
     // Enemy を攻撃して倒す
-    enemy1.setActualParam(MRBasics.params.hp, 1);
+    enemy1.setParamCurrentValue(MRBasics.params.hp, 1);
     MRLively.world.transferEntity(enemy1, floorId, 12, 11);  // 強制移動
     MRSystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, MRData.system.skills.normalAttack, 2).withConsumeAction());
     MRSystem.dialogContext.activeDialog().submit();
@@ -102,7 +102,7 @@ test("concretes.enemy.GoldThief.DropItem", () => {
     MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // Enemy を攻撃して倒す
-    enemy1.setActualParam(MRBasics.params.hp, 1);
+    enemy1.setParamCurrentValue(MRBasics.params.hp, 1);
     MRSystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, MRData.system.skills.normalAttack, 6).withConsumeAction());
     MRSystem.dialogContext.activeDialog().submit();
 

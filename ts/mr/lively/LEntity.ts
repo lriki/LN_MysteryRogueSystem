@@ -14,7 +14,7 @@ import { DAbilityId } from "ts/mr/data/DAbility";
 import { LActivity } from "./activities/LActivity";
 import { LFloorId } from "./LFloorId";
 import { LParty, LPartyId } from "./LParty";
-import { DSParamId, DXParamId } from "ts/mr/data/DParameter";
+import { DParameterType, DSParamId, DXParamId } from "ts/mr/data/DParameter";
 import { SAbilityFactory } from "ts/mr/system/SAbilityFactory";
 import { DFactionId, MRData } from "ts/mr/data/MRData";
 import { DEntity, DEntityId, DIdentificationDifficulty } from "ts/mr/data/DEntity";
@@ -23,7 +23,7 @@ import { DEventId } from "ts/mr/data/predefineds/DBasicEvents";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { LParamSet } from "./LParam";
 import { UState } from "ts/mr/utility/UState";
-import { DBuffMode, DParamBuff, LStateLevelType } from "ts/mr/data/DEffect";
+import { DBuffLevelOp, DBuffMode, DBuffType, DParamBuff, LStateLevelType } from "ts/mr/data/DEffect";
 import { DSequelId } from "../data/DSequel";
 import { LReward } from "./LReward";
 import { DBlockLayerKind, DEntityKindId, DSubComponentEffectTargetKey, DRaceId, DActionId, DParameterId, DAnimationId } from "../data/DCommon";
@@ -57,6 +57,13 @@ enum BlockLayer
 export interface LParamMinMax {
     min: number;
     max: number;
+}
+
+export enum LParamChangedAction {
+    None = 0,
+    WithRefresh = 1 << 1,
+    WithNotification = 1 << 2,
+    All = LParamChangedAction.WithRefresh | LParamChangedAction.WithNotification,
 }
 
 /**
@@ -157,7 +164,7 @@ export class LEntity extends LObject
             const value = params[i];
             if (value !== undefined) {
                 const param = this._params.acquireParam(i);
-                param.setActualDamgeParam(this.idealParam(i) - value);
+                param.setActualDamgeParam(this._params.getActualMax(this, i) - value);
             }
         }
         this.resetInitialActualParam();
@@ -427,120 +434,114 @@ export class LEntity extends LObject
     //--------------------------------------------------------------------------------
     // Parameters
 
-    public params(): LParamSet {
+    public get params(): LParamSet {
         return this._params;
     }
 
-    // 現在の上限値。
-    // システム上、HP,MP 等のほか、攻撃力、満腹度など様々なパラメータの減少が発生するため、
-    // RMMZ のような _hp, _mp, _tp といったフィールドは用意せず、すべて同じように扱う。
-    // Game_BattlerBase.prototype.param
-    public idealParam(paramId: DParameterId): number {
-        const a1 = this.idealParamBasePlus(paramId);
-        const a2 = this.idealParamRate(paramId);
-        const a3 =  this.paramBuffRate(paramId);
-        const a4 = this.paramBuffPlus(paramId);
-        const value =
-            a1 *
-            a2 *
-            a3 +
-            a4;
-        const maxValue = this.paramMax(paramId);
-        const minValue = this.paramMin(paramId);
-        return Math.round(value.clamp(minValue, maxValue));
+    /**
+     * 装備効果やバフが反映された、実際の最大値 （UIの表示やダメージ計算に使用する、一般的な最大値） を取得する。
+     * @param paramId 
+     */
+    public getParamActualMax(paramId: DParameterId): number {
+        return this._params.getActualMax(this, paramId);
     }
 
-    // 現在のレベルやクラスに応じた基礎値。
-    // 例えば FP だと常に 100. バフやアイテムによる最大 FP 上昇量は含まない。
-    // Game_BattlerBase.prototype.paramBase
-    private idealParamBase(paramId: DParameterId): number {
-        const data = MRData.parameters[paramId];
-        const battlerParam = data.battlerParamId;
-        if (battlerParam >= 0) {
-            return this.getIdealParamBase(paramId);
-        }
-        else {
-            return data.initialIdealValue;
-        }
+    public getEffortValue(paramId: DParameterId): number {
+        const param = this.params.param(paramId);
+        return param ? param.effortValue() : 0;
     }
 
-    // Game_BattlerBase.prototype.paramPlus
-    // 成長アイテム使用による、半永久的な上限加算値
-    public idealParamPlus(paramId: DParameterId): number {
-        const param = this._params.param(paramId);
-        return (param) ? param.idealParamPlus() + this.queryIdealParameterPlus(paramId) : 0;
-    }
-
-    // Game_BattlerBase.prototype.paramBasePlus
-    public idealParamBasePlus(paramId: DParameterId): number {
-        return this.idealParamBase(paramId) + this.idealParamPlus(paramId);
-        //return Math.max(0, this.idealParamBase(paramId) + this.idealParamPlus(paramId));
-    }
-    
-    // Game_BattlerBase.prototype.paramRate
-    public idealParamRate(paramId: DParameterId): number {
-        return this.traitsPi(MRBasics.traits.TRAIT_PARAM, paramId);
-    }
-
-    // Game_BattlerBase.prototype.paramBuffRate
-    // バフ適用レベル (正負の整数値。正規化されたレートではない点に注意)
-    public paramBuffRate(paramId: DParameterId): number {
-        const param = this._params.param(paramId);
+    public setEffortValue(paramId: DParameterId, value: number, action: LParamChangedAction = LParamChangedAction.All): void {
+        const param = this.params.param(paramId);
         if (param) {
-            return (param.buff() * 0.25 + 1.0) * param.buffRate();
-        }
-        else {
-            return 1.0;
+            let oldEffortValue = 0;
+            let oldActualValue = 0;
+            if (action & LParamChangedAction.WithNotification) {
+                oldEffortValue = this.getEffortValue(paramId);
+                oldActualValue =  this.getActualParam(paramId);
+            }
+
+            param.setEffortValue(value);
+
+            if (action & LParamChangedAction.WithNotification) {
+                const newEffortValue = this.getEffortValue(paramId);
+                const newActualValue = this.getActualParam(paramId);
+                if (newEffortValue !== oldEffortValue) {
+                    this.notifyParamIdealPlusChanged(paramId, newEffortValue, oldEffortValue);
+                }
+                if (newActualValue !== oldActualValue) {
+                    this.notifyParamChanged(paramId, newActualValue, oldActualValue);
+                }
+            }
+
+            if (action & LParamChangedAction.WithRefresh) {
+                this.refreshConditions();
+            }
         }
     }
 
-    public paramBuffPlus(paramId: DParameterId): number {
+    public getActualParam(paramId: DParameterId): number {
         const param = this._params.param(paramId);
-        return (param) ? param.buffPlus() : 0;
-    }
-    
-    // バフや成長によるパラメータ上限値の最小値。
-    // 現在の上限値を取得したいときは idealParam() を使うこと。
-    // Game_BattlerBase.prototype.paramMin
-    public paramMin(paramId: DParameterId): number {
-        const data = MRData.parameters[paramId];
-        return data ? data.minValue : 0;
-    };
-    
-    // バフや成長によるパラメータ上限値の最大値。
-    // 現在の上限値を取得したいときは idealParam() を使うこと。
-    // Game_BattlerBase.prototype.paramMax
-    public paramMax(paramId: DParameterId): number {
-        const data = MRData.parameters[paramId];
-        return data ? data.maxValue : Infinity;
-    };
-
-    public actualParam(paramId: DParameterId): number {
-        const param = this._params.param(paramId);
-        const value = (param) ? this.idealParam(paramId) - param.actualParamDamge() : 0;
         
-        const maxValue = this.paramMax(paramId);
-        const minValue = this.paramMin(paramId);
-        return Math.round(value.clamp(minValue, maxValue));
+        let value = 0;
+        if (param) {
+            if (param.data.type == DParameterType.Dependent) {
+                value = this.getDependentParameterCurrentValue(paramId);
+            }
+            else {
+                value = this._params.getActualMax(this, paramId) - param.actualParamDamge();
+            }
+        }
+        
+        const minLimit = this._params.getMinLimit(paramId);
+        const maxLimit = this._params.getMaxLimit(paramId);
+        return Math.round(value.clamp(minLimit, maxLimit));
     }
 
     /** 直接設定 */
-    public setActualParam(paramId: DParameterId, value: number): void {
-        const max = this.idealParam(paramId);
-        this.setActualDamgeParam(paramId, max - value);
+    public setParamCurrentValue(paramId: DParameterId, value: number): void {
+        const data = MRData.parameters[paramId];
+        const max = this._params.getActualMax(this, paramId);
+        if (data.type == DParameterType.Dependent) {
+            this.setDependentParameterCurrentValue(paramId, value);
+        }
+        else {
+            this.setActualDamgeParam(paramId, max - value);
+        }
     }
 
+    private notifyParamIdealPlusChanged(paramId: DParameterId, newValue: number, oldValue: number): void {
+        this.iterateBehaviorsReverse(b => b.onParamIdealPlusChanged(this, paramId, newValue, oldValue));
+    }
+    
     private notifyParamChanged(paramId: DParameterId, newValue: number, oldValue: number): void {
         this.iterateBehaviorsReverse(b => b.onParamChanged(this, paramId, newValue, oldValue));
+    }
+
+    private getDependentParameterCurrentValue(paramId: DParameterId): number {
+        let result: number | undefined = undefined;
+        this.iterateBehaviorsReverse(b => {
+            result = b.onGetDependentParameterIdealBaseValue(this, paramId);
+            return result === undefined;
+        });
+        return result ?? 0;
+    }
+
+    private setDependentParameterCurrentValue(paramId: DParameterId, value: number): void {
+        this.iterateBehaviorsReverse(b => {
+            b.onSetDependentParameterIdealBaseValue(this, paramId, value);
+            return true;
+        });
+        this.refreshConditions();
     }
 
     public setActualDamgeParam(paramId: DParameterId, value: number): void {
         const param = this._params.param(paramId);
         if (param) {
             if (param.actualParamDamge() != value) {
-                const oldValue = this.actualParam(paramId);
+                const oldValue = this.getActualParam(paramId);
                 param.setActualDamgeParam(value);
-                this.notifyParamChanged(paramId, this.actualParam(paramId), oldValue);
+                this.notifyParamChanged(paramId, this.getActualParam(paramId), oldValue);
                 this.refreshConditions();
             }
         }
@@ -549,15 +550,21 @@ export class LEntity extends LObject
         }
     }
     
+    // TODO: current param
     public gainActualParam(paramId: DParameterId, value: number, refresh: boolean): void {
         if (value === 0) return;    // refresh とか発生させる意味なし
 
         const param = this._params.param(paramId);
         if (param) {
-            if (value != 0) {
-                const oldValue = this.actualParam(paramId);
+            if (param.data.type == DParameterType.Dependent) {
+                // TODO: 今は level だけなのでよいが、actual から増分するのはバフとか考慮する必要があるので良くない
+                const oldValue = this.getActualParam(paramId);
+                this.setDependentParameterCurrentValue(paramId, this.getActualParam(paramId) + value);
+            }
+            else {
+                const oldValue = this.getActualParam(paramId);
                 param.gainActualParam(value);
-                this.notifyParamChanged(paramId, this.actualParam(paramId), oldValue);
+                this.notifyParamChanged(paramId, this.getActualParam(paramId), oldValue);
                 if (refresh) {
                     this.refreshConditions();
                 }
@@ -571,25 +578,27 @@ export class LEntity extends LObject
     private resetInitialActualParam(): void {
         for (const param of this._params.params()) {
             if (param) {
-                param.resetInitialActualValue(this.actualParam(param.parameterId()));
+                param.resetInitialActualValue(this.getActualParam(param.parameterId));
             }
         }
     }
 
     public refreshConditions(): void {
+
+        // 副作用によって HP が 0 以下になったときは、 1 のまま残したい。
+        // このフラグによって、 前回 refresh 時から HP に対して直接変更があったかを判断する。
+        // refresh 前に、直接 DamageValue が変えられていた場合は false のまま。
+        let hpSideEffects = false;  
+
         const hpParam = this._params.param(MRBasics.params.hp);
         if (hpParam) {
-            const dead = !!this.states().find(s => s.stateDataId() == MRBasics.states.dead || s.stateData().deadState);//this.isDeathStateAffected();
-            const hp = this.actualParam(MRBasics.params.hp);
-
-            // DeadState が外れた直後など、HP0 なのに DeadState がついていなければ HP1 にする。
-            // if (!dead && hp == 0) {
-            //     hpParam.setActualDamgeParam(this.idealParam(REBasics.params.hp) - 1);
-            // }
+            hpSideEffects = !hpParam.isDamageValueChanged;
+            const dead = !!this.states().find(s => s.stateDataId() == MRBasics.states.dead || s.stateData().deadState);
+            const hp = this.getActualParam(MRBasics.params.hp);
 
             // 外部から addState() 等で DeathState が与えられた場合は HP0 にする
             if (dead && hp != 0) {
-                hpParam.setActualDamgeParam(this.idealParam(MRBasics.params.hp));
+                hpParam.setActualDamgeParam(this._params.getActualMax(this, MRBasics.params.hp));
                 this.removeAllStates(true);
             }
         }
@@ -601,8 +610,16 @@ export class LEntity extends LObject
         
     
         // refresh 後、HP が 0 なら DeadState を付加する
-        if (this.idealParam(MRBasics.params.hp) !== 0) {
-            if (this.actualParam(MRBasics.params.hp) === 0) {
+        const mhp = this._params.getActualMax(this, MRBasics.params.hp);
+        if (mhp !== 0) {
+            const hp = this.getActualParam(MRBasics.params.hp);
+
+            if (hp <= 0) {
+                //if (beforeLivingLike && hpParam) {
+                if (hpParam && hpSideEffects) {
+                    hpParam.setActualDamgeParam(mhp - 1);
+                }
+                else
                 if (!this.isDeathStateAffected()) {
                     this.addState(MRBasics.states.dead, false);
                 }
@@ -626,11 +643,11 @@ export class LEntity extends LObject
             param.addBuff(buff);
             this.refreshConditions();
 
-            if (buff.mode == DBuffMode.Strength) {
-                this._effectResult.pushAddedBuff(buff.paramId);
+            if (buff.level < 0) {
+                this._effectResult.pushAddedDebuff(buff.paramId);
             }
             else {
-                this._effectResult.pushAddedDebuff(buff.paramId);
+                this._effectResult.pushAddedBuff(buff.paramId);
             }
         }
     }
@@ -761,13 +778,13 @@ export class LEntity extends LObject
 
         const upgrades = this._params.param(MRBasics.params.upgradeValue);
         if (upgrades) {
-            result.upgrades = this.actualParam(MRBasics.params.upgradeValue);
+            result.upgrades = this.getActualParam(MRBasics.params.upgradeValue);
         }
 
         // TODO: test
         const remaining = this._params.param(MRBasics.params.remaining);
         if (remaining) {
-            result.capacity = this.actualParam(MRBasics.params.remaining);
+            result.capacity = this.getActualParam(MRBasics.params.remaining);
             result.initialCapacity = remaining.initialActualValue();
         }
 
@@ -837,7 +854,7 @@ export class LEntity extends LObject
 
     public queryParamMinMax(paramId: DParameterId): LParamMinMax {
         const param = MRData.parameters[paramId];
-        const result: LParamMinMax = { min: param.minValue, max: param.maxValue };
+        const result: LParamMinMax = { min: param.minLimit, max: param.maxLimit };
         if (paramId == MRBasics.params.upgradeValue) {
             const data = this.data;
             result.min = data.upgradeMin;
@@ -1563,8 +1580,8 @@ export class LEntity extends LObject
     // Game_BattlerBase.prototype.recoverAll
     public recoverAll(): void {
         this.removeAllStates(false);
-        this.params().params().forEach(x => {
-            if (x && x.data().recoverTarget) {
+        this.params.params().forEach(x => {
+            if (x && x.data.recoverTarget) {
                 x.clearDamage(this);
             }
         });
@@ -1693,19 +1710,19 @@ export class LEntity extends LObject
     // Fomula properties
 
     public get hp(): number {
-        return this.actualParam(MRBasics.params.hp);
+        return this.getActualParam(MRBasics.params.hp);
     }
     public get atk(): number {
-        return this.actualParam(MRBasics.params.atk);
+        return this.getActualParam(MRBasics.params.atk);
     }
     public get def(): number {
-        return this.actualParam(MRBasics.params.def);
+        return this.getActualParam(MRBasics.params.def);
     }
     public get agi(): number {
-        return this.actualParam(MRBasics.params.agi);
+        return this.getActualParam(MRBasics.params.agi);
     }
     public get fp(): number {
-        return this.actualParam(MRBasics.params.fp);
+        return this.getActualParam(MRBasics.params.fp);
     }
 }
 

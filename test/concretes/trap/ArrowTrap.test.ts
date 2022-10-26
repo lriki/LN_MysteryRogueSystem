@@ -21,7 +21,7 @@ test("concretes.trap.ArrowTrap.Basic", () => {
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     player1.addState(MRData.getState("kState_UT罠必中").id);
-    const hp1 = player1.actualParam(MRBasics.params.hp);
+    const hp1 = player1.getActualParam(MRBasics.params.hp);
 
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢の罠_A").id, [], "trap1"));
@@ -38,7 +38,7 @@ test("concretes.trap.ArrowTrap.Basic", () => {
     MRLively.world.random().resetSeed(5);     // 乱数調整
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
-    const hp2 = player1.actualParam(MRBasics.params.hp);
+    const hp2 = player1.getActualParam(MRBasics.params.hp);
     expect(hp2 < hp1).toBe(true);  // ダメージを受けている
 });
 
@@ -48,7 +48,7 @@ test("concretes.trap.ArrowTrap.HitOtherUnit", () => {
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     player1.dir = 6;
-    const hp1 = player1.actualParam(MRBasics.params.hp);
+    const hp1 = player1.getActualParam(MRBasics.params.hp);
 
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢の罠_A").id, [], "trap1"));
@@ -57,7 +57,7 @@ test("concretes.trap.ArrowTrap.HitOtherUnit", () => {
     // 右を向く Player の右、つまり下から矢が飛んでくるので、それに当たる位置に Enemy を配置する
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 15);
-    const enemyhp1 = enemy1.actualParam(MRBasics.params.hp);
+    const enemyhp1 = enemy1.getActualParam(MRBasics.params.hp);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
@@ -69,8 +69,8 @@ test("concretes.trap.ArrowTrap.HitOtherUnit", () => {
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
-    const hp2 = player1.actualParam(MRBasics.params.hp);
-    const enemyhp2 = enemy1.actualParam(MRBasics.params.hp);
+    const hp2 = player1.getActualParam(MRBasics.params.hp);
+    const enemyhp2 = enemy1.getActualParam(MRBasics.params.hp);
     expect(hp2 == hp1).toBe(true);          // Player はダメージを受けていない
     expect(enemyhp2 < enemyhp1).toBe(true); // Enemy はダメージを受けている
 });
@@ -87,7 +87,7 @@ test("concretes.trap.ArrowTrap.DropAsItem", () => {
     // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     player1.dir = 6;
-    const hp1 = player1.actualParam(MRBasics.params.hp);
+    const hp1 = player1.getActualParam(MRBasics.params.hp);
 
     // アイテム入手
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_ちからの草_A").id, [], "item1"));

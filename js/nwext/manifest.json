@@ -1,0 +1,24 @@
+{
+    "manifest_version": 2,
+  
+    "name": "Osudio Dev Tools",
+    "version": "0.1",
+  
+    "description": "Frontend Developer Tools for Osudio",
+    "author": "Osudio Frontend Team",
+
+  
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+    "devtools_page": "main.html",
+    
+   "content_scripts": [ {
+    "js": [ "js/inject.js" ],
+    "matches": [ "\u003Call_urls>" ],
+    "run_at": "document_start"
+ } ],
+    
+   "permissions": [ "chrome-extension://*", "file:///*", "http://*/*", "https://*/*" ],
+   "web_accessible_resources": [ "main.html", "panel.html" ]
+
+
+  }

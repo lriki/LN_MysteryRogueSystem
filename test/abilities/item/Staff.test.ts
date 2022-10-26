@@ -37,7 +37,7 @@ test("Items.Staff.Knockback", () => {
     expect(dn.capacity).toBe(5);
 
     // 残り使用回数を [1] にしておく
-    item1.setActualParam(MRBasics.params.remaining, 1);
+    item1.setParamCurrentValue(MRBasics.params.remaining, 1);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
@@ -57,7 +57,7 @@ test("Items.Staff.Knockback", () => {
         MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
         expect(enemy1.mx).toBe(20);  // 吹き飛ばし効果で 10Block 後退 & Enemy ターンで Player に 1Block 近づく
-        expect(item1.actualParam(MRBasics.params.remaining)).toBe(0);    // 使用回数が減っている
+        expect(item1.getActualParam(MRBasics.params.remaining)).toBe(0);    // 使用回数が減っている
     }
 
     // 振ってみる (使用回数切れ)
@@ -72,7 +72,7 @@ test("Items.Staff.Knockback", () => {
         MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
         expect(enemy1.mx).toBe(19);  // 杖を振っても何も起こらないので引き続き近づいてくる
-        expect(item1.actualParam(MRBasics.params.remaining)).toBe(0);    // 使用回数は 0 のまま。余計に減算されたりしないこと。
+        expect(item1.getActualParam(MRBasics.params.remaining)).toBe(0);    // 使用回数は 0 のまま。余計に減算されたりしないこと。
     }
 
     // 投げてみる

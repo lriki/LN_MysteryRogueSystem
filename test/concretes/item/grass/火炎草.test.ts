@@ -20,16 +20,16 @@ test("concretes.item.grass.火炎草.test", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
-    const player1Hp1 = player1.actualParam(MRBasics.params.hp);
+    const player1Hp1 = player1.getActualParam(MRBasics.params.hp);
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     enemy1.addState(MRData.getState("kState_UTからぶり").id);
     MRLively.world.transferEntity(enemy1, floorId, 11, 10);
 
-    enemy1.params().param(MRBasics.params.hp)?.setIdealParamPlus(500);
-    enemy1.setActualParam(MRBasics.params.hp, 500);
-    const enemy1Hp1 = enemy1.actualParam(MRBasics.params.hp);
+    enemy1.params.param(MRBasics.params.hp)?.setEffortValue(500);
+    enemy1.setParamCurrentValue(MRBasics.params.hp, 500);
+    const enemy1Hp1 = enemy1.getActualParam(MRBasics.params.hp);
 
     // アイテム作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_火炎草_A").id, [], "item1"));
@@ -50,17 +50,17 @@ test("concretes.item.grass.火炎草.test", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // Enemy はダメージを受ける
-    const enemy1Hp2 = enemy1.actualParam(MRBasics.params.hp);
+    const enemy1Hp2 = enemy1.getActualParam(MRBasics.params.hp);
     expect(enemy1Hp2 < enemy1Hp1).toBeTruthy();
 
     // Player はダメージを受けない (Issue 修正確認)
-    const player1Hp2 = player1.actualParam(MRBasics.params.hp);
+    const player1Hp2 = player1.getActualParam(MRBasics.params.hp);
     expect(player1Hp2).toBe(player1Hp1);
     
     //----------------------------------------------------------------------------------------------------
 
     // Enemy の HP をリセット
-    enemy1.setActualParam(MRBasics.params.hp, 500);
+    enemy1.setParamCurrentValue(MRBasics.params.hp, 500);
 
     // [投げる]
     MRSystem.dialogContext.postActivity(LActivity.makeThrow(player1, item2).withEntityDirection(6).withConsumeAction());
@@ -69,7 +69,7 @@ test("concretes.item.grass.火炎草.test", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // Enemy はダメージを受ける。ただし、投げ当てた時のダメージ量は飲んだ時よりも少ない。
-    const enemy1Hp3 = enemy1.actualParam(MRBasics.params.hp);
+    const enemy1Hp3 = enemy1.getActualParam(MRBasics.params.hp);
     expect(enemy1Hp3 < enemy1Hp1).toBeTruthy();
     expect((enemy1Hp1 - enemy1Hp3) < (enemy1Hp1 - enemy1Hp2)).toBeTruthy();
     

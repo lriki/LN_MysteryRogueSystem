@@ -18,7 +18,7 @@ test("system.BDash.ArrowDamageStop", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(floorId, 10, 10, 6);
-    const hp1 = player1.actualParam(MRBasics.params.hp);
+    const hp1 = player1.getActualParam(MRBasics.params.hp);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_インプ_A").id, [], "enemy1"));
@@ -37,7 +37,7 @@ test("system.BDash.ArrowDamageStop", () => {
         MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     }
 
-    const hp2 = player1.actualParam(MRBasics.params.hp);
+    const hp2 = player1.getActualParam(MRBasics.params.hp);
     const unit = player1.getEntityBehavior(LUnitBehavior);
     expect(hp2).toBeLessThan(hp1);              // ダメージを受けている
     expect(unit._straightDashing).toBeFalsy();  // ダッシュ状態は解除されている

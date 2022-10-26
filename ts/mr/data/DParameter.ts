@@ -1,10 +1,15 @@
 import { DParameterId } from "./DCommon";
 import { DValuePoint } from "./DEffect";
 import { DFactionType } from "./DFaction";
-import { DFlavorEffect, IFlavorEffect } from "./DFlavorEffect";
+import { DFlavorEffect, IFlavorEffectProps } from "./DFlavorEffect";
 
 export type DXParamId = number;
 export type DSParamId = number;
+
+export enum DParameterType {
+    Normal = 0,
+    Dependent = 1,
+}
 
 export enum DParamMessageValueSource {
     Relative,
@@ -123,6 +128,9 @@ export class DParameter {
     ダメージ計算や結果表示の際に、DParameter とほぼ同等だけど別の処理を新たに作らなければならないのが大変だったため。
     依存関係パラメータは見た目上、通常パラメータと同じように抽象化して使いたい。
     そのため、DDependentParameter 固有の事情をより上位のレイヤーで気にしなければならないのは NG.
+
+    ### 制限事項
+    - 依存関係パラメータは、ダメージ値を持たない。常に idealValue を使う。
     */
 
     /** ID (0 is Invalid). */
@@ -132,6 +140,8 @@ export class DParameter {
     readonly key: string;
 
     readonly code: string;
+
+    type: DParameterType;
 
     displayName: string;
 
@@ -147,8 +157,11 @@ export class DParameter {
      * Level なら 1, Exp なら 0, HP なら Ideal など。 */
     initialValue: number | undefined;
 
-    minValue: number;
-    maxValue: number;
+    minEffortLimit: number;
+    maxEffortLimit: number;
+
+    minLimit: number;
+    maxLimit: number;
 
     /** [全回復] の対象とするか */
     recoverTarget: boolean;
@@ -184,15 +197,17 @@ export class DParameter {
     //private _parameterFlavorEffects: (DParameterFlavorEffect | undefined)[][] = [];
     parameterFlavorEffects: DParameterFlavorEffect[] = [];
 
+    // ダメージ禁止。つまり、 setParamActual を禁止する。
+    allowDamage: boolean = true;
 
 
-    public static makeBuiltin(id: DParameterId, code: string, displayName: string, displayNameMaximun: string, battlerParamId: number, initialIdealValue: number, minValue: number, maxValue: number, recoverTarget: boolean) {
+    public static makeBuiltin(id: DParameterId, code: string, displayName: string, displayNameMaximun: string, battlerParamId: number, initialIdealValue: number, minLimit: number, maxLimit: number, recoverTarget: boolean) {
         const p = new DParameter(id, code, displayName);
         p.displayNameMaximum = displayNameMaximun;
         p.battlerParamId = battlerParamId;
         p.initialIdealValue = initialIdealValue;
-        p.minValue = minValue;
-        p.maxValue = maxValue;
+        p.minLimit = minLimit;
+        p.maxLimit = maxLimit;
         p.recoverTarget = recoverTarget;
         return p;
     }
@@ -201,12 +216,15 @@ export class DParameter {
         this.id = id;
         this.key = key;
         this.code = key;
+        this.type = DParameterType.Normal;
         this.displayName = displayName;
         this.displayNameMaximum = displayName;
         this.battlerParamId = -1;
         this.initialIdealValue = 100;
-        this.minValue = 0;
-        this.maxValue = Infinity;
+        this.minEffortLimit = 0;
+        this.maxEffortLimit = Infinity;
+        this.minLimit = 0;
+        this.maxLimit = Infinity;
         this.addBuffCoe = 100;
         this.mulBuffCore = 0.25;
         this.messageValueSource = DParamMessageValueSource.Relative;
@@ -266,11 +284,21 @@ export class DParameter {
     }
 }
 
+export interface IParameterProps {
+    /** パラメータの識別子です。ダメージ計算式での "a.atk" のように、. に続けて指定できる、パラメータの名前です。英数字とする必要があります。 */
+    //key: string;
+
+    /** パラメータの表示名です。 GUI に表示する名前です。 */
+    name?: string;
+
+    flavorEffects?: IParameterFlavorEffect[];
+}
+
 export interface IParameterFlavorEffect {
     looksFaction?: DFactionType,
     point?: DValuePoint,
     addition?: DValueAddition,
     conditionFormula?: string,
-    flavorEffect: IFlavorEffect,
+    flavorEffect: IFlavorEffectProps,
 }
 

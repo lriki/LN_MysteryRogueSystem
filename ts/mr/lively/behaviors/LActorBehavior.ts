@@ -60,10 +60,10 @@ export class LActorBehavior extends LBattlerBehavior {
         //this._nickname = actor.nickname;
         //this._profile = actor.profile;
         this.initSkills();
-        const a1= self.actualParam(MRBasics.params.level);
-        const b1= self.actualParam(MRBasics.params.exp);
+        const a1= self.getActualParam(MRBasics.params.level);
+        const b1= self.getActualParam(MRBasics.params.exp);
         //this.initEquips(actor.equips);
-        this.paramSet().clearParamPlus();
+        //this.paramSet().clearParamPlus();
         self.recoverAll();
 
     }
@@ -83,7 +83,7 @@ export class LActorBehavior extends LBattlerBehavior {
         
     // Game_Actor.prototype.initSkills
     initSkills(): void {
-        const level = this.ownerEntity().actualParam(MRBasics.params.level);
+        const level = this.ownerEntity().getActualParam(MRBasics.params.level);
         this._skills = [];
         for (const learning of this.currentClass().learnings) {
             if (learning.level <= level) {
@@ -107,9 +107,11 @@ export class LActorBehavior extends LBattlerBehavior {
 
     // Game_Actor.prototype.paramBase 
     onQueryIdealParamBase(paramId: DParameterId, base: number): number {
-        const level = this.ownerEntity().actualParam(MRBasics.params.level);
+        const level = this.ownerEntity().getActualParam(MRBasics.params.level);
         const p = this.currentClass().params[MRData.parameters[paramId].battlerParamId];
-        return base + (p ? p[level] : 0);
+        const v = (p ? p[level] : 0);
+        assert(v !== undefined);
+        return base + v;
     }
 
     

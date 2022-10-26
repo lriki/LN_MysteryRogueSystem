@@ -240,13 +240,13 @@ export class VMainStatusWindow extends Window_Base {
         
         // 満腹度
         const fpData = MRData.parameters[MRBasics.params.fp];
-        const cfp = Math.ceil(fpData.makeDisplayValue(this._entity.actualParam(MRBasics.params.fp)));
-        const mfp = Math.ceil(fpData.makeDisplayValue(this._entity.idealParam(MRBasics.params.fp)));
+        const cfp = Math.ceil(fpData.makeDisplayValue(this._entity.getActualParam(MRBasics.params.fp)));
+        const mfp = Math.ceil(fpData.makeDisplayValue(this._entity.getParamActualMax(MRBasics.params.fp)));
         this._fpValue.setText(`${cfp}/${mfp}`);
 
         // ちから
-        const c = this._entity.actualParam(MRBasics.params.pow);
-        const m = this._entity.idealParam(MRBasics.params.pow);
+        const c = this._entity.getActualParam(MRBasics.params.pow);
+        const m = this._entity.getParamActualMax(MRBasics.params.pow);
         this._powValue.setText(`${c}/${m}`);
         
         // 経験値

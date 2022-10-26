@@ -51,6 +51,7 @@ import { DEmittor } from "ts/mr/data/DEmittor";
 import { SActivityContext } from "ts/mr/system/SActivityContext";
 import { LFieldEffect } from "../LFieldEffect";
 import { SSubTaskChain } from "ts/mr/system/tasks/STask";
+import { LParam } from "../LParam";
 
 export enum DecisionPhase {
     //Prepare,
@@ -349,10 +350,16 @@ export abstract class LBehavior extends LObject {
     public onQueryAttackAnimationId(self: LEntity, index: number): DAnimationId | undefined { return undefined; }
 
 
+    public onParamIdealPlusChanged(self: LEntity, paramId: DParameterId, newValue: number, oldValue: number): void { }
     public onParamChanged(self: LEntity, paramId: DParameterId, newValue: number, oldValue: number): void { }
     
-    public onRefreshConditions(self: LEntity): void { }
+    /** 指定された依存パラメータの値を取得する。 */
+    public onGetDependentParameterIdealBaseValue(self: LEntity, parameterId: DParameterId): number | undefined { return undefined; }
 
+    /** 指定された依存パラメータの値を設定する。 */
+    public onSetDependentParameterIdealBaseValue(self: LEntity, parameterId: DParameterId, value: number): void { }
+    
+    public onRefreshConditions(self: LEntity): void { }
 
 
     // 従来ver は Command 扱いだった。

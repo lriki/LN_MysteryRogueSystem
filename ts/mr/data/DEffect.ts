@@ -3,6 +3,8 @@ import { DSubEntityFindKey, DSpecificEffectId, DBlockLayerKind, DBlockLayerScope
 import { DEntityId } from "./DEntity";
 import { DParameterId } from "ts/mr/data/DCommon";
 import { MRData } from "./MRData";
+import { DHelpers } from "./DHelper";
+import { DFlavorEffect, IFlavorEffectProps } from "./DFlavorEffect";
 
 
 
@@ -23,7 +25,7 @@ export enum DParameterEffectApplyType {
 export enum DValuePoint {
     Current,
     Minimum,
-    Maximum,
+    Growth,
 }
 
 
@@ -248,21 +250,26 @@ export class DEffectFieldScope {
 
 
 export enum DBuffMode {
-    Strength,
-    Weakness,
+    Strength = "strength",
+    Weakness = "weakness",
 }
 
-export enum DBuffOp {
+export enum DBuffType {
     Add,
     Mul,
 }
 
+export enum DBuffLevelOp {
+    Set,
+    Add,
+}
+
 export interface DParamBuff {
     paramId: DParameterId;
-    mode: DBuffMode,
+    type: DBuffType;
+    //mode: DBuffMode,
+    levelType: DBuffLevelOp;
     level: number;
-    levelType: LStateLevelType;
-    op: DBuffOp;
     turn: number;
     //formula: string;
 }
@@ -308,21 +315,19 @@ export interface DEffectConditions {
    
 }
 
+
+
+
+
 export class DEffect {
-    id: DEffectId;
-    sourceKey: string;
+    readonly id: DEffectId;
+    readonly key: string;
 
 
     subEntityFindKey: DSubEntityFindKey;
     conditions: DEffectConditions;
     
-    /**
-     * 対象へダメージを与えるときにクリティカル判定を行うかかどうか。
-     * 前方3方向など複数攻撃対象がいる場合は個別にクリティカルが発生することになる。
-     * 攻撃の発生元での会心判定は Action として行うこと。
-     * 
-     * IDataSkill.damage.critical
-     */
+    /** @see {@link IEffectProps.critical} */
     critical: boolean;
 
     /**
@@ -338,8 +343,11 @@ export class DEffect {
       * ターゲット側アニメーション。
       * なお、ユーザー側アニメーションは Effect ではなく Item や Skill 側に付く点に注意。
       * Item が複数の Effect を持つときでも、ユーザー側は Item 自体に対応する見た目の動作をとる。
+      * 
+      * undefined はデフォルトのアニメーションを使う。
+      * null はアニメーションを再生しないことを示す。
       */
-    rmmzAnimationId: number;
+    flavorEffect: DFlavorEffect | undefined | null;
 
 
     /**
@@ -377,9 +385,9 @@ export class DEffect {
     
 
 
-    constructor(id: DEffectId, sourceKey: string) {
+    constructor(id: DEffectId, key: string) {
         this.id = id;
-        this.sourceKey = sourceKey;
+        this.key = key;
         //this.id = id;
         //this.scope = {
         //    area: DEffectFieldScopeArea.Room,
@@ -391,7 +399,9 @@ export class DEffect {
         this.critical = false;
         this.successRate = 100;
         this.hitType = DEffectHitType.Certain;
-        this.rmmzAnimationId = 0;
+
+        // デフォルトは表示無し。この Effect を Skill から使う場合はそちらで undefined が設定されれば、デフォルトのアニメーションが使われる。
+        this.flavorEffect = null;
         
         this.parameterQualifyings = [];
         this.otherEffectQualifyings = [];
@@ -408,6 +418,30 @@ export class DEffect {
         //this.rejectionLevel = DEffectRejectionLevel.Ones;
     }
 
+    public applyProps(props: IEffectProps): void {
+        this.critical = props.critical ?? this.critical;
+        this.flavorEffect = props.flavorEffect ? new DFlavorEffect(props.flavorEffect) : this.flavorEffect;
+        
+        // buffEffects
+        for (const p of props.parameterBuffs ?? []) {
+            const d: DParamBuff = {
+                paramId: MRData.parameter(p.parameterKey).id,
+                type: DHelpers.stringToEnum(p.type, {
+                    "constant": DBuffType.Add,
+                    "ratio": DBuffType.Mul,
+                }),
+                levelType: DHelpers.stringToEnum(p.levelOp, {
+                    "add": DBuffLevelOp.Add,
+                    "set": DBuffLevelOp.Set,
+                    "_": DBuffLevelOp.Add,
+                }),
+                level: p.level,
+                turn: p.turn,
+            };
+            this.buffQualifying.push(d);
+        }
+    }
+
     public copyFrom(src: DEffect): void {
         //this.scope = { ...src.scope };
         this.subEntityFindKey = { ...src.subEntityFindKey };
@@ -415,7 +449,7 @@ export class DEffect {
         this.critical = src.critical;
         this.successRate = src.successRate;
         this.hitType = src.hitType;
-        this.rmmzAnimationId = src.rmmzAnimationId;
+        this.flavorEffect = src.flavorEffect;
         
         this.parameterQualifyings = src.parameterQualifyings.map(x => x.clone());
         this.otherEffectQualifyings = src.otherEffectQualifyings.slice();
@@ -558,4 +592,44 @@ export class DEffectSet {
         return this.effect(0).hitType;
     }
 }
+
+
+
+//------------------------------------------------------------------------------
+// Props
+
+export interface IEffectProps {
+    
+    /**
+     * 対象へダメージを与えるときにクリティカル判定を行うかかどうか。
+     * 
+     * 前方3方向など複数攻撃対象がいる場合は個別にクリティカルが発生することになる。
+     * 攻撃の発生元での会心判定は Action として行うこと。
+     * 
+     * IDataSkill.damage.critical
+     */
+    critical?: boolean;
+
+    /**
+     * パラメータへのバフ・デバフ効果。
+     */
+    parameterBuffs?: IParameterBuffEffectProps[];
+
+    /**
+     * この Effect が発生するときに再生する FlavorEffect。
+     */
+    flavorEffect?: IFlavorEffectProps;
+}
+
+
+export interface IParameterBuffEffectProps {
+    parameterKey: string;
+    type: ("constant" | "ratio");
+
+    /** (省略した場合は add) */
+    levelOp?: ("add" | "set"),
+    level: number;
+    turn: number;
+}
+
 

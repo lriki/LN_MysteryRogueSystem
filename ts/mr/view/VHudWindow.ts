@@ -36,10 +36,10 @@ export class VHudWindow extends Window_Base {
         const inventory = entity.findEntityBehavior(LInventoryBehavior);
         if (!inventory) return;
 
-        const hp = entity.actualParam(MRBasics.params.hp);
-        const mhp = entity.idealParam(MRBasics.params.hp);
-        const fp = entity.actualParam(MRBasics.params.fp);
-        const mfp = entity.idealParam(MRBasics.params.fp);
+        const hp = entity.getActualParam(MRBasics.params.hp);
+        const mhp = entity.getParamActualMax(MRBasics.params.hp);
+        const fp = entity.getActualParam(MRBasics.params.fp);
+        const mfp = entity.getParamActualMax(MRBasics.params.fp);
 
         const level = experience.level(entity);
         const prevExp = experience.expForLevel(entity, experience.level(entity));

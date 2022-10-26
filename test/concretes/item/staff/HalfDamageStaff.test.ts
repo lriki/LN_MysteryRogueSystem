@@ -27,7 +27,7 @@ test("concretes.item.staff.HalfDamageStaff.basic", () => {
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
-    const enemy1HP1 = enemy1.actualParam(MRBasics.params.hp);
+    const enemy1HP1 = enemy1.getActualParam(MRBasics.params.hp);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
@@ -39,13 +39,13 @@ test("concretes.item.staff.HalfDamageStaff.basic", () => {
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const enemy1HP2 = enemy1.actualParam(MRBasics.params.hp);
+    const enemy1HP2 = enemy1.getActualParam(MRBasics.params.hp);
     expect(enemy1HP2).toBe(Math.floor(enemy1HP1 / 2));
 
     //----------------------------------------------------------------------------------------------------
 
     // HP1 にしておく
-    enemy1.setActualParam(MRBasics.params.hp, 1);
+    enemy1.setParamCurrentValue(MRBasics.params.hp, 1);
 
     // [振る]
     MRSystem.dialogContext.postActivity(LActivity.makeWave(player1, item1).withConsumeAction());
@@ -54,7 +54,7 @@ test("concretes.item.staff.HalfDamageStaff.basic", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // HP1 で効果を受けたら戦闘不能
-    const enemy1HP3 = enemy1.actualParam(MRBasics.params.hp);
+    const enemy1HP3 = enemy1.getActualParam(MRBasics.params.hp);
     expect(enemy1HP3).toBe(0);
     expect(enemy1.isDestroyed()).toBeTruthy();
 });

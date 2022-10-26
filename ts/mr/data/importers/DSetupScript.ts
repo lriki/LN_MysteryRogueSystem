@@ -3,8 +3,12 @@ import { DEntity } from "../DEntity";
 import { DParameter } from "../DParameter";
 import { MRBasics } from "../MRBasics";
 import { MRData } from "../MRData";
-import * as index from "../index";
 import { DSkill } from "../DSkill";
+import { evalScript } from "./DSetupScripEvaluator";
+import { IEffectProps } from "../DEffect";
+
+
+
 
 
 interface DSetupScriptDB_Trait {
@@ -50,6 +54,7 @@ export class db {
     public static parameters: { [key: string]: DSParameters };
     public static actions: { [key: string]: DSetupAction };
     public static entities: { [key: string]: DSEntity };
+    public static effects: { [key: string]: IEffectProps } | undefined;
 }
 
 
@@ -71,18 +76,7 @@ export class DSetupScript {
     }
 
     public addScript(script: string): void {
-        // let require = function(f: string): RequireOverrideReturn {
-        //     return {
-        //         MRData: MRData,
-        //         mrdb: mrdb,
-        //         MRBasics: MRBasics,
-        //     };
-        // };
-        const require = function(f: string): any {
-            return index;
-        };
-        const tr = tr2;
-        eval(script);
+        evalScript(this, script);
     }
 
     public registerData(): void {
@@ -95,6 +89,8 @@ export class DSetupScript {
     }
     
     public setupData(): void {
+        this.createEffects();
+
         for (const data of MRData.parameters) {
             const entry = db.parameters[data.key];
             if (entry) {
@@ -102,9 +98,30 @@ export class DSetupScript {
             }
         }
         for (const data of MRData.skills.filter(x => x.isActivity)) {
-            const entry = db.actions[data.key];
-            if (entry) {
-                entry.setup(data);
+            const props = db.actions[data.key];
+            if (props) {
+                props.setup(data);
+            }
+        }
+
+        this.setupEffects();
+    }
+
+    private createEffects(): void {
+        if (!db.effects) return;
+        for (const [key, props] of Object.entries(db.effects)) {
+            if (!MRData.effects.find(x => x.key == key)) {
+                MRData.newEffect(key);
+            }
+        }
+    }
+
+    private setupEffects(): void {
+        if (!db.effects) return;
+        for (const data of MRData.effects) {
+            const props = db.effects[data.key];
+            if (props) {
+                data.applyProps(props);
             }
         }
     }
@@ -150,8 +167,6 @@ export class DSetupScript {
                 data.setup(entity);
             }
         }
-
-
     }
 }
 

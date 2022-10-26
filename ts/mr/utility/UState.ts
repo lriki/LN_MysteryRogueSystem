@@ -1,4 +1,4 @@
-import { assert } from "ts/mr/Common";
+import { assert, tr2 } from "ts/mr/Common";
 import { LStateLevelType } from "ts/mr/data/DEffect";
 import { DAutoRemovalTiming, DState, DStateEffect, DStateId } from "ts/mr/data/DState";
 import { DStateGroup } from "ts/mr/data/DStateGroup";
@@ -7,6 +7,7 @@ import { LEntity } from "ts/mr/lively/LEntity";
 import { LState } from "ts/mr/lively/states/LState";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { SStateFactory } from "ts/mr/system/SStateFactory";
+import { Diag } from "../Diag";
 
 export interface StateAddition {
     stateId: DStateId;
@@ -99,8 +100,14 @@ export class UState {
         // 既存ステートのうち自動付加・自動削除条件を持つものは、満たされてないものに削除マークをつける
         for (const state of currentStates) {
             if (state.data.autoAdditionCondition) {
-                const a = entity;
-                const cond = eval(state.data.autoAdditionCondition);
+                let cond: boolean = false;
+                try {
+                    const a = entity;
+                    cond = eval(state.data.autoAdditionCondition);
+                }
+                catch (e) {
+                    Diag.error(tr2("ステートの自動付加条件の評価に失敗しました。ステートID: %1 条件: %2").format(state.data.id, state.data.autoAdditionCondition));
+                }
                 if (!cond) {
                     state.removing = true;
                 }
@@ -115,8 +122,14 @@ export class UState {
         // 自動付加条件を満たすステートを、いったんすべて追加する
         for (const data of MRData.states) {
             if (data.autoAdditionCondition && !currentStates.find(s => s.data.id == data.id)) {
-                const a = entity;
-                const cond = eval(data.autoAdditionCondition);
+                let cond: boolean = false;
+                try {
+                    const a = entity;
+                    cond = eval(data.autoAdditionCondition);
+                }
+                catch (e) {
+                    Diag.error(tr2("ステートの自動付加条件の評価に失敗しました。ステートID: %1 条件: %2").format(data.id, data.autoAdditionCondition));
+                }
                 if (cond === true) {
                     currentStates.push({
                         data: data,

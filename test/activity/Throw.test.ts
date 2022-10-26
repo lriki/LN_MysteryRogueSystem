@@ -100,6 +100,6 @@ test("activity.ThrowAndHit", () => {
     MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     expect(item1.isDestroyed()).toBe(true);     // item は削除されている
-    const a = enemy1.actualParam(MRBasics.params.hp);
-    expect(enemy1.actualParam(MRBasics.params.hp) > 1).toBe(true); // HP が回復していること。
+    const a = enemy1.getActualParam(MRBasics.params.hp);
+    expect(enemy1.getActualParam(MRBasics.params.hp) > 1).toBe(true); // HP が回復していること。
 });

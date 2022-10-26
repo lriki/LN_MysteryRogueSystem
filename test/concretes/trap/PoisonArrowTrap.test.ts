@@ -17,8 +17,8 @@ test("concretes.trap.PoisonArrowTrap.Basic", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
-    const hp1 = player1.actualParam(MRBasics.params.hp);
-    const pow1 = player1.actualParam(MRBasics.params.pow);
+    const hp1 = player1.getActualParam(MRBasics.params.hp);
+    const pow1 = player1.getActualParam(MRBasics.params.pow);
     player1.addState(MRData.getState("kState_UT罠必中").id);
 
     // trap 生成&配置
@@ -36,8 +36,8 @@ test("concretes.trap.PoisonArrowTrap.Basic", () => {
     MRLively.world.random().resetSeed(5);     // 乱数調整
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
-    const hp2 = player1.actualParam(MRBasics.params.hp);
-    const pow2 = player1.actualParam(MRBasics.params.pow);
+    const hp2 = player1.getActualParam(MRBasics.params.hp);
+    const pow2 = player1.getActualParam(MRBasics.params.pow);
     expect(hp2 < hp1).toBe(true);  // ダメージを受けている
     expect(pow2).toBe(pow1 - 1);    // ちからが減っている
 });

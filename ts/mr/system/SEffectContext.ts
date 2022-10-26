@@ -17,6 +17,7 @@ import { LObject, LObjectType } from "../lively/LObject";
 import { UEffect } from "../utility/UEffect";
 import { UAction } from "../utility/UAction";
 import { STask } from "./tasks/STask";
+import { MRSystem } from "./MRSystem";
 
 
 export enum SEffectIncidentType {
@@ -264,20 +265,20 @@ export class SEffectContext {
 
             const effectData = effect.data();
             const behavior = this._effectorFact.subjectBehavior();
-            const attackAnimationId = behavior ? behavior.attackAnimationId() : -1;
-            const rmmzAnimationId = (effectData.rmmzAnimationId < 0) ? attackAnimationId : effectData.rmmzAnimationId;
-            if (rmmzAnimationId > 0) {
+            const attackFlavorEffect = behavior ? behavior.attackAnimationId() : MRData.system.bareHandsFlavorEffect;
+            const flavorEffect = (effectData.flavorEffect === undefined) ? attackFlavorEffect : effectData.flavorEffect;
+            if (flavorEffect) {
                 const animationTarget2 = this.findAnimationEntity(target);
                 if (animationTarget2) {
-                    cctx.postAnimation(animationTarget2, rmmzAnimationId, false);
+                    cctx.displayFlavorEffect(animationTarget2, flavorEffect, { messageFormatArgs:[] });
                     animationPosted = true;
                 }
             }
 
             const selfEffect = this._effectorFact.effectSet().succeededSelfEffect;
             if (selfEffect) {
-                if (selfEffect.rmmzAnimationId) {
-                    cctx.postAnimation(effect.subject(), selfEffect.rmmzAnimationId, false);
+                if (selfEffect.flavorEffect) {
+                    cctx.displayFlavorEffect(effect.subject(), selfEffect.flavorEffect, { messageFormatArgs:[] });
                     animationPosted = true;
                 }
             }

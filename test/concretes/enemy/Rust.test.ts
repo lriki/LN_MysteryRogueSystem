@@ -25,12 +25,12 @@ test("concretes.enemy.Rust", () => {
     // 武器 入手
     const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1, [], "weapon1"));
     inventory2.addEntity(weapon1);
-    const weapon1_UP1 = weapon1.actualParam(MRBasics.params.upgradeValue);
+    const weapon1_UP1 = weapon1.getActualParam(MRBasics.params.upgradeValue);
 
     // 盾 入手
     const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_青銅の盾_A").id, [], "shield1"));
     inventory2.addEntity(shield1);
-    const shield1_UP1 = shield1.actualParam(MRBasics.params.upgradeValue);
+    const shield1_UP1 = shield1.getActualParam(MRBasics.params.upgradeValue);
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ラストゾンビ_A").id, [], "enemy1"));
@@ -49,8 +49,8 @@ test("concretes.enemy.Rust", () => {
     MRLively.world.random().resetSeed(5);     // 乱数調整
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const weapon1_UP2 = weapon1.actualParam(MRBasics.params.upgradeValue);
-    const shield1_UP2 = shield1.actualParam(MRBasics.params.upgradeValue);
+    const weapon1_UP2 = weapon1.getActualParam(MRBasics.params.upgradeValue);
+    const shield1_UP2 = shield1.getActualParam(MRBasics.params.upgradeValue);
 
     expect(weapon1_UP2).toBe(weapon1_UP1 - 1);
     expect(shield1_UP2).toBe(shield1_UP1 - 1);

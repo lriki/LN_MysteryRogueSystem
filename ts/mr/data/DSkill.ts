@@ -1,7 +1,7 @@
 import { DSpecificEffectId as DSpecialEffectId, DSkillId } from "./DCommon";
 import { DRmmzEffectScope } from "./DEffect";
 import { DEmittor, DEmittorId } from "./DEmittor";
-import { DFlavorEffect, IFlavorEffect } from "./DFlavorEffect";
+import { DFlavorEffect, IFlavorEffectProps } from "./DFlavorEffect";
 import { MRData } from "./MRData";
 
 export class DSkill {
@@ -72,7 +72,7 @@ export class DSkill {
         return MRData.getEmittorById(this.emittorId);
     }
 
-    public setFlavorEffect(options: IFlavorEffect): void {
+    public setFlavorEffect(options: IFlavorEffectProps): void {
         this.flavorEffect = new DFlavorEffect(options);
     }
 }

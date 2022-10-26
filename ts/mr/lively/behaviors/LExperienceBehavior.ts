@@ -1,7 +1,7 @@
 import { MRData } from "ts/mr/data/MRData";
 import { MRLively } from "../MRLively";
 import { LBehavior } from "ts/mr/lively/behaviors/LBehavior";
-import { LEntity } from "../LEntity";
+import { LEntity, LParamChangedAction } from "../LEntity";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { DParameterId } from "ts/mr/data/DCommon";
 import { DClass } from "ts/mr/data/DClass";
@@ -115,10 +115,35 @@ export class LExperienceBehavior extends LBehavior {
     Behavior が依存パラメータの増減要求を受け取り、影響するパラメータの変更を行う。
     （それは上記の通り Exp かもしれないし、Lv を持たなければ効果が無いし、モンスターの場合はランクダウンかもしれない）
 
+    [22/10/19] 依存パラメータLevel と Exp と依存パラメータへのバフ
+    ----------
+    「一時的にレベルを下げる」系のスキルを実装できるだろうか？
+
+    まず思いつくのは Level に対するバフである。これの実現自体は簡単。
+    問題は、その時点で Exp とどう連携するか。
+
+    もし NextExp を Level の ActualValue から計算すると、デバフを食らったときに普通は 現在Exp>NextExp となってしまう。
+    冪等性を重視する場合、この状態を維持することはできず、即レベルアップを繰り返し、デバフ中にもかかわらずレベルが上がってしまう。
+
+    Levelを依存パラメータにする/しないに関わらず、 Exp は Leven の IdealValue から計算する必要があり、
+    LevelUp/Down は Damage として表現するのではなく、最大値(IdealBase or IdealPlus)の変更として扱う必要がある。
+
+    [22/10/19] Level は依存パラメータにしちゃダメかも
+    ----------
+    Expを持たない、モンスターのレベルが表現できなくなる。
+    ダミー的な ExpParam を持たせてもいいが、そんな用途の余計な情報は出来るだけ持たせたくない。
+
+
+
+
     */
+
+    // Level は依存パラメータであり、 Exp に応じて常に変化するため「前回値」が必要な時は別途持っておく必要がある。
+    //private _currentLevel: number;
 
     constructor() {
         super();
+        //this._currentLevel = 0;
     }
 
     public clone(newOwner: LEntity): LBehavior {
@@ -127,7 +152,7 @@ export class LExperienceBehavior extends LBehavior {
     }
 
     onAttached(self: LEntity): void {
-        const params = self.params();
+        const params = self.params;
         params.acquireParam(MRBasics.params.level);
         params.acquireParam(MRBasics.params.exp);
         this.resetLevel(self);
@@ -137,25 +162,54 @@ export class LExperienceBehavior extends LBehavior {
         this.resetLevel(self);
     }
 
-    onParamChanged(self: LEntity, paramId: DParameterId, newValue: number, oldValue: number): void {
+    override onParamIdealPlusChanged(self: LEntity, paramId: DParameterId, newValue: number, oldValue: number): void {
         if (paramId == MRBasics.params.level) {
-            self.setActualParam(MRBasics.params.exp, this.expForLevel(self, newValue));
+            this.refreshExpFromLevel(self, newValue, oldValue);
         }
         else if (paramId == MRBasics.params.exp) {
-            this.refreshLevel(self);
+            throw new Error("Unreachable.");
         }
     }
+
+    override onParamChanged(self: LEntity, paramId: DParameterId, newValue: number, oldValue: number): void {
+        if (paramId == MRBasics.params.level) {
+            //throw new Error("Unreachable.");
+        }
+        else if (paramId == MRBasics.params.exp) {
+            this.refreshLevelFromExp(self, newValue, oldValue);
+        }
+    }
+
+    // override onGetDependentParameterIdealBaseValue(self: LEntity, parameterId: DParameterId): number | undefined {
+    //     if (parameterId == MRBasics.params.level) {
+    //         return this._currentLevel;
+    //     }
+    //     return undefined;
+    // }
+
+    // override onSetDependentParameterIdealBaseValue(self: LEntity, parameterId: DParameterId, value: number): void {
+    //     if (parameterId == MRBasics.params.level) {
+    //         // Level -> Exp へ Backword.
+    //         self.setParamCurrentValue(MRBasics.params.exp, this.expForLevel(self, value));
+    //     }
+    // }
     
     onRefreshConditions(self: LEntity): void {
         
     }
 
     private resetLevel(self: LEntity): void {
-        self.setActualParam(MRBasics.params.level, this.actor(self).initialLevel);
+        //this._currentLevel = this.actor(self).initialLevel;
+        this.setLevel(self, this.actor(self).initialLevel);
     }
 
     public level(self: LEntity): number {
-        return self.actualParam(MRBasics.params.level);
+        return self.getEffortValue(MRBasics.params.level);
+    }
+
+    // Game_Actor.prototype.currentExp
+    public currentExp(self: LEntity): number {
+        return self.getActualParam(MRBasics.params.exp);
     }
 
     // public maxLevel(self: LEntity): number {
@@ -165,17 +219,18 @@ export class LExperienceBehavior extends LBehavior {
     // for test
     public setLevel(self: LEntity, value: number): void {
         value = value.clamp(1, this.maxLevel(self));
-        self.setActualParam(MRBasics.params.level, value);
+        self.setEffortValue(MRBasics.params.level, value);
+        //self.setParamCurrentValue(MRBasics.params.level, value);
+    }
+
+    private gainLevel(self: LEntity, value: number): void {
+        self.setEffortValue(MRBasics.params.level, self.getEffortValue(MRBasics.params.level) + value, LParamChangedAction.None);
+        //self.gainActualParam(MRBasics.params.level, value, false);
     }
     
     // Game_Actor.prototype.changeLevel = function(level, show) {
     //     this.changeExp(this.expForLevel(level), show);
     // };
-
-    // Game_Actor.prototype.currentExp
-    public currentExp(self: LEntity): number {
-        return self.actualParam(MRBasics.params.exp);
-    }
     
     // Game_Actor.prototype.nextLevelExp
     public nextLevelExp(self: LEntity): number {
@@ -223,30 +278,63 @@ export class LExperienceBehavior extends LBehavior {
         return this.expForLevel(self, this.level(self));
     }
 
-    // 現在 Exp に Level をあわせる
-    private refreshLevel(self: LEntity): void {
-        //const lastLevel = this._level;
-        //const lastSkills = this.skills();
+    public setExp(self: LEntity, value: number): void {
+        self.setParamCurrentValue(MRBasics.params.exp, value);
+    }
 
-        while (!this.isMaxLevel(self) && this.currentExp(self) >= this.nextLevelExp(self)) {
-            this.levelUp(self);
+    private refreshExpFromLevel(self: LEntity, newLevel: number, oldLevel: number): void {
+        //this._currentLevel = newLevel;
+        this.setExp(self, this.expForLevel(self, newLevel));
+    }
+
+    // 現在 Exp に Level をあわせる
+    private refreshLevelFromExp(self: LEntity, newExp: number, oldExp: number): void {
+        if (newExp == oldExp) return;
+
+        // 検証。 _lastLevel は常に exp の変動とともに更新されていなければならない。
+        // {
+        //     const e1 = this.expForLevel(self, this._currentLevel);
+        //     const e2 = this.expForLevel(self, this._currentLevel + 1);
+        //     assert(e1 <= oldExp && oldExp < e2);
+        // }
+
+        //const oldLevel = this._currentLevel;
+        // if (newExp > oldExp) {
+        //     // LevelUp
+        //     while (this._currentLevel < this.maxLevel(self) && newExp >= this.expForLevel(self, this._currentLevel + 1)) {
+        //         this._currentLevel++;
+        //         this.onLevelUp(self/*, oldLevel*/);
+        //     }
+        // }
+        // else {
+        //     // LevelDown
+        //     while (newExp < this.expForLevel(self, this._currentLevel)) {
+        //         this._currentLevel--;
+        //         this.onLevelUp(self/*, oldLevel*/);
+        //     }
+        // }
+
+
+        // const lastLevel = oldLevel;
+        while (!this.isMaxLevel(self) && newExp >= this.nextLevelExp(self)) {
+            this.onLevelUp(self/*, oldLevel*/);
         }
-        while (this.currentExp(self) < this.currentLevelExp(self)) {
-            this.levelDown(self);
+        while (newExp < this.currentLevelExp(self)) {
+            this.onLevelDown(self/*, oldLevel*/);
         }
     }
 
     // Game_Actor.prototype.levelUp
-    private levelUp(self: LEntity): void {
-        const oldValue = self.actualParam(MRBasics.params.level);
-        self.gainActualParam(MRBasics.params.level, 1, false);
+    private onLevelUp(self: LEntity/*, oldLevel: number*/): void {
+        // const oldValue = self.actualParam(MRBasics.params.level);
+        this.gainLevel(self, 1);
         //this.ownerEntity()._effectResult.levelup = true;
 
         const result = this.ownerEntity()._effectResult;
         const paramResult = new LParamEffectResult(MRBasics.params.level);
-        paramResult.applyTarget = DValuePoint.Current;
+        paramResult.applyTarget = DValuePoint.Growth;
         paramResult.damage = -1;
-        paramResult.oldValue = oldValue;
+        //paramResult.oldValue = oldLevel;
         result.paramEffects2.push(paramResult);
         result._revision++;
 
@@ -258,8 +346,8 @@ export class LExperienceBehavior extends LBehavior {
     }
 
     // Game_Actor.prototype.levelDown
-    private levelDown(self: LEntity): void {
-        self.gainActualParam(MRBasics.params.level, -1, false);
+    private onLevelDown(self: LEntity/*, oldLevel: number*/): void {
+        this.gainLevel(self, -1);
         // this.ownerEntity()._effectResult.leveldown = true;
         // this.ownerEntity()._effectResult._revision++;
     }

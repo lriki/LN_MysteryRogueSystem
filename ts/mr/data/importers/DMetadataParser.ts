@@ -5,6 +5,7 @@ import { MRData } from "../MRData";
 
 export class DMetadata {
     key: string;
+    effectKey: string | undefined;
 
     type: string;
 
@@ -22,6 +23,7 @@ export class DMetadata {
 
     public constructor() {
         this.key = "";
+        this.effectKey = undefined;
         this.type = "";
         this.kind = "";
         this.behaviors = [];
@@ -49,6 +51,11 @@ export class DMetadataParser {
         const key = meta["MR-Key"];
         if (key) {
             result.key = key.trim();
+        }
+        
+        const effectKey = meta["MR-EffectKey"];
+        if (effectKey) {
+            result.effectKey = effectKey.trim();
         }
 
         const capacity = meta["RE-Capacity"];

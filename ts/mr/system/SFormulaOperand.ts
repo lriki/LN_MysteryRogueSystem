@@ -24,8 +24,8 @@ export class SFormulaOperand {
 
                     if (paramPowerToAtk && param.id == MRBasics.params.atk) {
                         const entity = this.entity();
-                        const atk = entity.actualParam(MRBasics.params.atk);
-                        const pow = entity.actualParam(MRBasics.params.pow);
+                        const atk = entity.getActualParam(MRBasics.params.atk);
+                        const pow = entity.getActualParam(MRBasics.params.pow);
                         
                         // NOTE:
                         // ↓原作のダメージ計算式。
@@ -54,14 +54,14 @@ export class SFormulaOperand {
                         return atk + (atk * ((pow - 8) / 16.0));
                     }
                     else {
-                        return this.entity().actualParam(param.id);
+                        return this.entity().getActualParam(param.id);
                     }
                 },
                 configurable: true
             };
             prop["max_" + param.code] = {
                 get: () => {
-                    return this.entity().idealParam(param.id);
+                    return this.entity().getParamActualMax(param.id);
                 },
                 configurable: true
             };

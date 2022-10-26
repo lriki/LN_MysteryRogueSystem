@@ -31,7 +31,7 @@ test("effects.CollideEffects.Weapon", () => {
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_Test_サンドバッグドラゴン").id, [], "enemy1"));
     enemy1.addState(MRData.getState("kState_UTからぶり").id);
     MRLively.world.transferEntity(enemy1, floorId, 11, 10);
-    const enemy1HP1 = enemy1.actualParam(MRBasics.params.hp);
+    const enemy1HP1 = enemy1.getActualParam(MRBasics.params.hp);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -45,7 +45,7 @@ test("effects.CollideEffects.Weapon", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 何かしらダメージが出ていること
-    const enemy1HP2 = enemy1.actualParam(MRBasics.params.hp);
+    const enemy1HP2 = enemy1.getActualParam(MRBasics.params.hp);
     const damage1 = enemy1HP1 - enemy1HP2;
     expect(damage1).toBeGreaterThan(0);
 
@@ -81,7 +81,7 @@ test("effects.CollideEffects.Shield", () => {
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_Test_サンドバッグドラゴン").id, [], "enemy1"));
     enemy1.addState(MRData.getState("kState_UTからぶり").id);
     MRLively.world.transferEntity(enemy1, floorId, 11, 10);
-    const enemy1HP1 = enemy1.actualParam(MRBasics.params.hp);
+    const enemy1HP1 = enemy1.getActualParam(MRBasics.params.hp);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -97,7 +97,7 @@ test("effects.CollideEffects.Shield", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 防御力の値と同じダメージが出ていること
-    const enemy1HP2 = enemy1.actualParam(MRBasics.params.hp);
+    const enemy1HP2 = enemy1.getActualParam(MRBasics.params.hp);
     const damage1 = enemy1HP1 - enemy1HP2;
     expect(damage1).toBe(damage.value);
 });

@@ -32,7 +32,7 @@ test("concretes.item.scroll.RestartScroll", async () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, floorId, 13, 10);
-    const enemy1HP1 = enemy1.actualParam(MRBasics.params.hp);
+    const enemy1HP1 = enemy1.getActualParam(MRBasics.params.hp);
 
 
     // 初期状態を Save
@@ -59,7 +59,7 @@ test("concretes.item.scroll.RestartScroll", async () => {
     //await REGame.recorder.stopRecording();
 
     // とりあえず何かダメージ受けているはず
-    const enemy1HP2 = enemy1.actualParam(MRBasics.params.hp);
+    const enemy1HP2 = enemy1.getActualParam(MRBasics.params.hp);
     expect(enemy1HP2).toBeLessThan(enemy1HP1);
 
     //----------------------------------------------------------------------------------------------------
@@ -81,7 +81,7 @@ test("concretes.item.scroll.RestartScroll", async () => {
     const inventory2 = player1_2.getEntityBehavior(LInventoryBehavior);
 
     const enemy1_2 = MRLively.world.entity(enemy1.entityId());
-    const enemy1HP3 = enemy1_2.actualParam(MRBasics.params.hp);
+    const enemy1HP3 = enemy1_2.getActualParam(MRBasics.params.hp);
 
     // 色々元に戻っている
     expect(player1_2.mx).toBe(10);

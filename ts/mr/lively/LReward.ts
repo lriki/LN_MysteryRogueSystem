@@ -32,7 +32,7 @@ export class LReward {
         // if (b) {
         //     b.gainExp(this._exp);
         // }
-        if (entity.params().hasParam(MRBasics.params.exp)) {
+        if (entity.params.hasParam(MRBasics.params.exp)) {
             entity.gainActualParam(MRBasics.params.exp, this._exp, true);
         }
 

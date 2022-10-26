@@ -32,7 +32,7 @@ test("Recorder.Basic1", async () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, floorId, 13, 10);  // 配置
-    const initialHP1 = enemy1.actualParam(MRBasics.params.hp);
+    const initialHP1 = enemy1.getActualParam(MRBasics.params.hp);
 
     // 初期状態を Save
     const savedata1 = TestJsonEx.stringify(SGameManager.makeSaveContentsCore());
@@ -56,7 +56,7 @@ test("Recorder.Basic1", async () => {
 
     await MRLively.recorder.stopRecording();
 
-    const resultHP2 = enemy1.actualParam(MRBasics.params.hp);
+    const resultHP2 = enemy1.getActualParam(MRBasics.params.hp);
 
     //----------------------------------------------------------------------------------------------------
 
@@ -71,7 +71,7 @@ test("Recorder.Basic1", async () => {
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const resultHP3 = enemy1_2.actualParam(MRBasics.params.hp);
+    const resultHP3 = enemy1_2.getActualParam(MRBasics.params.hp);
     expect(resultHP2).toBe(resultHP3);
 });
 

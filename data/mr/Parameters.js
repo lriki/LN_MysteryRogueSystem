@@ -34,7 +34,7 @@ MR.db.parameters = {
             });
             parameter.addFlavorEffect({
                 looksFaction: MR.DFactionType.Neutral,          // 勢力を問わず、
-                point: MR.DValuePoint.Maximum,                  // 最大値が、
+                point: MR.DValuePoint.Growth,                  // 最大値が、
                 addition: MR.DValueAddition.Gain,               // 増えた時、
                 flavorEffect: {
                     text: MR.DTextManager.actorGain             // "増えた" と表示する。(ツクールのエディタで設定された文字列)
@@ -50,7 +50,7 @@ MR.db.parameters = {
             // レベルアップ
             parameter.addFlavorEffect({
                 looksFaction: MR.DFactionType.Neutral,          // 勢力を問わず、
-                point: MR.DValuePoint.Current,                  // 現在値が、
+                point: MR.DValuePoint.Growth,                  // 理想値が、
                 addition: MR.DValueAddition.Gain,               // 増えた時、
                 flavorEffect: {
                     text: MR.DTextManager.levelUp.replace("%3", "%5"),  // レベルアップのメッセージを表示する。(ツクールのエディタで設定された文字列)
@@ -65,7 +65,7 @@ MR.db.parameters = {
             // レベルダウン
             parameter.addFlavorEffect({
                 looksFaction: MR.DFactionType.Neutral,          // 勢力を問わず、
-                point: MR.DValuePoint.Current,                  // 現在値が、
+                point: MR.DValuePoint.Growth,                  // 理想値が、
                 addition: MR.DValueAddition.Loss,               // 減った時、
                 flavorEffect: {
                     text: tr("%1は%2 %5 にさがった。"),         // レベルダウンのメッセージを表示する。

@@ -149,10 +149,10 @@ export class SEmittorPerformer {
 
     private canPayParamCost(entity: LEntity, paramId: DParameterId, cost: DParamCost): boolean {
         if (cost.type == DParamCostType.Decrease) {
-            if (entity.actualParam(paramId) < cost.value) return false;
+            if (entity.getActualParam(paramId) < cost.value) return false;
         }
         else if (cost.type == DParamCostType.Increase) {
-            const d = entity.idealParam(paramId) - entity.actualParam(paramId);
+            const d = entity.getParamActualMax(paramId) - entity.getActualParam(paramId);
             if (d < cost.value) return false;
         }
         else {

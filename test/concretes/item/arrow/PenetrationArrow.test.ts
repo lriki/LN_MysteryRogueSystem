@@ -33,8 +33,8 @@ test("concretes.item.arrow.PenetrationArrow", () => {
     const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy2"));
     MRLively.world.transferEntity(enemy1, floorId, 15, 10);
     MRLively.world.transferEntity(enemy2, floorId, 17, 10);
-    const enemy1HP1 = enemy1.actualParam(MRBasics.params.hp);
-    const enemy2HP1 = enemy2.actualParam(MRBasics.params.hp);
+    const enemy1HP1 = enemy1.getActualParam(MRBasics.params.hp);
+    const enemy2HP1 = enemy2.getActualParam(MRBasics.params.hp);
 
     // Player の右に壁を作る
     MRLively.map.block(11, 10)._tileShape = LTileShape.Wall;
@@ -51,8 +51,8 @@ test("concretes.item.arrow.PenetrationArrow", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 壁を貫通し、2体の Enemy にダメージが出ている
-    const enemy1HP2 = enemy1.actualParam(MRBasics.params.hp);
-    const enemy2HP2 = enemy2.actualParam(MRBasics.params.hp);
+    const enemy1HP2 = enemy1.getActualParam(MRBasics.params.hp);
+    const enemy2HP2 = enemy2.getActualParam(MRBasics.params.hp);
     expect(enemy1HP2).toBeLessThan(enemy1HP1);
     expect(enemy2HP2).toBeLessThan(enemy2HP1);
 

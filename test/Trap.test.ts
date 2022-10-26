@@ -17,7 +17,7 @@ test("Trap.TriggerRate", () => {
     TestEnv.newGame();
 
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    const hp1 = player1.actualParam(MRBasics.params.hp);
+    const hp1 = player1.getActualParam(MRBasics.params.hp);
 
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_地雷_A").id, [], "trap1"));
     MRLively.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
@@ -38,10 +38,10 @@ test("Trap.TriggerRate", () => {
         trapBehavior.setExposed(false);
         MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-        const hp2 = player1.actualParam(MRBasics.params.hp);
+        const hp2 = player1.getActualParam(MRBasics.params.hp);
         if (hp2 < hp1) triggerd1++;
         MRLively.world.transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 10, 10);
-        player1.setActualParam(MRBasics.params.hp, hp1);
+        player1.setParamCurrentValue(MRBasics.params.hp, hp1);
     }
 
     //----------------------------------------------------------------------------------------------------
@@ -56,10 +56,10 @@ test("Trap.TriggerRate", () => {
 
         MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-        const hp2 = player1.actualParam(MRBasics.params.hp);
+        const hp2 = player1.getActualParam(MRBasics.params.hp);
         if (hp2 < hp1) triggerd2++;
         MRLively.world.transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 10, 10);
-        player1.setActualParam(MRBasics.params.hp, hp1);
+        player1.setParamCurrentValue(MRBasics.params.hp, hp1);
     }
 
     // paramHiddenTrapTriggerRate, paramExposedTrapTriggerRate の関係から、振れ幅大きめに基準を作っておく
@@ -135,7 +135,7 @@ test("Trap.Attack", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10); // 罠の上に配置
-    const hp1 = enemy1.actualParam(MRBasics.params.hp);
+    const hp1 = enemy1.getActualParam(MRBasics.params.hp);
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
@@ -148,7 +148,7 @@ test("Trap.Attack", () => {
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // Enemy がダメージを受けていることを確認
-    const hp2 = enemy1.actualParam(MRBasics.params.hp);
+    const hp2 = enemy1.getActualParam(MRBasics.params.hp);
     expect(hp2 < hp1).toBe(true);
 
     // 敵に効果がある状態では、罠は露出しない

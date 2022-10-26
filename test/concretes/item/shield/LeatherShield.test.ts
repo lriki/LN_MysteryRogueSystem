@@ -22,7 +22,7 @@ test("concretes.item.shield.LeatherShield.test", () => {
     player1.addState(MRData.getState("kState_UT罠必中").id);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
-    const fp1 = player1.actualParam(MRBasics.params.fp);
+    const fp1 = player1.getActualParam(MRBasics.params.fp);
 
     const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_皮の盾_A").id, [], "shield1"));
     inventory.addEntity(shield1);
@@ -31,7 +31,7 @@ test("concretes.item.shield.LeatherShield.test", () => {
     // trap1 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_錆ワナ_A").id, [], "trap1"));
     MRLively.world.transferEntity(trap1, floorId, 11, 10);
-    const shield1_UP1 = shield1.actualParam(MRBasics.params.upgradeValue);
+    const shield1_UP1 = shield1.getActualParam(MRBasics.params.upgradeValue);
 
     MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
@@ -44,10 +44,10 @@ test("concretes.item.shield.LeatherShield.test", () => {
 
     MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
-    const fp2 = player1.actualParam(MRBasics.params.fp);
+    const fp2 = player1.getActualParam(MRBasics.params.fp);
     expect(fp2).toBe(fp1 - (paramFPLoss / 2));  // FP が基本値の半分、減少していること
 
     // 装備はさびない
-    const shield1_UP2 = shield1.actualParam(MRBasics.params.upgradeValue);
+    const shield1_UP2 = shield1.getActualParam(MRBasics.params.upgradeValue);
     expect(shield1_UP2).toBe(shield1_UP1);
 });

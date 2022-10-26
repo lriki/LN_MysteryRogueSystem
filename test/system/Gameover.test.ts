@@ -23,7 +23,7 @@ test("system.Gameover.Basic", () => {
 
     //----------------------------------------------------------------------------------------------------
 
-    player1.setActualParam(MRBasics.params.hp, 0);
+    player1.setParamCurrentValue(MRBasics.params.hp, 0);
 
     // [待機]
     MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
@@ -37,7 +37,7 @@ test("system.Gameover.Basic", () => {
     expect(camera.transferingNewFloorId().landId()).toBe(land.id);
 
     // HP はまだ回復していない
-    expect(player1.actualParam(MRBasics.params.hp)).toBe(0); 
+    expect(player1.getActualParam(MRBasics.params.hp)).toBe(0); 
 
     // 冒険の結果は Gameover になっている
     const party = player1.party();
@@ -65,7 +65,7 @@ test("system.Gameover.Basic", () => {
     expect(camera.transferingNewFloorId().rmmzMapId()).toBe(map.mapId);
 
     // この時点で HPは回復している
-    expect(player1.actualParam(MRBasics.params.hp)).toBeGreaterThan(0);
+    expect(player1.getActualParam(MRBasics.params.hp)).toBeGreaterThan(0);
 
     //----------------------------------------------------------------------------------------------------
 

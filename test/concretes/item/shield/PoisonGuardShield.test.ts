@@ -20,7 +20,7 @@ test("concretes.item.shield.PoisonGuardShield", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
-    const pow1 = player1.actualParam(MRBasics.params.pow);
+    const pow1 = player1.getActualParam(MRBasics.params.pow);
     player1.addState(MRData.getState("kState_UT罠必中").id);
 
     const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_うろこの盾_A").id, [], "shield1"));
@@ -43,7 +43,7 @@ test("concretes.item.shield.PoisonGuardShield", () => {
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
-    const pow2 = player1.actualParam(MRBasics.params.pow);
+    const pow2 = player1.getActualParam(MRBasics.params.pow);
     expect(pow2).toBeLessThan(pow1);        // 毒矢の効果は受けてしまう
 
     //----------------------------------------------------------------------------------------------------
@@ -54,7 +54,7 @@ test("concretes.item.shield.PoisonGuardShield", () => {
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const pow4 = player1.actualParam(MRBasics.params.pow);
+    const pow4 = player1.getActualParam(MRBasics.params.pow);
     expect(pow4).toBeLessThan(pow1);        // 毒草の効果は受けてしまう
 });
 
@@ -65,7 +65,7 @@ test("concretes.item.shield.PoisonGuardShield2", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
-    const pow1 = player1.actualParam(MRBasics.params.pow);
+    const pow1 = player1.getActualParam(MRBasics.params.pow);
 
     const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_うろこの盾_A").id, [], "shield1"));
     inventory.addEntity(shield1);
@@ -85,7 +85,7 @@ test("concretes.item.shield.PoisonGuardShield2", () => {
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const pow5 = player1.actualParam(MRBasics.params.pow);
+    const pow5 = player1.getActualParam(MRBasics.params.pow);
     expect(pow5).toBe(pow1);                // 特定スキルからの効果は受けない
 });
 

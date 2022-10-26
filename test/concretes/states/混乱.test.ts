@@ -150,7 +150,7 @@ test("concretes.states.混乱.throw", () => {
     MRSystem.scheduler.stepSimulation();
     for (let i = 0; i < 5; i++) {
         // HP1 にする
-        enemy1.setActualParam(MRBasics.params.hp, 1);
+        enemy1.setParamCurrentValue(MRBasics.params.hp, 1);
 
         // 投げる
         MRSystem.dialogContext.postActivity(LActivity.makeThrow(actor1, items[i]).withEntityDirection(6).withConsumeAction());
@@ -158,6 +158,6 @@ test("concretes.states.混乱.throw", () => {
         MRSystem.scheduler.stepSimulation();
 
         // 混乱は投げには影響しないので、命中してHP回復しているはず
-        expect(enemy1.actualParam(MRBasics.params.hp) > 5).toBe(true);
+        expect(enemy1.getActualParam(MRBasics.params.hp) > 5).toBe(true);
     }
 });

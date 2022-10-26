@@ -1,6 +1,7 @@
 import { DClassId } from "./DClass";
 import { DSkillId } from "./DCommon";
 import { DEntityId } from "./DEntity";
+import { DFlavorEffect } from "./DFlavorEffect";
 import { DStateId } from "./DState";
 import { DFactionId, MRData } from "./MRData";
 
@@ -69,6 +70,8 @@ export class DSystem {
 
     public initialPartyMembers: DEntityId[];
 
+    public readonly bareHandsFlavorEffect: DFlavorEffect;
+
 
     constructor() {
         //this.elements = $dataSystem.elements ?? [];
@@ -93,6 +96,8 @@ export class DSystem {
         this.fallbackGoldEntityId = 0;
         //this.fallbackTrapEntityId = 0;
         this.initialPartyMembers = [];
+        this.bareHandsFlavorEffect = new DFlavorEffect();
+        this.bareHandsFlavorEffect.rmmzAnimationId = 1;
     }
 
     public link(testMode: boolean): void {

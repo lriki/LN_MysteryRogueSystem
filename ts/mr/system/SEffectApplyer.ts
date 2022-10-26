@@ -104,8 +104,8 @@ export class SEffect {
     // Game_Action.prototype.lukEffectRate
     public lukEffectRate(target: LEntity): number {
         const subject = this.subject();
-        const subject_luk = subject ? subject.actualParam(MRBasics.params.luk) : 0.0;
-        const target_luk = target.actualParam(MRBasics.params.luk);
+        const subject_luk = subject ? subject.getActualParam(MRBasics.params.luk) : 0.0;
+        const target_luk = target.getActualParam(MRBasics.params.luk);
         return Math.max(1.0 + (subject_luk - target_luk) * 0.001, 0.0);
     }
 }
@@ -344,7 +344,7 @@ export class SParameterEffect {
         if (this.qualifying.fallback) {
             this._valid = false;
         }
-        else if (target.params().hasParam(this.paramId)) {
+        else if (target.params.hasParam(this.paramId)) {
             this._valid = this.meetsConditions(target);
         }
         else {
@@ -518,7 +518,7 @@ export class SEffectApplyer {
 
         // 効果適用後の値は refresh() 後でとらないと、min-max clamp されていない。
         for (const paramResult of result.paramEffects2) {
-            paramResult.newValue = target.actualParam(paramResult.paramId);
+            paramResult.newValue = target.getActualParam(paramResult.paramId);
         }
     }
 
@@ -720,7 +720,7 @@ export class SEffectApplyer {
 
         //b.gainActualParam(DBasics.params.hp, -value);
 
-        const oldValue = target.actualParam(paramEffect.paramId);
+        const oldValue = target.getActualParam(paramEffect.paramId);
 
         if (value === 0) {
             result.critical = false;
@@ -741,8 +741,8 @@ export class SEffectApplyer {
             }
             this.gainDrainedParam(paramEffect, value);
         }
-        else if (paramEffect.qualifying.applyTarget == DValuePoint.Maximum) {
-            target.params().params()[paramEffect.paramId]?.gainIdealParamPlus(-value);
+        else if (paramEffect.qualifying.applyTarget == DValuePoint.Growth) {
+            target.params.params()[paramEffect.paramId]?.gainEffortValue(-value);
         }
         else {
             throw new Error("Not implemented.");

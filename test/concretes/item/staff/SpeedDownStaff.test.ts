@@ -29,7 +29,7 @@ test("concretes.item.staff.SpeedDownStaff.basic", () => {
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
-    const enemy1AGI1 = enemy1.actualParam(MRBasics.params.agi);
+    const enemy1AGI1 = enemy1.getActualParam(MRBasics.params.agi);
 
     expect(LScheduler2.getSpeedLevel(enemy1)).toBe(1);
 
@@ -43,7 +43,7 @@ test("concretes.item.staff.SpeedDownStaff.basic", () => {
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const enemy1AGI2 = enemy1.actualParam(MRBasics.params.agi);
+    const enemy1AGI2 = enemy1.getActualParam(MRBasics.params.agi);
     const speed = LScheduler2.getSpeedLevel(enemy1);
     expect(enemy1AGI2 < enemy1AGI1).toBeTruthy();
     expect(speed).toBe(-1);

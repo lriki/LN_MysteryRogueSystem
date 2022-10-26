@@ -68,8 +68,8 @@ export class LSelfExplosionBehavior extends LBehavior {
         // 既に戦闘不能なら処理不要
         if (self.isDeathStateAffected()) return SCommandResponse.Pass;
 
-        const mhp = self.idealParam(MRBasics.params.hp);
-        const hp = self.actualParam(MRBasics.params.hp);
+        const mhp = self.getParamActualMax(MRBasics.params.hp);
+        const hp = self.getActualParam(MRBasics.params.hp);
         if (hp < 10) {          // 残り1桁で爆発
             const skill = MRData.getSkill("kSkill_大爆発");
             cctx.postActivity(LActivity.makePerformSkill(self, skill.id));

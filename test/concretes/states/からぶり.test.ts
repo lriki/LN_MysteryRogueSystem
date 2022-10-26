@@ -19,12 +19,12 @@ test("concretes.states.からぶり", () => {
     MRLively.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
     TestEnv.performFloorTransfer();
     actor1.addState(MRData.getState("kState_UTからぶり").id);
-    const actorHP1 = actor1.actualParam(MRBasics.params.hp);
+    const actorHP1 = actor1.getActualParam(MRBasics.params.hp);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [MRData.getState("kState_UTからぶり").id], "enemy1"));
     MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
-    const enemyHP1 = enemy1.actualParam(MRBasics.params.hp);
+    const enemyHP1 = enemy1.getActualParam(MRBasics.params.hp);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -39,8 +39,8 @@ test("concretes.states.からぶり", () => {
         MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
         // 互いに HP 減少は無い
-        const actorHP2 = actor1.actualParam(MRBasics.params.hp);
-        const enemyHP2 = enemy1.actualParam(MRBasics.params.hp);
+        const actorHP2 = actor1.getActualParam(MRBasics.params.hp);
+        const enemyHP2 = enemy1.getActualParam(MRBasics.params.hp);
         expect(actorHP2).toBe(actorHP1);
         expect(enemyHP2).toBe(enemyHP1);
     }

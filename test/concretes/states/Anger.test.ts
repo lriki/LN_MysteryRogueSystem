@@ -20,7 +20,7 @@ test("concretes.states.Anger", () => {
 
     // Player
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
-    const pow1 = player1.actualParam(MRBasics.params.pow);
+    const pow1 = player1.getActualParam(MRBasics.params.pow);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ゾンビ_A").id, [], "enemy1"));
@@ -33,7 +33,7 @@ test("concretes.states.Anger", () => {
 
     for (let i = 0; i < 100; i++) {
         // ちからを戻しておく
-        player1.setActualParam(MRBasics.params.pow, pow1);
+        player1.setParamCurrentValue(MRBasics.params.pow, pow1);
 
         // 待機
         MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
@@ -42,7 +42,7 @@ test("concretes.states.Anger", () => {
         MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
         // ちからが減っている
-        const pow2 = player1.actualParam(MRBasics.params.pow);
+        const pow2 = player1.getActualParam(MRBasics.params.pow);
         expect(pow2).toBe(pow1 - 1);
     }
 });

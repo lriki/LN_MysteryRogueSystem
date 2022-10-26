@@ -40,7 +40,7 @@ export class LGoldBehavior extends LBehavior {
     }
 
     onAttached(self: LEntity): void {
-        const params = self.params();
+        const params = self.params;
         params.acquireParam(MRBasics.params.gold);
     }
 
@@ -58,11 +58,11 @@ export class LGoldBehavior extends LBehavior {
     }
     
     public gold(): number {
-        return this.ownerEntity().actualParam(MRBasics.params.gold);
+        return this.ownerEntity().getActualParam(MRBasics.params.gold);
     }
 
     public setGold(value: number) {
-        this.ownerEntity().setActualParam(MRBasics.params.gold, value);
+        this.ownerEntity().setParamCurrentValue(MRBasics.params.gold, value);
     }
 }
 

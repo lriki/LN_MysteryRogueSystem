@@ -76,7 +76,19 @@ export class DHelpers {
         );
     }
 
-    
+    public static stringToEnum<T>(value: string | undefined, pattern: { [key: string]: T }): T {
+        if (value) {
+            const e = pattern[value];
+            if (e !== undefined) {
+                return e;
+            }
+        }
+        const d = pattern["_"];
+        if (d !== undefined) {
+            return d;
+        }
+        throw new Error(`Unknown value: ${value}`);
+    }
 
     
     

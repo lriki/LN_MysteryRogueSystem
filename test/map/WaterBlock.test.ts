@@ -55,7 +55,7 @@ test("map.WaterBlock.WoodArrow.ProjectileOverMove", () => {
     
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, floorId, 13, 10);
-    const initialHP = enemy1.actualParam(MRBasics.params.hp);
+    const initialHP = enemy1.getActualParam(MRBasics.params.hp);
 
     // Player と Enemy の間に水地を作る
     MRLively.map.block(12, 10)._tileShape = LTileShape.Water;
@@ -70,7 +70,7 @@ test("map.WaterBlock.WoodArrow.ProjectileOverMove", () => {
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const hp = enemy1.actualParam(MRBasics.params.hp);
+    const hp = enemy1.getActualParam(MRBasics.params.hp);
     expect(hp < initialHP).toBeTruthy();      // ダメージを受けているはず
 });
 
@@ -88,7 +88,7 @@ test("map.WaterBlock.WoodArrow.ProjectileOverMove", () => {
     
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライム_A").id, [], "enemy1"));
     MRLively.world.transferEntity(enemy1, floorId, 13, 10);
-    const initialHP = enemy1.actualParam(MRBasics.params.hp);
+    const initialHP = enemy1.getActualParam(MRBasics.params.hp);
 
     // Player と Enemy の間に水地を作る
     MRLively.map.block(12, 10)._tileShape = LTileShape.Water;
@@ -103,7 +103,7 @@ test("map.WaterBlock.WoodArrow.ProjectileOverMove", () => {
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const hp = enemy1.actualParam(MRBasics.params.hp);
+    const hp = enemy1.getActualParam(MRBasics.params.hp);
     expect(hp < initialHP).toBeTruthy();      // ダメージを受けているはず
 });
 

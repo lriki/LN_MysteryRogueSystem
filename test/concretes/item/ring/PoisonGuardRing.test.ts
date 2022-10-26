@@ -20,7 +20,7 @@ test("concretes.item.ring.PoisonGuardRing.test", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
     const equipmentUser = player1.getEntityBehavior(LEquipmentUserBehavior);
-    const pow1 = player1.actualParam(MRBasics.params.pow);
+    const pow1 = player1.getActualParam(MRBasics.params.pow);
     player1.addState(MRData.getState("kState_UT罠必中").id);
 
     const ring1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_毒消しの指輪_A").id, [], "ring1"));
@@ -42,7 +42,7 @@ test("concretes.item.ring.PoisonGuardRing.test", () => {
     MRLively.world.random().resetSeed(5);     // 乱数調整
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
-    const pow2 = player1.actualParam(MRBasics.params.pow);
+    const pow2 = player1.getActualParam(MRBasics.params.pow);
     expect(pow2).toBe(pow1);    // ちからは減っていない
     expect(MRLively.messageHistory.includesText("ちからは変化しなかった")).toBeTruthy();
 });

@@ -13,8 +13,8 @@ beforeAll(() => {
 test("system.Property.basic", () => {
     TestEnv.newGame();
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
-    const hp1 = player1.actualParam(MRBasics.params.hp);
-    const max_hp1 = player1.idealParam(MRBasics.params.hp);
+    const hp1 = player1.getActualParam(MRBasics.params.hp);
+    const max_hp1 = player1.getParamActualMax(MRBasics.params.hp);
     const stateId = MRData.getState("kState_UTかなしばり").id;
     player1.addState(stateId);
 
