@@ -1,4 +1,4 @@
-import { DSpecialEffectRef } from "ts/mr/data/DEffect";
+import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
 import { DFloorClass, DLandForwardDirection } from "ts/mr/data/DLand";
 import { LEffectResult } from "ts/mr/lively/LEffectResult";
 import { LEntity } from "ts/mr/lively/LEntity";

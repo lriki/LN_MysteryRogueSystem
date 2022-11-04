@@ -29,7 +29,7 @@ export class LParamEffectResult {
 
     public constructor(paramId: DParameterId) {
         this.paramId = paramId;
-        this.applyTarget = DValuePoint.Current
+        this.applyTarget = DValuePoint.Actual
     }
 
     public paramDisplayName(): string {

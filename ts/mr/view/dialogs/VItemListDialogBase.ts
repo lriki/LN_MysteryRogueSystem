@@ -86,7 +86,7 @@ export class VItemListDialogBase extends VDialog {
             if (1) {
                 const owner = this._inventory.ownerEntity();
                 const itemEntity = this.itemListWindow.selectedItem();
-                const level = MRLively.identifyer.getEntityIdentificationLevel(owner, itemEntity);
+                const level = MRLively.getCurrentIdentifyer().getEntityIdentificationLevel(owner, itemEntity);
                 if (level == EntityIdentificationLevel.Unidentified) {
                     window.addSystemCommand(tr2("名前"), "nickname", () => this.handleNickname());
                 }

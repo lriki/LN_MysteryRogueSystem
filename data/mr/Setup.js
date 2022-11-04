@@ -23,13 +23,13 @@
 /// <reference path="./MysteryRogueSystem.d.ts" />
 const MR = require("MysteryRogueSystem/ts/main");
 
-MR.db.entities = {
+MR.db.entities3 = {
 
-    "kEntity_ドラゴンキラーA": {
-        setup: (entity) => {
-            entity.equipmentTraits.push({code: MRBasics.traits.RaceRate, dataId: MRData.getRace("kRace_ドラゴン系").id, value: 1.5});
-        }
-    },
+    // "kEntity_ドラゴンキラーA": {
+    //     setup: (entity) => {
+    //         entity.equipmentTraits.push({code: MRBasics.traits.RaceRate, dataId: MRData.getRace("kRace_ドラゴン系").id, value: 1.5});
+    //     }
+    // },
     "kEntity_目覚めの指輪A": {
         setup: (entity) => {
             entity.equipmentTraits.push({code: MRBasics.traits.AwakeStep, dataId: 0, value: 0});

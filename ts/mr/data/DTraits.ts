@@ -1,5 +1,7 @@
 import { tr2 } from "../Common";
+import { DElementId } from "./DCommon";
 import { DHelpers } from "./DHelper";
+import { MRBasics } from "./MRBasics";
 import { MRData } from "./MRData";
 
 export type DTraitId = number;
@@ -68,6 +70,84 @@ export class DTrait {
             return Number(value);
         }
     }
+
+    public static makeTraitData(props: ITraitProps): IDataTrait {
+        switch (props.code) {
+            case "DeathVulnerableElement":
+                return { code: MRData.getTrait("DeathVulnerableElement").id, dataId: MRData.getElement(props.elementKey).id, value: MRData.getState(props.stateKey).id };
+            case "RaceRate":
+                return { code: MRBasics.traits.RaceRate, dataId: MRData.getRace(props.raceKey).id, value: props.value };
+            case "SurvivalParameterLossRate":
+                return { code: MRBasics.traits.SurvivalParamLossRate, dataId: MRData.getParameter(props.parameterKey).id, value: props.value };
+            case "ParameterDamageRate":
+                return { code: MRBasics.traits.ParamDamageRate, dataId: MRData.getParameter(props.parameterKey).id, value: props.value };
+            case "SkillGuard":
+                return { code: MRBasics.traits.SkillGuard, dataId: MRData.getSkill(props.skillKey).id, value: 0 };
+            case "Unknown":
+                return { code: 0, dataId: props.dataKey, value: props.value };
+            default:
+                throw new Error(`Trait code "${(props as any).code}" unsupported.`)
+        }
+    }
 }
 
+//------------------------------------------------------------------------------
+// Props
 
+export interface ITraitProps_DeathVulnerableElement {
+    /** DeathVulnerableElement1 */
+    code: "DeathVulnerableElement";
+    elementKey: string;
+    stateKey: string;
+}
+
+export interface ITraitProps_RaceRate {
+    /** RaceRate1 */
+    code: "RaceRate";
+    raceKey: string;
+    value: number;
+}
+
+export interface ITraitProps_SurvivalParameterLossRate {
+    /** SurvivalParameterLossRate1 */
+    code: "SurvivalParameterLossRate";
+
+    /** パラメータ Key. */
+    parameterKey: string;
+
+    /** 率 (double) */
+    value: number;
+}
+
+export interface ITraitProps_ParameterDamageRate {
+    /** ParameterDamageRate1 */
+    code: "ParameterDamageRate";
+
+    /** パラメータ Key. */
+    parameterKey: string;
+
+    /** 率 (double) */
+    value: number;
+}
+
+export interface ITraitProps_SkillGuard {
+    /** SkillGuard1 */
+    code: "SkillGuard";
+
+    /** スキル Key. */
+    skillKey: string;
+}
+
+export interface ITraitProps_Unknown {
+    code: "Unknown";
+    dataKey: any;
+    value: any;
+}
+
+export type ITraitProps =
+    ITraitProps_DeathVulnerableElement |
+    ITraitProps_RaceRate |
+    ITraitProps_SurvivalParameterLossRate |
+    ITraitProps_ParameterDamageRate |
+    ITraitProps_SkillGuard |
+    ITraitProps_Unknown;

@@ -26,11 +26,11 @@ import { UState } from "ts/mr/utility/UState";
 import { DBuffLevelOp, DBuffMode, DBuffType, DParamBuff, LStateLevelType } from "ts/mr/data/DEffect";
 import { DSequelId } from "../data/DSequel";
 import { LReward } from "./LReward";
-import { DBlockLayerKind, DEntityKindId, DSubComponentEffectTargetKey, DRaceId, DActionId, DParameterId, DAnimationId } from "../data/DCommon";
+import { DBlockLayerKind, DEntityCategoryId, DSubComponentEffectTargetKey, DRaceId, DActionId, DParameterId, DAnimationId } from "../data/DCommon";
 import { LActionToken } from "./LActionToken";
 import { LMinimapMarkerClass, LPriceInfo, LReaction, LRoomId } from "./LCommon";
 import { LShopArticle } from "./LShopArticle";
-import { DEntityKind } from "../data/DEntityKind";
+import { DEntityCategory } from "../data/DEntityCategory";
 import { DTraitId } from "../data/DTraits";
 import { SActivityContext } from "../system/SActivityContext";
 import { LSchedulingResult } from "./LSchedulingResult";
@@ -156,7 +156,7 @@ export class LEntity extends LObject
         }
 
         // 初期識別状態
-        this._individualIdentified = (this.data.identificationDifficulty == DIdentificationDifficulty.Clear);
+        this._individualIdentified = (this.data.identificationDifficulty == DIdentificationDifficulty.Clearly);
 
         this._params.clear();
         const params = this.data.idealParams;
@@ -181,11 +181,11 @@ export class LEntity extends LObject
         return MRData.entities[this._entityDataId];
     }
 
-    public kindDataId(): DEntityKindId {
+    public kindDataId(): DEntityCategoryId {
         return this.data.entity.kindId;
     }
 
-    public kindData(): DEntityKind {
+    public kindData(): DEntityCategory {
         return MRData.entityKinds[this.data.entity.kindId];
     }
 

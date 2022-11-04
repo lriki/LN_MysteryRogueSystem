@@ -68,9 +68,10 @@ test("Survival.FP", () => {
     
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-    expect(player1.getActualParam(MRBasics.params.fp)).toBe(490);  // 草を食べた分だけ FP が回復していること
+    expect(player1.getActualParam(MRBasics.params.fp)).toBe(500);  // 草を食べた分だけ FP が回復していること
     // NOTE: 原作では、食料を食べた直後、9回移動すると満腹度が1減る。
     // つまり、1ターン内で食べた直後に満腹度の減算が発生している。
+    // MRシステムでは、アイテム効果の設定時にイメージしづらいマジックナンバーを避けるため、食料を食べた直後には満腹度の減算は発生しない。
 
     //----------------------------------------------------------------------------------------------------
     // 投げ当てたときは FP は回復しない
@@ -91,5 +92,5 @@ test("Survival.FP", () => {
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     expect(MRLively.world.findEntity(item2.entityId())).toBe(undefined);  // UT薬草は Player と衝突したので消滅している
-    expect(player1.getActualParam(MRBasics.params.fp)).toBe(480);            // 投げ当てたときの効果は発動するが、FP は回復しない
+    expect(player1.getActualParam(MRBasics.params.fp)).toBe(490);         // 投げ当てたときの効果は発動するが、FP は回復しない (自然経過の消費のみ発生する)
 });

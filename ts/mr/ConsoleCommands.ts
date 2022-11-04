@@ -40,7 +40,7 @@ function setFP(entityId: number, value: number) {
 function setPlayerParameter(key: string, value: number) {
     const player = MRLively.camera.focusedEntity();
     if (!player) return;
-    player.setParamCurrentValue(MRData.parameter(key).id, value);
+    player.setParamCurrentValue(MRData.getParameter(key).id, value);
 }
 
 function setVariable(id: number, value: number) {
@@ -74,7 +74,7 @@ function levelMax() {
 }
 
 function moveToExit() {
-    const exitPoint = MRLively.map.entities().find(x => x.kindDataId() == MRBasics.entityKinds.exitPoint);
+    const exitPoint = MRLively.map.entities().find(x => x.kindDataId() == MRBasics.entityCategories.exitPoint);
     if (!exitPoint) return;
 
     const player = MRLively.camera.focusedEntity();

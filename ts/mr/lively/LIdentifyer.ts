@@ -132,6 +132,20 @@ export enum EntityIdentificationLevel {
  */
 @MRSerializable
 export class LIdentifyer {
+    /*
+    [2022/11/1] WorldMap 対応に伴う識別ルールの整理
+    ----------
+    - WorldMap では最も難しい識別ルールとしたい
+        - 草など、強化値・使用回数の無いアイテムは通常通り種別識別可能。(ゲーム開始後、一度でも使えば以後名前はわかる)
+        - ただし呪いや祝福は、個体識別するまでわからない (シレン5相当)
+    - LandからLandへ移ったとき
+        - 難易度の低いLandへ移ったら、全部識別する、など。(シレン2 中級→初級ルート)
+        - Land によっては、前の Land の状態のまま維持したい。
+        - 別の Land への移動時に清算処理するのがいいかも。
+
+    */
+
+
     /** 種別としての識別済みフラグ。undefined の場合、その Entity は常に少なくとも名前は識別済み。 Index: DEntityId */
     private _identificationStates: (IdentificationState | undefined)[] = [];
 
@@ -146,7 +160,7 @@ export class LIdentifyer {
                 const names = MRData.pseudonymous.getNameList(kind.id);
                 const entities = MRData.entities.filter(x => x.entity.kindId == kind.id && x.identificationDifficulty == DIdentificationDifficulty.Obscure);
                 if (names.length < entities.length) {
-                    throw new Error(tr2(`Kind:${kind.name} の pseudonym が不足しています。(c: ${names.length})`));
+                    throw new Error(tr2(`Kind:${kind.key} の pseudonym が不足しています。(c: ${names.length})`));
                 }
     
                 names.mutableShuffle();
@@ -189,7 +203,7 @@ export class LIdentifyer {
             }
 
             if (state.nameIdentified) {// 呪い状態などを受けないものは、名前識別済みであれば個体識別済みとする
-                if (entityData.canModifierState) {
+                if (entityData.allowModifierState) {
                     return EntityIdentificationLevel.KindIdentified;
                 }
                 else {
@@ -206,7 +220,7 @@ export class LIdentifyer {
                 // 個体識別済み
                 return EntityIdentificationLevel.IndividualIdentified;
             }
-            else if (!entityData.canModifierState) {
+            else if (!entityData.allowModifierState) {
                 // 呪い状態などを受けないものは、名前識別済みであれば個体識別済みとする
                 return EntityIdentificationLevel.IndividualIdentified;
             }

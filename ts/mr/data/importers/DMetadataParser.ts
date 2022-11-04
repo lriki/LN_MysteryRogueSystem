@@ -5,11 +5,13 @@ import { MRData } from "../MRData";
 
 export class DMetadata {
     key: string;
+    entityTemplateKey: string | undefined;
     effectKey: string | undefined;
+    emittorKey: string | undefined;
 
     type: string;
 
-    kind: string;
+    category: string;
 
     capacity: string | undefined;
 
@@ -24,8 +26,9 @@ export class DMetadata {
     public constructor() {
         this.key = "";
         this.effectKey = undefined;
+        this.emittorKey = undefined;
         this.type = "";
-        this.kind = "";
+        this.category = "";
         this.behaviors = [];
         this.traits = [];
         this.races = [];
@@ -43,19 +46,29 @@ export class DMetadataParser {
             result.type = type.trim();
         }
 
-        const kind = meta["MR-Category"];
-        if (kind) {
-            result.kind = kind.trim();
+        const category = meta["MR-Category"];
+        if (category) {
+            result.category = category.trim();
         }
 
         const key = meta["MR-Key"];
         if (key) {
             result.key = key.trim();
         }
+
+        const entityTemplateKey = meta["MR-EntityTemplate"];
+        if (entityTemplateKey) {
+            result.entityTemplateKey = entityTemplateKey.trim();
+        }
         
         const effectKey = meta["MR-EffectKey"];
         if (effectKey) {
             result.effectKey = effectKey.trim();
+        }
+        
+        const emittorKey = meta["MR-EmittorKey"];
+        if (emittorKey) {
+            result.emittorKey = emittorKey.trim();
         }
 
         const capacity = meta["RE-Capacity"];

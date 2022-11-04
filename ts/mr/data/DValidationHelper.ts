@@ -15,5 +15,14 @@ export class DValidationHelper {
         const data = $dataEnemies[rmmzEnemyId];
         return tr2("敵キャラ(%1:%2)").format(data.id, data.name);
     }
+
+    public static makeRmmzMapName(mapId: number): string {
+        const data = $dataMapInfos[mapId];
+        return this.makeDataName("マップ", mapId, data ? data.name : "???");
+    }
+
+    public static makeRmmzEventName(event: IDataMapEvent): string {
+        return this.makeDataName("イベント", event.id, event.name);
+    }
 }
 

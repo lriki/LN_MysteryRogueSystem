@@ -1,4 +1,4 @@
-import { DSpecificEffectId as DSpecialEffectId, DSkillId } from "./DCommon";
+import { DSpecialEffectId as DSpecialEffectId, DSkillId } from "./DCommon";
 import { DRmmzEffectScope } from "./DEffect";
 import { DEmittor, DEmittorId } from "./DEmittor";
 import { DFlavorEffect, IFlavorEffectProps } from "./DFlavorEffect";
@@ -75,15 +75,20 @@ export class DSkill {
     public setFlavorEffect(options: IFlavorEffectProps): void {
         this.flavorEffect = new DFlavorEffect(options);
     }
+
+    public applyProps(props: ISkillProps): void {
+        if (props.flavorEffect) {
+            this.setFlavorEffect(props.flavorEffect);
+        }
+    }
 }
 
-export class DSpecialEffect {
+//------------------------------------------------------------------------------
+// Props
 
-    id: DSpecialEffectId;
-    key: string;
-
-    public constructor(id: DSpecialEffectId, key: string) {
-        this.id = id;
-        this.key = key;
-    }
+export interface ISkillProps {
+    /**
+     * この Skill を発動するときに再生する FlavorEffect。
+     */
+    flavorEffect?: IFlavorEffectProps;
 }

@@ -4,7 +4,7 @@ import { FBlockComponent, FEntryPont, FExitPont, FMap } from "../FMapData";
 import { DHelpers } from "ts/mr/data/DHelper";
 import { MRData } from "ts/mr/data/MRData";
 import { DAnnotationReader } from "ts/mr/data/importers/DAttributeReader";
-import { DEntityKind } from "ts/mr/data/DEntityKind";
+import { DEntityCategory } from "ts/mr/data/DEntityCategory";
 import { FMapBlock } from "../data/FMapBlock";
 
 
@@ -126,7 +126,7 @@ export class FMarkContinuationPass extends FMapBuildPass {
                 if (!metadata) return false;
                 const entity = MRData.findEntity(metadata.entity);
                 if (!entity) return false;
-                return DEntityKind.isEntryPoint(entity);
+                return DEntityCategory.isEntryPoint(entity);
             });
             
             if (entryPointEvent) {

@@ -1,6 +1,6 @@
 import { assert } from "ts/mr/Common";
 import { MRBasics } from "ts/mr/data/MRBasics";
-import { DSpecificEffectId } from "ts/mr/data/DCommon";
+import { DSpecialEffectId } from "ts/mr/data/DCommon";
 import { SSpecialEffect } from "./SSpecialEffect";
 import { SGoldStealSpecialEffect } from "./SGoldStealSpecialEffect";
 import { SItemStealSpecialEffect } from "./SItemStealSpecialEffect";
@@ -17,6 +17,7 @@ import { SClarificationSpecialEffect } from "./SClarificationSpecialEffect";
 import { SDivisionSpecialEffect } from "./SDivisionSpecialEffect";
 import { SRemoveStatesByIntentionsSpecialEffect } from "./SRemoveStatesByIntentionsSpecialEffect";
 import { SPerformeSkillSpecialEffect } from "./SPerformeSkillSpecialEffect";
+import { SRemoveStateSpecialEffect } from "./SRemoveStateSpecialEffect";
 
 export class SSpecialEffectManager {
     private behaviors: (SSpecialEffect | undefined)[] = [];    // Index is DSkillBehaviorId
@@ -25,15 +26,15 @@ export class SSpecialEffectManager {
         this.setupBuiltins();
     }
 
-    public register(specialEffectId: DSpecificEffectId, behavior: SSpecialEffect) {
+    public register(specialEffectId: DSpecialEffectId, behavior: SSpecialEffect) {
         this.behaviors[specialEffectId] = behavior;
     }
 
-    public find(specialEffectId: DSpecificEffectId): SSpecialEffect | undefined {
+    public find(specialEffectId: DSpecialEffectId): SSpecialEffect | undefined {
         return this.behaviors[specialEffectId];
     }
 
-    public get(specialEffectId: DSpecificEffectId): SSpecialEffect {
+    public get(specialEffectId: DSpecialEffectId): SSpecialEffect {
         const b = this.find(specialEffectId);
         assert(b);
         return b;
@@ -43,7 +44,7 @@ export class SSpecialEffectManager {
         this.register(MRBasics.effectBehaviors.itemSteal, new SItemStealSpecialEffect());
         this.register(MRBasics.effectBehaviors.goldSteal, new SGoldStealSpecialEffect());
         this.register(MRBasics.effectBehaviors.levelDown, new SLevelDownSpecialEffect());
-        this.register(MRBasics.effectBehaviors.warp, new SWarpSpecialEffect());
+        this.register(MRBasics.effectBehaviors.randomWarp, new SWarpSpecialEffect());
         this.register(MRBasics.effectBehaviors.stumble, new SStumbleSpecialEffect());
         this.register(MRBasics.effectBehaviors.transferToNextFloor, new STransferToNextFloorSpecialEffect());
         this.register(MRBasics.effectBehaviors.transferToLowerFloor, new STransferToLowerFloorSpecialEffect());
@@ -53,6 +54,7 @@ export class SSpecialEffectManager {
         this.register(MRBasics.effectBehaviors.restartFloor, new SRestartFloorSpecialEffect());
         this.register(MRBasics.effectBehaviors.clarification, new SClarificationSpecialEffect());
         this.register(MRBasics.effectBehaviors.division, new SDivisionSpecialEffect());
+        this.register(MRBasics.effectBehaviors.removeState, new SRemoveStateSpecialEffect());
         this.register(MRBasics.effectBehaviors.removeStatesByIntentions, new SRemoveStatesByIntentionsSpecialEffect());
         this.register(MRBasics.effectBehaviors.performeSkill, new SPerformeSkillSpecialEffect());
     }

@@ -1,6 +1,6 @@
 [
     {
-        "kind": "Grass",
+        "kind": "kEntityCategory_Grass",
         "names": [
             "白い草",
             "黒い草",
@@ -27,11 +27,13 @@
             "褐色の草",
             "黄緑の草",
             "肌色の草",
+            "桃色の草",
+            "桜色の草",
             "無色の草"
         ]
     },
     {
-        "kind": "Staff",
+        "kind": "kEntityCategory_Staff",
         "names": [
             "松の杖",
             "竹の杖",
@@ -51,7 +53,7 @@
         ]
     },
     {
-        "kind": "Scroll",
+        "kind": "kEntityCategory_Scroll",
         "names": [
             "ネズミの絵の巻物",
             "ネコの絵の巻物",

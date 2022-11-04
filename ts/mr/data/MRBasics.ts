@@ -1,5 +1,5 @@
 import { DClassId } from "./DClass";
-import { DAttackElementId, DSpecificEffectId as DSpecialEffectId, DTerrainPresetId, DTerrainSettingId } from "./DCommon";
+import { DElementId, DSpecialEffectId as DSpecialEffectId, DTerrainPresetId, DTerrainSettingId } from "./DCommon";
 import { DStateId } from "./DState";
 import { DBasicActions } from "./predefineds/DBasicActions";
 import { DBasicCommands } from "./predefineds/DBasicCommands";
@@ -20,14 +20,14 @@ export interface DBasicVariables {
 }
 
 export interface DBasicElements {
-    explosion: DAttackElementId,
+    explosion: DElementId,
 }
 
 export interface DBasicSpecialEffects {
     itemSteal: DSpecialEffectId;
     goldSteal: DSpecialEffectId;
     levelDown: DSpecialEffectId;
-    warp: DSpecialEffectId;
+    randomWarp: DSpecialEffectId;
     stumble: DSpecialEffectId;
     transferToNextFloor: DSpecialEffectId;
     transferToLowerFloor: DSpecialEffectId;
@@ -40,6 +40,7 @@ export interface DBasicSpecialEffects {
     restartFloor: DSpecialEffectId;
     clarification: DSpecialEffectId;
     division: DSpecialEffectId;
+    removeState: DSpecialEffectId;
     removeStatesByIntentions: DSpecialEffectId;
     performeSkill: DSpecialEffectId;
 }
@@ -61,7 +62,7 @@ export class MRBasics {
     static events: DBasicEvents;
     static actions: DBasicActions;
     static commands: DBasicCommands;
-    static entityKinds: BasicEntityKinds;
+    static entityCategories: BasicEntityKinds;
     //static stateTraits: DBasicStateTraits;
     static states: DBasicStates;
     static params: DBasicParameters;

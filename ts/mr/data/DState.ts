@@ -1,4 +1,4 @@
-import { DEntityKindId } from "./DCommon";
+import { DEntityCategoryId } from "./DCommon";
 import { DBehaviorInstantiation } from "./DEntityProperties";
 import { DParameterId } from "ts/mr/data/DCommon";
 import { DSequelId } from "./DSequel";
@@ -107,7 +107,7 @@ export namespace DStateRestriction {
 
 
 export interface DStateMatchConditions {
-    kindId: DEntityKindId;
+    kindId: DEntityCategoryId;
 }
 
 export interface DStateDamageRemovel {
@@ -154,7 +154,7 @@ export class DStateEffect {
 }
 
 export interface DStateApplyConditions {
-    kindIds: DEntityKindId[],  // 適用対象の制限。空の場合は制限しない。
+    kindIds: DEntityCategoryId[],  // 適用対象の制限。空の場合は制限しない。
 }
 
 export enum DStateIntentions {

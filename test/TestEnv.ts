@@ -241,7 +241,7 @@ export class TestEnvIntegration extends SIntegration {
     */
 
     onLoadFixedMapEvents(): void {
-        SRmmzHelpers.createEntitiesFromRmmzFixedMapEventData();
+        SRmmzHelpers.createEntitiesFromRmmzFixedMapEventData(0);
     }
     
     onUpdateBlock(block: LBlock): void {

@@ -1,7 +1,8 @@
 import { assert } from "../Common";
-import { DEntityKindId } from "./DCommon";
+import { DEntityCategoryId } from "./DCommon";
 import { DEffectFieldScope, DEffectFieldScopeArea, DEffectFieldScopeRange, DEffectSet, DEmittorCost } from "./DEffect";
 import { DSkill } from "./DSkill";
+import { MRData } from "./MRData";
 
 
 export type DEmittorId = number;
@@ -11,7 +12,9 @@ export type DEmittorId = number;
  * RMMZ の Skill と Item の共通パラメータ
  */
  export class DEmittor {
-    id: DEmittorId;
+    readonly id: DEmittorId;
+
+    readonly key: string;
 
     /**
      * Cost は Emittor が持つ。
@@ -55,19 +58,37 @@ export type DEmittorId = number;
 
     effectSet: DEffectSet;
     
-    constructor(id: DEmittorId, sourceKey: string) {
+    constructor(id: DEmittorId, key: string) {
         this.id = id;
+        this.key = key;
         this.costs = new DEmittorCost();
         this.scope = new DEffectFieldScope();
         this.selfAnimationId = 0;
         this.targetAreaAnimationId = 0;
         this.selfSequelId = 0;
-        this.effectSet = new DEffectSet(sourceKey);
+        this.effectSet = new DEffectSet(key);
+    }
+
+    public applyProps(props: IEmittorProps): void {
+        if (props.targetEffectKeys) {
+            this.effectSet.clearEffects();
+            for (const key of props.targetEffectKeys) {
+                const effect = MRData.getEffect(key);
+                this.effectSet.addEffect(effect);
+            }
+        }
     }
     
     public copyFrom(src: DEmittor): void {
         this.scope = { ...src.scope };
         this.effectSet.copyFrom(src.effectSet);
     }
+}
+
+//------------------------------------------------------------------------------
+// Props
+
+export interface IEmittorProps {
+    targetEffectKeys?: string[];
 }
 

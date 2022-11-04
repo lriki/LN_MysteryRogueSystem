@@ -45,7 +45,8 @@ test("concretes.item.food.LittleFood", () => {
     expect(item1.isDestroyed()).toBeTruthy();
 
     // FP が回復しているはず。
-    expect(player1.getActualParam(MRBasics.params.fp)).toBe(6990);
+    const fp1 = player1.getActualParam(MRBasics.params.fp);
+    expect(fp1).toBe(6990);
 
     const message = MRLively.messageHistory;
     expect(message.countIncludesText("おなかがふくれた。")).toBe(1);
@@ -65,7 +66,7 @@ test("concretes.item.food.LittleFood", () => {
     const maxFp2 = player1.getParamActualMax(MRBasics.params.fp);
     const fp2 = player1.getActualParam(MRBasics.params.fp);
     expect(maxFp2).toBeGreaterThan(maxFp1);
-    expect(fp2).toBe(maxFp2 - 10);
+    expect(fp2).toBe(maxFp2);
     expect(message.countIncludesText("おなかがふくれた。")).toBe(1);    // 前のメッセージ履歴
     expect(message.countIncludesText("最大満腹度が 2 増えた")).toBe(1);
 });
@@ -116,7 +117,6 @@ test("concretes.item.food.CorrodedFood", () => {
     expect(player1.getActualParam(MRBasics.params.fp)).toBeGreaterThan(2000);// FP が回復しているはず。
     expect(hp2).toBeLessThan(hp1);          // ダメージをうける
     expect(pow2).toBeLessThan(pow1);        // ちからが減る
-    expect(message.includesText("おなかがいっぱいになった。")).toBeTruthy();
 });
 
 

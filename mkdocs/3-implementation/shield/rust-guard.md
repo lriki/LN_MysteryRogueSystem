@@ -9,7 +9,7 @@
 
 ```
 <MR-Type: Entity>
-<MR-Category: Shield>
+<MR-Category: kEntityCategory_Shield>
 <MR-Key: kEntity_サビよけの盾_A>
 <MR-Prefab: kPrefab_サビよけの盾_A>
 ```

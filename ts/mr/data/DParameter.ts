@@ -54,7 +54,7 @@ export class DParameterFlavorEffect {
     public constructor(options?: IParameterFlavorEffect) {
         options = options || { flavorEffect: {} };
         this.looksFaction = options.looksFaction ?? DFactionType.Neutral;
-        this.point = options.point ?? DValuePoint.Current;
+        this.point = options.point ?? DValuePoint.Actual;
         this.addition = options.addition ?? DValueAddition.Gain;
         this.conditionFormula = options.conditionFormula;
         this.flavorEffect = new DFlavorEffect(options.flavorEffect);

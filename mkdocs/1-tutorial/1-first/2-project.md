@@ -14,7 +14,7 @@
 
 ```
 <MR-Type: Entity>
-<MR-Category: Actor>
+<MR-Category: kEntityCategory_Actor>
 <MR-Key: kEntity_ActorA>
 <MR-Prefab: kPrefab_ActorA>
 ```

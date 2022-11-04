@@ -11,6 +11,7 @@ import { LEventServer } from "./LEventServer";
 import { LBlock } from "./LBlock";
 import { LScheduler2 } from "./LScheduler";
 import { MRGameExtension } from "./MRGameExtension";
+import { LLand } from "./LLand";
 
 /**
  * 各 REGame_* インスタンスを保持する。
@@ -27,7 +28,6 @@ export class MRLively {
     static map: LMap;
     static camera: LCamera;
     static scheduler: LScheduler2;
-    static identifyer: LIdentifyer;
     static recorder: SActivityRecorder;
     static messageHistory: LMessageHistory;
     static eventServer: LEventServer;
@@ -40,5 +40,13 @@ export class MRLively {
 
     /**  */
     static signalFlushSequelSet: ((sequelSet: SSequelSet) => void) | undefined;
+
+    static getCurrentLand(): LLand {
+        return this.map.land2();
+    }
+
+    static getCurrentIdentifyer(): LIdentifyer {
+        return this.getCurrentLand().identifyer;
+    }
 }
 

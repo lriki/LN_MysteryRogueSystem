@@ -1354,18 +1354,6 @@ declare module 'MysteryRogueSystem/ts/mr/data/DActor' {
   }
 
 }
-declare module 'MysteryRogueSystem/ts/mr/data/DAttackElement' {
-  import { DAttackElementId } from "MysteryRogueSystem/ts/mr/data/DCommon";
-  export class DAttackElement {
-      id: DAttackElementId;
-      key: string;
-      name: string;
-      rmmzElementId: number;
-      constructor(id: number);
-      parseNameAndKey(str: string): void;
-  }
-
-}
 declare module 'MysteryRogueSystem/ts/mr/data/DClass' {
   export type DClassId = number;
   export interface DClassLearningSkill {
@@ -1406,12 +1394,19 @@ declare module 'MysteryRogueSystem/ts/mr/data/DCommon' {
   export type DParameterId = number & {
       readonly brand?: unique symbol;
   };
-  export type DEntityKindId = number;
-  export type DAttackElementId = number;
+  export type DEntityCategoryId = number & {
+      readonly brand?: unique symbol;
+  };
+  /** 属性データのインデックス。 RMMZ の ElementId と等しい。 */
+  export type DElementId = number & {
+      readonly brand?: unique symbol;
+  };
   export type DSkillId = number & {
       readonly brand?: unique symbol;
   };
-  export type DSpecificEffectId = number;
+  export type DSpecialEffectId = number & {
+      readonly brand?: unique symbol;
+  };
   export type DRaceId = number;
   export type DTerrainShapeId = number;
   export type DTerrainSettingId = number;
@@ -1419,6 +1414,9 @@ declare module 'MysteryRogueSystem/ts/mr/data/DCommon' {
   export type DActionId = DSkillId;
   export type DCommandId = number;
   export type DEffectId = number & {
+      readonly brand?: unique symbol;
+  };
+  export type DEntityTemplateId = number & {
       readonly brand?: unique symbol;
   };
   /** Animation データのインデックス。 RMMZ の AnimationId と等しい。 */
@@ -1430,14 +1428,14 @@ declare module 'MysteryRogueSystem/ts/mr/data/DCommon' {
   export type DMapId = number;
   export class DSubComponentEffectTargetKey {
       path: string;
-      kindId: DEntityKindId;
+      kindId: DEntityCategoryId;
       tags: string[];
       constructor();
-      static make(path: string, kindId?: DEntityKindId | undefined, tags?: string[] | undefined): DSubComponentEffectTargetKey;
+      static make(path: string, kindId?: DEntityCategoryId | undefined, tags?: string[] | undefined): DSubComponentEffectTargetKey;
       clone(): DSubComponentEffectTargetKey;
   }
   export interface DSubEntityFindKey {
-      kindId: DEntityKindId;
+      kindId: DEntityCategoryId;
       key: DSubComponentEffectTargetKey | undefined;
   }
   export enum DColorIndex {
@@ -1471,10 +1469,10 @@ declare module 'MysteryRogueSystem/ts/mr/data/DDataImporter' {
 
 }
 declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
-  import { DSubEntityFindKey, DSpecificEffectId, DBlockLayerKind, DBlockLayerScope, DEntityKindId, DRaceId, DAttackElementId, DEffectId } from "MysteryRogueSystem/ts/mr/data/DCommon";
-  import { DEntityId } from "MysteryRogueSystem/ts/mr/data/DEntity";
+  import { DSubEntityFindKey, DBlockLayerKind, DBlockLayerScope, DEntityCategoryId, DRaceId, DElementId, DEffectId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   import { DParameterId } from "ts/mr/data/DCommon";
   import { DFlavorEffect, IFlavorEffectProps } from "MysteryRogueSystem/ts/mr/data/DFlavorEffect";
+  import { DSpecialEffectRef, ISpecialEffectProps } from "MysteryRogueSystem/ts/mr/data/DSpecialEffect";
   export enum DParameterEffectApplyType {
       /** なし */
       None = 0,
@@ -1486,7 +1484,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
       Drain = 3
   }
   export enum DValuePoint {
-      Current = 0,
+      Actual = 0,
       Minimum = 1,
       Growth = 2
   }
@@ -1495,7 +1493,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
       /** IDataSkill.damage.type  */
       applyType: DParameterEffectApplyType;
       applyTarget: DValuePoint;
-      elementIds: DAttackElementId[];
+      elementIds: DElementId[];
       formula: string;
       /** 分散度 (%) */
       variance: number;
@@ -1613,14 +1611,8 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
       level: number;
       turn: number;
   }
-  export interface DSpecialEffectRef {
-      specialEffectId: DSpecificEffectId;
-      entityId?: DEntityId;
-      dataId?: number;
-      value?: any;
-  }
   export interface DEffectConditions {
-      kindId: DEntityKindId;
+      kindId: DEntityCategoryId;
       /** 判定する RaceId。 0 の場合は対象外。 */
       raceId: DRaceId;
       applyRating: number;
@@ -1714,12 +1706,14 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
       get selfEffect(): DEffect;
       effects(): readonly DEffect[];
       effect(index: number): DEffect;
+      clearEffects(): void;
       setEffect(index: number, value: DEffect): void;
       addEffect(value: DEffect): void;
       copyFrom(src: DEffectSet): void;
       hitType(): DEffectHitType;
   }
   export interface IEffectProps {
+      conditions?: IEffectConditionsProps;
       /**
        * 対象へダメージを与えるときにクリティカル判定を行うかかどうか。
        *
@@ -1730,14 +1724,63 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
        */
       critical?: boolean;
       /**
-       * パラメータへのバフ・デバフ効果。
+       * パラメータへのダメージ・回復効果のリスト。
+       */
+      parameterDamages?: IParameterDamageEffectProps[];
+      /**
+       * パラメータへのバフ・デバフ効果のリスト。
        */
       parameterBuffs?: IParameterBuffEffectProps[];
+      /**
+       * 特殊効果のリスト。
+       */
+      specialEffects?: ISpecialEffectProps[];
       /**
        * この Effect が発生するときに再生する FlavorEffect。
        */
       flavorEffect?: IFlavorEffectProps;
   }
+  export interface IEffectConditionsProps {
+      targetCategoryKey?: string;
+      /** 判定する RaceId。 0 の場合は対象外。 */
+      targetRaceKey?: string;
+      /** EnemyAction と同じ整数。0 はレート無し。 */
+      rating?: number;
+      fallback?: boolean;
+  }
+  /**
+   * パラメータへのダメージ・回復効果。
+   */
+  export interface IParameterDamageEffectProps {
+      parameterKey: string;
+      /**
+       * Effect を適用する条件式。
+       *
+       * ダメージ計算式と同様のオペランドが使用できます。 `a.hp < 100` とすると、対象の HP が 100 未満のときに効果が発生します。
+       * 省略した場合は常に効果が発生します。
+       */
+      conditionFormula?: string;
+      /**
+       * true を指定すると、いずれの条件式にもマッチしない場合、効果が発生します。
+       */
+      conditionFallback?: boolean;
+      /**
+       * どのパラメータ要素に対して効果を与えるかを指定します。(default: actual)
+       *
+       * - actual: 現在値
+       * - growth: 成長値 (最大値の算出基準)
+       */
+      point?: ("actual" | "growth");
+      type?: ("damage" | "recover" | "drain");
+      /**
+       * ダメージ計算式。
+       */
+      formula: string;
+      silent?: boolean;
+  }
+  /**
+   * パラメータへのバフ・デバフ効果。
+   */
   export interface IParameterBuffEffectProps {
       parameterKey: string;
       type: ("constant" | "ratio");
@@ -1748,6 +1791,16 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
   }
 
 }
+declare module 'MysteryRogueSystem/ts/mr/data/DElement' {
+  import { DElementId } from "MysteryRogueSystem/ts/mr/data/DCommon";
+  export class DElement {
+      readonly id: DElementId;
+      readonly key: string;
+      name: string;
+      constructor(id: number, key: string);
+  }
+
+}
 declare module 'MysteryRogueSystem/ts/mr/data/DEmittor' {
   import { DEffectFieldScope, DEffectSet, DEmittorCost } from "MysteryRogueSystem/ts/mr/data/DEffect";
   export type DEmittorId = number;
@@ -1755,7 +1808,8 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEmittor' {
    * RMMZ の Skill と Item の共通パラメータ
    */
   export class DEmittor {
-      id: DEmittorId;
+      readonly id: DEmittorId;
+      readonly key: string;
       /**
        * Cost は Emittor が持つ。
        * 杖から出る魔法弾がイメージしやすいかも。
@@ -1792,8 +1846,12 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEmittor' {
       /** 発動側 Sequel ID */
       selfSequelId: number;
       effectSet: DEffectSet;
-      constructor(id: DEmittorId, sourceKey: string);
+      constructor(id: DEmittorId, key: string);
+      applyProps(props: IEmittorProps): void;
       copyFrom(src: DEmittor): void;
+  }
+  export interface IEmittorProps {
+      targetEffectKeys?: string[];
   }
 
 }
@@ -1836,19 +1894,19 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEnemy' {
 declare module 'MysteryRogueSystem/ts/mr/data/DEntity' {
   import { DActor } from "MysteryRogueSystem/ts/mr/data/DActor";
   import { DClassId } from "MysteryRogueSystem/ts/mr/data/DClass";
-  import { DActionId, DAttackElementId, DRaceId } from "MysteryRogueSystem/ts/mr/data/DCommon";
+  import { DActionId, DElementId, DRaceId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   import { DEmittorId, DEmittor } from "MysteryRogueSystem/ts/mr/data/DEmittor";
   import { DEnemy } from "MysteryRogueSystem/ts/mr/data/DEnemy";
   import { DEntityProperties } from "MysteryRogueSystem/ts/mr/data/DEntityProperties";
-  import { DIdentifiedTiming } from "MysteryRogueSystem/ts/mr/data/DIdentifyer";
   import { DEquipment, DItem } from "MysteryRogueSystem/ts/mr/data/DItem";
   import { DPrefab, DPrefabId } from "MysteryRogueSystem/ts/mr/data/DPrefab";
   import { DStateId } from "MysteryRogueSystem/ts/mr/data/DState";
   import { DTroopId } from "MysteryRogueSystem/ts/mr/data/DTroop";
+  import { ITraitProps } from "MysteryRogueSystem/ts/mr/data/DTraits";
   import { DFactionId } from "MysteryRogueSystem/ts/mr/data/MRData";
   export type DEntityId = number;
   export enum DIdentificationDifficulty {
-      Clear = 0,
+      Clearly = 0,
       NameGuessed = 1,
       Obscure = 2
   }
@@ -1897,7 +1955,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEntity' {
       condition: string;
   }
   export interface DCounterAction {
-      conditionAttackType: DAttackElementId | undefined;
+      conditionAttackType: DElementId | undefined;
       emitSelf: boolean;
   }
   export interface DRange {
@@ -1927,16 +1985,17 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEntity' {
       id: DEntityId;
       prefabId: DPrefabId;
       entity: DEntityProperties;
+      entityTemplateKey: string | undefined;
       display: DEntityNamePlate;
       description: string;
       identificationDifficulty: DIdentificationDifficulty;
-      identifiedTiming: DIdentifiedTiming;
+      identificationReaction: DActionId;
       /** 買い値（販売価格） */
       sellingPrice2: number;
       /** 売り値 (買取価格) */
       purchasePrice: number;
       /** 祝福・呪い・封印状態になるか。 */
-      canModifierState: boolean;
+      allowModifierState: boolean;
       actor: DActor | undefined;
       itemData: DItem | undefined;
       equipment: DEquipment | undefined;
@@ -2004,6 +2063,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEntity' {
       mainEmittor(): DEmittor;
       makeDisplayName(stackCont: number): string;
       verify(): void;
+      applyProps(props: IEntityProps): void;
   }
   export class DEntityCreateInfo {
       entityId: DEntityId;
@@ -2031,13 +2091,45 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEntity' {
       rate: number;
       constructor();
       entityData(): DEntity;
-      static makeFromEventData(event: IDataMapEvent): DEntitySpawner2 | undefined;
-      static makeFromEventPageData(event: IDataMapEvent, page: IDataMapEventPage): DEntitySpawner2 | undefined;
+      static makeFromEventData(event: IDataMapEvent, rmmzMapId: number): DEntitySpawner2 | undefined;
+      static makeFromEventPageData(event: IDataMapEvent, page: IDataMapEventPage, rmmzMapId: number): DEntitySpawner2 | undefined;
+  }
+  export interface IEntityProps {
+      reactions?: IReactionProps[];
+      /**
+       * ModifierState (祝福、呪い、封印) になりえるかを指定します。 (default: false)
+       */
+      allowModifierState?: boolean;
+      /**
+       * 未識別状態の名前をどのように表示するか。
+       *
+       * - "clearly" : 未識別状態にはならない (デフォルト)
+       * - "named"   : 未識別状態でも名前を表示する。強化値や使用回数は表示しない。主に装備品が該当する。
+       * - "obscure" : 未識別の場合、仮名を表示する。
+       */
+      identificationDifficulty?: ("clearly" | "named" | "obscure");
+      /**
+       * どの Action に反応して識別状態となるかを、 Action の key で指定します。
+       */
+      identificationActionKey?: string;
+      /**
+       * この Entity 自身に付加するトレイトのリスト。
+       */
+      selfTraits: ITraitProps[];
+      /**
+       * この Entity を装備アイテムとして装備した時に、装備者に対して付加するトレイトのリスト。
+       */
+      equipmentTraits: ITraitProps[];
+  }
+  export interface IReactionProps {
+      actionKey: string;
+      emittorKeys?: string[];
+      commandName?: string;
   }
 
 }
-declare module 'MysteryRogueSystem/ts/mr/data/DEntityKind' {
-  import { DEntityKindId } from "MysteryRogueSystem/ts/mr/data/DCommon";
+declare module 'MysteryRogueSystem/ts/mr/data/DEntityCategory' {
+  import { DEntityCategoryId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   import { DEntity } from "MysteryRogueSystem/ts/mr/data/DEntity";
   /**
    * Entity の種別
@@ -2054,25 +2146,28 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEntityKind' {
    *
    *
    */
-  export class DEntityKind {
+  export class DEntityCategory {
       /** ID (0 is Invalid). */
-      id: DEntityKindId;
-      /** name. */
-      name: string;
+      readonly id: DEntityCategoryId;
+      /** key. */
+      readonly key: string;
       /** Name. */
       displayName: string;
-      constructor(id: DEntityKindId);
+      constructor(id: DEntityCategoryId, key: string);
       static isMonster(entity: DEntity): boolean;
       static isTrap(entity: DEntity): boolean;
       static isEntryPoint(entity: DEntity): boolean;
       static isExitPoint(entity: DEntity): boolean;
       static isOrnament(entity: DEntity): boolean;
       static isItem(entity: DEntity): boolean;
+      applyProps(props: IEntityCategoryProps): void;
+  }
+  export interface IEntityCategoryProps {
   }
 
 }
 declare module 'MysteryRogueSystem/ts/mr/data/DEntityProperties' {
-  import { DEntityKindId } from "MysteryRogueSystem/ts/mr/data/DCommon";
+  import { DEntityCategoryId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   export enum DItemEquipmentSide {
       Right = 0,
       Left = 1
@@ -2084,7 +2179,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEntityProperties' {
   export interface DEntityProperties {
       /** MR-Key */
       key: string;
-      kindId: DEntityKindId;
+      kindId: DEntityCategoryId;
       behaviors: DBehaviorInstantiation[];
       commandNames: string[];
       reactionNames: string[];
@@ -2101,6 +2196,50 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEntityProperties' {
   /** @deprecated DMetadataParser */
   export function parseMetaToEntityProperties(meta: any | undefined): DEntityProperties;
   export function parseMetadata_Behavior(meta: string[]): DBehaviorInstantiation[];
+
+}
+declare module 'MysteryRogueSystem/ts/mr/data/DEntityTemplate' {
+  import { DEntityTemplateId } from "MysteryRogueSystem/ts/mr/data/DCommon";
+  import { DEntity } from "MysteryRogueSystem/ts/mr/data/DEntity";
+  export class DEntityTemplate {
+      readonly id: DEntityTemplateId;
+      readonly key: string;
+      private _props;
+      constructor(id: DEntityTemplateId, key: string, props: IEntityTemplateProps);
+      get props(): IEntityTemplateProps;
+      resetProps(props: IEntityTemplateProps): void;
+      applyTo(entity: DEntity): void;
+      private applyTo_Weapon;
+      private applyTo_Shield;
+      private applyTo_Armor;
+      private applyTo_Accessory;
+      private applyTo_Grass;
+      private applyTo_Food;
+  }
+  export interface IEntityTemplateProps_Null {
+      type: "null";
+  }
+  export interface IEntityTemplateProps_Weapon {
+      type: "Weapon";
+  }
+  export interface IEntityTemplateProps_Shield {
+      type: "Shield";
+  }
+  export interface IEntityTemplateProps_Armor {
+      type: "Armor";
+  }
+  export interface IEntityTemplateProps_Accessory {
+      type: "Accessory";
+  }
+  export interface IEntityTemplateProps_Grass {
+      type: "Grass";
+      /** FPの回復量 */
+      recoverFP: number;
+  }
+  export interface IEntityTemplateProps_Food {
+      type: "Food";
+  }
+  export type IEntityTemplateProps = IEntityTemplateProps_Weapon | IEntityTemplateProps_Shield | IEntityTemplateProps_Accessory | IEntityTemplateProps_Armor | IEntityTemplateProps_Grass | IEntityTemplateProps_Food | IEntityTemplateProps_Null;
 
 }
 declare module 'MysteryRogueSystem/ts/mr/data/DEquipmentPart' {
@@ -2229,12 +2368,6 @@ declare module 'MysteryRogueSystem/ts/mr/data/DHelper' {
 
 }
 declare module 'MysteryRogueSystem/ts/mr/data/DIdentifyer' {
-  export enum DIdentifiedTiming {
-      None = "None",
-      Eat = "Eat",
-      Equip = "Equip",
-      Read = "Read"
-  }
   export class DIdentifyer {
   }
 
@@ -2360,7 +2493,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DItemShop' {
 declare module 'MysteryRogueSystem/ts/mr/data/DLand' {
   import { DLandId, DMapId, DTerrainPresetId, DTerrainSettingId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   import { DEntitySpawner2 } from "MysteryRogueSystem/ts/mr/data/DEntity";
-  import { DEntityKind } from "MysteryRogueSystem/ts/mr/data/DEntityKind";
+  import { DEntityCategory } from "MysteryRogueSystem/ts/mr/data/DEntityCategory";
   import { DMap } from "MysteryRogueSystem/ts/mr/data/DMap";
   export enum DFloorClass {
       FloorMap = 0,
@@ -2510,11 +2643,11 @@ declare module 'MysteryRogueSystem/ts/mr/data/DLand' {
       addEventMapAsExitMap(map: DMap): void;
       import(mapData: IDataMap): void;
       private parseLandIdentificationLevel;
-      checkIdentifiedKind(kind: DEntityKind): boolean;
-      checkIdentifiedEntity(kind: DEntityKind): boolean;
+      checkIdentifiedKind(kind: DEntityCategory): boolean;
+      checkIdentifiedEntity(kind: DEntityCategory): boolean;
       static buildFloorTable(mapData: IDataMap): DFloorInfo[];
-      static buildAppearanceTableSet(mapData: IDataMap, mapId: number, maxFloors: number): DAppearanceTableSet;
-      static buildSubAppearanceTable(land: DLand, mapData: IDataMap, mapId: number, tableSet: DAppearanceTableSet, table: DAppearanceTableEntity[][]): void;
+      static buildAppearanceTableSet(mapData: IDataMap, rmmzMapId: number, maxFloors: number): DAppearanceTableSet;
+      static buildSubAppearanceTable(land: DLand, mapData: IDataMap, rmmzMapId: number, tableSet: DAppearanceTableSet, table: DAppearanceTableEntity[][]): void;
   }
 
 }
@@ -2791,15 +2924,15 @@ declare module 'MysteryRogueSystem/ts/mr/data/DPreset' {
 
 }
 declare module 'MysteryRogueSystem/ts/mr/data/DPseudonymous' {
-  import { DEntityKindId } from "MysteryRogueSystem/ts/mr/data/DCommon";
-  import { DEntityKind } from "MysteryRogueSystem/ts/mr/data/DEntityKind";
+  import { DEntityCategoryId } from "MysteryRogueSystem/ts/mr/data/DCommon";
+  import { DEntityCategory } from "MysteryRogueSystem/ts/mr/data/DEntityCategory";
   export class DPseudonymous {
       private _names;
       constructor();
       setup(data: any): void;
-      kinds(): DEntityKind[];
-      nameList(kindId: DEntityKindId): string[] | undefined;
-      getNameList(kindId: DEntityKindId): string[];
+      kinds(): DEntityCategory[];
+      nameList(kindId: DEntityCategoryId): string[] | undefined;
+      getNameList(kindId: DEntityCategoryId): string[];
   }
 
 }
@@ -2841,7 +2974,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DSequel' {
 
 }
 declare module 'MysteryRogueSystem/ts/mr/data/DSkill' {
-  import { DSpecificEffectId as DSpecialEffectId, DSkillId } from "MysteryRogueSystem/ts/mr/data/DCommon";
+  import { DSkillId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   import { DRmmzEffectScope } from "MysteryRogueSystem/ts/mr/data/DEffect";
   import { DEmittor, DEmittorId } from "MysteryRogueSystem/ts/mr/data/DEmittor";
   import { DFlavorEffect, IFlavorEffectProps } from "MysteryRogueSystem/ts/mr/data/DFlavorEffect";
@@ -2867,16 +3000,44 @@ declare module 'MysteryRogueSystem/ts/mr/data/DSkill' {
       constructor(id: DSkillId, key: string);
       emittor(): DEmittor;
       setFlavorEffect(options: IFlavorEffectProps): void;
+      applyProps(props: ISkillProps): void;
   }
-  export class DSpecialEffect {
-      id: DSpecialEffectId;
-      key: string;
-      constructor(id: DSpecialEffectId, key: string);
+  export interface ISkillProps {
+      /**
+       * この Skill を発動するときに再生する FlavorEffect。
+       */
+      flavorEffect?: IFlavorEffectProps;
   }
 
 }
+declare module 'MysteryRogueSystem/ts/mr/data/DSpecialEffect' {
+  import { DSpecialEffectId } from "MysteryRogueSystem/ts/mr/data/DCommon";
+  import { DEntityId } from "MysteryRogueSystem/ts/mr/data/DEntity";
+  export class DSpecialEffect {
+      readonly id: DSpecialEffectId;
+      readonly key: string;
+      constructor(id: DSpecialEffectId, key: string);
+      static makeSpecialEffectRef(props: ISpecialEffectProps): DSpecialEffectRef;
+  }
+  export interface DSpecialEffectRef {
+      specialEffectId: DSpecialEffectId;
+      entityId?: DEntityId;
+      dataId?: number;
+      value?: any;
+  }
+  export interface ISpecialEffectProps_RandomWarp {
+      code: "RandomWarp";
+  }
+  export interface ISpecialEffectProps_Unknown {
+      code: "Unknown";
+      dataKey: any;
+      value: any;
+  }
+  export type ISpecialEffectProps = ISpecialEffectProps_RandomWarp | ISpecialEffectProps_Unknown;
+
+}
 declare module 'MysteryRogueSystem/ts/mr/data/DState' {
-  import { DEntityKindId } from "MysteryRogueSystem/ts/mr/data/DCommon";
+  import { DEntityCategoryId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   import { DBehaviorInstantiation } from "MysteryRogueSystem/ts/mr/data/DEntityProperties";
   import { DParameterId } from "ts/mr/data/DCommon";
   import { DSequelId } from "MysteryRogueSystem/ts/mr/data/DSequel";
@@ -2936,7 +3097,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DState' {
       function fromRmmzRestriction(value: number): DStateRestriction.None | DStateRestriction.AttcakToOpponent | DStateRestriction.AttackToOther | DStateRestriction.AttcakToFriend | DStateRestriction.NotAction;
   }
   export interface DStateMatchConditions {
-      kindId: DEntityKindId;
+      kindId: DEntityCategoryId;
   }
   export interface DStateDamageRemovel {
       paramId: DParameterId;
@@ -2958,7 +3119,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DState' {
       constructor();
   }
   export interface DStateApplyConditions {
-      kindIds: DEntityKindId[];
+      kindIds: DEntityCategoryId[];
   }
   export enum DStateIntentions {
       None = 0,
@@ -3315,7 +3476,48 @@ declare module 'MysteryRogueSystem/ts/mr/data/DTraits' {
       /** @deprecated DMetadataParser */
       static parseTraitMetadata(meta: any): IDataTrait[];
       private static parseDataId;
+      static makeTraitData(props: ITraitProps): IDataTrait;
   }
+  export interface ITraitProps_DeathVulnerableElement {
+      /** DeathVulnerableElement1 */
+      code: "DeathVulnerableElement";
+      elementKey: string;
+      stateKey: string;
+  }
+  export interface ITraitProps_RaceRate {
+      /** RaceRate1 */
+      code: "RaceRate";
+      raceKey: string;
+      value: number;
+  }
+  export interface ITraitProps_SurvivalParameterLossRate {
+      /** SurvivalParameterLossRate1 */
+      code: "SurvivalParameterLossRate";
+      /** パラメータ Key. */
+      parameterKey: string;
+      /** 率 (double) */
+      value: number;
+  }
+  export interface ITraitProps_ParameterDamageRate {
+      /** ParameterDamageRate1 */
+      code: "ParameterDamageRate";
+      /** パラメータ Key. */
+      parameterKey: string;
+      /** 率 (double) */
+      value: number;
+  }
+  export interface ITraitProps_SkillGuard {
+      /** SkillGuard1 */
+      code: "SkillGuard";
+      /** スキル Key. */
+      skillKey: string;
+  }
+  export interface ITraitProps_Unknown {
+      code: "Unknown";
+      dataKey: any;
+      value: any;
+  }
+  export type ITraitProps = ITraitProps_DeathVulnerableElement | ITraitProps_RaceRate | ITraitProps_SurvivalParameterLossRate | ITraitProps_ParameterDamageRate | ITraitProps_SkillGuard | ITraitProps_Unknown;
 
 }
 declare module 'MysteryRogueSystem/ts/mr/data/DTroop' {
@@ -3334,6 +3536,8 @@ declare module 'MysteryRogueSystem/ts/mr/data/DValidationHelper' {
       static makeDataName(typeName: string, id: number, dataName: string): string;
       static makeRmmzTroopName(rmmzTrppoId: number): string;
       static makeRmmzEnemyName(rmmzEnemyId: number): string;
+      static makeRmmzMapName(mapId: number): string;
+      static makeRmmzEventName(event: IDataMapEvent): string;
   }
 
 }
@@ -3416,9 +3620,11 @@ declare module 'MysteryRogueSystem/ts/mr/data/importers/DMetadataParser' {
   import { DBehaviorInstantiation } from "MysteryRogueSystem/ts/mr/data/DEntityProperties";
   export class DMetadata {
       key: string;
+      entityTemplateKey: string | undefined;
       effectKey: string | undefined;
+      emittorKey: string | undefined;
       type: string;
-      kind: string;
+      category: string;
       capacity: string | undefined;
       /** MR-Behavior */
       behaviors: DBehaviorInstantiation[];
@@ -3435,22 +3641,39 @@ declare module 'MysteryRogueSystem/ts/mr/data/importers/DMetadataParser' {
 
 }
 declare module 'MysteryRogueSystem/ts/mr/data/importers/DSetupScripEvaluator' {
-  import { db } from "MysteryRogueSystem/ts/mr/data/importers/DSetupScript";
-  import { IEffectProps, IParameterBuffEffectProps } from "MysteryRogueSystem/ts/mr/data/DEffect";
+  import { DSetupScriptDatabase } from "MysteryRogueSystem/ts/mr/data/importers/DSetupScript";
+  import { IEffectProps, IParameterBuffEffectProps, IParameterDamageEffectProps } from "MysteryRogueSystem/ts/mr/data/DEffect";
   import { IFlavorEffectProps } from "MysteryRogueSystem/ts/mr/data/DFlavorEffect";
+  import { IEmittorProps } from "MysteryRogueSystem/ts/mr/data/DEmittor";
+  import { IEntityProps, IReactionProps } from "MysteryRogueSystem/ts/mr/data/DEntity";
+  import { IEntityTemplateProps } from "MysteryRogueSystem/ts/mr/data/DEntityTemplate";
+  import { IEntityCategoryProps } from "MysteryRogueSystem/ts/mr/data/DEntityCategory";
+  import { ISpecialEffectProps } from "MysteryRogueSystem/ts/mr/data/DSpecialEffect";
+  import { ITraitProps } from "MysteryRogueSystem/ts/mr/data/DTraits";
   global {
+      function EntityCategory(props: IEntityCategoryProps): IEntityCategoryProps;
       function Effect(props: IEffectProps): IEffectProps;
-      function ParameterBuffEffect(props: IParameterBuffEffectProps): IParameterBuffEffectProps;
+      function ParameterDamage(props: IParameterDamageEffectProps): IParameterDamageEffectProps;
+      function ParameterBuff(props: IParameterBuffEffectProps): IParameterBuffEffectProps;
+      function SpecialEffect(props: ISpecialEffectProps): ISpecialEffectProps;
+      function Trait(props: ITraitProps): ITraitProps;
       function FlavorEffect(props: IFlavorEffectProps): IFlavorEffectProps;
+      function Emittor(props: IEmittorProps): IEmittorProps;
+      function Entity(props: IEntityProps): IEntityProps;
+      function Reaction(props: IReactionProps): IReactionProps;
+      function EntityTemplate(props: IEntityTemplateProps): IEntityTemplateProps;
   }
-  export function evalScript(obj: db, script: string): void;
+  export function evalScript(obj: DSetupScriptDatabase, script: string): void;
 
 }
 declare module 'MysteryRogueSystem/ts/mr/data/importers/DSetupScript' {
-  import { DEntity } from "MysteryRogueSystem/ts/mr/data/DEntity";
+  import { DEntity, IEntityProps } from "MysteryRogueSystem/ts/mr/data/DEntity";
   import { DParameter } from "MysteryRogueSystem/ts/mr/data/DParameter";
-  import { DSkill } from "MysteryRogueSystem/ts/mr/data/DSkill";
+  import { DSkill, ISkillProps } from "MysteryRogueSystem/ts/mr/data/DSkill";
   import { IEffectProps } from "MysteryRogueSystem/ts/mr/data/DEffect";
+  import { IEmittorProps } from "MysteryRogueSystem/ts/mr/data/DEmittor";
+  import { IEntityTemplateProps } from "MysteryRogueSystem/ts/mr/data/DEntityTemplate";
+  import { IEntityCategoryProps } from "MysteryRogueSystem/ts/mr/data/DEntityCategory";
   export interface DSParameters {
       setup: (parameter: DParameter) => void;
   }
@@ -3460,27 +3683,54 @@ declare module 'MysteryRogueSystem/ts/mr/data/importers/DSetupScript' {
   export interface DSEntity {
       setup: (entity: DEntity) => void;
   }
-  export class db {
-      static parameters: {
+  export class DSetupScriptDatabase {
+      parameters: {
           [key: string]: DSParameters;
       };
-      static actions: {
-          [key: string]: DSetupAction;
+      entityCategories: {
+          [key: string]: IEntityCategoryProps;
       };
-      static entities: {
+      entityTemplates: {
+          [key: string]: IEntityTemplateProps;
+      };
+      entities3: {
           [key: string]: DSEntity;
       };
-      static effects: {
+      actions: {
+          [key: string]: ISkillProps;
+      };
+      effects: {
           [key: string]: IEffectProps;
-      } | undefined;
+      };
+      emittors: {
+          [key: string]: IEmittorProps;
+      };
+      entities: {
+          [key: string]: IEntityProps;
+      };
+      constructor();
+      mergeFrom(other: DSetupScriptDatabase): void;
   }
+  export var db: DSetupScriptDatabase | undefined;
+  export function setDB(v: DSetupScriptDatabase | undefined): void;
   export class DSetupScript {
+      private _mainDB;
       constructor();
       addScript(script: string): void;
       registerData(): void;
       setupData(): void;
+      private createEntityCategories;
+      private setupEntityCategories;
       private createEffects;
       private setupEffects;
+      private createEmittors;
+      private setupEmittors;
+      private createActions;
+      private setupActions;
+      private createEntityTemplates;
+      private setupEntityTemplates;
+      private createEntities;
+      private setupEntities;
       setupItem(entity: DEntity): void;
   }
 
@@ -3507,7 +3757,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/index' {
 }
 declare module 'MysteryRogueSystem/ts/mr/data/MRBasics' {
   import { DClassId } from "MysteryRogueSystem/ts/mr/data/DClass";
-  import { DAttackElementId, DSpecificEffectId as DSpecialEffectId, DTerrainPresetId } from "MysteryRogueSystem/ts/mr/data/DCommon";
+  import { DElementId, DSpecialEffectId as DSpecialEffectId, DTerrainPresetId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   import { DBasicActions } from "MysteryRogueSystem/ts/mr/data/predefineds/DBasicActions";
   import { DBasicCommands } from "MysteryRogueSystem/ts/mr/data/predefineds/DBasicCommands";
   import { BasicEntityKinds } from "MysteryRogueSystem/ts/mr/data/predefineds/DBasicEntityKinds";
@@ -3525,13 +3775,13 @@ declare module 'MysteryRogueSystem/ts/mr/data/MRBasics' {
       landExitResultDetail: number;
   }
   export interface DBasicElements {
-      explosion: DAttackElementId;
+      explosion: DElementId;
   }
   export interface DBasicSpecialEffects {
       itemSteal: DSpecialEffectId;
       goldSteal: DSpecialEffectId;
       levelDown: DSpecialEffectId;
-      warp: DSpecialEffectId;
+      randomWarp: DSpecialEffectId;
       stumble: DSpecialEffectId;
       transferToNextFloor: DSpecialEffectId;
       transferToLowerFloor: DSpecialEffectId;
@@ -3561,7 +3811,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/MRBasics' {
       static events: DBasicEvents;
       static actions: DBasicActions;
       static commands: DBasicCommands;
-      static entityKinds: BasicEntityKinds;
+      static entityCategories: BasicEntityKinds;
       static states: DBasicStates;
       static params: DBasicParameters;
       static xparams: DBasicXParams;
@@ -3581,11 +3831,11 @@ declare module 'MysteryRogueSystem/ts/mr/data/MRData' {
   import { LBehavior } from "ts/mr/lively/behaviors/LBehavior";
   import { DState } from "MysteryRogueSystem/ts/mr/data/DState";
   import { DSystem } from "MysteryRogueSystem/ts/mr/data/DSystem";
-  import { DSpecialEffect, DSkill } from "MysteryRogueSystem/ts/mr/data/DSkill";
+  import { DSkill } from "MysteryRogueSystem/ts/mr/data/DSkill";
   import { DClass } from "MysteryRogueSystem/ts/mr/data/DClass";
   import { DItem, DItemDataId } from "MysteryRogueSystem/ts/mr/data/DItem";
   import { DLand } from "MysteryRogueSystem/ts/mr/data/DLand";
-  import { DEntityKind } from "MysteryRogueSystem/ts/mr/data/DEntityKind";
+  import { DEntityCategory } from "MysteryRogueSystem/ts/mr/data/DEntityCategory";
   import { DSequel, DSequelId } from "MysteryRogueSystem/ts/mr/data/DSequel";
   import { DEnemy, DEnemyId } from "MysteryRogueSystem/ts/mr/data/DEnemy";
   import { DEquipmentPart } from "MysteryRogueSystem/ts/mr/data/DEquipmentPart";
@@ -3603,13 +3853,15 @@ declare module 'MysteryRogueSystem/ts/mr/data/MRData' {
   import { DItemShopType } from "MysteryRogueSystem/ts/mr/data/DItemShop";
   import { MRDataExtension } from "MysteryRogueSystem/ts/mr/data/MRDataExtension";
   import { DEmittor, DEmittorId } from "MysteryRogueSystem/ts/mr/data/DEmittor";
-  import { DAttackElement } from "MysteryRogueSystem/ts/mr/data/DAttackElement";
+  import { DElement } from "MysteryRogueSystem/ts/mr/data/DElement";
   import { DRace } from "MysteryRogueSystem/ts/mr/data/DRace";
   import { DFloorPreset, DTerrainSetting, DTerrainShape } from "MysteryRogueSystem/ts/mr/data/DTerrainPreset";
   import { DCommand } from "MysteryRogueSystem/ts/mr/data/DCommand";
   import { DEffect } from "MysteryRogueSystem/ts/mr/data/DEffect";
   import { DParameterId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   import { DMap } from "MysteryRogueSystem/ts/mr/data/DMap";
+  import { DEntityTemplate, IEntityTemplateProps } from "MysteryRogueSystem/ts/mr/data/DEntityTemplate";
+  import { DSpecialEffect } from "MysteryRogueSystem/ts/mr/data/DSpecialEffect";
   export type DFactionId = number;
   /**
    * 勢力
@@ -3645,9 +3897,9 @@ declare module 'MysteryRogueSystem/ts/mr/data/MRData' {
       static NormalAttackSkillId: number;
       static ext: MRDataExtension;
       static system: DSystem;
-      static attackElements: DAttackElement[];
+      static elements: DElement[];
       static equipmentParts: DEquipmentPart[];
-      static entityKinds: DEntityKind[];
+      static entityKinds: DEntityCategory[];
       static classes: DClass[];
       static races: DRace[];
       static actors: DEntityId[];
@@ -3670,6 +3922,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/MRData' {
       static itemShops: DItemShopType[];
       static prefabs: DPrefab[];
       static entities: DEntity[];
+      static entityTemplates: DEntityTemplate[];
       static troops: DTroop[];
       static emittors: DEmittor[];
       static effects: DEffect[];
@@ -3682,10 +3935,11 @@ declare module 'MysteryRogueSystem/ts/mr/data/MRData' {
       static armorDataIdOffset: number;
       static _behaviorFactories: (() => LBehavior)[];
       static reset(): void;
-      static getAttackElement(pattern: string): DAttackElement;
-      static addEntityKind(displayName: string, name: string): number;
-      static findEntityKind(pattern: string): DEntityKind | undefined;
-      static getEntityKind(pattern: string): DEntityKind;
+      static newElement(key: string): DElement;
+      static getElement(pattern: string): DElement;
+      static newEntityCategory(key: string, displayName?: string): number;
+      static findEntityCategory(pattern: string): DEntityCategory | undefined;
+      static getEntityCategory(pattern: string): DEntityCategory;
       static newClass(name: string): number;
       static newRace(): DRace;
       static findRace(pattern: string): DRace | undefined;
@@ -3694,10 +3948,13 @@ declare module 'MysteryRogueSystem/ts/mr/data/MRData' {
       static newCommand(name: string): DCommand;
       static addSequel(name: string): DSequelId;
       static addParams(key: string, displayName: string): DParameter;
-      static parameter(key: DParameterId | string): DParameter;
+      static getParameter(key: DParameterId | string): DParameter;
       static newEntity(): DEntity;
       static findEntity(pattern: string): DEntity | undefined;
       static getEntity(pattern: string): DEntity;
+      static newEntityTemplate(key: string, props: IEntityTemplateProps): DEntityTemplate;
+      static findEntityTemplate(pattern: string): DEntityTemplate | undefined;
+      static getEntityTemplate(pattern: string): DEntityTemplate;
       static newPrefab(): DPrefab;
       static newMap(): DMap;
       static findMap(pattern: string): DMap | undefined;
@@ -3706,8 +3963,10 @@ declare module 'MysteryRogueSystem/ts/mr/data/MRData' {
       static cloneEffect(src: DEffect): DEffect;
       static findEffect(pattern: string): DEffect | undefined;
       static getEffect(pattern: string): DEffect;
-      static newEmittor(sourceKey: string): DEmittor;
+      static newEmittor(key: string): DEmittor;
       static cloneEmittor(src: DEmittor): DEmittor;
+      static findEmittor(pattern: string): DEmittor | undefined;
+      static getEmittor(pattern: string): DEmittor;
       static getEmittorById(id: DEmittorId): DEmittor;
       static newTerrainShape(key: string): DTerrainShape;
       static findTerrainShape(pattern: string): DTerrainShape | undefined;
@@ -3724,6 +3983,8 @@ declare module 'MysteryRogueSystem/ts/mr/data/MRData' {
       static findActor(pattern: string): DActor | undefined;
       static getActor(pattern: string): DActor;
       static newEffectBehavior(key: string): DSpecialEffect;
+      static findSpecialEffect(pattern: string): DSpecialEffect | undefined;
+      static getSpecialEffect(pattern: string): DSpecialEffect;
       static newItem(): [DEntity, DItem];
       static itemEntity(id: DItemDataId): DEntity;
       static itemData(id: DItemDataId): DItem;
@@ -3795,6 +4056,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/MRDataManager' {
 
 }
 declare module 'MysteryRogueSystem/ts/mr/data/MRSetup' {
+  import { DEmittor } from "MysteryRogueSystem/ts/mr/data/DEmittor";
   import { DEntity } from "MysteryRogueSystem/ts/mr/data/DEntity";
   import { DPrefab } from "MysteryRogueSystem/ts/mr/data/DPrefab";
   import { DSkill } from "MysteryRogueSystem/ts/mr/data/DSkill";
@@ -3815,11 +4077,12 @@ declare module 'MysteryRogueSystem/ts/mr/data/MRSetup' {
       static setupDirectly_State(data: DState): void;
       static setupDirectly_StateGroup(data: DStateGroup): void;
       private static setupItemCommon;
-      private static setupWeaponCommon;
-      private static setupShieldCommon;
+      static setupWeaponCommon(entity: DEntity): void;
+      static setupShieldCommon(entity: DEntity): void;
       private static setupArrowCommon;
       private static setupRingCommon;
-      private static setupGrassCommon;
+      static setupFoodCommon(entity: DEntity, fp?: number): void;
+      static setupGrassCommon(entity: DEntity, fp?: number): [DEmittor, DEmittor];
       private static setupStaffCommon;
       private static setupScrollCommon;
       private static addVulnerableDeathExplosion;
@@ -3992,26 +4255,27 @@ declare module 'MysteryRogueSystem/ts/mr/data/predefineds/DBasicCommands' {
 
 }
 declare module 'MysteryRogueSystem/ts/mr/data/predefineds/DBasicEntityKinds' {
-  import { DEntityKindId } from "MysteryRogueSystem/ts/mr/data/DCommon";
+  import { DEntityCategoryId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   export interface BasicEntityKinds {
-      actor: DEntityKindId;
-      WeaponKindId: DEntityKindId;
-      ShieldKindId: DEntityKindId;
-      ArrowKindId: DEntityKindId;
-      BraceletKindId: DEntityKindId;
-      FoodKindId: DEntityKindId;
-      grass: DEntityKindId;
-      ScrollKindId: DEntityKindId;
-      WandKindId: DEntityKindId;
-      PotKindId: DEntityKindId;
-      DiscountTicketKindId: DEntityKindId;
-      BuildingMaterialKindId: DEntityKindId;
-      TrapKindId: DEntityKindId;
-      FigurineKindId: DEntityKindId;
-      MonsterKindId: DEntityKindId;
-      entryPoint: DEntityKindId;
-      exitPoint: DEntityKindId;
-      Ornament: DEntityKindId;
+      actor: DEntityCategoryId;
+      WeaponKindId: DEntityCategoryId;
+      ShieldKindId: DEntityCategoryId;
+      armor: DEntityCategoryId;
+      ArrowKindId: DEntityCategoryId;
+      BraceletKindId: DEntityCategoryId;
+      FoodKindId: DEntityCategoryId;
+      grass: DEntityCategoryId;
+      ScrollKindId: DEntityCategoryId;
+      WandKindId: DEntityCategoryId;
+      PotKindId: DEntityCategoryId;
+      DiscountTicketKindId: DEntityCategoryId;
+      BuildingMaterialKindId: DEntityCategoryId;
+      TrapKindId: DEntityCategoryId;
+      FigurineKindId: DEntityCategoryId;
+      MonsterKindId: DEntityCategoryId;
+      entryPoint: DEntityCategoryId;
+      exitPoint: DEntityCategoryId;
+      Ornament: DEntityCategoryId;
   }
 
 }
@@ -5443,7 +5707,7 @@ declare module 'MysteryRogueSystem/ts/mr/lively/behaviors/LBehavior' {
   import { DCounterAction } from "ts/mr/data/DEntity";
   import { LCharacterAI } from "MysteryRogueSystem/ts/mr/lively/ai/LCharacterAI";
   import { SEffect, SEffectorFact } from "ts/mr/system/SEffectApplyer";
-  import { DBlockLayerKind, DSpecificEffectId, DSubComponentEffectTargetKey, DActionId } from "ts/mr/data/DCommon";
+  import { DBlockLayerKind, DSpecialEffectId, DSubComponentEffectTargetKey, DActionId } from "ts/mr/data/DCommon";
   import { DSequelId } from "ts/mr/data/DSequel";
   import { LCandidateSkillAction } from "ts/mr/utility/UAction";
   import { DEffect } from "ts/mr/data/DEffect";
@@ -5500,7 +5764,6 @@ declare module 'MysteryRogueSystem/ts/mr/lively/behaviors/LBehavior' {
   export const onMoveAsProjectile: unique symbol;
   export const onWalkedOnTopAction: unique symbol;
   export const onWalkedOnTopReaction: unique symbol;
-  export const onMoveAsMagicBullet: unique symbol;
   export const onPreStepFeetProcess_Actor: unique symbol;
   export const onPreStepFeetProcess: unique symbol;
   export const onPerformStepFeetProcess: unique symbol;
@@ -5556,7 +5819,7 @@ declare module 'MysteryRogueSystem/ts/mr/lively/behaviors/LBehavior' {
   }
   interface SEffectBehaviorRejectionInfo {
       kind: "EffectBehavior";
-      id: DSpecificEffectId;
+      id: DSpecialEffectId;
   }
   export type SRejectionInfo = SEffectRejectionInfo | SEffectBehaviorRejectionInfo;
   /**
@@ -6444,6 +6707,8 @@ declare module 'MysteryRogueSystem/ts/mr/lively/behaviors/LSurvivorBehavior' {
    */
   export class LSurvivorBehavior extends LBehavior {
       private _basicLoss;
+      private _prevFP;
+      constructor();
       clone(newOwner: LEntity): LBehavior;
       onAttached(self: LEntity): void;
       onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult;
@@ -6934,11 +7199,11 @@ declare module 'MysteryRogueSystem/ts/mr/lively/LEntity' {
   import { DParamBuff, LStateLevelType } from "ts/mr/data/DEffect";
   import { DSequelId } from "MysteryRogueSystem/ts/mr/data/DSequel";
   import { LReward } from "MysteryRogueSystem/ts/mr/lively/LReward";
-  import { DBlockLayerKind, DEntityKindId, DSubComponentEffectTargetKey, DRaceId, DActionId, DParameterId, DAnimationId } from "MysteryRogueSystem/ts/mr/data/DCommon";
+  import { DBlockLayerKind, DEntityCategoryId, DSubComponentEffectTargetKey, DRaceId, DActionId, DParameterId, DAnimationId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   import { LActionToken } from "MysteryRogueSystem/ts/mr/lively/LActionToken";
   import { LMinimapMarkerClass, LPriceInfo, LReaction, LRoomId } from "MysteryRogueSystem/ts/mr/lively/LCommon";
   import { LShopArticle } from "MysteryRogueSystem/ts/mr/lively/LShopArticle";
-  import { DEntityKind } from "MysteryRogueSystem/ts/mr/data/DEntityKind";
+  import { DEntityCategory } from "MysteryRogueSystem/ts/mr/data/DEntityCategory";
   import { DTraitId } from "MysteryRogueSystem/ts/mr/data/DTraits";
   import { SActivityContext } from "MysteryRogueSystem/ts/mr/system/SActivityContext";
   import { LSchedulingResult } from "MysteryRogueSystem/ts/mr/lively/LSchedulingResult";
@@ -7015,8 +7280,8 @@ declare module 'MysteryRogueSystem/ts/mr/lively/LEntity' {
       setupInstance(entityDataId: DEntityId): void;
       get dataId(): DEntityId;
       get data(): DEntity;
-      kindDataId(): DEntityKindId;
-      kindData(): DEntityKind;
+      kindDataId(): DEntityCategoryId;
+      kindData(): DEntityCategory;
       entityId(): LEntityId;
       equals(other: LEntity): boolean;
       isGCReady(): boolean;
@@ -7522,12 +7787,14 @@ declare module 'MysteryRogueSystem/ts/mr/lively/LJournal' {
 }
 declare module 'MysteryRogueSystem/ts/mr/lively/LLand' {
   import { DLand } from "ts/mr/data/DLand";
-  import { DLandId } from "MysteryRogueSystem/ts/mr/data/DCommon";
+  import { LIdentifyer } from "MysteryRogueSystem/ts/mr/lively/LIdentifyer";
   export class LLand {
+      readonly identifyer: LIdentifyer;
       private _landDataId;
-      setup_(landDataId: DLandId): void;
+      constructor(landDataId: DLand);
       landData(): DLand;
       maxFloorNumber(): number;
+      resetIdentifyer(): void;
   }
 
 }
@@ -8227,6 +8494,7 @@ declare module 'MysteryRogueSystem/ts/mr/lively/MRLively' {
   import { LBlock } from "MysteryRogueSystem/ts/mr/lively/LBlock";
   import { LScheduler2 } from "MysteryRogueSystem/ts/mr/lively/LScheduler";
   import { MRGameExtension } from "MysteryRogueSystem/ts/mr/lively/MRGameExtension";
+  import { LLand } from "MysteryRogueSystem/ts/mr/lively/LLand";
   /**
    * 各 REGame_* インスタンスを保持する。
    *
@@ -8241,7 +8509,6 @@ declare module 'MysteryRogueSystem/ts/mr/lively/MRLively' {
       static map: LMap;
       static camera: LCamera;
       static scheduler: LScheduler2;
-      static identifyer: LIdentifyer;
       static recorder: SActivityRecorder;
       static messageHistory: LMessageHistory;
       static eventServer: LEventServer;
@@ -8249,6 +8516,8 @@ declare module 'MysteryRogueSystem/ts/mr/lively/MRLively' {
       static borderWall: LBlock;
       /**  */
       static signalFlushSequelSet: ((sequelSet: SSequelSet) => void) | undefined;
+      static getCurrentLand(): LLand;
+      static getCurrentIdentifyer(): LIdentifyer;
   }
 
 }
@@ -9081,7 +9350,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/dialogs/SWarehouseWithdrawDialog
 
 }
 declare module 'MysteryRogueSystem/ts/mr/system/effects/SChangeInstanceSpecialEffect' {
-  import { DSpecialEffectRef } from "ts/mr/data/DEffect";
+  import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
@@ -9093,7 +9362,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/SChangeInstanceSpecialEf
 
 }
 declare module 'MysteryRogueSystem/ts/mr/system/effects/SClarificationSpecialEffect' {
-  import { DSpecialEffectRef } from "ts/mr/data/DEffect";
+  import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
@@ -9105,7 +9374,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/SClarificationSpecialEff
 
 }
 declare module 'MysteryRogueSystem/ts/mr/system/effects/SDispelEquipmentsSpecialEffect' {
-  import { DSpecialEffectRef } from "ts/mr/data/DEffect";
+  import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
@@ -9121,7 +9390,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/SDispelEquipmentsSpecial
 
 }
 declare module 'MysteryRogueSystem/ts/mr/system/effects/SDivisionSpecialEffect' {
-  import { DSpecialEffectRef } from "ts/mr/data/DEffect";
+  import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
@@ -9138,7 +9407,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/SGoldStealSpecialEffect'
   import { SEffectModifier } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
   import { SSpecialEffect } from "MysteryRogueSystem/ts/mr/system/effects/SSpecialEffect";
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
-  import { DSpecialEffectRef } from "ts/mr/data/DEffect";
+  import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
   export class SGoldStealSpecialEffect extends SSpecialEffect {
       onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void;
       private pickGold;
@@ -9146,7 +9415,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/SGoldStealSpecialEffect'
 
 }
 declare module 'MysteryRogueSystem/ts/mr/system/effects/SItemStealSpecialEffect' {
-  import { DSpecialEffectRef } from "ts/mr/data/DEffect";
+  import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
@@ -9160,7 +9429,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/SItemStealSpecialEffect'
 
 }
 declare module 'MysteryRogueSystem/ts/mr/system/effects/SLevelDownSpecialEffect' {
-  import { DSpecialEffectRef } from "ts/mr/data/DEffect";
+  import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
@@ -9172,7 +9441,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/SLevelDownSpecialEffect'
 
 }
 declare module 'MysteryRogueSystem/ts/mr/system/effects/SPerformeSkillSpecialEffect' {
-  import { DSpecialEffectRef } from "ts/mr/data/DEffect";
+  import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
@@ -9184,7 +9453,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/SPerformeSkillSpecialEff
 
 }
 declare module 'MysteryRogueSystem/ts/mr/system/effects/SRemoveStatesByIntentionsSpecialEffect' {
-  import { DSpecialEffectRef } from "ts/mr/data/DEffect";
+  import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
@@ -9196,7 +9465,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/SRemoveStatesByIntention
 
 }
 declare module 'MysteryRogueSystem/ts/mr/system/effects/SRestartFloorSpecialEffect' {
-  import { DSpecialEffectRef } from "ts/mr/data/DEffect";
+  import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
@@ -9212,27 +9481,27 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/SSpecialEffect' {
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
   import { SEffectModifier } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
-  import { DSpecialEffectRef } from "ts/mr/data/DEffect";
+  import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
   export abstract class SSpecialEffect {
       onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void;
   }
 
 }
 declare module 'MysteryRogueSystem/ts/mr/system/effects/SSpecialEffectManager' {
-  import { DSpecificEffectId } from "ts/mr/data/DCommon";
+  import { DSpecialEffectId } from "ts/mr/data/DCommon";
   import { SSpecialEffect } from "MysteryRogueSystem/ts/mr/system/effects/SSpecialEffect";
   export class SSpecialEffectManager {
       private behaviors;
       constructor();
-      register(specialEffectId: DSpecificEffectId, behavior: SSpecialEffect): void;
-      find(specialEffectId: DSpecificEffectId): SSpecialEffect | undefined;
-      get(specialEffectId: DSpecificEffectId): SSpecialEffect;
+      register(specialEffectId: DSpecialEffectId, behavior: SSpecialEffect): void;
+      find(specialEffectId: DSpecialEffectId): SSpecialEffect | undefined;
+      get(specialEffectId: DSpecialEffectId): SSpecialEffect;
       private setupBuiltins;
   }
 
 }
 declare module 'MysteryRogueSystem/ts/mr/system/effects/SStumbleSpecialEffect' {
-  import { DSpecialEffectRef } from "ts/mr/data/DEffect";
+  import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
@@ -9244,7 +9513,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/SStumbleSpecialEffect' {
 
 }
 declare module 'MysteryRogueSystem/ts/mr/system/effects/STransferToLowerFloorSpecialEffect' {
-  import { DSpecialEffectRef } from "ts/mr/data/DEffect";
+  import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
@@ -9256,7 +9525,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/STransferToLowerFloorSpe
 
 }
 declare module 'MysteryRogueSystem/ts/mr/system/effects/STransferToNextFloorSpecialEffect' {
-  import { DSpecialEffectRef } from "ts/mr/data/DEffect";
+  import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
@@ -9268,7 +9537,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/STransferToNextFloorSpec
 
 }
 declare module 'MysteryRogueSystem/ts/mr/system/effects/STrapProliferationSpecialEffect' {
-  import { DSpecialEffectRef } from "ts/mr/data/DEffect";
+  import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
@@ -9280,7 +9549,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/STrapProliferationSpecia
 
 }
 declare module 'MysteryRogueSystem/ts/mr/system/effects/SWrapSpecialEffect' {
-  import { DSpecialEffectRef } from "ts/mr/data/DEffect";
+  import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
@@ -10045,14 +10314,15 @@ declare module 'MysteryRogueSystem/ts/mr/system/SDialogContext' {
 
 }
 declare module 'MysteryRogueSystem/ts/mr/system/SEffectApplyer' {
-  import { DEntityKindId, DSkillId, DSubComponentEffectTargetKey, DAttackElementId, DParameterId } from "MysteryRogueSystem/ts/mr/data/DCommon";
-  import { DEffect, DEffectSet, DOtherEffectQualifying, DParamBuff, DParameterQualifying, DSpecialEffectRef } from "MysteryRogueSystem/ts/mr/data/DEffect";
+  import { DEntityCategoryId, DSkillId, DSubComponentEffectTargetKey, DElementId, DParameterId } from "MysteryRogueSystem/ts/mr/data/DCommon";
+  import { DEffect, DEffectSet, DOtherEffectQualifying, DParamBuff, DParameterQualifying } from "MysteryRogueSystem/ts/mr/data/DEffect";
   import { LBattlerBehavior } from "MysteryRogueSystem/ts/mr/lively/behaviors/LBattlerBehavior";
   import { LEffectResult } from "MysteryRogueSystem/ts/mr/lively/LEffectResult";
   import { LEntity } from "MysteryRogueSystem/ts/mr/lively/LEntity";
   import { LRandom } from "MysteryRogueSystem/ts/mr/lively/LRandom";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
   import { SEffectIncidentType } from "MysteryRogueSystem/ts/mr/system/SEffectContext";
+  import { DSpecialEffectRef } from "MysteryRogueSystem/ts/mr/data/DSpecialEffect";
   export class SEffect {
       private _fact;
       private _data;
@@ -10092,7 +10362,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/SEffectApplyer' {
       private _direction;
       private _genericEffectRate;
       constructor(subject: LEntity, effects: DEffectSet, incidentType: SEffectIncidentType, dir: number);
-      withIncidentEntityKind(value: DEntityKindId): this;
+      withIncidentEntityKind(value: DEntityCategoryId): this;
       withItem(item: LEntity): this;
       withSkill(skill: DSkillId): this;
       subject(): LEntity;
@@ -10100,7 +10370,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/SEffectApplyer' {
       effectSet(): DEffectSet;
       subEffects(): SSubEffect[];
       incidentType(): SEffectIncidentType;
-      incidentEntityKind(): DEntityKindId;
+      incidentEntityKind(): DEntityCategoryId;
       item(): LEntity | undefined;
       sourceSkill(): DSkillId | undefined;
       direction(): number;
@@ -10118,7 +10388,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/SEffectApplyer' {
   export class SParameterEffect {
       paramId: DParameterId;
       qualifying: DParameterQualifying;
-      elementIds: DAttackElementId[];
+      elementIds: DElementId[];
       formula: string;
       /** IDataSkill.damage.type  */
       applyType: SParameterEffectApplyType;
@@ -10554,8 +10824,8 @@ declare module 'MysteryRogueSystem/ts/mr/system/SRmmzHelpers' {
    * Visual レイヤーにアクセスする rmmz フォルダからは独立させたもの。
    */
   export class SRmmzHelpers {
-      static readEntityMetadata(event: Game_Event): DEntitySpawner2 | undefined;
-      static createEntitiesFromRmmzFixedMapEventData(): void;
+      static readEntityMetadata(event: Game_Event, rmmzMapId: number): DEntitySpawner2 | undefined;
+      static createEntitiesFromRmmzFixedMapEventData(rmmzMapId: number): void;
       static createEntityFromRmmzEvent(data: DEntityCreateInfo, eventId: number, x: number, y: number): LEntity;
       static getRegionId(x: number, y: number): number;
       static buildFixedMapData(map: FMap): void;
@@ -10964,11 +11234,11 @@ declare module 'MysteryRogueSystem/ts/mr/utility/UEffect' {
 
 }
 declare module 'MysteryRogueSystem/ts/mr/utility/UIdentify' {
-  import { DIdentifiedTiming } from "ts/mr/data/DIdentifyer";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "ts/mr/system/SCommandContext";
+  import { DActionId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   export class UIdentify {
-      static identifyByTiming(cctx: SCommandContext, actor: LEntity, target: LEntity, timing: DIdentifiedTiming, withMessage?: boolean): void;
+      static identifyByTiming(cctx: SCommandContext, actor: LEntity, target: LEntity, actionId: DActionId, withMessage?: boolean): void;
       /**
        * 指定した Entity を識別する。
        */

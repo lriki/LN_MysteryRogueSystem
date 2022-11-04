@@ -18,7 +18,7 @@ import { DSkill } from './DSkill';
 import { DTroop } from './DTroop';
 import { DStateGroup } from './DStateGroup';
 import { MRSetup } from './MRSetup';
-import { DAttackElement } from './DAttackElement';
+import { DElement } from './DElement';
 import { DParamMessageValueSource, DParameter, DParameterType } from './DParameter';
 import { DDataImporter } from './DDataImporter';
 import { DDropItem } from './DEnemy';
@@ -199,27 +199,28 @@ export class MRDataManager {
             MRSetup.setupParameter(param);
         }
         
-        MRBasics.entityKinds = {
-            actor: MRData.addEntityKind("Actor", "Actor"),
-            WeaponKindId: MRData.addEntityKind("武器", "Weapon"),
-            ShieldKindId: MRData.addEntityKind("盾", "Shield"),
-            ArrowKindId: MRData.addEntityKind("矢", "Arrow"),
+        MRBasics.entityCategories = {
+            actor: MRData.newEntityCategory("kEntityCategory_Actor", "Actor"),
+            WeaponKindId: MRData.newEntityCategory("kEntityCategory_Weapon", "武器"),
+            ShieldKindId: MRData.newEntityCategory("kEntityCategory_Shield", "盾"),
+            armor: MRData.newEntityCategory("kEntityCategory_Armor", "盾"),
+            ArrowKindId: MRData.newEntityCategory("kEntityCategory_Arrow", "矢"),
             //RE_Data.addEntityKind("石"),
             //RE_Data.addEntityKind("弾"),
-            BraceletKindId: MRData.addEntityKind("腕輪", "Ring"),
-            FoodKindId: MRData.addEntityKind("食料", "Food"),
-            grass: MRData.addEntityKind("草", "Grass"),
-            ScrollKindId: MRData.addEntityKind("巻物", "Scroll"),
-            WandKindId: MRData.addEntityKind("杖", "Staff"),
-            PotKindId: MRData.addEntityKind("壺", "Pot"),
-            DiscountTicketKindId: MRData.addEntityKind("割引券", "DiscountTicket"),
-            BuildingMaterialKindId: MRData.addEntityKind("材料", "BuildingMaterial"),
-            TrapKindId: MRData.addEntityKind("罠", "Trap"),
-            FigurineKindId: MRData.addEntityKind("土偶", "Figurine"),
-            MonsterKindId: MRData.addEntityKind("モンスター", "Monster"),
-            entryPoint: MRData.addEntityKind("入り口", "EntryPoint"),
-            exitPoint: MRData.addEntityKind("出口", "ExitPoint"),
-            Ornament: MRData.addEntityKind("Ornament", "Ornament"),
+            BraceletKindId: MRData.newEntityCategory("kEntityCategory_Ring", "腕輪"),
+            FoodKindId: MRData.newEntityCategory("kEntityCategory_Food", "食料"),
+            grass: MRData.newEntityCategory("kEntityCategory_Grass", "草"),
+            ScrollKindId: MRData.newEntityCategory("kEntityCategory_Scroll", "巻物"),
+            WandKindId: MRData.newEntityCategory("kEntityCategory_Staff", "杖"),
+            PotKindId: MRData.newEntityCategory("kEntityCategory_Pot", "壺"),
+            DiscountTicketKindId: MRData.newEntityCategory("kEntityCategory_DiscountTicket", "割引券"),
+            BuildingMaterialKindId: MRData.newEntityCategory("kEntityCategory_BuildingMaterial", "材料"),
+            TrapKindId: MRData.newEntityCategory("kEntityCategory_Trap", "罠"),
+            FigurineKindId: MRData.newEntityCategory("kEntityCategory_Figurine", "土偶"),
+            MonsterKindId: MRData.newEntityCategory("kEntityCategory_Monster", "モンスター"),
+            entryPoint: MRData.newEntityCategory("kEntityCategory_EntryPoint", "入り口"),
+            exitPoint: MRData.newEntityCategory("kEntityCategory_ExitPoint", "出口"),
+            Ornament: MRData.newEntityCategory("kEntityCategory_Ornament", "Ornament"),
         };
 
         MRBasics.xparams = { // RMMZ と同じ配列
@@ -440,7 +441,7 @@ export class MRDataManager {
             itemSteal: MRData.newEffectBehavior("ItemSteal").id,
             goldSteal: MRData.newEffectBehavior("GoldSteal").id,
             levelDown: MRData.newEffectBehavior("LevelDown").id,
-            warp: MRData.newEffectBehavior("Warp").id,
+            randomWarp: MRData.newEffectBehavior("RandomWarp").id,
             stumble: MRData.newEffectBehavior("Stumble").id,
             transferToNextFloor: MRData.newEffectBehavior("TransferToNextFloor").id,
             transferToLowerFloor: MRData.newEffectBehavior("TransferToLowerFloor").id,
@@ -450,9 +451,33 @@ export class MRDataManager {
             restartFloor: MRData.newEffectBehavior("RestartFloor").id,
             clarification: MRData.newEffectBehavior("Clarification").id,
             division: MRData.newEffectBehavior("Division").id,
+            removeState: MRData.newEffectBehavior("RemoveState").id,
             removeStatesByIntentions: MRData.newEffectBehavior("RemoveStatesByIntentions").id,
             performeSkill: MRData.newEffectBehavior("PerformeSkill").id,
         };
+
+        // EntityTemplate
+        {
+            MRData.newEntityTemplate("kEntityTemplate_Weapon", {
+                type: "Weapon",
+            });
+            MRData.newEntityTemplate("kEntityTemplate_Shield", {
+                type: "Shield",
+            });
+            MRData.newEntityTemplate("kEntityTemplate_Armor", {
+                type: "Armor",
+            });
+            MRData.newEntityTemplate("kEntityTemplate_Accessory", {
+                type: "Accessory",
+            });
+            MRData.newEntityTemplate("kEntityTemplate_Grass", {
+                type: "Grass",
+                recoverFP: 500,
+            });
+            MRData.newEntityTemplate("kEntityTemplate_Food", {
+                type: "Food",
+            });
+        }
 
         {
             {
@@ -545,14 +570,18 @@ export class MRDataManager {
     private static loadData(next: NextFunc): void {
         MRData.system = new DSystem();
 
-        // Import AttackElements
-        MRData.attackElements = [];
-        for (const x of $dataSystem.elements) {
-            const e = new DAttackElement(MRData.attackElements.length);
-            MRData.attackElements.push(e);
-            if (x) {
-                e.parseNameAndKey(x);
+        // Import Elements
+        MRData.elements = [];
+        for (const x of $dataSystem.elements) { // [0] is "" (empty string).
+            const tokens = x.split("##");
+            let key = x;
+            let name = x;
+            if (tokens.length == 2) {
+                name = tokens[0];
+                key = tokens[1];
             }
+            const data = MRData.newElement(key);
+            data.name = name;
         }
 
         MRBasics.variables = {
@@ -562,7 +591,7 @@ export class MRDataManager {
         };
 
         MRBasics.elements = {
-            explosion: MRData.getAttackElement("kElement_Explosion").id,
+            explosion: MRData.getElement("kElement_Explosion").id,
         };
         
         
@@ -734,8 +763,10 @@ export class MRDataManager {
                 flavorEffect.text = messages;
 
                 if (DHelpers.isForFriend(skill.rmmzEffectScope)) {
-                //if (DHelpers.isSingle(skill.rmmzEffectScope)) {
                     emittor.scope.range = DEffectFieldScopeRange.Performer;
+                }
+                else {
+                    emittor.scope.range = DEffectFieldScopeRange.Front1;
                 }
             }
         });
@@ -787,13 +818,14 @@ export class MRDataManager {
             if (x) {
                 const meta = DMetadataParser.parse(x.meta);
                 entity.entity = parseMetaToEntityProperties(x.meta);
+                entity.entityTemplateKey = meta.entityTemplateKey;
                 entity.display.name = x.name;
                 entity.display.iconIndex = x.iconIndex ?? 0;
                 entity.description = x.description;
                 entity.sellingPrice2 = x.price;
                 entity.purchasePrice = Math.max(entity.sellingPrice2 / 2, 1);
 
-                const emittor = MRData.newEmittor(entity.entity.key);
+                const emittor = MRData.newEmittor(meta.emittorKey ?? entity.entity.key);
                 const effect = MRData.newEffect(meta.effectKey ?? entity.entity.key);
                 effect.critical = false;
                 effect.successRate = x.successRate;
@@ -828,6 +860,7 @@ export class MRDataManager {
         $dataWeapons.forEach(x => {
             const [entity, item] = MRData.newItem();
             if (x) {
+                const meta = DMetadataParser.parse(x.meta);
                 entity.display.name = DHelpers.parseDisplayName(x.name);
                 entity.display.iconIndex = x.iconIndex ?? 0;
                 entity.description = x.description;
@@ -847,12 +880,14 @@ export class MRDataManager {
                 entity.equipmentTraits = x.traits.slice();
                 entity.equipmentTraits = entity.equipmentTraits.concat(DTrait.parseTraitMetadata(x.meta));
                 entity.entity = parseMetaToEntityProperties(x.meta);
+                entity.entityTemplateKey = meta.entityTemplateKey;
             }
         });
         MRData.armorDataIdOffset = MRData.items.length;
         $dataArmors.forEach(x => {
             const [entity, item] = MRData.newItem();
             if (x) {
+                const meta = DMetadataParser.parse(x.meta);
                 entity.display.name = x.name;
                 entity.display.iconIndex = x.iconIndex ?? 0;
                 entity.description = x.description;
@@ -871,6 +906,7 @@ export class MRDataManager {
                 entity.equipmentTraits = x.traits.slice();
                 entity.equipmentTraits = entity.equipmentTraits.concat(DTrait.parseTraitMetadata(x.meta));
                 entity.entity = parseMetaToEntityProperties(x.meta);
+                entity.entityTemplateKey = meta.entityTemplateKey;
             }
         });
         MRSystem.items = {
@@ -907,7 +943,7 @@ export class MRDataManager {
                 enemy.actions = x.actions;
                 enemy.dropItems = DDropItem.makeFromRmmzDropItemList(x.dropItems, x.gold);
                 entity.entity = parseMetaToEntityProperties(x.meta);    // TODO: ↓DMetadataParserを使う
-                entity.entity.kindId = MRBasics.entityKinds.MonsterKindId;
+                entity.entity.kindId = MRBasics.entityCategories.MonsterKindId;
                 entity.factionId = MRData.system.factions.enemy;
                 entity.classId =  MRBasics.defaultEnemyClass;
 
@@ -1223,10 +1259,14 @@ export class MRDataManager {
 
     public static importSetupScript(next: NextFunc): void {
         const scripts = [
+            "mr/EntityCategories.js",
+            "mr/EntityTemplates.js",
             "mr/Setup.js",
             "mr/Actions.js",
             "mr/Parameters.js",
             "mr/Effects.js",
+            "mr/Emittors.js",
+            "mr/Entities.js",
         ];
         const scriptDB = new DSetupScript();
 

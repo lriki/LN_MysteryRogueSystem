@@ -24,7 +24,7 @@ export class SDetailsDialog extends SDialog {
     public get description(): string {
         const subject = MRLively.camera.focusedEntity();
         assert(subject);
-        if (MRLively.identifyer.getEntityIdentificationLevel(subject, this._entity) == EntityIdentificationLevel.Unidentified) {
+        if (MRLively.getCurrentIdentifyer().getEntityIdentificationLevel(subject, this._entity) == EntityIdentificationLevel.Unidentified) {
             return tr2("このアイテムは識別されていません。");
         }
         else {

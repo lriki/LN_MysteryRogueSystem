@@ -1,4 +1,4 @@
-import { DEntityKindId } from "./DCommon";
+import { DEntityCategoryId } from "./DCommon";
 import { DEntity } from "./DEntity";
 import { MRBasics } from "./MRBasics";
 
@@ -17,19 +17,20 @@ import { MRBasics } from "./MRBasics";
  * 
  * 
  */
-export class DEntityKind {
+export class DEntityCategory {
     /** ID (0 is Invalid). */
-    id: DEntityKindId;
+    public readonly id: DEntityCategoryId;
 
-    /** name. */
-    name: string;
+    /** key. */
+    public readonly key: string;
+
     /** Name. */
     displayName: string;
 
     
-    public constructor(id: DEntityKindId) {
+    public constructor(id: DEntityCategoryId, key: string) {
         this.id = id;
-        this.name = "";
+        this.key = key;
         this.displayName = "";
     }
     
@@ -37,23 +38,23 @@ export class DEntityKind {
     // Enemy は敵対という意味も含むため。
     // Monster は仲間になることもある。
     public static isMonster(entity: DEntity): boolean {
-        return entity.entity.kindId == MRBasics.entityKinds.MonsterKindId;
+        return entity.entity.kindId == MRBasics.entityCategories.MonsterKindId;
     }
 
     public static isTrap(entity: DEntity): boolean {
-        return entity.entity.kindId == MRBasics.entityKinds.TrapKindId;
+        return entity.entity.kindId == MRBasics.entityCategories.TrapKindId;
     }
 
     public static isEntryPoint(entity: DEntity): boolean {
-        return entity.entity.kindId == MRBasics.entityKinds.entryPoint;
+        return entity.entity.kindId == MRBasics.entityCategories.entryPoint;
     }
 
     public static isExitPoint(entity: DEntity): boolean {
-        return entity.entity.kindId == MRBasics.entityKinds.exitPoint;
+        return entity.entity.kindId == MRBasics.entityCategories.exitPoint;
     }
 
     public static isOrnament(entity: DEntity): boolean {
-        return entity.entity.kindId == MRBasics.entityKinds.Ornament;
+        return entity.entity.kindId == MRBasics.entityCategories.Ornament;
     }
 
     public static isItem(entity: DEntity): boolean {
@@ -63,4 +64,14 @@ export class DEntityKind {
                 !this.isOrnament(entity);
     }
     
+    public applyProps(props: IEntityCategoryProps): void {
+
+    }
 }
+
+//------------------------------------------------------------------------------
+// Props
+
+export interface IEntityCategoryProps {
+}
+

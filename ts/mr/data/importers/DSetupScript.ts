@@ -1,11 +1,14 @@
 import { assert, tr2 } from "../../Common";
-import { DEntity } from "../DEntity";
+import { DEntity, IEntityProps } from "../DEntity";
 import { DParameter } from "../DParameter";
 import { MRBasics } from "../MRBasics";
 import { MRData } from "../MRData";
-import { DSkill } from "../DSkill";
+import { DSkill, ISkillProps } from "../DSkill";
 import { evalScript } from "./DSetupScripEvaluator";
 import { IEffectProps } from "../DEffect";
+import { IEmittorProps } from "../DEmittor";
+import { IEntityTemplateProps } from "../DEntityTemplate";
+import { IEntityCategoryProps } from "../DEntityCategory";
 
 
 
@@ -50,13 +53,43 @@ export interface DSEntity {
     setup: (entity: DEntity) => void;
 }
 
-export class db {
-    public static parameters: { [key: string]: DSParameters };
-    public static actions: { [key: string]: DSetupAction };
-    public static entities: { [key: string]: DSEntity };
-    public static effects: { [key: string]: IEffectProps } | undefined;
+export class DSetupScriptDatabase {
+    public parameters: { [key: string]: DSParameters };
+    public entityCategories: { [key: string]: IEntityCategoryProps };
+    public entityTemplates: { [key: string]: IEntityTemplateProps };
+    public entities3: { [key: string]: DSEntity };
+    public actions: { [key: string]: ISkillProps };
+    public effects: { [key: string]: IEffectProps };
+    public emittors: { [key: string]: IEmittorProps };
+    public entities: { [key: string]: IEntityProps };
+
+    public constructor() {
+        this.parameters = {};
+        this.entityCategories = {};
+        this.entityTemplates = {};
+        this.entities3 = {};
+        this.actions = {};
+        this.effects = {};
+        this.emittors = {};
+        this.entities = {};
+    }
+
+    public mergeFrom(other: DSetupScriptDatabase): void {
+        Object.assign(this.parameters, other.parameters);
+        Object.assign(this.entityCategories, other.entityCategories);
+        Object.assign(this.entityTemplates, other.entityTemplates);
+        Object.assign(this.entities3, other.entities3);
+        Object.assign(this.actions, other.actions);
+        Object.assign(this.effects, other.effects);
+        Object.assign(this.emittors, other.emittors);
+        Object.assign(this.entities, other.entities);
+    }
 }
 
+export var db: DSetupScriptDatabase | undefined;
+export function setDB(v: DSetupScriptDatabase | undefined) {
+    db = v;
+}
 
 interface RequireOverrideReturn {
     MRData: typeof MRData;
@@ -65,22 +98,20 @@ interface RequireOverrideReturn {
 };
 
 export class DSetupScript {
-    //private _db: DSetupScriptDB;
+    private _mainDB: DSetupScriptDatabase;
 
     public constructor() {
-        // let db: any = {};
-        // for (const script of scripts) {
-        // }
-        // assert(db);
-        // this._db = db;
+        this._mainDB = new DSetupScriptDatabase();
     }
 
     public addScript(script: string): void {
-        evalScript(this, script);
+        const db = new DSetupScriptDatabase();
+        evalScript(db, script);
+        this._mainDB.mergeFrom(db);
     }
 
     public registerData(): void {
-        for (const key in db.parameters) {
+        for (const key in this._mainDB.parameters) {
             if (!MRData.parameters.find(x => x.key == key)) {
                 MRData.addParams(key, "");
             }
@@ -89,27 +120,53 @@ export class DSetupScript {
     }
     
     public setupData(): void {
+        this.createEntityCategories();
+        this.createActions();
         this.createEffects();
+        this.createEmittors();
+        this.createEntityTemplates();
+        this.createEntities();
 
         for (const data of MRData.parameters) {
-            const entry = db.parameters[data.key];
+            const entry = this._mainDB.parameters[data.key];
             if (entry) {
                 entry.setup(data);
             }
         }
-        for (const data of MRData.skills.filter(x => x.isActivity)) {
-            const props = db.actions[data.key];
-            if (props) {
-                props.setup(data);
+        // for (const data of MRData.skills.filter(x => x.isActivity)) {
+        //     const props = db.actions[data.key];
+        //     if (props) {
+        //         props.setup(data);
+        //     }
+        // }
+
+        this.setupEntityCategories();
+        this.setupActions();
+        this.setupEffects();
+        this.setupEmittors();
+        this.setupEntityTemplates();
+        this.setupEntities();
+    }
+
+    private createEntityCategories(): void {
+        for (const [key, props] of Object.entries(this._mainDB.entityCategories)) {
+            if (!MRData.entityKinds.find(x => x.key == key)) {
+                MRData.newEntityCategory(key);
             }
         }
+    }
 
-        this.setupEffects();
+    private setupEntityCategories(): void {
+        for (const data of MRData.entityKinds) {
+            const props = this._mainDB.entityCategories[data.key];
+            if (props) {
+                data.applyProps(props);
+            }
+        }
     }
 
     private createEffects(): void {
-        if (!db.effects) return;
-        for (const [key, props] of Object.entries(db.effects)) {
+        for (const [key, props] of Object.entries(this._mainDB.effects)) {
             if (!MRData.effects.find(x => x.key == key)) {
                 MRData.newEffect(key);
             }
@@ -117,14 +174,98 @@ export class DSetupScript {
     }
 
     private setupEffects(): void {
-        if (!db.effects) return;
         for (const data of MRData.effects) {
-            const props = db.effects[data.key];
+            const props = this._mainDB.effects[data.key];
             if (props) {
                 data.applyProps(props);
             }
         }
     }
+
+    private createEmittors(): void {
+        if (!this._mainDB.emittors) return;
+        for (const [key, props] of Object.entries(this._mainDB.emittors)) {
+            if (!MRData.emittors.find(x => x.key == key)) {
+                MRData.newEmittor(key);
+            }
+        }
+    }
+
+    private setupEmittors(): void {
+        if (!this._mainDB.emittors) return;
+        for (const data of MRData.emittors) {
+            const props = this._mainDB.emittors[data.key];
+            if (props) {
+                data.applyProps(props);
+            }
+        }
+    }
+
+    private createActions(): void {
+        if (!this._mainDB.actions) return;
+        for (const [key, props] of Object.entries(this._mainDB.actions)) {
+            if (!MRData.skills.find(x => x.key == key)) {
+                MRData.newEmittor(key);
+            }
+        }
+    }
+
+    private setupActions(): void {
+        if (!this._mainDB.actions) return;
+        for (const data of MRData.skills) {
+            const props = this._mainDB.actions[data.key];
+            if (props) {
+                data.applyProps(props);
+            }
+        }
+    }
+
+    private createEntityTemplates(): void {
+        if (!this._mainDB.entityTemplates) return;
+        for (const [key, props] of Object.entries(this._mainDB.entityTemplates)) {
+            if (!MRData.entityTemplates.find(x => x.key == key)) {
+                MRData.newEntityTemplate(key, props);
+            }
+        }
+    }
+
+    private setupEntityTemplates(): void {
+        if (!this._mainDB.entityTemplates) return;
+        for (const data of MRData.entityTemplates) {
+            const props = this._mainDB.entityTemplates[data.key];
+            if (props) {
+                data.resetProps(props);
+            }
+        }
+    }
+
+    private createEntities(): void {
+        if (!this._mainDB.entities) return;
+        for (const [key, props] of Object.entries(this._mainDB.entities)) {
+            if (!MRData.entities.find(x => x.entity.key == key)) {
+                const e = MRData.newEntity();
+                e.entity.key = key;
+            }
+        }
+    }
+
+    private setupEntities(): void {
+        if (!this._mainDB.entities) return;
+        for (const data of MRData.entities) {
+            if (data.entityTemplateKey) {
+                const entityTemplates = MRData.getEntityTemplate(data.entityTemplateKey);
+                entityTemplates.applyTo(data);
+            }
+
+            const props = this._mainDB.entities[data.entity.key];
+            if (props) {
+                data.applyProps(props);
+            }
+        }
+    }
+
+
+
 
     public setupItem(entity: DEntity): void {
 
@@ -162,7 +303,7 @@ export class DSetupScript {
         // }
 
         {
-            const data = db.entities[entity.entity.key];
+            const data = this._mainDB.entities3[entity.entity.key];
             if (data) {
                 data.setup(entity);
             }

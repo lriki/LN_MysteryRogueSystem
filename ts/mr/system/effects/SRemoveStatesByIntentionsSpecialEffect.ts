@@ -1,4 +1,4 @@
-import { DSpecialEffectRef } from "ts/mr/data/DEffect";
+import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
 import { DStateIntentions } from "ts/mr/data/DState";
 import { LEffectResult } from "ts/mr/lively/LEffectResult";
 import { LEntity } from "ts/mr/lively/LEntity";

@@ -2,10 +2,15 @@
 // export type DPresetId = number;
 export type DActorId = number;
 export type DParameterId = number & { readonly brand?: unique symbol };
-export type DEntityKindId = number;
-export type DAttackElementId = number;
+export type DEntityCategoryId = number & { readonly brand?: unique symbol };
+
+/** 属性データのインデックス。 RMMZ の ElementId と等しい。 */
+export type DElementId = number & { readonly brand?: unique symbol };
+
 export type DSkillId = number & { readonly brand?: unique symbol };
-export type DSpecificEffectId = number;
+
+export type DSpecialEffectId = number & { readonly brand?: unique symbol };
+
 export type DRaceId = number;
 export type DTerrainShapeId = number;
 export type DTerrainSettingId = number;
@@ -13,6 +18,7 @@ export type DTerrainPresetId = number;
 export type DActionId = DSkillId;
 export type DCommandId = number;
 export type DEffectId = number & { readonly brand?: unique symbol }; // Do not include in save data
+export type DEntityTemplateId = number & { readonly brand?: unique symbol };
 
 /** Animation データのインデックス。 RMMZ の AnimationId と等しい。 */
 export type DAnimationId = number & { readonly brand?: unique symbol };
@@ -48,7 +54,7 @@ export type DMapId = number;
 // Sub-Component を検索するためのキー
 export class DSubComponentEffectTargetKey {
     path: string;
-    kindId: DEntityKindId;
+    kindId: DEntityCategoryId;
     tags: string[];
 
     public constructor() {
@@ -57,7 +63,7 @@ export class DSubComponentEffectTargetKey {
         this.tags = [];
     }
 
-    public static make(path: string, kindId?: DEntityKindId | undefined, tags?: string[] | undefined): DSubComponentEffectTargetKey {
+    public static make(path: string, kindId?: DEntityCategoryId | undefined, tags?: string[] | undefined): DSubComponentEffectTargetKey {
         const i =  new DSubComponentEffectTargetKey();
         i.path = path;
         if (kindId) i.kindId = kindId;
@@ -76,7 +82,7 @@ export class DSubComponentEffectTargetKey {
 
 
 export interface DSubEntityFindKey {
-    kindId: DEntityKindId;
+    kindId: DEntityCategoryId;
     
     // Sub-Component を検索するための情報。
     // undefined ではない場合、上記の条件に一致した Entity に対して、さらにこの内容で検索をかける。

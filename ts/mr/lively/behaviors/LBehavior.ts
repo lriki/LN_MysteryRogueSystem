@@ -40,7 +40,7 @@ import { DPrefabId } from "ts/mr/data/DPrefab";
 import { DCounterAction } from "ts/mr/data/DEntity";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { SEffect, SEffectorFact } from "ts/mr/system/SEffectApplyer";
-import { DBlockLayerKind, DSpecificEffectId, DSubComponentEffectTargetKey, DCommandId, DActionId } from "ts/mr/data/DCommon";
+import { DBlockLayerKind, DSpecialEffectId, DSubComponentEffectTargetKey, DCommandId, DActionId } from "ts/mr/data/DCommon";
 import { DSequelId } from "ts/mr/data/DSequel";
 import { LCandidateSkillAction } from "ts/mr/utility/UAction";
 import { DEffect } from "ts/mr/data/DEffect";
@@ -110,7 +110,6 @@ export const onThrowReaction = Symbol("onThrowReaction");
 export const onMoveAsProjectile = Symbol("onMoveAsProjectile");
 export const onWalkedOnTopAction = Symbol("onWalkedOnTopAction");
 export const onWalkedOnTopReaction = Symbol("onWalkedOnTopReaction");
-export const onMoveAsMagicBullet = Symbol("onMoveAsMagicBullet");
 
 export const onPreStepFeetProcess_Actor = Symbol("onPreStepFeetProcess_Actor");
 export const onPreStepFeetProcess = Symbol("onPreStepFeetProcess");
@@ -188,7 +187,7 @@ interface SEffectRejectionInfo {
 
 interface SEffectBehaviorRejectionInfo {
     kind: "EffectBehavior";
-    id: DSpecificEffectId;
+    id: DSpecialEffectId;
 }
 
 export type SRejectionInfo = SEffectRejectionInfo | SEffectBehaviorRejectionInfo;

@@ -1,7 +1,5 @@
-import { DSpecificEffectId } from "ts/mr/data/DCommon";
-import { DSpecialEffectRef } from "ts/mr/data/DEffect";
+import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
 import { MRBasics } from "ts/mr/data/MRBasics";
-import { LBattlerBehavior } from "ts/mr/lively/behaviors/LBattlerBehavior";
 import { LExperienceBehavior } from "ts/mr/lively/behaviors/LExperienceBehavior";
 import { LEffectResult } from "ts/mr/lively/LEffectResult";
 import { LEntity } from "ts/mr/lively/LEntity";

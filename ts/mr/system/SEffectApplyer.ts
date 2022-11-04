@@ -1,6 +1,6 @@
 import { MRBasics } from "../data/MRBasics";
-import { DSpecificEffectId, DEntityKindId, DSkillId, DSubComponentEffectTargetKey, DAttackElementId, DParameterId } from "../data/DCommon";
-import { DEffect, DEffectHitType, DEffectSet, DOtherEffectQualifying, DParamBuff, DValuePoint, DParameterEffectApplyType, DParameterQualifying, DSpecialEffectRef } from "../data/DEffect";
+import { DSpecialEffectId, DEntityCategoryId, DSkillId, DSubComponentEffectTargetKey, DElementId, DParameterId } from "../data/DCommon";
+import { DEffect, DEffectHitType, DEffectSet, DOtherEffectQualifying, DParamBuff, DValuePoint, DParameterEffectApplyType, DParameterQualifying } from "../data/DEffect";
 import { DItemEffect } from "../data/DItemEffect";
 import { LandExitResult, MRData } from "../data/MRData";
 import { LProjectileBehavior } from "../lively/behaviors/activities/LProjectileBehavior";
@@ -17,6 +17,7 @@ import { paramThrowingDistance } from "../PluginParameters";
 import { UState } from "../utility/UState";
 import { DStateId } from "../data/DState";
 import { assert } from "../Common";
+import { DSpecialEffectRef } from "../data/DSpecialEffect";
 
 
 
@@ -135,7 +136,7 @@ export class SEffectorFact {
     private _selfModifier: SEffectModifier;
     private _succeededSelfModifier: SEffectModifier | undefined;
     private _incidentType: SEffectIncidentType;
-    private _incidentEntityKind: DEntityKindId; // 効果の発生元がアイテムの場合はその種類
+    private _incidentEntityKind: DEntityCategoryId; // 効果の発生元がアイテムの場合はその種類
     private _item: LEntity | undefined;
 
     private _sourceSkill: DSkillId | undefined;
@@ -174,7 +175,7 @@ export class SEffectorFact {
         });
     }
 
-    public withIncidentEntityKind(value: DEntityKindId): this {
+    public withIncidentEntityKind(value: DEntityCategoryId): this {
         this._incidentEntityKind = value;
 
         // この種類を扱うのは得意？
@@ -218,7 +219,7 @@ export class SEffectorFact {
         return this._incidentType;
     }
 
-    public incidentEntityKind(): DEntityKindId {
+    public incidentEntityKind(): DEntityCategoryId {
         return this._incidentEntityKind;
     }
 
@@ -286,7 +287,7 @@ export class SParameterEffect {
     paramId: DParameterId;
     qualifying: DParameterQualifying;
     
-    elementIds: DAttackElementId[];
+    elementIds: DElementId[];
 
     formula: string;
 
@@ -731,7 +732,7 @@ export class SEffectApplyer {
         }
         result.makeSuccess();
 
-        if (paramEffect.qualifying.applyTarget == DValuePoint.Current) {
+        if (paramEffect.qualifying.applyTarget == DValuePoint.Actual) {
 
             target.gainActualParam(paramEffect.paramId, -value, false);
             if (value > 0) {

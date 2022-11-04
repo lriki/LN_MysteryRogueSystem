@@ -1,5 +1,4 @@
-import { DSpecificEffectId } from "ts/mr/data/DCommon";
-import { DSpecialEffectRef } from "ts/mr/data/DEffect";
+import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
 import { MRData } from "ts/mr/data/MRData";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";

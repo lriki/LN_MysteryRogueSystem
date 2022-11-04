@@ -1,10 +1,11 @@
 import { assert } from "ts/mr/Common";
-import { DSubEntityFindKey, DSpecificEffectId, DBlockLayerKind, DBlockLayerScope, DEntityKindId, DSubComponentEffectTargetKey, DRaceId, DAttackElementId, DEffectId } from "./DCommon";
+import { DSubEntityFindKey, DSpecialEffectId, DBlockLayerKind, DBlockLayerScope, DEntityCategoryId, DSubComponentEffectTargetKey, DRaceId, DElementId, DEffectId } from "./DCommon";
 import { DEntityId } from "./DEntity";
 import { DParameterId } from "ts/mr/data/DCommon";
 import { MRData } from "./MRData";
 import { DHelpers } from "./DHelper";
 import { DFlavorEffect, IFlavorEffectProps } from "./DFlavorEffect";
+import { DSpecialEffect, DSpecialEffectRef, ISpecialEffectProps } from "./DSpecialEffect";
 
 
 
@@ -23,7 +24,7 @@ export enum DParameterEffectApplyType {
 }
 
 export enum DValuePoint {
-    Current,
+    Actual,
     Minimum,
     Growth,
 }
@@ -38,7 +39,7 @@ export class DParameterQualifying {
     applyTarget: DValuePoint;
 
 
-    elementIds: DAttackElementId[];  // (Index of DSystem.elements)
+    elementIds: DElementId[];  // (Index of DSystem.elements)
 
     formula: string;
 
@@ -65,7 +66,7 @@ export class DParameterQualifying {
     public constructor(paramId: DParameterId, formula: string, applyType: DParameterEffectApplyType) {
         this._parameterId = paramId;
         this.applyType = applyType;
-        this.applyTarget = DValuePoint.Current;
+        this.applyTarget = DValuePoint.Actual;
         this.elementIds = [0];
         this.formula = formula;
         this.variance = 0;
@@ -239,7 +240,7 @@ export class DEffectFieldScope {
 
     public constructor() {
         this.area = DEffectFieldScopeArea.Room,
-        this.range = DEffectFieldScopeRange.Front1,
+        this.range = DEffectFieldScopeRange.Performer,
         this.length = -1,
         this.projectilePrefabKey = "";
         this.layers = [DBlockLayerKind.Unit];
@@ -274,16 +275,9 @@ export interface DParamBuff {
     //formula: string;
 }
 
-export interface DSpecialEffectRef {
-    specialEffectId: DSpecificEffectId;
-    entityId?: DEntityId;
-    dataId?: number;
-    value?: any;
-}
-
 
 export interface DEffectConditions {
-    kindId: DEntityKindId;
+    kindId: DEntityCategoryId;
 
     /** 判定する RaceId。 0 の場合は対象外。 */
     raceId: DRaceId;
@@ -292,27 +286,6 @@ export interface DEffectConditions {
     
 
     fallback: boolean;
-
-
-    /*
-    基本の考えは RMMZ イベントの [出現条件] と同じ。
-    条件は AND。設定されているものが全て満たされていれば、マッチする。
-    ただし、全く未設定の場合は無条件で有効となる。
-
-    選択処理は次の通り。
-    - 条件が何も設定されてないものは常に発動する。
-       複数ある場合は同時に発動する。
-        他に条件指定がある Effect とも同時発動する。
-    - 条件が設定されているものは次のように選択する。
-        - まず条件が設定されているものをフィルタリングする。
-        - rating を持つものがひとつでもある場合、rating が 1 以上の Effect を対象にランダム選択する。
-        - rating が 0 のものは常に発動する。
-        - 上記の結果ひとつも実行できるものが無い場合、fallback の Effect を発動する。
-
-
-    
-    */
-   
 }
 
 
@@ -408,37 +381,81 @@ export class DEffect {
         this.effectBehaviors = [];
         this.rmmzSpecialEffectQualifyings = [];
         this.buffQualifying = [];
-        // this.qualifyings = {
-        //     parameterQualifyings: [],
-        //     otherEffectQualifyings: [],
-        //     effectBehaviors: [],
-        //     rmmzSpecialEffectQualifyings : [],
-        //     buffQualifying: [],
-        // };
-        //this.rejectionLevel = DEffectRejectionLevel.Ones;
     }
 
     public applyProps(props: IEffectProps): void {
+        if (props.conditions) {
+            if (props.conditions.targetCategoryKey) {
+                this.conditions.kindId = MRData.getEntityCategory(props.conditions.targetCategoryKey).id;
+            }
+            if (props.conditions.targetRaceKey) {
+                this.conditions.raceId = MRData.getRace(props.conditions.targetRaceKey).id;
+            }
+            if (props.conditions.rating) {
+                this.conditions.applyRating = props.conditions.rating;
+            }
+            if (props.conditions.fallback) {
+                this.conditions.fallback = props.conditions.fallback;
+            }
+        }
+
         this.critical = props.critical ?? this.critical;
         this.flavorEffect = props.flavorEffect ? new DFlavorEffect(props.flavorEffect) : this.flavorEffect;
         
+        // damageEffects
+        if (props.parameterDamages) {
+            for (const p of props.parameterDamages) {
+                const d = new DParameterQualifying(
+                    MRData.getParameter(p.parameterKey).id,
+                    p.formula,
+                    DHelpers.stringToEnum(p.type, {
+                        "damage": DParameterEffectApplyType.Damage,
+                        "recover": DParameterEffectApplyType.Recover,
+                        "drain": DParameterEffectApplyType.Drain,
+                        "_": DParameterEffectApplyType.Damage,
+                    }));
+                d.applyTarget = DHelpers.stringToEnum(p.point, {
+                    "actual": DValuePoint.Actual,
+                    "growth": DValuePoint.Growth,
+                    "_": DValuePoint.Actual,
+                });
+                if (p.conditionFormula) {
+                    d.conditionFormula = p.conditionFormula;
+                }
+                if (p.conditionFallback) {
+                    d.fallback = p.conditionFallback;
+                }
+                d.silent = p.silent ?? d.silent;
+                this.parameterQualifyings.push(d);
+            }
+        }
+
         // buffEffects
-        for (const p of props.parameterBuffs ?? []) {
-            const d: DParamBuff = {
-                paramId: MRData.parameter(p.parameterKey).id,
-                type: DHelpers.stringToEnum(p.type, {
-                    "constant": DBuffType.Add,
-                    "ratio": DBuffType.Mul,
-                }),
-                levelType: DHelpers.stringToEnum(p.levelOp, {
-                    "add": DBuffLevelOp.Add,
-                    "set": DBuffLevelOp.Set,
-                    "_": DBuffLevelOp.Add,
-                }),
-                level: p.level,
-                turn: p.turn,
-            };
-            this.buffQualifying.push(d);
+        if (props.parameterBuffs) {
+            for (const p of props.parameterBuffs) {
+                const d: DParamBuff = {
+                    paramId: MRData.getParameter(p.parameterKey).id,
+                    type: DHelpers.stringToEnum(p.type, {
+                        "constant": DBuffType.Add,
+                        "ratio": DBuffType.Mul,
+                    }),
+                    levelType: DHelpers.stringToEnum(p.levelOp, {
+                        "add": DBuffLevelOp.Add,
+                        "set": DBuffLevelOp.Set,
+                        "_": DBuffLevelOp.Add,
+                    }),
+                    level: p.level,
+                    turn: p.turn,
+                };
+                this.buffQualifying.push(d);
+            }
+        }
+
+        // specialEffects
+        if (props.specialEffects) {
+            for (const p of props.specialEffects) {
+                this.effectBehaviors.push(DSpecialEffect.makeSpecialEffectRef(p));
+            }
         }
     }
 
@@ -528,19 +545,6 @@ export class DEmittorCost {
     
 }
 
-// export class DSubEffect {
-//     effect: DEffect;
-    
-//     public constructor(key: DSubComponentEffectTargetKey, effect: DEffect) {
-//         this.key = key;
-//         this.effect = effect;
-//     }
-
-//     public clone(): DSubEffect {
-//         return new DSubEffect(this.key.clone(), this.effect.clone());
-//     }
-// }
-
 export class DEffectSet {
 
     /** 使用者に対して与える効果 */
@@ -572,6 +576,10 @@ export class DEffectSet {
         return MRData.effects[this.effectIds[index]];
     }
 
+    public clearEffects(): void {
+        this.effectIds = [];
+    }
+
     public setEffect(index: number, value: DEffect): void {
         this.effectIds[index] = value.id;
     }
@@ -599,6 +607,8 @@ export class DEffectSet {
 // Props
 
 export interface IEffectProps {
+    conditions?: IEffectConditionsProps;
+
     
     /**
      * 対象へダメージを与えるときにクリティカル判定を行うかかどうか。
@@ -611,9 +621,19 @@ export interface IEffectProps {
     critical?: boolean;
 
     /**
-     * パラメータへのバフ・デバフ効果。
+     * パラメータへのダメージ・回復効果のリスト。
+     */
+    parameterDamages?: IParameterDamageEffectProps[];
+
+    /**
+     * パラメータへのバフ・デバフ効果のリスト。
      */
     parameterBuffs?: IParameterBuffEffectProps[];
+
+    /**
+     * 特殊効果のリスト。
+     */
+    specialEffects?: ISpecialEffectProps[];
 
     /**
      * この Effect が発生するときに再生する FlavorEffect。
@@ -621,7 +641,81 @@ export interface IEffectProps {
     flavorEffect?: IFlavorEffectProps;
 }
 
+export interface IEffectConditionsProps {
 
+
+    targetCategoryKey?: string;
+
+    /** 判定する RaceId。 0 の場合は対象外。 */
+    targetRaceKey?: string;
+    
+    /** EnemyAction と同じ整数。0 はレート無し。 */
+    rating?: number;
+    
+    fallback?: boolean;
+
+
+    /*
+    基本の考えは RMMZ イベントの [出現条件] と同じ。
+    条件は AND。設定されているものが全て満たされていれば、マッチする。
+    ただし、全く未設定の場合は無条件で有効となる。
+
+    選択処理は次の通り。
+    - 条件が何も設定されてないものは常に発動する。
+       複数ある場合は同時に発動する。
+        他に条件指定がある Effect とも同時発動する。
+    - 条件が設定されているものは次のように選択する。
+        - まず条件が設定されているものをフィルタリングする。
+        - rating を持つものがひとつでもある場合、rating が 1 以上の Effect を対象にランダム選択する。
+        - rating が 0 のものは常に発動する。
+        - 上記の結果ひとつも実行できるものが無い場合、fallback の Effect を発動する。
+
+
+    
+    */
+   
+}
+
+/**
+ * パラメータへのダメージ・回復効果。
+ */
+export interface IParameterDamageEffectProps {
+    parameterKey: string;
+
+    /**
+     * Effect を適用する条件式。
+     * 
+     * ダメージ計算式と同様のオペランドが使用できます。 `a.hp < 100` とすると、対象の HP が 100 未満のときに効果が発生します。
+     * 省略した場合は常に効果が発生します。
+     */
+    conditionFormula?: string;
+
+    /**
+     * true を指定すると、いずれの条件式にもマッチしない場合、効果が発生します。
+     */
+    conditionFallback?: boolean;
+
+    /**
+     * どのパラメータ要素に対して効果を与えるかを指定します。(default: actual)
+     * 
+     * - actual: 現在値
+     * - growth: 成長値 (最大値の算出基準)
+     */
+    point?: ("actual" | "growth");
+
+    type?: ("damage" | "recover" | "drain");
+
+    /**
+     * ダメージ計算式。
+     */
+    formula: string;
+
+    silent?: boolean;
+}
+
+/**
+ * パラメータへのバフ・デバフ効果。
+ */
 export interface IParameterBuffEffectProps {
     parameterKey: string;
     type: ("constant" | "ratio");

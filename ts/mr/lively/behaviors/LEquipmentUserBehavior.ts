@@ -14,7 +14,6 @@ import { SSoundManager } from "ts/mr/system/SSoundManager";
 import { SEffectSubject } from "ts/mr/system/SEffectContext";
 import { testPickOutItem } from "../internal";
 import { UIdentify } from "ts/mr/utility/UIdentify";
-import { DIdentifiedTiming } from "ts/mr/data/DIdentifyer";
 import { UName } from "ts/mr/utility/UName";
 import { SActivityContext } from "ts/mr/system/SActivityContext";
 import { DActionId, DSubComponentEffectTargetKey } from "ts/mr/data/DCommon";
@@ -279,7 +278,7 @@ NOTE:
 
         this.ownerEntity().refreshConditions();
 
-        UIdentify.identifyByTiming(cctx, self, itemEntity, DIdentifiedTiming.Equip, false);
+        UIdentify.identifyByTiming(cctx, self, itemEntity, MRBasics.actions.EquipActionId, false);
 
         SSoundManager.playEquip();
         cctx.postMessage(tr2("%1 を装備した。").format(UName.makeNameAsItem(itemEntity)));

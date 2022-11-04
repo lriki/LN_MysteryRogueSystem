@@ -1,5 +1,5 @@
 import { assert } from "ts/mr/Common";
-import { DEntityKind } from "ts/mr/data/DEntityKind";
+import { DEntityCategory } from "ts/mr/data/DEntityCategory";
 import { LShopkeeperBehavior } from "ts/mr/lively/behaviors/LShopkeeperBehavior";
 import { LBlock, LBlockSystemDecoration } from "ts/mr/lively/LBlock";
 import { LRandom } from "ts/mr/lively/LRandom";
@@ -59,7 +59,7 @@ export class SItemShopBuilder {
 
         // アイテム配置
         const floorId = manager.map().floorId();
-        const items = manager.map().land2().landData().appearanceTable.shop[floorId.floorNumber()].filter(e => DEntityKind.isItem(e.spawiInfo.entityData()));
+        const items = manager.map().land2().landData().appearanceTable.shop[floorId.floorNumber()].filter(e => DEntityCategory.isItem(e.spawiInfo.entityData()));
         if (items.length > 0) {
             const spawnedItems = [];
             const center = UMovement.getCenterOfRoom(room);

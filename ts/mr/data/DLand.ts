@@ -3,7 +3,7 @@ import { assert, tr, tr2 } from "../Common";
 import { DAnnotationReader } from "./importers/DAttributeReader";
 import { DLandId, DMapId, DTerrainPresetId, DTerrainSettingId } from "./DCommon";
 import { DEntitySpawner2 } from "./DEntity";
-import { DEntityKind } from "./DEntityKind";
+import { DEntityCategory } from "./DEntityCategory";
 import { DHelpers } from "./DHelper";
 import { MRData } from "./MRData";
 import { DMap } from "./DMap";
@@ -407,7 +407,7 @@ export class DLand {
                             }
                         }
                         else {
-                            const kind = MRData.getEntityKind(key.toLowerCase());
+                            const kind = MRData.getEntityCategory(key.toLowerCase());
                             this.identifiedKinds[kind.id] = this.parseLandIdentificationLevel(tokens[1].toLowerCase());
                         }
                     }
@@ -440,13 +440,13 @@ export class DLand {
         }
     }
     
-    public checkIdentifiedKind(kind: DEntityKind): boolean {
+    public checkIdentifiedKind(kind: DEntityCategory): boolean {
         const e = this.identifiedKinds[kind.id];
         if (!e) return false;   // 省略されているなら未識別
         return e >= DLandIdentificationLevel.Kind;
     }
 
-    public checkIdentifiedEntity(kind: DEntityKind): boolean {
+    public checkIdentifiedEntity(kind: DEntityCategory): boolean {
         const e = this.identifiedKinds[kind.id];
         if (!e) return false;   // 省略されているなら未識別
         return e >= DLandIdentificationLevel.Entity;
@@ -482,7 +482,7 @@ export class DLand {
         return floors;
     }
         
-    public static buildAppearanceTableSet(mapData: IDataMap, mapId: number, maxFloors: number): DAppearanceTableSet {
+    public static buildAppearanceTableSet(mapData: IDataMap, rmmzMapId: number, maxFloors: number): DAppearanceTableSet {
         
         const table: DAppearanceTableSet = { 
             entities: [],
@@ -506,12 +506,12 @@ export class DLand {
             // @MR-Spawner
             const entityMetadata = DAnnotationReader.readEntityMetadataFromPage(event.pages[0]);
             if (entityMetadata) {
-                const spawnInfo = DEntitySpawner2.makeFromEventData(event);
+                const spawnInfo = DEntitySpawner2.makeFromEventData(event, rmmzMapId);
                 if (!spawnInfo) {
-                    throw new Error(`Entity "${entityMetadata.entity}" not found. (Map:${DHelpers.makeRmmzMapDebugName(mapId)}, Event:${event.id}.${event.name})`);
+                    throw new Error(`Entity "${entityMetadata.entity}" not found. (Map:${DHelpers.makeRmmzMapDebugName(rmmzMapId)}, Event:${event.id}.${event.name})`);
                 }
                 if (spawnInfo.entityId <= 0 && spawnInfo.troopId <= 0) {
-                    throw new Error(`Entity "${spawnInfo.xName}" not found. (Map:${DHelpers.makeRmmzMapDebugName(mapId)}, Event:${event.id}.${event.name})`);
+                    throw new Error(`Entity "${spawnInfo.xName}" not found. (Map:${DHelpers.makeRmmzMapDebugName(rmmzMapId)}, Event:${event.id}.${event.name})`);
                 }
 
                 const tableItem: DAppearanceTableEntity = {
@@ -558,13 +558,13 @@ export class DLand {
                 if (spawnInfo.troopId > 0) {
                     table.enemies[i].push(entity);        // troop は enemy と一緒にしてみる
                 }
-                else if (DEntityKind.isMonster(spawnInfo.entityData())) {
+                else if (DEntityCategory.isMonster(spawnInfo.entityData())) {
                     table.enemies[i].push(entity);
                 }
-                else if (DEntityKind.isTrap(spawnInfo.entityData())) {
+                else if (DEntityCategory.isTrap(spawnInfo.entityData())) {
                     table.traps[i].push(entity);
                 }
-                else if (DEntityKind.isItem(spawnInfo.entityData())) {
+                else if (DEntityCategory.isItem(spawnInfo.entityData())) {
                     table.items[i].push(entity);
                 }
                 else {
@@ -582,9 +582,9 @@ export class DLand {
         return table;
     }
     
-    public static buildSubAppearanceTable(land: DLand, mapData: IDataMap, mapId: number, tableSet: DAppearanceTableSet, table: DAppearanceTableEntity[][]): void {
+    public static buildSubAppearanceTable(land: DLand, mapData: IDataMap, rmmzMapId: number, tableSet: DAppearanceTableSet, table: DAppearanceTableEntity[][]): void {
         if (mapData.width != table.length) {
-            throw new Error(tr2("%1に含まれる%2テーブルのマップサイズが一致していません。").format(land.name, $dataMapInfos[mapId]?.name));
+            throw new Error(tr2("%1に含まれる%2テーブルのマップサイズが一致していません。").format(land.name, $dataMapInfos[rmmzMapId]?.name));
         }
 
         assert(tableSet.maxFloors == table.length);
@@ -599,9 +599,9 @@ export class DLand {
             // @MR-Spawner
             const entityMetadata = DAnnotationReader.readEntityMetadataFromPage(event.pages[0]);
             if (entityMetadata) {
-                const spawnInfo = DEntitySpawner2.makeFromEventData(event);
+                const spawnInfo = DEntitySpawner2.makeFromEventData(event, rmmzMapId);
                 if (!spawnInfo) {
-                    throw new Error(`Entity "${entityMetadata.entity}" not found. (Map:${DHelpers.makeRmmzMapDebugName(mapId)}, Event:${event.id}.${event.name})`);
+                    throw new Error(`Entity "${entityMetadata.entity}" not found. (Map:${DHelpers.makeRmmzMapDebugName(rmmzMapId)}, Event:${event.id}.${event.name})`);
                 }
 
                 const tableItem: DAppearanceTableEntity = {

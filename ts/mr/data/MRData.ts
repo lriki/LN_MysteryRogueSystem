@@ -1,11 +1,11 @@
 import { LBehavior } from "ts/mr/lively/behaviors/LBehavior";
 import { DState } from "./DState";
 import { DSystem } from "./DSystem";
-import { DSpecialEffect, DSkill } from "./DSkill";
+import { DSkill } from "./DSkill";
 import { DClass } from "./DClass";
 import { DItem, DItemDataId } from "./DItem";
 import { DLand } from "./DLand";
-import { DEntityKind } from "./DEntityKind";
+import { DEntityCategory } from "./DEntityCategory";
 import { DSequel, DSequelId } from "./DSequel";
 import { DEnemy, DEnemyId } from "./DEnemy";
 import { DEquipmentPart } from "./DEquipmentPart";
@@ -23,7 +23,7 @@ import { DPseudonymous } from "./DPseudonymous";
 import { DItemShopType } from "./DItemShop";
 import { MRDataExtension } from "./MRDataExtension";
 import { DEmittor, DEmittorId } from "./DEmittor";
-import { DAttackElement } from "./DAttackElement";
+import { DElement } from "./DElement";
 import { assert } from "../Common";
 import { DRace } from "./DRace";
 import { DFloorPreset, DTerrainSetting, DTerrainShape } from "./DTerrainPreset";
@@ -31,6 +31,8 @@ import { DCommand } from "./DCommand";
 import { DEffect } from "./DEffect";
 import { DActionId, DEffectId, DParameterId, DSkillId } from "./DCommon";
 import { DMap } from "./DMap";
+import { DEntityTemplate, IEntityTemplateProps } from "./DEntityTemplate";
+import { DSpecialEffect } from "./DSpecialEffect";
 
 
 export type DFactionId = number;
@@ -92,9 +94,9 @@ export class MRData
 
     static system: DSystem;
     //static equipTypes: DEquipmentType[] = [];
-    static attackElements: DAttackElement[] = [];
+    static elements: DElement[] = [];
     static equipmentParts: DEquipmentPart[] = [];
-    static entityKinds: DEntityKind[] = [];
+    static entityKinds: DEntityCategory[] = [];
     static classes: DClass[] = [];
     static races: DRace[] = [];
     static actors: DEntityId[] = [];
@@ -119,6 +121,7 @@ export class MRData
     static itemShops: DItemShopType[] = [];
     static prefabs: DPrefab[] = [];
     static entities: DEntity[] = [];
+    static entityTemplates: DEntityTemplate[] = [];
     static troops: DTroop[] = [];
     static emittors: DEmittor[] = [];
     static effects: DEffect[] = [];
@@ -136,7 +139,7 @@ export class MRData
     static _behaviorFactories: (() => LBehavior)[] = [];
 
     static reset() {
-        this.entityKinds = [{ id: 0, displayName: "null", name: "" }];
+        this.entityKinds = [new DEntityCategory(0, "null")];
 
         this.classes = [];
         this.newClass("null");
@@ -161,6 +164,7 @@ export class MRData
         this.states = [];
         this.prefabs = [new DPrefab(0)];
         this.entities = [new DEntity(0)];
+        this.entityTemplates = [new DEntityTemplate(0, "null", { type: "null" })];
         this.emittors = [new DEmittor(0, "null")];
         this.effects = [new DEffect(0, "null")];
         this.terrainSettings = [new DTerrainSetting(0)];
@@ -169,33 +173,36 @@ export class MRData
 
     //--------------------------------------------------------------------------
 
-    static getAttackElement(pattern: string): DAttackElement {
-        const d = this.attackElements.find(e => (e.key != "" && e.key == pattern));
+    static newElement(key: string): DElement {
+        const data = new DElement(this.races.length, key);
+        this.elements.push(data);
+        return data;
+    }
+
+    static getElement(pattern: string): DElement {
+        const d = this.elements.find(e => (e.key != "" && e.key == pattern));
         if (d) return d;
         throw new Error(`AttackElement "${pattern}" not found.`);
     }
 
     //--------------------------------------------------------------------------
 
-    static addEntityKind(displayName: string, name: string): number {
+    static newEntityCategory(key: string, displayName: string = ""): number {
         const newId = this.entityKinds.length;
-        const data = new DEntityKind(newId);
-        data.name = name;
+        const data = new DEntityCategory(newId, key);
         data.displayName = displayName;
         this.entityKinds.push(data);
         return newId;
     }
 
-    static findEntityKind(pattern: string): DEntityKind | undefined {
-        const k = pattern.toLowerCase();
-        const kind = MRData.entityKinds.find(x => x.name.toLowerCase() === k);
-        return kind;
+    static findEntityCategory(pattern: string): DEntityCategory | undefined {
+        return this.findHelper(this.entityKinds, pattern, x => x.key === pattern);
     }
 
-    static getEntityKind(pattern: string): DEntityKind {
-        const kind = this.findEntityKind(pattern);
-        if (!kind) throw new Error(`EntityKind "${pattern}" not found.`);
-        return kind;
+    static getEntityCategory(pattern: string): DEntityCategory {
+        const d = this.findEntityCategory(pattern);
+        if (!d) throw new Error(`EntityCategory "${pattern}" not found.`);
+        return d;
     }
     
     //--------------------------------------------------------------------------
@@ -293,7 +300,7 @@ export class MRData
         return data;
     }
 
-    static parameter(key: DParameterId | string): DParameter {
+    static getParameter(key: DParameterId | string): DParameter {
         let data;
         if (typeof key === "number") {
             data = this.parameters[key];
@@ -310,8 +317,7 @@ export class MRData
     // 
 
     static newEntity(): DEntity {
-        const newId = this.entities.length;
-        const data = new DEntity(newId);
+        const data = new DEntity(this.entities.length);
         this.entities.push(data);
         return data;
     }
@@ -329,6 +335,25 @@ export class MRData
         const d = this.findEntity(pattern);
         if (d) return d;
         throw new Error(`Entity "${pattern}" not found.`);
+    }
+
+    //--------------------------------------------------------------------------
+    // 
+
+    static newEntityTemplate(key: string, props: IEntityTemplateProps): DEntityTemplate {
+        const data = new DEntityTemplate(this.entityTemplates.length, key, props);
+        this.entityTemplates.push(data);
+        return data;
+    }
+
+    static findEntityTemplate(pattern: string): DEntityTemplate | undefined {
+        return this.findHelper(this.entityTemplates, pattern, x => x.key === pattern);
+    }
+
+    static getEntityTemplate(pattern: string): DEntityTemplate {
+        const d = this.findEntityTemplate(pattern);
+        if (d) return d;
+        throw new Error(`EntityTemplate "${pattern}" not found.`);
     }
 
     //--------------------------------------------------------------------------
@@ -392,9 +417,9 @@ export class MRData
 
     //--------------------------------------------------------------------------
 
-    static newEmittor(sourceKey: string): DEmittor {
+    static newEmittor(key: string): DEmittor {
         const newId = this.emittors.length;
-        const data = new DEmittor(newId, sourceKey);
+        const data = new DEmittor(newId, key);
         this.emittors.push(data);
         return data;
     }
@@ -407,6 +432,16 @@ export class MRData
         return data;
     }
     
+    static findEmittor(pattern: string): DEmittor | undefined {
+        return this.findHelper(this.emittors, pattern, x => x.key == pattern);
+    }
+
+    static getEmittor(pattern: string): DEmittor {
+        const d = this.findEmittor(pattern);
+        if (d) return d;
+        throw new Error(`Emittor "${pattern}" not found.`);
+    }
+
     static getEmittorById(id: DEmittorId): DEmittor {
         const d = this.emittors[id];
         if (d) return d;
@@ -534,6 +569,17 @@ export class MRData
         const data = new DSpecialEffect(this.effectBehaviors.length, key);
         this.effectBehaviors.push(data);
         return data;
+    }
+
+    
+    static findSpecialEffect(pattern: string): DSpecialEffect | undefined {
+        return this.findHelper(this.effectBehaviors, pattern, x => x.key == pattern);
+    }
+
+    static getSpecialEffect(pattern: string): DSpecialEffect {
+        const d = this.findSpecialEffect(pattern);
+        if (d) return d;
+        throw new Error(`SpecialEffect "${pattern}" not found.`);
     }
 
     //--------------------------------------------------------------------------

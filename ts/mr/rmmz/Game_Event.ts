@@ -91,7 +91,7 @@ var _Game_Event_setupPageSettings = Game_Event.prototype.setupPageSettings;
 Game_Event.prototype.setupPageSettings = function() {
     _Game_Event_setupPageSettings.call(this);
 
-    this._isREEntity = !!SRmmzHelpers.readEntityMetadata(this);
+    this._isREEntity = !!SRmmzHelpers.readEntityMetadata(this, this._mapId);
     this._reEventData = (this._pageIndex >= 0) ? DAnnotationReader.readREEventMetadataFromPage(this.page()) : undefined;
 }
 

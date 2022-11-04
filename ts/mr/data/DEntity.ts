@@ -1,24 +1,24 @@
-import { assert } from "ts/mr/Common";
+import { assert, tr2 } from "ts/mr/Common";
 import { DActor } from "./DActor";
 import { DAnnotationReader } from "./importers/DAttributeReader";
 import { DClassId } from "./DClass";
-import { DActionId, DAttackElementId, DEntityKindId, DRaceId } from "./DCommon";
+import { DActionId, DElementId, DEntityCategoryId, DRaceId } from "./DCommon";
 import { DEmittorId, DEmittor } from "./DEmittor";
 import { DEnemy } from "./DEnemy";
 import { DEntityProperties, DEntityProperties_Default } from "./DEntityProperties";
 import { DHelpers } from "./DHelper";
-import { DIdentifiedTiming } from "./DIdentifyer";
 import { DEquipment, DItem } from "./DItem";
 import { DPrefab, DPrefabId } from "./DPrefab";
 import { DStateId } from "./DState";
 import { DTroopId } from "./DTroop";
-import { MRBasics } from "./MRBasics";
+import { DTrait, ITraitProps } from "./DTraits";
 import { DFactionId, MRData } from "./MRData";
+import { DValidationHelper } from "./DValidationHelper";
 
 export type DEntityId = number;
 
 export enum DIdentificationDifficulty {
-    Clear = 0,          // 呪いなども含めて常に識別済み。お金など。
+    Clearly = 0,          // 呪いなども含めて常に識別済み。お金など。
     NameGuessed = 1,    // 名前は常にわかる。装備品など。修正値や呪いはわからない。
     Obscure = 2,        // 名前もわからない。
     //Individual,
@@ -160,7 +160,7 @@ export interface DEntityAutoAdditionState {
 }
 
 export interface DCounterAction {
-    conditionAttackType: DAttackElementId | undefined;
+    conditionAttackType: DElementId | undefined;
     emitSelf: boolean;
 }
 
@@ -194,13 +194,14 @@ export class DEntity {
     prefabId: DPrefabId;
     
     entity: DEntityProperties;
+    entityTemplateKey: string | undefined;
     
     display: DEntityNamePlate;
 
     description: string;
 
     identificationDifficulty: DIdentificationDifficulty;
-    identifiedTiming: DIdentifiedTiming;
+    identificationReaction: DActionId;
 
 
     /** 買い値（販売価格） */
@@ -210,7 +211,7 @@ export class DEntity {
     purchasePrice: number;
 
     /** 祝福・呪い・封印状態になるか。 */
-    canModifierState: boolean;
+    allowModifierState: boolean;
 
     actor: DActor | undefined;
 
@@ -295,11 +296,11 @@ export class DEntity {
         this.entity = DEntityProperties_Default();
         this.display = { name: "null", stackedName: "null(%1)", iconIndex: 0 };
         this.description = "";
-        this.identificationDifficulty = DIdentificationDifficulty.Clear;
-        this.identifiedTiming = DIdentifiedTiming.None;
+        this.identificationDifficulty = DIdentificationDifficulty.Clearly;
+        this.identificationReaction = 0;
         this.sellingPrice2 = 0;
         this.purchasePrice = 0;
-        this.canModifierState = true;
+        this.allowModifierState = true;
         this.itemData = undefined;
         this.enemy = undefined;
         this.classId = 0;
@@ -394,6 +395,55 @@ export class DEntity {
 
     public verify(): void {
         
+    }
+
+    public applyProps(props: IEntityProps): void {
+        if (props.reactions) {
+            for (const reactionProps of props.reactions) {
+                const action = MRData.getSkill(reactionProps.actionKey);
+                if (reactionProps.emittorKeys) {
+                    for (const emittorKey of reactionProps.emittorKeys) {
+                        const emittor = MRData.getEmittor(emittorKey);
+                        const reaction = this.addReaction(action.id, emittor, false);
+                        if (reactionProps.commandName) {
+                            reaction.overrideDisplayCommandName = reactionProps.commandName;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (props.allowModifierState) {
+            this.allowModifierState = props.allowModifierState;
+        }
+
+        if (props.identificationActionKey) {
+            this.identificationDifficulty = DHelpers.stringToEnum(props.identificationActionKey, {
+                "clearly": DIdentificationDifficulty.Clearly,
+                "named": DIdentificationDifficulty.NameGuessed,
+                "obscure": DIdentificationDifficulty.Obscure,
+            });
+        }
+
+        if (props.identificationActionKey) {
+            this.identificationReaction = MRData.getSkill(props.identificationActionKey).id;
+        }
+
+        if (props.selfTraits) {
+            for (const t of props.selfTraits) {
+                this.selfTraits.push(DTrait.makeTraitData(t));
+            }
+        }
+
+        if (this.entity.key == "kEntity_ドラゴンキラーA") {
+            console.log("");
+        }
+
+        if (props.equipmentTraits) {
+            for (const t of props.equipmentTraits) {
+                this.equipmentTraits.push(DTrait.makeTraitData(t));
+            }
+        }
     }
 }
 
@@ -493,11 +543,11 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
     //     return REData.prefabs[REData.entities[this.entityId].prefabId].isExitPoint();
     // }
 
-    public static makeFromEventData(event: IDataMapEvent): DEntitySpawner2 | undefined {
-        return this.makeFromEventPageData(event, event.pages[0]);
+    public static makeFromEventData(event: IDataMapEvent, rmmzMapId: number): DEntitySpawner2 | undefined {
+        return this.makeFromEventPageData(event, event.pages[0], rmmzMapId);
     }
 
-    public static makeFromEventPageData(event: IDataMapEvent, page: IDataMapEventPage): DEntitySpawner2 | undefined {
+    public static makeFromEventPageData(event: IDataMapEvent, page: IDataMapEventPage, rmmzMapId: number): DEntitySpawner2 | undefined {
         const entityMetadata = DAnnotationReader.readEntityMetadataFromPage(page);
         if (!entityMetadata) return undefined;
         
@@ -512,6 +562,13 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
         entity.xName = entityMetadata.entity;
         entity.rate = entityMetadata.rate ?? 100;
 
+        if (entityMetadata.entity != "" && entity.entityId <= 0) {
+            throw new Error(tr2("@MR-Spawner で指定された Entity Key '%1' が存在しません。 %2 %3").format(
+                entityMetadata.entity,
+                DValidationHelper.makeRmmzMapName(rmmzMapId),
+                DValidationHelper.makeRmmzEventName(event)));
+        }
+
         for (const stateKey of entityMetadata.states) {
             const index = MRData.states.findIndex(s => s.key == stateKey);
             if (index > 0) {
@@ -525,4 +582,48 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
         return entity;
     }
 }
+
+
+//------------------------------------------------------------------------------
+// Props
+
+export interface IEntityProps {
+    reactions?: IReactionProps[];
+
+    /**
+     * ModifierState (祝福、呪い、封印) になりえるかを指定します。 (default: false)
+     */
+    allowModifierState?: boolean;
+
+    /**
+     * 未識別状態の名前をどのように表示するか。
+     * 
+     * - "clearly" : 未識別状態にはならない (デフォルト)
+     * - "named"   : 未識別状態でも名前を表示する。強化値や使用回数は表示しない。主に装備品が該当する。
+     * - "obscure" : 未識別の場合、仮名を表示する。
+     */
+    identificationDifficulty?: ("clearly" | "named" | "obscure");
+
+    /**
+     * どの Action に反応して識別状態となるかを、 Action の key で指定します。
+     */
+    identificationActionKey?: string;
+
+    /**
+     * この Entity 自身に付加するトレイトのリスト。
+     */
+    selfTraits: ITraitProps[];
+
+    /**
+     * この Entity を装備アイテムとして装備した時に、装備者に対して付加するトレイトのリスト。
+     */
+    equipmentTraits: ITraitProps[];
+}
+
+export interface IReactionProps {
+    actionKey: string;
+    emittorKeys?: string[];
+    commandName?: string;
+}
+
 

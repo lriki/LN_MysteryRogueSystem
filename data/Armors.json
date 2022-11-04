@@ -41,7 +41,7 @@
     ],
     "iconIndex": 128,
     "name": "皮の盾",
-    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kEntity_皮の盾A>\n<MR-Prefab: kPrefab_皮の盾A>\n<RE-EquipmentImage:RE-Shield-2,Left>",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEntity_皮の盾A>\n<MR-Prefab: kPrefab_皮の盾A>\n<MR-EntityTemplate: kEntityTemplate_Shield>\n<RE-EquipmentImage:RE-Shield-2,Left>",
     "params": [
       0,
       0,
@@ -68,7 +68,7 @@
     ],
     "iconIndex": 128,
     "name": "青銅の盾",
-    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kEntity_青銅の盾A>\n<MR-Prefab: kPrefab_青銅の盾A>\n<RE-EquipmentImage:RE-Shield-1,Left>",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEntity_青銅の盾A>\n<MR-Prefab: kPrefab_青銅の盾A>\n<MR-EntityTemplate: kEntityTemplate_Shield>\n<RE-EquipmentImage:RE-Shield-1,Left>",
     "params": [
       0,
       0,
@@ -95,7 +95,7 @@
     ],
     "iconIndex": 128,
     "name": "うろこの盾",
-    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kEntity_うろこの盾A>\n<MR-Prefab: kPrefab_うろこの盾A>",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEntity_うろこの盾A>\n<MR-Prefab: kPrefab_うろこの盾A>\n<MR-EntityTemplate: kEntityTemplate_Shield>",
     "params": [
       0,
       0,
@@ -122,7 +122,7 @@
     ],
     "iconIndex": 128,
     "name": "金の盾",
-    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kEntity_金の盾A>\n<MR-Prefab: kPrefab_金の盾A>",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEntity_金の盾A>\n<MR-Prefab: kPrefab_金の盾A>\n<MR-EntityTemplate: kEntityTemplate_Shield>",
     "params": [
       0,
       0,
@@ -149,7 +149,7 @@
     ],
     "iconIndex": 128,
     "name": "鋼の盾",
-    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kEntity_鋼の盾A>\n<MR-Prefab: kPrefab_鋼の盾A>",
+    "note": "<MR-Type: Entity>\n<MR-Category: kEntityCategory_Shield>\n<MR-Key: kEntity_鋼の盾A>\n<MR-Prefab: kPrefab_鋼の盾A>\n<MR-EntityTemplate: kEntityTemplate_Shield>",
     "params": [
       0,
       0,
@@ -181,7 +181,7 @@
     ],
     "iconIndex": 128,
     "name": "ドラゴンシールド",
-    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kEntity_ドラゴンシールドA>\n<MR-Prefab: kPrefab_ドラゴンシールドA>",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEntity_ドラゴンシールドA>\n<MR-Prefab: kPrefab_ドラゴンシールドA>\n<MR-EntityTemplate: kEntityTemplate_Shield>",
     "params": [
       0,
       0,
@@ -208,7 +208,7 @@
     ],
     "iconIndex": 128,
     "name": "隕石の盾",
-    "note": "<MR-Type: Entity>\n<MR-Category: Shield>\n<MR-Key: kEntity_隕石の盾A>\n<MR-Prefab: kPrefab_隕石の盾A>",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEntity_隕石の盾A>\n<MR-Prefab: kPrefab_隕石の盾A>\n<MR-EntityTemplate: kEntityTemplate_Shield>",
     "params": [
       0,
       0,
@@ -316,7 +316,7 @@
     ],
     "iconIndex": 144,
     "name": "目覚めの指輪",
-    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_目覚めの指輪A>\n<MR-Prefab: kPrefab_目覚めの指輪A>",
+    "note": "<MR-Type: Entity>\n<MR-Category: kEntityCategory_Ring>\n<MR-Key: kEntity_目覚めの指輪A>\n<MR-Prefab: kPrefab_目覚めの指輪A>",
     "params": [
       0,
       0,
@@ -343,7 +343,7 @@
     ],
     "iconIndex": 144,
     "name": "ちからの指輪",
-    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_ちからの指輪A>\n<MR-Prefab: kPrefab_ちからの指輪A>",
+    "note": "<MR-Type: Entity>\n<MR-Category: kEntityCategory_Ring>\n<MR-Key: kEntity_ちからの指輪A>\n<MR-Prefab: kPrefab_ちからの指輪A>",
     "params": [
       0,
       0,
@@ -370,7 +370,7 @@
     ],
     "iconIndex": 144,
     "name": "高跳びの指輪",
-    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_高跳びの指輪A>\n<MR-Prefab: kPrefab_高跳びの指輪A>",
+    "note": "<MR-Type: Entity>\n<MR-Category: kEntityCategory_Ring>\n<MR-Key: kEntity_高跳びの指輪A>\n<MR-Prefab: kPrefab_高跳びの指輪A>",
     "params": [
       0,
       0,
@@ -402,7 +402,7 @@
     ],
     "iconIndex": 144,
     "name": "睡眠よけの指輪",
-    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_睡眠よけの指輪A>\n<MR-Prefab: kPrefab_睡眠よけの指輪A>",
+    "note": "<MR-Type: Entity>\n<MR-Category: kEntityCategory_Ring>\n<MR-Key: kEntity_睡眠よけの指輪A>\n<MR-Prefab: kPrefab_睡眠よけの指輪A>",
     "params": [
       0,
       0,
@@ -429,7 +429,7 @@
     ],
     "iconIndex": 144,
     "name": "ハラヘリの指輪",
-    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_ハラヘリの指輪A>\n<MR-Prefab: kPrefab_ハラヘリの指輪A>",
+    "note": "<MR-Type: Entity>\n<MR-Category: kEntityCategory_Ring>\n<MR-Key: kEntity_ハラヘリの指輪A>\n<MR-Prefab: kPrefab_ハラヘリの指輪A>",
     "params": [
       0,
       0,
@@ -456,7 +456,7 @@
     ],
     "iconIndex": 144,
     "name": "毒消しの指輪",
-    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_毒消しの指輪A>\n<MR-Prefab: kPrefab_毒消しの指輪A>",
+    "note": "<MR-Type: Entity>\n<MR-Category: kEntityCategory_Ring>\n<MR-Key: kEntity_毒消しの指輪A>\n<MR-Prefab: kPrefab_毒消しの指輪A>",
     "params": [
       0,
       0,
@@ -483,7 +483,7 @@
     ],
     "iconIndex": 144,
     "name": "影読みの指輪",
-    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_影読みの指輪A>\n<MR-Prefab: kPrefab_影読みの指輪A>",
+    "note": "<MR-Type: Entity>\n<MR-Category: kEntityCategory_Ring>\n<MR-Key: kEntity_影読みの指輪A>\n<MR-Prefab: kPrefab_影読みの指輪A>",
     "params": [
       0,
       0,
@@ -510,7 +510,7 @@
     ],
     "iconIndex": 144,
     "name": "インプよけの指輪",
-    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_インプよけの指輪A>\n<MR-Prefab: kPrefab_インプよけの指輪A>",
+    "note": "<MR-Type: Entity>\n<MR-Category: kEntityCategory_Ring>\n<MR-Key: kEntity_インプよけの指輪A>\n<MR-Prefab: kPrefab_インプよけの指輪A>",
     "params": [
       0,
       0,
@@ -537,7 +537,7 @@
     ],
     "iconIndex": 144,
     "name": "忍び足の指輪",
-    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_忍び足の指輪A>\n<MR-Prefab: kPrefab_忍び足の指輪A>",
+    "note": "<MR-Type: Entity>\n<MR-Category: kEntityCategory_Ring>\n<MR-Key: kEntity_忍び足の指輪A>\n<MR-Prefab: kPrefab_忍び足の指輪A>",
     "params": [
       0,
       0,
@@ -591,7 +591,7 @@
     ],
     "iconIndex": 144,
     "name": "罠よけの指輪",
-    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_罠よけの指輪A>\n<MR-Prefab: kPrefab_罠よけの指輪A>",
+    "note": "<MR-Type: Entity>\n<MR-Category: kEntityCategory_Ring>\n<MR-Key: kEntity_罠よけの指輪A>\n<MR-Prefab: kPrefab_罠よけの指輪A>",
     "params": [
       0,
       0,
@@ -618,7 +618,7 @@
     ],
     "iconIndex": 144,
     "name": "ハラヘラズの指輪",
-    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_ハラヘラズの指輪A>\n<MR-Prefab: kPrefab_ハラヘラズの指輪A>",
+    "note": "<MR-Type: Entity>\n<MR-Category: kEntityCategory_Ring>\n<MR-Key: kEntity_ハラヘラズの指輪A>\n<MR-Prefab: kPrefab_ハラヘラズの指輪A>",
     "params": [
       0,
       0,
@@ -645,7 +645,7 @@
     ],
     "iconIndex": 144,
     "name": "きれいな指輪",
-    "note": "<MR-Type: Entity>\n<MR-Category: Ring>\n<MR-Key: kEntity_きれいな指輪A>\n<MR-Prefab: kPrefab_きれいな指輪A>",
+    "note": "<MR-Type: Entity>\n<MR-Category: kEntityCategory_Ring>\n<MR-Key: kEntity_きれいな指輪A>\n<MR-Prefab: kPrefab_きれいな指輪A>",
     "params": [
       0,
       0,

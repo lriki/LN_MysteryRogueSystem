@@ -21,11 +21,11 @@ import { DHelpers } from "../data/DHelper";
  */
 export class SRmmzHelpers {
 
-    static readEntityMetadata(event: Game_Event): DEntitySpawner2 | undefined {
+    static readEntityMetadata(event: Game_Event, rmmzMapId: number): DEntitySpawner2 | undefined {
         if (event._pageIndex >= 0) {
             const data = event.event();
             assert(data);
-            return DEntitySpawner2.makeFromEventPageData(data, event.page());
+            return DEntitySpawner2.makeFromEventPageData(data, event.page(), rmmzMapId);
         }
         else {
             return undefined;
@@ -42,10 +42,10 @@ export class SRmmzHelpers {
     //}
 
     // こちらは UnitTest 用。Game_Event は使えないので $dataMap から、最初のイベントページ固定で作る
-    public static createEntitiesFromRmmzFixedMapEventData(): void {
+    public static createEntitiesFromRmmzFixedMapEventData(rmmzMapId: number): void {
         $dataMap.events.forEach((e: (IDataMapEvent | null)) => {
             if (e) {
-                const data = DEntitySpawner2.makeFromEventData(e);
+                const data = DEntitySpawner2.makeFromEventData(e, rmmzMapId);
                 if (data) {
                     if (data.troopId > 0) {
                         SEntityFactory.spawnTroopAndMembers( MRData.troops[data.troopId], e.x, e.y,data.stateIds);

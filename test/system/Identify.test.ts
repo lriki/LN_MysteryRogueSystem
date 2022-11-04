@@ -56,7 +56,7 @@ test("system.Identify.Nickname", () => {
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_識別の巻物A").id, [], "item1"));
     inventory.addEntity(item1);
 
-    MRLively.identifyer.setNickname(item1.dataId, "Nickname");
+    MRLively.getCurrentIdentifyer().setNickname(item1.dataId, "Nickname");
 
     const name1 = UName.makeNameAsItem(item1);
     expect(name1.includes("\\C[3]Nickname")).toBeTruthy();
@@ -92,4 +92,37 @@ test("system.Identify.Grass", () => {
 
     // 食べれば、同種のアイテムは識別される。
     expect(name2).not.toBe(name1);
+});
+
+test("system.Identify.Equipment", () => {
+    TestEnv.newGame();
+
+    // Player
+    const player1 = TestEnv.setupPlayer(LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
+    const inventory = player1.getEntityBehavior(LInventoryBehavior);
+
+    // 装備 入手
+    const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1));
+    const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Shield1));
+    inventory.addEntity(weapon1);
+    inventory.addEntity(shield1);
+
+    // 最初は未識別状態
+    expect(weapon1.individualIdentified()).toBeFalsy();
+    expect(shield1.individualIdentified()).toBeFalsy();
+
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    //----------------------------------------------------------------------------------------------------
+
+    // [装備]
+    MRSystem.dialogContext.postActivity(LActivity.makeEquip(player1, weapon1));
+    MRSystem.dialogContext.postActivity(LActivity.makeEquip(player1, shield1).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
+
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
+    // 装備によって、個体識別済みとなる。
+    expect(weapon1.individualIdentified()).toBeTruthy();
+    expect(shield1.individualIdentified()).toBeTruthy();
 });

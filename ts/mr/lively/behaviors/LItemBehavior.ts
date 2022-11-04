@@ -1,6 +1,5 @@
 import { assert, MRSerializable } from "ts/mr/Common";
 import { MRBasics } from "ts/mr/data/MRBasics";
-import { DIdentifiedTiming } from "ts/mr/data/DIdentifyer";
 import { DItem, DItemDataId } from "ts/mr/data/DItem";
 import { MRData } from "ts/mr/data/MRData";
 import { SCommandResponse } from "ts/mr/system/SCommand";
@@ -118,7 +117,7 @@ export class LItemBehavior extends LBehavior {
         // [読まれた]
         else if (activity.actionId() == MRBasics.actions.ReadActionId) {
             const actor = activity.actor();
-            UIdentify.identifyByTiming(cctx, actor, self, DIdentifiedTiming.Read);
+            UIdentify.identifyByTiming(cctx, actor, self, activity.actionId());
             const reaction = self.data.getReaction(MRBasics.actions.ReadActionId);
             for (const emittor of reaction.emittors()) {
                 SEmittorPerformer.makeWithEmitor(actor, actor, emittor)
@@ -134,7 +133,7 @@ export class LItemBehavior extends LBehavior {
             const subject = activity.actor();
             const reactor = activity.object();
             if (reactor) {
-                UIdentify.identifyByTiming(cctx, subject, reactor, DIdentifiedTiming.Eat);
+                UIdentify.identifyByTiming(cctx, subject, reactor, activity.actionId());
 
 
                 const reaction = self.data.getReaction(MRBasics.actions.EatActionId);

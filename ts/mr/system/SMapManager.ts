@@ -19,7 +19,7 @@ import { DBlockLayerKind } from "../data/DCommon";
 import { USpawner } from "../utility/USpawner";
 import { ULimitations } from "../utility/ULimitations";
 import { paramMaxTrapsInMap } from "../PluginParameters";
-import { DEntityKind } from "../data/DEntityKind";
+import { DEntityCategory } from "../data/DEntityCategory";
 import { UEffect } from "../utility/UEffect";
 import { DAppearanceTableEntity } from "../data/DLand";
 
@@ -82,7 +82,7 @@ export class SMapManager {
             if (exitPoint) {
                 const appearanceTable = MRData.lands[floorId.landId()].appearanceTable;
                 const prefab = appearanceTable.system[floorId.floorNumber()].find(e => {
-                    return DEntityKind.isExitPoint(e.spawiInfo.entityData());
+                    return DEntityCategory.isExitPoint(e.spawiInfo.entityData());
                 });
                 assert(prefab);
 

@@ -30,6 +30,6 @@ export class SNicknameDialog extends SDialog {
     }
 
     public setNickname(name: string): void {
-        MRLively.identifyer.setNickname(this.item.dataId, name);
+        MRLively.getCurrentIdentifyer().setNickname(this.item.dataId, name);
     }
 }

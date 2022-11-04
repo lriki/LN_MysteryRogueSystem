@@ -45,6 +45,13 @@ export class LSurvivorBehavior extends LBehavior {
     */
 
     private _basicLoss = paramFPLoss;
+    private _prevFP;
+
+    public constructor() {
+        super();
+        this._basicLoss = paramFPLoss;
+        this._prevFP = Infinity;
+    }
 
     public clone(newOwner: LEntity): LBehavior {
         const b = MRLively.world.spawn(LSurvivorBehavior);
@@ -59,54 +66,59 @@ export class LSurvivorBehavior extends LBehavior {
     onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult {
         
         if (phase == DecisionPhase.UpdateState) {
-            const prevFP = self.getActualParam(MRBasics.params.fp);
-
-            var loss = this._basicLoss;
-            loss *= self.traitsPi(MRBasics.traits.SurvivalParamLossRate, MRBasics.params.fp);
-
-            // FP 減少
-            self.gainActualParam(MRBasics.params.fp, -loss, true);
-
-            
-            const fp = self.getActualParam(MRBasics.params.fp);
-
-            if (prevFP > 0 && fp <= 0) {
-                // 今回の更新で FP が 0 になったのであれば、メッセージを表示する
-                cctx.postMessage(tr2("だめだ、もう倒れそうだ！ 早くなにか食べないと！"));
-            }
-
-            /*
-            switch (self.actualParam(REBasics.params.fp)) {
-                case 3:
-                    //cctx.postBalloon(entity, 6, false);
-                    cctx.postMessage(tr2("だめだ！ もう倒れそうだ！"));
-                    //cctx.postWait(entity, 10);
-                    break;
-                case 2:
-                    cctx.postMessage(tr2("早く・・・なにか食べないと・・・"))
-                    //cctx.postWait(entity, 10);
-                    break;
-                case 1:
-                    cctx.postMessage(tr2("飢え死にしてしまう！"));
-                    //cctx.postWait(entity, 10);
-                    break;
-            }
-            */
-
-
-            if (fp <= 0) {
-                // 満腹度 0 による HP 減少
-                self.gainActualParam(MRBasics.params.hp, -1, true);
-
-                if (self.isDeathStateAffected()) {
-                    cctx.postMessage(tr2("おなかがすいて倒れた・・・"));
-                }
+            const fp1 = self.getActualParam(MRBasics.params.fp);
+            if (fp1 > this._prevFP) {
+                this._prevFP = fp1;
             }
             else {
-                // HP自動回復
-                self.gainActualParam(MRBasics.params.hp, 1, true);
+                var loss = this._basicLoss;
+                loss *= self.traitsPi(MRBasics.traits.SurvivalParamLossRate, MRBasics.params.fp);
+    
+                // FP 減少
+                self.gainActualParam(MRBasics.params.fp, -loss, true);
+    
+                
+                const fp2 = self.getActualParam(MRBasics.params.fp);
+    
+                if (fp1 > 0 && fp2 <= 0) {
+                    // 今回の更新で FP が 0 になったのであれば、メッセージを表示する
+                    cctx.postMessage(tr2("だめだ、もう倒れそうだ！ 早くなにか食べないと！"));
+                }
+    
+                /*
+                switch (self.actualParam(REBasics.params.fp)) {
+                    case 3:
+                        //cctx.postBalloon(entity, 6, false);
+                        cctx.postMessage(tr2("だめだ！ もう倒れそうだ！"));
+                        //cctx.postWait(entity, 10);
+                        break;
+                    case 2:
+                        cctx.postMessage(tr2("早く・・・なにか食べないと・・・"))
+                        //cctx.postWait(entity, 10);
+                        break;
+                    case 1:
+                        cctx.postMessage(tr2("飢え死にしてしまう！"));
+                        //cctx.postWait(entity, 10);
+                        break;
+                }
+                */
+    
+    
+                if (fp2 <= 0) {
+                    // 満腹度 0 による HP 減少
+                    self.gainActualParam(MRBasics.params.hp, -1, true);
+    
+                    if (self.isDeathStateAffected()) {
+                        cctx.postMessage(tr2("おなかがすいて倒れた・・・"));
+                    }
+                }
+                else {
+                    // HP自動回復
+                    self.gainActualParam(MRBasics.params.hp, 1, true);
+                }
+                this._prevFP = fp2;
             }
-
+    
 
             return SPhaseResult.Pass;
         }

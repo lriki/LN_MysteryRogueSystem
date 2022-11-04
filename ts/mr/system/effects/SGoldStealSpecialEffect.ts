@@ -11,9 +11,8 @@ import { SEffectModifier } from "../SEffectApplyer";
 import { SEntityFactory } from "../SEntityFactory";
 import { SSpecialEffect } from "./SSpecialEffect";
 import { SItemStealSpecialEffect } from "./SItemStealSpecialEffect";
-import { DSpecificEffectId } from "ts/mr/data/DCommon";
 import { LEffectResult } from "ts/mr/lively/LEffectResult";
-import { DSpecialEffectRef } from "ts/mr/data/DEffect";
+import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
 
 export class SGoldStealSpecialEffect extends SSpecialEffect {
 

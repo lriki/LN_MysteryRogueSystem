@@ -69,7 +69,6 @@ export class SGameManager {
         MRLively.map = new LMap();
         MRLively.camera = new LCamera();
         MRLively.scheduler = new LScheduler2();
-        MRLively.identifyer = new LIdentifyer();
         MRLively.recorder = new SActivityRecorder();
         MRLively.messageHistory = new LMessageHistory();
         MRLively.eventServer = new LEventServer();
@@ -179,7 +178,7 @@ export class SGameManager {
 
             // 別 Land への遷移？
             if (newFloorId.landId() != currentFloorId.landId()) {
-                MRLively.identifyer.reset(newFloorId.landData());
+                MRLively.world.land(newFloorId.landId()).resetIdentifyer();
             }
     
             if (newFloorId.isTacticsMap()) {
@@ -237,7 +236,6 @@ export class SGameManager {
         contents.map = MRLively.map;
         contents.camera = MRLively.camera;
         contents.scheduler = MRLively.scheduler;
-        contents.identifyer = MRLively.identifyer;
         contents.messageHistory = MRLively.messageHistory;
         contents.eventServer = MRLively.eventServer;
         return contents;
@@ -249,7 +247,6 @@ export class SGameManager {
         MRLively.map = contents.map;
         MRLively.camera = contents.camera;
         MRLively.scheduler = contents.scheduler;
-        MRLively.identifyer = contents.identifyer;
         MRLively.messageHistory = contents.messageHistory;
         MRLively.eventServer = contents.eventServer;
     }

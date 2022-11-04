@@ -1,11 +1,8 @@
-import { assert } from "ts/mr/Common";
-import { MRBasics } from "ts/mr/data/MRBasics";
-import { DSpecificEffectId, DSkillId } from "ts/mr/data/DCommon";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { SCommandContext } from "../SCommandContext";
 import { SEffectModifier } from "../SEffectApplyer";
 import { LEffectResult } from "ts/mr/lively/LEffectResult";
-import { DSpecialEffectRef } from "ts/mr/data/DEffect";
+import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
 
 
 export abstract class SSpecialEffect {

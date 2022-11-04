@@ -46,7 +46,7 @@ import { LStumblePreventionBehavior } from "../lively/behaviors/LPreventionBehav
 import { LActivityCharmBehavior } from "../lively/behaviors/LActivityCharmBehavior";
 import { LExperienceBehavior } from "../lively/behaviors/LExperienceBehavior";
 import { LRaceBehavior } from "../lively/behaviors/LRaceBehavior";
-import { DEntityKind } from "../data/DEntityKind";
+import { DEntityCategory } from "../data/DEntityCategory";
 
 export class SEntityFactory {
     public static newActor(entityId: DEntityId): LEntity {
@@ -97,8 +97,8 @@ export class SEntityFactory {
         this.setupCommon(e);
         const entityData = e.data;
 
-        if (entityData.entity.kindId == MRBasics.entityKinds.WeaponKindId ||
-            entityData.entity.kindId == MRBasics.entityKinds.ShieldKindId) {
+        if (entityData.entity.kindId == MRBasics.entityCategories.WeaponKindId ||
+            entityData.entity.kindId == MRBasics.entityCategories.ShieldKindId) {
             e.addBehavior(LEquipmentBehavior);
         }
 
@@ -214,19 +214,19 @@ export class SEntityFactory {
         const entityData = MRData.entities[dataId];
         const prefab = MRData.prefabs[entityData.prefabId];
         
-        if (DEntityKind.isMonster(entityData)) {
+        if (DEntityCategory.isMonster(entityData)) {
             this.buildMonster(entity, entityData);
         }
-        else if (DEntityKind.isTrap(entityData)) {
+        else if (DEntityCategory.isTrap(entityData)) {
             this.buildTrap(entity, entityData.item().id);
         }
-        else if (DEntityKind.isEntryPoint(entityData)) {
+        else if (DEntityCategory.isEntryPoint(entityData)) {
             this.buildEntryPoint(entity);
         }
-        else if (DEntityKind.isExitPoint(entityData)) {
+        else if (DEntityCategory.isExitPoint(entityData)) {
             this.buildExitPoint(entity);
         }
-        else if (DEntityKind.isOrnament(entityData)) {
+        else if (DEntityCategory.isOrnament(entityData)) {
             this.buildOrnament(entity, prefab);
         }
         else {

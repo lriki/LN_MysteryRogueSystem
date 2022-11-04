@@ -23,7 +23,7 @@ export class UName {
     public static makeNameAsItem(entity: LEntity, viewSubject?: LEntity): string {
         if (!viewSubject) viewSubject = MRLively.camera.focusedEntity();
         assert(viewSubject);
-        return MRLively.identifyer.makeDisplayText(viewSubject, entity);
+        return MRLively.getCurrentIdentifyer().makeDisplayText(viewSubject, entity);
     }
     
 }

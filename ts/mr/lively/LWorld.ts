@@ -27,11 +27,11 @@ export class LWorld {
 
     constructor() {
         this._objects = [undefined];   // [0] is dummy
-        this._lands = MRData.lands.map(x => {
-            const land = new LLand();
-            land.setup_(x.id);
-            return land;
-        });
+        this._lands = [];
+        for (const landData of MRData.lands) {
+            const land = new LLand(landData);
+            this._lands.push(land);
+        }
         this._parties = [undefined];  // [0] is dummy
     }
     
