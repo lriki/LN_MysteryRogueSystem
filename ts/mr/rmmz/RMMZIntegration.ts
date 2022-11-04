@@ -17,6 +17,8 @@ import { DEventId } from "ts/mr/data/predefineds/DBasicEvents";
 import { MRLively } from "../lively/MRLively";
 import { FloorRestartSequence } from "./FloorRestartSequence";
 import { MRBasics } from "../data/MRBasics";
+import { LActorBehavior } from "../lively/behaviors/LActorBehavior";
+import { LEquipmentUserBehavior } from "../lively/behaviors/LEquipmentUserBehavior";
 
 export class RMMZIntegration extends SIntegration {
 
@@ -197,4 +199,26 @@ export class RMMZIntegration extends SIntegration {
         $gameVariables.setValue(MRBasics.variables.landExitResult, Math.floor(result / 100));
     }
 
+    override onEquipmentChanged(entity: LEntity): void {
+        const actor = entity.findEntityBehavior(LActorBehavior);
+        const equipmentUser = entity.findEntityBehavior(LEquipmentUserBehavior);
+        if (actor && equipmentUser) {
+            const rmmzActor = $gameActors.actor(actor.rmmzActorId);
+            assert(rmmzActor);
+            
+            const items = equipmentUser.equippedItemEntities();
+            rmmzActor._equips = [];
+            for (let i = 0; i < items.length; i++) {
+                const itemData = items[i].data.item();
+                rmmzActor._equips[i] = new Game_Item();
+                if (itemData.rmmzWeaponId > 0) {
+                    rmmzActor._equips[i].setEquip(true, itemData.rmmzWeaponId);
+                }
+                else {
+                    rmmzActor._equips[i].setEquip(false, itemData.rmmzArmorId);
+                }
+            }
+            rmmzActor.refresh();
+        }
+    }
 }

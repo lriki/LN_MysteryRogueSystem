@@ -20,6 +20,7 @@ import { DActionId, DSubComponentEffectTargetKey } from "ts/mr/data/DCommon";
 import { LEventResult } from "../LEventServer";
 import { DEventId, ItemRemovedFromInventoryArgs } from "ts/mr/data/predefineds/DBasicEvents";
 import { STask } from "ts/mr/system/tasks/STask";
+import { LActorBehavior } from "./LActorBehavior";
 
 interface SlotPart {
     itemEntityIds: LEntityId[];
@@ -286,6 +287,8 @@ NOTE:
         if (itemEntity.isCursed()) {
             cctx.postMessage(tr2("呪われていた！"));
         }
+
+        this.onEquipmentChanged(self);
     }
 
     private postEquipOff(cctx: SCommandContext, self: LEntity, itemEntity: LEntity): STask {
@@ -300,6 +303,7 @@ NOTE:
                 else {
                     cctx.postMessage(tr2("何も起こらなかった。"));
                 }
+                this.onEquipmentChanged(self);
                 return true;
             });
     }
@@ -363,5 +367,9 @@ NOTE:
 
         this._slots = newSlots;
         this._revisitonNumber++;
+    }
+
+    private onEquipmentChanged(self: LEntity): void {
+        MRSystem.integration.onEquipmentChanged(self);
     }
 }

@@ -68,6 +68,10 @@ export class LActorBehavior extends LBattlerBehavior {
 
     }
 
+    public get rmmzActorId(): number {
+        return this.ownerEntity().data.actorData().rmmzActorId;
+    }
+
     // Game_Actor.prototype.actor
     actor(): DActor {
         const entity = this.ownerEntity().data;

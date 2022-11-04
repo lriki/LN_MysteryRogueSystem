@@ -296,4 +296,7 @@ export class TestEnvIntegration extends SIntegration {
     onSetLandExitResult(result: LandExitResult): void {
         this.exitResult = result;
     }
+    
+    override onEquipmentChanged(entity: LEntity): void {
+    }
 }

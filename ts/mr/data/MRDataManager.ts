@@ -816,6 +816,8 @@ export class MRDataManager {
         $dataItems.forEach(x => {
             const [entity, item] = MRData.newItem();
             if (x) {
+                item.rmmzItemId = x.id;
+
                 const meta = DMetadataParser.parse(x.meta);
                 entity.entity = parseMetaToEntityProperties(x.meta);
                 entity.entityTemplateKey = meta.entityTemplateKey;
@@ -860,6 +862,8 @@ export class MRDataManager {
         $dataWeapons.forEach(x => {
             const [entity, item] = MRData.newItem();
             if (x) {
+                item.rmmzWeaponId = x.id;
+
                 const meta = DMetadataParser.parse(x.meta);
                 entity.display.name = DHelpers.parseDisplayName(x.name);
                 entity.display.iconIndex = x.iconIndex ?? 0;
@@ -887,6 +891,8 @@ export class MRDataManager {
         $dataArmors.forEach(x => {
             const [entity, item] = MRData.newItem();
             if (x) {
+                item.rmmzArmorId = x.id;
+
                 const meta = DMetadataParser.parse(x.meta);
                 entity.display.name = x.name;
                 entity.display.iconIndex = x.iconIndex ?? 0;

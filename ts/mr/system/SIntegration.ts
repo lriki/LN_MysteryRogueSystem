@@ -63,6 +63,8 @@ export abstract class SIntegration {
 
     abstract onSetLandExitResult(result: LandExitResult): void;
 
+    abstract onEquipmentChanged(entity: LEntity): void;
+
 
     //--------------------
     // Visual notifications

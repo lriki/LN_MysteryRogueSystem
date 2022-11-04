@@ -73,10 +73,17 @@ export class DItem {
 
     entityId: DEntityId;
 
+    rmmzItemId: number;
+    rmmzWeaponId: number;
+    rmmzArmorId: number;
+
     
     constructor(id: DItemDataId, entityId: DEntityId) {
         this.id = id;
         this.entityId = entityId;
+        this.rmmzItemId = 0;
+        this.rmmzWeaponId = 0;
+        this.rmmzArmorId = 0;
     }
 
     public entityData(): DEntity {
