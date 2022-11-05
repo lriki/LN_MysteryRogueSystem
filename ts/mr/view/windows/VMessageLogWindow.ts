@@ -27,6 +27,7 @@ interface TextLineState {
 /**
  */
 export class VMessageLogWindow extends Window_Base {
+
     private _message: LMessageHistory;
     private _waitCount: number = 0;
     private _autoScroll: boolean = true;;
@@ -34,6 +35,7 @@ export class VMessageLogWindow extends Window_Base {
     private _autoScrollCountMax: number = 10;
     private _maxLines: number = 2;
 
+    public _autoCloseEnabled: boolean;
     private _autoCloseCount: number = 0;
     private _autoCloseCountMax: number = 200;
     private _lineSpriteCache: Sprite[] = [];
@@ -41,6 +43,7 @@ export class VMessageLogWindow extends Window_Base {
 
     constructor(message: LMessageHistory, rect: Rectangle) {
         super(rect);
+        this._autoCloseEnabled = true;
         this._message = message;
         this.openness = 0;
         this.initMembers();
@@ -50,6 +53,14 @@ export class VMessageLogWindow extends Window_Base {
         this._waitCount = 0;
         this._autoCloseCount = 0;
         this._autoScrollCount = 0;
+    }
+
+    public set autoCloseEnabled(value: boolean) {
+        this._autoCloseEnabled = value;
+        if (!this._autoCloseEnabled) {
+            this.open();
+            this.openness = 255;
+        }
     }
 
     private maxLines(): number {
@@ -331,6 +342,7 @@ export class VMessageLogWindow extends Window_Base {
     }
 
     private updateAutoClose() {
+        if (!this._autoCloseEnabled) return;
         if (this._autoCloseCount > 0) {
             this._autoCloseCount--;
             if (this._autoCloseCount <= 0) {

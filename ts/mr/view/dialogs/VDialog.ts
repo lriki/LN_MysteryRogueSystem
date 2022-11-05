@@ -108,6 +108,10 @@ export class VDialog {
     onDestroy() {
     }
 
+    public get windowLayer(): PIXI.Container {
+        return SceneManager._scene._windowLayer as any;
+    }
+
     protected addWindow(window: Window_Base) {
         SceneManager._scene.addWindow(window);
         this._windows.push(window);
