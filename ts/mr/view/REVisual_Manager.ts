@@ -49,6 +49,7 @@ import { VNicknameDialog } from "./dialogs/VNicknameDialog";
 import { VFloatingAnimationTargetSprite } from "./sprites/VFloatingAnimationSprite";
 import { MRView } from "./MRView";
 import { VHelper } from "./VHelper";
+import { assert } from "../Common";
 
 /**
  */
@@ -100,39 +101,33 @@ export class REVisual_Manager
     }
 
     openDialog(model: SDialog): void {
-        if (model instanceof SManualActionDialog)
-            this.dialogNavigator._openDialog(new VManualActionDialogVisual(model));
-        else if (model instanceof SEventExecutionDialog)
-            this.dialogNavigator._openDialog(new REEventExecutionDialogVisual(model));
-        // else if (model instanceof SWarehouseDialog)
-        //     this._dialogNavigator._openDialog(new VWarehouseDialog(model));
-        else if (model instanceof SWarehouseStoreDialog)
-            this.dialogNavigator._openDialog(new VWarehouseStoreDialog(model));
-        else if (model instanceof SWarehouseWithdrawDialog)
-            this.dialogNavigator._openDialog(new VWarehouseWithdrawDialog(model));
-        else if (model instanceof SMainMenuDialog)
-            this.dialogNavigator._openDialog(new VMainMenuDialog(model));
-        else if (model instanceof SFeetDialog)
-            this.dialogNavigator._openDialog(new VFeetDialog(model));
-        else if (model instanceof SItemListDialog)
-            this.dialogNavigator._openDialog(new VItemListDialog(model));
-        else if (model instanceof SItemSelectionDialog)
-            this.dialogNavigator._openDialog(new VItemSelectionDialog(model));
-        else if (model instanceof SDetailsDialog)
-            this.dialogNavigator._openDialog(new VDetailsDialog(model));
-        else if (model instanceof SItemSellDialog)
-            this.dialogNavigator._openDialog(new VItemSellDialog(model));
-        else if (model instanceof SNicknameDialog)
-            this.dialogNavigator._openDialog(new VNicknameDialog(model));
-            
-
-            
-        //else if (d instanceof LMainMenuDialog)
-        //    this._dialogNavigator._openDialog(new VMenuDialog(d));
-
-            
-        // AI 用の Dialog を開いた時など、UI を伴わないものもある
-        //return undefined;
+        let dialog = MRView.ext.onOpenDialog(model);
+        if (!dialog) {
+            if (model instanceof SManualActionDialog)
+                dialog = new VManualActionDialogVisual(model);
+            else if (model instanceof SEventExecutionDialog)
+                dialog = new REEventExecutionDialogVisual(model);
+            else if (model instanceof SWarehouseStoreDialog)
+                dialog = new VWarehouseStoreDialog(model);
+            else if (model instanceof SWarehouseWithdrawDialog)
+                dialog = new VWarehouseWithdrawDialog(model);
+            else if (model instanceof SMainMenuDialog)
+                dialog = new VMainMenuDialog(model);
+            else if (model instanceof SFeetDialog)
+                dialog = new VFeetDialog(model);
+            else if (model instanceof SItemListDialog)
+                dialog = new VItemListDialog(model);
+            else if (model instanceof SItemSelectionDialog)
+                dialog = new VItemSelectionDialog(model);
+            else if (model instanceof SDetailsDialog)
+                dialog = new VDetailsDialog(model);
+            else if (model instanceof SItemSellDialog)
+                dialog = new VItemSellDialog(model);
+            else if (model instanceof SNicknameDialog)
+                dialog = new VNicknameDialog(model);
+        }
+        assert(dialog);
+        this.dialogNavigator._openDialog(dialog);
     }
 
     public startFloatingAnimation(animationId: number, mx: number, my: number): void {
