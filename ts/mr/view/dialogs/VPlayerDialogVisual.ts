@@ -2,7 +2,7 @@ import { assert, tr2 } from "ts/mr/Common";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { MRBasics } from "ts/mr/data/MRBasics";
-import { SManualActionDialog } from "ts/mr/system/dialogs/SManualDecisionDialog";
+import { SPlayerDialog } from "ts/mr/system/dialogs/SPlayerDialog";
 import { MRView } from "../MRView";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { LUnitBehavior } from "ts/mr/lively/behaviors/LUnitBehavior";
@@ -22,10 +22,10 @@ enum UpdateMode {
     DiagonalMoving,
 }
 
-export class VManualActionDialogVisual extends VDialog {
+export class VPlayerDialogVisual extends VDialog {
     private readonly MovingInputInterval = 5;
 
-    private _model: SManualActionDialog;
+    private _model: SPlayerDialog;
     private _updateMode: UpdateMode = UpdateMode.Normal;
     private _waitCount: number = 0; // キーボード操作では 1 フレームでピッタリ斜め入力するのが難しいので、最後の入力から少し待てるようにする
     //private _dirSelecting: boolean = false;
@@ -35,7 +35,7 @@ export class VManualActionDialogVisual extends VDialog {
 
     private _crossDiagonalCount: number = 0;    // 
 
-    public constructor(model: SManualActionDialog) {
+    public constructor(model: SPlayerDialog) {
         super(model);
         this._model = model;
     }

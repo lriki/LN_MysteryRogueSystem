@@ -1,8 +1,8 @@
 
-import { SManualActionDialog } from "ts/mr/system/dialogs/SManualDecisionDialog";
+import { SPlayerDialog } from "ts/mr/system/dialogs/SPlayerDialog";
 import { Vector2 } from "ts/mr/math/Vector2";
 import { REDialogVisualNavigator } from "ts/mr/view/dialogs/REDialogVisual";
-import { VManualActionDialogVisual } from "ts/mr/view/dialogs/VManualActionDialogVisual";
+import { VPlayerDialogVisual } from "ts/mr/view/dialogs/VPlayerDialogVisual";
 import { REVisualSequel } from "ts/mr/view/REVisualSequel";
 import { REEventExecutionDialogVisual } from "./dialogs/REEventExecutionDialogVisual";
 import { MRSystem } from "ts/mr/system/MRSystem";
@@ -103,8 +103,8 @@ export class REVisual_Manager
     openDialog(model: SDialog): void {
         let dialog = MRView.ext.onOpenDialog(model);
         if (!dialog) {
-            if (model instanceof SManualActionDialog)
-                dialog = new VManualActionDialogVisual(model);
+            if (model instanceof SPlayerDialog)
+                dialog = new VPlayerDialogVisual(model);
             else if (model instanceof SEventExecutionDialog)
                 dialog = new REEventExecutionDialogVisual(model);
             else if (model instanceof SWarehouseStoreDialog)

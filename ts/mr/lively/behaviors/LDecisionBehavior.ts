@@ -1,4 +1,4 @@
-import { SManualActionDialog } from "ts/mr/system/dialogs/SManualDecisionDialog";
+import { SPlayerDialog } from "ts/mr/system/dialogs/SPlayerDialog";
 import { SPhaseResult } from "../../system/SCommand";
 import { SCommandContext } from "../../system/SCommandContext";
 import { DecisionPhase, LBehavior } from "./LBehavior";
@@ -50,7 +50,7 @@ export class LDecisionBehavior extends LBehavior {
                 return SPhaseResult.Handled;
             }
             else {
-                const dialog = new SManualActionDialog();
+                const dialog = new SPlayerDialog();
                 dialog.dashingEntry = unit._straightDashing;
                 cctx.openDialog(self, dialog, false);
                 unit.clearStraightDashing();

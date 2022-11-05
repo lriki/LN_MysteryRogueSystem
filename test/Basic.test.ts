@@ -2,7 +2,7 @@
 //   https://qiita.com/t-toyota/items/93cce73004b9f765cfcf
 
 import { LUnitBehavior } from "ts/mr/lively/behaviors/LUnitBehavior";
-import { SManualActionDialog } from "ts/mr/system/dialogs/SManualDecisionDialog";
+import { SPlayerDialog } from "ts/mr/system/dialogs/SPlayerDialog";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "./TestEnv";
@@ -90,7 +90,7 @@ test("Basic1", () => {
     {
         // マニュアル操作の Dialog が開かれている
         const dialog1 = dialogContext.activeDialog();
-        expect((dialog1 instanceof SManualActionDialog)).toBe(true);
+        expect((dialog1 instanceof SPlayerDialog)).toBe(true);
     
         // 向き変更。行動を消費せず Dialog を閉じる
         dialogContext.postActivity(LActivity.makeDirectionChange(actor1, 9));
@@ -104,7 +104,7 @@ test("Basic1", () => {
         
         // 行動の消費が無いので、再び ManualActionDialog が開かれる。
         // しかし一度閉じているので、違うインスタンスで開かれている。
-        expect((dialogContext.activeDialog() instanceof SManualActionDialog)).toBe(true);
+        expect((dialogContext.activeDialog() instanceof SPlayerDialog)).toBe(true);
         expect((dialog1 != dialogContext.activeDialog())).toBe(true);
     
         // この時点では向きは変更されている
