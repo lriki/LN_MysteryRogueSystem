@@ -9,6 +9,7 @@ import { SFeetDialog } from "ts/mr/system/dialogs/SFeetDialog";
 import { tr2 } from "ts/mr/Common";
 import { VMainStatusWindow } from "../windows/VMainStatusWindow";
 import { VLayout } from "../ui/VUIElement";
+import { UDialog } from "ts/mr/utility/UDialog";
 
 export class VMainMenuDialog extends VDialog {
     _model: SMainMenuDialog;
@@ -42,28 +43,12 @@ export class VMainMenuDialog extends VDialog {
 
 
     private handleItem() {
-        const entity = this._model.entity();
-        const inventory = entity.findEntityBehavior(LInventoryBehavior);
-        if (inventory) {
-            this._model.openSubDialog(new SItemListDialog(entity, inventory), d => {
-                //if (d.isSubmitted()) this.submit();
-                return false;
-            });
-        }
+        UDialog.postOpenInventoryDialog(this.commandContext(), this._model.entity(), dialog => {});
     }
 
     private handleFeet() {
-        const feetEntity = MRLively.map.firstFeetEntity(this._model.entity());
-        if (feetEntity) {
-            this._model.openSubDialog(new SFeetDialog(this._model.entity(), feetEntity), d => {
-                //if (d.isSubmitted()) this.submit();
-                return false;
-            });
-        }
-        else {
-            this.commandContext().postMessage(tr2("足元には何もない。"));
+        if (!UDialog.postOpenFeetDialog(this.commandContext(), this._model.entity(), dialog => {})) {
             this.cancel();
-            //this.dialogContext().postReopen();
         }
     }
 

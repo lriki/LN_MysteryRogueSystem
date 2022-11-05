@@ -12,6 +12,7 @@ import { LBehaviorId, LEntityId } from "ts/mr/lively/LObject";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { MRSystem } from "../MRSystem";
 import { SDialog } from "../SDialog";
+import { SDialogContext } from "../SDialogContext";
 import { SCommonCommand } from "./SCommonCommand";
 import { SDialogCommand } from "./SDialogCommand";
 import { SItemSelectionDialog } from "./SItemSelectionDialog";

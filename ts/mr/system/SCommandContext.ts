@@ -22,6 +22,7 @@ import { CommandResultCallback, SSubTaskChain, STask, STaskCallMethod, STaskStat
 import { DFlavorEffect } from "../data/DFlavorEffect";
 import { LEntityDescription } from "../lively/LIdentifyer";
 import { SSoundManager } from "./SSoundManager";
+import { SDialogContext } from "./SDialogContext";
 
 export interface SDisplayFlavorEffectOptions {
     messageFormatArgs: unknown[],
@@ -247,6 +248,10 @@ export class SCommandContext
         this._runningCommandList = [];
         this._messageIndex = 0;
         this._commandChainRunning = false;
+    }
+
+    public get dialogContext(): SDialogContext {
+        return MRSystem.dialogContext;
     }
 
     public random(): LRandom {

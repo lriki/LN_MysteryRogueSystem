@@ -122,10 +122,21 @@ export class SDialog {
      * SubDialog を開く。
      * 
      * onResult が呼ばれる時点で、dialog はスタックから取り除かれている。
+     * 
+     * onClosed は、SubDialog が閉じられた時点で呼ばれます。
+     * onClosed で親 Dialog に対してデフォルトの処理を行う場合は、false または void を返してください。
+     * デフォルトの処理は、子 Dialog の結果を親 Dialog に引き継ぐように反映します。
+     * つまり、
+     * - 子 Dialog が Submit された場合は、親 Dialog も Submit となり、 Close されます。
+     * - 子 Dialog が Cancel された場合は、親 Dialog は Close されません。
+     * 
+     * onClosed で親 Dialog に対してデフォルトの処理を行わない場合は、true を返してください。
+     * 例えば未識別アイテムの名前付けウィンドウでは、名前を決定すると Submit 結果となりますが、
+     * その時その親 (通常は ItemListDialog) は Close しません。
      */
-    public openSubDialog<T extends SDialog>(dialog: T, onResult?: ((model: T) => boolean | void) | undefined) {
+    public openSubDialog<T extends SDialog>(dialog: T, onClosed?: ((model: T) => boolean | void) | undefined) {
         dialog._resultCallbackVisual = (model: T) => {
-            const handled = (onResult) ? onResult(model) : false;
+            const handled = (onClosed) ? onClosed(model) : false;
             if (!handled) {
                 switch (model.resultAction) {
                     case SDialogAction.Submit:
