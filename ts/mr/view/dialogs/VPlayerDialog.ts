@@ -22,10 +22,10 @@ enum UpdateMode {
     DiagonalMoving,
 }
 
-export class VPlayerDialogVisual extends VDialog {
+export class VPlayerDialog extends VDialog {
     private readonly MovingInputInterval = 5;
 
-    private _model: SPlayerDialog;
+    public readonly model: SPlayerDialog;
     private _updateMode: UpdateMode = UpdateMode.Normal;
     private _waitCount: number = 0; // キーボード操作では 1 フレームでピッタリ斜め入力するのが難しいので、最後の入力から少し待てるようにする
     //private _dirSelecting: boolean = false;
@@ -37,7 +37,7 @@ export class VPlayerDialogVisual extends VDialog {
 
     public constructor(model: SPlayerDialog) {
         super(model);
-        this._model = model;
+        this.model = model;
     }
 
     private actionButton(): string {
@@ -84,7 +84,7 @@ export class VPlayerDialogVisual extends VDialog {
         if (Input.isPressed(this.directionButton()) && Input.isPressed(this.actionButton())) {
             entity.getEntityBehavior(LUnitBehavior)._fastforwarding = true;
             this.dialogContext().postActivity(LActivity.make(entity).withConsumeAction(LActionTokenConsumeType.MajorActed));
-            this._model.submit();
+            this.model.submit();
             return;
         }
 
@@ -338,7 +338,7 @@ export class VPlayerDialogVisual extends VDialog {
 
             context.postActivity(activity);
 
-            this._model.submit();
+            this.model.submit();
 
             // TODO: test
             //SceneManager._scene.executeAutosave();
@@ -358,14 +358,14 @@ export class VPlayerDialogVisual extends VDialog {
         if (frontTarget && !Helpers.isHostile(entity, frontTarget)) {
             if (!!frontTarget.queryReactions().find(x => x.actionId == MRBasics.actions.talk)) {
                 context.postActivity(LActivity.makeTalk(entity).withConsumeAction(LActionTokenConsumeType.MajorActed));
-                this._model.submit();
+                this.model.submit();
                 return true;
             }
         }
         
         // [通常攻撃] スキル発動
         context.postActivity(LActivity.makePerformSkill(entity, MRData.system.skills.normalAttack).withConsumeAction(LActionTokenConsumeType.MajorActed));
-        this._model.submit();
+        this.model.submit();
         
         return true;
     }
@@ -377,7 +377,7 @@ export class VPlayerDialogVisual extends VDialog {
         if (item) {
             const activity1 = LActivity.makePrimaryUse(entity, item).withConsumeAction();
             context.postActivity(activity1);
-            this._model.submit();
+            this.model.submit();
         }
         
         return true;

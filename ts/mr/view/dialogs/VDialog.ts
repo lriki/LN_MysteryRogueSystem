@@ -5,7 +5,7 @@ import { SDialogContext } from "ts/mr/system/SDialogContext";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 
 export class VDialog {
-    private _baseModel: SDialog;
+    public readonly model: SDialog;
     _created: boolean = false;
     _started: boolean = false;
     //_destroying: boolean = false;
@@ -17,11 +17,7 @@ export class VDialog {
     _closing: boolean = false;
 
     protected constructor(model: SDialog) {
-        this._baseModel = model;
-    }
-
-    public get model(): SDialog {
-        return this._baseModel;
+        this.model = model;
     }
 
     protected dialogContext(): SDialogContext {
@@ -64,7 +60,7 @@ export class VDialog {
 
     protected submit() {
         //this._dialogResult = true;
-        this._baseModel.submit();
+        this.model.submit();
         //REVisual.manager?._dialogNavigator.pop();
 
         //if (this._resultCallback) {
@@ -74,29 +70,13 @@ export class VDialog {
 
     protected cancel() {
         //this._dialogResult = false;
-        this._baseModel.cancel();
+        this.model.cancel();
         //REVisual.manager?._dialogNavigator.pop();
     }
 
     protected closeAllSubDialogs() {
-        this._baseModel.closeAllSubDialogs();
+        this.model.closeAllSubDialogs();
     }
-
-    //public isSubmitted(): boolean {
-    //    return this._dialogResult;
-    //}
-
-   // public isCanceled(): boolean {
-    //    return !this._dialogResult;
-    //}
-    
-    /*
-    protected doneDialog(consumeAction: boolean) {
-        assert(this._navigator);
-        this._navigator.clear();
-        return RESystem.dialogContext.closeDialog(consumeAction);
-    }
-    */
 
     // push されたあと、最初の onUpdate の前
     onCreate() {
