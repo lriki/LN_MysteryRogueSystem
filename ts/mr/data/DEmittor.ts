@@ -71,10 +71,10 @@ export type DEmittorId = number;
 
     public applyProps(props: IEmittorProps): void {
         if (props.targetEffectKeys) {
-            this.effectSet.clearEffects();
+            this.effectSet.clearTargetEffects();
             for (const key of props.targetEffectKeys) {
                 const effect = MRData.getEffect(key);
-                this.effectSet.addEffect(effect);
+                this.effectSet.addTargetEffect(effect);
             }
         }
     }

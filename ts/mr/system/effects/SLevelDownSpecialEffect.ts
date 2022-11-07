@@ -4,12 +4,12 @@ import { LExperienceBehavior } from "ts/mr/lively/behaviors/LExperienceBehavior"
 import { LEffectResult } from "ts/mr/lively/LEffectResult";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { SCommandContext } from "../SCommandContext";
-import { SEffectModifier } from "../SEffectApplyer";
+import { SEffect } from "../SEffectApplyer";
 import { SSpecialEffect } from "./SSpecialEffect";
 
 export class SLevelDownSpecialEffect extends SSpecialEffect {
 
-    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
+    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void {
         const param = target.params.param(MRBasics.params.level);
         if (!param) return;
 

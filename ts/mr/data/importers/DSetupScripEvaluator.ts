@@ -9,7 +9,7 @@ import { IEntityProps, IReactionProps } from "../DEntity";
 import { IEntityTemplateProps } from "../DEntityTemplate";
 import { IEntityCategoryProps } from "../DEntityCategory";
 import { ISpecialEffectProps } from "../DSpecialEffect";
-import { ITraitProps } from "../DTraits";
+import { ITraitProps } from "../DTrait";
 
 declare global {
     function EntityCategory(props: IEntityCategoryProps): IEntityCategoryProps;

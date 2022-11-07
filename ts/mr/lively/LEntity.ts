@@ -31,7 +31,7 @@ import { LActionToken } from "./LActionToken";
 import { LMinimapMarkerClass, LPriceInfo, LReaction, LRoomId } from "./LCommon";
 import { LShopArticle } from "./LShopArticle";
 import { DEntityCategory } from "../data/DEntityCategory";
-import { DTraitId } from "../data/DTraits";
+import { DTraitId } from "../data/DTrait";
 import { SActivityContext } from "../system/SActivityContext";
 import { LSchedulingResult } from "./LSchedulingResult";
 import { LDeathResult } from "./LDeathResult";
@@ -484,7 +484,11 @@ export class LEntity extends LObject
         const param = this._params.param(paramId);
         
         let value = 0;
-        if (param) {
+        const forceValue = this.traitMaxOrDefault(MRBasics.traits.ForceParameter, paramId, undefined);
+        if (forceValue !== undefined) {
+            value = forceValue;
+        }
+        else if (param) {
             if (param.data.type == DParameterType.Dependent) {
                 value = this.getDependentParameterCurrentValue(paramId);
             }
@@ -700,6 +704,16 @@ export class LEntity extends LObject
     public traitsSumOrDefault(code: number, id: number, defaultValue: number): number {
         const traits = this.traitsWithId(code, id);
         return (traits.length == 0) ? defaultValue : traits.reduce((r, trait) => r + trait.value, 0);
+    }
+
+    public traitMaxOrDefault<T>(code: number, dataId: number, defaultValue: T): number | T {
+        const traits = this.traitsWithId(code, dataId);
+        if (traits.length == 0) {
+            return defaultValue;
+        }
+        else {
+            return traits.reduce((r, trait) => Math.max(r, trait.value), 0);
+        }
     }
 
     // Game_BattlerBase.prototype.traitsSumAll

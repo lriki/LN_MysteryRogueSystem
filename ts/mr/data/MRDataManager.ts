@@ -11,7 +11,7 @@ import { DLand, DLandIdentificationLevel } from "./DLand";
 import { DHelpers } from "./DHelper";
 import { DPrefabMoveType } from "./DPrefab";
 import { DEquipment } from './DItem';
-import { DTrait } from './DTraits';
+import { DTrait } from './DTrait';
 import { DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DEffectFieldScopeRange, DSkillCostSource, DParamCostType } from './DEffect';
 import { DSystem } from './DSystem';
 import { DSkill } from './DSkill';
@@ -134,7 +134,7 @@ export class MRDataManager {
             //----------
             DParameter.makeBuiltin(10, "fp", tr2("満腹度"), tr2("最大満腹度"), -1, 10000, 0, Infinity, true),    // FP
             DParameter.makeBuiltin(11, "pow", tr2("ちから"), tr2("ちからの最大値"), -1, 8, 0, Infinity, true),   // Power
-            DParameter.makeBuiltin(12, "up", tr2("つよさ"), tr2("つよさの最大値"), -1, 99, -Infinity, Infinity, false),
+            DParameter.makeBuiltin(12, "upg", tr2("つよさ"), tr2("つよさの最大値"), -1, 99, -Infinity, Infinity, false),
             DParameter.makeBuiltin(13, "rem", tr2("回数"), tr2("最大回数"), -1, 99, 0, Infinity, false),
             DParameter.makeBuiltin(14, "cap", "Capacity", tr2("最大容量"), -1, 8, 0, Infinity, false),
             DParameter.makeBuiltin(15, "gold", "Gold", tr2("最大ゴールド"), -1, 999999, 10, Infinity, false),
@@ -153,7 +153,7 @@ export class MRDataManager {
             tp: MRData.parameters.findIndex(x => x.code == "tp"),
             fp: MRData.parameters.findIndex(x => x.code == "fp"),
             pow: MRData.parameters.findIndex(x => x.code == "pow"),
-            upgradeValue: MRData.parameters.findIndex(x => x.code == "up"),
+            upgradeValue: MRData.parameters.findIndex(x => x.code == "upg"),
             remaining: MRData.parameters.findIndex(x => x.code == "rem"),
             capacity: MRData.parameters.findIndex(x => x.code == "cap"),
             gold: MRData.parameters.findIndex(x => x.code == "gold"),
@@ -335,6 +335,7 @@ export class MRDataManager {
             MRBasics.traits.PenetrationItem = MRData.newTrait("PenetrationItem").id;
             MRBasics.traits.PenetrationThrower = MRData.newTrait("PenetrationThrower").id;
             MRBasics.traits.DeathVulnerableElement = MRData.newTrait("DeathVulnerableElement").id;
+            MRBasics.traits.ForceParameter = MRData.newTrait("ForceParameter").id;
         }
 
         // Factions
@@ -451,6 +452,7 @@ export class MRDataManager {
             restartFloor: MRData.newEffectBehavior("RestartFloor").id,
             clarification: MRData.newEffectBehavior("Clarification").id,
             division: MRData.newEffectBehavior("Division").id,
+            addState: MRData.newEffectBehavior("AddState").id,
             removeState: MRData.newEffectBehavior("RemoveState").id,
             removeStatesByIntentions: MRData.newEffectBehavior("RemoveStatesByIntentions").id,
             performeSkill: MRData.newEffectBehavior("PerformeSkill").id,
@@ -750,7 +752,7 @@ export class MRDataManager {
                 if (x.damage.type > 0) {
                     effect.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
                 }
-                emittor.effectSet.effectIds.push(effect.id);
+                emittor.effectSet.targetEffectIds.push(effect.id);
 
                 skill.name = x.name;
                 skill.emittorId = emittor.id;
@@ -847,7 +849,7 @@ export class MRDataManager {
                     effect.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
                 }
                 //effect.rmmzItemEffectQualifying = x.effects.
-                emittor.effectSet.effectIds.push(effect.id);
+                emittor.effectSet.targetEffectIds.push(effect.id);
 
                 entity.setMainEmittor(emittor);
 

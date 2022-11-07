@@ -18,6 +18,7 @@ import { SDivisionSpecialEffect } from "./SDivisionSpecialEffect";
 import { SRemoveStatesByIntentionsSpecialEffect } from "./SRemoveStatesByIntentionsSpecialEffect";
 import { SPerformeSkillSpecialEffect } from "./SPerformeSkillSpecialEffect";
 import { SRemoveStateSpecialEffect } from "./SRemoveStateSpecialEffect";
+import { SAddStateSpecialEffect } from "./SAddStateSpecialEffect";
 
 export class SSpecialEffectManager {
     private behaviors: (SSpecialEffect | undefined)[] = [];    // Index is DSkillBehaviorId
@@ -54,6 +55,7 @@ export class SSpecialEffectManager {
         this.register(MRBasics.effectBehaviors.restartFloor, new SRestartFloorSpecialEffect());
         this.register(MRBasics.effectBehaviors.clarification, new SClarificationSpecialEffect());
         this.register(MRBasics.effectBehaviors.division, new SDivisionSpecialEffect());
+        this.register(MRBasics.effectBehaviors.addState, new SAddStateSpecialEffect());
         this.register(MRBasics.effectBehaviors.removeState, new SRemoveStateSpecialEffect());
         this.register(MRBasics.effectBehaviors.removeStatesByIntentions, new SRemoveStatesByIntentionsSpecialEffect());
         this.register(MRBasics.effectBehaviors.performeSkill, new SPerformeSkillSpecialEffect());

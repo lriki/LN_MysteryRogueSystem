@@ -40,6 +40,7 @@ export interface DBasicSpecialEffects {
     restartFloor: DSpecialEffectId;
     clarification: DSpecialEffectId;
     division: DSpecialEffectId;
+    addState: DSpecialEffectId;
     removeState: DSpecialEffectId;
     removeStatesByIntentions: DSpecialEffectId;
     performeSkill: DSpecialEffectId;

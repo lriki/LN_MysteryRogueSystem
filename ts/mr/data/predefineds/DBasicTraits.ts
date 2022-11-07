@@ -1,4 +1,4 @@
-import { DTraitId } from "../DTraits";
+import { DTraitId } from "../DTrait";
 
 
 // export interface DBasicStateTraits {
@@ -211,6 +211,13 @@ export interface DBasicTraits {
      * dataId: DElementId
      * value: 付加する DStateId
      */
-     DeathVulnerableElement: DTraitId;
+    DeathVulnerableElement: DTraitId;
+
+    /**
+     * パラメータの Actual を強制的に指定した値にする。
+     * dataId: DParameterId
+     * value: Actual 値
+     */
+    ForceParameter: DTraitId;
 }
 

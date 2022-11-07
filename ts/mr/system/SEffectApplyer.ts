@@ -20,21 +20,40 @@ import { assert } from "../Common";
 import { DSpecialEffectRef } from "../data/DSpecialEffect";
 
 
-
+/**
+ * DEffect に対するインスタンス情報。
+ * Effect 発動者や対象などの関係者の紐づけや、実行時にエフェクトの各プロパティについて、オーバーライドされた値を保持する。
+ */
 export class SEffect {
     private _fact: SEffectorFact;
     private _data: DEffect;
-    private _targetModifier: SEffectModifier;
-    private _hitType: DEffectHitType;
-    private _successRate: number;   // 0~100
+    //private _targetModifier: SEffectModifier;
+    //private _hitType: DEffectHitType;
+    //private _successRate: number;   // 0~100
+    private _parameterEffects2: SParameterEffect[];
 
     constructor(fact: SEffectorFact, effect: DEffect) {
         this._fact = fact;
         this._data = effect;
-        this._hitType = effect.hitType;
-        this._successRate = effect.successRate;
+        //this._hitType = effect.hitType;
+        //this._successRate = effect.successRate;
 
-        this._targetModifier = new SEffectModifier(fact.subject(), effect);
+        //this._targetModifier = new SEffectModifier(fact.subject(), effect);
+
+        // subject の現在値を初期パラメータとする。
+        // 装備品 Behavior はここへ値を加算したりする。
+        //this._subjectActualParams = [];
+        this._parameterEffects2 = [];
+        for (const p of effect.parameterQualifyings) {
+            const paramEffect = new SParameterEffect(p);
+            this._parameterEffects2.push(paramEffect);
+
+            // Check fixed damage.
+            const trait = fact.subject().traitsWithId(MRBasics.traits.FixedDamage, p._parameterId).backOrUndefined();
+            if (trait) {
+                paramEffect.fixedDamage = trait.value;
+            }
+        }
     }
 
     public fact(): SEffectorFact {
@@ -49,29 +68,31 @@ export class SEffect {
         return this._data;
     }
     
-    public targetModifier(): SEffectModifier {
-        return this._targetModifier;
-    }
+    // public targetModifier(): SEffectModifier {
+    //     return this._targetModifier;
+    // }
 
-    
+    public get successRate(): number {  // 0~100
+        return this.data().successRate;
+    }
         
     public isCertainHit(): boolean {
-        return this._hitType == DEffectHitType.Certain;
+        return this.data().hitType == DEffectHitType.Certain;
     }
 
     public isPhysical(): boolean {
-        return this._hitType == DEffectHitType.Physical;
+        return this.data().hitType == DEffectHitType.Physical;
     }
 
     public isMagical(): boolean {
-        return this._hitType == DEffectHitType.Magical;
+        return this.data().hitType == DEffectHitType.Magical;
     }
 
     // 0.0~1.0
     // クラスの特徴などで [追加能力値:命中+x] が無いと 0 になり全く命中しなくなる。
     // Game_Action.prototype.itemHit
     public hitRate(): number {
-        const successRate = this._successRate;
+        const successRate = this.successRate;
         if (this.isPhysical()) {
             const subject = this.subject();
             const hit = (subject) ? subject.xparamOrDefault(MRBasics.xparams.hit, 1.0) : 1.0;
@@ -109,12 +130,42 @@ export class SEffect {
         const target_luk = target.getActualParam(MRBasics.params.luk);
         return Math.max(1.0 + (subject_luk - target_luk) * 0.001, 0.0);
     }
+
+
+
+
+
+    
+    public hasParamDamage(): boolean {
+        //return this._parameterEffects.findIndex(x => x && x.applyType != SParameterEffectApplyType.None) >= 0;
+        return this._parameterEffects2.findIndex(x => x && x.applyType != SParameterEffectApplyType.None) >= 0;
+    }
+
+    public parameterEffects2(): readonly SParameterEffect[] {
+        return this._parameterEffects2;
+    }
+    
+    public otherEffectQualifyings(): DOtherEffectQualifying[] {
+        return this._data.otherEffectQualifyings;
+    }
+
+    public effectBehaviors(): DSpecialEffectRef[] {
+        return this._data.effectBehaviors;
+    }
+ 
+     public specialEffectQualifyings(): IDataEffect[] {
+         return this._data.rmmzSpecialEffectQualifyings;
+     }
+
+     public buffQualifying(): DParamBuff[] {
+        return this._data.buffQualifying;
+    }
 }
 
-export interface SSubEffect {
-    subTargetKey: DSubComponentEffectTargetKey;
-    effect: SEffect;
-}
+// export interface SSubEffect {
+//     subTargetKey: DSubComponentEffectTargetKey;
+//     effect: SEffect;
+// }
 
 // 攻撃側
 export class SEffectorFact {
@@ -132,9 +183,9 @@ export class SEffectorFact {
     // 以下、Behavior 持ち回りで編集される要素
     //private _subjectActualParams: number[];
     private _effects: SEffect[] = [];
-    private _subEffects: SSubEffect[] = [];
-    private _selfModifier: SEffectModifier;
-    private _succeededSelfModifier: SEffectModifier | undefined;
+    //private _subEffects: SSubEffect[] = [];
+    private _selfModifier: SEffect;
+    private _succeededSelfModifier: SEffect | undefined;
     private _incidentType: SEffectIncidentType;
     private _incidentEntityKind: DEntityCategoryId; // 効果の発生元がアイテムの場合はその種類
     private _item: LEntity | undefined;
@@ -154,7 +205,7 @@ export class SEffectorFact {
         this._direction = dir;
         this._genericEffectRate = 1.0;
 
-        for (const i of effects.effects()) {
+        for (const i of effects.targetEffects()) {
             this._effects.push(new SEffect(this, i));
         }
         // for (const i of effects.subEffects) {
@@ -164,9 +215,9 @@ export class SEffectorFact {
         //         effect: e,
         //     });
         // }
-        this._selfModifier = new SEffectModifier(subject, effects.selfEffect);
+        this._selfModifier = new SEffect(this, effects.selfEffect);
         if (effects.succeededSelfEffect) {
-            this._succeededSelfModifier = new SEffectModifier(subject, effects.succeededSelfEffect);
+            this._succeededSelfModifier = new SEffect(this, effects.succeededSelfEffect);
         }
         
         this._subject.iterateBehaviors2(b => {
@@ -211,9 +262,9 @@ export class SEffectorFact {
         return this._subjectEffects;
     }
 
-    public subEffects(): SSubEffect[] {
-        return this._subEffects;
-    }
+    // public subEffects(): SSubEffect[] {
+    //     return this._subEffects;
+    // }
 
     public incidentType(): SEffectIncidentType {
         return this._incidentType;
@@ -235,11 +286,11 @@ export class SEffectorFact {
         return this._direction;
     }
 
-    public selfModifier(): SEffectModifier {
+    public selfModifier(): SEffect {
         return this._selfModifier;
     }
 
-    public succeededSelfModifier(): SEffectModifier | undefined {
+    public succeededSelfModifier(): SEffect | undefined {
         return this._succeededSelfModifier;
     }
     
@@ -284,24 +335,28 @@ export enum SParameterEffectApplyType {
 // 例えば通常の武器は isDrain=falseでも、回復印が付いていたら isDrain=true にするなど、
 // 関連する情報を統合した最終的な Effect として作り上げるために使う。
 export class SParameterEffect {
-    paramId: DParameterId;
-    qualifying: DParameterQualifying;
-    
-    elementIds: DElementId[];
+    readonly paramId: DParameterId;
+    readonly qualifying: DParameterQualifying;
+    private _valid: boolean;
 
-    formula: string;
+
+    // 以下、とりあえず readonly としておく。
+    // 初版時点の想定のように、Behavior で持ちまわるなどで変更したくなった時は変更できるようにする。
+    
+    readonly elementIds: DElementId[];
+
+    readonly formula: string;
 
     /** IDataSkill.damage.type  */
-    applyType: SParameterEffectApplyType;
+    readonly applyType: SParameterEffectApplyType;
 
-    isDrain: boolean;
+    readonly isDrain: boolean;
 
     /** 分散度 */
-    variance: number;
+    readonly variance: number;
 
     fixedDamage: number | undefined;
 
-    private _valid: boolean;
 
     public constructor(data: DParameterQualifying) {
         this.qualifying = data;
@@ -373,7 +428,7 @@ export class SParameterEffect {
 }
 
 
-
+/*
 export class SEffectModifier {
     private _data: DEffect;
     private _parameterEffects2: SParameterEffect[];
@@ -437,6 +492,7 @@ export class SEffectModifier {
         return this._data.buffQualifying;
     }
 }
+*/
 
 /**
  * 成否判定後、実際にパラメータやステートに変化を与える
@@ -450,7 +506,7 @@ export class SEffectApplyer {
         this._rand = rand;
     }
 
-    public apply(cctx: SCommandContext, modifier: SEffectModifier, target: LEntity): void {
+    public apply(cctx: SCommandContext, modifier: SEffect, target: LEntity): void {
         const result =  target._effectResult;
 
         const sourceSkillId = this._effect.fact().sourceSkill();
@@ -866,6 +922,7 @@ export class SEffectApplyer {
     }
 
     // Game_Action.prototype.itemEffectAddState
+    // TODO: SAddStateSpecialEffect.itemEffectAddState にまとめたい
     private itemEffectAddState(target: LEntity, effect: IDataEffect, result: LEffectResult): void {
         if (effect.dataId === 0) {
             // ID=0 は "通常攻撃" という特殊な状態付加となる。
@@ -876,6 +933,7 @@ export class SEffectApplyer {
     }
 
     // Game_Action.prototype.itemEffectAddNormalState
+    // TODO: SAddStateSpecialEffect.itemEffectAddNormalState にまとめたい
     private itemEffectAddNormalState(target: LEntity, effect: IDataEffect, result: LEffectResult): void {
         const stateData = MRData.states[effect.dataId];
 
@@ -900,6 +958,7 @@ export class SEffectApplyer {
         }
     }
 
+    // TODO: SAddStateSpecialEffect.addState にまとめたい
     private addState(target: LEntity, stateId: DStateId, result: LEffectResult) {
         target.addState(stateId);
         result.makeSuccess();

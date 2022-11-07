@@ -11,7 +11,7 @@ import { DEquipment, DItem } from "./DItem";
 import { DPrefab, DPrefabId } from "./DPrefab";
 import { DStateId } from "./DState";
 import { DTroopId } from "./DTroop";
-import { DTrait, ITraitProps } from "./DTraits";
+import { DTrait, ITraitProps } from "./DTrait";
 import { DFactionId, MRData } from "./MRData";
 import { DValidationHelper } from "./DValidationHelper";
 
@@ -433,10 +433,6 @@ export class DEntity {
             for (const t of props.selfTraits) {
                 this.selfTraits.push(DTrait.makeTraitData(t));
             }
-        }
-
-        if (this.entity.key == "kEntity_ドラゴンキラーA") {
-            console.log("");
         }
 
         if (props.equipmentTraits) {

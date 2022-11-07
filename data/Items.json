@@ -1002,7 +1002,7 @@
     "iconIndex": 181,
     "itypeId": 1,
     "name": "[Test]毒草",
-    "note": "<MR-Type: Entity>\n<MR-Category: kEntityCategory_Grass>\n<MR-Key: kEntity_毒草B>\n<MR-Prefab: kPrefab_毒草B>\n<MR-EmittorKey: kEmittor_毒草B>\n<MR-EffectKey: kEffect_毒草B>\n",
+    "note": "<MR-Type: Entity>\n<MR-Category: kEntityCategory_Grass>\n<MR-Key: kEntity_毒草B>\n<MR-Prefab: kPrefab_毒草B>\n<MR-EmittorKey: kEmittor_毒草B>\n<MR-EffectKey: kEffect_毒草B_Main>\n",
     "occasion": 0,
     "price": 100,
     "repeats": 1,

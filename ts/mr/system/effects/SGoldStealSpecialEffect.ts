@@ -7,7 +7,7 @@ import { LEntity } from "ts/mr/lively/LEntity";
 import { LRandom } from "ts/mr/lively/LRandom";
 import { UName } from "ts/mr/utility/UName";
 import { SCommandContext } from "../SCommandContext";
-import { SEffectModifier } from "../SEffectApplyer";
+import { SEffect } from "../SEffectApplyer";
 import { SEntityFactory } from "../SEntityFactory";
 import { SSpecialEffect } from "./SSpecialEffect";
 import { SItemStealSpecialEffect } from "./SItemStealSpecialEffect";
@@ -16,7 +16,7 @@ import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
 
 export class SGoldStealSpecialEffect extends SSpecialEffect {
 
-    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
+    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void {
 
         const gold = this.pickGold(target, cctx.random());
         if (!gold) {

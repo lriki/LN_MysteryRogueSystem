@@ -23,12 +23,12 @@ MR.db.entities = {
             Trait({ code: "SurvivalParameterLossRate", parameterKey: "fp", value: 0.5 }),
         ],
         selfTraits: [
-            Trait({ code: "ParameterDamageRate", parameterKey: "up", value: 0.0 }),
+            Trait({ code: "ParameterDamageRate", parameterKey: "upg", value: 0.0 }),
         ],
         // NOTE:
         // - SurvivalParameterLossRate は、ターン経過で減少する FP の減少率を 0.5 にします。
         //   これを equipmentTraits へ追加することで、盾を装備している Entity、つまりプレイヤーユニットの FP へこの効果を適用します。
-        // - ParameterDamageRate は、up(UpgradeValue=強化値) へのダメージ (つまりサビ) を 0 (無効化) にします。
+        // - ParameterDamageRate は、upg(UpgradeValue=強化値) へのダメージ (つまりサビ) を 0 (無効化) にします。
         //   これを selfTraits へ追加することで、この盾自身へ効果を適用します。
     }),
     //--------------------------------------------------------------------------
@@ -44,7 +44,7 @@ MR.db.entities = {
     //--------------------------------------------------------------------------
     "kEntity_金の盾A": Entity({
         selfTraits: [
-            Trait({ code: "ParameterDamageRate", parameterKey: "up", value: 0.0 }),
+            Trait({ code: "ParameterDamageRate", parameterKey: "upg", value: 0.0 }),
         ],
     }),
     //==========================================================================

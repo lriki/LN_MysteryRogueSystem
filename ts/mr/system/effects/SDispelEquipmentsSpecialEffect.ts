@@ -4,14 +4,14 @@ import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBeh
 import { LEffectResult } from "ts/mr/lively/LEffectResult";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { SCommandContext } from "../SCommandContext";
-import { SEffectModifier } from "../SEffectApplyer";
+import { SEffect } from "../SEffectApplyer";
 import { SSpecialEffect } from "./SSpecialEffect";
 
 /**
  * @deprecated
  */
 export class SDispelEquipmentsSpecialEffect extends SSpecialEffect {
-    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
+    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void {
         const equipmentUser = target.findEntityBehavior(LEquipmentUserBehavior);
         if (equipmentUser) {
             const items = equipmentUser.equippedItemEntities();

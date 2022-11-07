@@ -277,7 +277,7 @@ export interface DParamBuff {
 
 
 export interface DEffectConditions {
-    kindId: DEntityCategoryId;
+    targetCategoryId: DEntityCategoryId;
 
     /** 判定する RaceId。 0 の場合は対象外。 */
     raceId: DRaceId;
@@ -368,7 +368,7 @@ export class DEffect {
         //    length: -1,
         //    projectilePrefabKey: "" };
         this.subEntityFindKey = { kindId: 0, key: undefined };
-        this.conditions = { kindId: 0, raceId: 0, applyRating: 0, fallback: false };
+        this.conditions = { targetCategoryId: 0, raceId: 0, applyRating: 0, fallback: false };
         this.critical = false;
         this.successRate = 100;
         this.hitType = DEffectHitType.Certain;
@@ -384,20 +384,20 @@ export class DEffect {
     }
 
     public applyProps(props: IEffectProps): void {
-        if (props.conditions) {
-            if (props.conditions.targetCategoryKey) {
-                this.conditions.kindId = MRData.getEntityCategory(props.conditions.targetCategoryKey).id;
-            }
-            if (props.conditions.targetRaceKey) {
-                this.conditions.raceId = MRData.getRace(props.conditions.targetRaceKey).id;
-            }
-            if (props.conditions.rating) {
-                this.conditions.applyRating = props.conditions.rating;
-            }
-            if (props.conditions.fallback) {
-                this.conditions.fallback = props.conditions.fallback;
-            }
-        }
+        // if (props.conditions) {
+        //     if (props.conditions.targetCategoryKey) {
+        //         this.conditions.targetCategoryId = MRData.getEntityCategory(props.conditions.targetCategoryKey).id;
+        //     }
+        //     if (props.conditions.targetRaceKey) {
+        //         this.conditions.raceId = MRData.getRace(props.conditions.targetRaceKey).id;
+        //     }
+        //     if (props.conditions.rating) {
+        //         this.conditions.applyRating = props.conditions.rating;
+        //     }
+        //     if (props.conditions.fallback) {
+        //         this.conditions.fallback = props.conditions.fallback;
+        //     }
+        // }
 
         this.critical = props.critical ?? this.critical;
         this.flavorEffect = props.flavorEffect ? new DFlavorEffect(props.flavorEffect) : this.flavorEffect;
@@ -493,7 +493,7 @@ export class DEffect {
     }
 
     public hasCondition(): boolean {
-        if (this.conditions.kindId != 0) return true;
+        if (this.conditions.targetCategoryId != 0) return true;
         if (this.conditions.raceId != 0) return true;
         if (this.conditions.applyRating != 0) return true;
         if (this.conditions.fallback) return true;
@@ -545,6 +545,15 @@ export class DEmittorCost {
     
 }
 
+/**
+ * SEffectContext のエントリポイントに入力する情報。
+ * 
+ * Emittor の発動条件をクリアした後の、ひとつの「効果適用」に関係する様々な Effect をまとめるクラス。
+ * このクラスの情報は Emittor に統合することも検討したが、 Effect 適用周りのコードは複雑なので、
+ * あえて分離し、EffectContext 内の処理では Emittor の情報を参照しないようにした。
+ * 
+ * 新種道具を作るときは、これが効果の1単位となる。
+ */
 export class DEffectSet {
 
     /** 使用者に対して与える効果 */
@@ -557,47 +566,47 @@ export class DEffectSet {
     succeededSelfEffect: DEffect | undefined;
     
     /** 対象に対して与える効果。matchConditions を判定して、最終的に適用する Effect を決める */
-    effectIds: DEffectId[];
+    targetEffectIds: DEffectId[];
 
     public constructor(sourceKey: string) {
         this.selfEffectId = MRData.newEffect(sourceKey).id;
-        this.effectIds = [];
+        this.targetEffectIds = [];
     }
 
     public get selfEffect(): DEffect {
         return MRData.effects[this.selfEffectId];
     }
     
-    public effects(): readonly DEffect[] {
-        return this.effectIds.map(x => MRData.effects[x]);
+    public targetEffects(): readonly DEffect[] {
+        return this.targetEffectIds.map(x => MRData.effects[x]);
     }
 
-    public effect(index: number): DEffect {
-        return MRData.effects[this.effectIds[index]];
+    public targetEffect(index: number): DEffect {
+        return MRData.effects[this.targetEffectIds[index]];
     }
 
-    public clearEffects(): void {
-        this.effectIds = [];
+    public clearTargetEffects(): void {
+        this.targetEffectIds = [];
     }
 
-    public setEffect(index: number, value: DEffect): void {
-        this.effectIds[index] = value.id;
+    public setTargetEffect(index: number, value: DEffect): void {
+        this.targetEffectIds[index] = value.id;
     }
 
-    public addEffect(value: DEffect): void {
-        this.effectIds.push(value.id);
+    public addTargetEffect(value: DEffect): void {
+        this.targetEffectIds.push(value.id);
     }
 
     public copyFrom(src: DEffectSet): void {
         this.selfEffect.copyFrom(src.selfEffect);
-        this.effectIds = [];
-        for (const id of src.effectIds) {
-            this.effectIds.push(MRData.cloneEffect(MRData.effects[id]).id);
+        this.targetEffectIds = [];
+        for (const id of src.targetEffectIds) {
+            this.targetEffectIds.push(MRData.cloneEffect(MRData.effects[id]).id);
         }
     }
 
     public hitType(): DEffectHitType {
-        return this.effect(0).hitType;
+        return this.targetEffect(0).hitType;
     }
 }
 

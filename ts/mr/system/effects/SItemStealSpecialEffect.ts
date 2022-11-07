@@ -9,12 +9,12 @@ import { UAction } from "ts/mr/utility/UAction";
 import { UName } from "ts/mr/utility/UName";
 import { USearch } from "ts/mr/utility/USearch";
 import { SCommandContext } from "../SCommandContext";
-import { SEffectModifier } from "../SEffectApplyer";
+import { SEffect } from "../SEffectApplyer";
 import { SSpecialEffect } from "./SSpecialEffect";
 
 export class SItemStealSpecialEffect extends SSpecialEffect {
 
-    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
+    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void {
         result.makeSuccess();
 
         // TODO: これだとアイテム化けに対応できない

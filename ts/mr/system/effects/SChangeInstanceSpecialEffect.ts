@@ -7,12 +7,12 @@ import { LEntity } from "ts/mr/lively/LEntity";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { USpawner } from "ts/mr/utility/USpawner";
 import { SCommandContext } from "../SCommandContext";
-import { SEffectModifier } from "../SEffectApplyer";
+import { SEffect } from "../SEffectApplyer";
 import { SSpecialEffect } from "./SSpecialEffect";
 
 export class SChangeInstanceSpecialEffect extends SSpecialEffect {
 
-    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
+    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void {
         const entityData = (() => {
             if (data.entityId)
                 return MRData.entities[data.entityId];

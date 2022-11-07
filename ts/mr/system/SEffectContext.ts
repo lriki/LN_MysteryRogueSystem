@@ -10,7 +10,7 @@ import { SCommandContext } from "./SCommandContext";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { LRandom } from "ts/mr/lively/LRandom";
 import { DStateId } from "ts/mr/data/DState";
-import { SEffect, SEffectApplyer, SEffectorFact, SEffectModifier } from "./SEffectApplyer";
+import { SEffect, SEffectApplyer, SEffectorFact } from "./SEffectApplyer";
 import { onEffectResult } from "../lively/internal";
 import { SCommandResponse } from "./SCommand";
 import { LObject, LObjectType } from "../lively/LObject";
@@ -198,35 +198,35 @@ export class SEffectContext {
         return cctx.postCall(() => {});
     }
 
-    public selectEffects(effectList: SEffect[], rand: LRandom): SEffect[] {
-        const ratingMax = Math.max(...effectList.map(a => a.data().conditions.applyRating ?? 0));
-        if (ratingMax > 0) {
-            const effect = this.selectEffect(effectList.filter(x => !!x.data().conditions.applyRating), rand);
-            return effect ? [effect] : [];
-        }
-        else {
-            return effectList;
-        }
-    };
+    // public selectEffects(effectList: SEffect[], rand: LRandom): SEffect[] {
+    //     const ratingMax = Math.max(...effectList.map(a => a.data().conditions.applyRating ?? 0));
+    //     if (ratingMax > 0) {
+    //         const effect = this.selectEffect(effectList.filter(x => !!x.data().conditions.applyRating), rand);
+    //         return effect ? [effect] : [];
+    //     }
+    //     else {
+    //         return effectList;
+    //     }
+    // };
 
-    public selectEffect(effectList: SEffect[], rand: LRandom): SEffect | undefined {
-        const ratingMax = Math.max(...effectList.map(a => a.data().conditions.applyRating ?? 0));
-        const ratingZero = ratingMax - 10;//- 3;
-        const sum = effectList.reduce((r, a) => r + (a.data().conditions.applyRating ?? 0) - ratingZero, 0);
-        if (sum > 0) {
-            let value = rand.nextIntWithMax(sum);
-            for (const action of effectList) {
-                if (!action.data().conditions.applyRating) continue;
+    // public selectEffect(effectList: SEffect[], rand: LRandom): SEffect | undefined {
+    //     const ratingMax = Math.max(...effectList.map(a => a.data().conditions.applyRating ?? 0));
+    //     const ratingZero = ratingMax - 10;//- 3;
+    //     const sum = effectList.reduce((r, a) => r + (a.data().conditions.applyRating ?? 0) - ratingZero, 0);
+    //     if (sum > 0) {
+    //         let value = rand.nextIntWithMax(sum);
+    //         for (const action of effectList) {
+    //             if (!action.data().conditions.applyRating) continue;
 
-                value -= (action.data().conditions.applyRating ?? 0) - ratingZero;
-                if (value < 0) {
-                    return action;
-                }
-            }
-        } else {
-            return undefined;
-        }
-    }
+    //             value -= (action.data().conditions.applyRating ?? 0) - ratingZero;
+    //             if (value < 0) {
+    //                 return action;
+    //             }
+    //         }
+    //     } else {
+    //         return undefined;
+    //     }
+    // }
 
     // private applyEffectToTarget(cctx: SCommandContext, effect: SEffect, target: LEntity, animationTarget: LEntity): void {
 
@@ -325,7 +325,7 @@ export class SEffectContext {
             // 実際にダメージが発生したかではなく、ダメージを与えようとしたか (回復ではないか) で判断する。
             {
                 const removeStates: DStateId[] = [];
-                for (const p of effect.targetModifier().parameterEffects2()) {
+                for (const p of effect.parameterEffects2()) {
                     if (p && !p.isRecover()) {
                         target.iterateStates(s => {
                             if (s.checkRemoveAtDamageTesting(p.paramId)) {
@@ -459,13 +459,13 @@ export class SEffectContext {
             if (result != SCommandResponse.Pass) return; 
         }
 
-        if (effect.targetModifier().hasParamDamage()) {
+        if (effect.hasParamDamage()) {
             const criRate = effect.criRate(target) * 100;
             result.critical = (this._rand.nextIntWithMax(100) < criRate);
         }
         
         const applyer = new SEffectApplyer(effect, this._rand);
-        applyer.apply(cctx, effect.targetModifier(), target);
+        applyer.apply(cctx, effect, target);
         applyer.apply(cctx, this._effectorFact.selfModifier(), this._effectorFact.subject());
         if (target._effectResult.success) {
             const effect2 = this._effectorFact.succeededSelfModifier();

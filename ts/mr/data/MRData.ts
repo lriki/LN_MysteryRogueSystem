@@ -14,7 +14,7 @@ import { DAbility } from "./DAbility";
 import { DMonsterHouseType } from "./DMonsterHouse";
 import { DTemplateMap } from "./DTemplateMap";
 import { DPrefab } from "./DPrefab";
-import { DTrait } from "./DTraits";
+import { DTrait } from "./DTrait";
 import { DParameter } from "./DParameter";
 import { DEntity, DEntityId } from "./DEntity";
 import { DTroop } from "./DTroop";

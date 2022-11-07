@@ -125,8 +125,8 @@ export class UEffect {
             return false;
         }
 
-        if (data.conditions.kindId != 0) {
-            if (data.conditions.kindId != target.kindDataId()) {
+        if (data.conditions.targetCategoryId != 0) {
+            if (data.conditions.targetCategoryId != target.kindDataId()) {
                 return false;
             }
         }

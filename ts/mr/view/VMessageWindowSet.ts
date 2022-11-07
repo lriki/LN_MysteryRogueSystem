@@ -61,6 +61,10 @@ export class VMessageWindowSet {
 
     }
 
+    public get messageLogWindow(): VMessageLogWindow {
+        return this._logWindow;
+    }
+
     private messageWindowRect(): Rectangle {
         const padding = 30;
         const ww = Graphics.boxWidth;

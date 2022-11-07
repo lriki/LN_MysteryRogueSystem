@@ -6,12 +6,12 @@ import { MovingMethod } from "ts/mr/lively/LMap";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { UMovement } from "ts/mr/utility/UMovement";
 import { SCommandContext } from "../SCommandContext";
-import { SEffectModifier } from "../SEffectApplyer";
+import { SEffect } from "../SEffectApplyer";
 import { SSpecialEffect } from "./SSpecialEffect";
 
 export class SDivisionSpecialEffect extends SSpecialEffect {
 
-    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void {
+    public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void {
         const block = MRLively.map.block(target.mx, target.my);
 
         result.makeSuccess();

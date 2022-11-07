@@ -82,6 +82,33 @@ MR.db.effects = {
             }),
         ]
     }),
+    //--------------------------------------------------------------------------
+    "kEffect_毒草B_Main": Effect({
+        parameterDamages: [
+            ParameterDamage({           // HP に 5 ダメージ
+                parameterKey: "hp",
+                formula: "5",
+            }),
+            ParameterDamage({           // POW に 1 ダメージ
+                parameterKey: "pow",
+                formula: "1",
+            }),
+        ],
+        specialEffects:[
+            SpecialEffect({             // ステート解除
+                code: "RemoveState",
+                stateKey: "kState_UTまどわし",
+                chance: 1.0,
+            }),
+            SpecialEffect({             // ステート解除
+                code: "RemoveState",
+                stateKey: "kState_UT混乱",
+                chance: 1.0,
+            }),
+        ]
+    }),
+
+    
     //==========================================================================
     // 食料
     //==========================================================================

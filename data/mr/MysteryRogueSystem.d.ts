@@ -698,6 +698,7 @@ declare module 'MysteryRogueSystem/test/TestEnv' {
       onEntityLeavedMap(entity: LEntity): void;
       onEntityReEnterMap(entity: LEntity): void;
       onSetLandExitResult(result: LandExitResult): void;
+      onEquipmentChanged(entity: LEntity): void;
   }
 
 }
@@ -1612,7 +1613,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
       turn: number;
   }
   export interface DEffectConditions {
-      kindId: DEntityCategoryId;
+      targetCategoryId: DEntityCategoryId;
       /** 判定する RaceId。 0 の場合は対象外。 */
       raceId: DRaceId;
       applyRating: number;
@@ -1692,6 +1693,13 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
       constructor();
       setParamCost(source: DSkillCostSource, paramId: DParameterId, paramCost: DParamCost): void;
   }
+  /**
+   * SEffectContext のエントリポイントに入力する情報。
+   *
+   * Emittor の発動条件をクリアした後の、ひとつの「効果適用」に関係する様々な Effect をまとめるクラス。
+   * このクラスの情報は Emittor に統合することも検討したが、 Effect 適用周りのコードは複雑なので、
+   * あえて分離し、EffectContext 内の処理では Emittor の情報を参照しないようにした。
+   */
   export class DEffectSet {
       /** 使用者に対して与える効果 */
       selfEffectId: DEffectId;
@@ -1701,14 +1709,14 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
        */
       succeededSelfEffect: DEffect | undefined;
       /** 対象に対して与える効果。matchConditions を判定して、最終的に適用する Effect を決める */
-      effectIds: DEffectId[];
+      targetEffectIds: DEffectId[];
       constructor(sourceKey: string);
       get selfEffect(): DEffect;
-      effects(): readonly DEffect[];
-      effect(index: number): DEffect;
-      clearEffects(): void;
-      setEffect(index: number, value: DEffect): void;
-      addEffect(value: DEffect): void;
+      targetEffects(): readonly DEffect[];
+      targetEffect(index: number): DEffect;
+      clearTargetEffects(): void;
+      setTargetEffect(index: number, value: DEffect): void;
+      addTargetEffect(value: DEffect): void;
       copyFrom(src: DEffectSet): void;
       hitType(): DEffectHitType;
   }
@@ -1902,7 +1910,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEntity' {
   import { DPrefab, DPrefabId } from "MysteryRogueSystem/ts/mr/data/DPrefab";
   import { DStateId } from "MysteryRogueSystem/ts/mr/data/DState";
   import { DTroopId } from "MysteryRogueSystem/ts/mr/data/DTroop";
-  import { ITraitProps } from "MysteryRogueSystem/ts/mr/data/DTraits";
+  import { ITraitProps } from "MysteryRogueSystem/ts/mr/data/DTrait";
   import { DFactionId } from "MysteryRogueSystem/ts/mr/data/MRData";
   export type DEntityId = number;
   export enum DIdentificationDifficulty {
@@ -2440,6 +2448,9 @@ declare module 'MysteryRogueSystem/ts/mr/data/DItem' {
       /** ID (0 is Invalid). */
       id: DItemDataId;
       entityId: DEntityId;
+      rmmzItemId: number;
+      rmmzWeaponId: number;
+      rmmzArmorId: number;
       constructor(id: DItemDataId, entityId: DEntityId);
       entityData(): DEntity;
   }
@@ -3021,19 +3032,35 @@ declare module 'MysteryRogueSystem/ts/mr/data/DSpecialEffect' {
   }
   export interface DSpecialEffectRef {
       specialEffectId: DSpecialEffectId;
-      entityId?: DEntityId;
-      dataId?: number;
-      value?: any;
+      entityId: DEntityId;
+      dataId: number;
+      value: number;
   }
   export interface ISpecialEffectProps_RandomWarp {
       code: "RandomWarp";
+  }
+  /** ステート付加 */
+  export interface ISpecialEffectProps_AddState {
+      code: "AddState";
+      /** ステートの Key. */
+      stateKey: string;
+      /** 成功率 (1.0 は 100%) */
+      chance: number;
+  }
+  export interface ISpecialEffectProps_RemoveState {
+      /** ステート解除 */
+      code: "RemoveState";
+      /** ステートの Key. */
+      stateKey: string;
+      /** 成功率 (1.0 は 100%) */
+      chance: number;
   }
   export interface ISpecialEffectProps_Unknown {
       code: "Unknown";
       dataKey: any;
       value: any;
   }
-  export type ISpecialEffectProps = ISpecialEffectProps_RandomWarp | ISpecialEffectProps_Unknown;
+  export type ISpecialEffectProps = ISpecialEffectProps_RandomWarp | ISpecialEffectProps_AddState | ISpecialEffectProps_RemoveState | ISpecialEffectProps_Unknown;
 
 }
 declare module 'MysteryRogueSystem/ts/mr/data/DState' {
@@ -3447,7 +3474,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DTextManager' {
   }
 
 }
-declare module 'MysteryRogueSystem/ts/mr/data/DTraits' {
+declare module 'MysteryRogueSystem/ts/mr/data/DTrait' {
   export type DTraitId = number;
   /**
    * コアスクリプトの Trait は number だけで識別されるものであるが、
@@ -3649,7 +3676,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/importers/DSetupScripEvaluator' {
   import { IEntityTemplateProps } from "MysteryRogueSystem/ts/mr/data/DEntityTemplate";
   import { IEntityCategoryProps } from "MysteryRogueSystem/ts/mr/data/DEntityCategory";
   import { ISpecialEffectProps } from "MysteryRogueSystem/ts/mr/data/DSpecialEffect";
-  import { ITraitProps } from "MysteryRogueSystem/ts/mr/data/DTraits";
+  import { ITraitProps } from "MysteryRogueSystem/ts/mr/data/DTrait";
   global {
       function EntityCategory(props: IEntityCategoryProps): IEntityCategoryProps;
       function Effect(props: IEffectProps): IEffectProps;
@@ -3792,6 +3819,8 @@ declare module 'MysteryRogueSystem/ts/mr/data/MRBasics' {
       restartFloor: DSpecialEffectId;
       clarification: DSpecialEffectId;
       division: DSpecialEffectId;
+      addState: DSpecialEffectId;
+      removeState: DSpecialEffectId;
       removeStatesByIntentions: DSpecialEffectId;
       performeSkill: DSpecialEffectId;
   }
@@ -3844,7 +3873,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/MRData' {
   import { DMonsterHouseType } from "MysteryRogueSystem/ts/mr/data/DMonsterHouse";
   import { DTemplateMap } from "MysteryRogueSystem/ts/mr/data/DTemplateMap";
   import { DPrefab } from "MysteryRogueSystem/ts/mr/data/DPrefab";
-  import { DTrait } from "MysteryRogueSystem/ts/mr/data/DTraits";
+  import { DTrait } from "MysteryRogueSystem/ts/mr/data/DTrait";
   import { DParameter } from "MysteryRogueSystem/ts/mr/data/DParameter";
   import { DEntity, DEntityId } from "MysteryRogueSystem/ts/mr/data/DEntity";
   import { DTroop } from "MysteryRogueSystem/ts/mr/data/DTroop";
@@ -4484,7 +4513,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/predefineds/DBasicStates' {
 
 }
 declare module 'MysteryRogueSystem/ts/mr/data/predefineds/DBasicTraits' {
-  import { DTraitId } from "MysteryRogueSystem/ts/mr/data/DTraits";
+  import { DTraitId } from "MysteryRogueSystem/ts/mr/data/DTrait";
   export interface DBasicTraits {
       TRAIT_ELEMENT_RATE: DTraitId;
       TRAIT_DEBUFF_RATE: DTraitId;
@@ -4646,6 +4675,12 @@ declare module 'MysteryRogueSystem/ts/mr/data/predefineds/DBasicTraits' {
        * value: 付加する DStateId
        */
       DeathVulnerableElement: DTraitId;
+      /**
+       * パラメータの Actual を強制的に指定した値にする。
+       * dataId: DParameterId
+       * value: Actual 値
+       */
+      ForceParameter: DTraitId;
   }
 
 }
@@ -5633,6 +5668,7 @@ declare module 'MysteryRogueSystem/ts/mr/lively/behaviors/LActorBehavior' {
       clone(newOwner: LEntity): LBehavior;
       constructor();
       onAttached(self: LEntity): void;
+      get rmmzActorId(): number;
       actor(): DActor;
       currentClass(): DClass;
       initSkills(): void;
@@ -6115,6 +6151,7 @@ declare module 'MysteryRogueSystem/ts/mr/lively/behaviors/LEquipmentUserBehavior
       equipOffShortcut(cctx: SCommandContext, itemEntity: LEntity): void;
       onRemoveItemFromInventory(item: LEntity): void;
       private refreshSlots;
+      private onEquipmentChanged;
   }
 
 }
@@ -7204,7 +7241,7 @@ declare module 'MysteryRogueSystem/ts/mr/lively/LEntity' {
   import { LMinimapMarkerClass, LPriceInfo, LReaction, LRoomId } from "MysteryRogueSystem/ts/mr/lively/LCommon";
   import { LShopArticle } from "MysteryRogueSystem/ts/mr/lively/LShopArticle";
   import { DEntityCategory } from "MysteryRogueSystem/ts/mr/data/DEntityCategory";
-  import { DTraitId } from "MysteryRogueSystem/ts/mr/data/DTraits";
+  import { DTraitId } from "MysteryRogueSystem/ts/mr/data/DTrait";
   import { SActivityContext } from "MysteryRogueSystem/ts/mr/system/SActivityContext";
   import { LSchedulingResult } from "MysteryRogueSystem/ts/mr/lively/LSchedulingResult";
   import { LDeathResult } from "MysteryRogueSystem/ts/mr/lively/LDeathResult";
@@ -7378,6 +7415,7 @@ declare module 'MysteryRogueSystem/ts/mr/lively/LEntity' {
       traitsPi(code: number, id: number): number;
       traitsSum(code: number, id: number): number;
       traitsSumOrDefault(code: number, id: number, defaultValue: number): number;
+      traitMaxOrDefault<T>(code: number, dataId: number, defaultValue: T): number | T;
       private traitsSumAll;
       private traitsSet;
       xparam(xparamId: DXParamId): number;
@@ -8975,6 +9013,7 @@ declare module 'MysteryRogueSystem/ts/mr/rmmz/RMMZIntegration' {
       onEntityLeavedMap(entity: LEntity): void;
       onEntityReEnterMap(entity: LEntity): void;
       onSetLandExitResult(result: LandExitResult): void;
+      onEquipmentChanged(entity: LEntity): void;
   }
 
 }
@@ -9282,15 +9321,6 @@ declare module 'MysteryRogueSystem/ts/mr/system/dialogs/SMainMenuDialog' {
   }
 
 }
-declare module 'MysteryRogueSystem/ts/mr/system/dialogs/SManualDecisionDialog' {
-  import { SDialogContext } from "ts/mr/system/SDialogContext";
-  import { SDialog } from "MysteryRogueSystem/ts/mr/system/SDialog";
-  export class SManualActionDialog extends SDialog {
-      dashingEntry: boolean;
-      onUpdate(context: SDialogContext): void;
-  }
-
-}
 declare module 'MysteryRogueSystem/ts/mr/system/dialogs/SNicknameDialog' {
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SDialog } from "MysteryRogueSystem/ts/mr/system/SDialog";
@@ -9300,6 +9330,15 @@ declare module 'MysteryRogueSystem/ts/mr/system/dialogs/SNicknameDialog' {
       constructor(actorEntity: LEntity, targetItem: LEntity);
       get item(): LEntity;
       setNickname(name: string): void;
+  }
+
+}
+declare module 'MysteryRogueSystem/ts/mr/system/dialogs/SPlayerDialog' {
+  import { SDialogContext } from "ts/mr/system/SDialogContext";
+  import { SDialog } from "MysteryRogueSystem/ts/mr/system/SDialog";
+  export class SPlayerDialog extends SDialog {
+      dashingEntry: boolean;
+      onUpdate(context: SDialogContext): void;
   }
 
 }
@@ -9349,15 +9388,32 @@ declare module 'MysteryRogueSystem/ts/mr/system/dialogs/SWarehouseWithdrawDialog
   }
 
 }
+declare module 'MysteryRogueSystem/ts/mr/system/effects/SAddStateSpecialEffect' {
+  import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
+  import { DStateId } from "ts/mr/data/DState";
+  import { LEffectResult } from "ts/mr/lively/LEffectResult";
+  import { LEntity } from "ts/mr/lively/LEntity";
+  import { LRandom } from "ts/mr/lively/LRandom";
+  import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
+  import { SEffect } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
+  import { SSpecialEffect } from "MysteryRogueSystem/ts/mr/system/effects/SSpecialEffect";
+  export class SAddStateSpecialEffect extends SSpecialEffect {
+      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void;
+      static itemEffectAddState(target: LEntity, effect: SEffect, effectRef: DSpecialEffectRef, rand: LRandom, result: LEffectResult): void;
+      static itemEffectAddNormalState(target: LEntity, effect: SEffect, effectRef: DSpecialEffectRef, rand: LRandom, result: LEffectResult): void;
+      static addState(target: LEntity, stateId: DStateId, result: LEffectResult): void;
+  }
+
+}
 declare module 'MysteryRogueSystem/ts/mr/system/effects/SChangeInstanceSpecialEffect' {
   import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
-  import { SEffectModifier } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
+  import { SEffect } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
   import { SSpecialEffect } from "MysteryRogueSystem/ts/mr/system/effects/SSpecialEffect";
   export class SChangeInstanceSpecialEffect extends SSpecialEffect {
-      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void;
+      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void;
   }
 
 }
@@ -9366,10 +9422,10 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/SClarificationSpecialEff
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
-  import { SEffectModifier } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
+  import { SEffect } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
   import { SSpecialEffect } from "MysteryRogueSystem/ts/mr/system/effects/SSpecialEffect";
   export class SClarificationSpecialEffect extends SSpecialEffect {
-      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void;
+      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void;
   }
 
 }
@@ -9378,13 +9434,13 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/SDispelEquipmentsSpecial
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
-  import { SEffectModifier } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
+  import { SEffect } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
   import { SSpecialEffect } from "MysteryRogueSystem/ts/mr/system/effects/SSpecialEffect";
   /**
    * @deprecated
    */
   export class SDispelEquipmentsSpecialEffect extends SSpecialEffect {
-      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void;
+      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void;
       testApply(items: LEntity[]): boolean;
   }
 
@@ -9394,22 +9450,22 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/SDivisionSpecialEffect' 
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
-  import { SEffectModifier } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
+  import { SEffect } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
   import { SSpecialEffect } from "MysteryRogueSystem/ts/mr/system/effects/SSpecialEffect";
   export class SDivisionSpecialEffect extends SSpecialEffect {
-      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void;
+      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void;
   }
 
 }
 declare module 'MysteryRogueSystem/ts/mr/system/effects/SGoldStealSpecialEffect' {
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
-  import { SEffectModifier } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
+  import { SEffect } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
   import { SSpecialEffect } from "MysteryRogueSystem/ts/mr/system/effects/SSpecialEffect";
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
   export class SGoldStealSpecialEffect extends SSpecialEffect {
-      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void;
+      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void;
       private pickGold;
   }
 
@@ -9419,10 +9475,10 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/SItemStealSpecialEffect'
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
-  import { SEffectModifier } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
+  import { SEffect } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
   import { SSpecialEffect } from "MysteryRogueSystem/ts/mr/system/effects/SSpecialEffect";
   export class SItemStealSpecialEffect extends SSpecialEffect {
-      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void;
+      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void;
       private pickItem;
       static postWarpBySteal(cctx: SCommandContext, performer: LEntity, itemName: string): void;
   }
@@ -9433,10 +9489,10 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/SLevelDownSpecialEffect'
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
-  import { SEffectModifier } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
+  import { SEffect } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
   import { SSpecialEffect } from "MysteryRogueSystem/ts/mr/system/effects/SSpecialEffect";
   export class SLevelDownSpecialEffect extends SSpecialEffect {
-      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void;
+      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void;
   }
 
 }
@@ -9445,10 +9501,10 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/SPerformeSkillSpecialEff
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
-  import { SEffectModifier } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
+  import { SEffect } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
   import { SSpecialEffect } from "MysteryRogueSystem/ts/mr/system/effects/SSpecialEffect";
   export class SPerformeSkillSpecialEffect extends SSpecialEffect {
-      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void;
+      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void;
   }
 
 }
@@ -9457,10 +9513,22 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/SRemoveStatesByIntention
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
-  import { SEffectModifier } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
+  import { SEffect } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
   import { SSpecialEffect } from "MysteryRogueSystem/ts/mr/system/effects/SSpecialEffect";
   export class SRemoveStatesByIntentionsSpecialEffect extends SSpecialEffect {
-      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void;
+      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void;
+  }
+
+}
+declare module 'MysteryRogueSystem/ts/mr/system/effects/SRemoveStateSpecialEffect' {
+  import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
+  import { LEffectResult } from "ts/mr/lively/LEffectResult";
+  import { LEntity } from "ts/mr/lively/LEntity";
+  import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
+  import { SEffect } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
+  import { SSpecialEffect } from "MysteryRogueSystem/ts/mr/system/effects/SSpecialEffect";
+  export class SRemoveStateSpecialEffect extends SSpecialEffect {
+      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void;
   }
 
 }
@@ -9469,21 +9537,21 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/SRestartFloorSpecialEffe
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
-  import { SEffectModifier } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
+  import { SEffect } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
   import { SSpecialEffect } from "MysteryRogueSystem/ts/mr/system/effects/SSpecialEffect";
   export class SRestartFloorSpecialEffect extends SSpecialEffect {
-      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void;
+      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void;
   }
 
 }
 declare module 'MysteryRogueSystem/ts/mr/system/effects/SSpecialEffect' {
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
-  import { SEffectModifier } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
+  import { SEffect } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
   export abstract class SSpecialEffect {
-      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void;
+      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void;
   }
 
 }
@@ -9505,10 +9573,10 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/SStumbleSpecialEffect' {
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
-  import { SEffectModifier } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
+  import { SEffect } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
   import { SSpecialEffect } from "MysteryRogueSystem/ts/mr/system/effects/SSpecialEffect";
   export class SStumbleSpecialEffect extends SSpecialEffect {
-      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void;
+      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void;
   }
 
 }
@@ -9517,10 +9585,10 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/STransferToLowerFloorSpe
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
-  import { SEffectModifier } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
+  import { SEffect } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
   import { SSpecialEffect } from "MysteryRogueSystem/ts/mr/system/effects/SSpecialEffect";
   export class STransferToLowerFloorSpecialEffect extends SSpecialEffect {
-      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void;
+      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void;
   }
 
 }
@@ -9529,10 +9597,10 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/STransferToNextFloorSpec
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
-  import { SEffectModifier } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
+  import { SEffect } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
   import { SSpecialEffect } from "MysteryRogueSystem/ts/mr/system/effects/SSpecialEffect";
   export class STransferToNextFloorSpecialEffect extends SSpecialEffect {
-      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void;
+      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void;
   }
 
 }
@@ -9541,10 +9609,10 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/STrapProliferationSpecia
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
-  import { SEffectModifier } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
+  import { SEffect } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
   import { SSpecialEffect } from "MysteryRogueSystem/ts/mr/system/effects/SSpecialEffect";
   export class STrapProliferationSpecialEffect extends SSpecialEffect {
-      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void;
+      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void;
   }
 
 }
@@ -9553,10 +9621,10 @@ declare module 'MysteryRogueSystem/ts/mr/system/effects/SWrapSpecialEffect' {
   import { LEffectResult } from "ts/mr/lively/LEffectResult";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
-  import { SEffectModifier } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
+  import { SEffect } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
   import { SSpecialEffect } from "MysteryRogueSystem/ts/mr/system/effects/SSpecialEffect";
   export class SWarpSpecialEffect extends SSpecialEffect {
-      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffectModifier, target: LEntity, result: LEffectResult): void;
+      onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void;
   }
 
 }
@@ -9951,6 +10019,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/SCommandContext' {
   import { LActionTokenConsumeType } from "MysteryRogueSystem/ts/mr/lively/LCommon";
   import { CommandResultCallback, SSubTaskChain, STask, TaskThenFunc } from "MysteryRogueSystem/ts/mr/system/tasks/STask";
   import { DFlavorEffect } from "MysteryRogueSystem/ts/mr/data/DFlavorEffect";
+  import { SDialogContext } from "MysteryRogueSystem/ts/mr/system/SDialogContext";
   export interface SDisplayFlavorEffectOptions {
       messageFormatArgs: unknown[];
       motionObjectEntity?: LEntity;
@@ -10142,6 +10211,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/SCommandContext' {
       get currentSubTaskChain(): SSubTaskChain | undefined;
       constructor(sequelContext: SSequelContext);
       clear(): void;
+      get dialogContext(): SDialogContext;
       random(): LRandom;
       checkOpenDialogRequired(): boolean;
       callCommand(c: SSubTaskChain, entity: LEntity, cmd: SCommand): void;
@@ -10281,8 +10351,19 @@ declare module 'MysteryRogueSystem/ts/mr/system/SDialog' {
        * SubDialog を開く。
        *
        * onResult が呼ばれる時点で、dialog はスタックから取り除かれている。
+       *
+       * onClosed は、SubDialog が閉じられた時点で呼ばれます。
+       * onClosed で親 Dialog に対してデフォルトの処理を行う場合は、false または void を返してください。
+       * デフォルトの処理は、子 Dialog の結果を親 Dialog に引き継ぐように反映します。
+       * つまり、
+       * - 子 Dialog が Submit された場合は、親 Dialog も Submit となり、 Close されます。
+       * - 子 Dialog が Cancel された場合は、親 Dialog は Close されません。
+       *
+       * onClosed で親 Dialog に対してデフォルトの処理を行わない場合は、true を返してください。
+       * 例えば未識別アイテムの名前付けウィンドウでは、名前を決定すると Submit 結果となりますが、
+       * その時その親 (通常は ItemListDialog) は Close しません。
        */
-      openSubDialog<T extends SDialog>(dialog: T, onResult?: ((model: T) => boolean | void) | undefined): void;
+      openSubDialog<T extends SDialog>(dialog: T, onClosed?: ((model: T) => boolean | void) | undefined): void;
   }
 
 }
@@ -10314,7 +10395,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/SDialogContext' {
 
 }
 declare module 'MysteryRogueSystem/ts/mr/system/SEffectApplyer' {
-  import { DEntityCategoryId, DSkillId, DSubComponentEffectTargetKey, DElementId, DParameterId } from "MysteryRogueSystem/ts/mr/data/DCommon";
+  import { DEntityCategoryId, DSkillId, DElementId, DParameterId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   import { DEffect, DEffectSet, DOtherEffectQualifying, DParamBuff, DParameterQualifying } from "MysteryRogueSystem/ts/mr/data/DEffect";
   import { LBattlerBehavior } from "MysteryRogueSystem/ts/mr/lively/behaviors/LBattlerBehavior";
   import { LEffectResult } from "MysteryRogueSystem/ts/mr/lively/LEffectResult";
@@ -10323,17 +10404,19 @@ declare module 'MysteryRogueSystem/ts/mr/system/SEffectApplyer' {
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
   import { SEffectIncidentType } from "MysteryRogueSystem/ts/mr/system/SEffectContext";
   import { DSpecialEffectRef } from "MysteryRogueSystem/ts/mr/data/DSpecialEffect";
+  /**
+   * DEffect に対するインスタンス情報。
+   * Effect 発動者や対象などの関係者の紐づけや、実行時にエフェクトの各プロパティについて、オーバーライドされた値を保持する。
+   */
   export class SEffect {
       private _fact;
       private _data;
-      private _targetModifier;
-      private _hitType;
-      private _successRate;
+      private _parameterEffects2;
       constructor(fact: SEffectorFact, effect: DEffect);
       fact(): SEffectorFact;
       subject(): LEntity;
       data(): DEffect;
-      targetModifier(): SEffectModifier;
+      get successRate(): number;
       isCertainHit(): boolean;
       isPhysical(): boolean;
       isMagical(): boolean;
@@ -10341,10 +10424,12 @@ declare module 'MysteryRogueSystem/ts/mr/system/SEffectApplyer' {
       evaRate(target: LEntity): number;
       criRate(target: LEntity): number;
       lukEffectRate(target: LEntity): number;
-  }
-  export interface SSubEffect {
-      subTargetKey: DSubComponentEffectTargetKey;
-      effect: SEffect;
+      hasParamDamage(): boolean;
+      parameterEffects2(): readonly SParameterEffect[];
+      otherEffectQualifyings(): DOtherEffectQualifying[];
+      effectBehaviors(): DSpecialEffectRef[];
+      specialEffectQualifyings(): IDataEffect[];
+      buffQualifying(): DParamBuff[];
   }
   export class SEffectorFact {
       private _subject;
@@ -10352,7 +10437,6 @@ declare module 'MysteryRogueSystem/ts/mr/system/SEffectApplyer' {
       private _subjectBattlerBehavior;
       private _effectors;
       private _effects;
-      private _subEffects;
       private _selfModifier;
       private _succeededSelfModifier;
       private _incidentType;
@@ -10368,14 +10452,13 @@ declare module 'MysteryRogueSystem/ts/mr/system/SEffectApplyer' {
       subject(): LEntity;
       subjectBehavior(): LBattlerBehavior | undefined;
       effectSet(): DEffectSet;
-      subEffects(): SSubEffect[];
       incidentType(): SEffectIncidentType;
       incidentEntityKind(): DEntityCategoryId;
       item(): LEntity | undefined;
       sourceSkill(): DSkillId | undefined;
       direction(): number;
-      selfModifier(): SEffectModifier;
-      succeededSelfModifier(): SEffectModifier | undefined;
+      selfModifier(): SEffect;
+      succeededSelfModifier(): SEffect | undefined;
       addEffector(entity: LEntity): void;
       genericEffectRate(): number;
       effects(): readonly SEffect[];
@@ -10386,34 +10469,23 @@ declare module 'MysteryRogueSystem/ts/mr/system/SEffectApplyer' {
       Recover = 2
   }
   export class SParameterEffect {
-      paramId: DParameterId;
-      qualifying: DParameterQualifying;
-      elementIds: DElementId[];
-      formula: string;
-      /** IDataSkill.damage.type  */
-      applyType: SParameterEffectApplyType;
-      isDrain: boolean;
-      /** 分散度 */
-      variance: number;
-      fixedDamage: number | undefined;
+      readonly paramId: DParameterId;
+      readonly qualifying: DParameterQualifying;
       private _valid;
+      readonly elementIds: DElementId[];
+      readonly formula: string;
+      /** IDataSkill.damage.type  */
+      readonly applyType: SParameterEffectApplyType;
+      readonly isDrain: boolean;
+      /** 分散度 */
+      readonly variance: number;
+      fixedDamage: number | undefined;
       constructor(data: DParameterQualifying);
       isRecover(): boolean;
       get isValid(): boolean;
       set isValid(value: boolean);
       evalConditions(target: LEntity): void;
       private meetsConditions;
-  }
-  export class SEffectModifier {
-      private _data;
-      private _parameterEffects2;
-      constructor(subject: LEntity, q: DEffect);
-      hasParamDamage(): boolean;
-      parameterEffects2(): readonly SParameterEffect[];
-      otherEffectQualifyings(): DOtherEffectQualifying[];
-      effectBehaviors(): DSpecialEffectRef[];
-      specialEffectQualifyings(): IDataEffect[];
-      buffQualifying(): DParamBuff[];
   }
   /**
    * 成否判定後、実際にパラメータやステートに変化を与える
@@ -10422,7 +10494,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/SEffectApplyer' {
       private _effect;
       private _rand;
       constructor(effect: SEffect, rand: LRandom);
-      apply(cctx: SCommandContext, modifier: SEffectModifier, target: LEntity): void;
+      apply(cctx: SCommandContext, modifier: SEffect, target: LEntity): void;
       private makeDamageValue;
       private elemetedRecoverRate;
       private evalDamageFormula;
@@ -10712,6 +10784,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/SIntegration' {
       protected abstract onEntityLeavedMap(entity: LEntity): void;
       protected abstract onEntityReEnterMap(entity: LEntity): void;
       abstract onSetLandExitResult(result: LandExitResult): void;
+      abstract onEquipmentChanged(entity: LEntity): void;
       refreshGameMap(map: LMap): void;
       flushEffectResultOneEntity(entity: LEntity): void;
       flushEffectResult(): void;
@@ -11192,6 +11265,20 @@ declare module 'MysteryRogueSystem/ts/mr/utility/UCommon' {
   export interface SPoint {
       x: number;
       y: number;
+  }
+
+}
+declare module 'MysteryRogueSystem/ts/mr/utility/UDialog' {
+  import { LEntity } from "MysteryRogueSystem/ts/mr/lively/LEntity";
+  import { SFeetDialog } from "MysteryRogueSystem/ts/mr/system/dialogs/SFeetDialog";
+  import { SItemListDialog } from "MysteryRogueSystem/ts/mr/system/dialogs/SItemListDialog";
+  import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
+  import { SDialog } from "MysteryRogueSystem/ts/mr/system/SDialog";
+  import { SDialogContext } from "MysteryRogueSystem/ts/mr/system/SDialogContext";
+  export class UDialog {
+      static postOpenInventoryDialog(cctx: SCommandContext, entity: LEntity, onClosed: (dialog: SItemListDialog) => void): boolean;
+      static postOpenFeetDialog(cctx: SCommandContext, entity: LEntity, onClosed: (dialog: SFeetDialog) => void): boolean;
+      static openSkillDialog(dctx: SDialogContext, model: SDialog, entity: LEntity): void;
   }
 
 }
@@ -11822,7 +11909,7 @@ declare module 'MysteryRogueSystem/ts/mr/view/dialogs/VDetailsDialog' {
   import { VDialog } from "MysteryRogueSystem/ts/mr/view/dialogs/VDialog";
   import { SDetailsDialog } from "ts/mr/system/dialogs/SDetailsDialog";
   export class VDetailsDialog extends VDialog {
-      private _model;
+      readonly model: SDetailsDialog;
       private _window;
       constructor(model: SDetailsDialog);
       onCreate(): void;
@@ -11837,7 +11924,7 @@ declare module 'MysteryRogueSystem/ts/mr/view/dialogs/VDialog' {
   import { SDialogContext } from "ts/mr/system/SDialogContext";
   import { SCommandContext } from "ts/mr/system/SCommandContext";
   export class VDialog {
-      private _baseModel;
+      readonly model: SDialog;
       _created: boolean;
       _started: boolean;
       _navigator: REDialogVisualNavigator | undefined;
@@ -11845,7 +11932,6 @@ declare module 'MysteryRogueSystem/ts/mr/view/dialogs/VDialog' {
       private _activeWindow;
       _closing: boolean;
       protected constructor(model: SDialog);
-      get model(): SDialog;
       protected dialogContext(): SDialogContext;
       protected commandContext(): SCommandContext;
       /** @deprecated */
@@ -11859,6 +11945,7 @@ declare module 'MysteryRogueSystem/ts/mr/view/dialogs/VDialog' {
       onClose(): void;
       onStop(): void;
       onDestroy(): void;
+      get windowLayer(): PIXI.Container;
       protected addWindow(window: Window_Base): void;
       private _removeWindow;
       protected activateWindow(window: Window_Base): void;
@@ -11974,39 +12061,6 @@ declare module 'MysteryRogueSystem/ts/mr/view/dialogs/VItemSellDialog' {
   }
 
 }
-declare module 'MysteryRogueSystem/ts/mr/view/dialogs/VManualActionDialogVisual' {
-  import { SManualActionDialog } from "ts/mr/system/dialogs/SManualDecisionDialog";
-  import { VDialog } from "MysteryRogueSystem/ts/mr/view/dialogs/VDialog";
-  export class VManualActionDialogVisual extends VDialog {
-      private readonly MovingInputInterval;
-      private _model;
-      private _updateMode;
-      private _waitCount;
-      private _directionButtonPresseCount;
-      private _moveButtonPresseCount;
-      private _movingInputWaitCount;
-      private _crossDiagonalCount;
-      constructor(model: SManualActionDialog);
-      private actionButton;
-      private shortcutButton;
-      private dashButton;
-      private directionButton;
-      private isOffDirectionButton;
-      private isDashButtonPressed;
-      private isMoveButtonPressed;
-      onStop(): void;
-      onUpdate(): void;
-      private updateInput;
-      private updateNormal;
-      private endDirectionSelecting;
-      private updateDirSelecting;
-      private updateDiagonalMoving;
-      private attemptMoveEntity;
-      private attemptFrontAction;
-      private attemptShortcutAction;
-  }
-
-}
 declare module 'MysteryRogueSystem/ts/mr/view/dialogs/VMenuDialog' {
   import { SMainMenuDialog } from "ts/mr/system/dialogs/SMainMenuDialog";
   import { VMenuCommandWindow } from "MysteryRogueSystem/ts/mr/view/windows/VMenuCommandWindow";
@@ -12042,6 +12096,39 @@ declare module 'MysteryRogueSystem/ts/mr/view/dialogs/VNicknameDialog' {
       private editWindowRect;
       private inputWindowRect;
       private handleInputOk;
+  }
+
+}
+declare module 'MysteryRogueSystem/ts/mr/view/dialogs/VPlayerDialog' {
+  import { SPlayerDialog } from "ts/mr/system/dialogs/SPlayerDialog";
+  import { VDialog } from "MysteryRogueSystem/ts/mr/view/dialogs/VDialog";
+  export class VPlayerDialog extends VDialog {
+      private readonly MovingInputInterval;
+      readonly model: SPlayerDialog;
+      private _updateMode;
+      private _waitCount;
+      private _directionButtonPresseCount;
+      private _moveButtonPresseCount;
+      private _movingInputWaitCount;
+      private _crossDiagonalCount;
+      constructor(model: SPlayerDialog);
+      private actionButton;
+      private shortcutButton;
+      private dashButton;
+      private directionButton;
+      private isOffDirectionButton;
+      private isDashButtonPressed;
+      private isMoveButtonPressed;
+      onStop(): void;
+      onUpdate(): void;
+      private updateInput;
+      private updateNormal;
+      private endDirectionSelecting;
+      private updateDirSelecting;
+      private updateDiagonalMoving;
+      private attemptMoveEntity;
+      private attemptFrontAction;
+      private attemptShortcutAction;
   }
 
 }
@@ -12112,8 +12199,15 @@ declare module 'MysteryRogueSystem/ts/mr/view/MRView' {
 
 }
 declare module 'MysteryRogueSystem/ts/mr/view/MRVisualExtension' {
+  import { SDialog } from "MysteryRogueSystem/ts/mr/system/SDialog";
+  import { VDialog } from "MysteryRogueSystem/ts/mr/view/dialogs/VDialog";
   export class MRVisualExtension {
       onMapVisualSetup(): void;
+      /**
+       * 指定された SDialog に対して開く VDialog をオーバーライドします。
+       * 必要に応じて instanceof で型チェックして、それぞれの VDialog を返すように実装してください。
+       */
+      onOpenDialog(model: SDialog): VDialog | undefined;
   }
 
 }
@@ -12699,6 +12793,7 @@ declare module 'MysteryRogueSystem/ts/mr/view/VMapGuideGrid' {
 }
 declare module 'MysteryRogueSystem/ts/mr/view/VMessageWindowSet' {
   import { VFloorNameWindow } from "MysteryRogueSystem/ts/mr/view/windows/VFloorNameWindow";
+  import { VMessageLogWindow } from "MysteryRogueSystem/ts/mr/view/windows/VMessageLogWindow";
   /**
    * Scene_Message 相当の機能。
    *
@@ -12715,6 +12810,7 @@ declare module 'MysteryRogueSystem/ts/mr/view/VMessageWindowSet' {
       private _fadeSign;
       _floorNameWindow: VFloorNameWindow;
       constructor(scene: Scene_Map);
+      get messageLogWindow(): VMessageLogWindow;
       private messageWindowRect;
       attemptStartDisplayFloorName(): void;
       private startFadeIn;
@@ -12983,12 +13079,14 @@ declare module 'MysteryRogueSystem/ts/mr/view/windows/VMessageLogWindow' {
       private _autoScrollCount;
       private _autoScrollCountMax;
       private _maxLines;
+      _autoCloseEnabled: boolean;
       private _autoCloseCount;
       private _autoCloseCountMax;
       private _lineSpriteCache;
       private _textLines;
       constructor(message: LMessageHistory, rect: Rectangle);
       private initMembers;
+      set autoCloseEnabled(value: boolean);
       private maxLines;
       update(): void;
       private checkToNotClose;
