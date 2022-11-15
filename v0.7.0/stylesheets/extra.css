@@ -1,0 +1,22 @@
+
+.md-typeset h1 {
+    border-bottom: 1px solid #8f8f8f;
+}
+
+.md-typeset h2 {
+    font-weight: bold;
+    border-bottom: 1px solid #8f8f8f;
+}
+
+.md-typeset h3 {
+    font-weight: bold;
+    margin: 1.8em 0 0.8em;
+}
+
+.md-typeset p > code {
+    background-color: #ffe0e0;
+}
+
+.md-typeset li > code {
+    background-color: #ffe0e0;
+}
