@@ -23,7 +23,7 @@ Game_Player.prototype.canMove = function(): boolean {
     }
 
     // 通常マップでも、 Dialog 表示中は移動を禁止する
-    if (!MRView.manager?.dialogNavigator.isEmpty()) {
+    if (!MRView.dialogManager?.dialogNavigator.isEmpty) {
         return false;
     }
     return _Game_Player_canMove.call(this);

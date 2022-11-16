@@ -12,7 +12,7 @@ import { DHelpers } from "./DHelper";
 import { DPrefabMoveType } from "./DPrefab";
 import { DEquipment } from './DItem';
 import { DTrait } from './DTrait';
-import { DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DEffectFieldScopeRange, DSkillCostSource, DParamCostType } from './DEffect';
+import { DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DEffectFieldScopeType, DSkillCostSource, DParamCostType } from './DEffect';
 import { DSystem } from './DSystem';
 import { DSkill } from './DSkill';
 import { DTroop } from './DTroop';
@@ -34,6 +34,7 @@ import { DFlavorEffect, DSound } from './DFlavorEffect';
 import { DValidationHelper } from './DValidationHelper';
 import { DMapId } from './DCommon';
 import { REFloorMapKind } from './DMap';
+import { DEffectRef } from './DEffectSuite';
 
 type NextFunc = () => void;
 type TaskFunc = (next: NextFunc) => void;
@@ -138,7 +139,7 @@ export class MRDataManager {
             DParameter.makeBuiltin(13, "rem", tr2("回数"), tr2("最大回数"), -1, 99, 0, Infinity, false),
             DParameter.makeBuiltin(14, "cap", "Capacity", tr2("最大容量"), -1, 8, 0, Infinity, false),
             DParameter.makeBuiltin(15, "gold", "Gold", tr2("最大ゴールド"), -1, 999999, 10, Infinity, false),
-            DParameter.makeBuiltin(16, "level", tr2("レベル"), tr2("最大レベル"), -1, 99, 1, Infinity, false),
+            DParameter.makeBuiltin(16, "level", tr2("レベル"), tr2("レベル"), -1, 99, 1, Infinity, false),  // レベルアップは Growth に対して行うので、最大値名を "最大レベル" にしてしまうと、"Aは最大レベルが1上がった！"と表示されてしまう。
             DParameter.makeBuiltin(17, "exp", tr2("経験値"), tr2("最大経験値"), -1, 9999999, 0, Infinity, false),
         ];
         MRBasics.params = {
@@ -200,27 +201,27 @@ export class MRDataManager {
         }
         
         MRBasics.entityCategories = {
-            actor: MRData.newEntityCategory("kEntityCategory_Actor", "Actor"),
-            WeaponKindId: MRData.newEntityCategory("kEntityCategory_Weapon", "武器"),
-            ShieldKindId: MRData.newEntityCategory("kEntityCategory_Shield", "盾"),
-            armor: MRData.newEntityCategory("kEntityCategory_Armor", "盾"),
-            ArrowKindId: MRData.newEntityCategory("kEntityCategory_Arrow", "矢"),
+            actor: MRData.newEntityCategory("kEntityCategory_Actor", "Actor").id,
+            WeaponKindId: MRData.newEntityCategory("kEntityCategory_Weapon", "武器").id,
+            ShieldKindId: MRData.newEntityCategory("kEntityCategory_Shield", "盾").id,
+            armor: MRData.newEntityCategory("kEntityCategory_Armor", "盾").id,
+            ArrowKindId: MRData.newEntityCategory("kEntityCategory_Arrow", "矢").id,
             //RE_Data.addEntityKind("石"),
             //RE_Data.addEntityKind("弾"),
-            BraceletKindId: MRData.newEntityCategory("kEntityCategory_Ring", "腕輪"),
-            FoodKindId: MRData.newEntityCategory("kEntityCategory_Food", "食料"),
-            grass: MRData.newEntityCategory("kEntityCategory_Grass", "草"),
-            ScrollKindId: MRData.newEntityCategory("kEntityCategory_Scroll", "巻物"),
-            WandKindId: MRData.newEntityCategory("kEntityCategory_Staff", "杖"),
-            PotKindId: MRData.newEntityCategory("kEntityCategory_Pot", "壺"),
-            DiscountTicketKindId: MRData.newEntityCategory("kEntityCategory_DiscountTicket", "割引券"),
-            BuildingMaterialKindId: MRData.newEntityCategory("kEntityCategory_BuildingMaterial", "材料"),
-            TrapKindId: MRData.newEntityCategory("kEntityCategory_Trap", "罠"),
-            FigurineKindId: MRData.newEntityCategory("kEntityCategory_Figurine", "土偶"),
-            MonsterKindId: MRData.newEntityCategory("kEntityCategory_Monster", "モンスター"),
-            entryPoint: MRData.newEntityCategory("kEntityCategory_EntryPoint", "入り口"),
-            exitPoint: MRData.newEntityCategory("kEntityCategory_ExitPoint", "出口"),
-            Ornament: MRData.newEntityCategory("kEntityCategory_Ornament", "Ornament"),
+            BraceletKindId: MRData.newEntityCategory("kEntityCategory_Ring", "腕輪").id,
+            FoodKindId: MRData.newEntityCategory("kEntityCategory_Food", "食料").id,
+            grass: MRData.newEntityCategory("kEntityCategory_Grass", "草").id,
+            ScrollKindId: MRData.newEntityCategory("kEntityCategory_Scroll", "巻物").id,
+            WandKindId: MRData.newEntityCategory("kEntityCategory_Staff", "杖").id,
+            PotKindId: MRData.newEntityCategory("kEntityCategory_Pot", "壺").id,
+            DiscountTicketKindId: MRData.newEntityCategory("kEntityCategory_DiscountTicket", "割引券").id,
+            BuildingMaterialKindId: MRData.newEntityCategory("kEntityCategory_BuildingMaterial", "材料").id,
+            TrapKindId: MRData.newEntityCategory("kEntityCategory_Trap", "罠").id,
+            FigurineKindId: MRData.newEntityCategory("kEntityCategory_Figurine", "土偶").id,
+            MonsterKindId: MRData.newEntityCategory("kEntityCategory_Enemy", "モンスター").id,
+            entryPoint: MRData.newEntityCategory("kEntityCategory_EntryPoint", "入り口").id,
+            exitPoint: MRData.newEntityCategory("kEntityCategory_ExitPoint", "出口").id,
+            Ornament: MRData.newEntityCategory("kEntityCategory_Ornament", "Ornament").id,
         };
 
         MRBasics.xparams = { // RMMZ と同じ配列
@@ -752,7 +753,8 @@ export class MRDataManager {
                 if (x.damage.type > 0) {
                     effect.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
                 }
-                emittor.effectSet.targetEffectIds.push(effect.id);
+                //emittor.effectSet.targetEffectIds.push(effect.id);
+                emittor.effectSuite.addTargetEffect(new DEffectRef(effect.id));
 
                 skill.name = x.name;
                 skill.emittorId = emittor.id;
@@ -764,12 +766,7 @@ export class MRDataManager {
                 const flavorEffect = new DFlavorEffect();
                 flavorEffect.text = messages;
 
-                if (DHelpers.isForFriend(skill.rmmzEffectScope)) {
-                    emittor.scope.range = DEffectFieldScopeRange.Performer;
-                }
-                else {
-                    emittor.scope.range = DEffectFieldScopeRange.Front1;
-                }
+                emittor.setupFromRmmzScope(x.scope ?? DRmmzEffectScope.None);
             }
         });
 
@@ -848,16 +845,13 @@ export class MRDataManager {
                 if (x.damage.type > 0) {
                     effect.parameterQualifyings.push(this.makeParameterQualifying(x.damage));
                 }
+
                 //effect.rmmzItemEffectQualifying = x.effects.
-                emittor.effectSet.targetEffectIds.push(effect.id);
+               // emittor.effectSet.targetEffectIds.push( effect.id);
+               emittor.effectSuite.addTargetEffect(new DEffectRef(effect.id));
 
                 entity.setMainEmittor(emittor);
-
-                const rmmzScope = x.scope ?? DRmmzEffectScope.None;
-
-                if (DHelpers.isForFriend(rmmzScope)) {
-                    emittor.scope.range = DEffectFieldScopeRange.Performer;
-                }
+                emittor.setupFromRmmzScope(x.scope ?? DRmmzEffectScope.None);
             }
         });
         MRData.weaponDataIdOffset = MRData.items.length;
@@ -1038,7 +1032,7 @@ export class MRDataManager {
         
         {
             const level = DLandIdentificationLevel.Entity;
-            for (const kind of MRData.entityKinds) {
+            for (const kind of MRData.categories) {
                 defaltLand.identifiedKinds[kind.id] = level;
             }
         }

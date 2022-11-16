@@ -1,5 +1,5 @@
 import { MRBasics } from "ts/mr/data/MRBasics";
-import { DEffectFieldScopeRange, DSkillCostSource, DEmittorCost, DParamCostType, DParamCost, DEffectFieldScope, DRmmzEffectScope, DEffectSet } from "ts/mr/data/DEffect";
+import { DEffectFieldScopeType, DSkillCostSource, DEmittorCost, DParamCostType, DParamCost, DEffectFieldScope, DRmmzEffectScope } from "ts/mr/data/DEffect";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
 import { MRData } from "ts/mr/data/MRData";
 import { LProjectileBehavior } from "ts/mr/lively/behaviors/activities/LProjectileBehavior";
@@ -292,8 +292,8 @@ export class SEmittorPerformer {
         //const subject = performer.getEntityBehavior(LBattlerBehavior);
 
         
-        if (emittor.scope.range == DEffectFieldScopeRange.Performer) {
-            const effectSubject = new SEffectorFact(this._subject, emittor.effectSet, SEffectIncidentType.IndirectAttack, effectDir/*performer.dir*/);
+        if (emittor.scope.range == DEffectFieldScopeType.Performer) {
+            const effectSubject = new SEffectorFact(this._subject, emittor.effectSuite, SEffectIncidentType.IndirectAttack, effectDir/*performer.dir*/);
             if (itemEntity) {
                 effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
                 effectSubject.withItem(itemEntity);
@@ -319,7 +319,7 @@ export class SEmittorPerformer {
                 }
             });
         }
-        else if (emittor.scope.range == DEffectFieldScopeRange.Front1) {
+        else if (emittor.scope.range == DEffectFieldScopeType.Front1) {
             const frontBlock = UMovement.getFrontBlock(performer);
 
             // 攻撃エフェクト (TODO: Front1 に限らず、効果範囲の重心に対して発動するようにする)
@@ -340,7 +340,7 @@ export class SEmittorPerformer {
                 const targets = this.getTargetInBlock(frontBlock, emittor.scope);
                 for (const target of targets)  {
 
-                    const effectSubject = new SEffectorFact(this._subject, emittor.effectSet, SEffectIncidentType.DirectAttack, performer.dir);
+                    const effectSubject = new SEffectorFact(this._subject, emittor.effectSuite, SEffectIncidentType.DirectAttack, performer.dir);
                     if (itemEntity) {
                         effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
                         effectSubject.withItem(itemEntity);
@@ -377,16 +377,16 @@ export class SEmittorPerformer {
                 if (skillId > 0) this.raiseSkillEmitted(cctx, performer, targets, skillId);
             }
         }
-        else if (emittor.scope.range == DEffectFieldScopeRange.StraightProjectile) {
+        else if (emittor.scope.range == DEffectFieldScopeType.StraightProjectile) {
             this.performeEffect_StraightProjectile(cctx, performer, emittor, itemEntity, performer.mx, performer.my, performer.dir);
         }
-        else if (emittor.scope.range == DEffectFieldScopeRange.ReceiveProjectile) {
+        else if (emittor.scope.range == DEffectFieldScopeType.ReceiveProjectile) {
             const dir = this._effectDirection != 0 ? this._effectDirection : performer.dir;
             const block = USearch.findFirstWallInDirection(performer.mx, performer.my, dir);
             this.performeEffect_StraightProjectile(cctx, performer, emittor, itemEntity, block.mx, block.my, UMovement.reverseDir(dir));
         }
-        else if (emittor.scope.range == DEffectFieldScopeRange.Selection) {
-            const effectSubject = new SEffectorFact(this._subject, emittor.effectSet, SEffectIncidentType.IndirectAttack, effectDir/*performer.dir*/);
+        else if (emittor.scope.range == DEffectFieldScopeType.Selection) {
+            const effectSubject = new SEffectorFact(this._subject, emittor.effectSuite, SEffectIncidentType.IndirectAttack, effectDir/*performer.dir*/);
             if (itemEntity) {
                 effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
                 effectSubject.withItem(itemEntity);
@@ -400,8 +400,8 @@ export class SEmittorPerformer {
             effectContext.applyWithWorth(cctx, selectedItems);
             this.onPerformed(cctx, selectedItems);
         }
-        else if (emittor.scope.range == DEffectFieldScopeRange.Around || emittor.scope.range == DEffectFieldScopeRange.AroundAndCenter) {
-            const withCenter = (emittor.scope.range == DEffectFieldScopeRange.AroundAndCenter);
+        else if (emittor.scope.range == DEffectFieldScopeType.Around || emittor.scope.range == DEffectFieldScopeType.AroundAndCenter) {
+            const withCenter = (emittor.scope.range == DEffectFieldScopeType.AroundAndCenter);
 
             const targets: LEntity[] = [];
             USearch.iterateAroundEntities(performer.mx, performer.my, emittor.scope.length, withCenter, (entity) => {
@@ -412,7 +412,7 @@ export class SEmittorPerformer {
 
             this.applyEffect(cctx, performer, emittor, targets, skillId, itemEntity);
         }
-        else if (emittor.scope.range == DEffectFieldScopeRange.Center) {
+        else if (emittor.scope.range == DEffectFieldScopeType.Center) {
             const targets: LEntity[] = [];
             const block = MRLively.map.tryGetBlock(performer.mx, performer.my);
             if (block) {
@@ -424,7 +424,7 @@ export class SEmittorPerformer {
             }
             this.applyEffect(cctx, performer, emittor, targets, skillId, itemEntity);
         }
-        else if (emittor.scope.range == DEffectFieldScopeRange.Room) {
+        else if (emittor.scope.range == DEffectFieldScopeType.Room) {
             const targets: LEntity[] = [];
             MRLively.map.room(performer.roomId()).forEachEntities(entity => {
                 if (UAction.testFactionMatch(performer, entity, DRmmzEffectScope.Opponent_All)) {
@@ -433,7 +433,7 @@ export class SEmittorPerformer {
             });
             this.applyEffect(cctx, performer, emittor, targets, skillId, itemEntity);
         }
-        else if (emittor.scope.range == DEffectFieldScopeRange.Map) {
+        else if (emittor.scope.range == DEffectFieldScopeType.Map) {
             const targets: LEntity[] = [];
             MRLively.map.entities().filter(entity => {
                 if (UAction.testFactionMatch(performer, entity, DRmmzEffectScope.Everyone)) {
@@ -483,7 +483,7 @@ export class SEmittorPerformer {
 
     private applyEffect(cctx: SCommandContext, performer: LEntity, emittor: DEmittor, targets: LEntity[], skillId: DSkillId, itemEntity: LEntity | undefined) {
         
-        const effectSubject = new SEffectorFact(this._subject, emittor.effectSet, SEffectIncidentType.DirectAttack, performer.dir);
+        const effectSubject = new SEffectorFact(this._subject, emittor.effectSuite, SEffectIncidentType.DirectAttack, performer.dir);
         if (itemEntity) {
             effectSubject.withIncidentEntityKind(itemEntity.kindDataId());
             effectSubject.withItem(itemEntity);

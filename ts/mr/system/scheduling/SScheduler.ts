@@ -177,6 +177,7 @@ export class SScheduler {
     }
 
     private update_RoundEnding(): void {
+        MRLively.chronus.advanceRound();
 
         //if (RESystem.sequelContext.isEmptySequelSet()) {
         if (this._occupy) {

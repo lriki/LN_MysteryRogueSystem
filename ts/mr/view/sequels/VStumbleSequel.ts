@@ -1,11 +1,11 @@
 import { Vector2 } from "ts/mr/math/Vector2";
 import { VKeyFrameAnimationCurve } from "../animation/VAnimation";
-import { REVisualSequel } from "../REVisualSequel";
-import { REVisualSequelContext } from "../REVisualSequelContext";
-import { REVisual_Entity } from "../REVisual_Entity";
+import { VSequel } from "../VSequel";
+import { VSequelContext } from "../VSequelContext";
+import { VEntity } from "../VEntity";
 
 
-export class VStumbleSequel extends REVisualSequel {
+export class VStumbleSequel extends VSequel {
 
     private static RotationSignTable = [1, -1, 1, 1, -1, 1, 1, -1, -1, 1];
     private _curve: VKeyFrameAnimationCurve;
@@ -18,7 +18,7 @@ export class VStumbleSequel extends REVisualSequel {
         this._curve.addFrame(20, 0);
     }
 
-    onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void {
+    onUpdate(visual: VEntity, context: VSequelContext): void {
 
         const frameCount = context.frameCount();
         const sprite = visual.rmmzSprite();

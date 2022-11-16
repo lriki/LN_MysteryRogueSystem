@@ -54,7 +54,7 @@ RPGツクールMZ で新規作成したプロジェクトとマージしてご�
 ### ユーザーガイド
 
 - 🌱 [テストプロジェクトの実行方法](./docs/TestProject.md)
-- 📚 [マニュアル](https://lriki.github.io/LN_MysteryRogueSystemSite/)
+- 📚 [マニュアル](https://lriki.github.io/LN_MysteryRogueSystem/latest/)
 - ✋ サポート
   - 使い方や仕様・その他の質問 ➡️ [こちらから質問できます](https://github.com/lriki/LN_MysteryRogueSystem/issues/new?template=question.md)
   - 機能要望・提案 ➡️ [こちらから提案できます](https://github.com/lriki/LN_MysteryRogueSystem/issues/new?template=feature_request.md)

@@ -1,11 +1,11 @@
 import * as PIXI from "pixi.js";
-import { REVisualSequel } from "../REVisualSequel";
-import { REVisualSequelContext } from "../REVisualSequelContext";
-import { REVisual_Entity } from "../REVisual_Entity";
+import { VSequel } from "../VSequel";
+import { VSequelContext } from "../VSequelContext";
+import { VEntity } from "../VEntity";
 
 
-export class VCollapseSequel extends REVisualSequel {
-    onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void {
+export class VCollapseSequel extends VSequel {
+    onUpdate(visual: VEntity, context: VSequelContext): void {
 
         const effectDuration = 24 - context.frameCount();
 

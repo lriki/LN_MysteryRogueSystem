@@ -1,18 +1,18 @@
 import { Vector2 } from "ts/mr/math/Vector2";
 import { Helpers } from "ts/mr/system/Helpers";
 import { SMotionSequel } from "ts/mr/system/SSequel";
-import { REVisualSequel } from "../REVisualSequel";
-import { REVisualSequelContext } from "../REVisualSequelContext";
-import { REVisual_Entity } from "../REVisual_Entity";
+import { VSequel } from "../VSequel";
+import { VSequelContext } from "../VSequelContext";
+import { VEntity } from "../VEntity";
 
 const DROP_TIME = 16;
 const DROP_RADIUS = 0.2;
 
 
-export class VDropSequel extends REVisualSequel {
+export class VDropSequel extends VSequel {
 
 
-    onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void {
+    onUpdate(visual: VEntity, context: VSequelContext): void {
 
         const frameCount = context.frameCount();
         const entity = visual.entity();

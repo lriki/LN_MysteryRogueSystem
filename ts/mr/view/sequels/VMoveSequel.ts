@@ -2,20 +2,20 @@ import { assert } from "ts/mr/Common";
 import { Vector2 } from "ts/mr/math/Vector2";
 import { SMotionSequel } from "ts/mr/system/SSequel";
 import { VKeyFrameAnimationCurve } from "../animation/VAnimation";
-import { REVisualSequel } from "../REVisualSequel";
-import { REVisualSequelContext } from "../REVisualSequelContext";
-import { REVisual_Entity } from "../REVisual_Entity";
+import { VSequel } from "../VSequel";
+import { VSequelContext } from "../VSequelContext";
+import { VEntity } from "../VEntity";
 import { VSequelHelper } from "./VSequelHelper";
 
 /**
  * 倍速移動など、1ターンに複数ブロックを移動する場合、その数だけ Sequel が生成される。
  * そうしないと、途中で立ち寄ったブロックを補完するようなアニメーションが表現できない。
  */
-export class REVisualSequel_Move extends REVisualSequel {
+export class REVisualSequel_Move extends VSequel {
     private _curveX: VKeyFrameAnimationCurve | undefined;
     private _curveY: VKeyFrameAnimationCurve | undefined;
 
-    onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void {
+    onUpdate(visual: VEntity, context: VSequelContext): void {
         if (context.isDashing()) {
             // ダッシュ中は座標をそろえて即終了
             context.unlockCamera();

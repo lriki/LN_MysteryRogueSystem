@@ -13,12 +13,13 @@ import { MovingMethod } from "ts/mr/lively/LMap";
 import { UAction } from "ts/mr/utility/UAction";
 import { MRData } from "ts/mr/data/MRData";
 import { SEffectorFact } from "ts/mr/system/SEffectApplyer";
-import { DEffectHitType, DEffectSet } from "ts/mr/data/DEffect";
-import { DBlockLayerKind } from "ts/mr/data/DCommon";
+import { DEffectHitType } from "ts/mr/data/DEffect";
+import { DBlockLayerKind, DEmittorId } from "ts/mr/data/DCommon";
 import { SActionHitTest } from "ts/mr/system/SActionHitTest";
 import { paramThrowingDistance } from "ts/mr/PluginParameters";
-import { DEmittor, DEmittorId } from "ts/mr/data/DEmittor";
+import { DEmittor } from "ts/mr/data/DEmittor";
 import { LReaction } from "../../LCommon";
+import { DEffectSuite } from "ts/mr/data/DEffectSuite";
 
 /**
  * 投射可能であるか。従来の Throwable の拡張。
@@ -98,9 +99,9 @@ export class LProjectileBehavior extends LBehavior {
         return DEffectHitType.Certain;
     }
 
-    private get effectSet(): DEffectSet {
+    private get effectSet(): DEffectSuite {
         assert(this._effectSet);
-        return MRData.emittors[this._effectSet].effectSet;
+        return MRData.emittors[this._effectSet].effectSuite;
     }
 
     

@@ -1,6 +1,6 @@
 import { db, DSetupScriptDatabase, setDB } from "./DSetupScript";
-import { DParameter } from "../DParameter";
-import { IEffectProps, IParameterBuffEffectProps, IParameterDamageEffectProps } from "../DEffect";
+import { DParameter, IParameterFlavorEffect } from "../DParameter";
+import { IEffectProps, IParameterBuffEffectProps, IParameterValueEffectProps } from "../DEffect";
 import { IFlavorEffectProps } from "../DFlavorEffect";
 import * as index from "../index";
 import { tr2 } from "ts/mr/Common";
@@ -10,16 +10,18 @@ import { IEntityTemplateProps } from "../DEntityTemplate";
 import { IEntityCategoryProps } from "../DEntityCategory";
 import { ISpecialEffectProps } from "../DSpecialEffect";
 import { ITraitProps } from "../DTrait";
+import { IEffectRef } from "../DEffectSuite";
 
 declare global {
     function EntityCategory(props: IEntityCategoryProps): IEntityCategoryProps;
     function Effect(props: IEffectProps): IEffectProps;
-    function ParameterDamage(props: IParameterDamageEffectProps): IParameterDamageEffectProps;
+    function ParameterValue(props: IParameterValueEffectProps): IParameterValueEffectProps;
     function ParameterBuff(props: IParameterBuffEffectProps): IParameterBuffEffectProps;
     function SpecialEffect(props: ISpecialEffectProps): ISpecialEffectProps;
     function Trait(props: ITraitProps): ITraitProps;
     function FlavorEffect(props: IFlavorEffectProps): IFlavorEffectProps;
     function Emittor(props: IEmittorProps): IEmittorProps;
+    function EffectRef(props: IEffectRef): IEffectRef;
     function Entity(props: IEntityProps): IEntityProps;
     function Reaction(props: IReactionProps): IReactionProps;
     function EntityTemplate(props: IEntityTemplateProps): IEntityTemplateProps;
@@ -39,7 +41,11 @@ function Effect(props: IEffectProps): IEffectProps {
     return props;
 }
 
-function ParameterDamage(props: IParameterDamageEffectProps): IParameterDamageEffectProps {
+function ParameterFlavorEffect(props: IParameterFlavorEffect): IParameterFlavorEffect {
+    return props;
+}
+
+function ParameterValue(props: IParameterValueEffectProps): IParameterValueEffectProps {
     return props;
 }
 
@@ -60,6 +66,10 @@ function FlavorEffect(props: IFlavorEffectProps): IFlavorEffectProps {
 }
 
 function Emittor(props: IEmittorProps): IEmittorProps {
+    return props;
+}
+
+function EffectRef(props: IEffectRef): IEffectRef {
     return props;
 }
 

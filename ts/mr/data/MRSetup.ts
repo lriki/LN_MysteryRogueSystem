@@ -1,6 +1,6 @@
 import { DClarificationType, MRBasics } from "./MRBasics";
 import { DBlockLayerKind, DSubComponentEffectTargetKey } from "./DCommon";
-import { DBuffMode, DBuffType, DEffect, DEffectFieldScopeRange, DEffectHitType, DParamCostType, DValuePoint, DParameterEffectApplyType, DParameterQualifying, DSkillCostSource, LStateLevelType, DBuffLevelOp } from "./DEffect";
+import { DBuffMode, DBuffType, DEffect, DEffectFieldScopeType, DEffectHitType, DParamCostType, DValuePoint, DParameterEffectApplyType, DParameterQualifying, DSkillCostSource, LStateLevelType, DBuffLevelOp } from "./DEffect";
 import { DEmittor } from "./DEmittor";
 import { DEntity, DIdentificationDifficulty } from "./DEntity";
 import { DItemEffect } from "./DItemEffect";
@@ -15,6 +15,7 @@ import { DParameterFlavorEffect, DValueAddition, DParameter } from "./DParameter
 import { DFlavorEffect, DSound } from "./DFlavorEffect";
 import { DTextManager } from "./DTextManager";
 import { DFactionType } from "./DFaction";
+import { DEffectRef } from "./DEffectSuite";
 
 export class MRSetup {
 
@@ -313,212 +314,33 @@ export class MRSetup {
                 entity.addReaction(MRBasics.actions.collide, entity.mainEmittor());
                 //entity.addEmittor(DEffectCause.Hit, REData.cloneEmittor(entity.mainEmittor()));
                 break;
-            // case "kEntity_混乱草A": {
-            //     const effect = entity.mainEmittor().effectSet.effect(0);
-            //     //effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(63);
-            //     this.setupGrassCommon(entity);
-            //     // entity.addReaction(REBasics.actions.EatActionId, 0);
-            //     // entity.addEmittor(DEffectCause.Eat, entity.mainEmittor());
-            //     // entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
-            //     break;
-            // }
-            // case "kEntity_めぐすり草A": {
-            //     const effect = entity.mainEmittor().effectSet.effect(0);
-            //     //effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(97);
-            //     this.setupGrassCommon(entity);
-            //     // entity.addReaction(REBasics.actions.EatActionId, 0);
-            //     // entity.addEmittor(DEffectCause.Eat, entity.mainEmittor());
-            //     // entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
-            //     break;
-            // }
-            // case "kEntity_まどわし草A":
-            //     this.setupGrassCommon(entity);
-            //     // entity.addReaction(REBasics.actions.EatActionId, 0);
-            //     // entity.addEmittor(DEffectCause.Eat, entity.mainEmittor());
-            //     // entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
-            //     break;
-            case "kEntity_毒草A": {
-                // mainEmittor は setupGrassCommon() の中で clone されて Eat と Collide に振り分けられるので、共通 Effect は先に設定しておく。
-                const mainEmittor = entity.mainEmittor();
-                const effect = mainEmittor.effectSet.targetEffect(0);
-                effect.conditions.fallback = true;
-                effect.parameterQualifyings.push(new DParameterQualifying(MRBasics.params.hp, "5", DParameterEffectApplyType.Damage));
-                effect.parameterQualifyings.push(new DParameterQualifying(MRBasics.params.pow, "3", DParameterEffectApplyType.Damage));
-                // effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_REMOVE_STATE, dataId: MRData.getState("kState_UTまどわし").id, value1: 1.0, value2: 0 });
-                // effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_REMOVE_STATE, dataId: MRData.getState("kState_UT混乱").id, value1: 1.0, value2: 0 });
-                effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.removeState, entityId: 0, dataId: MRData.getState("kState_UTまどわし").id, value: 1.0 });
-                effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.removeState, entityId: 0, dataId: MRData.getState("kState_UT混乱").id, value: 1.0 });
-                //effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(59);
-                
-                const effect2 = MRData.newEffect(entity.entity.key);
-                effect2.conditions.targetCategoryId = MRBasics.entityCategories.MonsterKindId;
-                effect2.parameterQualifyings.push(new DParameterQualifying(MRBasics.params.hp, "1", DParameterEffectApplyType.Damage));
-                mainEmittor.effectSet.addTargetEffect(effect2);
-
-                const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
-                break;
-            }
-            case "kEntity_毒草B": { // シレン仕様
-                // mainEmittor は setupGrassCommon() の中で clone されて Eat と Collide に振り分けられるので、共通 Effect は先に設定しておく。
-                const mainEmittor = entity.mainEmittor();
-                const effect = mainEmittor.effectSet.targetEffect(0);
-                effect.conditions.fallback = true;
-                // effect.parameterQualifyings.push(new DParameterQualifying(MRBasics.params.hp, "5", DParameterEffectApplyType.Damage));
-                // effect.parameterQualifyings.push(new DParameterQualifying(MRBasics.params.pow, "1", DParameterEffectApplyType.Damage));
-                // // effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_REMOVE_STATE, dataId: MRData.getState("kState_UTまどわし").id, value1: 1.0, value2: 0 });
-                // // effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_REMOVE_STATE, dataId: MRData.getState("kState_UT混乱").id, value1: 1.0, value2: 0 });
-                // effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.removeState, entityId: 0, dataId: MRData.getState("kState_UTまどわし").id, value: 1.0 });
-                // effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.removeState, entityId: 0, dataId: MRData.getState("kState_UT混乱").id, value: 1.0 });
-                //effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(59);
-                
-                
-                const effect2 = MRData.newEffect(entity.entity.key);
-                effect2.conditions.targetCategoryId = MRBasics.entityCategories.MonsterKindId;
-                effect2.parameterQualifyings.push(new DParameterQualifying(MRBasics.params.hp, "5", DParameterEffectApplyType.Damage));
-                //effect2.parameterQualifyings.push(new DParameterQualifying(MRBasics.params.atk, "b.atk", DParameterEffectApplyType.Damage));
-                //effect2.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: MRData.getState("kState_ATK0").id, value1: 1.0, value2: 0});
-                effect2.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.addState, entityId: 0, dataId: MRData.getState("kState_ATK0").id, value: 1.0 });
-                mainEmittor.effectSet.addTargetEffect(effect2);
-
-                const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
-                break;
-            }
-            case "kEntity_毒消し草A": {
-                const mainEmittor = entity.mainEmittor();
-
-                const effect1 = mainEmittor.effectSet.targetEffect(0);
-                effect1.conditions.fallback = true;
-                const q = new DParameterQualifying(MRBasics.params.pow, "b.max_pow - b.pow", DParameterEffectApplyType.Recover);
-                q.alliesSideGainMessage = "%1の%2が回復した。";
-                effect1.parameterQualifyings.push(q);
-                effect1.flavorEffect = DFlavorEffect.fromRmmzAnimationId(45);
-
-                const effect2 = MRData.newEffect(entity.entity.key);
-                effect2.conditions.raceId = MRData.getRace("kRace_ドレイン系").id;
-                effect2.parameterQualifyings.push(new DParameterQualifying(MRBasics.params.hp, "50", DParameterEffectApplyType.Damage));
-                effect2.flavorEffect = DFlavorEffect.fromRmmzAnimationId(45);
-                mainEmittor.effectSet.addTargetEffect(effect2);
-
-                const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
-                // entity.addReaction(REBasics.actions.EatActionId, 0);
-                // entity.addEmittor(DEffectCause.Eat, entity.mainEmittor());
-
-                //const emittor = entity.getReaction(REBasics.actions.collide).emittor();
-
-                break;
-            }
-            case "kEntity_薬草A": {
-                if (1) {
-                    const mainEmittor = entity.mainEmittor();
-                    const effect1 = mainEmittor.effectSet.targetEffect(0);
-                    const effect2 = MRData.cloneEffect(effect1);
-
-                    // effect1: 一般用 (HP 回復のみ)
-                    effect1.conditions.fallback = true;
-
-                    // effect2: Actor 専用 (最大HP の上昇効果もある)
-                    effect2.conditions.targetCategoryId = MRBasics.entityCategories.actor;
-                    effect2.parameterQualifyings[0].conditionFormula = "a.hp < a.max_hp";
-                    effect2.parameterQualifyings.push(
-                        new DParameterQualifying(MRBasics.params.hp, "1", DParameterEffectApplyType.Recover)
-                        .withApplyTarget(DValuePoint.Growth)
-                        .withConditionFormula("a.hp >= a.max_hp"));
-                    mainEmittor.effectSet.addTargetEffect(effect2);
-
-                    const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
-                }
-                else {
-                    const mainEmittor = entity.mainEmittor();
-    
-                    const effect1 = mainEmittor.effectSet.targetEffect(0);
-    
-                    // ダメージを与えるときに 最大HP 上昇効果を発動したくない。
-                    // そうすると、薬草アイテム側の効果として、対象の種類や種族によって効果を分ける必要がある。
-                    // 単に受け側で回復をダメージ扱いするだけでは足りない。
-                    const effect2 = MRData.cloneEffect(effect1);
-                    effect2.conditions.raceId = MRData.getRace("kRace_アンデッド系").id;
-                    //effect2.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "50", DParameterEffectApplyType.Damage));
-                    mainEmittor.effectSet.addTargetEffect(effect2);
-                    //effect2.flavorEffect = 0;
-    
-                    effect1.parameterQualifyings[0].conditionFormula = "a.hp < a.max_hp";
-    
-                    const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
-                    // entity.addReaction(REBasics.actions.EatActionId, 0);
-                    // entity.addEmittor(DEffectCause.Eat, entity.mainEmittor());
-    
-                    //const emittor = entity.getReaction(REBasics.actions.EatActionId).emittor();
-                    const effect = eatEmittor.effectSet.targetEffect(0);
-                    effect.parameterQualifyings.push(
-                        new DParameterQualifying(MRBasics.params.hp, "1", DParameterEffectApplyType.Recover)
-                        .withApplyTarget(DValuePoint.Growth)
-                        .withConditionFormula("a.hp >= a.max_hp"));
-    
-                }
-                break;
-            }
-            case "kEntity_睡眠草A": {
-                const effect = entity.mainEmittor().effectSet.targetEffect(0);
-                effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(62);
-                this.setupGrassCommon(entity);
-                // entity.addReaction(REBasics.actions.EatActionId, 0);
-                // entity.addEmittor(DEffectCause.Eat, entity.mainEmittor());
-                // entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
-                break;
-            }
-            case "kEntity_火炎草A": {
-                const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
-
-                const eatEmittor2 = MRData.getItem("kEntity_火炎草_ブレス").mainEmittor();
-                eatEmittor2.scope.range = DEffectFieldScopeRange.Front1;
-                entity.addReaction(MRBasics.actions.EatActionId, eatEmittor2);
-                // const effect1 = .effectSet.effect(0);
-                // eatEmittor2.effectSet.addEffect effect1;
-
-                const effect2 = MRData.getItem("kEntity_火炎草_投げ当て").mainEmittor().effectSet.targetEffect(0);
-                collideEmittor.effectSet.setTargetEffect(0, effect2);
-
-                // entity.addReaction(REBasics.actions.EatActionId, 0);]
-                //entity.addReaction(REBasics.actions.EatActionId, REData.getSkill("kSkill_火炎草ブレス").emittor());
-                // const emittor = entity.getReaction(REBasics.actions.EatActionId).emittor();
-                // emittor
-                //entity.addEmittor(DEffectCause.Eat, REData.getSkill("kSkill_火炎草ブレス").emittor());
-
-                //const emittor = entity.effectSet.emittor(DEffectCause.Eat);
-                //assert(emittor);
-                //emittor.scope.range = DEffectFieldScopeRange.Front1;
-                //entity.effectSet.setEmittor(DEffectCause.Hit, entity.effectSet.mainEmittor());
-                //data.effectSet.setSkill(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_隣接"));
-                //data.effectSet.setEffect(DEffectCause.Eat, REData.getSkill("kSkill_炎のブレス_直線").effect());
-                //entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
-                break;
-            }
             case "kEntity_弟切草A": {
-                const mainEmittor = entity.mainEmittor();
-                const effect1 = mainEmittor.effectSet.targetEffect(0);
-                const effect2 = MRData.cloneEffect(effect1);
+                // const mainEmittor = entity.mainEmittor();
+                // const effect1 = mainEmittor.effectSuite.targetEffect(0);
+                // const effect2 = MRData.cloneEffect(effect1.effect);
 
-                // effect1: 一般用 (HP 回復のみ)
-                effect1.conditions.fallback = true;
+                // // effect1: 一般用 (HP 回復のみ)
+                // effect1.conditions.fallback = true;
 
-                // effect2: Actor 専用 (最大HP の上昇効果もある)
-                effect2.conditions.targetCategoryId = MRBasics.entityCategories.actor;
-                effect2.parameterQualifyings[0].conditionFormula = "a.hp < a.max_hp";
-                effect2.parameterQualifyings.push(
-                    new DParameterQualifying(MRBasics.params.hp, "2", DParameterEffectApplyType.Recover)
-                    .withApplyTarget(DValuePoint.Growth)
-                    .withConditionFormula("a.hp >= a.max_hp"));
-                mainEmittor.effectSet.addTargetEffect(effect2);
+                // // effect2: Actor 専用 (最大HP の上昇効果もある)
+                // const effect2Ref = new DEffectRef(effect2.id);
+                // effect2Ref.conditions.targetCategoryId = MRBasics.entityCategories.actor;
+                // effect2Ref.effect.parameterQualifyings[0].conditionFormula = "a.hp < a.max_hp";
+                // effect2Ref.effect.parameterQualifyings.push(
+                //     new DParameterQualifying(MRBasics.params.hp, "2", DParameterEffectApplyType.Recover)
+                //     .withApplyTarget(DValuePoint.Growth)
+                //     .withConditionFormula("a.hp >= a.max_hp"));
+                // mainEmittor.effectSuite.addTargetEffect(effect2Ref);
 
-                const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
-                break;
+                // const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
+                // break;
 
                 // const [eatEmittor, collideEmittor] = this.setupGrassCommon(entity);
                 // // entity.addReaction(REBasics.actions.EatActionId, 0);
                 // // entity.addEmittor(DEffectCause.Eat, entity.mainEmittor());
                 // // entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 // //const emittor = entity.getReaction(REBasics.actions.EatActionId).emittor();
-                // eatEmittor.effectSet.effect(0).parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "999", DParameterEffectApplyType.Recover));
+                // eatEmittor.effectSet.effect(0).effect.parameterQualifyings.push(new DParameterQualifying(REBasics.params.hp, "999", DParameterEffectApplyType.Recover));
                 // eatEmittor.effectSet.effect(0).effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.removeStatesByIntentions, value: DStateIntentions.Negative });
                 break;
             }
@@ -564,9 +386,9 @@ export class MRSetup {
                 //entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 entity.addReaction(MRBasics.actions.WaveActionId, MRData.getSkill("kSkill_魔法弾発射_一般").emittor());
                 entity.idealParams[MRBasics.params.remaining] = 5;
-                const effect = entity.mainEmittor().effectSet.targetEffect(0);
-                effect.parameterQualifyings.push(new DParameterQualifying(MRBasics.params.hp, "b.hp / 2", DParameterEffectApplyType.Damage));
-                effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(55);
+                const effect = entity.mainEmittor().effectSuite.targetEffect(0);
+                effect.effect.parameterQualifyings.push(new DParameterQualifying(MRBasics.params.hp, "b.hp / 2", DParameterEffectApplyType.Damage));
+                effect.effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(55);
                 break;
             }
             case "kEntity_透明の杖A": {
@@ -574,9 +396,9 @@ export class MRSetup {
                 //entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 entity.addReaction(MRBasics.actions.WaveActionId, MRData.getSkill("kSkill_魔法弾発射_一般").emittor());
                 entity.idealParams[MRBasics.params.remaining] = 5;
-                const effect = entity.mainEmittor().effectSet.targetEffect(0);
-                effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_ADD_STATE, dataId: MRData.getState("kState_UT透明").id, value1: 1.0, value2: 0 });
-                effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(101);
+                const effect = entity.mainEmittor().effectSuite.targetEffect(0);
+                effect.effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_ADD_STATE, dataId: MRData.getState("kState_UT透明").id, value1: 1.0, value2: 0 });
+                effect.effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(101);
                 break;
             }
             case "kEntity_倍速の杖A": {
@@ -584,14 +406,15 @@ export class MRSetup {
                 //entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 entity.addReaction(MRBasics.actions.WaveActionId, MRData.getSkill("kSkill_魔法弾発射_一般").emittor());
                 entity.idealParams[MRBasics.params.remaining] = 5;
-                const effect = entity.mainEmittor().effectSet.targetEffect(0);effect.buffQualifying.push({
+                const effect = entity.mainEmittor().effectSuite.targetEffect(0);
+                effect.effect.buffQualifying.push({
                     paramId: MRBasics.params.agi,
                     level: 1,
                     levelType: DBuffLevelOp.Add,
                     type: DBuffType.Add,
                     turn: 10,
                 });
-                effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(12);
+                effect.effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(12);
                 break;
             }
             case "kEntity_いかずちの杖A": {
@@ -599,11 +422,11 @@ export class MRSetup {
                 //entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 entity.addReaction(MRBasics.actions.WaveActionId, MRData.getSkill("kSkill_魔法弾発射_一般").emittor());
                 entity.idealParams[MRBasics.params.remaining] = 5;
-                const effect = entity.mainEmittor().effectSet.targetEffect(0);
-                effect.parameterQualifyings.push(
+                const effect = entity.mainEmittor().effectSuite.targetEffect(0);
+                effect.effect.parameterQualifyings.push(
                     new DParameterQualifying(MRBasics.params.hp, "35", DParameterEffectApplyType.Damage)
                     .withVariance(20));
-                effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(77);
+                effect.effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(77);
                 break;
             }
             case "kEntity_混乱の杖A": {
@@ -611,9 +434,9 @@ export class MRSetup {
                 //entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 entity.addReaction(MRBasics.actions.WaveActionId, MRData.getSkill("kSkill_魔法弾発射_一般").emittor());
                 entity.idealParams[MRBasics.params.remaining] = 5;
-                const effect = entity.mainEmittor().effectSet.targetEffect(0);
-                effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_ADD_STATE, dataId: MRData.getState("kState_UT混乱").id, value1: 1.0, value2: 0 });
-                effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(63);
+                const effect = entity.mainEmittor().effectSuite.targetEffect(0);
+                effect.effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_ADD_STATE, dataId: MRData.getState("kState_UT混乱").id, value1: 1.0, value2: 0 });
+                effect.effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(63);
                 break;
             }
             case "kEntity_分裂の杖A": {
@@ -621,9 +444,9 @@ export class MRSetup {
                 //entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 entity.addReaction(MRBasics.actions.WaveActionId, MRData.getSkill("kSkill_魔法弾発射_一般").emittor());
                 entity.idealParams[MRBasics.params.remaining] = 5;
-                const effect = entity.mainEmittor().effectSet.targetEffect(0);
-                effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.division, entityId: 0, dataId: 0, value: 0 });
-                effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(106);
+                const effect = entity.mainEmittor().effectSuite.targetEffect(0);
+                effect.effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.division, entityId: 0, dataId: 0, value: 0 });
+                effect.effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(106);
                 break;
             }
             case "kEntity_睡眠の杖A": {
@@ -631,9 +454,9 @@ export class MRSetup {
                 //entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 entity.addReaction(MRBasics.actions.WaveActionId, MRData.getSkill("kSkill_魔法弾発射_一般").emittor());
                 entity.idealParams[MRBasics.params.remaining] = 5;
-                const effect = entity.mainEmittor().effectSet.targetEffect(0);
-                effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_ADD_STATE, dataId: MRData.getState("kState_睡眠").id, value1: 1.0, value2: 0 });
-                effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(62);
+                const effect = entity.mainEmittor().effectSuite.targetEffect(0);
+                effect.effect.rmmzSpecialEffectQualifyings.push({ code: DItemEffect.EFFECT_ADD_STATE, dataId: MRData.getState("kState_睡眠").id, value1: 1.0, value2: 0 });
+                effect.effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(62);
                 break;
             }
             case "kEntity_封印の杖A":
@@ -669,8 +492,8 @@ export class MRSetup {
                 //entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 entity.addReaction(MRBasics.actions.WaveActionId, MRData.getSkill("kSkill_魔法弾発射_一般").emittor());
                 entity.idealParams[MRBasics.params.remaining] = 5;
-                const effect = entity.mainEmittor().effectSet.targetEffect(0);
-                effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.randomWarp, entityId: 0, dataId: 0, value: 0 });
+                const effect = entity.mainEmittor().effectSuite.targetEffect(0);
+                effect.effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.randomWarp, entityId: 0, dataId: 0, value: 0 });
                 break;
             }
             case "kEntity_鈍足の杖A": {
@@ -678,15 +501,15 @@ export class MRSetup {
                // entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 entity.addReaction(MRBasics.actions.WaveActionId, MRData.getSkill("kSkill_魔法弾発射_一般").emittor());
                 entity.idealParams[MRBasics.params.remaining] = 5;
-                const effect = entity.mainEmittor().effectSet.targetEffect(0);
-                effect.buffQualifying.push({
+                const effect = entity.mainEmittor().effectSuite.targetEffect(0);
+                effect.effect.buffQualifying.push({
                     paramId: MRBasics.params.agi,
                     level: -1,
                     levelType: DBuffLevelOp.Add,
                     type: DBuffType.Add,
                     turn: 10,
                 });
-                effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(54);
+                effect.effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(54);
                 break;
             }
             case "kEntity_もろはの杖A": {
@@ -698,18 +521,18 @@ export class MRSetup {
                 //emittor.selfAnimationId = 60;
 
                 //emittor.scope.range = DEffectFieldScopeRange.Performer;
-                const effect1 = emittor.effectSet.targetEffect(0);
-                effect1.flavorEffect = DFlavorEffect.fromRmmzAnimationId(60);
+                const effect1 = emittor.effectSuite.targetEffect(0);
+                effect1.effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(60);
 
-                const effect2 = MRData.getItem("kEntity_もろはの杖A_使用者側効果").mainEmittor().effectSet.targetEffect(0);
-                effect2.flavorEffect = DFlavorEffect.fromRmmzAnimationId(60);
-                emittor.effectSet.succeededSelfEffect = effect2;
+                const effect2 = MRData.getItem("kEntity_もろはの杖A_使用者側効果").mainEmittor().effectSuite.targetEffect(0);
+                effect2.effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(60);
+                emittor.effectSuite.succeededSelfEffect = effect2;
 
                 break;
             }
             case "kEntity_転ばぬ先の杖A":
                 this.setupStaffCommon(entity);
-                entity.mainEmittor().effectSet.targetEffect(0).effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.stumble, entityId: 0, dataId: 0, value: 0 });
+                entity.mainEmittor().effectSuite.targetEffect(0).effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.stumble, entityId: 0, dataId: 0, value: 0 });
                 //entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 entity.addReaction(MRBasics.actions.WaveActionId, MRData.getSkill("kSkill_魔法弾発射_一般").emittor());
                 entity.idealParams[MRBasics.params.remaining] = 5;
@@ -823,8 +646,8 @@ export class MRSetup {
                 //entity.addEmittor(DEffectCause.Hit, entity.mainEmittor());
                 entity.addReaction(MRBasics.actions.WaveActionId, MRData.getSkill("kSkill_魔法弾発射_一般").emittor());
                 entity.idealParams[MRBasics.params.remaining] = 5;
-                const effect = entity.mainEmittor().effectSet.targetEffect(0);
-                effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(65);
+                const effect = entity.mainEmittor().effectSuite.targetEffect(0);
+                effect.effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(65);
                 break;
             }
 
@@ -832,14 +655,14 @@ export class MRSetup {
             case "kEntity_眠りガスA": {
                 const emittor = entity.mainEmittor();
                 emittor.selfAnimationId = 35;
-                emittor.scope.range = DEffectFieldScopeRange.Center;
+                emittor.scope.range = DEffectFieldScopeType.Center;
                 break;
             }
             case "kEntity_地雷A": {
                 const emittor = entity.mainEmittor();
-                const effect = emittor.effectSet.targetEffect(0);
+                const effect = emittor.effectSuite.targetEffect(0);
                 
-                emittor.scope.range = DEffectFieldScopeRange.AroundAndCenter;
+                emittor.scope.range = DEffectFieldScopeType.AroundAndCenter;
                 emittor.scope.length = 1;
                 emittor.selfAnimationId = 109;
                 //emittor.selfSequelId = REBasics.sequels.explosion;
@@ -847,11 +670,11 @@ export class MRSetup {
                 const pp = new DParameterQualifying(MRBasics.params.hp, "b.hp / 2", DParameterEffectApplyType.Damage)
                     .withElementId(MRBasics.elements.explosion);
                 pp.elementIds.push(MRData.getElement("kElement_DeathExplosion").id);
-                effect.parameterQualifyings.push(pp);
-                    // effect.parameterQualifyings.push(
+                effect.effect.parameterQualifyings.push(pp);
+                    // effect.effect.parameterQualifyings.push(
                     //     new DParameterQualifying(0, "0", DParameterEffectApplyType.Damage)
                     //     .withElementId(REData.getAttackElement("kElement_DeathExplosion").id));
-                // effect.parameterQualifyings.push({
+                // effect.effect.parameterQualifyings.push({
                 //     parameterId: REBasics.params.hp,
                 //     applyTarget: DParameterApplyTarget.Current,
                 //     elementId: REBasics.elements.explosion,
@@ -863,7 +686,7 @@ export class MRSetup {
                 //effect.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_UT爆発四散").id, value1: 1.0, value2: 0});
 
                 // 必中だと耐性を持っているはずの Player も即死してしまうので。
-                effect.hitType = DEffectHitType.Magical;
+                effect.effect.hitType = DEffectHitType.Magical;
 
                 entity.counterActions.push({ conditionAttackType: MRBasics.elements.explosion, emitSelf: true });
 
@@ -920,37 +743,37 @@ export class MRSetup {
             }
             case "kEntity_トラバサミA": {
                 const emittor = entity.mainEmittor();
-                const effect = emittor.effectSet.targetEffect(0);
-                emittor.scope.range = DEffectFieldScopeRange.Center;
-                effect.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: MRData.getState("kState_UTトラバサミ").id, value1: 1.0, value2: 0});
+                const effect = emittor.effectSuite.targetEffect(0);
+                emittor.scope.range = DEffectFieldScopeType.Center;
+                effect.effect.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: MRData.getState("kState_UTトラバサミ").id, value1: 1.0, value2: 0});
                 break;
             }
             case "kEntity_バネA": {
                 const emittor = entity.mainEmittor();
-                const effect = emittor.effectSet.targetEffect(0);
-                emittor.scope.range = DEffectFieldScopeRange.Center;
-                effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.randomWarp, entityId: 0, dataId: 0, value: 0 });
+                const effect = emittor.effectSuite.targetEffect(0);
+                emittor.scope.range = DEffectFieldScopeType.Center;
+                effect.effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.randomWarp, entityId: 0, dataId: 0, value: 0 });
                 break;
             }
             case "kEntity_転び石A":
-                entity.mainEmittor().scope.range = DEffectFieldScopeRange.Center;
-                entity.mainEmittor().effectSet.targetEffect(0).effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.stumble, entityId: 0, dataId: 0, value: 0 });
+                entity.mainEmittor().scope.range = DEffectFieldScopeType.Center;
+                entity.mainEmittor().effectSuite.targetEffect(0).effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.stumble, entityId: 0, dataId: 0, value: 0 });
                 break;
             case "kEntity_木の矢の罠A": {
                 const emittor = entity.mainEmittor();
-                emittor.scope.range = DEffectFieldScopeRange.ReceiveProjectile;
+                emittor.scope.range = DEffectFieldScopeType.ReceiveProjectile;
                 emittor.scope.length = Infinity;
                 emittor.scope.projectilePrefabKey = "kEntity_木の矢A";
                 break;
             }
             case "kEntity_毒矢の罠A": {
                 const emittor = entity.mainEmittor();
-                emittor.scope.range = DEffectFieldScopeRange.ReceiveProjectile;
+                emittor.scope.range = DEffectFieldScopeType.ReceiveProjectile;
                 emittor.scope.length = Infinity;
                 emittor.scope.projectilePrefabKey = "kEntity_毒矢A";
-                emittor.effectSet.targetEffect(0).parameterQualifyings.push(
+                emittor.effectSuite.targetEffect(0).effect.parameterQualifyings.push(
                     new DParameterQualifying(MRBasics.params.pow, "1", DParameterEffectApplyType.Damage));
-                // emittor.effectSet.effect(0).parameterQualifyings.push({
+                // emittor.effectSet.effect(0).effect.parameterQualifyings.push({
                 //     parameterId: REBasics.params.pow,
                 //     applyTarget: DParameterApplyTarget.Current,
                 //     elementId: 0,
@@ -965,14 +788,14 @@ export class MRSetup {
                 break;
             case "kEntity_落とし穴A": {
                 const emittor = entity.mainEmittor();
-                emittor.scope.range = DEffectFieldScopeRange.Center;
-                emittor.effectSet.targetEffect(0).effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.transferToLowerFloor, entityId: 0, dataId: 0, value: 0});
+                emittor.scope.range = DEffectFieldScopeType.Center;
+                emittor.effectSuite.targetEffect(0).effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.transferToLowerFloor, entityId: 0, dataId: 0, value: 0});
                 break;
             }
             case "kEntity_突風の罠A": {
                 const emittor = entity.mainEmittor();
-                emittor.scope.range = DEffectFieldScopeRange.Center;
-                emittor.effectSet.targetEffect(0).effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.transferToNextFloor, entityId: 0, dataId: 0, value: 0 });
+                emittor.scope.range = DEffectFieldScopeType.Center;
+                emittor.effectSuite.targetEffect(0).effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.transferToNextFloor, entityId: 0, dataId: 0, value: 0 });
                 emittor.selfAnimationId = 94;
                 break;
             }
@@ -989,7 +812,7 @@ export class MRSetup {
             case "kEntity_ワナの巻物A": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.mainEmittor();
-                emittor.effectSet.targetEffect(0).effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.trapProliferation, entityId: 0, dataId: 0, value: 0 });
+                emittor.effectSuite.targetEffect(0).effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.trapProliferation, entityId: 0, dataId: 0, value: 0 });
                 emittor.selfAnimationId = 54;
                 entity.addReaction(MRBasics.actions.ReadActionId, emittor);
                 break;
@@ -997,71 +820,71 @@ export class MRSetup {
             case "kEntity_メッキの巻物A": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.mainEmittor();
-                emittor.scope.range = DEffectFieldScopeRange.Selection;
-                emittor.effectSet.targetEffect(0).rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: MRData.getState("kState_System_Plating").id, value1: 1.0, value2: 0});
-                emittor.effectSet.targetEffect(0).flavorEffect = DFlavorEffect.fromRmmzAnimationId(12);
+                emittor.scope.range = DEffectFieldScopeType.Selection;
+                emittor.effectSuite.targetEffect(0).effect.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: MRData.getState("kState_System_Plating").id, value1: 1.0, value2: 0});
+                emittor.effectSuite.targetEffect(0).effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(12);
                 entity.addReaction(MRBasics.actions.ReadActionId, emittor);
                 break;
             }
             case "kEntity_地獄耳の巻物A": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.mainEmittor();
-                emittor.scope.range = DEffectFieldScopeRange.Performer;
-                emittor.effectSet.targetEffect(0).effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.clarification, entityId: 0, dataId: 0, value: DClarificationType.Unit });
-                emittor.effectSet.targetEffect(0).effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.performeSkill, entityId: 0, dataId: MRData.getSkill("kSkill_アイテム擬態解除_全体").id, value: 0 });
-                emittor.effectSet.targetEffect(0).flavorEffect = DFlavorEffect.fromRmmzAnimationId(44);
+                emittor.scope.range = DEffectFieldScopeType.Performer;
+                emittor.effectSuite.targetEffect(0).effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.clarification, entityId: 0, dataId: 0, value: DClarificationType.Unit });
+                emittor.effectSuite.targetEffect(0).effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.performeSkill, entityId: 0, dataId: MRData.getSkill("kSkill_アイテム擬態解除_全体").id, value: 0 });
+                emittor.effectSuite.targetEffect(0).effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(44);
                 entity.addReaction(MRBasics.actions.ReadActionId, emittor);
                 break;
             }
             case "kEntity_千里眼の巻物A": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.mainEmittor();
-                emittor.scope.range = DEffectFieldScopeRange.Performer;
-                emittor.effectSet.targetEffect(0).effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.clarification, entityId: 0, dataId: 0, value: DClarificationType.Item });
-                emittor.effectSet.targetEffect(0).flavorEffect = DFlavorEffect.fromRmmzAnimationId(44);
+                emittor.scope.range = DEffectFieldScopeType.Performer;
+                emittor.effectSuite.targetEffect(0).effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.clarification, entityId: 0, dataId: 0, value: DClarificationType.Item });
+                emittor.effectSuite.targetEffect(0).effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(44);
                 entity.addReaction(MRBasics.actions.ReadActionId, emittor);
                 break;
             }
             case "kEntity_あかりの巻物A": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.mainEmittor();
-                emittor.scope.range = DEffectFieldScopeRange.Performer;
-                emittor.effectSet.targetEffect(0).effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.clarification, entityId: 0, dataId: 0, value: DClarificationType.Unit });
-                emittor.effectSet.targetEffect(0).effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.clarification, entityId: 0, dataId: 0, value: DClarificationType.Trap });
-                emittor.effectSet.targetEffect(0).effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.clarification, entityId: 0, dataId: 0, value: DClarificationType.Terrain });
-                emittor.effectSet.targetEffect(0).effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.clarification, entityId: 0, dataId: 0, value: DClarificationType.Sight });
-                emittor.effectSet.targetEffect(0).flavorEffect = DFlavorEffect.fromRmmzAnimationId(44);
+                emittor.scope.range = DEffectFieldScopeType.Performer;
+                emittor.effectSuite.targetEffect(0).effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.clarification, entityId: 0, dataId: 0, value: DClarificationType.Unit });
+                emittor.effectSuite.targetEffect(0).effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.clarification, entityId: 0, dataId: 0, value: DClarificationType.Trap });
+                emittor.effectSuite.targetEffect(0).effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.clarification, entityId: 0, dataId: 0, value: DClarificationType.Terrain });
+                emittor.effectSuite.targetEffect(0).effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.clarification, entityId: 0, dataId: 0, value: DClarificationType.Sight });
+                emittor.effectSuite.targetEffect(0).effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(44);
                 entity.addReaction(MRBasics.actions.ReadActionId, emittor);
                 break;
             }
             case "kEntity_天の恵みの巻物A": {
                 this.setupScrollCommon(entity);
                 const emittor = MRData.cloneEmittor(MRData.getSkill("kSkill_武器強化").emittor());
-                emittor.scope.range = DEffectFieldScopeRange.Performer;
+                emittor.scope.range = DEffectFieldScopeType.Performer;
                 entity.addReaction(MRBasics.actions.ReadActionId, emittor);
                 break;
             }
             case "kEntity_地の恵みの巻物A": {
                 this.setupScrollCommon(entity);
                 const emittor = MRData.cloneEmittor(MRData.getSkill("kSkill_防具強化").emittor());
-                emittor.scope.range = DEffectFieldScopeRange.Performer;
+                emittor.scope.range = DEffectFieldScopeType.Performer;
                 entity.addReaction(MRBasics.actions.ReadActionId, emittor);
                 break;
             }
             case "kEntity_おはらいの巻物A": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.mainEmittor();
-                emittor.scope.range = DEffectFieldScopeRange.Performer;
+                emittor.scope.range = DEffectFieldScopeType.Performer;
                 //emittor.effectSet.effect(0).effectBehaviors.push({ specialEffectId: REBasics.effectBehaviors.dispelEquipments });
-                emittor.effectSet.targetEffect(0).flavorEffect = DFlavorEffect.fromRmmzAnimationId(46);
+                emittor.effectSuite.targetEffect(0).effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(46);
 
                 
-                const effect1 = MRData.cloneEffect(MRData.getSkill("kSkill_解呪").emittor().effectSet.targetEffect(0));
-                const effect2 = MRData.cloneEffect(MRData.getSkill("kSkill_解呪").emittor().effectSet.targetEffect(0));
+                const effect1 = MRData.cloneEffect(MRData.getSkill("kSkill_解呪").emittor().effectSuite.targetEffect(0).effect);
+                const effect2 = MRData.cloneEffect(MRData.getSkill("kSkill_解呪").emittor().effectSuite.targetEffect(0).effect);
                 effect1.subEntityFindKey.key = DSubComponentEffectTargetKey.make("Equipped", MRBasics.entityCategories.WeaponKindId);
                 effect2.subEntityFindKey.key = DSubComponentEffectTargetKey.make("Equipped", MRBasics.entityCategories.ShieldKindId);
-                emittor.effectSet.addTargetEffect(effect1);
-                emittor.effectSet.addTargetEffect(effect2);
+                emittor.effectSuite.addTargetEffect(new DEffectRef(effect1.id));
+                emittor.effectSuite.addTargetEffect(new DEffectRef(effect2.id));
 
                 entity.addReaction(MRBasics.actions.ReadActionId, emittor);
                 break;
@@ -1069,36 +892,36 @@ export class MRSetup {
             case "kEntity_食料の巻物A": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.mainEmittor();
-                emittor.scope.range = DEffectFieldScopeRange.Selection;
-                emittor.effectSet.targetEffect(0).effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.changeInstance, entityId: MRData.getItem("kEntity_大きなおにぎりA").id, dataId: 0, value: 0 });
-                emittor.effectSet.targetEffect(0).flavorEffect = DFlavorEffect.fromRmmzAnimationId(2);
+                emittor.scope.range = DEffectFieldScopeType.Selection;
+                emittor.effectSuite.targetEffect(0).effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.changeInstance, entityId: MRData.getItem("kEntity_大きなおにぎりA").id, dataId: 0, value: 0 });
+                emittor.effectSuite.targetEffect(0).effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(2);
                 entity.addReaction(MRBasics.actions.ReadActionId, emittor);
                 break;
             }
             case "kEntity_祈りの巻物A": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.mainEmittor();
-                emittor.scope.range = DEffectFieldScopeRange.Selection;
-                emittor.effectSet.targetEffect(0).parameterQualifyings.push(new DParameterQualifying(MRBasics.params.remaining, "5", DParameterEffectApplyType.Recover));
-                emittor.effectSet.targetEffect(0).flavorEffect = DFlavorEffect.fromRmmzAnimationId(46);
+                emittor.scope.range = DEffectFieldScopeType.Selection;
+                emittor.effectSuite.targetEffect(0).effect.parameterQualifyings.push(new DParameterQualifying(MRBasics.params.remaining, "5", DParameterEffectApplyType.Recover));
+                emittor.effectSuite.targetEffect(0).effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(46);
                 entity.addReaction(MRBasics.actions.ReadActionId, emittor);
                 break;
             }
             case "kEntity_かなしばりの巻物A": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.mainEmittor();
-                emittor.scope.range = DEffectFieldScopeRange.Around;
+                emittor.scope.range = DEffectFieldScopeType.Around;
                 emittor.scope.length = 1;
-                emittor.effectSet.targetEffect(0).rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: MRData.getState("kState_UTかなしばり").id, value1: 1.0, value2: 0});
-                emittor.effectSet.targetEffect(0).flavorEffect = DFlavorEffect.fromRmmzAnimationId(15);
+                emittor.effectSuite.targetEffect(0).effect.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: MRData.getState("kState_UTかなしばり").id, value1: 1.0, value2: 0});
+                emittor.effectSuite.targetEffect(0).effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(15);
                 entity.addReaction(MRBasics.actions.ReadActionId, emittor);
                 break;
             }
             case "kEntity_真空切りの巻物A": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.mainEmittor();
-                emittor.scope.range = DEffectFieldScopeRange.Room;
-                emittor.effectSet.targetEffect(0).parameterQualifyings.push(
+                emittor.scope.range = DEffectFieldScopeType.Room;
+                emittor.effectSuite.targetEffect(0).effect.parameterQualifyings.push(
                     new DParameterQualifying(MRBasics.params.hp, "35", DParameterEffectApplyType.Damage)
                     .withVariance(20));
                 emittor.selfAnimationId = 94;
@@ -1108,15 +931,15 @@ export class MRSetup {
             case "kEntity_時の砂の巻物A": {
                 this.setupScrollCommon(entity);
                 const emittor = entity.mainEmittor();
-                emittor.scope.range = DEffectFieldScopeRange.Performer;
-                emittor.effectSet.targetEffect(0).effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.restartFloor, entityId: 0, dataId: 0, value: 0 });
+                emittor.scope.range = DEffectFieldScopeType.Performer;
+                emittor.effectSuite.targetEffect(0).effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.restartFloor, entityId: 0, dataId: 0, value: 0 });
                 entity.addReaction(MRBasics.actions.ReadActionId, emittor);
                 emittor.selfAnimationId = 118;
                 break;
             }
             case "kEntity_脱出の巻物A":
                 this.setupScrollCommon(entity);
-                entity.mainEmittor().effectSet.targetEffect(0).otherEffectQualifyings.push({key: "kSystemEffect_脱出"});
+                entity.mainEmittor().effectSuite.targetEffect(0).effect.otherEffectQualifyings.push({key: "kSystemEffect_脱出"});
                 entity.addReaction(MRBasics.actions.ReadActionId, entity.mainEmittor());
                 entity.addReaction(MRBasics.actions.collide, MRData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 entity.identificationDifficulty = DIdentificationDifficulty.NameGuessed;
@@ -1129,8 +952,8 @@ export class MRSetup {
                 break;
             case "kEntity_識別の巻物A":
                 this.setupScrollCommon(entity);
-                entity.mainEmittor().scope.range = DEffectFieldScopeRange.Selection;
-                entity.mainEmittor().effectSet.targetEffect(0).otherEffectQualifyings.push({key: "kSystemEffect_識別"});
+                entity.mainEmittor().scope.range = DEffectFieldScopeType.Selection;
+                entity.mainEmittor().effectSuite.targetEffect(0).effect.otherEffectQualifyings.push({key: "kSystemEffect_識別"});
                 entity.addReaction(MRBasics.actions.ReadActionId, entity.mainEmittor());
                 //entity.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
@@ -1145,77 +968,77 @@ export class MRSetup {
         const emittor = data.emittor();
         switch (data.key) {
             case "kSkill_炎のブレス_直線":
-                emittor.scope.range = DEffectFieldScopeRange.StraightProjectile;
+                emittor.scope.range = DEffectFieldScopeType.StraightProjectile;
                 emittor.scope.length = Infinity;
                 emittor.scope.projectilePrefabKey = "kEntity_System_炎のブレスA";
                 break;
             case "kSkill_魔法弾発射_一般":
-                emittor.scope.range = DEffectFieldScopeRange.StraightProjectile;
+                emittor.scope.range = DEffectFieldScopeType.StraightProjectile;
                 emittor.scope.length = Infinity;
                 emittor.scope.projectilePrefabKey = "kEntity_System_MagicBulletA";
                 data.emittor().costs.setParamCost(DSkillCostSource.Item, MRBasics.params.remaining, {type: DParamCostType.Decrease, value: 1});
                 break;
             case "kSkill_ふきとばし": {
-                const effect = emittor.effectSet.targetEffect(0);
-                effect.otherEffectQualifyings.push({key: "kSystemEffect_ふきとばし"});
-                effect.parameterQualifyings.push(new DParameterQualifying(MRBasics.params.hp, "5", DParameterEffectApplyType.Damage));
+                const effect = emittor.effectSuite.targetEffect(0);
+                effect.effect.otherEffectQualifyings.push({key: "kSystemEffect_ふきとばし"});
+                effect.effect.parameterQualifyings.push(new DParameterQualifying(MRBasics.params.hp, "5", DParameterEffectApplyType.Damage));
                 break;
             }
             case "kSkill_変化":
-                emittor.effectSet.targetEffect(0).effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.changeInstance, entityId: 0, dataId: 0, value: 0 });
-                emittor.effectSet.targetEffect(0).flavorEffect = DFlavorEffect.fromRmmzAnimationId(40);
+                emittor.effectSuite.targetEffect(0).effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.changeInstance, entityId: 0, dataId: 0, value: 0 });
+                emittor.effectSuite.targetEffect(0).effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(40);
                 break;
             case "kSkill_投げ当て_1ダメ":
-                emittor.scope.range = DEffectFieldScopeRange.Performer;
+                emittor.scope.range = DEffectFieldScopeType.Performer;
                 break;
             case "kSkill_火炎草ブレス":
-                emittor.scope.range = DEffectFieldScopeRange.Front1;
+                emittor.scope.range = DEffectFieldScopeType.Front1;
                 //emittor.scope.length = Infinity;
                 //emittor.scope.projectilePrefabKey = "kEntity_System_炎のブレスA";
                 break;
             case "kSkill_射撃_矢":
-                emittor.scope.range = DEffectFieldScopeRange.StraightProjectile;
+                emittor.scope.range = DEffectFieldScopeType.StraightProjectile;
                 emittor.scope.length = Infinity;
                 emittor.scope.projectilePrefabKey = "kEntity_木の矢A";
                 break;
             case "kSkill_足つかみ":
-                emittor.scope.range = DEffectFieldScopeRange.Front1;
-                emittor.effectSet.selfEffect.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: MRData.getState("kState_UT足つかみ").id, value1: 100, value2: 0});
+                emittor.scope.range = DEffectFieldScopeType.Front1;
+                emittor.effectSuite.selfEffect.effect.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: MRData.getState("kState_UT足つかみ").id, value1: 100, value2: 0});
                 break;
             case "kSkill_大爆発":
-                emittor.scope.range = DEffectFieldScopeRange.Around;
+                emittor.scope.range = DEffectFieldScopeType.Around;
                 emittor.scope.length = 1;
                 //emittor.effectSet.effect(0).qualifyings.specialEffectQualifyings.push({code: DSpecialEffectCodes.DeadlyExplosion, dataId: 0, value1: 0, value2: 0});
-                //emittor.effectSet.effect(0).qualifyings.parameterQualifyings;
+                //emittor.effectSet.effect(0).qualifyings.effect.parameterQualifyings;
                 //emittor.effectSet.effect(0).rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: REData.getState("kState_UT爆発四散").id, value1: 100, value2: 0});
                 //emittor.selfAnimationId = 109;
-                emittor.effectSet.targetEffect(0).parameterQualifyings[0].elementIds.push(MRData.getElement("kElement_DeathExplosion").id);
+                emittor.effectSuite.targetEffect(0).effect.parameterQualifyings[0].elementIds.push(MRData.getElement("kElement_DeathExplosion").id);
                 emittor.selfSequelId = MRBasics.sequels.explosion;
-                emittor.effectSet.targetEffect(0).hitType = DEffectHitType.Magical;
+                emittor.effectSuite.targetEffect(0).effect.hitType = DEffectHitType.Magical;
                 break;
             case "kSkill_アイテム盗み":
-                emittor.scope.range = DEffectFieldScopeRange.Front1;
+                emittor.scope.range = DEffectFieldScopeType.Front1;
                 emittor.scope.layers.push(DBlockLayerKind.Ground);
-                emittor.effectSet.targetEffect(0).effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.itemSteal, entityId: 0, dataId: 0, value: 0 });
+                emittor.effectSuite.targetEffect(0).effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.itemSteal, entityId: 0, dataId: 0, value: 0 });
                 break;
             case "kSkill_ゴールド盗み":
-                emittor.scope.range = DEffectFieldScopeRange.Front1;
+                emittor.scope.range = DEffectFieldScopeType.Front1;
                 //emittor.scope.layers.push(DBlockLayerKind.Ground);
-                emittor.effectSet.targetEffect(0).effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.goldSteal, entityId: 0, dataId: 0, value: 0 });
+                emittor.effectSuite.targetEffect(0).effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.goldSteal, entityId: 0, dataId: 0, value: 0 });
                 break;
             case "kSkill_装備サビ":
-                emittor.scope.range = DEffectFieldScopeRange.Front1;
+                emittor.scope.range = DEffectFieldScopeType.Front1;
                 break;
             case "kSkill_装備サビ_武器":
             case "kSkill_装備サビ_盾":
-                emittor.scope.range = DEffectFieldScopeRange.Front1;
+                emittor.scope.range = DEffectFieldScopeType.Front1;
                 const p = new DParameterQualifying(MRBasics.params.upgradeValue, "1", DParameterEffectApplyType.Damage);
                 p.alliesSideGainMessage = tr2("%1はサビてしまった。"),
                 p.alliesSideLossMessage = tr2("%1はサビてしまった。"),
                 p.opponentGainMessage = tr2("%1はサビてしまった。"),
                 p.opponentLossMessage = tr2("%1はサビてしまった。"),
-                emittor.effectSet.targetEffect(0).parameterQualifyings.push(p);
-                // emittor.effectSet.effect(0).parameterQualifyings.push({
+                emittor.effectSuite.targetEffect(0).effect.parameterQualifyings.push(p);
+                // emittor.effectSet.effect(0).effect.parameterQualifyings.push({
                 //     parameterId: REBasics.params.upgradeValue,
                 //     applyTarget: DParameterApplyTarget.Current,
                 //     elementId: 0,
@@ -1229,20 +1052,20 @@ export class MRSetup {
                 //     opponentLossMessage: tr2("%1はサビてしまった。"),
                 // });
                 if (data.key == "kSkill_装備サビ_武器") {
-                    emittor.effectSet.targetEffect(0).subEntityFindKey.key = DSubComponentEffectTargetKey.make("Equipped", MRBasics.entityCategories.WeaponKindId);
+                    emittor.effectSuite.targetEffect(0).effect.subEntityFindKey.key = DSubComponentEffectTargetKey.make("Equipped", MRBasics.entityCategories.WeaponKindId);
                 }
                 else {
-                    emittor.effectSet.targetEffect(0).subEntityFindKey.key = DSubComponentEffectTargetKey.make("Equipped", MRBasics.entityCategories.ShieldKindId);
+                    emittor.effectSuite.targetEffect(0).effect.subEntityFindKey.key = DSubComponentEffectTargetKey.make("Equipped", MRBasics.entityCategories.ShieldKindId);
                 }
                 break;
             case "kSkill_混乱魔法_部屋内":
-                emittor.scope.range = DEffectFieldScopeRange.Room;
+                emittor.scope.range = DEffectFieldScopeType.Room;
                 emittor.selfAnimationId = 97;
                 break;
             case "kSkill_毒攻撃":
-                emittor.scope.range = DEffectFieldScopeRange.Front1;
-                emittor.effectSet.targetEffect(0).parameterQualifyings.push(new DParameterQualifying(MRBasics.params.pow, "1", DParameterEffectApplyType.Damage));
-                // emittor.effectSet.effect(0).parameterQualifyings.push({
+                emittor.scope.range = DEffectFieldScopeType.Front1;
+                emittor.effectSuite.targetEffect(0).effect.parameterQualifyings.push(new DParameterQualifying(MRBasics.params.pow, "1", DParameterEffectApplyType.Damage));
+                // emittor.effectSet.effect(0).effect.parameterQualifyings.push({
                 //     parameterId: REBasics.params.pow,
                 //     applyTarget: DParameterApplyTarget.Current,
                 //     elementId: 0,
@@ -1253,9 +1076,9 @@ export class MRSetup {
                 // });
                 break;
             case "kSkill_毒攻撃_強":
-                emittor.scope.range = DEffectFieldScopeRange.Front1;
-                emittor.effectSet.targetEffect(0).parameterQualifyings.push(new DParameterQualifying(MRBasics.params.pow, "3", DParameterEffectApplyType.Damage));
-                // emittor.effectSet.effect(0).parameterQualifyings.push({
+                emittor.scope.range = DEffectFieldScopeType.Front1;
+                emittor.effectSuite.targetEffect(0).effect.parameterQualifyings.push(new DParameterQualifying(MRBasics.params.pow, "3", DParameterEffectApplyType.Damage));
+                // emittor.effectSet.effect(0).effect.parameterQualifyings.push({
                 //     parameterId: REBasics.params.pow,
                 //     applyTarget: DParameterApplyTarget.Current,
                 //     elementId: 0,
@@ -1266,57 +1089,57 @@ export class MRSetup {
                 // });
                 break;
             case "kSkill_レベルダウン":
-                emittor.effectSet.targetEffect(0).effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.levelDown, entityId: 0, dataId: 0, value: 0 });
+                emittor.effectSuite.targetEffect(0).effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.levelDown, entityId: 0, dataId: 0, value: 0 });
                 break;
             case "kSkill_ワープ魔法":
-                emittor.effectSet.targetEffect(0).effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.randomWarp, entityId: 0, dataId: 0, value: 0 });
+                emittor.effectSuite.targetEffect(0).effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.randomWarp, entityId: 0, dataId: 0, value: 0 });
                 break;
             case "kSkill_Warp":
-                emittor.effectSet.targetEffect(0).effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.randomWarp, entityId: 0, dataId: 0, value: 0 });
-                emittor.scope.range = DEffectFieldScopeRange.Performer;
+                emittor.effectSuite.targetEffect(0).effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.randomWarp, entityId: 0, dataId: 0, value: 0 });
+                emittor.scope.range = DEffectFieldScopeType.Performer;
                 break;
             case "kSkill_KnockbackAttack":
-                emittor.effectSet.targetEffect(0).otherEffectQualifyings.push({key: "kSystemEffect_ふきとばし"});
-                emittor.scope.range = DEffectFieldScopeRange.Front1;
+                emittor.effectSuite.targetEffect(0).effect.otherEffectQualifyings.push({key: "kSystemEffect_ふきとばし"});
+                emittor.scope.range = DEffectFieldScopeType.Front1;
                 break;
             case "kSkill_武器強化": {
-                const effect1 = emittor.effectSet.targetEffect(0);
-                effect1.parameterQualifyings.push(new DParameterQualifying(MRBasics.params.upgradeValue, "1", DParameterEffectApplyType.Recover));
-                effect1.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_REMOVE_STATE, dataId: MRData.system.states.curse, value1: 1.0, value2: 0});
-                effect1.subEntityFindKey.key = DSubComponentEffectTargetKey.make("Equipped", MRBasics.entityCategories.WeaponKindId);
+                const effect1 = emittor.effectSuite.targetEffect(0);
+                effect1.effect.parameterQualifyings.push(new DParameterQualifying(MRBasics.params.upgradeValue, "1", DParameterEffectApplyType.Recover));
+                effect1.effect.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_REMOVE_STATE, dataId: MRData.system.states.curse, value1: 1.0, value2: 0});
+                effect1.effect.subEntityFindKey.key = DSubComponentEffectTargetKey.make("Equipped", MRBasics.entityCategories.WeaponKindId);
                 effect1.conditions.applyRating = 7;
-                effect1.flavorEffect = DFlavorEffect.fromRmmzAnimationId(51);
+                effect1.effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(51);
                 break;
             }
             case "kSkill_武器強化_強": {
-                const effect1 = emittor.effectSet.targetEffect(0);
-                effect1.parameterQualifyings.push(new DParameterQualifying(MRBasics.params.upgradeValue, "3", DParameterEffectApplyType.Recover));
-                effect1.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_REMOVE_STATE, dataId: MRData.system.states.curse, value1: 1.0, value2: 0});
-                effect1.subEntityFindKey.key = DSubComponentEffectTargetKey.make("Equipped", MRBasics.entityCategories.WeaponKindId);
+                const effect1 = emittor.effectSuite.targetEffect(0);
+                effect1.effect.parameterQualifyings.push(new DParameterQualifying(MRBasics.params.upgradeValue, "3", DParameterEffectApplyType.Recover));
+                effect1.effect.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_REMOVE_STATE, dataId: MRData.system.states.curse, value1: 1.0, value2: 0});
+                effect1.effect.subEntityFindKey.key = DSubComponentEffectTargetKey.make("Equipped", MRBasics.entityCategories.WeaponKindId);
                 effect1.conditions.applyRating = 3;
-                effect1.flavorEffect = DFlavorEffect.fromRmmzAnimationId(52);
+                effect1.effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(52);
                 break;
             }
             case "kSkill_防具強化": {
-                const effect1 = emittor.effectSet.targetEffect(0);
-                effect1.parameterQualifyings.push(new DParameterQualifying(MRBasics.params.upgradeValue, "1", DParameterEffectApplyType.Recover));
-                effect1.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_REMOVE_STATE, dataId: MRData.system.states.curse, value1: 1.0, value2: 0});
-                effect1.subEntityFindKey.key = DSubComponentEffectTargetKey.make("Equipped", MRBasics.entityCategories.ShieldKindId);
+                const effect1 = emittor.effectSuite.targetEffect(0);
+                effect1.effect.parameterQualifyings.push(new DParameterQualifying(MRBasics.params.upgradeValue, "1", DParameterEffectApplyType.Recover));
+                effect1.effect.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_REMOVE_STATE, dataId: MRData.system.states.curse, value1: 1.0, value2: 0});
+                effect1.effect.subEntityFindKey.key = DSubComponentEffectTargetKey.make("Equipped", MRBasics.entityCategories.ShieldKindId);
                 effect1.conditions.applyRating = 7;
-                effect1.flavorEffect = DFlavorEffect.fromRmmzAnimationId(51);
+                effect1.effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(51);
                 break;
             }
             case "kSkill_防具強化_強": {
-                const effect1 = emittor.effectSet.targetEffect(0);
-                effect1.parameterQualifyings.push(new DParameterQualifying(MRBasics.params.upgradeValue, "3", DParameterEffectApplyType.Recover));
-                effect1.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_REMOVE_STATE, dataId: MRData.system.states.curse, value1: 1.0, value2: 0});
-                effect1.subEntityFindKey.key = DSubComponentEffectTargetKey.make("Equipped", MRBasics.entityCategories.ShieldKindId);
+                const effect1 = emittor.effectSuite.targetEffect(0);
+                effect1.effect.parameterQualifyings.push(new DParameterQualifying(MRBasics.params.upgradeValue, "3", DParameterEffectApplyType.Recover));
+                effect1.effect.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_REMOVE_STATE, dataId: MRData.system.states.curse, value1: 1.0, value2: 0});
+                effect1.effect.subEntityFindKey.key = DSubComponentEffectTargetKey.make("Equipped", MRBasics.entityCategories.ShieldKindId);
                 effect1.conditions.applyRating = 3;
-                effect1.flavorEffect = DFlavorEffect.fromRmmzAnimationId(52);
+                effect1.effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(52);
                 break;
             }
             case "kSkill_アイテム擬態解除_全体": {
-                emittor.scope.range = DEffectFieldScopeRange.Map;
+                emittor.scope.range = DEffectFieldScopeType.Map;
                 break;
             }
         }
@@ -1326,22 +1149,26 @@ export class MRSetup {
         const emittor = data.emittor();
         switch (data.key) {
             case "kSkill_装備サビ": {
-                const effect1 = MRData.cloneEffect(MRData.getSkill("kSkill_装備サビ_武器").emittor().effectSet.targetEffect(0));
-                const effect2 = MRData.cloneEffect(MRData.getSkill("kSkill_装備サビ_盾").emittor().effectSet.targetEffect(0));
+                const effect1 = MRData.cloneEffect(MRData.getSkill("kSkill_装備サビ_武器").emittor().effectSuite.targetEffect(0).effect);
+                const effect2 = MRData.cloneEffect(MRData.getSkill("kSkill_装備サビ_盾").emittor().effectSuite.targetEffect(0).effect);
                 effect1.subEntityFindKey.key = DSubComponentEffectTargetKey.make("Equipped", MRBasics.entityCategories.WeaponKindId);
                 effect2.subEntityFindKey.key = DSubComponentEffectTargetKey.make("Equipped", MRBasics.entityCategories.ShieldKindId);
-                emittor.effectSet.addTargetEffect(effect1);
-                emittor.effectSet.addTargetEffect(effect2);
+                emittor.effectSuite.addTargetEffect(new DEffectRef(effect1.id));
+                emittor.effectSuite.addTargetEffect(new DEffectRef(effect2.id));
                 break;
             }
             case "kSkill_武器強化": {
-                const effect2 = MRData.cloneEffect(MRData.getSkill("kSkill_武器強化_強").emittor().effectSet.targetEffect(0));
-                emittor.effectSet.addTargetEffect(effect2);
+                // const effect2 = MRData.cloneEffect(MRData.getSkill("kSkill_武器強化_強").emittor().effectSet.targetEffect(0).effect);
+                // emittor.effectSet.addTargetEffect(new DEffectRef(effect2.id));
+                const ref = MRData.getSkill("kSkill_武器強化_強").emittor().effectSuite.targetEffect(0);
+                emittor.effectSuite.addTargetEffect(ref);
                 break;
             }
             case "kSkill_防具強化": {
-                const effect2 = MRData.cloneEffect(MRData.getSkill("kSkill_防具強化_強").emittor().effectSet.targetEffect(0));
-                emittor.effectSet.addTargetEffect(effect2);
+                // const effect2 = MRData.cloneEffect(MRData.getSkill("kSkill_防具強化_強").emittor().effectSet.targetEffect(0).effect);
+                // emittor.effectSet.addTargetEffect(new DEffectRef(effect2.id));
+                const ref = MRData.getSkill("kSkill_防具強化_強").emittor().effectSuite.targetEffect(0);
+                emittor.effectSuite.addTargetEffect(ref);
                 break;
             }
         }
@@ -1352,13 +1179,13 @@ export class MRSetup {
         switch (entity.entity.key) {
             case "kEntity_錆ワナA": {
                 const emittor = entity.mainEmittor();
-                const effect1 = MRData.cloneEffect(MRData.getSkill("kSkill_装備サビ_武器").emittor().effectSet.targetEffect(0));
-                const effect2 = MRData.cloneEffect(MRData.getSkill("kSkill_装備サビ_盾").emittor().effectSet.targetEffect(0));
+                const effect1 = MRData.cloneEffect(MRData.getSkill("kSkill_装備サビ_武器").emittor().effectSuite.targetEffect(0).effect);
+                const effect2 = MRData.cloneEffect(MRData.getSkill("kSkill_装備サビ_盾").emittor().effectSuite.targetEffect(0).effect);
                 effect1.subEntityFindKey.key = DSubComponentEffectTargetKey.make("Equipped", MRBasics.entityCategories.WeaponKindId);
                 effect2.subEntityFindKey.key = DSubComponentEffectTargetKey.make("Equipped", MRBasics.entityCategories.ShieldKindId);
-                emittor.effectSet.addTargetEffect(effect1);
-                emittor.effectSet.addTargetEffect(effect2);
-                emittor.scope.range = DEffectFieldScopeRange.Center;
+                emittor.effectSuite.addTargetEffect(new DEffectRef(effect1.id));
+                emittor.effectSuite.addTargetEffect(new DEffectRef(effect2.id));
+                emittor.scope.range = DEffectFieldScopeType.Center;
                 emittor.selfAnimationId = 82;
                 break;
             }
@@ -1556,14 +1383,14 @@ export class MRSetup {
         assert(damage);
         
         const emittor = MRData.newEmittor(entity.entity.key);
-        emittor.scope.range = DEffectFieldScopeRange.Performer;
+        emittor.scope.range = DEffectFieldScopeType.Performer;
         const effect = MRData.newEffect(entity.entity.key);
         effect.critical = false;
         effect.successRate = 100;
         effect.hitType = DEffectHitType.Physical;
         const q = new DParameterQualifying(MRBasics.params.hp, damage.value.toString(), DParameterEffectApplyType.Damage);
         effect.parameterQualifyings.push(q);
-        emittor.effectSet.addTargetEffect(effect);
+        emittor.effectSuite.addTargetEffect(new DEffectRef(effect.id));
         entity.addReaction(MRBasics.actions.collide, emittor);
     }
 
@@ -1575,7 +1402,7 @@ export class MRSetup {
         this.setupItemCommon(entity);
         entity.entity.kindId = MRBasics.entityCategories.ArrowKindId;
         const emittor = MRData.newEmittor(entity.entity.key);
-        emittor.scope.range = DEffectFieldScopeRange.Performer;
+        emittor.scope.range = DEffectFieldScopeType.Performer;
         const effect = MRData.newEffect(entity.entity.key);
         effect.critical = false;
         effect.successRate = 100;
@@ -1587,7 +1414,7 @@ export class MRSetup {
         if (entity.equipment) {
             effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(entity.equipment.targetRmmzAnimationId);
         }
-        emittor.effectSet.addTargetEffect(effect);
+        emittor.effectSuite.addTargetEffect(new DEffectRef(effect.id));
         entity.addReaction(MRBasics.actions.collide, emittor);
 
     }
@@ -1615,7 +1442,7 @@ export class MRSetup {
         // そのあと MainEmittor に FP 回復効果を追加する。
 
         const mainEmittor = entity.mainEmittor();
-        mainEmittor.scope.range = DEffectFieldScopeRange.Performer;
+        mainEmittor.scope.range = DEffectFieldScopeType.Performer;
 
         // Collide
         const collideEmittor = MRData.cloneEmittor(mainEmittor);
@@ -1627,7 +1454,7 @@ export class MRSetup {
 
         const fpEffect = MRData.newEffect(entity.entity.key);
         fpEffect.parameterQualifyings.push(new DParameterQualifying(MRBasics.params.fp, fp.toString(), DParameterEffectApplyType.Recover).withSilent());
-        eatEmittor.effectSet.addTargetEffect(fpEffect);
+        eatEmittor.effectSuite.addTargetEffect(new DEffectRef(fpEffect.id));
         const reaction = entity.addReaction(MRBasics.actions.EatActionId, eatEmittor);
         reaction.overrideDisplayCommandName = tr2("飲む");
         //entity.addEmittor(DEffectCause.Eat, eatEmittor);
@@ -1642,6 +1469,34 @@ export class MRSetup {
         return [eatEmittor, collideEmittor];
     }
 
+    /*
+    杖の処理見直し
+    ----------
+    v0.7.0 時点の杖の処理の流れ
+    1. Wave の Reaction として、 「kSkill_魔法弾発射_一般のEmittor」 を発動する
+    2. 「kSkill_魔法弾発射_一般のEmittor」 の Range は StraightProjectile である。
+    3. performeEffect() にて、Performer は杖ItemEntity を使って、 StraightProjectile を発動する。
+    4. StraightProjectile は、使われた ItemEntity を投げ当てた時の効果を発動する。
+
+    今は StraightProjectile は Collide 固定だが、土塊の杖やトンネルの杖など、振ったときと投げた時で効果が変わるものはある。
+
+    多分イメージが簡単なのは、「吹き飛ばしの魔法弾」「トンネルの魔法弾」など個別に作ることだろう。
+    現状の StraightProjectile は ItemEntity の Collide を参照しているが、これをやめ、個別に設定できるようにする。
+    v0.7.0 ではコード上で手動設定していたため、簡略化を狙ってちょっとややこしくなっていた。
+
+    トドの壺など押したらコストを消費して何かが飛んでいくものにも応用できるかもしれない。
+
+    修正後の流れ
+    1. Wave の Reaction として、 kEmittor_吹き飛ばしの魔法弾 を発動する
+    2. kEmittor_吹き飛ばしの魔法弾 の Range は StraightProjectile で、効果は Emittor に紐づいている。
+    3. performeEffect() にて、Performer は StraightProjectile を発動する。
+    4. StraightProjectile は、kEmittor_吹き飛ばしの魔法弾 に紐づいた効果を発動する。
+
+    なお、ドラゴンの炎ブレスはSkill側でダメージ設定している。
+    performeEffect_StraightProjectile() で、 次のようになっている。
+    - ItemEntity が指定されている場合はその collide を使う。
+    - そうでなければ、 emittor に紐づいている Effect を使う。
+    */
     private static setupStaffCommon(entity: DEntity): void {
         this.setupItemCommon(entity);
         const mainEmittor = entity.mainEmittor();

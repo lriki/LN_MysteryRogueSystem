@@ -1,20 +1,17 @@
 import { assert } from "../Common";
-import { DEntityCategoryId } from "./DCommon";
-import { DEffectFieldScope, DEffectFieldScopeArea, DEffectFieldScopeRange, DEffectSet, DEmittorCost } from "./DEffect";
-import { DSkill } from "./DSkill";
+import { DEmittorId, DEntityCategoryId } from "./DCommon";
+import { DEffectFieldScope, DEffectFieldScopeArea, DEffectFieldScopeType, DEmittorCost, DRmmzEffectScope } from "./DEffect";
+import { DEffectRef, DEffectSuite, IEffectRef } from "./DEffectSuite";
+import { DHelpers } from "./DHelper";
 import { MRData } from "./MRData";
-
-
-export type DEmittorId = number;
-
 
 /**
  * RMMZ の Skill と Item の共通パラメータ
  */
  export class DEmittor {
-    readonly id: DEmittorId;
-
-    readonly key: string;
+    public readonly id: DEmittorId;
+    public readonly key: string;
+    public readonly effectSuite: DEffectSuite;
 
     /**
      * Cost は Emittor が持つ。
@@ -56,32 +53,92 @@ export type DEmittorId = number;
     /** 発動側 Sequel ID */
     selfSequelId: number;
 
-    effectSet: DEffectSet;
     
     constructor(id: DEmittorId, key: string) {
         this.id = id;
         this.key = key;
+        this.effectSuite = new DEffectSuite(key);
         this.costs = new DEmittorCost();
         this.scope = new DEffectFieldScope();
         this.selfAnimationId = 0;
         this.targetAreaAnimationId = 0;
         this.selfSequelId = 0;
-        this.effectSet = new DEffectSet(key);
     }
 
     public applyProps(props: IEmittorProps): void {
+        if (props.scopeType) {
+            this.scope.range = DHelpers.stringToEnum(props.scopeType, {
+                "front": DEffectFieldScopeType.Front1,
+                "_": DEffectFieldScopeType.Performer,
+            });
+        }
+
         if (props.targetEffectKeys) {
-            this.effectSet.clearTargetEffects();
+            this.effectSuite.clearTargetEffects();
             for (const key of props.targetEffectKeys) {
                 const effect = MRData.getEffect(key);
-                this.effectSet.addTargetEffect(effect);
+                const ref = new DEffectRef(effect.id);
+                this.effectSuite.addTargetEffect(ref);
+            }
+        }
+        // NOTE: 追加にするべきか？リセットか？
+        // Trait や SpecialEffect はエディタ上でどのような設定がされているのかがわかる。
+        // 対して、 Emittor や Effect は MRシステム独自のもので、エディタからは見えない。
+        // 見えないのでイメージしづらく、省略されていると見落としの懸念がある。
+        // そのためリセットにしておく。
+        if (props.targetEffects) {
+            this.effectSuite.clearTargetEffects();
+            for (const p of props.targetEffects) {
+                const effect = MRData.getEffect(p.effectKey);
+                const ref = new DEffectRef(effect.id);
+                // if (p.conditions) {
+                //     if (p.conditions.targetCategoryKey) {
+                //         ref.conditions.targetCategoryId = MRData.getEntityCategory(p.conditions.targetCategoryKey).id;
+                //     }
+                //     if (p.conditions.targetRaceKey) {
+                //         ref.conditions.raceId = MRData.getRace(p.conditions.targetRaceKey).id;
+                //     }
+                //     if (p.conditions.rating) {
+                //         ref.conditions.applyRating = p.conditions.rating;
+                //     }
+                //     if (p.conditions.fallback) {
+                //         ref.conditions.fallback = p.conditions.fallback;
+                //     }
+                // }
+                if (p.conditionTargetCategoryKey) {
+                    ref.conditions.targetCategoryId = MRData.getEntityCategory(p.conditionTargetCategoryKey).id;
+                }
+                if (p.conditionTargetRaceKey) {
+                    ref.conditions.targetRaceId = MRData.getRace(p.conditionTargetRaceKey).id;
+                }
+                if (p.conditionRating) {
+                    ref.conditions.applyRating = p.conditionRating;
+                }
+                if (p.conditionFallback) {
+                    ref.conditions.fallback = p.conditionFallback;
+                }
+                this.effectSuite.addTargetEffect(ref);
             }
         }
     }
     
     public copyFrom(src: DEmittor): void {
         this.scope = { ...src.scope };
-        this.effectSet.copyFrom(src.effectSet);
+        this.effectSuite.copyFrom(src.effectSuite);
+    }
+
+    public setupFromRmmzScope(rmmzScope: DRmmzEffectScope): void {
+        switch (rmmzScope) {
+            case DRmmzEffectScope.Opponent_Single:
+                this.scope.range = DEffectFieldScopeType.Front1;
+                break;
+            case DRmmzEffectScope.Opponent_All:
+                this.scope.range = DEffectFieldScopeType.Room;
+                break;
+            default:
+                this.scope.range = DEffectFieldScopeType.Performer;
+                break;
+        }
     }
 }
 
@@ -89,6 +146,18 @@ export type DEmittorId = number;
 // Props
 
 export interface IEmittorProps {
+    scopeType?: ("front");
+
+    /** @deprecated */
     targetEffectKeys?: string[];
+
+    /**
+     * この Emittor によって発動される Effect のリストです。
+     * 必要に応じて発動条件を指定できます。
+     * 
+     * このリストを設定すると、 EntityTemplate によってリンクされる Emittor と Effect の関連付けはリセットされます。
+     * つまりこのリストには、Emittor が発動する Effect をすべて指定する必要があります。
+     */
+    targetEffects?: IEffectRef[];
 }
 

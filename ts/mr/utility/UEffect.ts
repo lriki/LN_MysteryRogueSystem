@@ -1,5 +1,4 @@
 import { assert } from "../Common";
-import { DEffect, DEffectSet } from "../data/DEffect";
 import { LEntity } from "../lively/LEntity";
 import { LRandom } from "../lively/LRandom";
 import { SEffect } from "../system/SEffectApplyer";
@@ -68,7 +67,7 @@ export class UEffect {
     private static selectCandidateTargetEffects(result: UResolvedApplyEffects, allEffects: readonly SEffect[], target: LEntity, rand: LRandom): void {
         for (const effect of allEffects) {
             // Find sub-components
-            const subComponentKey = effect.data().subEntityFindKey.key;
+            const subComponentKey = effect.data().effect.subEntityFindKey.key;
             if (subComponentKey) {
                 for (const subTarget of target.querySubEntities(subComponentKey)) {
                     result.addCandidateTargetEffect(subTarget, target, effect);
@@ -131,8 +130,8 @@ export class UEffect {
             }
         }
 
-        if (data.conditions.raceId != 0) {
-            if (!target.queryRaceIds().includes(data.conditions.raceId)) {
+        if (data.conditions.targetRaceId != 0) {
+            if (!target.queryRaceIds().includes(data.conditions.targetRaceId)) {
                 return false;
             }
         }
@@ -143,22 +142,6 @@ export class UEffect {
 
     private static selectEffect(effectList: SEffect[], rand: LRandom): SEffect | undefined {
         return this.selectRating<SEffect>(rand, effectList, x => x.data().conditions.applyRating);
-        // const ratingMax = Math.max(...effectList.map(a => a.data().conditions.applyRating));
-        // const ratingZero = ratingMax - 10;//- 3;
-        // const sum = effectList.reduce((r, a) => r + (a.data().conditions.applyRating) - ratingZero, 0);
-        // if (sum > 0) {
-        //     let value = rand.nextIntWithMax(sum);
-        //     for (const action of effectList) {
-        //         if (!action.data().conditions.applyRating) continue;
-
-        //         value -= (action.data().conditions.applyRating) - ratingZero;
-        //         if (value < 0) {
-        //             return action;
-        //         }
-        //     }
-        // } else {
-        //     return undefined;
-        // }
     }
 
     public static selectRating<T>(rand: LRandom, items: T[], rating: (item: T) => number): T | undefined {

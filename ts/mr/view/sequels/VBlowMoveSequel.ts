@@ -1,14 +1,14 @@
 import { Vector2 } from "ts/mr/math/Vector2";
-import { REVisualSequel } from "../REVisualSequel";
-import { REVisualSequelContext } from "../REVisualSequelContext";
-import { REVisual_Entity } from "../REVisual_Entity";
+import { VSequel } from "../VSequel";
+import { VSequelContext } from "../VSequelContext";
+import { VEntity } from "../VEntity";
 
 /**
  * 吹き飛ばされ移動。
  * 矢を撃つのとは別なので注意。
  */
-export class VBlowMoveSequel extends REVisualSequel {
-    onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void {
+export class VBlowMoveSequel extends VSequel {
+    onUpdate(visual: VEntity, context: VSequelContext): void {
 
         // 移動は直線距離ではなく X Y 個別に計算する。
         // 斜め移動時に速度が上がる問題であるが、複数の Entity が同時に移動するとき、

@@ -51,6 +51,22 @@ MR.db.entities = {
     // 草・薬
     //==========================================================================
     //--------------------------------------------------------------------------
+    "kEntity_火炎草A": Entity({
+        reactions: [
+            Reaction({
+                actionKey: "kAction_Eat",
+                emittorKeys: [
+                    "kEmittor_火炎草A_Main",
+                    "kEmittor_火炎草A_Eat"],
+                commandName: "飲む",
+            }),
+            Reaction({
+                actionKey: "kAction_Collide",
+                emittorKeys: ["kEmittor_火炎草A_Collide"],
+            }),
+        ],
+    }),
+    //--------------------------------------------------------------------------
     "kEntity_TestポーションA": Entity({
         reactions: [
             Reaction({
@@ -62,6 +78,9 @@ MR.db.entities = {
                 actionKey: "kAction_Collide",
                 emittorKeys: ["kEmittor_TestポーションA_投げ当て"],
             }),
+        ],
+        selfTraits: [
+            Trait({ code: "DeathVulnerableElement", elementKey: "kElement_DeathExplosion", stateKey: "kState_System_ExplosionDeath" }),
         ],
     }),
 };

@@ -38,7 +38,7 @@ PluginManager.registerCommand(pluginName, "MR-SetContext", (args: any) => {
 PluginManager.registerCommand(pluginName, "MR-ShowWarehouseStoreDialog", (args: any) => {
     const serviceProviderKey: string = args.serviceProviderKey;
     const serviceUserKey: string = args.serviceUserKey;
-    if (MRView.manager) {
+    if (MRView.sequelFactory) {
         const player = MRLively.camera.getFocusedEntity();
         MRSystem.commandContext.openDialog(player, new SWarehouseStoreDialog(USearch.getEntityByKeyPattern(serviceUserKey), USearch.getEntityByKeyPattern(serviceProviderKey)), false)
         .then((d: SWarehouseStoreDialog) => {
@@ -51,7 +51,7 @@ PluginManager.registerCommand(pluginName, "MR-ShowWarehouseStoreDialog", (args: 
 PluginManager.registerCommand(pluginName, "MR-ShowWarehouseWithdrawDialog", (args: any) => {
     const serviceProviderKey: string = args.serviceProviderKey;
     const serviceUserKey: string = args.serviceUserKey;
-    if (MRView.manager) {
+    if (MRView.sequelFactory) {
         const player = MRLively.camera.getFocusedEntity();
         MRSystem.commandContext.openDialog(player, new SWarehouseWithdrawDialog(USearch.getEntityByKeyPattern(serviceUserKey), USearch.getEntityByKeyPattern(serviceProviderKey)), false)
         .then((d: SWarehouseWithdrawDialog) => {
@@ -65,7 +65,7 @@ PluginManager.registerCommand(pluginName, "MR-ShowItemSellDialog", (args: any) =
     const serviceProviderKey: string = args.serviceProviderKey;
     const serviceUserKey: string = args.serviceUserKey;
     const inventoryOwnerKey: string = args.inventoryOwnerKey;
-    if (MRView.manager) {
+    if (MRView.sequelFactory) {
         const player = MRLively.camera.getFocusedEntity();
         MRSystem.commandContext.openDialog(player, new SItemSellDialog(USearch.getEntityByKeyPattern(serviceProviderKey), USearch.getEntityByKeyPattern(serviceUserKey), USearch.getEntityByKeyPattern(inventoryOwnerKey)), false)
         .then((d: SItemSellDialog) => {

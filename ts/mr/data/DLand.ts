@@ -402,7 +402,7 @@ export class DLand {
 
                         if (key.toLowerCase() == "all") {
                             const level = this.parseLandIdentificationLevel(tokens[1].toLowerCase());
-                            for (const kind of MRData.entityKinds) {
+                            for (const kind of MRData.categories) {
                                 this.identifiedKinds[kind.id] = level;
                             }
                         }

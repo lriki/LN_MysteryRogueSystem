@@ -147,21 +147,21 @@ export class RMMZIntegration extends SIntegration {
     }
     
     onOpenDialog(model: SDialog): void {
-        MRView.manager?.openDialog(model);
+        MRView.dialogManager?.openDialog(model);
     }
     
     onUpdateDialog(context: SDialogContext): void {
-        const manager = MRView.manager;
+        const manager = MRView.dialogManager;
         if (manager) {
-            assert(!manager.dialogNavigator.isEmpty());
+            assert(!manager.dialogNavigator.isEmpty);
             manager.dialogNavigator.update(context);
         }
     }
 
     override onDialogClosed(context: SDialogContext, dialog: SDialog): void {
-        const manager = MRView.manager;
+        const manager = MRView.dialogManager;
         if (manager) {
-            manager.dialogNavigator.markCloseDialog(context, dialog);
+            manager.dialogNavigator.closeDialog(context, dialog);
         }
     }
     

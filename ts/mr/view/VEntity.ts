@@ -3,8 +3,7 @@ import { DSequelId } from "ts/mr/data/DSequel";
 import { Vector2 } from "ts/mr/math/Vector2";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { Helpers } from "ts/mr/system/Helpers";
-import { MRSystem } from "ts/mr/system/MRSystem";
-import { REVisualSequelContext } from "ts/mr/view/REVisualSequelContext";
+import { VSequelContext } from "ts/mr/view/VSequelContext";
 import { LEntity } from "../lively/LEntity";
 import { MRView } from "./MRView";
 import { SNavigationHelper } from "ts/mr/system/SNavigationHelper";
@@ -21,12 +20,11 @@ import { MRData } from "../data/MRData";
  * RMMZ 向けのこのクラスの実装では、直接 Sprite を出したりするわけではない点に注意。
  * Mnager からのインスタンス生成と同時に、動的に Game_Event が生成され、このクラスはその Game_Event を操作する。
  */
-export class REVisual_Entity
-{
+export class VEntity {
     private _entity: LEntity; // EntityVisual が存在する間、Entity は必ず存在していると考えてよい
     private _rmmzEventId: number;
     private _rmmzSpriteIndex: number;   // Spriteset_Map._characterSprites の index
-    private _sequelContext: REVisualSequelContext;
+    private _sequelContext: VSequelContext;
     private _initialUpdate: boolean = true;
 
     // 単位は Block 座標と等しい。px 単位ではない点に注意。
@@ -55,7 +53,7 @@ export class REVisual_Entity
         this._entity = entity;
         this._rmmzEventId = rmmzEventId;
         this._rmmzSpriteIndex = -1;
-        this._sequelContext = new REVisualSequelContext(this);
+        this._sequelContext = new VSequelContext(this);
         this._position = new Vector2(entity.mx, entity.my);
         this._sequelOpacity = 1.0;
     }
@@ -120,7 +118,7 @@ export class REVisual_Entity
         this._position.y = this._entity.my;
     }
 
-    sequelContext(): REVisualSequelContext {
+    sequelContext(): VSequelContext {
         return this._sequelContext;
     }
 
@@ -152,16 +150,16 @@ export class REVisual_Entity
     }
 
     _update() {
-        assert(MRView.manager);
+        assert(MRView.sequelFactory);
 
-        
+
         if (this._rmmzEventId >= 0) {
             //const tileSize = REVisual.manager.tileSize();
             const event = $gameMap.event(this._rmmzEventId);
             const entity = this.entity();
 
 
-            
+
             this._visibility = SView.getEntityVisibility(entity);
 
 
@@ -170,12 +168,12 @@ export class REVisual_Entity
                 this._actualImage = this.getCharacterImage(entity, this._visibility);
                 if (this._actualImage) {
                     event.setImage(this._actualImage.characterName, this._actualImage.characterIndex);
-    
+
                     if (event.isDirectionFixed() != this._actualImage.directionFix) {
                         event.setDirection(this._actualImage.direction);
                         event.setDirectionFix(this._actualImage.directionFix);
                     }
-    
+
                     event.setStepAnime(this._actualImage.stepAnime);
                     event.setWalkAnime(this._actualImage.walkAnime);
                     if (!this._actualImage.stepAnime && !this._actualImage.walkAnime) {
@@ -234,15 +232,15 @@ export class REVisual_Entity
             event._y = this._position.y;
             event._realX = this._position.x;//(this._position.x * tileSize.x) + (tileSize.x  / 2);
             event._realY = this._position.y;//(this._position.y * tileSize.y) + (tileSize.y  / 2);
-            
+
             // NOTE: 罠を踏んだ後、Sequel の再生が終わるまで露出した罠が表示されない問題があった。
             // ただ既存問題が見切れていないためコメントアウト。
             //if (REVisual._syncCamera) {
-                this.updateOpacity(entity, event, this._visibility);
+            this.updateOpacity(entity, event, this._visibility);
             //}
 
 
-            
+
             const sprite = this.rmmzSprite();
             if (sprite) {
                 const entity = this.entity();
@@ -307,7 +305,7 @@ export class REVisual_Entity
         if (visibility.image) {
             return visibility.image;
         }
-        
+
         return undefined;
 
         // // ステートなどで上書きされているもの
@@ -315,7 +313,7 @@ export class REVisual_Entity
         // if (overridenImage) {
         //     return overridenImage;
         // }
-        
+
         // return undefined;
         // デフォルトはプレハブから
         // const prefab = REData.prefabs[ entity.data.prefabId];
@@ -355,27 +353,5 @@ export class REVisual_Entity
             }
         }
     }
-
-/*
-    private updateEventPage(event: Game_REPrefabEvent): void {
-        const index = this.getEventPageIndex();
-        event.setPageIndex(index);
-    }
-    
-    private getEventPageIndex(): number {
-        const prefab = this.entity().data().prefab();
-        if (prefab.subPages.length > 0) {
-            for (const stateId of this.entity()._states) {
-                const state = REGame.world.object(stateId) as LState;
-                for (const subPage of prefab.subPages) {
-                    if (subPage.stateId == state.stateDataId()) {
-                        return subPage.rmmzEventPageIndex;
-                    }
-                }
-            }
-        }
-        return 0;
-    }
-    */
 }
 

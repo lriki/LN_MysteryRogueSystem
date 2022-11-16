@@ -1,6 +1,6 @@
 import { assert } from "../Common";
 import { MRSystem } from "../system/MRSystem";
-import { REEntityVisualSet } from "../view/REEntityVisualSet";
+import { VEntityManager } from "../view/VEntityManager";
 import { MRView } from "../view/MRView";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { RMMZHelper } from "./RMMZHelper";
@@ -52,7 +52,7 @@ Scene_Map.prototype.createDisplayObjects = function() {
 
     // ベースの createDisplayObjects() では update() が一度呼ばれるため、先にインスタンスを作っておく
     assert(!MRView.entityVisualSet);
-    MRView.entityVisualSet = new REEntityVisualSet();
+    MRView.entityVisualSet = new VEntityManager();
 
     _Scene_Map_createDisplayObjects.call(this);
     

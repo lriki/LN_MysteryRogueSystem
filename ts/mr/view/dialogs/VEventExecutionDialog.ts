@@ -3,7 +3,7 @@ import { assert } from "ts/mr/Common";
 import { SEventExecutionDialog } from "ts/mr/system/dialogs/SEventExecutionDialog";
 import { VDialog } from "./VDialog";
 
-export class REEventExecutionDialogVisual extends VDialog {
+export class VEventExecutionDialog extends VDialog {
     private _model: SEventExecutionDialog;
 
     constructor(model: SEventExecutionDialog) {

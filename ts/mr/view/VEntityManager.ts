@@ -2,8 +2,8 @@ import { MRDataManager } from "ts/mr/data/MRDataManager";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { SSequelSet } from "ts/mr/system/SSequel";
-import { REVisualSequelManager } from "./REVisualSequelManager";
-import { REVisual_Entity } from "./REVisual_Entity";
+import { VSequelManager } from "./VSequelManager";
+import { VEntity } from "./VEntity";
 import { assert } from "ts/mr/Common";
 import { SRmmzHelpers } from "../system/SRmmzHelpers";
 import { MRData } from "../data/MRData";
@@ -17,14 +17,14 @@ import { MRData } from "../data/MRData";
  * 
  * なお、Spriteset_Map は SceneManager.onBeforeSceneStart() からの Scene(PIXI.Stage) の destory により破棄される。
  */
-export class REEntityVisualSet {
-    private _visualEntities: REVisual_Entity[];
-    private _sequelManager: REVisualSequelManager;
+export class VEntityManager {
+    private _visualEntities: VEntity[];
+    private _sequelManager: VSequelManager;
     //private _reservedDeleteVisuals: REVisual_Entity[];
 
     constructor() {
         this._visualEntities = [];
-        this._sequelManager = new REVisualSequelManager(this);
+        this._sequelManager = new VSequelManager(this);
         //this._reservedDeleteVisuals = [];
         MRLively.signalFlushSequelSet = (x) => this.handleFlushSequelSet(x);
         
@@ -43,7 +43,7 @@ export class REEntityVisualSet {
         });
     }
 
-    public entityVisuals(): REVisual_Entity[] {
+    public entityVisuals(): VEntity[] {
         return this._visualEntities;
     }
 
@@ -76,26 +76,26 @@ export class REEntityVisualSet {
         this.deleteVisuals();
     }
 
-    public sequelManager(): REVisualSequelManager {
+    public sequelManager(): VSequelManager {
         return this._sequelManager;
     }
 
-    public findEntityVisualByEntity(entity: LEntity): REVisual_Entity | undefined {
+    public findEntityVisualByEntity(entity: LEntity): VEntity | undefined {
         return this._visualEntities.find(x => x.entity().entityId() == entity.entityId());
     }
 
-    public getEntityVisualByEntity(entity: LEntity): REVisual_Entity {
+    public getEntityVisualByEntity(entity: LEntity): VEntity {
         const v = this.findEntityVisualByEntity(entity);
         assert(v);
         return v;
     }
 
-    findEntityVisualByRMMZEventId(rmmzEventId: number): REVisual_Entity | undefined {
+    findEntityVisualByRMMZEventId(rmmzEventId: number): VEntity | undefined {
         return this._visualEntities.find(x => x.rmmzEventId() == rmmzEventId);
     }
 
     visualRunning(): boolean {
-        return this._sequelManager.isRunning();
+        return this._sequelManager.isRunning;
     }
 
     public reserveDeleteVisual(entity: LEntity): void {
@@ -126,7 +126,7 @@ export class REEntityVisualSet {
         }
     }
 
-    private detachVisual(visual: REVisual_Entity): void {
+    private detachVisual(visual: VEntity): void {
         this._sequelManager.removeVisual(visual);
         $gameMap.event(visual.rmmzEventId()).erase();
     }
@@ -148,8 +148,6 @@ export class REEntityVisualSet {
                 }
             }
         }
-        console.log("entity", entity);
-        console.log("entity.data", entity.data);
 
         const prefabId = entity.getPrefabId();
         const prefab = MRData.prefabs[prefabId];
@@ -200,7 +198,7 @@ export class REEntityVisualSet {
 
         assert(event.isREEvent());
 
-        const visual = new REVisual_Entity(entity, event.eventId());
+        const visual = new VEntity(entity, event.eventId());
         //event._visualId = this._visualEntities.length;
         this._visualEntities.push(visual);
     }

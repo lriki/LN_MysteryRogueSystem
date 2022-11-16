@@ -38,6 +38,7 @@ import { UEffect } from "../utility/UEffect";
 import { DTerrainSettingRef } from "../data/DLand";
 import { MRBasics } from "../data/MRBasics";
 import { LEquipmentUserBehavior } from "../lively/behaviors/LEquipmentUserBehavior";
+import { LChronus } from "../lively/LChronus";
 //import { REVisual } from "../visual/REVisual";
 
 /**
@@ -72,6 +73,7 @@ export class SGameManager {
         MRLively.recorder = new SActivityRecorder();
         MRLively.messageHistory = new LMessageHistory();
         MRLively.eventServer = new LEventServer();
+        MRLively.chronus = new LChronus();
         MRLively.borderWall = new LBlock(-1, -1);
 
         MRLively.world._registerObject(MRLively.map);
@@ -238,6 +240,7 @@ export class SGameManager {
         contents.scheduler = MRLively.scheduler;
         contents.messageHistory = MRLively.messageHistory;
         contents.eventServer = MRLively.eventServer;
+        contents.chronus = MRLively.chronus;
         return contents;
     }
 
@@ -249,6 +252,7 @@ export class SGameManager {
         MRLively.scheduler = contents.scheduler;
         MRLively.messageHistory = contents.messageHistory;
         MRLively.eventServer = contents.eventServer;
+        MRLively.chronus = contents.chronus;
     }
 
     public static makeSaveContents(): any {

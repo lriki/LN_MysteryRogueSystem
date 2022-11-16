@@ -22,17 +22,18 @@ import { DStateGroup } from "./DStateGroup";
 import { DPseudonymous } from "./DPseudonymous";
 import { DItemShopType } from "./DItemShop";
 import { MRDataExtension } from "./MRDataExtension";
-import { DEmittor, DEmittorId } from "./DEmittor";
+import { DEmittor } from "./DEmittor";
 import { DElement } from "./DElement";
 import { assert } from "../Common";
 import { DRace } from "./DRace";
 import { DFloorPreset, DTerrainSetting, DTerrainShape } from "./DTerrainPreset";
 import { DCommand } from "./DCommand";
 import { DEffect } from "./DEffect";
-import { DActionId, DEffectId, DParameterId, DSkillId } from "./DCommon";
+import { DActionId, DEffectId, DEmittorId, DParameterId, DSkillId } from "./DCommon";
 import { DMap } from "./DMap";
 import { DEntityTemplate, IEntityTemplateProps } from "./DEntityTemplate";
 import { DSpecialEffect } from "./DSpecialEffect";
+import { DChronus } from "./DChronus";
 
 
 export type DFactionId = number;
@@ -93,10 +94,12 @@ export class MRData
     static ext: MRDataExtension = new MRDataExtension();
 
     static system: DSystem;
-    //static equipTypes: DEquipmentType[] = [];
+    static chronus: DChronus;
+
     static elements: DElement[] = [];
     static equipmentParts: DEquipmentPart[] = [];
-    static entityKinds: DEntityCategory[] = [];
+    static categories: DEntityCategory[] = [];
+
     static classes: DClass[] = [];
     static races: DRace[] = [];
     static actors: DEntityId[] = [];
@@ -139,7 +142,9 @@ export class MRData
     static _behaviorFactories: (() => LBehavior)[] = [];
 
     static reset() {
-        this.entityKinds = [new DEntityCategory(0, "null")];
+        this.chronus = new DChronus();
+
+        this.categories = [new DEntityCategory(0, "null")];
 
         this.classes = [];
         this.newClass("null");
@@ -187,16 +192,15 @@ export class MRData
 
     //--------------------------------------------------------------------------
 
-    static newEntityCategory(key: string, displayName: string = ""): number {
-        const newId = this.entityKinds.length;
-        const data = new DEntityCategory(newId, key);
+    static newEntityCategory(key: string, displayName: string = ""): DEntityCategory {
+        const data = new DEntityCategory(this.categories.length, key);
         data.displayName = displayName;
-        this.entityKinds.push(data);
-        return newId;
+        this.categories.push(data);
+        return data;
     }
 
     static findEntityCategory(pattern: string): DEntityCategory | undefined {
-        return this.findHelper(this.entityKinds, pattern, x => x.key === pattern);
+        return this.findHelper(this.categories, pattern, x => x.key === pattern);
     }
 
     static getEntityCategory(pattern: string): DEntityCategory {
@@ -426,7 +430,7 @@ export class MRData
 
     static cloneEmittor(src: DEmittor): DEmittor {
         const newId = this.emittors.length;
-        const data = new DEmittor(newId, src.effectSet.selfEffect.key);
+        const data = new DEmittor(newId, src.effectSuite.selfEffect.effect.key);
         data.copyFrom(src);
         this.emittors.push(data);
         return data;

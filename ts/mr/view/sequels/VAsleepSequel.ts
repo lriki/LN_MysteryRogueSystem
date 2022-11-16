@@ -1,11 +1,11 @@
-import { REVisualSequel } from "../REVisualSequel";
-import { REVisualSequelContext } from "../REVisualSequelContext";
-import { REVisual_Entity } from "../REVisual_Entity";
+import { VSequel } from "../VSequel";
+import { VSequelContext } from "../VSequelContext";
+import { VEntity } from "../VEntity";
 
 
-export class VAsleepSequel extends REVisualSequel {
+export class VAsleepSequel extends VSequel {
 
-    onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void {
+    onUpdate(visual: VEntity, context: VSequelContext): void {
 
         const event = visual.rmmzEvent();
         if (event) {

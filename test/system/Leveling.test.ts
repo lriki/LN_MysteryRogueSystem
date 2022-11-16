@@ -47,7 +47,7 @@ test("system.Leveling.levelUp", () => {
     expect(level2).toBeGreaterThan(level1);
 
     const message = MRLively.messageHistory;
-    expect(message.countIncludesText("レベル 2 に上がった")).toBe(1);
+    expect(message.countIncludesText("はレベル 2 に上がった")).toBe(1);
 });
 
 test("system.Leveling.BoundaryValueTest", () => {

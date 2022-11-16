@@ -2,8 +2,8 @@ import { assert, tr2 } from "ts/mr/Common";
 import { DActor } from "./DActor";
 import { DAnnotationReader } from "./importers/DAttributeReader";
 import { DClassId } from "./DClass";
-import { DActionId, DElementId, DEntityCategoryId, DRaceId } from "./DCommon";
-import { DEmittorId, DEmittor } from "./DEmittor";
+import { DActionId, DElementId, DEmittorId, DEntityCategoryId, DRaceId } from "./DCommon";
+import { DEmittor } from "./DEmittor";
 import { DEnemy } from "./DEnemy";
 import { DEntityProperties, DEntityProperties_Default } from "./DEntityProperties";
 import { DHelpers } from "./DHelper";
@@ -399,6 +399,7 @@ export class DEntity {
 
     public applyProps(props: IEntityProps): void {
         if (props.reactions) {
+            this.reactions = [];
             for (const reactionProps of props.reactions) {
                 const action = MRData.getSkill(reactionProps.actionKey);
                 if (reactionProps.emittorKeys) {

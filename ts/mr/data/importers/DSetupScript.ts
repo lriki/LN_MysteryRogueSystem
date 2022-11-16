@@ -150,14 +150,14 @@ export class DSetupScript {
 
     private createEntityCategories(): void {
         for (const [key, props] of Object.entries(this._mainDB.entityCategories)) {
-            if (!MRData.entityKinds.find(x => x.key == key)) {
+            if (!MRData.categories.find(x => x.key == key)) {
                 MRData.newEntityCategory(key);
             }
         }
     }
 
     private setupEntityCategories(): void {
-        for (const data of MRData.entityKinds) {
+        for (const data of MRData.categories) {
             const props = this._mainDB.entityCategories[data.key];
             if (props) {
                 data.applyProps(props);

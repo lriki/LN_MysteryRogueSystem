@@ -18,6 +18,7 @@ export type DTerrainPresetId = number;
 export type DActionId = DSkillId;
 export type DCommandId = number;
 export type DEffectId = number & { readonly brand?: unique symbol }; // Do not include in save data
+export type DEmittorId = number & { readonly brand?: unique symbol };
 export type DEntityTemplateId = number & { readonly brand?: unique symbol };
 
 /** Animation データのインデックス。 RMMZ の AnimationId と等しい。 */
@@ -28,28 +29,6 @@ export type DLandId = number;
 
 /** DMap のインデックス。 RMMZ の MapId と等しい。 */
 export type DMapId = number;
-
-
-// /**
-//  * システムに基づいた根本的な分類。
-//  * 
-//  * EntityKind とは異なりユーザーが安易に増やすべきではない。そのため DB では扱わず、enum とする。
-//  * これによってデフォルトで追加される Behavior が変わる。
-//  * 
-//  * 例えば「壺」や「札」といったアイテムの種類はタイトルごとに変わるが、
-//  * 「アイテム」「罠」といった種類はローグライクRPGとしては共通の要素となる。
-//  */
-// export enum DEntityClass {
-//     Unit,
-
-//     /**
-//      * 主に Unit のインベントリによって所有され、 Unit の行動選択肢を増やすために利用できる Entity。
-//      */
-//     Item,
-    
-//     Trap,
-// }
-
 
 // Sub-Component を検索するためのキー
 export class DSubComponentEffectTargetKey {

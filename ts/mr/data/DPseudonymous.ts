@@ -32,7 +32,7 @@ export class DPseudonymous {
         const result = [];
         for (let i = 0; i < this._names.length; i++) {
             if (this._names[i]) {
-                result.push(MRData.entityKinds[i]);
+                result.push(MRData.categories[i]);
             }
         }
         return result;

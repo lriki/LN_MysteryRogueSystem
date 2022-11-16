@@ -186,7 +186,7 @@ export class LEntity extends LObject
     }
 
     public kindData(): DEntityCategory {
-        return MRData.entityKinds[this.data.entity.kindId];
+        return MRData.categories[this.data.entity.kindId];
     }
 
     public entityId(): LEntityId {

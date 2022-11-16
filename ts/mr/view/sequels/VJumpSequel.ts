@@ -1,7 +1,7 @@
 import { Vector2 } from "ts/mr/math/Vector2";
-import { REVisualSequel } from "../REVisualSequel";
-import { REVisualSequelContext } from "../REVisualSequelContext";
-import { REVisual_Entity } from "../REVisual_Entity";
+import { VSequel } from "../VSequel";
+import { VSequelContext } from "../VSequelContext";
+import { VEntity } from "../VEntity";
 
 /*
 論理位置とMotion再生の順序について
@@ -19,7 +19,7 @@ Motionの引数として移動後の位置を渡す必要が出てきて、ち�
 
 */
 
-export class VJumpSequel extends REVisualSequel {
+export class VJumpSequel extends VSequel {
     private _moveSpeed: number = 4;
     private _jumpPeak: number = 0;
     private _jumpCount: number = 0;
@@ -27,7 +27,7 @@ export class VJumpSequel extends REVisualSequel {
     private _realX: number = 0;
     private _realY: number = 0;
 
-    onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void {
+    onUpdate(visual: VEntity, context: VSequelContext): void {
 
         const frameCount = context.frameCount();
         const event = visual.rmmzEvent();

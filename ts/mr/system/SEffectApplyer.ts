@@ -1,6 +1,6 @@
 import { MRBasics } from "../data/MRBasics";
 import { DSpecialEffectId, DEntityCategoryId, DSkillId, DSubComponentEffectTargetKey, DElementId, DParameterId } from "../data/DCommon";
-import { DEffect, DEffectHitType, DEffectSet, DOtherEffectQualifying, DParamBuff, DValuePoint, DParameterEffectApplyType, DParameterQualifying } from "../data/DEffect";
+import { DEffect, DEffectHitType, DOtherEffectQualifying, DParamBuff, DValuePoint, DParameterEffectApplyType, DParameterQualifying } from "../data/DEffect";
 import { DItemEffect } from "../data/DItemEffect";
 import { LandExitResult, MRData } from "../data/MRData";
 import { LProjectileBehavior } from "../lively/behaviors/activities/LProjectileBehavior";
@@ -18,6 +18,7 @@ import { UState } from "../utility/UState";
 import { DStateId } from "../data/DState";
 import { assert } from "../Common";
 import { DSpecialEffectRef } from "../data/DSpecialEffect";
+import { DEffectRef, DEffectSuite } from "../data/DEffectSuite";
 
 
 /**
@@ -26,13 +27,13 @@ import { DSpecialEffectRef } from "../data/DSpecialEffect";
  */
 export class SEffect {
     private _fact: SEffectorFact;
-    private _data: DEffect;
+    private _data: DEffectRef;
     //private _targetModifier: SEffectModifier;
     //private _hitType: DEffectHitType;
     //private _successRate: number;   // 0~100
     private _parameterEffects2: SParameterEffect[];
 
-    constructor(fact: SEffectorFact, effect: DEffect) {
+    constructor(fact: SEffectorFact, effect: DEffectRef) {
         this._fact = fact;
         this._data = effect;
         //this._hitType = effect.hitType;
@@ -44,7 +45,7 @@ export class SEffect {
         // 装備品 Behavior はここへ値を加算したりする。
         //this._subjectActualParams = [];
         this._parameterEffects2 = [];
-        for (const p of effect.parameterQualifyings) {
+        for (const p of effect.effect.parameterQualifyings) {
             const paramEffect = new SParameterEffect(p);
             this._parameterEffects2.push(paramEffect);
 
@@ -64,7 +65,7 @@ export class SEffect {
         return this._fact.subject();
     }
 
-    public data(): DEffect {
+    public data(): DEffectRef {
         return this._data;
     }
     
@@ -73,19 +74,19 @@ export class SEffect {
     // }
 
     public get successRate(): number {  // 0~100
-        return this.data().successRate;
+        return this.data().effect.successRate;
     }
         
     public isCertainHit(): boolean {
-        return this.data().hitType == DEffectHitType.Certain;
+        return this.data().effect.hitType == DEffectHitType.Certain;
     }
 
     public isPhysical(): boolean {
-        return this.data().hitType == DEffectHitType.Physical;
+        return this.data().effect.hitType == DEffectHitType.Physical;
     }
 
     public isMagical(): boolean {
-        return this.data().hitType == DEffectHitType.Magical;
+        return this.data().effect.hitType == DEffectHitType.Magical;
     }
 
     // 0.0~1.0
@@ -118,7 +119,7 @@ export class SEffect {
         const subject = this.subject();
         const cri = (subject) ? subject.xparam(MRBasics.xparams.cri) : 1.0;
 
-        return this._data.critical
+        return this._data.effect.critical
             ? cri * (1 - target.xparam(MRBasics.xparams.cev))
             : 0;
     }
@@ -146,19 +147,19 @@ export class SEffect {
     }
     
     public otherEffectQualifyings(): DOtherEffectQualifying[] {
-        return this._data.otherEffectQualifyings;
+        return this._data.effect.otherEffectQualifyings;
     }
 
     public effectBehaviors(): DSpecialEffectRef[] {
-        return this._data.effectBehaviors;
+        return this._data.effect.effectBehaviors;
     }
  
      public specialEffectQualifyings(): IDataEffect[] {
-         return this._data.rmmzSpecialEffectQualifyings;
+         return this._data.effect.rmmzSpecialEffectQualifyings;
      }
 
      public buffQualifying(): DParamBuff[] {
-        return this._data.buffQualifying;
+        return this._data.effect.buffQualifying;
     }
 }
 
@@ -170,7 +171,7 @@ export class SEffect {
 // 攻撃側
 export class SEffectorFact {
     private _subject: LEntity;
-    private _subjectEffects: DEffectSet;
+    private _subjectEffects: DEffectSuite;
     private _subjectBattlerBehavior: LBattlerBehavior | undefined;
 
     // 適用側 (攻撃側) の関係者。
@@ -196,7 +197,7 @@ export class SEffectorFact {
 
     private _genericEffectRate: number;
 
-    public constructor(subject: LEntity, effects: DEffectSet, incidentType: SEffectIncidentType, dir: number) {
+    public constructor(subject: LEntity, effects: DEffectSuite, incidentType: SEffectIncidentType, dir: number) {
         this._subject = subject;
         this._subjectEffects = effects;
         this._subjectBattlerBehavior = subject.findEntityBehavior(LBattlerBehavior);
@@ -258,7 +259,7 @@ export class SEffectorFact {
         return this._subjectBattlerBehavior;
     }
 
-    public effectSet(): DEffectSet {
+    public effectSet(): DEffectSuite {
         return this._subjectEffects;
     }
 
@@ -409,6 +410,11 @@ export class SParameterEffect {
     }
 
     private meetsConditions(target: LEntity): boolean {
+        if (this.qualifying.conditionTargetCategoryId > 0) {
+            if (this.qualifying.conditionTargetCategoryId != target.kindDataId()) {
+                return false;
+            }
+        }
         if (this.qualifying.conditionFormula) {
             const a = MRSystem.formulaOperandA as any;
             a.wrap(target);
@@ -810,6 +816,7 @@ export class SEffectApplyer {
             paramResult.applyTarget = paramEffect.qualifying.applyTarget;
             paramResult.damage = value;
             paramResult.oldValue = oldValue;
+            paramResult.parameterDamageEffect = paramEffect.qualifying;
             //paramResult.newValue = target.actualParam(paramEffect.paramId);
             paramResult.drain = paramEffect.isDrain;
             result.paramEffects2.push(paramResult);

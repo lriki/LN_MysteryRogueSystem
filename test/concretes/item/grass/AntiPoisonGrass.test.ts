@@ -46,7 +46,7 @@ test("concretes.item.grass.AntiPoisonGrass.player", () => {
 
     const pow2 = player1.getActualParam(MRBasics.params.pow);
     expect(pow2).toBe(pow1);    // ちからが最大まで回復
-    expect(MRLively.messageHistory.includesText("回復した")).toBeTruthy();
+    expect(MRLively.messageHistory.includesText("ちからが回復した")).toBeTruthy();  // "ちからが7回復した" とはならない
 
     TestUtils.testCommonGrassEnd(player1, item1);
 

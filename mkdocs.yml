@@ -1,6 +1,14 @@
+# Project information
 site_name: RPGツクールMZ MisteryRogueSystem
 docs_dir: mkdocs
 site_dir: mksite
+site_url: https://lriki.github.io/LN_MysteryRogueSystem/
+site_author: lriki
+
+# Repository
+repo_name: LN_MysteryRogueSystem
+repo_url: https://github.com/lriki/LN_MysteryRogueSystem
+edit_uri: ""
 
 markdown_extensions:
   - admonition
@@ -13,6 +21,9 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
+extra:
+  version:
+    provider: mike
 
 theme:
   name: material
@@ -51,11 +62,10 @@ nav:
       - 4. 標準ゲームシステムとの関係: 1-tutorial/1-first/4-system.md
       - 5. ダンジョン攻略の流れ: 1-tutorial/1-first/5-land.md
       - 6. データベースの編集: 1-tutorial/1-first/6-database.md
-      - 7. 詳細データの編集: 1-tutorial/1-first/7-edit-details.md
-      - 8. デバッグ機能: 1-tutorial/1-first/8-debug-command.md
+      - 7. デバッグ機能: 1-tutorial/1-first/8-debug-command.md
     - アイテムの作成:
       - 1. はじめに: 1-tutorial/2-create-item/1-introduction.md
-      - 2. アイテムエンティティの追加: 1-tutorial/2-create-item/2-item-entity.md
+      - 2. アイテムデータの追加: 1-tutorial/2-create-item/2-item-entity.md
       - 3. アクションとリアクション: 1-tutorial/2-create-item/3-action-and-reaction.md
       - 4. エミッターとエフェクト: 1-tutorial/2-create-item/4-emittor-and-effect.md
       - 5. 投げ当てと副効果: 1-tutorial/2-create-item/5-sub-effects.md
@@ -63,16 +73,18 @@ nav:
       - 7. エンティティテンプレート: 1-tutorial/2-create-item/7-entity-template.md
       - 8. まとめ・設定の探し方: 1-tutorial/2-create-item/8-closing.md
   - 機能:
-    - feature/index.md
-    - パラメータ: feature/parameters.md
-    - 種族: feature/race.md
-    - スキル: feature/skill.md
-    - トループ: feature/troop.md
-    - ステート: feature/state.md
-    - ステートグループ: feature/state-group.md
-    - ドロップアイテム: feature/DropItem.md
-    - 変数: feature/rmmz-variables.md
-    - イベントコマンド: feature/event-commands.md
+    - 2-feature/index.md
+    - エディタで設定できる情報:
+      - アイテム: 2-feature/import-db-item.md
+    - パラメータ: 2-feature/parameters.md
+    - 種族: 2-feature/race.md
+    - スキル: 2-feature/skill.md
+    - トループ: 2-feature/troop.md
+    - ステート: 2-feature/state.md
+    - ステートグループ: 2-feature/state-group.md
+    - ドロップアイテム: 2-feature/DropItem.md
+    - 変数: 2-feature/rmmz-variables.md
+    - イベントコマンド: 2-feature/event-commands.md
   - 実装:
     - 3-implementation/index.md
     - アイテム:

@@ -43,7 +43,7 @@ import { SEffect, SEffectorFact } from "ts/mr/system/SEffectApplyer";
 import { DBlockLayerKind, DSpecialEffectId, DSubComponentEffectTargetKey, DCommandId, DActionId } from "ts/mr/data/DCommon";
 import { DSequelId } from "ts/mr/data/DSequel";
 import { LCandidateSkillAction } from "ts/mr/utility/UAction";
-import { DEffect } from "ts/mr/data/DEffect";
+import { DEffectRef } from "ts/mr/data/DEffectSuite";
 import { DFactionId } from "ts/mr/data/MRData";
 import { LMinimapMarkerClass, LPriceInfo, LReaction } from "../LCommon";
 import { LMap } from "../LMap";
@@ -182,7 +182,7 @@ export interface CollideActionArgs {
 }
 interface SEffectRejectionInfo {
     kind: "Effect";
-    effect: DEffect;
+    effect: DEffectRef;
 }
 
 interface SEffectBehaviorRejectionInfo {

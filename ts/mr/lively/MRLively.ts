@@ -12,6 +12,7 @@ import { LBlock } from "./LBlock";
 import { LScheduler2 } from "./LScheduler";
 import { MRGameExtension } from "./MRGameExtension";
 import { LLand } from "./LLand";
+import { LChronus } from "./LChronus";
 
 /**
  * 各 REGame_* インスタンスを保持する。
@@ -31,6 +32,7 @@ export class MRLively {
     static recorder: SActivityRecorder;
     static messageHistory: LMessageHistory;
     static eventServer: LEventServer;
+    static chronus: LChronus;
 
     // 冒険結果の表示中かどうか
     static challengeResultShowing: boolean = false;

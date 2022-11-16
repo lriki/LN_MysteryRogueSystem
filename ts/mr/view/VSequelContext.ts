@@ -4,13 +4,15 @@ import { LUnitBehavior } from "ts/mr/lively/behaviors/LUnitBehavior";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { SSequelUnit, SSequelClip, SMotionSequel, SAnumationSequel, SWaitSequel, SBalloonSequel, SFloatingAnumationSequel } from "ts/mr/system/SSequel";
 import { DSequelId } from "../data/DSequel";
-
 import { MRView } from "./MRView";
-import { REVisualSequel } from "./REVisualSequel";
-import { REVisual_Entity } from "./REVisual_Entity";
+import { VSequel } from "./VSequel";
+import { VEntity } from "./VEntity";
 
-export class REVisualSequelContext {
-    private _entityVisual: REVisual_Entity;
+/**
+ * VEntity 1つに対する、モーションの実行状態を表す。
+ */
+export class VSequelContext {
+    private _entityVisual: VEntity;
     private _clip: SSequelClip | undefined;
     private _currentClip: number = -1;
     private _frameCount: number = 0;
@@ -18,14 +20,14 @@ export class REVisualSequelContext {
     private _cuurentFinished: boolean = false;
     private _cancellationLocked : boolean = false;
     private _currentSequel: SSequelUnit | undefined;
-    private _currentVisualSequel: REVisualSequel | undefined;
+    private _currentVisualSequel: VSequel | undefined;
     private _startPosition: Vector2 = new Vector2(0, 0);
     private _currentIdleSequelId: DSequelId = 0;
     private _animationWaiting = false;
     private _balloonWaiting = false;
     private _waitFrameCount: number = 0;
 
-    constructor(entityVisual: REVisual_Entity) {
+    constructor(entityVisual: VEntity) {
         this._entityVisual = entityVisual;
     }
 
@@ -172,10 +174,10 @@ export class REVisualSequelContext {
     }
 
     private _startSequel(sequel: SMotionSequel) {
-        if (!MRView.manager) throw new Error();
+        if (!MRView.sequelFactory) throw new Error();
 
         this._currentSequel = sequel;
-        this._currentVisualSequel = MRView.manager.createVisualSequel(sequel.sequelId());
+        this._currentVisualSequel = MRView.sequelFactory.createVisualSequel(sequel.sequelId());
         this._frameCount = 0;
         this._cancellationLocked = false;
         this._cuurentFinished = false;
@@ -198,7 +200,7 @@ export class REVisualSequelContext {
     }
 
     private _startFloatingAnimation(unit: SFloatingAnumationSequel) {
-        MRView.manager?.startFloatingAnimation(unit.anumationlId, unit.mx, unit.my);
+        MRView.sequelFactory?.startFloatingAnimation(unit.anumationlId, unit.mx, unit.my);
         if (unit.isWait()) {
             this._animationWaiting = true;
         }

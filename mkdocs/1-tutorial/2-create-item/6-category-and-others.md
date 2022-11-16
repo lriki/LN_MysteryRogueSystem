@@ -1,7 +1,9 @@
 カテゴリ・トレイト
 ==========
 
-ここでは、アイテムの設定として推奨される要素について説明します。
+アイテムの効果を発動するための主要な設定は、全ページまでで一通り説明を終えました。
+
+ここでは、その他の細かな設定として推奨される要素について説明します。
 
 カテゴリ
 ----------
@@ -18,7 +20,7 @@
 - 巻物
 - 階段
 
-一般的なアイテムの分類と同じように考えることができますが、MRシステムではフロア間の階段や、杖を振った時に表示する魔法弾などもエンティティです。普段は気にする必要はありませんが、これらは特殊なカテゴリに属します。
+一般的なアイテムの分類と同じように考えることができますが、MRシステムではフロア間の階段や、杖を振った時に表示する魔法弾などもエンティティです。普段は気にする必要はありませんが、これらもカテゴリに属します。
 
 カテゴリ (の Key) はメモ欄で `MR-Category` によって指定できます。
 
@@ -35,11 +37,25 @@
 エンティティの細かな振る舞いのことを `トレイト` と呼びます。
 これは RPGツクールのデータベースの「特徴」で設定するものと同様です。
 
-トレイトは様々なものがありますが、ここでは `kEntity_ポーションA` に次のトレイトを追加してみましょう。
+トレイトは様々なものがありますが、ここでは `data/mr/Entities.js` の `kEntity_ポーションA` に次の設定を追加してみましょう
 
-```
-TODO:
-entity.selfTraits.push({ code: MRBasics.traits.DeathVulnerableElement, dataId: MRData.getAttackElement("kElement_DeathExplosion").id, value: MRData.getState("kState_System_ExplosionDeath").id });
+```diff
+ "kEntity_ポーションA": Entity({
+     reactions: [
+         Reaction({
+             actionKey: "kAction_Eat",
+             emittorKeys: ["kEmittor_ポーションA_Main"],
+             commandName: "飲む",
+         }),
+         Reaction({
+             actionKey: "kAction_Collide",
+             emittorKeys: ["kEmittor_ポーションA_投げ当て"],
+         }),
+    ],
++   selfTraits: [
++       Trait({ code: "DeathVulnerableElement", elementKey: "kElement_DeathExplosion", stateKey: "kState_System_ExplosionDeath" }),
++   ],
+}),
 ```
 
 このトレイトを付加すると、地雷などの強力な爆発属性の攻撃に巻き込まれたときに、アイテムが消滅するようになります。

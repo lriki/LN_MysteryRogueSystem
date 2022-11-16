@@ -1,6 +1,6 @@
-import { DSpecialEffectId as DSpecialEffectId, DSkillId } from "./DCommon";
+import { DSpecialEffectId as DSpecialEffectId, DSkillId, DEmittorId } from "./DCommon";
 import { DRmmzEffectScope } from "./DEffect";
-import { DEmittor, DEmittorId } from "./DEmittor";
+import { DEmittor } from "./DEmittor";
 import { DFlavorEffect, IFlavorEffectProps } from "./DFlavorEffect";
 import { MRData } from "./MRData";
 

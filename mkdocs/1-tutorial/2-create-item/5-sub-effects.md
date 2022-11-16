@@ -2,9 +2,9 @@
 ==========
 
 このチュートリアルでこれまで作成してきたアイテムは飲んだ時にHPを回復するだけでした。
-ここでは次の効果を実装し、ひとつのアイテムとして仕上げます。
+ここでは草・薬アイテムとして一般的な次の効果を実装します。
 
-- 飲んだ時に満腹度(FP)を回復する。
+- 飲んだ時に満腹度(FP)を少量回復する。
 - 投げ当てた時に相手の HP を回復する。ただし、このとき FP は回復しない。
 
 リアクション、エミッター、エフェクトの関連は次のようになります。
@@ -15,7 +15,7 @@ flowchart LR
     Reaction2["Reaction#2(投げ当てた)"]
     Emittor1["Emittor#1(kEmittor_ポーションA_Main)"]
     Emittor2["Emittor#2(kEmittor_ポーションA_投げ当て)"]
-    Effect1["Effect#1(kEffect_TestHP回復500)"]
+    Effect1["Effect#1(kEffect_ポーションA_Main)"]
     Effect2["Effect#2(kEffect_FP回復5)"]
 
     Reaction1 --> Emittor1
@@ -29,13 +29,13 @@ flowchart LR
 
 - [飲んだ]リアクション
 - kEmittor_ポーションA_Main
-- kEffect_TestHP回復500
+- kEffect_ポーションA_Main
 
-ここでは次の要素を作成し、それぞれの関連性を設定していきます。
+ここでは次の要素を新たに作成し、それぞれの関連性を設定していきます。
 
-- kEffect_FP回復5
-- kEmittor_ポーションA_投げ当て
 - [投げ当てた]リアクション
+- kEmittor_ポーションA_投げ当て
+- kEffect_FP回復5
 
 満腹度(FP)の回復
 ----------
@@ -46,10 +46,10 @@ flowchart LR
 
 ```js
 "kEffect_FP回復5": Effect({
-    parameterDamages: [
-        ParameterDamage({
+    parameterValues: [
+        ParameterValue({
             parameterKey: "fp",    // FPを、
-            type: "recover",       // 回復する。
+            type: "recovery",      // 回復する。
             formula: "500",        // 値は5%。
             silent: true,          // メッセージを表示しない。
         }),
@@ -70,13 +70,13 @@ flowchart LR
 ```js
 "kEmittor_ポーションA_Main": Emittor({
     targetEffectKeys: [
-        "kEffect_HP回復500",
+        "kEffect_ポーションA_Main",
         "kEffect_FP回復5",
     ],
 }),
 ```
 
-<!-- `kEmittor_ポーションA_Main` には最初から `kEffect_HP回復500` が追加されています。この設定は、そこへさらに `kEffect_FP回復5` を追加することを示しています。 -->
+この設定は `kEmittor_ポーションA_Main` が発動したときに、 `kEffect_ポーションA_Main(HP回復効果)` と `kEffect_FP回復5` の2つの効果を同時に適用することを示しています。
 
 設定したらテストプレイで動作確認してみましょう。
 
@@ -88,7 +88,7 @@ flowchart LR
 
 
 !!! tip デバッグコマンド
-    動作確認のために毎回 HP や FP を減らすのは大変です。 [](../1-first/8-debug-command.md) で説明したデバッグ機能で次のコマンドを実行すると、それぞれプレイヤーの HP を 10、FP を 1000(10%) にできます。
+    動作確認のために毎回 HP や FP を減らすのは大変です。 [デバッグ機能](../1-first/8-debug-command.md) で説明したコンソールで次のコマンドを実行すると、それぞれプレイヤーの HP を 10、FP を 1000(10%) にできます。
     ```
     MR.setPlayerParameter("hp", 10)
     MR.setPlayerParameter("fp", 1000)
@@ -97,15 +97,17 @@ flowchart LR
 投げ当て
 ----------
 
-`data/mr/Emittors.js` に次の設定を追加します。
+まずは投げ当て用のエミッターを追加しましょう。 `data/mr/Emittors.js` に次の設定を追加します。
 
 ```js
 "kEmittor_ポーションA_投げ当て": Emittor({
     targetEffectKeys: [
-        "kEffect_HP回復500",
+        "kEffect_ポーションA_Main",
     ],
 }),
 ```
+
+先ほどと異なり、こちらには FP 回復エフェクトが無い点に注意してください。
 
 続いて、 `data/mr/Entities.js` の `kEntity_ポーションA` に次の設定を追加します。
 

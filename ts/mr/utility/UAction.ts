@@ -1,5 +1,5 @@
 import { assert, tr, tr2 } from "ts/mr/Common";
-import { DEffectFieldScope, DEffectFieldScopeArea, DEffectFieldScopeRange, DRmmzEffectScope } from "ts/mr/data/DEffect";
+import { DEffectFieldScope, DEffectFieldScopeArea, DEffectFieldScopeType, DRmmzEffectScope } from "ts/mr/data/DEffect";
 import { DHelpers } from "ts/mr/data/DHelper";
 import { DSkill } from "ts/mr/data/DSkill";
 import { MRData } from "ts/mr/data/MRData";
@@ -281,7 +281,7 @@ export class UAction {
         const reaction = item.data.findReaction(actionId);
         if (reaction) {
             for (const emittor of reaction.emittors()) {
-                if (emittor.scope.range == DEffectFieldScopeRange.Selection) return true;
+                if (emittor.scope.range == DEffectFieldScopeType.Selection) return true;
             }
         }
         return false;
@@ -402,10 +402,10 @@ export class UAction {
     }
     
     private static searchTargetEntities(performer: LEntity, scope: DEffectFieldScope, rmmzEffectScope: DRmmzEffectScope, checkFaction: boolean): LEntity[] {
-        if (scope.range == DEffectFieldScopeRange.Performer) {
+        if (scope.range == DEffectFieldScopeType.Performer) {
             return [performer];
         }
-        else if (scope.range == DEffectFieldScopeRange.Front1) {
+        else if (scope.range == DEffectFieldScopeType.Front1) {
             // ターゲット候補を集める
             const candidates = UMovement.getAdjacentEntities(performer).filter(target => {
                 if (checkFaction) {
@@ -449,7 +449,7 @@ export class UAction {
             }
             */
         }
-        else if (scope.range == DEffectFieldScopeRange.StraightProjectile) {
+        else if (scope.range == DEffectFieldScopeType.StraightProjectile) {
             let candidates: LEntity[] = [];
             for (const dir of UMovement.directions) {
                 //const [ox, oy] = Helpers._dirToTileOffsetTable[dir];
@@ -504,7 +504,7 @@ export class UAction {
 
             return candidates;
         }
-        else if (scope.range == DEffectFieldScopeRange.Room) {
+        else if (scope.range == DEffectFieldScopeType.Room) {
             const candidates: LEntity[] = [];
             MRLively.map.room(performer.roomId()).forEachEntities(entity => {
                 if (this.testFactionMatch(performer, entity, rmmzEffectScope)) {

@@ -1,9 +1,9 @@
-import { REVisualSequel } from "../REVisualSequel";
-import { REVisualSequelContext } from "../REVisualSequelContext";
-import { REVisual_Entity } from "../REVisual_Entity";
+import { VSequel } from "../VSequel";
+import { VSequelContext } from "../VSequelContext";
+import { VEntity } from "../VEntity";
 
-export class VDownSequel extends REVisualSequel {
-    onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void {
+export class VDownSequel extends VSequel {
+    onUpdate(visual: VEntity, context: VSequelContext): void {
         const prefab = visual.entity().data.prefab();
         const event = visual.rmmzEvent();
         const image = prefab.downImage;

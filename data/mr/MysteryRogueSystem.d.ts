@@ -1355,6 +1355,51 @@ declare module 'MysteryRogueSystem/ts/mr/data/DActor' {
   }
 
 }
+declare module 'MysteryRogueSystem/ts/mr/data/DChronus' {
+  export enum DChronusTimeFrameKind {
+      Daytime = 0,
+      Nighttime = 1
+  }
+  export interface DChronusTimeFrame {
+      name: string;
+      kind: DChronusTimeFrameKind;
+      startHour: number;
+      lastHouer: number;
+      timeFrameId: number;
+  }
+  export interface DChronusTimeTone {
+      timeFrameId: number;
+      value: number[];
+  }
+  export class DChronus {
+      enabled: boolean;
+      readonly timeFrames: DChronusTimeFrame[];
+      readonly timeTones: DChronusTimeTone[];
+      /** 月ごとの日数配列 */
+      readonly daysOfMonth: number[];
+      /** 月名配列 */
+      readonly monthNames: string[];
+      /** 曜日配列 */
+      readonly weekNames: string[];
+      /** 1ラウンドの経過秒数 */
+      readonly secondsInRound: number;
+      /** 1分の秒数 */
+      readonly secondsInMinute = 60;
+      /** 1時間の分数 */
+      readonly minutesInHour = 60;
+      /** 1日の分数 */
+      readonly hoursInDay = 24;
+      constructor();
+      /** 1日の秒数 */
+      get secondsInDay(): number;
+      /** 1時間の秒数 */
+      get secondsInHour(): number;
+      getDaysOfWeek(): number;
+      getDaysOfMonth(month: number): number;
+      getDaysOfYear(): number;
+  }
+
+}
 declare module 'MysteryRogueSystem/ts/mr/data/DClass' {
   export type DClassId = number;
   export interface DClassLearningSkill {
@@ -1417,6 +1462,9 @@ declare module 'MysteryRogueSystem/ts/mr/data/DCommon' {
   export type DEffectId = number & {
       readonly brand?: unique symbol;
   };
+  export type DEmittorId = number & {
+      readonly brand?: unique symbol;
+  };
   export type DEntityTemplateId = number & {
       readonly brand?: unique symbol;
   };
@@ -1470,10 +1518,12 @@ declare module 'MysteryRogueSystem/ts/mr/data/DDataImporter' {
 
 }
 declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
-  import { DSubEntityFindKey, DBlockLayerKind, DBlockLayerScope, DEntityCategoryId, DRaceId, DElementId, DEffectId } from "MysteryRogueSystem/ts/mr/data/DCommon";
+  import { DSubEntityFindKey, DBlockLayerKind, DBlockLayerScope, DEntityCategoryId, DElementId, DEffectId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   import { DParameterId } from "ts/mr/data/DCommon";
   import { DFlavorEffect, IFlavorEffectProps } from "MysteryRogueSystem/ts/mr/data/DFlavorEffect";
   import { DSpecialEffectRef, ISpecialEffectProps } from "MysteryRogueSystem/ts/mr/data/DSpecialEffect";
+  import { DParameterFlavorEffect, IParameterFlavorEffect } from "MysteryRogueSystem/ts/mr/data/DParameter";
+  import { DFactionType } from "MysteryRogueSystem/ts/mr/data/DFaction";
   export enum DParameterEffectApplyType {
       /** なし */
       None = 0,
@@ -1500,12 +1550,18 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
       variance: number;
       /** メッセージを出さないようにする。 */
       silent: boolean;
+      conditionTargetCategoryId: DEntityCategoryId;
       conditionFormula?: string | undefined;
       fallback: boolean;
+      /** @deprecated */
       alliesSideGainMessage?: string | undefined;
+      /** @deprecated */
       alliesSideLossMessage?: string | undefined;
+      /** @deprecated */
       opponentGainMessage?: string | undefined;
+      /** @deprecated */
       opponentLossMessage?: string | undefined;
+      flavorEffects: DParameterFlavorEffect[];
       constructor(paramId: DParameterId, formula: string, applyType: DParameterEffectApplyType);
       withApplyTarget(value: DValuePoint): this;
       withElementId(value: number): this;
@@ -1513,6 +1569,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
       withSilent(value?: boolean): this;
       withConditionFormula(value: string): this;
       withFallback(value?: boolean): this;
+      getParameterFlavorEffectByLooksFaction(value: DFactionType): DParameterFlavorEffect[];
       clone(): DParameterQualifying;
       copyFrom(src: DParameterQualifying): void;
   }
@@ -1560,7 +1617,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
       Physical = 1,
       Magical = 2
   }
-  export enum DEffectFieldScopeRange {
+  export enum DEffectFieldScopeType {
       Performer = 0,
       Front1 = 1,
       StraightProjectile = 2,
@@ -1585,12 +1642,11 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
   }
   export class DEffectFieldScope {
       area: DEffectFieldScopeArea;
-      range: DEffectFieldScopeRange;
+      range: DEffectFieldScopeType;
       length: number;
       projectilePrefabKey: string;
       layers: DBlockLayerKind[];
       layerScope: DBlockLayerScope;
-      factions: DEffectScopeTargetFactionFlags;
       constructor();
   }
   export enum DBuffMode {
@@ -1612,18 +1668,10 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
       level: number;
       turn: number;
   }
-  export interface DEffectConditions {
-      targetCategoryId: DEntityCategoryId;
-      /** 判定する RaceId。 0 の場合は対象外。 */
-      raceId: DRaceId;
-      applyRating: number;
-      fallback: boolean;
-  }
   export class DEffect {
       readonly id: DEffectId;
       readonly key: string;
       subEntityFindKey: DSubEntityFindKey;
-      conditions: DEffectConditions;
       /** @see {@link IEffectProps.critical} */
       critical: boolean;
       /**
@@ -1671,7 +1719,6 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
       applyProps(props: IEffectProps): void;
       copyFrom(src: DEffect): void;
       hasAnyValidEffect(): boolean;
-      hasCondition(): boolean;
   }
   export enum DSkillCostSource {
       /** スキルの使用者 */
@@ -1693,35 +1740,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
       constructor();
       setParamCost(source: DSkillCostSource, paramId: DParameterId, paramCost: DParamCost): void;
   }
-  /**
-   * SEffectContext のエントリポイントに入力する情報。
-   *
-   * Emittor の発動条件をクリアした後の、ひとつの「効果適用」に関係する様々な Effect をまとめるクラス。
-   * このクラスの情報は Emittor に統合することも検討したが、 Effect 適用周りのコードは複雑なので、
-   * あえて分離し、EffectContext 内の処理では Emittor の情報を参照しないようにした。
-   */
-  export class DEffectSet {
-      /** 使用者に対して与える効果 */
-      selfEffectId: DEffectId;
-      /**
-       *  対象への効果が成功したときのみ、使用者に与える効果。
-       * v0.5.0時点ではもろはの杖しか使っていないが、他にもしあわせ草の武器印の効果等に使える。
-       */
-      succeededSelfEffect: DEffect | undefined;
-      /** 対象に対して与える効果。matchConditions を判定して、最終的に適用する Effect を決める */
-      targetEffectIds: DEffectId[];
-      constructor(sourceKey: string);
-      get selfEffect(): DEffect;
-      targetEffects(): readonly DEffect[];
-      targetEffect(index: number): DEffect;
-      clearTargetEffects(): void;
-      setTargetEffect(index: number, value: DEffect): void;
-      addTargetEffect(value: DEffect): void;
-      copyFrom(src: DEffectSet): void;
-      hitType(): DEffectHitType;
-  }
   export interface IEffectProps {
-      conditions?: IEffectConditionsProps;
       /**
        * 対象へダメージを与えるときにクリティカル判定を行うかかどうか。
        *
@@ -1734,7 +1753,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
       /**
        * パラメータへのダメージ・回復効果のリスト。
        */
-      parameterDamages?: IParameterDamageEffectProps[];
+      parameterValues?: IParameterValueEffectProps[];
       /**
        * パラメータへのバフ・デバフ効果のリスト。
        */
@@ -1748,19 +1767,15 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
        */
       flavorEffect?: IFlavorEffectProps;
   }
-  export interface IEffectConditionsProps {
-      targetCategoryKey?: string;
-      /** 判定する RaceId。 0 の場合は対象外。 */
-      targetRaceKey?: string;
-      /** EnemyAction と同じ整数。0 はレート無し。 */
-      rating?: number;
-      fallback?: boolean;
-  }
   /**
    * パラメータへのダメージ・回復効果。
    */
-  export interface IParameterDamageEffectProps {
+  export interface IParameterValueEffectProps {
       parameterKey: string;
+      /**
+       * Effect を適用する対象カテゴリ。
+       */
+      conditionTargetCategoryKey?: string;
       /**
        * Effect を適用する条件式。
        *
@@ -1779,12 +1794,20 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
        * - growth: 成長値 (最大値の算出基準)
        */
       point?: ("actual" | "growth");
-      type?: ("damage" | "recover" | "drain");
+      /**
+       * どのような性質の効果であるかを指定します。(default: damage)
+       *
+       * - damage: ダメージ
+       * - recovery: 回復
+       * - drain: 吸収
+       */
+      type?: ("damage" | "recovery" | "drain");
       /**
        * ダメージ計算式。
        */
       formula: string;
       silent?: boolean;
+      parameterFlavorEffects?: IParameterFlavorEffect[];
   }
   /**
    * パラメータへのバフ・デバフ効果。
@@ -1799,6 +1822,72 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEffect' {
   }
 
 }
+declare module 'MysteryRogueSystem/ts/mr/data/DEffectSuite' {
+  import { DEffectId, DEntityCategoryId, DRaceId } from "MysteryRogueSystem/ts/mr/data/DCommon";
+  import { DEffect, DEffectHitType } from "MysteryRogueSystem/ts/mr/data/DEffect";
+  export interface DEffectConditions {
+      targetCategoryId: DEntityCategoryId;
+      /** 判定する RaceId。 0 の場合は対象外。 */
+      targetRaceId: DRaceId;
+      applyRating: number;
+      fallback: boolean;
+  }
+  /**
+   * Script での設定のしやすさを考慮して、 condition を Emittor 寄りの情報とした、 Effect 参照情報。
+   *
+   * 条件は Effect 単体以外にも、複数の Effect と関連してどれか一つを選びだしたりするものがあるため、
+   * Effect に付く情報ではなく、そのひとつ上の、Effect たちを取りまとめる側に付ける方がイメージしやすい。
+   */
+  export class DEffectRef {
+      private _effectId;
+      conditions: DEffectConditions;
+      constructor(effectId: DEffectId);
+      get effectId(): DEffectId;
+      get effect(): DEffect;
+      hasCondition(): boolean;
+      copyFrom(src: DEffectRef): void;
+      clone(): DEffectRef;
+  }
+  /**
+   * SEffectContext のエントリポイントに入力する情報。
+   *
+   * Emittor の発動条件をクリアした後の、ひとつの「効果適用」に関係する様々な Effect をまとめるクラス。
+   * このクラスの情報は Emittor に統合することも検討したが、 Effect 適用周りのコードは複雑なので、
+   * あえて分離し、EffectContext 内の処理では Emittor の情報を参照しないようにした。
+   *
+   * 新種道具を作るときは、これが効果の1単位となる。
+   */
+  export class DEffectSuite {
+      /** 使用者に対して与える効果 */
+      selfEffectId: DEffectRef;
+      /**
+       *  対象への効果が成功したときのみ、使用者に与える効果。
+       * v0.5.0時点ではもろはの杖しか使っていないが、他にもしあわせ草の武器印の効果等に使える。
+       */
+      succeededSelfEffect: DEffectRef | undefined;
+      /** 対象に対して与える効果。matchConditions を判定して、最終的に適用する Effect を決める */
+      private _targetEffectRefs;
+      constructor(sourceKey: string);
+      get selfEffect(): DEffectRef;
+      targetEffects(): readonly DEffectRef[];
+      targetEffect(index: number): DEffectRef;
+      clearTargetEffects(): void;
+      setTargetEffect(index: number, value: DEffectRef): void;
+      addTargetEffect(value: DEffectRef): void;
+      copyFrom(src: DEffectSuite): void;
+      hitType(): DEffectHitType;
+  }
+  export interface IEffectRef {
+      effectKey: string;
+      conditionTargetCategoryKey?: string;
+      /** 判定する RaceId。 0 の場合は対象外。 */
+      conditionTargetRaceKey?: string;
+      /** EnemyAction と同じ整数。0 はレート無し。 */
+      conditionRating?: number;
+      conditionFallback?: boolean;
+  }
+
+}
 declare module 'MysteryRogueSystem/ts/mr/data/DElement' {
   import { DElementId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   export class DElement {
@@ -1810,14 +1899,16 @@ declare module 'MysteryRogueSystem/ts/mr/data/DElement' {
 
 }
 declare module 'MysteryRogueSystem/ts/mr/data/DEmittor' {
-  import { DEffectFieldScope, DEffectSet, DEmittorCost } from "MysteryRogueSystem/ts/mr/data/DEffect";
-  export type DEmittorId = number;
+  import { DEmittorId } from "MysteryRogueSystem/ts/mr/data/DCommon";
+  import { DEffectFieldScope, DEmittorCost, DRmmzEffectScope } from "MysteryRogueSystem/ts/mr/data/DEffect";
+  import { DEffectSuite, IEffectRef } from "MysteryRogueSystem/ts/mr/data/DEffectSuite";
   /**
    * RMMZ の Skill と Item の共通パラメータ
    */
   export class DEmittor {
       readonly id: DEmittorId;
       readonly key: string;
+      readonly effectSuite: DEffectSuite;
       /**
        * Cost は Emittor が持つ。
        * 杖から出る魔法弾がイメージしやすいかも。
@@ -1853,13 +1944,23 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEmittor' {
       targetAreaAnimationId: number;
       /** 発動側 Sequel ID */
       selfSequelId: number;
-      effectSet: DEffectSet;
       constructor(id: DEmittorId, key: string);
       applyProps(props: IEmittorProps): void;
       copyFrom(src: DEmittor): void;
+      setupFromRmmzScope(rmmzScope: DRmmzEffectScope): void;
   }
   export interface IEmittorProps {
+      scopeType?: ("front");
+      /** @deprecated */
       targetEffectKeys?: string[];
+      /**
+       * この Emittor によって発動される Effect のリストです。
+       * 必要に応じて発動条件を指定できます。
+       *
+       * このリストを設定すると、 EntityTemplate によってリンクされる Emittor と Effect の関連付けはリセットされます。
+       * つまりこのリストには、Emittor が発動する Effect をすべて指定する必要があります。
+       */
+      targetEffects?: IEffectRef[];
   }
 
 }
@@ -1902,8 +2003,8 @@ declare module 'MysteryRogueSystem/ts/mr/data/DEnemy' {
 declare module 'MysteryRogueSystem/ts/mr/data/DEntity' {
   import { DActor } from "MysteryRogueSystem/ts/mr/data/DActor";
   import { DClassId } from "MysteryRogueSystem/ts/mr/data/DClass";
-  import { DActionId, DElementId, DRaceId } from "MysteryRogueSystem/ts/mr/data/DCommon";
-  import { DEmittorId, DEmittor } from "MysteryRogueSystem/ts/mr/data/DEmittor";
+  import { DActionId, DElementId, DEmittorId, DRaceId } from "MysteryRogueSystem/ts/mr/data/DCommon";
+  import { DEmittor } from "MysteryRogueSystem/ts/mr/data/DEmittor";
   import { DEnemy } from "MysteryRogueSystem/ts/mr/data/DEnemy";
   import { DEntityProperties } from "MysteryRogueSystem/ts/mr/data/DEntityProperties";
   import { DEquipment, DItem } from "MysteryRogueSystem/ts/mr/data/DItem";
@@ -2736,14 +2837,14 @@ declare module 'MysteryRogueSystem/ts/mr/data/DParameter' {
    * 発動する FlavorEffect と、その発動条件のセット
    */
   export class DParameterFlavorEffect {
-      /** 発動条件となる対象勢力 */
-      looksFaction: DFactionType;
       /** 発動条件となる適用対象 */
       point: DValuePoint;
       /** 発動条件となる値の増減 */
       addition: DValueAddition;
       /** 発動条件式 (value=新しい値, old=古い値, min=最小値, max=最大値)。 undefined の場合は式を評価せず、true とみなす。 */
       conditionFormula: string | undefined;
+      /** 発動条件となる対象勢力 */
+      looksFaction: DFactionType;
       /** 発動する効果 */
       flavorEffect: DFlavorEffect;
       constructor(options?: IParameterFlavorEffect);
@@ -2861,10 +2962,33 @@ declare module 'MysteryRogueSystem/ts/mr/data/DParameter' {
       flavorEffects?: IParameterFlavorEffect[];
   }
   export interface IParameterFlavorEffect {
-      looksFaction?: DFactionType;
-      point?: DValuePoint;
-      addition?: DValueAddition;
+      /**
+       * どのパラメータ要素に対する表示であるかを指定します。(default: actual)
+       *
+       * - actual: 現在値
+       * - growth: 成長値 (最大値の算出基準)
+       */
+      point?: ("actual" | "growth");
+      /**
+       * どのような性質に対する表示であるかを指定します。(default: loss)
+       *
+       * - loss: 値が減った時 (ダメージを受けた時など)
+       * - gain: 値が増えた時 (回復した時など)
+       * - none: 値に変化がなかった時
+       */
+      addition?: ("loss" | "gain" | "none");
       conditionFormula?: string;
+      /**
+       * 操作中のユニットから見て、どのような勢力のユニットに対する表示であるかを指定します。(default: neutral)
+       *
+       * - neutral: 中立・その他
+       * - friendly: 友好的. または操作中の Unit
+       * - hostile: 敵対的
+       */
+      looksFaction?: ("neutral" | "friendly" | "hostile");
+      /**
+       * 条件が満たされたときに表示する FlavorEffect を指定します。
+       */
       flavorEffect: IFlavorEffectProps;
   }
 
@@ -2931,9 +3055,6 @@ declare module 'MysteryRogueSystem/ts/mr/data/DPrefab' {
   }
 
 }
-declare module 'MysteryRogueSystem/ts/mr/data/DPreset' {
-
-}
 declare module 'MysteryRogueSystem/ts/mr/data/DPseudonymous' {
   import { DEntityCategoryId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   import { DEntityCategory } from "MysteryRogueSystem/ts/mr/data/DEntityCategory";
@@ -2985,9 +3106,9 @@ declare module 'MysteryRogueSystem/ts/mr/data/DSequel' {
 
 }
 declare module 'MysteryRogueSystem/ts/mr/data/DSkill' {
-  import { DSkillId } from "MysteryRogueSystem/ts/mr/data/DCommon";
+  import { DSkillId, DEmittorId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   import { DRmmzEffectScope } from "MysteryRogueSystem/ts/mr/data/DEffect";
-  import { DEmittor, DEmittorId } from "MysteryRogueSystem/ts/mr/data/DEmittor";
+  import { DEmittor } from "MysteryRogueSystem/ts/mr/data/DEmittor";
   import { DFlavorEffect, IFlavorEffectProps } from "MysteryRogueSystem/ts/mr/data/DFlavorEffect";
   export class DSkill {
       /** ID (0 is Invalid). */
@@ -3669,7 +3790,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/importers/DMetadataParser' {
 }
 declare module 'MysteryRogueSystem/ts/mr/data/importers/DSetupScripEvaluator' {
   import { DSetupScriptDatabase } from "MysteryRogueSystem/ts/mr/data/importers/DSetupScript";
-  import { IEffectProps, IParameterBuffEffectProps, IParameterDamageEffectProps } from "MysteryRogueSystem/ts/mr/data/DEffect";
+  import { IEffectProps, IParameterBuffEffectProps, IParameterValueEffectProps } from "MysteryRogueSystem/ts/mr/data/DEffect";
   import { IFlavorEffectProps } from "MysteryRogueSystem/ts/mr/data/DFlavorEffect";
   import { IEmittorProps } from "MysteryRogueSystem/ts/mr/data/DEmittor";
   import { IEntityProps, IReactionProps } from "MysteryRogueSystem/ts/mr/data/DEntity";
@@ -3677,15 +3798,17 @@ declare module 'MysteryRogueSystem/ts/mr/data/importers/DSetupScripEvaluator' {
   import { IEntityCategoryProps } from "MysteryRogueSystem/ts/mr/data/DEntityCategory";
   import { ISpecialEffectProps } from "MysteryRogueSystem/ts/mr/data/DSpecialEffect";
   import { ITraitProps } from "MysteryRogueSystem/ts/mr/data/DTrait";
+  import { IEffectRef } from "MysteryRogueSystem/ts/mr/data/DEffectSuite";
   global {
       function EntityCategory(props: IEntityCategoryProps): IEntityCategoryProps;
       function Effect(props: IEffectProps): IEffectProps;
-      function ParameterDamage(props: IParameterDamageEffectProps): IParameterDamageEffectProps;
+      function ParameterValue(props: IParameterValueEffectProps): IParameterValueEffectProps;
       function ParameterBuff(props: IParameterBuffEffectProps): IParameterBuffEffectProps;
       function SpecialEffect(props: ISpecialEffectProps): ISpecialEffectProps;
       function Trait(props: ITraitProps): ITraitProps;
       function FlavorEffect(props: IFlavorEffectProps): IFlavorEffectProps;
       function Emittor(props: IEmittorProps): IEmittorProps;
+      function EffectRef(props: IEffectRef): IEffectRef;
       function Entity(props: IEntityProps): IEntityProps;
       function Reaction(props: IReactionProps): IReactionProps;
       function EntityTemplate(props: IEntityTemplateProps): IEntityTemplateProps;
@@ -3881,16 +4004,17 @@ declare module 'MysteryRogueSystem/ts/mr/data/MRData' {
   import { DPseudonymous } from "MysteryRogueSystem/ts/mr/data/DPseudonymous";
   import { DItemShopType } from "MysteryRogueSystem/ts/mr/data/DItemShop";
   import { MRDataExtension } from "MysteryRogueSystem/ts/mr/data/MRDataExtension";
-  import { DEmittor, DEmittorId } from "MysteryRogueSystem/ts/mr/data/DEmittor";
+  import { DEmittor } from "MysteryRogueSystem/ts/mr/data/DEmittor";
   import { DElement } from "MysteryRogueSystem/ts/mr/data/DElement";
   import { DRace } from "MysteryRogueSystem/ts/mr/data/DRace";
   import { DFloorPreset, DTerrainSetting, DTerrainShape } from "MysteryRogueSystem/ts/mr/data/DTerrainPreset";
   import { DCommand } from "MysteryRogueSystem/ts/mr/data/DCommand";
   import { DEffect } from "MysteryRogueSystem/ts/mr/data/DEffect";
-  import { DParameterId } from "MysteryRogueSystem/ts/mr/data/DCommon";
+  import { DEmittorId, DParameterId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   import { DMap } from "MysteryRogueSystem/ts/mr/data/DMap";
   import { DEntityTemplate, IEntityTemplateProps } from "MysteryRogueSystem/ts/mr/data/DEntityTemplate";
   import { DSpecialEffect } from "MysteryRogueSystem/ts/mr/data/DSpecialEffect";
+  import { DChronus } from "MysteryRogueSystem/ts/mr/data/DChronus";
   export type DFactionId = number;
   /**
    * 勢力
@@ -3926,9 +4050,10 @@ declare module 'MysteryRogueSystem/ts/mr/data/MRData' {
       static NormalAttackSkillId: number;
       static ext: MRDataExtension;
       static system: DSystem;
+      static chronus: DChronus;
       static elements: DElement[];
       static equipmentParts: DEquipmentPart[];
-      static entityKinds: DEntityCategory[];
+      static categories: DEntityCategory[];
       static classes: DClass[];
       static races: DRace[];
       static actors: DEntityId[];
@@ -3966,7 +4091,7 @@ declare module 'MysteryRogueSystem/ts/mr/data/MRData' {
       static reset(): void;
       static newElement(key: string): DElement;
       static getElement(pattern: string): DElement;
-      static newEntityCategory(key: string, displayName?: string): number;
+      static newEntityCategory(key: string, displayName?: string): DEntityCategory;
       static findEntityCategory(pattern: string): DEntityCategory | undefined;
       static getEntityCategory(pattern: string): DEntityCategory;
       static newClass(name: string): number;
@@ -5746,7 +5871,7 @@ declare module 'MysteryRogueSystem/ts/mr/lively/behaviors/LBehavior' {
   import { DBlockLayerKind, DSpecialEffectId, DSubComponentEffectTargetKey, DActionId } from "ts/mr/data/DCommon";
   import { DSequelId } from "ts/mr/data/DSequel";
   import { LCandidateSkillAction } from "ts/mr/utility/UAction";
-  import { DEffect } from "ts/mr/data/DEffect";
+  import { DEffectRef } from "ts/mr/data/DEffectSuite";
   import { DFactionId } from "ts/mr/data/MRData";
   import { LMinimapMarkerClass, LPriceInfo, LReaction } from "MysteryRogueSystem/ts/mr/lively/LCommon";
   import { LMap } from "MysteryRogueSystem/ts/mr/lively/LMap";
@@ -5851,7 +5976,7 @@ declare module 'MysteryRogueSystem/ts/mr/lively/behaviors/LBehavior' {
   }
   interface SEffectRejectionInfo {
       kind: "Effect";
-      effect: DEffect;
+      effect: DEffectRef;
   }
   interface SEffectBehaviorRejectionInfo {
       kind: "EffectBehavior";
@@ -7094,6 +7219,36 @@ declare module 'MysteryRogueSystem/ts/mr/lively/LChallengeResult' {
    */
 
 }
+declare module 'MysteryRogueSystem/ts/mr/lively/LChronus' {
+  import { DChronusTimeFrame } from "MysteryRogueSystem/ts/mr/data/DChronus";
+  export class LChronus {
+      private _totalSeconds;
+      private _totalDays;
+      private _currentTimeFrameIndex;
+      private _revisionNumber;
+      private _needsLivingTimeFrameRefresh;
+      constructor();
+      /** 日中の秒数。(0 ~ MRData.chronus.secondsInDay-1) */
+      get totalSeconds(): number;
+      /** 経過日数 */
+      get totalDays(): number;
+      get currentTimeFrameIndex(): number;
+      get currentTimeFrame(): DChronusTimeFrame;
+      get currentTimeFrameId(): number;
+      private getTimeFrameIndex;
+      private isHourInRange;
+      advanceRound(): void;
+      private advanceSeconds;
+      private advanceDay;
+      private requireRefresh;
+      private reserveLivingTimeFrameRefresh;
+      clearLivingTimeFrameRefresh(): void;
+      get needsLivingTimeFrameRefresh(): boolean;
+      get weekIndex(): number;
+      get hour(): number;
+  }
+
+}
 declare module 'MysteryRogueSystem/ts/mr/lively/LCommon' {
   import { DActionId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   export type LRoomId = number;
@@ -7142,7 +7297,7 @@ declare module 'MysteryRogueSystem/ts/mr/lively/LEffectResult' {
   import { DState, DStateId } from "ts/mr/data/DState";
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
-  import { DEffect, DValuePoint } from "MysteryRogueSystem/ts/mr/data/DEffect";
+  import { DEffect, DParameterQualifying, DValuePoint } from "MysteryRogueSystem/ts/mr/data/DEffect";
   import { DEntityId } from "MysteryRogueSystem/ts/mr/data/DEntity";
   import { DEffectId, DParameterId } from "MysteryRogueSystem/ts/mr/data/DCommon";
   import { DFactionType as DFactionType } from "MysteryRogueSystem/ts/mr/data/DFaction";
@@ -7153,6 +7308,7 @@ declare module 'MysteryRogueSystem/ts/mr/lively/LEffectResult' {
       newValue: number;
       drain: boolean;
       applyTarget: DValuePoint;
+      parameterDamageEffect: DParameterQualifying | undefined;
       constructor(paramId: DParameterId);
       paramDisplayName(): string;
       getValue(entity: LEntity, recover: boolean): number;
@@ -8533,6 +8689,7 @@ declare module 'MysteryRogueSystem/ts/mr/lively/MRLively' {
   import { LScheduler2 } from "MysteryRogueSystem/ts/mr/lively/LScheduler";
   import { MRGameExtension } from "MysteryRogueSystem/ts/mr/lively/MRGameExtension";
   import { LLand } from "MysteryRogueSystem/ts/mr/lively/LLand";
+  import { LChronus } from "MysteryRogueSystem/ts/mr/lively/LChronus";
   /**
    * 各 REGame_* インスタンスを保持する。
    *
@@ -8550,6 +8707,7 @@ declare module 'MysteryRogueSystem/ts/mr/lively/MRLively' {
       static recorder: SActivityRecorder;
       static messageHistory: LMessageHistory;
       static eventServer: LEventServer;
+      static chronus: LChronus;
       static challengeResultShowing: boolean;
       static borderWall: LBlock;
       /**  */
@@ -9070,7 +9228,7 @@ declare module 'MysteryRogueSystem/ts/mr/rmmz/Spriteset_Map' {
 
 }
 declare module 'MysteryRogueSystem/ts/mr/rmmz/Sprite_Character' {
-  import { REVisual_Entity } from "ts/mr/view/REVisual_Entity";
+  import { VEntity } from "ts/mr/view/VEntity";
   import { VCharacterSpriteSet } from "ts/mr/view/VCharacterSpriteSet";
   import { Sprite_CharacterDamage_RE } from "MysteryRogueSystem/ts/mr/rmmz/Sprite_CharacterDamage_RE";
   global {
@@ -9083,7 +9241,7 @@ declare module 'MysteryRogueSystem/ts/mr/rmmz/Sprite_Character' {
           setStateIcons(icons: number[]): void;
           endAllEffect(): void;
           removeREPrefabEventSprite(index: number): void;
-          findVisual(): REVisual_Entity | undefined;
+          findVisual(): VEntity | undefined;
           _damageSprites_RE: Sprite_CharacterDamage_RE[];
           updateDamagePopup_RE(): void;
           attemtSetupDamagePopup_RE(): void;
@@ -10396,7 +10554,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/SDialogContext' {
 }
 declare module 'MysteryRogueSystem/ts/mr/system/SEffectApplyer' {
   import { DEntityCategoryId, DSkillId, DElementId, DParameterId } from "MysteryRogueSystem/ts/mr/data/DCommon";
-  import { DEffect, DEffectSet, DOtherEffectQualifying, DParamBuff, DParameterQualifying } from "MysteryRogueSystem/ts/mr/data/DEffect";
+  import { DOtherEffectQualifying, DParamBuff, DParameterQualifying } from "MysteryRogueSystem/ts/mr/data/DEffect";
   import { LBattlerBehavior } from "MysteryRogueSystem/ts/mr/lively/behaviors/LBattlerBehavior";
   import { LEffectResult } from "MysteryRogueSystem/ts/mr/lively/LEffectResult";
   import { LEntity } from "MysteryRogueSystem/ts/mr/lively/LEntity";
@@ -10404,6 +10562,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/SEffectApplyer' {
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
   import { SEffectIncidentType } from "MysteryRogueSystem/ts/mr/system/SEffectContext";
   import { DSpecialEffectRef } from "MysteryRogueSystem/ts/mr/data/DSpecialEffect";
+  import { DEffectRef, DEffectSuite } from "MysteryRogueSystem/ts/mr/data/DEffectSuite";
   /**
    * DEffect に対するインスタンス情報。
    * Effect 発動者や対象などの関係者の紐づけや、実行時にエフェクトの各プロパティについて、オーバーライドされた値を保持する。
@@ -10412,10 +10571,10 @@ declare module 'MysteryRogueSystem/ts/mr/system/SEffectApplyer' {
       private _fact;
       private _data;
       private _parameterEffects2;
-      constructor(fact: SEffectorFact, effect: DEffect);
+      constructor(fact: SEffectorFact, effect: DEffectRef);
       fact(): SEffectorFact;
       subject(): LEntity;
-      data(): DEffect;
+      data(): DEffectRef;
       get successRate(): number;
       isCertainHit(): boolean;
       isPhysical(): boolean;
@@ -10445,13 +10604,13 @@ declare module 'MysteryRogueSystem/ts/mr/system/SEffectApplyer' {
       private _sourceSkill;
       private _direction;
       private _genericEffectRate;
-      constructor(subject: LEntity, effects: DEffectSet, incidentType: SEffectIncidentType, dir: number);
+      constructor(subject: LEntity, effects: DEffectSuite, incidentType: SEffectIncidentType, dir: number);
       withIncidentEntityKind(value: DEntityCategoryId): this;
       withItem(item: LEntity): this;
       withSkill(skill: DSkillId): this;
       subject(): LEntity;
       subjectBehavior(): LBattlerBehavior | undefined;
-      effectSet(): DEffectSet;
+      effectSet(): DEffectSuite;
       incidentType(): SEffectIncidentType;
       incidentEntityKind(): DEntityCategoryId;
       item(): LEntity | undefined;
@@ -10525,7 +10684,7 @@ declare module 'MysteryRogueSystem/ts/mr/system/SEffectContext' {
   import { LEntity } from "ts/mr/lively/LEntity";
   import { SCommandContext } from "MysteryRogueSystem/ts/mr/system/SCommandContext";
   import { LRandom } from "ts/mr/lively/LRandom";
-  import { SEffect, SEffectorFact } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
+  import { SEffectorFact } from "MysteryRogueSystem/ts/mr/system/SEffectApplyer";
   import { STask } from "MysteryRogueSystem/ts/mr/system/tasks/STask";
   export enum SEffectIncidentType {
       /** 直接攻撃 (ヤリなど、隣接していない場合もあり得る) */
@@ -10578,8 +10737,6 @@ declare module 'MysteryRogueSystem/ts/mr/system/SEffectContext' {
       constructor(subject: SEffectorFact, rand: LRandom);
       effectorFact(): SEffectorFact;
       applyWithWorth(cctx: SCommandContext, targets: LEntity[]): STask;
-      selectEffects(effectList: SEffect[], rand: LRandom): SEffect[];
-      selectEffect(effectList: SEffect[], rand: LRandom): SEffect | undefined;
       private findAnimationEntity;
       private applyWithHitTest;
       private judgeHits;
@@ -11861,50 +12018,6 @@ declare module 'MysteryRogueSystem/ts/mr/view/animation/VEasing' {
   export const easing: IEasingMap;
 
 }
-declare module 'MysteryRogueSystem/ts/mr/view/dialogs/REDialogVisual' {
-  import { SDialog } from "ts/mr/system/SDialog";
-  import { SDialogContext } from "ts/mr/system/SDialogContext";
-  import { VDialog } from "MysteryRogueSystem/ts/mr/view/dialogs/VDialog";
-  export type DialogResultCallback = (dialog: any) => void;
-  /**
-   * SceneManager と同じく、スタックで Sub Dialog を管理するクラス。
-   *
-   * SceneManager でメニュー表示などを実装すると、ウィンドウが表示されたときには Scene_Map の表示情報はすべて破棄されている。
-   * そのため、ウィンドウを表示したままキャラクターをアニメーションさせることができない。
-   *
-   * このクラスはその対策として、Scene_Map 内でウィンドウの遷移管理を行う。
-   */
-  export class REDialogVisualNavigator {
-      _subDialogs: VDialog[];
-      _scene: VDialog | undefined;
-      _nextScene: VDialog | undefined;
-      _destroyList: VDialog[];
-      constructor();
-      isEmpty(): boolean;
-      _openDialog(dialog: VDialog): void;
-      markCloseDialog(context: SDialogContext, model: SDialog): void;
-      private push;
-      private pop;
-      clear2(): void;
-      update(context: SDialogContext): void;
-      private changeScene;
-      private updateScene;
-      lateUpdate(): void;
-      private destryDialogs;
-  }
-
-}
-declare module 'MysteryRogueSystem/ts/mr/view/dialogs/REEventExecutionDialogVisual' {
-  import { SEventExecutionDialog } from "ts/mr/system/dialogs/SEventExecutionDialog";
-  import { VDialog } from "MysteryRogueSystem/ts/mr/view/dialogs/VDialog";
-  export class REEventExecutionDialogVisual extends VDialog {
-      private _model;
-      constructor(model: SEventExecutionDialog);
-      onCreate(): void;
-      onUpdate(): void;
-  }
-
-}
 declare module 'MysteryRogueSystem/ts/mr/view/dialogs/VDetailsDialog' {
   import { VDialog } from "MysteryRogueSystem/ts/mr/view/dialogs/VDialog";
   import { SDetailsDialog } from "ts/mr/system/dialogs/SDetailsDialog";
@@ -11920,14 +12033,14 @@ declare module 'MysteryRogueSystem/ts/mr/view/dialogs/VDetailsDialog' {
 }
 declare module 'MysteryRogueSystem/ts/mr/view/dialogs/VDialog' {
   import { SDialog } from "ts/mr/system/SDialog";
-  import { REDialogVisualNavigator } from "MysteryRogueSystem/ts/mr/view/dialogs/REDialogVisual";
+  import { VDialogNavigator } from "MysteryRogueSystem/ts/mr/view/dialogs/VDialogNavigator";
   import { SDialogContext } from "ts/mr/system/SDialogContext";
   import { SCommandContext } from "ts/mr/system/SCommandContext";
   export class VDialog {
       readonly model: SDialog;
       _created: boolean;
       _started: boolean;
-      _navigator: REDialogVisualNavigator | undefined;
+      _navigator: VDialogNavigator | undefined;
       _windows: Window_Base[];
       private _activeWindow;
       _closing: boolean;
@@ -11950,6 +12063,50 @@ declare module 'MysteryRogueSystem/ts/mr/view/dialogs/VDialog' {
       private _removeWindow;
       protected activateWindow(window: Window_Base): void;
       _destroy(): void;
+  }
+
+}
+declare module 'MysteryRogueSystem/ts/mr/view/dialogs/VDialogNavigator' {
+  import { SDialog } from "ts/mr/system/SDialog";
+  import { SDialogContext } from "ts/mr/system/SDialogContext";
+  import { VDialog } from "MysteryRogueSystem/ts/mr/view/dialogs/VDialog";
+  export type DialogResultCallback = (dialog: any) => void;
+  /**
+   * SceneManager と同じく、スタックで Sub Dialog を管理するクラス。
+   *
+   * SceneManager でメニュー表示などを実装すると、ウィンドウが表示されたときには Scene_Map の表示情報はすべて破棄されている。
+   * そのため、ウィンドウを表示したままキャラクターをアニメーションさせることができない。
+   *
+   * このクラスはその対策として、Scene_Map 内でウィンドウの遷移管理を行う。
+   */
+  export class VDialogNavigator {
+      private _subDialogs;
+      private _scene;
+      private _nextScene;
+      private _destroyList;
+      constructor();
+      get isEmpty(): boolean;
+      openDialog(dialog: VDialog): void;
+      closeDialog(context: SDialogContext, model: SDialog): void;
+      private push;
+      private pop;
+      private clear;
+      update(context: SDialogContext): void;
+      private changeScene;
+      private updateScene;
+      lateUpdate(): void;
+      private destryDialogs;
+  }
+
+}
+declare module 'MysteryRogueSystem/ts/mr/view/dialogs/VEventExecutionDialog' {
+  import { SEventExecutionDialog } from "ts/mr/system/dialogs/SEventExecutionDialog";
+  import { VDialog } from "MysteryRogueSystem/ts/mr/view/dialogs/VDialog";
+  export class VEventExecutionDialog extends VDialog {
+      private _model;
+      constructor(model: SEventExecutionDialog);
+      onCreate(): void;
+      onUpdate(): void;
   }
 
 }
@@ -12163,13 +12320,15 @@ declare module 'MysteryRogueSystem/ts/mr/view/dialogs/VWarehouseWithdrawDialog' 
 }
 declare module 'MysteryRogueSystem/ts/mr/view/MRView' {
   import { VMapEditor } from "ts/mr/rmmz/VMapEditor";
-  import { REEntityVisualSet } from "MysteryRogueSystem/ts/mr/view/REEntityVisualSet";
+  import { VEntityManager } from "MysteryRogueSystem/ts/mr/view/VEntityManager";
   import { MRVisualExtension } from "MysteryRogueSystem/ts/mr/view/MRVisualExtension";
-  import { REVisual_Manager } from "MysteryRogueSystem/ts/mr/view/REVisual_Manager";
+  import { VSequelFactory } from "MysteryRogueSystem/ts/mr/view/VSequelFactory";
   import { VMapGuideGrid } from "MysteryRogueSystem/ts/mr/view/VMapGuideGrid";
   import { VMessageWindowSet } from "MysteryRogueSystem/ts/mr/view/VMessageWindowSet";
   import { VSpriteSet } from "MysteryRogueSystem/ts/mr/view/VSpriteSet";
   import { VChallengeResultWindow } from "MysteryRogueSystem/ts/mr/view/windows/VChallengeResultWindow";
+  import { VChronus } from "MysteryRogueSystem/ts/mr/view/VChronus";
+  import { VDialogManager } from "MysteryRogueSystem/ts/mr/view/VDialogManager";
   /**
    * REシステムと RMMZ の橋渡しを行うモジュールのルートクラス。
    *
@@ -12180,10 +12339,12 @@ declare module 'MysteryRogueSystem/ts/mr/view/MRView' {
    */
   export class MRView {
       static ext: MRVisualExtension;
-      static manager: REVisual_Manager | undefined;
+      static sequelFactory: VSequelFactory | undefined;
+      static dialogManager: VDialogManager | undefined;
       static mapBuilder: VMapEditor | undefined;
+      static chronus: VChronus | undefined;
       static scene: Scene_Map;
-      static entityVisualSet: REEntityVisualSet | undefined;
+      static entityVisualSet: VEntityManager | undefined;
       static spriteset: Spriteset_Map | undefined;
       static _challengeResultWindow: VChallengeResultWindow;
       static _messageWindowSet: VMessageWindowSet;
@@ -12211,367 +12372,178 @@ declare module 'MysteryRogueSystem/ts/mr/view/MRVisualExtension' {
   }
 
 }
-declare module 'MysteryRogueSystem/ts/mr/view/REEntityVisualSet' {
-  import { LEntity } from "ts/mr/lively/LEntity";
-  import { REVisualSequelManager } from "MysteryRogueSystem/ts/mr/view/REVisualSequelManager";
-  import { REVisual_Entity } from "MysteryRogueSystem/ts/mr/view/REVisual_Entity";
-  /**
-   * EntityVisual の管理クラス。
-   *
-   * Spriteset_Map と同じように、Scene_Map の生成・破棄に合わせて Sprite の表示状態を制御する。
-   * 実際にこのクラスが Sprite を生成するものではない点に注意。
-   *
-   * なお、Spriteset_Map は SceneManager.onBeforeSceneStart() からの Scene(PIXI.Stage) の destory により破棄される。
-   */
-  export class REEntityVisualSet {
-      private _visualEntities;
-      private _sequelManager;
-      constructor();
-      resetVisuals(): void;
-      entityVisuals(): REVisual_Entity[];
-      ternimate(): void;
-      update(): void;
-      sequelManager(): REVisualSequelManager;
-      findEntityVisualByEntity(entity: LEntity): REVisual_Entity | undefined;
-      getEntityVisualByEntity(entity: LEntity): REVisual_Entity;
-      findEntityVisualByRMMZEventId(rmmzEventId: number): REVisual_Entity | undefined;
-      visualRunning(): boolean;
-      reserveDeleteVisual(entity: LEntity): void;
-      private deleteVisuals;
-      private detachVisual;
-      private handleFlushSequelSet;
-      createVisual2(entity: LEntity): void;
-      private createVisual;
-  }
-
-}
-declare module 'MysteryRogueSystem/ts/mr/view/REVisualSequel' {
-  import { REVisualSequelContext } from "MysteryRogueSystem/ts/mr/view/REVisualSequelContext";
-  import { REVisual_Entity } from "MysteryRogueSystem/ts/mr/view/REVisual_Entity";
-  export abstract class REVisualSequel {
-      abstract onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void;
-  }
-
-}
-declare module 'MysteryRogueSystem/ts/mr/view/REVisualSequelContext' {
-  import { Vector2 } from "ts/mr/math/Vector2";
-  import { SSequelUnit, SSequelClip } from "ts/mr/system/SSequel";
-  import { REVisual_Entity } from "MysteryRogueSystem/ts/mr/view/REVisual_Entity";
-  export class REVisualSequelContext {
-      private _entityVisual;
-      private _clip;
-      private _currentClip;
-      private _frameCount;
-      private _timeScale;
-      private _cuurentFinished;
-      private _cancellationLocked;
-      private _currentSequel;
-      private _currentVisualSequel;
-      private _startPosition;
-      private _currentIdleSequelId;
-      private _animationWaiting;
-      private _balloonWaiting;
-      private _waitFrameCount;
-      constructor(entityVisual: REVisual_Entity);
-      sequel(): SSequelUnit;
-      frameCount(): number;
-      timeScale(): number;
-      isDashing(): boolean;
-      /** Sequel 開始時の Visual の position */
-      startPosition(): Vector2;
-      finished(): boolean;
-      isCancellationLocked(): boolean;
-      private isAnimationWaintng;
-      isFrameWaiting(): boolean;
-      isLogicalCompleted2(): boolean;
-      isLogicalCompleted(globalWaiting: boolean): boolean;
-      lockCamera(): void;
-      unlockCamera(): void;
-      unlockCancellation(): void;
-      startAnimation(rmmzAnimationId: number): void;
-      end(): void;
-      _start(clip: SSequelClip): void;
-      _next(): void;
-      private _startSequel;
-      private _startAnimation;
-      private _startFloatingAnimation;
-      private _startBalloon;
-      private _startWaitSequel;
-      _update(): void;
-  }
-
-}
-declare module 'MysteryRogueSystem/ts/mr/view/REVisualSequelManager' {
-  import { REVisual_Entity } from "MysteryRogueSystem/ts/mr/view/REVisual_Entity";
-  import { SSequelSet } from "MysteryRogueSystem/ts/mr/system/SSequel";
-  import { REEntityVisualSet } from "MysteryRogueSystem/ts/mr/view/REEntityVisualSet";
-  export class REVisualSequelManager {
-      private _entityVisualSet;
-      private _activeSequelSet;
-      private _currentSequelRun;
-      private _runningVisuals;
-      constructor(entityVisualSet: REEntityVisualSet);
-      setup(sequelSet: SSequelSet): void;
-      update(): void;
-      postUpdate(): void;
-      onFinishedAllSequels(): void;
-      isRunning(): boolean;
-      removeVisual(visual: REVisual_Entity): void;
-      private isLogicalCompleted;
-  }
-
-}
-declare module 'MysteryRogueSystem/ts/mr/view/REVisual_Entity' {
-  import { DSequelId } from "ts/mr/data/DSequel";
-  import { Vector2 } from "ts/mr/math/Vector2";
-  import { REVisualSequelContext } from "ts/mr/view/REVisualSequelContext";
-  import { LEntity } from "MysteryRogueSystem/ts/mr/lively/LEntity";
-  import { SEntityVisibility } from "ts/mr/system/SView";
-  import { DPrefabActualImage } from "ts/mr/data/DPrefab";
-  /**
-   * Entity の「見た目」を表現するためのクラス。
-   *
-   * RMMZ 向けのこのクラスの実装では、直接 Sprite を出したりするわけではない点に注意。
-   * Mnager からのインスタンス生成と同時に、動的に Game_Event が生成され、このクラスはその Game_Event を操作する。
-   */
-  export class REVisual_Entity {
-      private _entity;
-      private _rmmzEventId;
-      private _rmmzSpriteIndex;
-      private _sequelContext;
-      private _initialUpdate;
-      private _position;
-      private _visibilityOpacityStart;
-      private _visibilityOpacityTarget;
-      private _visibilityFrame;
-      private _prevVisibility;
-      private _visibility;
-      private _actualImage;
-      private _sequelOpacity;
-      reservedDestroy: boolean;
-      visualTransparent: boolean;
-      constructor(entity: LEntity, rmmzEventId: number);
-      entity(): LEntity;
-      rmmzEventId(): number;
-      rmmzEvent(): Game_Event;
-      rmmzSpriteIndex(): number;
-      rmmzSprite(): Sprite_Character | undefined;
-      getRmmzSprite(): Sprite_Character;
-      isVisible(): boolean;
-      position(): Vector2;
-      x(): number;
-      y(): number;
-      setX(value: number): void;
-      setY(value: number): void;
-      setPosition(value: Vector2): void;
-      resetPosition(): void;
-      sequelContext(): REVisualSequelContext;
-      getIdleSequelId(): DSequelId;
-      _setSpriteIndex(value: number): void;
-      actualImage(): DPrefabActualImage;
-      setOpacity(value: number): void;
-      private imageOverriden;
-      _update(): void;
-      private updateOpacity;
-      getCharacterImage(entity: LEntity, visibility: SEntityVisibility): DPrefabActualImage | undefined;
-      private getActualOpacity;
-      showEffectResult(): void;
-  }
-
-}
-declare module 'MysteryRogueSystem/ts/mr/view/REVisual_Manager' {
-  import { Vector2 } from "ts/mr/math/Vector2";
-  import { REDialogVisualNavigator } from "ts/mr/view/dialogs/REDialogVisual";
-  import { REVisualSequel } from "ts/mr/view/REVisualSequel";
-  import { DSequelId } from "ts/mr/data/DSequel";
-  import { SDialog } from "ts/mr/system/SDialog";
-  /**
-   */
-  export class REVisual_Manager {
-      private _tileSize;
-      private _visualSequelFactory;
-      readonly dialogNavigator: REDialogVisualNavigator;
-      constructor();
-      tileSize(): Vector2;
-      _finalize(): void;
-      createVisualSequel(sequelId: DSequelId): REVisualSequel;
-      openDialog(model: SDialog): void;
-      startFloatingAnimation(animationId: number, mx: number, my: number): void;
-  }
-
-}
 declare module 'MysteryRogueSystem/ts/mr/view/sequels/AttackSequel' {
-  import { REVisualSequel } from "MysteryRogueSystem/ts/mr/view/REVisualSequel";
-  import { REVisualSequelContext } from "MysteryRogueSystem/ts/mr/view/REVisualSequelContext";
-  import { REVisual_Entity } from "MysteryRogueSystem/ts/mr/view/REVisual_Entity";
-  export class VAttackSequel extends REVisualSequel {
-      onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void;
+  import { VSequel } from "MysteryRogueSystem/ts/mr/view/VSequel";
+  import { VSequelContext } from "MysteryRogueSystem/ts/mr/view/VSequelContext";
+  import { VEntity } from "MysteryRogueSystem/ts/mr/view/VEntity";
+  export class VAttackSequel extends VSequel {
+      onUpdate(visual: VEntity, context: VSequelContext): void;
   }
 
 }
 declare module 'MysteryRogueSystem/ts/mr/view/sequels/VAsleepSequel' {
-  import { REVisualSequel } from "MysteryRogueSystem/ts/mr/view/REVisualSequel";
-  import { REVisualSequelContext } from "MysteryRogueSystem/ts/mr/view/REVisualSequelContext";
-  import { REVisual_Entity } from "MysteryRogueSystem/ts/mr/view/REVisual_Entity";
-  export class VAsleepSequel extends REVisualSequel {
-      onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void;
+  import { VSequel } from "MysteryRogueSystem/ts/mr/view/VSequel";
+  import { VSequelContext } from "MysteryRogueSystem/ts/mr/view/VSequelContext";
+  import { VEntity } from "MysteryRogueSystem/ts/mr/view/VEntity";
+  export class VAsleepSequel extends VSequel {
+      onUpdate(visual: VEntity, context: VSequelContext): void;
   }
 
 }
 declare module 'MysteryRogueSystem/ts/mr/view/sequels/VBlowMoveSequel' {
-  import { REVisualSequel } from "MysteryRogueSystem/ts/mr/view/REVisualSequel";
-  import { REVisualSequelContext } from "MysteryRogueSystem/ts/mr/view/REVisualSequelContext";
-  import { REVisual_Entity } from "MysteryRogueSystem/ts/mr/view/REVisual_Entity";
+  import { VSequel } from "MysteryRogueSystem/ts/mr/view/VSequel";
+  import { VSequelContext } from "MysteryRogueSystem/ts/mr/view/VSequelContext";
+  import { VEntity } from "MysteryRogueSystem/ts/mr/view/VEntity";
   /**
    * 吹き飛ばされ移動。
    * 矢を撃つのとは別なので注意。
    */
-  export class VBlowMoveSequel extends REVisualSequel {
-      onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void;
+  export class VBlowMoveSequel extends VSequel {
+      onUpdate(visual: VEntity, context: VSequelContext): void;
   }
 
 }
 declare module 'MysteryRogueSystem/ts/mr/view/sequels/VCollapseSequel' {
-  import { REVisualSequel } from "MysteryRogueSystem/ts/mr/view/REVisualSequel";
-  import { REVisualSequelContext } from "MysteryRogueSystem/ts/mr/view/REVisualSequelContext";
-  import { REVisual_Entity } from "MysteryRogueSystem/ts/mr/view/REVisual_Entity";
-  export class VCollapseSequel extends REVisualSequel {
-      onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void;
+  import { VSequel } from "MysteryRogueSystem/ts/mr/view/VSequel";
+  import { VSequelContext } from "MysteryRogueSystem/ts/mr/view/VSequelContext";
+  import { VEntity } from "MysteryRogueSystem/ts/mr/view/VEntity";
+  export class VCollapseSequel extends VSequel {
+      onUpdate(visual: VEntity, context: VSequelContext): void;
   }
 
 }
 declare module 'MysteryRogueSystem/ts/mr/view/sequels/VCommonStoppedSequel' {
-  import { REVisualSequel } from "MysteryRogueSystem/ts/mr/view/REVisualSequel";
-  import { REVisualSequelContext } from "MysteryRogueSystem/ts/mr/view/REVisualSequelContext";
-  import { REVisual_Entity } from "MysteryRogueSystem/ts/mr/view/REVisual_Entity";
-  export class VCommonStoppedSequel extends REVisualSequel {
-      onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void;
+  import { VSequel } from "MysteryRogueSystem/ts/mr/view/VSequel";
+  import { VSequelContext } from "MysteryRogueSystem/ts/mr/view/VSequelContext";
+  import { VEntity } from "MysteryRogueSystem/ts/mr/view/VEntity";
+  export class VCommonStoppedSequel extends VSequel {
+      onUpdate(visual: VEntity, context: VSequelContext): void;
   }
 
 }
 declare module 'MysteryRogueSystem/ts/mr/view/sequels/VDownSequel' {
-  import { REVisualSequel } from "MysteryRogueSystem/ts/mr/view/REVisualSequel";
-  import { REVisualSequelContext } from "MysteryRogueSystem/ts/mr/view/REVisualSequelContext";
-  import { REVisual_Entity } from "MysteryRogueSystem/ts/mr/view/REVisual_Entity";
-  export class VDownSequel extends REVisualSequel {
-      onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void;
+  import { VSequel } from "MysteryRogueSystem/ts/mr/view/VSequel";
+  import { VSequelContext } from "MysteryRogueSystem/ts/mr/view/VSequelContext";
+  import { VEntity } from "MysteryRogueSystem/ts/mr/view/VEntity";
+  export class VDownSequel extends VSequel {
+      onUpdate(visual: VEntity, context: VSequelContext): void;
   }
 
 }
 declare module 'MysteryRogueSystem/ts/mr/view/sequels/VDropSequel' {
-  import { REVisualSequel } from "MysteryRogueSystem/ts/mr/view/REVisualSequel";
-  import { REVisualSequelContext } from "MysteryRogueSystem/ts/mr/view/REVisualSequelContext";
-  import { REVisual_Entity } from "MysteryRogueSystem/ts/mr/view/REVisual_Entity";
-  export class VDropSequel extends REVisualSequel {
-      onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void;
+  import { VSequel } from "MysteryRogueSystem/ts/mr/view/VSequel";
+  import { VSequelContext } from "MysteryRogueSystem/ts/mr/view/VSequelContext";
+  import { VEntity } from "MysteryRogueSystem/ts/mr/view/VEntity";
+  export class VDropSequel extends VSequel {
+      onUpdate(visual: VEntity, context: VSequelContext): void;
   }
 
 }
 declare module 'MysteryRogueSystem/ts/mr/view/sequels/VEarthquake2Sequel' {
-  import { REVisualSequel } from "MysteryRogueSystem/ts/mr/view/REVisualSequel";
-  import { REVisualSequelContext } from "MysteryRogueSystem/ts/mr/view/REVisualSequelContext";
-  import { REVisual_Entity } from "MysteryRogueSystem/ts/mr/view/REVisual_Entity";
-  export class VEarthquake2Sequel extends REVisualSequel {
-      onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void;
+  import { VSequel } from "MysteryRogueSystem/ts/mr/view/VSequel";
+  import { VSequelContext } from "MysteryRogueSystem/ts/mr/view/VSequelContext";
+  import { VEntity } from "MysteryRogueSystem/ts/mr/view/VEntity";
+  export class VEarthquake2Sequel extends VSequel {
+      onUpdate(visual: VEntity, context: VSequelContext): void;
   }
 
 }
 declare module 'MysteryRogueSystem/ts/mr/view/sequels/VEscapeSequel' {
-  import { REVisualSequel } from "MysteryRogueSystem/ts/mr/view/REVisualSequel";
-  import { REVisualSequelContext } from "MysteryRogueSystem/ts/mr/view/REVisualSequelContext";
-  import { REVisual_Entity } from "MysteryRogueSystem/ts/mr/view/REVisual_Entity";
-  export class VEscapeSequel extends REVisualSequel {
-      onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void;
+  import { VSequel } from "MysteryRogueSystem/ts/mr/view/VSequel";
+  import { VSequelContext } from "MysteryRogueSystem/ts/mr/view/VSequelContext";
+  import { VEntity } from "MysteryRogueSystem/ts/mr/view/VEntity";
+  export class VEscapeSequel extends VSequel {
+      onUpdate(visual: VEntity, context: VSequelContext): void;
   }
 
 }
 declare module 'MysteryRogueSystem/ts/mr/view/sequels/VExplosionSequel' {
-  import { REVisualSequelContext } from "MysteryRogueSystem/ts/mr/view/REVisualSequelContext";
-  import { REVisual_Entity } from "MysteryRogueSystem/ts/mr/view/REVisual_Entity";
+  import { VSequelContext } from "MysteryRogueSystem/ts/mr/view/VSequelContext";
+  import { VEntity } from "MysteryRogueSystem/ts/mr/view/VEntity";
   export class VExplosionSequel {
-      onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void;
+      onUpdate(visual: VEntity, context: VSequelContext): void;
   }
 
 }
 declare module 'MysteryRogueSystem/ts/mr/view/sequels/VIdleSequel' {
-  import { REVisualSequel } from "MysteryRogueSystem/ts/mr/view/REVisualSequel";
-  import { REVisualSequelContext } from "MysteryRogueSystem/ts/mr/view/REVisualSequelContext";
-  import { REVisual_Entity } from "MysteryRogueSystem/ts/mr/view/REVisual_Entity";
-  export class VIdleSequel extends REVisualSequel {
-      onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void;
+  import { VSequel } from "MysteryRogueSystem/ts/mr/view/VSequel";
+  import { VSequelContext } from "MysteryRogueSystem/ts/mr/view/VSequelContext";
+  import { VEntity } from "MysteryRogueSystem/ts/mr/view/VEntity";
+  export class VIdleSequel extends VSequel {
+      onUpdate(visual: VEntity, context: VSequelContext): void;
   }
 
 }
 declare module 'MysteryRogueSystem/ts/mr/view/sequels/VJumpSequel' {
-  import { REVisualSequel } from "MysteryRogueSystem/ts/mr/view/REVisualSequel";
-  import { REVisualSequelContext } from "MysteryRogueSystem/ts/mr/view/REVisualSequelContext";
-  import { REVisual_Entity } from "MysteryRogueSystem/ts/mr/view/REVisual_Entity";
-  export class VJumpSequel extends REVisualSequel {
+  import { VSequel } from "MysteryRogueSystem/ts/mr/view/VSequel";
+  import { VSequelContext } from "MysteryRogueSystem/ts/mr/view/VSequelContext";
+  import { VEntity } from "MysteryRogueSystem/ts/mr/view/VEntity";
+  export class VJumpSequel extends VSequel {
       private _moveSpeed;
       private _jumpPeak;
       private _jumpCount;
       private _realX;
       private _realY;
-      onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void;
+      onUpdate(visual: VEntity, context: VSequelContext): void;
       private jump;
       private jumpHeight;
   }
 
 }
 declare module 'MysteryRogueSystem/ts/mr/view/sequels/VMoveSequel' {
-  import { REVisualSequel } from "MysteryRogueSystem/ts/mr/view/REVisualSequel";
-  import { REVisualSequelContext } from "MysteryRogueSystem/ts/mr/view/REVisualSequelContext";
-  import { REVisual_Entity } from "MysteryRogueSystem/ts/mr/view/REVisual_Entity";
+  import { VSequel } from "MysteryRogueSystem/ts/mr/view/VSequel";
+  import { VSequelContext } from "MysteryRogueSystem/ts/mr/view/VSequelContext";
+  import { VEntity } from "MysteryRogueSystem/ts/mr/view/VEntity";
   /**
    * 倍速移動など、1ターンに複数ブロックを移動する場合、その数だけ Sequel が生成される。
    * そうしないと、途中で立ち寄ったブロックを補完するようなアニメーションが表現できない。
    */
-  export class REVisualSequel_Move extends REVisualSequel {
+  export class REVisualSequel_Move extends VSequel {
       private _curveX;
       private _curveY;
-      onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void;
+      onUpdate(visual: VEntity, context: VSequelContext): void;
   }
 
 }
 declare module 'MysteryRogueSystem/ts/mr/view/sequels/VSequelHelper' {
-  import { REVisual_Entity } from "MysteryRogueSystem/ts/mr/view/REVisual_Entity";
+  import { VEntity } from "MysteryRogueSystem/ts/mr/view/VEntity";
   export class VSequelHelper {
-      static updateStepAnimPattern(visual: REVisual_Entity): void;
+      static updateStepAnimPattern(visual: VEntity): void;
   }
 
 }
 declare module 'MysteryRogueSystem/ts/mr/view/sequels/VStumbleSequel' {
-  import { REVisualSequel } from "MysteryRogueSystem/ts/mr/view/REVisualSequel";
-  import { REVisualSequelContext } from "MysteryRogueSystem/ts/mr/view/REVisualSequelContext";
-  import { REVisual_Entity } from "MysteryRogueSystem/ts/mr/view/REVisual_Entity";
-  export class VStumbleSequel extends REVisualSequel {
+  import { VSequel } from "MysteryRogueSystem/ts/mr/view/VSequel";
+  import { VSequelContext } from "MysteryRogueSystem/ts/mr/view/VSequelContext";
+  import { VEntity } from "MysteryRogueSystem/ts/mr/view/VEntity";
+  export class VStumbleSequel extends VSequel {
       private static RotationSignTable;
       private _curve;
       constructor();
-      onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void;
+      onUpdate(visual: VEntity, context: VSequelContext): void;
   }
 
 }
 declare module 'MysteryRogueSystem/ts/mr/view/sequels/VUseItemSequel' {
-  import { REVisualSequel } from "MysteryRogueSystem/ts/mr/view/REVisualSequel";
-  import { REVisualSequelContext } from "MysteryRogueSystem/ts/mr/view/REVisualSequelContext";
-  import { REVisual_Entity } from "MysteryRogueSystem/ts/mr/view/REVisual_Entity";
-  export class VUseItemSequel extends REVisualSequel {
+  import { VSequel } from "MysteryRogueSystem/ts/mr/view/VSequel";
+  import { VSequelContext } from "MysteryRogueSystem/ts/mr/view/VSequelContext";
+  import { VEntity } from "MysteryRogueSystem/ts/mr/view/VEntity";
+  export class VUseItemSequel extends VSequel {
       private _itemSprite;
       private _itemVisual;
       private _baseX;
       private _baseY;
-      onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void;
+      onUpdate(visual: VEntity, context: VSequelContext): void;
       private findItemVisual;
   }
 
 }
 declare module 'MysteryRogueSystem/ts/mr/view/sequels/VWarpSequel' {
-  import { REVisualSequel } from "MysteryRogueSystem/ts/mr/view/REVisualSequel";
-  import { REVisualSequelContext } from "MysteryRogueSystem/ts/mr/view/REVisualSequelContext";
-  import { REVisual_Entity } from "MysteryRogueSystem/ts/mr/view/REVisual_Entity";
-  export class VWarpSequel extends REVisualSequel {
-      onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void;
+  import { VSequel } from "MysteryRogueSystem/ts/mr/view/VSequel";
+  import { VSequelContext } from "MysteryRogueSystem/ts/mr/view/VSequelContext";
+  import { VEntity } from "MysteryRogueSystem/ts/mr/view/VEntity";
+  export class VWarpSequel extends VSequel {
+      onUpdate(visual: VEntity, context: VSequelContext): void;
   }
 
 }
@@ -12733,6 +12705,32 @@ declare module 'MysteryRogueSystem/ts/mr/view/VCharacterSpriteSet' {
   }
 
 }
+declare module 'MysteryRogueSystem/ts/mr/view/VChronus' {
+  export class VChronus {
+      private _timeFrameId;
+      private _livingTimeRefreshFrameCount;
+      private _fadeBitmap;
+      private _fadeSprite;
+      private _textBitmap;
+      private _textSprite;
+      private _fadeAnimation;
+      constructor(scene: Scene_Map);
+      update(): void;
+      private getEffectDuration;
+      private setTint;
+  }
+
+}
+declare module 'MysteryRogueSystem/ts/mr/view/VDialogManager' {
+  import { SDialog } from "MysteryRogueSystem/ts/mr/system/SDialog";
+  import { VDialogNavigator } from "MysteryRogueSystem/ts/mr/view/dialogs/VDialogNavigator";
+  export class VDialogManager {
+      readonly dialogNavigator: VDialogNavigator;
+      constructor();
+      openDialog(model: SDialog): void;
+  }
+
+}
 declare module 'MysteryRogueSystem/ts/mr/view/VDirectionArrow' {
   export class VDirectionArrow extends Sprite {
       private _sprites;
@@ -12746,6 +12744,98 @@ declare module 'MysteryRogueSystem/ts/mr/view/VDirectionArrow' {
       setDirection(d: number): void;
       setCrossDiagonal(d: boolean): void;
       update(): void;
+  }
+
+}
+declare module 'MysteryRogueSystem/ts/mr/view/VEntity' {
+  import { DSequelId } from "ts/mr/data/DSequel";
+  import { Vector2 } from "ts/mr/math/Vector2";
+  import { VSequelContext } from "ts/mr/view/VSequelContext";
+  import { LEntity } from "MysteryRogueSystem/ts/mr/lively/LEntity";
+  import { SEntityVisibility } from "ts/mr/system/SView";
+  import { DPrefabActualImage } from "ts/mr/data/DPrefab";
+  /**
+   * Entity の「見た目」を表現するためのクラス。
+   *
+   * RMMZ 向けのこのクラスの実装では、直接 Sprite を出したりするわけではない点に注意。
+   * Mnager からのインスタンス生成と同時に、動的に Game_Event が生成され、このクラスはその Game_Event を操作する。
+   */
+  export class VEntity {
+      private _entity;
+      private _rmmzEventId;
+      private _rmmzSpriteIndex;
+      private _sequelContext;
+      private _initialUpdate;
+      private _position;
+      private _visibilityOpacityStart;
+      private _visibilityOpacityTarget;
+      private _visibilityFrame;
+      private _prevVisibility;
+      private _visibility;
+      private _actualImage;
+      private _sequelOpacity;
+      reservedDestroy: boolean;
+      visualTransparent: boolean;
+      constructor(entity: LEntity, rmmzEventId: number);
+      entity(): LEntity;
+      rmmzEventId(): number;
+      rmmzEvent(): Game_Event;
+      rmmzSpriteIndex(): number;
+      rmmzSprite(): Sprite_Character | undefined;
+      getRmmzSprite(): Sprite_Character;
+      isVisible(): boolean;
+      position(): Vector2;
+      x(): number;
+      y(): number;
+      setX(value: number): void;
+      setY(value: number): void;
+      setPosition(value: Vector2): void;
+      resetPosition(): void;
+      sequelContext(): VSequelContext;
+      getIdleSequelId(): DSequelId;
+      _setSpriteIndex(value: number): void;
+      actualImage(): DPrefabActualImage;
+      setOpacity(value: number): void;
+      private imageOverriden;
+      _update(): void;
+      private updateOpacity;
+      getCharacterImage(entity: LEntity, visibility: SEntityVisibility): DPrefabActualImage | undefined;
+      private getActualOpacity;
+      showEffectResult(): void;
+  }
+
+}
+declare module 'MysteryRogueSystem/ts/mr/view/VEntityManager' {
+  import { LEntity } from "ts/mr/lively/LEntity";
+  import { VSequelManager } from "MysteryRogueSystem/ts/mr/view/VSequelManager";
+  import { VEntity } from "MysteryRogueSystem/ts/mr/view/VEntity";
+  /**
+   * EntityVisual の管理クラス。
+   *
+   * Spriteset_Map と同じように、Scene_Map の生成・破棄に合わせて Sprite の表示状態を制御する。
+   * 実際にこのクラスが Sprite を生成するものではない点に注意。
+   *
+   * なお、Spriteset_Map は SceneManager.onBeforeSceneStart() からの Scene(PIXI.Stage) の destory により破棄される。
+   */
+  export class VEntityManager {
+      private _visualEntities;
+      private _sequelManager;
+      constructor();
+      resetVisuals(): void;
+      entityVisuals(): VEntity[];
+      ternimate(): void;
+      update(): void;
+      sequelManager(): VSequelManager;
+      findEntityVisualByEntity(entity: LEntity): VEntity | undefined;
+      getEntityVisualByEntity(entity: LEntity): VEntity;
+      findEntityVisualByRMMZEventId(rmmzEventId: number): VEntity | undefined;
+      visualRunning(): boolean;
+      reserveDeleteVisual(entity: LEntity): void;
+      private deleteVisuals;
+      private detachVisual;
+      private handleFlushSequelSet;
+      createVisual2(entity: LEntity): void;
+      private createVisual;
   }
 
 }
@@ -12815,6 +12905,98 @@ declare module 'MysteryRogueSystem/ts/mr/view/VMessageWindowSet' {
       attemptStartDisplayFloorName(): void;
       private startFadeIn;
       update(): void;
+  }
+
+}
+declare module 'MysteryRogueSystem/ts/mr/view/VSequel' {
+  import { VSequelContext } from "MysteryRogueSystem/ts/mr/view/VSequelContext";
+  import { VEntity } from "MysteryRogueSystem/ts/mr/view/VEntity";
+  export abstract class VSequel {
+      abstract onUpdate(visual: VEntity, context: VSequelContext): void;
+  }
+
+}
+declare module 'MysteryRogueSystem/ts/mr/view/VSequelContext' {
+  import { Vector2 } from "ts/mr/math/Vector2";
+  import { SSequelUnit, SSequelClip } from "ts/mr/system/SSequel";
+  import { VEntity } from "MysteryRogueSystem/ts/mr/view/VEntity";
+  /**
+   * VEntity 1つに対する、モーションの実行状態を表す。
+   */
+  export class VSequelContext {
+      private _entityVisual;
+      private _clip;
+      private _currentClip;
+      private _frameCount;
+      private _timeScale;
+      private _cuurentFinished;
+      private _cancellationLocked;
+      private _currentSequel;
+      private _currentVisualSequel;
+      private _startPosition;
+      private _currentIdleSequelId;
+      private _animationWaiting;
+      private _balloonWaiting;
+      private _waitFrameCount;
+      constructor(entityVisual: VEntity);
+      sequel(): SSequelUnit;
+      frameCount(): number;
+      timeScale(): number;
+      isDashing(): boolean;
+      /** Sequel 開始時の Visual の position */
+      startPosition(): Vector2;
+      finished(): boolean;
+      isCancellationLocked(): boolean;
+      private isAnimationWaintng;
+      isFrameWaiting(): boolean;
+      isLogicalCompleted2(): boolean;
+      isLogicalCompleted(globalWaiting: boolean): boolean;
+      lockCamera(): void;
+      unlockCamera(): void;
+      unlockCancellation(): void;
+      startAnimation(rmmzAnimationId: number): void;
+      end(): void;
+      _start(clip: SSequelClip): void;
+      _next(): void;
+      private _startSequel;
+      private _startAnimation;
+      private _startFloatingAnimation;
+      private _startBalloon;
+      private _startWaitSequel;
+      _update(): void;
+  }
+
+}
+declare module 'MysteryRogueSystem/ts/mr/view/VSequelFactory' {
+  import { VSequel } from "ts/mr/view/VSequel";
+  import { DSequelId } from "ts/mr/data/DSequel";
+  /**
+   */
+  export class VSequelFactory {
+      private _visualSequelFactory;
+      constructor();
+      createVisualSequel(sequelId: DSequelId): VSequel;
+      startFloatingAnimation(animationId: number, mx: number, my: number): void;
+  }
+
+}
+declare module 'MysteryRogueSystem/ts/mr/view/VSequelManager' {
+  import { VEntity } from "MysteryRogueSystem/ts/mr/view/VEntity";
+  import { SSequelSet } from "MysteryRogueSystem/ts/mr/system/SSequel";
+  import { VEntityManager } from "MysteryRogueSystem/ts/mr/view/VEntityManager";
+  export class VSequelManager {
+      private _entityVisualSet;
+      private _activeSequelSet;
+      private _currentSequelRun;
+      private _runningVisuals;
+      constructor(entityVisualSet: VEntityManager);
+      setup(sequelSet: SSequelSet): void;
+      get isRunning(): boolean;
+      update(): void;
+      postUpdate(): void;
+      removeVisual(visual: VEntity): void;
+      private onFinishedAllSequels;
+      private isLogicalCompleted;
   }
 
 }

@@ -1,5 +1,5 @@
 
-import { REVisual_Entity } from "../REVisual_Entity";
+import { VEntity } from "../VEntity";
 
 export class VSequelHelper {
     /*
@@ -33,7 +33,7 @@ export class VSequelHelper {
     }
     */
 
-    public static updateStepAnimPattern(visual: REVisual_Entity): void {
+    public static updateStepAnimPattern(visual: VEntity): void {
         const event = visual.rmmzEvent();
         if (event && event.hasStepAnime()) {
 

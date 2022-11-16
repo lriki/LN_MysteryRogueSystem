@@ -1,7 +1,7 @@
 import { Vector2 } from "ts/mr/math/Vector2";
-import { REVisualSequel } from "../REVisualSequel";
-import { REVisualSequelContext } from "../REVisualSequelContext";
-import { REVisual_Entity } from "../REVisual_Entity";
+import { VSequel } from "../VSequel";
+import { VSequelContext } from "../VSequelContext";
+import { VEntity } from "../VEntity";
 
 /*
 論理位置とMotion再生の順序について
@@ -19,8 +19,8 @@ Motionの引数として移動後の位置を渡す必要が出てきて、ち�
 
 */
 
-export class VWarpSequel extends REVisualSequel {
-    onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void {
+export class VWarpSequel extends VSequel {
+    onUpdate(visual: VEntity, context: VSequelContext): void {
 
         const frameCount = context.frameCount();
         //context.unlockCamera();

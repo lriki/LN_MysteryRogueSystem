@@ -1,14 +1,14 @@
-import { REVisualSequel } from "../REVisualSequel";
-import { REVisualSequelContext } from "../REVisualSequelContext";
-import { REVisual_Entity } from "../REVisual_Entity";
+import { VSequel } from "../VSequel";
+import { VSequelContext } from "../VSequelContext";
+import { VEntity } from "../VEntity";
 import { VSequelHelper } from "./VSequelHelper";
 
 
-export class VIdleSequel extends REVisualSequel {
+export class VIdleSequel extends VSequel {
 
     //private _animationCount: number = 0;
 
-    onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void {
+    onUpdate(visual: VEntity, context: VSequelContext): void {
         VSequelHelper.updateStepAnimPattern(visual);
         visual.resetPosition();
     }

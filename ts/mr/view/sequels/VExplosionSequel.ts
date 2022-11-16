@@ -1,11 +1,11 @@
-import { REVisualSequelContext } from "../REVisualSequelContext";
-import { REVisual_Entity } from "../REVisual_Entity";
+import { VSequelContext } from "../VSequelContext";
+import { VEntity } from "../VEntity";
 
 const EFFECT_FRAME_COUNT = 100;
 
 export class VExplosionSequel {
     
-    onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void {
+    onUpdate(visual: VEntity, context: VSequelContext): void {
         const effectDuration = EFFECT_FRAME_COUNT - context.frameCount();
 
         if (context.frameCount() == 0) {

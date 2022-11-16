@@ -1,5 +1,5 @@
 import { MRView } from "ts/mr/view/MRView";
-import { REVisual_Entity } from "ts/mr/view/REVisual_Entity";
+import { VEntity } from "ts/mr/view/VEntity";
 import { VCharacterSpriteSet } from "ts/mr/view/VCharacterSpriteSet";
 import { VHelper } from "ts/mr/view/VHelper";
 import { assert } from "../Common";
@@ -23,7 +23,7 @@ declare global {
         //isRECharacterExtinct(): boolean;
         endAllEffect(): void;
         removeREPrefabEventSprite(index: number): void;
-        findVisual(): REVisual_Entity | undefined;
+        findVisual(): VEntity | undefined;
 
         _damageSprites_RE: Sprite_CharacterDamage_RE[];
         updateDamagePopup_RE(): void;
@@ -131,7 +131,7 @@ Sprite_Character.prototype.endAllEffect = function() {
     // TODO: https://raw.githubusercontent.com/triacontane/RPGMakerMV/master/EventReSpawn.js
 }
 
-Sprite_Character.prototype.findVisual = function(): REVisual_Entity | undefined {
+Sprite_Character.prototype.findVisual = function(): VEntity | undefined {
     if (!MRView.entityVisualSet) return undefined;
 
     const event = this._character;

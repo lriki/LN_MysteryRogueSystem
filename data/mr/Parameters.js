@@ -13,29 +13,29 @@ MR.db.parameters = {
     "fp": {
         setup: (parameter) => {
             parameter.addFlavorEffect({
-                looksFaction: MR.DFactionType.Neutral,          // 勢力を問わず、
-                point: MR.DValuePoint.Current,                  // 現在値が、
-                addition: MR.DValueAddition.Gain,               // 増えた時、
+                looksFaction: "neutral",                        // 勢力を問わず、
+                point: "actual",                                // 現在値が、
+                addition: "gain",                               // 増えた時、
                 conditionFormula: "value < max",                // 最大値より小さい場合は、
                 flavorEffect: {
-                    text: tr("%1はおなかがふくれた。"),         // "おなかがふくれた" と表示する。
+                    text: tr("%1はおなかがふくれた。"),             // "おなかがふくれた" と表示する。
                     sound: { name: "Heal1", volume: 90 },       // 効果音を再生する。
                 }
             });
             parameter.addFlavorEffect({
-                looksFaction: MR.DFactionType.Neutral,          // 勢力を問わず、
-                point: MR.DValuePoint.Current,                  // 現在値が、
-                addition: MR.DValueAddition.Gain,               // 増えた時、
+                looksFaction: "neutral",                        // 勢力を問わず、
+                point: "actual",                                // 現在値が、
+                addition: "gain",                               // 増えた時、
                 conditionFormula: "value >= max",               // 最大値に達した場合は、
                 flavorEffect: {
-                    text: tr("%1はおなかがいっぱいになった。"), // "おなかがいっぱいになった" と表示する。
+                    text: tr("%1はおなかがいっぱいになった。"),     // "おなかがいっぱいになった" と表示する。
                     sound: { name: "Heal1", volume: 90 },       // 効果音を再生する。
                 }
             });
             parameter.addFlavorEffect({
-                looksFaction: MR.DFactionType.Neutral,          // 勢力を問わず、
-                point: MR.DValuePoint.Growth,                  // 最大値が、
-                addition: MR.DValueAddition.Gain,               // 増えた時、
+                looksFaction: "neutral",                        // 勢力を問わず、
+                point: "growth",                                // 最大値が、
+                addition: "gain",                               // 増えた時、
                 flavorEffect: {
                     text: MR.DTextManager.actorGain             // "増えた" と表示する。(ツクールのエディタで設定された文字列)
                 },
@@ -49,9 +49,9 @@ MR.db.parameters = {
         setup: (parameter) => {
             // レベルアップ
             parameter.addFlavorEffect({
-                looksFaction: MR.DFactionType.Neutral,          // 勢力を問わず、
-                point: MR.DValuePoint.Growth,                  // 理想値が、
-                addition: MR.DValueAddition.Gain,               // 増えた時、
+                looksFaction: "neutral",                        // 勢力を問わず、
+                point: "growth",                                // 理想値が、
+                addition: "gain",                               // 増えた時、
                 flavorEffect: {
                     text: MR.DTextManager.levelUp.replace("%3", "%5"),  // レベルアップのメッセージを表示する。(ツクールのエディタで設定された文字列)
                     sound: { name: "Decision5", volume: 90 },           // 効果音を再生する。
@@ -64,11 +64,11 @@ MR.db.parameters = {
             });
             // レベルダウン
             parameter.addFlavorEffect({
-                looksFaction: MR.DFactionType.Neutral,          // 勢力を問わず、
-                point: MR.DValuePoint.Growth,                  // 理想値が、
-                addition: MR.DValueAddition.Loss,               // 減った時、
+                looksFaction: "neutral",                        // 勢力を問わず、
+                point: "growth",                                // 理想値が、
+                addition: "loss",                               // 減った時、
                 flavorEffect: {
-                    text: tr("%1は%2 %5 にさがった。"),         // レベルダウンのメッセージを表示する。
+                    text: tr("%1は%2 %5 にさがった。"),             // レベルダウンのメッセージを表示する。
                 }
             });
         }

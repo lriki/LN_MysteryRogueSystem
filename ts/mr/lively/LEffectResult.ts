@@ -8,7 +8,7 @@ import { DParameterFlavorEffect, DParamMessageValueSource, DValueAddition } from
 import { SSoundManager } from "ts/mr/system/SSoundManager";
 import { UName } from "ts/mr/utility/UName";
 import { DTextManager } from "../data/DTextManager";
-import { DEffect, DValuePoint } from "../data/DEffect";
+import { DEffect, DParameterQualifying, DValuePoint } from "../data/DEffect";
 import { MRBasics } from "../data/MRBasics";
 import { DEntityId } from "../data/DEntity";
 import { DEffectId, DParameterId } from "../data/DCommon";
@@ -24,6 +24,8 @@ export class LParamEffectResult {
     newValue: number = 0;
     drain: boolean = false;
     applyTarget: DValuePoint;
+
+    parameterDamageEffect: DParameterQualifying | undefined;
     //qualifying: DParameterQualifying;
     //priorotyMessage: DParameterQualifying | undefined;
 
@@ -375,7 +377,17 @@ export class LEffectResult {
         
         // 条件に一致する flavorEffect を探す。
         // 見つからなかったら Neature にフォールバック
-        let flavorEffect = this.selectParameterFlavorEffect(entity, paramResult, param.getParameterFlavorEffectByLooksFaction(this.looksFactionType))
+        
+        let flavorEffect: DFlavorEffect | undefined = undefined;
+        if (paramResult.parameterDamageEffect) {
+            flavorEffect = this.selectParameterFlavorEffect(entity, paramResult, paramResult.parameterDamageEffect.getParameterFlavorEffectByLooksFaction(this.looksFactionType));
+            if (!flavorEffect && this.looksFactionType != DFactionType.Neutral) {
+                flavorEffect = this.selectParameterFlavorEffect(entity, paramResult, paramResult.parameterDamageEffect.getParameterFlavorEffectByLooksFaction(DFactionType.Neutral));
+            }
+        }
+        if (!flavorEffect) {
+            flavorEffect = this.selectParameterFlavorEffect(entity, paramResult, param.getParameterFlavorEffectByLooksFaction(this.looksFactionType));
+        }
         if (!flavorEffect && this.looksFactionType != DFactionType.Neutral) {
             flavorEffect = this.selectParameterFlavorEffect(entity, paramResult, param.getParameterFlavorEffectByLooksFaction(DFactionType.Neutral));
         }

@@ -1,9 +1,9 @@
 import { assert } from "ts/mr/Common";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { MRView } from "../MRView";
-import { REVisualSequel } from "../REVisualSequel";
-import { REVisualSequelContext } from "../REVisualSequelContext";
-import { REVisual_Entity } from "../REVisual_Entity";
+import { VSequel } from "../VSequel";
+import { VSequelContext } from "../VSequelContext";
+import { VEntity } from "../VEntity";
 import { VHelper } from "../VHelper";
 
 const DROP_TIME = 30;
@@ -21,13 +21,13 @@ const DIRS4: number[] = [
     6, 8, 4, 2, 
 ];
 
-export class VUseItemSequel extends REVisualSequel {
+export class VUseItemSequel extends VSequel {
     private _itemSprite: Sprite | undefined;
-    private _itemVisual: REVisual_Entity | undefined;
+    private _itemVisual: VEntity | undefined;
     private _baseX: number = 0;
     private _baseY: number = 0;
 
-    onUpdate(visual: REVisual_Entity, context: REVisualSequelContext): void {
+    onUpdate(visual: VEntity, context: VSequelContext): void {
 
         const frameCount = context.frameCount();
         const self = visual.entity();
@@ -114,7 +114,7 @@ export class VUseItemSequel extends REVisualSequel {
         }
     }
 
-    private findItemVisual(item: LEntity): REVisual_Entity | undefined {
+    private findItemVisual(item: LEntity): VEntity | undefined {
         if (!MRView.entityVisualSet) return undefined;
         
         const visual = MRView.entityVisualSet.findEntityVisualByEntity(item);

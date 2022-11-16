@@ -13,26 +13,25 @@ export type DialogResultCallback = (dialog: any) => void;
  * 
  * このクラスはその対策として、Scene_Map 内でウィンドウの遷移管理を行う。
  */
-export class REDialogVisualNavigator {
-    _subDialogs: VDialog[];
-    _scene: VDialog | undefined;
-    _nextScene: VDialog | undefined;
-
-    _destroyList: VDialog[] = [];
+export class VDialogNavigator {
+    private _subDialogs: VDialog[];
+    private _scene: VDialog | undefined;
+    private _nextScene: VDialog | undefined;
+    private _destroyList: VDialog[] = [];
 
     constructor() {
         this._subDialogs = [];
     }
 
-    isEmpty(): boolean {
+    public get isEmpty(): boolean {
         return !this._scene && !this._nextScene && this._subDialogs.length == 0;
     }
 
-    _openDialog(dialog: VDialog): void {
+    public openDialog(dialog: VDialog): void {
         this.push(dialog);
     }
 
-    markCloseDialog(context: SDialogContext, model: SDialog): void {
+    public closeDialog(context: SDialogContext, model: SDialog): void {
         this.pop(model);
     }
 
@@ -55,20 +54,18 @@ export class REDialogVisualNavigator {
 
         this._nextScene = this._subDialogs.pop();
 
-        //if (this._scene) {
-            this._scene.onStop();
+        this._scene.onStop();
 
-            // 深い Dialog がまとめて閉じられるときは update を挟まずに複数の Dialog が同時に閉じられる。
-            // この pop は多くの場合クリックやキャンセルキーのイベントハンドラから呼ばれるが、それは WindowLayer.update からの子要素のイテレート中に呼ばれる。
-            // この時点で実際に destroy() からの removeChild() してしまうと、イテレータが壊れてしまう。
-            // そのため、削除のタイミングをずらす。
-            this._destroyList.push(this._scene);
+        // 深い Dialog がまとめて閉じられるときは update を挟まずに複数の Dialog が同時に閉じられる。
+        // この pop は多くの場合クリックやキャンセルキーのイベントハンドラから呼ばれるが、それは WindowLayer.update からの子要素のイテレート中に呼ばれる。
+        // この時点で実際に destroy() からの removeChild() してしまうと、イテレータが壊れてしまう。
+        // そのため、削除のタイミングをずらす。
+        this._destroyList.push(this._scene);
 
-            this.changeScene();
-        //}
+        this.changeScene();
     }
 
-    clear2(): void {
+    private clear(): void {
         this.destryDialogs();
 
         if (this._scene) {
@@ -91,7 +88,7 @@ export class REDialogVisualNavigator {
         this._nextScene = undefined;
     }
 
-    update(context: SDialogContext): void {
+    public update(context: SDialogContext): void {
         if (this._nextScene) {
             this.changeScene();
         }
@@ -99,36 +96,20 @@ export class REDialogVisualNavigator {
     }
 
     private changeScene(): void {
-        // if (this._scene && this._scene._destroying) {
-        //     this._scene._destroy();
-        //     this._scene = undefined;
-        // }
-
-            this._scene = this._nextScene;
-            this._nextScene = undefined;
-            if (this._scene) {
-                if (!this._scene._created) {
-                    this._scene.onCreate();
-                    this._scene._created = true;
-                }
-                this._scene.onStart();
+        this._scene = this._nextScene;
+        this._nextScene = undefined;
+        if (this._scene) {
+            if (!this._scene._created) {
+                this._scene.onCreate();
+                this._scene._created = true;
             }
-
-        console.log("changeScene", this);
+            this._scene.onStart();
+        }
     }
 
     private updateScene(context: SDialogContext): void {
         if (this._scene) {
             this._scene.onUpdate();
-            /*
-            if (this._scene._started) {
-                this._scene.onUpdate(context);
-            }
-            else {
-                this._scene._started = true;
-                this._scene.onStart();
-            }
-            */
         }
     }
 

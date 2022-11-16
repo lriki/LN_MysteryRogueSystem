@@ -175,7 +175,7 @@ Spriteset_Map.prototype.updateREPrefabEvent = function() {
 };
 
 Spriteset_Map.prototype.makeREPrefabEventSprite = function(event: Game_Event) {
-    assert(MRView.manager);
+    assert(MRView.sequelFactory);
 
     event.setSpritePrepared(true);
     var sprite = new Sprite_Character(event as unknown as Game_Character);

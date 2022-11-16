@@ -6,6 +6,8 @@ import { MRData } from "./MRData";
 import { DHelpers } from "./DHelper";
 import { DFlavorEffect, IFlavorEffectProps } from "./DFlavorEffect";
 import { DSpecialEffect, DSpecialEffectRef, ISpecialEffectProps } from "./DSpecialEffect";
+import { DParameterFlavorEffect, IParameterFlavorEffect } from "./DParameter";
+import { DFactionType } from "./DFaction";
 
 
 
@@ -51,16 +53,28 @@ export class DParameterQualifying {
     /** メッセージを出さないようにする。 */
     silent: boolean;
 
+    // Emittor の conditions とどちらを使うべきか？
+    // ----------
+    // Emittor の conditions は、対象への効果適用自体にかかわるものである。
+    // 対してこちらの conditions は、個々の効果の発生条件である。
+    // 例えば、パラメータダメージは条件を付けるが、バフや特殊効果は一律適用する、といった場合に使用できる。
+    // Effect の FlavorEffect の表示有無がわかりやすいか。
+    conditionTargetCategoryId: DEntityCategoryId = 0;
     conditionFormula?: string | undefined;
     fallback: boolean = false;
 
+    /** @deprecated */
     alliesSideGainMessage?: string | undefined;
+    /** @deprecated */
     alliesSideLossMessage?: string | undefined;
+    /** @deprecated */
     opponentGainMessage?: string | undefined;
+    /** @deprecated */
     opponentLossMessage?: string | undefined;
     
 
-
+    // DParameter.parameterFlavorEffects をオーバーライドするもの
+    flavorEffects: DParameterFlavorEffect[] = [];
 
 
     public constructor(paramId: DParameterId, formula: string, applyType: DParameterEffectApplyType) {
@@ -102,6 +116,11 @@ export class DParameterQualifying {
         this.fallback = value;
         return this;
     }
+    
+    public getParameterFlavorEffectByLooksFaction(value: DFactionType): DParameterFlavorEffect[] {
+        const effects = this.flavorEffects.filter(e => e.looksFaction === value);
+        return effects;
+    }
 
     public clone(): DParameterQualifying {
         const i = new DParameterQualifying(0, "", DParameterEffectApplyType.None);
@@ -118,6 +137,8 @@ export class DParameterQualifying {
         this.variance = src.variance;
         this.silent = src.silent;
         this.conditionFormula = src.conditionFormula;
+        this.conditionTargetCategoryId = src.conditionTargetCategoryId;
+        this.flavorEffects = [...src.flavorEffects];
         this.alliesSideGainMessage = src.alliesSideGainMessage;
         this.alliesSideLossMessage = src.alliesSideLossMessage;
         this.opponentGainMessage = src.opponentGainMessage;
@@ -201,7 +222,7 @@ export enum DEffectHitType {
 }
 
 
-export enum DEffectFieldScopeRange {
+export enum DEffectFieldScopeType {
     Performer,  // 発動者自身
     Front1,
     StraightProjectile,
@@ -231,21 +252,21 @@ export enum DEffectScopeTargetFactionFlags {
 
 export class DEffectFieldScope {
     area: DEffectFieldScopeArea;
-    range: DEffectFieldScopeRange;
+    range: DEffectFieldScopeType;
     length: number;
     projectilePrefabKey: string;    // range が XXProjectile の時に使う projectile
     layers: DBlockLayerKind[];
     layerScope: DBlockLayerScope;
-    factions: DEffectScopeTargetFactionFlags;
+    //factions: DEffectScopeTargetFactionFlags;
 
     public constructor() {
         this.area = DEffectFieldScopeArea.Room,
-        this.range = DEffectFieldScopeRange.Performer,
+        this.range = DEffectFieldScopeType.Performer,
         this.length = -1,
         this.projectilePrefabKey = "";
         this.layers = [DBlockLayerKind.Unit];
         this.layerScope = DBlockLayerScope.TopOnly;
-        this.factions = DEffectScopeTargetFactionFlags.All;
+        //this.factions = DEffectScopeTargetFactionFlags.All;
     }
 }
 
@@ -276,18 +297,6 @@ export interface DParamBuff {
 }
 
 
-export interface DEffectConditions {
-    targetCategoryId: DEntityCategoryId;
-
-    /** 判定する RaceId。 0 の場合は対象外。 */
-    raceId: DRaceId;
-    
-    applyRating: number;  // EnemyAction と同じ整数。0 はレート無し
-    
-
-    fallback: boolean;
-}
-
 
 
 
@@ -298,7 +307,6 @@ export class DEffect {
 
 
     subEntityFindKey: DSubEntityFindKey;
-    conditions: DEffectConditions;
     
     /** @see {@link IEffectProps.critical} */
     critical: boolean;
@@ -368,7 +376,6 @@ export class DEffect {
         //    length: -1,
         //    projectilePrefabKey: "" };
         this.subEntityFindKey = { kindId: 0, key: undefined };
-        this.conditions = { targetCategoryId: 0, raceId: 0, applyRating: 0, fallback: false };
         this.critical = false;
         this.successRate = 100;
         this.hitType = DEffectHitType.Certain;
@@ -403,14 +410,14 @@ export class DEffect {
         this.flavorEffect = props.flavorEffect ? new DFlavorEffect(props.flavorEffect) : this.flavorEffect;
         
         // damageEffects
-        if (props.parameterDamages) {
-            for (const p of props.parameterDamages) {
+        if (props.parameterValues) {
+            for (const p of props.parameterValues) {
                 const d = new DParameterQualifying(
                     MRData.getParameter(p.parameterKey).id,
                     p.formula,
                     DHelpers.stringToEnum(p.type, {
                         "damage": DParameterEffectApplyType.Damage,
-                        "recover": DParameterEffectApplyType.Recover,
+                        "recovery": DParameterEffectApplyType.Recover,
                         "drain": DParameterEffectApplyType.Drain,
                         "_": DParameterEffectApplyType.Damage,
                     }));
@@ -419,13 +426,23 @@ export class DEffect {
                     "growth": DValuePoint.Growth,
                     "_": DValuePoint.Actual,
                 });
+                if (p.conditionTargetCategoryKey) {
+                    d.conditionTargetCategoryId = MRData.getEntityCategory(p.conditionTargetCategoryKey).id;
+                }
                 if (p.conditionFormula) {
                     d.conditionFormula = p.conditionFormula;
                 }
                 if (p.conditionFallback) {
                     d.fallback = p.conditionFallback;
                 }
-                d.silent = p.silent ?? d.silent;
+                if (p.silent) {
+                    d.silent = p.silent;
+                }
+                if (p.parameterFlavorEffects) {
+                    for (const f of p.parameterFlavorEffects) {
+                        d.flavorEffects.push(new DParameterFlavorEffect(f));
+                    }
+                }
                 this.parameterQualifyings.push(d);
             }
         }
@@ -462,7 +479,6 @@ export class DEffect {
     public copyFrom(src: DEffect): void {
         //this.scope = { ...src.scope };
         this.subEntityFindKey = { ...src.subEntityFindKey };
-        this.conditions = { ...src.conditions };
         this.critical = src.critical;
         this.successRate = src.successRate;
         this.hitType = src.hitType;
@@ -490,14 +506,6 @@ export class DEffect {
                 this.rmmzSpecialEffectQualifyings.length > 0 ||
                 this.buffQualifying.length > 0;
         
-    }
-
-    public hasCondition(): boolean {
-        if (this.conditions.targetCategoryId != 0) return true;
-        if (this.conditions.raceId != 0) return true;
-        if (this.conditions.applyRating != 0) return true;
-        if (this.conditions.fallback) return true;
-        return false;
     }
 }
 
@@ -545,78 +553,11 @@ export class DEmittorCost {
     
 }
 
-/**
- * SEffectContext のエントリポイントに入力する情報。
- * 
- * Emittor の発動条件をクリアした後の、ひとつの「効果適用」に関係する様々な Effect をまとめるクラス。
- * このクラスの情報は Emittor に統合することも検討したが、 Effect 適用周りのコードは複雑なので、
- * あえて分離し、EffectContext 内の処理では Emittor の情報を参照しないようにした。
- * 
- * 新種道具を作るときは、これが効果の1単位となる。
- */
-export class DEffectSet {
-
-    /** 使用者に対して与える効果 */
-    selfEffectId: DEffectId;
-
-    /**
-     *  対象への効果が成功したときのみ、使用者に与える効果。
-     * v0.5.0時点ではもろはの杖しか使っていないが、他にもしあわせ草の武器印の効果等に使える。
-     */
-    succeededSelfEffect: DEffect | undefined;
-    
-    /** 対象に対して与える効果。matchConditions を判定して、最終的に適用する Effect を決める */
-    targetEffectIds: DEffectId[];
-
-    public constructor(sourceKey: string) {
-        this.selfEffectId = MRData.newEffect(sourceKey).id;
-        this.targetEffectIds = [];
-    }
-
-    public get selfEffect(): DEffect {
-        return MRData.effects[this.selfEffectId];
-    }
-    
-    public targetEffects(): readonly DEffect[] {
-        return this.targetEffectIds.map(x => MRData.effects[x]);
-    }
-
-    public targetEffect(index: number): DEffect {
-        return MRData.effects[this.targetEffectIds[index]];
-    }
-
-    public clearTargetEffects(): void {
-        this.targetEffectIds = [];
-    }
-
-    public setTargetEffect(index: number, value: DEffect): void {
-        this.targetEffectIds[index] = value.id;
-    }
-
-    public addTargetEffect(value: DEffect): void {
-        this.targetEffectIds.push(value.id);
-    }
-
-    public copyFrom(src: DEffectSet): void {
-        this.selfEffect.copyFrom(src.selfEffect);
-        this.targetEffectIds = [];
-        for (const id of src.targetEffectIds) {
-            this.targetEffectIds.push(MRData.cloneEffect(MRData.effects[id]).id);
-        }
-    }
-
-    public hitType(): DEffectHitType {
-        return this.targetEffect(0).hitType;
-    }
-}
-
-
 
 //------------------------------------------------------------------------------
 // Props
 
 export interface IEffectProps {
-    conditions?: IEffectConditionsProps;
 
     
     /**
@@ -632,7 +573,7 @@ export interface IEffectProps {
     /**
      * パラメータへのダメージ・回復効果のリスト。
      */
-    parameterDamages?: IParameterDamageEffectProps[];
+    parameterValues?: IParameterValueEffectProps[];
 
     /**
      * パラメータへのバフ・デバフ効果のリスト。
@@ -650,46 +591,16 @@ export interface IEffectProps {
     flavorEffect?: IFlavorEffectProps;
 }
 
-export interface IEffectConditionsProps {
-
-
-    targetCategoryKey?: string;
-
-    /** 判定する RaceId。 0 の場合は対象外。 */
-    targetRaceKey?: string;
-    
-    /** EnemyAction と同じ整数。0 はレート無し。 */
-    rating?: number;
-    
-    fallback?: boolean;
-
-
-    /*
-    基本の考えは RMMZ イベントの [出現条件] と同じ。
-    条件は AND。設定されているものが全て満たされていれば、マッチする。
-    ただし、全く未設定の場合は無条件で有効となる。
-
-    選択処理は次の通り。
-    - 条件が何も設定されてないものは常に発動する。
-       複数ある場合は同時に発動する。
-        他に条件指定がある Effect とも同時発動する。
-    - 条件が設定されているものは次のように選択する。
-        - まず条件が設定されているものをフィルタリングする。
-        - rating を持つものがひとつでもある場合、rating が 1 以上の Effect を対象にランダム選択する。
-        - rating が 0 のものは常に発動する。
-        - 上記の結果ひとつも実行できるものが無い場合、fallback の Effect を発動する。
-
-
-    
-    */
-   
-}
-
 /**
  * パラメータへのダメージ・回復効果。
  */
-export interface IParameterDamageEffectProps {
+export interface IParameterValueEffectProps {
     parameterKey: string;
+
+    /**
+     * Effect を適用する対象カテゴリ。
+     */
+     conditionTargetCategoryKey?: string;
 
     /**
      * Effect を適用する条件式。
@@ -712,7 +623,14 @@ export interface IParameterDamageEffectProps {
      */
     point?: ("actual" | "growth");
 
-    type?: ("damage" | "recover" | "drain");
+    /**
+     * どのような性質の効果であるかを指定します。(default: damage)
+     * 
+     * - damage: ダメージ
+     * - recovery: 回復
+     * - drain: 吸収
+     */
+    type?: ("damage" | "recovery" | "drain");
 
     /**
      * ダメージ計算式。
@@ -720,6 +638,8 @@ export interface IParameterDamageEffectProps {
     formula: string;
 
     silent?: boolean;
+
+    parameterFlavorEffects?: IParameterFlavorEffect[];
 }
 
 /**

@@ -247,9 +247,9 @@ export class SEffectContext {
         const effectData =  effect.data();
         const result = target._effectResult;
         result.clear();
-        result.sourceEffectId = effectData.id;
+        result.sourceEffectId = effectData.effectId;
 
-        if (effectData.hasAnyValidEffect()) {
+        if (effectData.effect.hasAnyValidEffect()) {
             result._revision++;
         }
         else {
@@ -266,7 +266,7 @@ export class SEffectContext {
             const effectData = effect.data();
             const behavior = this._effectorFact.subjectBehavior();
             const attackFlavorEffect = behavior ? behavior.attackAnimationId() : MRData.system.bareHandsFlavorEffect;
-            const flavorEffect = (effectData.flavorEffect === undefined) ? attackFlavorEffect : effectData.flavorEffect;
+            const flavorEffect = (effectData.effect.flavorEffect === undefined) ? attackFlavorEffect : effectData.effect.flavorEffect;
             if (flavorEffect) {
                 const animationTarget2 = this.findAnimationEntity(target);
                 if (animationTarget2) {
@@ -277,8 +277,8 @@ export class SEffectContext {
 
             const selfEffect = this._effectorFact.effectSet().succeededSelfEffect;
             if (selfEffect) {
-                if (selfEffect.flavorEffect) {
-                    cctx.displayFlavorEffect(effect.subject(), selfEffect.flavorEffect, { messageFormatArgs:[] });
+                if (selfEffect.effect.flavorEffect) {
+                    cctx.displayFlavorEffect(effect.subject(), selfEffect.effect.flavorEffect, { messageFormatArgs:[] });
                     animationPosted = true;
                 }
             }

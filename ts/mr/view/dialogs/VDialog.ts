@@ -1,6 +1,6 @@
 import { SDialog, SDialogAction } from "ts/mr/system/SDialog";
 import { MRSystem } from "ts/mr/system/MRSystem";
-import { REDialogVisualNavigator } from "./REDialogVisual";
+import { VDialogNavigator } from "./VDialogNavigator";
 import { SDialogContext } from "ts/mr/system/SDialogContext";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 
@@ -9,7 +9,7 @@ export class VDialog {
     _created: boolean = false;
     _started: boolean = false;
     //_destroying: boolean = false;
-    _navigator: REDialogVisualNavigator | undefined;
+    _navigator: VDialogNavigator | undefined;
     _windows: Window_Base[] = [];
     private _activeWindow: Window_Base | undefined;
     //_resultCallback: DialogResultCallback | undefined;  // deprecated

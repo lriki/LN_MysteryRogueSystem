@@ -2,6 +2,7 @@ import { DParameterId } from "./DCommon";
 import { DValuePoint } from "./DEffect";
 import { DFactionType } from "./DFaction";
 import { DFlavorEffect, IFlavorEffectProps } from "./DFlavorEffect";
+import { DHelpers } from "./DHelper";
 
 export type DXParamId = number;
 export type DSParamId = number;
@@ -36,9 +37,6 @@ export enum DValueAddition {
  * 発動する FlavorEffect と、その発動条件のセット
  */
 export class DParameterFlavorEffect {
-    /** 発動条件となる対象勢力 */
-    public looksFaction: DFactionType;
-
     /** 発動条件となる適用対象 */
     public point: DValuePoint;
 
@@ -48,14 +46,41 @@ export class DParameterFlavorEffect {
     /** 発動条件式 (value=新しい値, old=古い値, min=最小値, max=最大値)。 undefined の場合は式を評価せず、true とみなす。 */
     public conditionFormula: string | undefined;
 
+    /** 発動条件となる対象勢力 */
+    public looksFaction: DFactionType;
+
     /** 発動する効果 */
     public flavorEffect: DFlavorEffect;
 
     public constructor(options?: IParameterFlavorEffect) {
+        this.looksFaction = DFactionType.Neutral;
+        this.point = DValuePoint.Actual;
+        this.addition = DValueAddition.Loss;
+
         options = options || { flavorEffect: {} };
-        this.looksFaction = options.looksFaction ?? DFactionType.Neutral;
-        this.point = options.point ?? DValuePoint.Actual;
-        this.addition = options.addition ?? DValueAddition.Gain;
+        if (options.point) {
+            this.point = DHelpers.stringToEnum(options.point, {
+                "actual": DValuePoint.Actual,
+                "growth": DValuePoint.Growth,
+                "_": DValuePoint.Actual,
+            });
+        }
+        if (options.addition) {
+            this.addition = DHelpers.stringToEnum(options.addition, {
+                "none": DValueAddition.None,
+                "loss": DValueAddition.Loss,
+                "gain": DValueAddition.Gain,
+                "_": DValueAddition.Loss,
+            });
+        }
+        if (options.looksFaction) {
+            this.looksFaction = DHelpers.stringToEnum(options.looksFaction, {
+                "neutral": DFactionType.Neutral,
+                "friendly": DFactionType.Friendly,
+                "hostile": DFactionType.Hostile,
+                "_": DFactionType.Neutral,
+            });
+        }
         this.conditionFormula = options.conditionFormula;
         this.flavorEffect = new DFlavorEffect(options.flavorEffect);
     }
@@ -295,10 +320,37 @@ export interface IParameterProps {
 }
 
 export interface IParameterFlavorEffect {
-    looksFaction?: DFactionType,
-    point?: DValuePoint,
-    addition?: DValueAddition,
+    
+    /**
+     * どのパラメータ要素に対する表示であるかを指定します。(default: actual)
+     * 
+     * - actual: 現在値
+     * - growth: 成長値 (最大値の算出基準)
+     */
+    point?: ("actual" | "growth");
+
+    /**
+     * どのような性質に対する表示であるかを指定します。(default: loss)
+     * 
+     * - loss: 値が減った時 (ダメージを受けた時など)
+     * - gain: 値が増えた時 (回復した時など)
+     * - none: 値に変化がなかった時
+     */
+    addition?: ("loss" | "gain" | "none");
+
     conditionFormula?: string,
+
+    /**
+     * 操作中のユニットから見て、どのような勢力のユニットに対する表示であるかを指定します。(default: neutral)
+     * 
+     * - neutral: 中立・その他
+     * - friendly: 友好的. または操作中の Unit
+     * - hostile: 敵対的
+     */
+    looksFaction?: ("neutral" | "friendly" | "hostile");
+
+    /**
+     * 条件が満たされたときに表示する FlavorEffect を指定します。
+     */
     flavorEffect: IFlavorEffectProps,
 }
-
