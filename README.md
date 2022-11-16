@@ -24,7 +24,7 @@ RPGツクールMZ 用の、ターン性ローグライクシステムのプラ�
 | Version | File |
 |---------|------|
 | 開発中の最新版 | [:arrow_down: LN_MysteryRogueSystem.js](https://raw.githubusercontent.com/lriki/LN_MysteryRogueSystem/main/js/plugins/LN_MysteryRogueSystem.js) |
-| v0.7.0 | 準備中 |
+| v0.8.0 | [:label: Tag](https://github.com/lriki/LN_MysteryRogueSystem/releases/tag/v0.8.0) |
 
 > **Warning** アップデートの注意点
 >
@@ -36,7 +36,7 @@ RPGツクールMZ 用の、ターン性ローグライクシステムのプラ�
 | Version | File |
 |---------|------|
 | 開発中の最新版 | [:arrow_down: LN_MysteryRogueSystem](https://github.com/lriki/LN_MysteryRogueSystem/archive/refs/heads/main.zip) |
-| v0.7.0 | 準備中 |
+| v0.8.0 | [:label: Tag](https://github.com/lriki/LN_MysteryRogueSystem/releases/tag/v0.8.0) |
 
 導入方法
 ----------
