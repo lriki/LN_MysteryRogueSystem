@@ -31,7 +31,7 @@ test("concretes.item.ring.WarpRing", () => {
     let count = 0;
     for (let i = 0; i < 200; i++) {
         // 移動
-        MRLively.world.transferEntity(player1, floorId, 10, 10);
+        MRLively.world.transferEntity(undefined, player1, floorId, 10, 10);
         MRSystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
         MRSystem.dialogContext.activeDialog().submit();
         

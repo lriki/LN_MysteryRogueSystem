@@ -36,9 +36,7 @@ test("concretes.states.速度変化", () => {
     };
 
     // Player
-    const actor1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
-    MRLively.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
-    TestEnv.performFloorTransfer();
+    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     // デフォルトの行動回数は 1 (等速)
     expect(LScheduler2.getSpeedLevel(actor1)).toBe(1);
@@ -133,7 +131,7 @@ test("concretes.states.速度変化.Issue1", () => {
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 30, 10);
+    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 30, 10);
 
     const wait = () => {
         MRSystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());

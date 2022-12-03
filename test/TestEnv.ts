@@ -25,6 +25,7 @@ import { MRBasics } from "ts/mr/data/MRBasics";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { DLandId } from "ts/mr/data/DCommon";
 import { DFloorClass } from "ts/mr/data/DLand";
+import { STransferMapDialog } from "ts/mr/system/dialogs/STransferMapDialog";
 
 declare global {
     interface Number {
@@ -108,21 +109,39 @@ export class TestEnv {
         if (dir) {
             player.dir = dir;
         }
-        MRLively.world.transferEntity(player, floorId, mx, my);
+        MRLively.world.transferEntity(MRSystem.commandContext, player, floorId, mx, my);
         TestEnv.performFloorTransfer();
         return player;
     }
 
+    // まだ色々使用が変わりそうなのでひとつ Wrapper を用意する
+    public static transferEntity(entity: LEntity, floorId: LFloorId, mx: number = -1, my: number = -1): void {
+        MRLively.world.transferEntity(MRSystem.commandContext, entity, floorId, mx, my);
+    }
+
     public static createReflectionObject(floorId: LFloorId, mx: number, my: number): LEntity {
         const object1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_投擲反射石A").id, [MRData.getState("kState_System_ItemStanding").id], "object1"));
-        MRLively.world.transferEntity(object1, floorId, 13, 10);
+        MRLively.world.transferEntity(MRSystem.commandContext, object1, floorId, 13, 10);
         return object1;
     }
 
     public static performFloorTransfer(): void {
-        assert(MRLively.camera.isFloorTransfering());
-        this.loadMapData(MRLively.camera.transferingNewFloorId().rmmzMapId());
-        SGameManager.performFloorTransfer();
+        const dctx = MRSystem.dialogContext;
+
+        // CommandList を実行して実際に Dialog を開かせる
+        MRSystem.scheduler.stepSimulation();
+        const dialog = dctx.activeDialog() as STransferMapDialog;
+        assert(dialog);
+
+
+        this.loadMapData(dialog.newFloorId.rmmzMapId());
+        dialog.performFloorTransfer();
+        dialog.submit();
+        //SGameManager.performFloorTransfer();
+
+
+        // submit() を受けて、次のシミュレーションを実行する (これを抜けてくると、SPlayerDialog が open しているはず)
+        //MRSystem.scheduler.stepSimulation();
     }
 
     private static loadRmmzDatabase(): void {
@@ -160,6 +179,7 @@ export class TestEnv {
         this.sequelSets = [];
         SGameManager.createGameObjects();
         SGameManager.setupNewGame();
+        this.performFloorTransfer();
     }
 
     public static padZero(v: number, length: number) {
@@ -199,6 +219,7 @@ export class TestEnv {
 
 export interface SIntegrationRecord {
     type: string;
+    entity?: LEntity;
 }
 
 export class TestEnvIntegration extends SIntegration {
@@ -285,7 +306,7 @@ export class TestEnvIntegration extends SIntegration {
     }
 
     onEntityLeavedMap(entity: LEntity): void {
-        this.records.push({ type: "onEntityLeavedMap" });
+        this.records.push({ type: "onEntityLeavedMap", entity });
         // Visual 表示は伴わない
     }
     

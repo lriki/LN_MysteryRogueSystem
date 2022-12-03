@@ -18,7 +18,7 @@ interface Entrance {
 
 export class SItemShopBuilder {
     public build(manager: SMapManager, info: LItemShopStructure, rand: LRandom): void {
-        const map = manager.map();
+        const map = manager.map;
         const room = map.room(info.roomId());
         
         room.forEachBlocks(block => {
@@ -58,8 +58,8 @@ export class SItemShopBuilder {
         }
 
         // アイテム配置
-        const floorId = manager.map().floorId();
-        const items = manager.map().land2().landData().appearanceTable.shop[floorId.floorNumber()].filter(e => DEntityCategory.isItem(e.spawiInfo.entityData()));
+        const floorId = manager.map.floorId();
+        const items = manager.map.land2().landData().appearanceTable.shop[floorId.floorNumber()].filter(e => DEntityCategory.isItem(e.spawiInfo.entityData()));
         if (items.length > 0) {
             const spawnedItems = [];
             const center = UMovement.getCenterOfRoom(room);
@@ -68,7 +68,7 @@ export class SItemShopBuilder {
                     if (room.contains(mx, my)) {
                         const data = manager.rand().select(items);
                         const entity = SEntityFactory.newEntity(data.spawiInfo, floorId);
-                        MRLively.world.transferEntity(entity, floorId, mx, my);
+                        MRLively.world.transferEntity(undefined, entity, floorId, mx, my);
                         spawnedItems.push(entity);
 
                         // 値札をつける
@@ -119,7 +119,7 @@ export class SItemShopBuilder {
 
     private getInRoomFloorBlock(room: LRoom, mx: number, my: number): LBlock | undefined {
         if (!room.contains(mx, my)) return undefined;
-        const block = MRLively.map.tryGetBlock(mx, my);
+        const block = MRLively.camera.currentMap.tryGetBlock(mx, my);
         if (!block) return undefined;
         if (!block.isFloorLikeShape()) return undefined;
         return block;

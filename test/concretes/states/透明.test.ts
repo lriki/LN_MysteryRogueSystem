@@ -33,7 +33,7 @@ test("concretes.states.透明.EnemyMove", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [stateId], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
+    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
 
     // Minimap には表示されない
     expect(SView.getEntityVisibility(enemy1).visible).toBe(false);
@@ -61,7 +61,7 @@ test("concretes.states.透明.Enemy", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_CharacterAI, 11, 6);
+    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_CharacterAI, 11, 6);
 
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------

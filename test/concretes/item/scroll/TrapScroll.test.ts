@@ -19,9 +19,7 @@ test("concretes.item.scroll.TrapScroll", () => {
     const floorId = LFloorId.makeFromKeys("MR-Land:UnitTestDungeon1", "kFloor_ランダム罠テスト");
 
     // Player を未時期別アイテムが出現するダンジョンへ配置する
-    const player1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
-    MRLively.world.transferEntity(player1, floorId);
-    TestEnv.performFloorTransfer();
+    const player1 = TestEnv.setupPlayer(floorId);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item1

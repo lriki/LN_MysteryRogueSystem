@@ -21,10 +21,7 @@ test("Items.Staff.Knockback", () => {
     TestEnv.newGame();
 
     // actor1 配置
-    const actor1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
-    MRLively.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
-    actor1.dir = 6;
-    TestEnv.performFloorTransfer();
+    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10, 6);
     const inventory = actor1.getEntityBehavior(LInventoryBehavior);
 
     // item1
@@ -41,7 +38,7 @@ test("Items.Staff.Knockback", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
@@ -78,7 +75,7 @@ test("Items.Staff.Knockback", () => {
     // 投げてみる
     {
         // Enemy を Player の右側に配置
-        MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+        TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
         MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
         
@@ -101,9 +98,7 @@ test("Items.Staff.Identify", () => {
     TestEnv.newGame();
 
     // Player を未時期別アイテムが出現するダンジョンへ配置する
-    const actor1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
-    MRLively.world.transferEntity(actor1, LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
-    TestEnv.performFloorTransfer();
+    const actor1 = TestEnv.setupPlayer(LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
     const inventory = actor1.getEntityBehavior(LInventoryBehavior);
 
     // item1

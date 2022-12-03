@@ -87,18 +87,7 @@ const _Game_Interpreter_command201 = Game_Interpreter.prototype.command201;
 Game_Interpreter.prototype.command201 = function(params: any): boolean {
     if (!_Game_Interpreter_command201.call(this, params)) return false;
 
-    UTransfer.transterRmmzDirectly($gamePlayer._newMapId, $gamePlayer._newX, $gamePlayer._newY);
-    /*
-    const floorId = LFloorId.makeFromMapTransfarInfo($gamePlayer._newMapId, $gamePlayer._newX);
-    
-    const playerEntity = MRLively.camera.focusedEntity();
-    if (playerEntity) {
-        if (floorId.isRandomMap())
-            MRLively.world._transferEntity(playerEntity, floorId);
-        else
-            MRLively.world._transferEntity(playerEntity, floorId, $gamePlayer._newX, $gamePlayer._newY);
-    }
-*/
+    UTransfer.transterRmmzDirectly($gamePlayer._newMapId, $gamePlayer._newX, $gamePlayer._newY, MRSystem.commandContext);
     return true;
 }
 

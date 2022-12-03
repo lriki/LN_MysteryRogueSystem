@@ -24,7 +24,7 @@ test("concretes.enemy.GrabFooter", () => {
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_バインドゴーレムA").id, [], "enemy1"));
     enemy1.addState(TestEnv.StateId_CertainDirectAttack);       // 攻撃必中にする
     enemy1.addState(MRData.getState("kState_UT10ダメージ").id);
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
+    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 

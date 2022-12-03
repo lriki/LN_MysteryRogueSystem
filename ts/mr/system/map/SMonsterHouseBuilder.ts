@@ -6,7 +6,7 @@ import { SMapManager } from "../SMapManager";
 
 export class SMonsterHouseBuilder {
     public build(manager: SMapManager, info: LMonsterHouseStructure, rand: LRandom): void {
-        const map = manager.map();
+        const map = manager.map;
         const room = map.room(info.roomId());
         const blockCount = room.width * room.height;
 

@@ -40,6 +40,11 @@ export interface DSystemSkills {
     normalAttack: DSkillId;
 }
 
+export enum DFovSystem {
+    RoomBounds,
+    // https://www.albertford.com/shadowcasting/
+    SymmetricShadowcast,
+}
 
 /**
  * MR システムをの基本的な動作に必要な定義済みデータを管理します。
@@ -71,6 +76,8 @@ export class DSystem {
     public initialPartyMembers: DEntityId[];
 
     public readonly bareHandsFlavorEffect: DFlavorEffect;
+
+    public fovSystem: DFovSystem = DFovSystem.RoomBounds;//DFovSystem.SymmetricShadowcast;//
 
 
     constructor() {

@@ -21,7 +21,7 @@ test("concretes.dialogs.FeetDialog.test", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_こん棒A").id, [], "item1"));
-    MRLively.world.transferEntity(item1, floorId, 10, 10);
+    TestEnv.transferEntity(item1, floorId, 10, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -46,7 +46,7 @@ test("concretes.dialogs.FeetDialog.test", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item1 は Map 上から外れている
-    const block = MRLively.map.block(10, 10);
+    const block = MRLively.camera.currentMap.block(10, 10);
     expect(block.layer(DBlockLayerKind.Ground).isContains(item1)).toBe(false);
 
     // item1 がインベントリに追加されている
@@ -61,7 +61,7 @@ test("concretes.dialogs.FeetDialog.ExitPoint", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     
     const exitPoint1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ExitPointA").id, [], "exitPoint1"));
-    MRLively.world.transferEntity(exitPoint1, floorId, 10, 10);
+    TestEnv.transferEntity(exitPoint1, floorId, 10, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -80,7 +80,7 @@ test("concretes.dialogs.FeetDialog.Trap", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_地雷A").id, [], "trap1"));
-    MRLively.world.transferEntity(trap1, floorId, 10, 10);
+    TestEnv.transferEntity(trap1, floorId, 10, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

@@ -59,7 +59,7 @@ export enum MovingMethod {
  */
 @MRSerializable
 export class LMap extends LObject {
-    private _floorId: LFloorId = LFloorId.makeEmpty();
+    private readonly _floorId: LFloorId = LFloorId.makeEmpty();
     private _width: number = 0;
     private _height: number = 0;
     private _blocks: LBlock[] = [];
@@ -79,17 +79,17 @@ export class LMap extends LObject {
     keeperCount: number = 0;
     lastKeeperCount: number = 0;
     
-    constructor() {
+    constructor(floorId: LFloorId) {
         super(LObjectType.Map);
+        this._floorId = floorId.clone();
     }
     
     public isGCReady(): boolean {
         return false;   // 自動削除しない
     }
 
-    setup(floorId: LFloorId, mapData: FMap) {
+    setup(mapData: FMap) {
         assert(this._entityIds.length == 0);        // 外部で releaseMap してから setup すること
-        this._floorId = floorId;
         this.unitClarity = false;
         this.itemClarity = false;
         this.trapClarity = false;
@@ -97,9 +97,8 @@ export class LMap extends LObject {
         this.build(mapData);
     }
 
-    public setupForRMMZDefaultMap(floorId: LFloorId):void {
+    public setupForRMMZDefaultMap():void {
         assert(this._entityIds.length == 0);        // 外部で releaseMap してから setup すること
-        this._floorId = floorId;
         this.setupEmptyMap(1, 1);
     }
 
@@ -557,7 +556,7 @@ export class LMap extends LObject {
 
     /** 足元の Entity を取得する */
     public firstFeetEntity(entity: LEntity): LEntity | undefined {
-        const block = MRLively.map.block(entity.mx, entity.my);
+        const block = this.block(entity.mx, entity.my);
         const layer = block.layer(DBlockLayerKind.Ground);
         return layer.firstEntity();
     }

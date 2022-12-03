@@ -31,7 +31,7 @@ test("concretes.item.EscapeScroll.Basic", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
     const initialHP = enemy1.getActualParam(MRBasics.params.hp);
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -55,6 +55,8 @@ test("concretes.item.EscapeScroll.Basic", () => {
     //----------------------------------------------------------------------------------------------------
 
     {
+        const ff1 = MRLively.camera.currentMap;
+
         // [読む]
         const activity = LActivity.makeRead(player1, item1).withConsumeAction();
         MRSystem.dialogContext.postActivity(activity);
@@ -62,8 +64,10 @@ test("concretes.item.EscapeScroll.Basic", () => {
         
         MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
+        const ff2 = MRLively.camera.currentMap;
+        const cc = MRLively.camera;
         // ExitMap へ遷移しているはず
-        const exitMapId = MRLively.map.land2().landData().exitMapData.id;
+        const exitMapId = MRLively.camera.currentMap.land2().landData().exitMapData.id;
         expect(player1.floorId.eventMapData().id).toBe(exitMapId);
 
         expect(TestEnv.integration.exitResult).toBe(LandExitResult.Escape);

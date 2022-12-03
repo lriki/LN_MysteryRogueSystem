@@ -30,7 +30,7 @@ test("concretes.item.ring.AwakeStepRing", () => {
 
     // Enemy1 (仮眠状態)
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [stateId], "enemy1"));
-    MRLively.world.transferEntity(enemy1, floorId, 19, 4);
+    MRLively.world.transferEntity(undefined, enemy1, floorId, 19, 4);
 
     MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
     
@@ -59,7 +59,7 @@ test("concretes.item.ring.AwakeStepRing", () => {
         expect(enemy1.isStateAffected(stateId)).toBe(false);
         
         // 元に戻す
-        MRLively.world.transferEntity(player1, floorId, 16, 4);
+        MRLively.world.transferEntity(undefined, player1, floorId, 16, 4);
         enemy1.addState(stateId);
     }
 

@@ -29,7 +29,7 @@ test("concretes.item.ring.SleepGuardRing", () => {
 
     // Trap
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_SleepTrap, [], "trap1"));
-    MRLively.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    MRLively.world.transferEntity(undefined, trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
@@ -39,7 +39,7 @@ test("concretes.item.ring.SleepGuardRing", () => {
     let count = 0;
     for (let i = 0; i < 100; i++) {
         // 移動
-        MRLively.world.transferEntity(player1, floorId, 10, 10);
+        MRLively.world.transferEntity(undefined, player1, floorId, 10, 10);
         MRSystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
         MRSystem.dialogContext.activeDialog().submit();
         

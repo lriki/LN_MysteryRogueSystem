@@ -66,9 +66,7 @@ test("system.Identify.Grass", () => {
     TestEnv.newGame();
 
     // Player
-    const actor1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
-    MRLively.world.transferEntity(actor1, LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
-    TestEnv.performFloorTransfer();
+    const actor1 = TestEnv.setupPlayer(LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
 
     // アイテム作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_薬草A").id, [], "item1"));

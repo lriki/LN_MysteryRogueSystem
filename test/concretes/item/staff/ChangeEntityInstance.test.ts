@@ -29,7 +29,7 @@ test("Items.ChangeEntityInstance.Wave", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_飴色スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
+    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
     const entityDataId = enemy1.dataId;
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -62,7 +62,7 @@ test("Items.ChangeEntityInstance.Throw", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_飴色スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
+    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
     const entityDataId = enemy1.dataId;
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

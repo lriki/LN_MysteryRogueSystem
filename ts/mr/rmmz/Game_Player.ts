@@ -9,7 +9,7 @@ Game_Player.prototype.initMembers = function() {
 
 const _Game_Player_isTransparent = Game_Player.prototype.isTransparent;
 Game_Player.prototype.isTransparent = function() {
-    if (MRLively.map.floorId().isTacticsMap())
+    if (MRLively.camera.currentMap.floorId().isTacticsMap())
         return true;    // RE マップ中は常に非表示
     else
         return _Game_Player_isTransparent.call(this);
@@ -18,7 +18,7 @@ Game_Player.prototype.isTransparent = function() {
 const _Game_Player_canMove = Game_Player.prototype.canMove;
 Game_Player.prototype.canMove = function(): boolean {
     // REma マップではマニュアル移動を禁止
-    if (MRLively.map.floorId().isTacticsMap()) {
+    if (MRLively.camera.currentMap.floorId().isTacticsMap()) {
         return false;
     }
 

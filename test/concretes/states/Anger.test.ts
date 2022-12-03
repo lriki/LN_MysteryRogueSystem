@@ -25,7 +25,7 @@ test("concretes.states.Anger", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ゾンビA").id, [], "enemy1"));
     enemy1.addState(MRData.getState("kState_Anger").id);
-    MRLively.world.transferEntity(enemy1, floorId, 11, 10);
+    MRLively.world.transferEntity(undefined, enemy1, floorId, 11, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

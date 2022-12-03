@@ -2,7 +2,7 @@ import { LEntity } from "./LEntity";
 import { assert, MRSerializable } from "../Common";
 import { MRLively } from "./MRLively";
 import { LRandom } from "ts/mr/lively/LRandom";
-import { LEntityId, LObject, LObjectType, LObjectId, LBehaviorId } from "./LObject";
+import { LEntityId, LObject, LObjectType, LObjectId, LBehaviorId, LMapId } from "./LObject";
 import { LBehavior } from "./behaviors/LBehavior";
 import { LAbility, LAbilityId } from "./abilities/LAbility";
 import { LFloorId } from "./LFloorId";
@@ -14,6 +14,8 @@ import { MRSystem } from "ts/mr/system/MRSystem";
 import { DEntityId } from "ts/mr/data/DEntity";
 import { UState } from "ts/mr/utility/UState";
 import { DLandId } from "../data/DCommon";
+import { SCommandContext } from "../system/SCommandContext";
+import { LMap } from "./LMap";
 
 /**
  * 1ゲーム内に1インスタンス存在する。
@@ -23,6 +25,7 @@ export class LWorld {
     private _objects: (LObject | undefined)[] = [];
     private _random: LRandom = new LRandom(Math.floor(Math.random() * 65535) + 1);
     private _lands: LLand[];
+    private _mapObjectIds: LMapId[][];   // [LandId][FloorId]
     private _parties: (LParty | undefined)[];
 
     constructor() {
@@ -32,6 +35,7 @@ export class LWorld {
             const land = new LLand(landData);
             this._lands.push(land);
         }
+        this._mapObjectIds = [];
         this._parties = [undefined];  // [0] is dummy
     }
     
@@ -48,6 +52,24 @@ export class LWorld {
                 throw new Error(`Destroyed entity. (id: [${id.index2()}, ${id.key2()}], actualy:[${e.__objectId().index2()}, ${e.__objectId().key2()}])`);
             }
         }
+    }
+
+    public map(floorId: LFloorId): LMap {
+        assert(!floorId.isEmpty());
+        // セーブデータ引継ぎに備えて、動的作成とする。Game_Actors.actor() と同じ。
+        let floors = this._mapObjectIds[floorId.landId()];
+        if (!floors) {
+            floors = [];
+            this._mapObjectIds[floorId.landId()] = floors;
+        }
+        let mapId = floors[floorId.floorNumber()];
+        if (!mapId) {
+            const map = new LMap(floorId);
+            this._registerObject(map);
+            mapId = map.__objectId();
+            floors[floorId.floorNumber()] = mapId;
+        }
+        return this.object(mapId) as LMap;
     }
 
     public findObject(id: LObjectId): LObject | undefined {
@@ -220,8 +242,12 @@ export class LWorld {
      * 
      * mx, my は省略可能。これは、未ロードのランダムマップへの遷移時に使用する。
      */
-    public transferEntity(entity: LEntity, floorId: LFloorId, mx: number = -1, my: number = -1): boolean {
-        const mapFloorId = MRLively.map.floorId();
+    public transferEntity(cctx: SCommandContext | undefined, entity: LEntity, floorId: LFloorId, mx: number = -1, my: number = -1): boolean {
+        //const currentMapId = MRLively.camera.currentMap;
+
+        const mapFloorId = MRLively.camera.currentFloorId;//currentMap.floorId();
+        const currentMap = mapFloorId.hasAny() ? MRLively.world.map(mapFloorId) : undefined;
+
         if (!mapFloorId .equals(floorId) && floorId.isRandomMap()) {
             // 未ロードのランダムマップへ遷移するとき、座標が明示されているのはおかしい
             assert(mx < 0);
@@ -230,11 +256,11 @@ export class LWorld {
         
         const oldLandId = entity.floorId.landId();
 
-        if (MRLively.map.isValid() && !mapFloorId.equals(floorId) && mapFloorId.equals(entity.floorId)) {
+        if (mapFloorId.hasAny() && !mapFloorId.equals(floorId) && mapFloorId.equals(entity.floorId)) {
             // 現在マップからの離脱
-            MRLively.map._removeEntity(entity);
+            assert(currentMap);
+            currentMap._removeEntity(entity);
         }
-
 
         // Floor 間移動?
         if (!entity.floorId.equals(floorId)) {
@@ -250,7 +276,8 @@ export class LWorld {
                 // 他の Floor から、現在表示中の Floor へ移動
                 entity.floorId = floorId;
                 UMovement.locateEntity(entity, mx, my);
-                MRLively.map._addEntityInternal(entity);
+                assert(currentMap);
+                currentMap._addEntityInternal(entity);
             }
 
         }
@@ -261,8 +288,9 @@ export class LWorld {
 
         // Camera が注視している Entity が別マップへ移動したら、マップ遷移
         if (MRLively.camera.focusedEntityId().equals(entity.entityId()) &&
-            !mapFloorId.equals(entity.floorId)) {
-            MRLively.camera._reserveFloorTransferToFocusedEntity();
+            !mapFloorId.equals(entity.floorId) &&
+            cctx) {
+            MRLively.camera._reserveFloorTransferToFocusedEntity(cctx);
         }
 
         // Land 間移動が行われた

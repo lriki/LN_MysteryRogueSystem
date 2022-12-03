@@ -97,7 +97,7 @@ test("concretes.item.grass.Herb.player", () => {
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, floorId, 15, 10);
+    MRLively.world.transferEntity(undefined, enemy1, floorId, 15, 10);
 
     // アイテム作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草A").id, [], "item1"));
@@ -153,7 +153,7 @@ test("concretes.item.grass.Herb.enemy", () => {
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, floorId, 15, 10);
+    MRLively.world.transferEntity(undefined, enemy1, floorId, 15, 10);
 
     // アイテム作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草A").id, [], "item1"));
@@ -203,7 +203,7 @@ test("concretes.item.grass.Herb.undead", () => {
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ゾンビA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, floorId, 15, 10);
+    MRLively.world.transferEntity(undefined, enemy1, floorId, 15, 10);
     const enemy1Hp1 = enemy1.getActualParam(MRBasics.params.hp);
 
     // アイテム作成 & インベントリに入れる

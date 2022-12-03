@@ -28,7 +28,7 @@ test("concretes.item.staff.SpeedDownStaff.basic", () => {
 
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
+    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
     const enemy1AGI1 = enemy1.getActualParam(MRBasics.params.agi);
 
     expect(LScheduler2.getSpeedLevel(enemy1)).toBe(1);

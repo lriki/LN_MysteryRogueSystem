@@ -63,7 +63,7 @@ export class RMMZIntegration extends SIntegration {
     }
 
     onLoadFixedMapEvents(): void {
-        MRLively.map.keeperCount = 0;
+        MRLively.camera.currentMap.keeperCount = 0;
 
         // 固定マップ上のイベント情報から Entity を作成する
         $gameMap.events().forEach((e: Game_Event) => {
@@ -86,13 +86,13 @@ export class RMMZIntegration extends SIntegration {
 
                     if (data.keeper) {
                         entity.keeper = true;
-                        MRLively.map.keeperCount++;
+                        MRLively.camera.currentMap.keeperCount++;
                     }
                 }
             }
         });
 
-        MRLively.map.lastKeeperCount = MRLively.map.keeperCount;
+        MRLively.camera.currentMap.lastKeeperCount = MRLively.camera.currentMap.keeperCount;
     }
 
     onUpdateBlock(block: LBlock): void {
@@ -185,7 +185,7 @@ export class RMMZIntegration extends SIntegration {
         entity.rmmzEventId = 0;
         if (entity.keeper) {
             entity.keeper = false;
-            MRLively.map.keeperCount--;
+            MRLively.camera.currentMap.keeperCount--;
         }
     }
 

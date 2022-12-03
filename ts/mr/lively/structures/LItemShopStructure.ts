@@ -92,11 +92,11 @@ export class LItemShopStructure extends LStructure {
     // 対価を得ずに所有(床置き)を失っている商品
     public getLossItems(): LEntity[] {
         const result: LEntity[] = [];
-        const room = MRLively.map.room(this._roomId);
+        const room = MRLively.camera.currentMap.room(this._roomId);
         for (const id of this._sellngItems) {
             const item = MRLively.world.entity(id);
-            if (item.floorId.equals(MRLively.map.floorId()) && room.contains(item.mx, item.my)) {
-                const block = MRLively.map.block(item.mx, item.my);
+            if (item.floorId.equals(MRLively.camera.currentMap.floorId()) && room.contains(item.mx, item.my)) {
+                const block = MRLively.camera.currentMap.block(item.mx, item.my);
                 assert(block.containsEntity(item)); // 一応、本当に Block に含まれているかチェックする
                 // 所有
             }
@@ -152,7 +152,7 @@ export class LItemShopStructure extends LStructure {
     }
 
     onEntityLocated(cctx: SCommandContext, entity: LEntity): void {
-        const block = MRLively.map.block(entity.mx, entity.my);
+        const block = MRLively.camera.currentMap.block(entity.mx, entity.my);
         if (block._roomId == this._roomId) {
         }
     }

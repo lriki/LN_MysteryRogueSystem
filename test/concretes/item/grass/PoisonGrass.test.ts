@@ -30,7 +30,7 @@ test("concretes.item.grass.PoisonGrass", () => {
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, floorId, 15, 10);
+    TestEnv.transferEntity(enemy1, floorId, 15, 10);
     const enemy1Hp1 = enemy1.getActualParam(MRBasics.params.hp);
     const enemy1Pow1 = enemy1.getActualParam(MRBasics.params.pow);
 

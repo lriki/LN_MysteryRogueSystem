@@ -26,7 +26,7 @@ test("concretes.enemy.SelfExplosion.NotExplosion", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ボムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     SDebugHelpers.setHP(enemy1, 1); // HP1 にして攻撃が当たったら倒れるようにする
     
@@ -63,17 +63,17 @@ test("concretes.enemy.SelfExplosion.Explosion", () => {
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ボムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     const enemy1HP1 = enemy1.getActualParam(MRBasics.params.hp);
     assert(enemy1HP1 > 10);     // テスト用に、最低これだけは確保しておく
     SDebugHelpers.setHP(enemy1, 10); // 爆発する一歩手前にしておく
 
     // enemy2
     const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy2"));
-    MRLively.world.transferEntity(enemy2, TestEnv.FloorId_FlatMap50x50, 11, 11);
+    MRLively.world.transferEntity(undefined, enemy2, TestEnv.FloorId_FlatMap50x50, 11, 11);
     
     // ふきとばし効果でダメージを与えたいので、Enemy1 の後ろに壁を作る
-    MRLively.map.block(12, 10)._tileShape = LTileShape.Wall;
+    MRLively.camera.currentMap.block(12, 10)._tileShape = LTileShape.Wall;
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -106,7 +106,7 @@ test("concretes.enemy.SelfExplosion.Explosion.Dead", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ボムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     SDebugHelpers.setHP(enemy1, 15);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------

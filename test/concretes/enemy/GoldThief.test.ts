@@ -27,10 +27,10 @@ test("concretes.enemy.GoldThief.Basic", () => {
 
     const gold1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_GoldA").id, [], "gold1"));
     gold1.getEntityBehavior(LGoldBehavior).setGold(1000);
-    MRLively.world.transferEntity(gold1, floorId, 13, 10);
+    MRLively.world.transferEntity(undefined, gold1, floorId, 13, 10);
     
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_小金猫A").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, floorId, 12, 10);
+    MRLively.world.transferEntity(undefined, enemy1, floorId, 12, 10);
     const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
     
     // □□□□□
@@ -74,7 +74,7 @@ test("concretes.enemy.GoldThief.Basic", () => {
     
     // Enemy を攻撃して倒す
     enemy1.setParamCurrentValue(MRBasics.params.hp, 1);
-    MRLively.world.transferEntity(enemy1, floorId, 12, 11);  // 強制移動
+    TestEnv.transferEntity(enemy1, floorId, 12, 11);  // 強制移動
     MRSystem.dialogContext.postActivity(LActivity.makePerformSkill(actor1, MRData.system.skills.normalAttack, 2).withConsumeAction());
     MRSystem.dialogContext.activeDialog().submit();
 
@@ -97,7 +97,7 @@ test("concretes.enemy.GoldThief.DropItem", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_小金猫A").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, floorId, 11, 10);
+    TestEnv.transferEntity(enemy1, floorId, 11, 10);
     
     MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -110,7 +110,7 @@ test("concretes.enemy.GoldThief.DropItem", () => {
 
     // Enemy は倒れ、足元に item が落ちている。ドロップ率 100%
     expect(enemy1.isDestroyed()).toBe(true);
-    const item = MRLively.map.block(11, 10).getFirstEntity();
+    const item = MRLively.camera.currentMap.block(11, 10).getFirstEntity();
     assert(item);
     expect(!!item.findEntityBehavior(LGoldBehavior)).toBe(true);
 });

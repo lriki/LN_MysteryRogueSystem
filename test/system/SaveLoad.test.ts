@@ -28,7 +28,7 @@ test("system.SaveLoad.EventServerIssue", () => {
     inventory.addEntity(item1);
     
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [stateId], "enemy1"));
-    MRLively.world.transferEntity(enemy1, floorId, 20, 20);
+    MRLively.world.transferEntity(undefined, enemy1, floorId, 20, 20);
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

@@ -53,12 +53,12 @@ export class LFloorId {
     }
 
     public floorNumber(): number {
-        assert(this._floorClass == DFloorClass.FloorMap);
+        //assert(this._floorClass == DFloorClass.FloorMap);
         return this._floorNumber;
     }
 
     public get eventMapIndex(): number {
-        assert(this._floorClass == DFloorClass.EventMap);
+        //assert(this._floorClass == DFloorClass.EventMap);
         return this._floorNumber;
     }
 

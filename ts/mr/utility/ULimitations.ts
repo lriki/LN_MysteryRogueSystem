@@ -8,7 +8,7 @@ import { paramMaxItemsInMap, paramMaxTrapsInMap } from "../PluginParameters";
 export class ULimitations {
     
     public static getItemCountInMap(): number {
-        const map = MRLively.map;
+        const map = MRLively.camera.currentMap;
         let count = 0;
         // Unit, Trap 以外を集計
         map.iterateEntities(e => {
@@ -24,7 +24,7 @@ export class ULimitations {
     }
 
     public static getTrapCountInMap(): number {
-        const map = MRLively.map;
+        const map = MRLively.camera.currentMap;
         let count = 0;
         map.iterateEntities(e => {
             if (e.findEntityBehavior(LTrapBehavior)) {

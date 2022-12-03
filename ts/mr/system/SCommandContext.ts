@@ -214,7 +214,6 @@ export class HandleActivityCommand {
 export class SCommandContext
 {
     private _sequelContext: SSequelContext;
-    private _visualAnimationWaiting: boolean = false;   // 不要かも
     _recodingCommandList: STask[] = [];
     private _nextPriorityTask: STask | undefined;
     private _runningCommandList: STask[] = [];
@@ -240,10 +239,24 @@ export class SCommandContext
         this._sequelContext = sequelContext;
     }
 
+    public get isRunning(): boolean {
+        return this._nextPriorityTask != undefined ||
+            this._messageIndex < this._runningCommandList.length ||
+            this._recodingCommandList.length != 0 ||
+            this._afterChainCommandList.length != 0 ||
+            this.__whenWaitingTasks.length != 0;
+    }
+
+    public get isRecordingListEmpty(): boolean {
+        return this._recodingCommandList.length == 0;
+    }
+
+    public get isEmpty(): boolean {
+        return !this.isRunning && this.isRecordingListEmpty;
+    }
+
     // マップ切り替え時に実行
     clear() {
-        this._visualAnimationWaiting = false;
-        
         this._recodingCommandList = [];
         this._runningCommandList = [];
         this._messageIndex = 0;
@@ -447,6 +460,7 @@ export class SCommandContext
     
     }
 
+    /** @deprecated use postCommandTask() */
     callSymbol<TSym extends symbol>(target: LEntity, sender: LEntity, subject: SEffectSubject, args: any, symbol: TSym): SCommandResponse {
         const response = target._callBehaviorIterationHelper((behavior: LBehavior) => {
             const func = (behavior as any)[symbol];
@@ -465,6 +479,7 @@ export class SCommandContext
     // TODO: sender っていうのがすごくわかりづらい。
     // target と sender は基本的に self で同一なのでそうして、
     // こうかてきようさきにしたいものを target として引数整理したほうがよさそう。
+    /** @deprecated use postCommandTask() */
     post<TSym extends symbol>(target: LEntity, sender: LEntity, subject: SEffectSubject, args: any, symbol: TSym, result?: CommandResultCallback): STask {
         const m1 = () => {
             const response = this.callSymbol(target, sender, subject, args, symbol);
@@ -492,15 +507,6 @@ export class SCommandContext
         this.pushRecodingCommandList(new STask("Call", m1));
         Log.postCommand("Call");
         return this._recodingCommandList[this._recodingCommandList.length - 1];
-    }
-
-    findReactorEntityInBlock(block: LBlock, actionId: number): LEntity | undefined {
-        const layers = block.layers();
-        for (let iLayer = layers.length - 1; iLayer >= 0; iLayer--) {   // 上の Layer から
-            const reactor = layers[iLayer].entities().find(entity => entity.queryReactions().find(x => x.actionId == actionId) != undefined);
-            if (reactor) return reactor;
-        }
-        return undefined;
     }
 
     openDialog(causeEntity: LEntity, dialogModel: SDialog, afterChain: boolean): SDialog {
@@ -554,7 +560,6 @@ export class SCommandContext
         const m1 = () => {
             Log.doCommand("Sequel");
             this._sequelContext.addSequel(s);
-            this._visualAnimationWaiting = true;
             return SCommandResponse.Handled;
         };
         this.pushRecodingCommandList(new STask("Sequel", m1));
@@ -569,7 +574,6 @@ export class SCommandContext
         const m1 = () => {
             Log.doCommand("Animation");
             this._sequelContext.addSequel(new SAnumationSequel(entity, animationId, wait));
-            this._visualAnimationWaiting = true;
             return SCommandResponse.Handled;
         };
         this.pushRecodingCommandList(new STask("Animation", m1));
@@ -584,7 +588,6 @@ export class SCommandContext
         const m1 = () => {
             Log.doCommand("Animation");
             this._sequelContext.addSequel(new SFloatingAnumationSequel(entity, rmmzAnimationId, mx, my, wait));
-            this._visualAnimationWaiting = true;
             return SCommandResponse.Handled;
         };
         this.pushRecodingCommandList(new STask("Animation", m1));
@@ -597,7 +600,6 @@ export class SCommandContext
         const m1 = () => {
             Log.doCommand("Balloon");
             this._sequelContext.addSequel(new SBalloonSequel(entity, balloonId, wait));
-            this._visualAnimationWaiting = true;
             return SCommandResponse.Handled;
         };
         this.pushRecodingCommandList(new STask("Balloon", m1));
@@ -611,7 +613,6 @@ export class SCommandContext
         const m1 = () => {
             Log.doCommand("WaitSequel");
             this._sequelContext.flushSequelSet(true);
-            this._visualAnimationWaiting = true;
             return SCommandResponse.Handled;
         };
         this.pushRecodingCommandList(new STask("WaitSequel", m1));
@@ -622,7 +623,6 @@ export class SCommandContext
         const m1 = () => {
             Log.doCommand("Wait");
             this._sequelContext.addSequel(new SWaitSequel(entity, waitCount));
-            this._visualAnimationWaiting = true;
             return SCommandResponse.Handled;
         };
         this.pushRecodingCommandList(new STask("Wait", m1));
@@ -690,53 +690,11 @@ export class SCommandContext
     postTransferFloor(entity: LEntity, floorId: LFloorId, x: number = 0, y:number = 0, d: number = 0) {
         const m1 = () => {
             Log.doCommand("TransferFloor");
-            MRLively.world.transferEntity(entity, floorId, x, y);
+            MRLively.world.transferEntity(this, entity, floorId, x, y);
             return SCommandResponse.Handled;
         };
         this.pushRecodingCommandList(new STask("TransferFloor", m1));
         Log.postCommand("TransferFloor");
-    }
-
-    postSkipPart(entity: LEntity): void {
-        const behavior = entity.findEntityBehavior(LUnitBehavior);
-        assert(behavior);
-
-        const m1 = () => {
-            Log.doCommand("SkipPart");
-            
-            entity._actionToken.clearActionTokenCount();
-
-            return SCommandResponse.Handled;
-        };
-        this.pushRecodingCommandList(new STask("SkipPart", m1));
-        Log.postCommand("SkipPart");
-    }
-    
-
-
-
-    visualAnimationWaiting(): boolean {
-        return this._visualAnimationWaiting;
-    }
-
-    clearVisualAnimationWaiting(): void {
-        this._visualAnimationWaiting = false;
-    }
-    
-    isRunning(): boolean {
-        return this._nextPriorityTask != undefined ||
-            this._messageIndex < this._runningCommandList.length ||
-            this._recodingCommandList.length != 0 ||
-            this._afterChainCommandList.length != 0 ||
-            this.__whenWaitingTasks.length != 0;
-    }
-
-    isRecordingListEmpty(): boolean {
-        return this._recodingCommandList.length == 0;
-    }
-
-    isEmpty(): boolean {
-        return !this.isRunning() && this.isRecordingListEmpty();
     }
 
     _processCommand() {
@@ -751,43 +709,16 @@ export class SCommandContext
             }
         }
 
-        if (this.isRunning()) {
+        if (this.isRunning) {
             // 今回実行したい Task は？
             const task = this._nextPriorityTask ? this._nextPriorityTask : this._runningCommandList[this._messageIndex];
             this._nextPriorityTask = undefined;
 
-            // 次の call で catch を呼ぼうとしている？
-            // const callingCatch = !task._result;
-
             // Task 実行
-            //const result = 
             task.call(this);
-            // if (result != STaskResult.Rejected) {
-            //     // つながっている Task があれば、次にそれを実行してみる
-            //     if (task._nextTask && !task._subChain) {
-            //         this._nextPriorityTask = task._nextTask;
-            //     }
-            // }
-            // else if (!callingCatch) {   // SubTasckChain の中で catch はひとつしか呼びたくない
-            //     // Task につながっている直近の catch を探してみる
-            //     let t = task._nextTask;
-            //     while (t) {
-            //         if (t._catchFunc) {
-            //             this._nextPriorityTask = t;
-            //         }
-            //         t = t._nextTask;
-            //     }
-            //     if (this._nextPriorityTask) {
-            //         // 次の call で reject 側が実行されるようにする。
-            //         // 変数を使いまわしているのであんまりよくないかもしれない。
-            //         this._nextPriorityTask._result = STaskResult.Rejected;
-            //     }
-            // }
 
             // ここまでで、最後に実行した Task の nextTask が無ければ、TaskList にある次の Task へ進む
             if (!this._nextPriorityTask) {
-                //assert(this._commandChainRunning);
-
                 if (this._commandChainRunning) {
                     this._messageIndex++;
         
@@ -819,7 +750,6 @@ export class SCommandContext
         this._recodingCommandList.splice(0);
         this._messageIndex = 0;
 
-
         if (this.__whenWaitingTasks.length > 0) {
             const tasks = this.__whenWaitingTasks;
             this.__whenWaitingTasks = [];
@@ -843,14 +773,11 @@ export class SCommandContext
                     this.__whenWaitingTasks.push(task);
                 }
             }
-        } 
-
-
+        }
 
         if (this._runningCommandList.length > 0) {
             Log.d(">>>>[Start CommandChain]");
             this._commandChainRunning = true;
-            //this.dumpCommands();
         }
         else if (this._afterChainCommandList.length > 0) {
             [this._runningCommandList, this._afterChainCommandList] = [this._afterChainCommandList, this._runningCommandList];
@@ -865,12 +792,6 @@ export class SCommandContext
         this._nextPriorityTask = task;
     }
 
-    dumpCommands() {
-        this._runningCommandList.forEach(x => {
-            console.log("  " + x._name);
-        });
-    }
-
     private pushRecodingCommandList(task: STask): void {
         assert(task._status == STaskStatus.Created);
         task._status = STaskStatus.Pending;
@@ -883,5 +804,4 @@ export class SCommandContext
         this._afterChainCommandList.push(task);
     }
 }
-
 

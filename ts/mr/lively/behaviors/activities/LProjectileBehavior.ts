@@ -114,7 +114,7 @@ export class LProjectileBehavior extends LBehavior {
 
         const self = args.self;
 
-        MRLively.map.appearEntity(self, self.mx, self.my, DBlockLayerKind.Projectile);
+        MRLively.camera.currentMap.appearEntity(self, self.mx, self.my, DBlockLayerKind.Projectile);
 
 
         LProjectileBehavior.startMoveAsProjectile(cctx, self, args.subject, args.sender.dir, paramThrowingDistance);
@@ -203,7 +203,7 @@ export class LProjectileBehavior extends LBehavior {
     private processEffectForNormal(cctx: SCommandContext, self: LEntity, x: number, y: number, subject: SEffectSubject): void {
 
         // 他 Unit との衝突判定
-        const hitTarget = MRLively.map.block(x, y).aliveEntity(DBlockLayerKind.Unit);
+        const hitTarget = MRLively.camera.currentMap.block(x, y).aliveEntity(DBlockLayerKind.Unit);
         if (hitTarget) {
             if (hitTarget.hasTrait(MRBasics.traits.PhysicalProjectileReflector)) {
                 // 跳ね返し
@@ -266,7 +266,7 @@ export class LProjectileBehavior extends LBehavior {
         assert(this._penetration);
 
         // 他 Unit との衝突判定
-        const hitTarget = MRLively.map.block(x, y).aliveEntity(DBlockLayerKind.Unit);
+        const hitTarget = MRLively.camera.currentMap.block(x, y).aliveEntity(DBlockLayerKind.Unit);
         if (hitTarget) {
             if (!SActionHitTest.testProjectle(subject.entity(), self, hitTarget, this.hitType(), cctx.random())) {
                 // 当たらなかった。貫通なので移動は続行する。

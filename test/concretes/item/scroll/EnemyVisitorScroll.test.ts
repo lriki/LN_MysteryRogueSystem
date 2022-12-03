@@ -31,9 +31,9 @@ test("concretes.item.scroll.EnemyVisitorScroll", () => {
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_黒幕バットA").id, [], "enemy2"));
     const enemy3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_梅キツネA").id, [MRData.getState("kState_UTアイテム擬態").id], "enemy3"));
-    MRLively.world.transferEntity(enemy1, floorId, 19, 4);
-    MRLively.world.transferEntity(enemy2, floorId, 20, 4);
-    MRLively.world.transferEntity(enemy3, floorId, 20, 5);
+    MRLively.world.transferEntity(undefined, enemy1, floorId, 19, 4);
+    MRLively.world.transferEntity(undefined, enemy2, floorId, 20, 4);
+    MRLively.world.transferEntity(undefined, enemy3, floorId, 20, 5);
 
     expect(SNavigationHelper.testVisibilityForMinimap(player1, enemy1)).toBeFalsy();
 

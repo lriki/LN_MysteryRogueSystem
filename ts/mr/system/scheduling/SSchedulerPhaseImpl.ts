@@ -31,7 +31,7 @@ export class SSchedulerPhase_ManualAction extends SSchedulerPhase {
 
     onStart(): void {
         // マップ移動に伴う初期配置後、onLocatedEntity イベントを発行したい
-        MRLively.map.updateLocatedResults(MRSystem.commandContext);
+        MRLively.camera.currentMap.updateLocatedResults(MRSystem.commandContext);
     }
 
     testProcessable(entity: LEntity, unitBehavior: LUnitBehavior): boolean {
@@ -58,7 +58,7 @@ export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
     }
 
     onStart(): void {
-        for (const s of MRLively.map.structures()) {
+        for (const s of MRLively.camera.currentMap.structures()) {
             if (s instanceof LItemShopStructure) {
                 
             }
@@ -102,7 +102,7 @@ export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
         // → 罠の発動判定と、発動処理を別にしなければならないかも。
 
         // TODO: 発動 trap リストをどこかに作っておきたい
-        for (const entity of MRLively.map.entities()) {
+        for (const entity of MRLively.camera.currentMap.entities()) {
             UAction.postAttemptPerformStepFeetProcess(MRSystem.commandContext, entity);
         }
 
@@ -169,7 +169,7 @@ export class SSchedulerPhase_ResolveAdjacentAndMovingTarget extends SSchedulerPh
     }
 
     onStart(): void {
-        MRLively.map.updateLocatedResults(MRSystem.commandContext);
+        MRLively.camera.currentMap.updateLocatedResults(MRSystem.commandContext);
     }
 
     testProcessable(entity: LEntity, unitBehavior: LUnitBehavior): boolean {

@@ -32,7 +32,7 @@ test("system.Leveling.levelUp", () => {
     
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     enemy1.setParamCurrentValue(MRBasics.params.hp, 1);               // 1 ダメージで倒せるようにしておく
-    MRLively.world.transferEntity(enemy1, floorId, 11, 10);
+    MRLively.world.transferEntity(undefined, enemy1, floorId, 11, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

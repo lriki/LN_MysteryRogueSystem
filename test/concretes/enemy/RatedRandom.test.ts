@@ -21,7 +21,7 @@ test("concretes.states.RatedRandom", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_バットA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, floorId, 20, 10);
+    TestEnv.transferEntity(enemy1, floorId, 20, 10);
 
     MRLively.world.random().resetSeed(9);     // 乱数調整
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -52,13 +52,13 @@ test("concretes.states.RatedRandom.Issue1", () => {
     */
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_バットA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, floorId, 11, 10);
-    MRLively.map.block(10, 9)._tileShape = LTileShape.Wall;
-    MRLively.map.block(11, 9)._tileShape = LTileShape.Wall;
-    MRLively.map.block(9, 10)._tileShape = LTileShape.Wall;
-    MRLively.map.block(12, 10)._tileShape = LTileShape.Wall;
-    MRLively.map.block(10, 11)._tileShape = LTileShape.Wall;
-    MRLively.map.block(11, 11)._tileShape = LTileShape.Wall;
+    MRLively.world.transferEntity(undefined, enemy1, floorId, 11, 10);
+    MRLively.camera.currentMap.block(10, 9)._tileShape = LTileShape.Wall;
+    MRLively.camera.currentMap.block(11, 9)._tileShape = LTileShape.Wall;
+    MRLively.camera.currentMap.block(9, 10)._tileShape = LTileShape.Wall;
+    MRLively.camera.currentMap.block(12, 10)._tileShape = LTileShape.Wall;
+    MRLively.camera.currentMap.block(10, 11)._tileShape = LTileShape.Wall;
+    MRLively.camera.currentMap.block(11, 11)._tileShape = LTileShape.Wall;
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

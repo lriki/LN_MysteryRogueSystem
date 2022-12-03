@@ -79,7 +79,7 @@ test("concretes.item.grass.AntiPoisonGrass.enemy", () => {
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ゾンビA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 15, 10);
+    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 15, 10);
     const enemy1Hp1 = enemy1.getActualParam(MRBasics.params.hp);
 
     // アイテム作成 & インベントリに入れる

@@ -11,7 +11,7 @@ import { SSpecialEffect } from "./SSpecialEffect";
 export class SClarificationSpecialEffect extends SSpecialEffect {
 
     public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void {
-        const map = MRLively.map;
+        const map = MRLively.camera.currentMap;
 
         cctx.postCall(() => {
             switch (data.value) {
@@ -28,7 +28,7 @@ export class SClarificationSpecialEffect extends SSpecialEffect {
                     MRSystem.minimapData.setRefreshNeeded();
                     break;
                 case DClarificationType.Terrain:
-                    MRLively.map.blocks().forEach(b => b._passed = true);
+                    MRLively.camera.currentMap.blocks().forEach(b => b._passed = true);
                     MRSystem.minimapData.setRefreshNeeded();
                     break;
                 case DClarificationType.Sight:

@@ -4880,7 +4880,7 @@
       }
     ],
     "battlerHue": 0,
-    "battlerName": "",
+    "battlerName": "MR-Unknown",
     "dropItems": [
       {
         "dataId": 1,
@@ -4917,8 +4917,8 @@
       }
     ],
     "gold": 0,
-    "name": "",
-    "note": "",
+    "name": "ボスドラゴン",
+    "note": "<MR-Type: Entity>\n<MR-Key: kEnemy_ボスドラゴンA>\n<MR-Prefab: kPrefab_ボスドラゴンA>\n----------",
     "params": [
       100,
       0,

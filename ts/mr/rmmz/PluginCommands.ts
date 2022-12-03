@@ -76,7 +76,7 @@ PluginManager.registerCommand(pluginName, "MR-ShowItemSellDialog", (args: any) =
 });
 
 PluginManager.registerCommand(pluginName, "MR-ProceedFloorForward", function(this: Game_Interpreter, args: any) {
-    UTransfer.proceedFloorForwardForPlayer();
+    UTransfer.proceedFloorForwardForPlayer(MRSystem.commandContext);
 });
 
 PluginManager.registerCommand(pluginName, "MR-ProceedFloorBackword", function(this: Game_Interpreter, args: any) {
@@ -97,7 +97,7 @@ PluginManager.registerCommand(pluginName, "MR-ProceedFloorBackword", function(th
         }
         else {
             const newFloorId = LFloorId.make(floorId.landId(), DFloorClass.FloorMap, newFloorNumber);
-            MRLively.world.transferEntity(entity, newFloorId);
+            MRLively.world.transferEntity(MRSystem.commandContext, entity, newFloorId);
 
             // イベントからの遷移は普通の [場所移動] コマンドと同じように WaitMode を設定する必要がある。
             // しないと、例えば直前に表示していたメッセージウィンドウのクローズなどを待たずに遷移が発生し、isBusy() でハングする。

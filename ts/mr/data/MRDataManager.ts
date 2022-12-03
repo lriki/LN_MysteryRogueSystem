@@ -337,6 +337,7 @@ export class MRDataManager {
             MRBasics.traits.PenetrationThrower = MRData.newTrait("PenetrationThrower").id;
             MRBasics.traits.DeathVulnerableElement = MRData.newTrait("DeathVulnerableElement").id;
             MRBasics.traits.ForceParameter = MRData.newTrait("ForceParameter").id;
+            MRBasics.traits.DisableMovement = MRData.newTrait("DisableMovement").id;
         }
 
         // Factions

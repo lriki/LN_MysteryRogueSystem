@@ -23,7 +23,7 @@ export class SImmediatelyCommandExecuteScheduler {
 
 
             
-            if (commandContext.isRunning()) {
+            if (commandContext.isRunning) {
                 commandContext._processCommand();
                 MRSystem.sequelContext.attemptFlush(false);
                 return;
@@ -33,7 +33,7 @@ export class SImmediatelyCommandExecuteScheduler {
                 // ※もともと callDecisionPhase() と後に毎回直接呼んでいたのだが、
                 //   onTurnEnd() などもサポートしはじめて呼び出し忘れが多くなった。
                 //   そもそもいつ呼び出すべきなのか分かりづらいので、submit の呼び出しは一元化する。
-                if (!commandContext.isRecordingListEmpty()) {
+                if (!commandContext.isRecordingListEmpty) {
                     commandContext._submit(); // swap
                 }
             }
@@ -45,14 +45,14 @@ export class SImmediatelyCommandExecuteScheduler {
                 }
             }
 
-            if (commandContext.isRunning()) {
+            if (commandContext.isRunning) {
                 // コマンド実行中。まだフェーズを進ませない
             }
             else {
                 MRLively.world._removeDestroyedObjects();
             }
 
-            if (commandContext.isEmpty()) {
+            if (commandContext.isEmpty) {
                 break;
             }
         }

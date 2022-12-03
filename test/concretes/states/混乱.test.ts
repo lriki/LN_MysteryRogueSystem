@@ -22,7 +22,7 @@ test("concretes.states.混乱.move", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [stateId], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
+    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
 
     // 10 ターン分 シミュレーション実行
     MRSystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
@@ -51,7 +51,7 @@ test("concretes.states.混乱.attack", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [MRData.getState("kState_UT混乱").id, MRData.getState("kState_UTからぶり").id], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
+    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
 
     // 周りを移動できない Enemy で囲ってみる
     const enemies = [
@@ -64,14 +64,14 @@ test("concretes.states.混乱.attack", () => {
         SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [MRData.getState("kState_睡眠").id], "enemy1")),
         SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [MRData.getState("kState_睡眠").id], "enemy1")),
     ];
-    MRLively.world.transferEntity(enemies[0], TestEnv.FloorId_FlatMap50x50, 19, 9);
-    MRLively.world.transferEntity(enemies[1], TestEnv.FloorId_FlatMap50x50, 20, 9);
-    MRLively.world.transferEntity(enemies[2], TestEnv.FloorId_FlatMap50x50, 21, 9);
-    MRLively.world.transferEntity(enemies[3], TestEnv.FloorId_FlatMap50x50, 19, 10);
-    MRLively.world.transferEntity(enemies[4], TestEnv.FloorId_FlatMap50x50, 21, 10);
-    MRLively.world.transferEntity(enemies[5], TestEnv.FloorId_FlatMap50x50, 19, 11);
-    MRLively.world.transferEntity(enemies[6], TestEnv.FloorId_FlatMap50x50, 20, 11);
-    MRLively.world.transferEntity(enemies[7], TestEnv.FloorId_FlatMap50x50, 21, 11);
+    MRLively.world.transferEntity(undefined, enemies[0], TestEnv.FloorId_FlatMap50x50, 19, 9);
+    MRLively.world.transferEntity(undefined, enemies[1], TestEnv.FloorId_FlatMap50x50, 20, 9);
+    MRLively.world.transferEntity(undefined, enemies[2], TestEnv.FloorId_FlatMap50x50, 21, 9);
+    MRLively.world.transferEntity(undefined, enemies[3], TestEnv.FloorId_FlatMap50x50, 19, 10);
+    MRLively.world.transferEntity(undefined, enemies[4], TestEnv.FloorId_FlatMap50x50, 21, 10);
+    MRLively.world.transferEntity(undefined, enemies[5], TestEnv.FloorId_FlatMap50x50, 19, 11);
+    MRLively.world.transferEntity(undefined, enemies[6], TestEnv.FloorId_FlatMap50x50, 20, 11);
+    MRLively.world.transferEntity(undefined, enemies[7], TestEnv.FloorId_FlatMap50x50, 21, 11);
 
     // 10 ターン分 シミュレーション実行
     MRSystem.scheduler.stepSimulation();
@@ -145,7 +145,7 @@ test("concretes.states.混乱.throw", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
+    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
 
     MRSystem.scheduler.stepSimulation();
     for (let i = 0; i < 5; i++) {

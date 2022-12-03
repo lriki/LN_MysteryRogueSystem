@@ -46,8 +46,8 @@ export class VHudWindow extends Window_Base {
         const nextExp = experience.nextLevelExp(entity);
         const extRatio = Math.max(0, (experience.currentExp(entity) - prevExp) / (nextExp - prevExp));
 
-        if (MRLively.map.floorId().isTacticsMap()) {
-            this.drawFloorNumber(0, 0, MRLively.map.floorId());
+        if (MRLively.camera.currentMap.floorId().isTacticsMap()) {
+            this.drawFloorNumber(0, 0, MRLively.camera.currentMap.floorId());
         }
         this.drawLevel(150, 0, level, extRatio);
         this.drawHpFp(300, 0, hp, mhp, fp, mfp);
@@ -57,7 +57,7 @@ export class VHudWindow extends Window_Base {
     update() {
         this.refresh();
 
-        if (MRLively.map.floorId().isTacticsMap() || MRLively.map.floorId().isSafetyMap()) {
+        if (MRLively.camera.currentMap.floorId().isTacticsMap() || MRLively.camera.currentMap.floorId().isSafetyMap()) {
             this.visible = true;
         }
         else {

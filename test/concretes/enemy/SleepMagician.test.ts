@@ -19,7 +19,7 @@ test("concretes.enemies.SleepMagician", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_メイジA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, floorId, 11, 10);
+    TestEnv.transferEntity(enemy1, floorId, 11, 10);
 
     MRSystem.scheduler.stepSimulation();
 

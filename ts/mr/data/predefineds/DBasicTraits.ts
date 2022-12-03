@@ -219,5 +219,7 @@ export interface DBasicTraits {
      * value: Actual 値
      */
     ForceParameter: DTraitId;
+
+    DisableMovement: DTraitId;
 }
 

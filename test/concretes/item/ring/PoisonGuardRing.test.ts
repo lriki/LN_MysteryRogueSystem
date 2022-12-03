@@ -29,7 +29,7 @@ test("concretes.item.ring.PoisonGuardRing.test", () => {
 
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_毒矢の罠A").id, [], "trap1"));
-    MRLively.world.transferEntity(trap1, floorId, 11, 10);
+    TestEnv.transferEntity(trap1, floorId, 11, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

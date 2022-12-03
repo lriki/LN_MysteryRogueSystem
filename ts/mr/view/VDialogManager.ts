@@ -24,6 +24,8 @@ import { VPlayerDialog } from "./dialogs/VPlayerDialog";
 import { VWarehouseStoreDialog } from "./dialogs/VWarehouseStoreDialog";
 import { VWarehouseWithdrawDialog } from "./dialogs/VWarehouseWithdrawDialog";
 import { MRView } from "./MRView";
+import { STransferMapDialog } from "../system/dialogs/STransferMapDialog";
+import { VTransferMapDialog } from "./dialogs/VTransferMapDialog";
 
 export class VDialogManager {
     public readonly dialogNavigator: VDialogNavigator;
@@ -57,8 +59,16 @@ export class VDialogManager {
                 dialog = new VItemSellDialog(model);
             else if (model instanceof SNicknameDialog)
                 dialog = new VNicknameDialog(model);
+            else if (model instanceof STransferMapDialog)
+                dialog = new VTransferMapDialog(model);
         }
         assert(dialog);
         this.dialogNavigator.openDialog(dialog);
+    }
+
+    public onRmmzSetupMapCompleted(): void {
+        const dialog = this.dialogNavigator.currentDialog;
+        if (dialog instanceof VTransferMapDialog)
+            dialog.onRmmzSetupMapCompleted();
     }
 }

@@ -25,35 +25,35 @@ test("system.Visibility.Basic", () => {
 
     // item1 (同じ部屋)
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_地獄耳の巻物A").id, [], "item1"));
-    MRLively.world.transferEntity(item1, floorId, 11, 3);
+    MRLively.world.transferEntity(undefined, item1, floorId, 11, 3);
 
     // trap1 (同じ部屋・露出していない)
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_SleepTrap, [], "trap1"));
-    MRLively.world.transferEntity(trap1, floorId, 12, 4);
+    MRLively.world.transferEntity(undefined, trap1, floorId, 12, 4);
 
     // enemy1 (同じ部屋)
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, floorId, 10, 4);
+    MRLively.world.transferEntity(undefined, enemy1, floorId, 10, 4);
 
     // exit1 (同じ部屋)
     const exit1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ExitPointA").id, [], "exit1"));
-    MRLively.world.transferEntity(exit1, floorId, 12, 5);
+    MRLively.world.transferEntity(undefined, exit1, floorId, 12, 5);
 
     // item2 (踏破していない別の部屋)
     const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_地獄耳の巻物A").id, [], "item2"));
-    MRLively.world.transferEntity(item2, floorId, 19, 9);
+    MRLively.world.transferEntity(undefined, item2, floorId, 19, 9);
 
     // trap2 (踏破していない別の部屋)
     const trap2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_SleepTrap, [], "trap2"));
-    MRLively.world.transferEntity(trap2, floorId, 19, 10);
+    MRLively.world.transferEntity(undefined, trap2, floorId, 19, 10);
 
     // enemy2 (踏破していない別の部屋)
     const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy2"));
-    MRLively.world.transferEntity(enemy2, floorId, 19, 4);
+    MRLively.world.transferEntity(undefined, enemy2, floorId, 19, 4);
 
     // exit2 (踏破していない別の部屋)
     const exit2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ExitPointA").id, [], "exit2"));
-    MRLively.world.transferEntity(exit2, floorId, 18, 9);
+    MRLively.world.transferEntity(undefined, exit2, floorId, 18, 9);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

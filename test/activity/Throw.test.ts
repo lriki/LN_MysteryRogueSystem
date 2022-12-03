@@ -19,10 +19,7 @@ test("activity.Throw", () => {
     TestEnv.newGame();
 
     // Player
-    const actor1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
-    actor1.dir = 6; // 右を向く
-    MRLively.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
-    TestEnv.performFloorTransfer();
+    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10, 6);
 
     // アイテムを作ってインベントリに入れる
     const entityData = DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb);
@@ -32,7 +29,7 @@ test("activity.Throw", () => {
     actor1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 
     // 投げ当てテスト用に壁を作る
-    MRLively.map.block(actor1.mx, actor1.my + 2)._tileShape = LTileShape.Wall;
+    MRLively.camera.currentMap.block(actor1.mx, actor1.my + 2)._tileShape = LTileShape.Wall;
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -75,14 +72,11 @@ test("activity.ThrowAndHit", () => {
     TestEnv.newGame();
 
     // Player
-    const actor1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
-    actor1.dir = 6; // 右を向く
-    MRLively.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);
-    TestEnv.performFloorTransfer();
+    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10, 6);
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
     SDebugHelpers.setHP(enemy1, 1); // HP1
 
     // アイテムを作ってインベントリに入れる

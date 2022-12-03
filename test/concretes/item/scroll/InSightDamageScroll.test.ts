@@ -28,8 +28,8 @@ test("concretes.item.scroll.InSightDamageScroll", () => {
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy2"));
-    MRLively.world.transferEntity(enemy1, floorId, 15, 10);
-    MRLively.world.transferEntity(enemy2, floorId, 10, 15);
+    MRLively.world.transferEntity(undefined, enemy1, floorId, 15, 10);
+    MRLively.world.transferEntity(undefined, enemy2, floorId, 10, 15);
     const enemy1HP1 = enemy1.getActualParam(MRBasics.params.hp);
     const enemy2HP1 = enemy2.getActualParam(MRBasics.params.hp);
 

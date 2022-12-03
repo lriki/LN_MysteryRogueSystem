@@ -23,6 +23,12 @@ export class VDialogNavigator {
         this._subDialogs = [];
     }
 
+    public get currentDialog(): VDialog | undefined {
+        if (this._nextScene) return this._nextScene;    // STransferMapDialog を update を挟まずに処理したいので、_nextScene 優先。
+        if (this._scene) return this._scene;
+        return undefined;
+    }
+
     public get isEmpty(): boolean {
         return !this._scene && !this._nextScene && this._subDialogs.length == 0;
     }
@@ -49,20 +55,25 @@ export class VDialogNavigator {
     }
     
     private pop(model: SDialog): void {
-        assert(this._scene);
-        assert(this._scene.model == model);
-
-        this._nextScene = this._subDialogs.pop();
-
-        this._scene.onStop();
-
-        // 深い Dialog がまとめて閉じられるときは update を挟まずに複数の Dialog が同時に閉じられる。
-        // この pop は多くの場合クリックやキャンセルキーのイベントハンドラから呼ばれるが、それは WindowLayer.update からの子要素のイテレート中に呼ばれる。
-        // この時点で実際に destroy() からの removeChild() してしまうと、イテレータが壊れてしまう。
-        // そのため、削除のタイミングをずらす。
-        this._destroyList.push(this._scene);
-
-        this.changeScene();
+        if (this._nextScene) {
+            this._nextScene = undefined;
+        }
+        else {
+            assert(this._scene);
+            assert(this._scene.model == model);
+    
+            this._nextScene = this._subDialogs.pop();
+    
+            this._scene.onStop();
+    
+            // 深い Dialog がまとめて閉じられるときは update を挟まずに複数の Dialog が同時に閉じられる。
+            // この pop は多くの場合クリックやキャンセルキーのイベントハンドラから呼ばれるが、それは WindowLayer.update からの子要素のイテレート中に呼ばれる。
+            // この時点で実際に destroy() からの removeChild() してしまうと、イテレータが壊れてしまう。
+            // そのため、削除のタイミングをずらす。
+            this._destroyList.push(this._scene);
+    
+            this.changeScene();
+        }
     }
 
     private clear(): void {

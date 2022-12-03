@@ -23,7 +23,7 @@ test("Equipment.EquipOnOff", () => {
 
     // Enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 21, 10);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 21, 10);
 
     MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
     
@@ -143,7 +143,7 @@ test("Equipment.Curse", () => {
 
     // 武器 入手 (呪い付き)
     const weapon1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Weapon1, [MRData.getState("kState_System_Curse").id]));
-    MRLively.world.transferEntity(weapon1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    TestEnv.transferEntity(weapon1, TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
@@ -288,7 +288,7 @@ test("Equipment.EquipReaction", () => {
 
     // 盾は足元へ
     const shield1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Shield1));
-    MRLively.world.transferEntity(shield1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    TestEnv.transferEntity(shield1, TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

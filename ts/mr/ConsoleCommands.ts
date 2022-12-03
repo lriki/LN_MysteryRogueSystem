@@ -19,12 +19,12 @@ function entities(domain?: string): LEntity[] {
         throw new Error("Not implemented.");
     }
     else {
-        return MRLively.map.entities();
+        return MRLively.camera.currentMap.entities();
     }
 }
 
 function mapInfo(): LMap {
-    return MRLively.map;
+    return MRLively.camera.currentMap;
 }
 
 function setHP(entityId: number, value: number) {
@@ -61,8 +61,8 @@ function visitAll() {
     const player = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
     player.addState(MRData.getState("UT気配察知").id);
     player.addState(MRData.getState("UT道具感知").id);
-    MRLively.map.unitClarity = true;
-    MRLively.map.blocks().forEach(b => b._passed = true);
+    MRLively.camera.currentMap.unitClarity = true;
+    MRLively.camera.currentMap.blocks().forEach(b => b._passed = true);
     MRSystem.minimapData.setRefreshNeeded();
 }
 
@@ -74,13 +74,13 @@ function levelMax() {
 }
 
 function moveToExit() {
-    const exitPoint = MRLively.map.entities().find(x => x.kindDataId() == MRBasics.entityCategories.exitPoint);
+    const exitPoint = MRLively.camera.currentMap.entities().find(x => x.kindDataId() == MRBasics.entityCategories.exitPoint);
     if (!exitPoint) return;
 
     const player = MRLively.camera.focusedEntity();
     if (!player) return;
 
-    MRLively.world.transferEntity(player, player.floorId, exitPoint.mx, exitPoint.my);
+    MRLively.world.transferEntity(MRSystem.commandContext, player, player.floorId, exitPoint.mx, exitPoint.my);
 }
 
 function addItem(itemKey: string) {

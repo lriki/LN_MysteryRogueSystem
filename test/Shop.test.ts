@@ -26,8 +26,8 @@ test("Shop.Basic", () => {
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
     inventory1.gainGold(1000);
 
-    const keeper1 = MRLively.map.block(19, 6).getFirstEntity();
-    const keeper2 = MRLively.map.block(19, 12).getFirstEntity();
+    const keeper1 = MRLively.camera.currentMap.block(19, 6).getFirstEntity();
+    const keeper2 = MRLively.camera.currentMap.block(19, 12).getFirstEntity();
     assert(keeper1);
     assert(keeper2);
     keeper1._name = "keeper1";
@@ -37,7 +37,7 @@ test("Shop.Basic", () => {
     expect(keeper1.getOutwardFactionId()).toBe(MRData.system.factions.neutral);
 
     // 商品の陳列を確認
-    const getItem = (x: number, y: number) => { const e = MRLively.map.block(22, 9).getFirstEntity(); assert(e); return e; };
+    const getItem = (x: number, y: number) => { const e = MRLively.camera.currentMap.block(22, 9).getFirstEntity(); assert(e); return e; };
     const items = [
         getItem(22, 9), getItem(23, 9), getItem(24, 9),
         getItem(22, 10), getItem(23, 10), getItem(24, 10),
@@ -79,7 +79,7 @@ test("Shop.Basic", () => {
     //----------------------------------------------------------------------------------------------------
 
     // 店主の隣へ移動
-    MRLively.world.transferEntity(player1, floorId, 20, 7);
+    TestEnv.transferEntity(player1, floorId, 20, 7);
     MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     MRSystem.dialogContext.activeDialog().submit();
 

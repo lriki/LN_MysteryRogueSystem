@@ -31,7 +31,7 @@ test("concretes.item.scroll.RestartScroll", async () => {
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, floorId, 13, 10);
+    MRLively.world.transferEntity(undefined, enemy1, floorId, 13, 10);
     const enemy1HP1 = enemy1.getActualParam(MRBasics.params.hp);
 
 

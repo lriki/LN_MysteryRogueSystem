@@ -44,7 +44,7 @@ export class USearch {
      */
     public static isVisibleFromSubject(subject: LEntity, target: LEntity): boolean {
         // あかりの巻物など、フロア自体に可視効果がある
-        if (MRLively.map.unitClarity) return true;
+        if (MRLively.camera.currentMap.unitClarity) return true;
         
         // よく見え状態なら、相手が透明状態でも見える
         if (subject.hasTrait(MRBasics.traits.ForceVisible)) return true;
@@ -61,7 +61,7 @@ export class USearch {
      */
     public static checkInSightEntity(subject: LEntity, target: LEntity): boolean {
         if (subject.isOnRoom()) {
-            const map = MRLively.map;
+            const map = MRLively.camera.currentMap;
             const subjectRoom = map.room(subject.roomId());
 
             // 部屋の外周にも含まれず、部屋の外にいる target を見ることはできない。
@@ -92,7 +92,7 @@ export class USearch {
 
         if (subject.isOnRoom()) {
             // 部屋の中からは、部屋の外周上の Block も可視となる
-            const room = MRLively.map.room(subject.roomId());
+            const room = MRLively.camera.currentMap.room(subject.roomId());
             return room.checkVisibilityBlock(block);
         }
         else {
@@ -161,12 +161,12 @@ export class USearch {
         assert(length >= 1);
 
         if (withCenter) {
-            const block = MRLively.map.tryGetBlock(mx, my);
+            const block = MRLively.camera.currentMap.tryGetBlock(mx, my);
             if (block) func(block);
         }
 
         this.iterateAroundPositions(mx, my, length, (mx, my) => {
-            const block = MRLively.map.tryGetBlock(mx, my);
+            const block = MRLively.camera.currentMap.tryGetBlock(mx, my);
             if (block) func(block);
         })
     }
@@ -183,7 +183,7 @@ export class USearch {
     }
     
     public static getFirstUnderFootEntity(entity: LEntity): LEntity | undefined {
-        const block = MRLively.map.tryGetBlock(entity.mx, entity.my);
+        const block = MRLively.camera.currentMap.tryGetBlock(entity.mx, entity.my);
         if (block) {
             const target = block.getFirstEntity(DBlockLayerKind.Ground);
             return target;
@@ -196,7 +196,7 @@ export class USearch {
      */
     public static selectUnitSpawnableBlock(rand: LRandom): LBlock | null {
         // 空いている Block をランダムに選択して配置する
-        const spawnableBlocks = MRLively.map.getSpawnableBlocks(DBlockLayerKind.Unit);
+        const spawnableBlocks = MRLively.camera.currentMap.getSpawnableBlocks(DBlockLayerKind.Unit);
         if (spawnableBlocks.length == 0) return null;
 
         const player = MRLively.camera.focusedEntity();
@@ -212,7 +212,7 @@ export class USearch {
         });
 
         // 部屋が複数ある場合、Player 以外の部屋を選ぶ
-        if (!MRLively.map.isSingleRoomMap) {
+        if (!MRLively.camera.currentMap.isSingleRoomMap) {
             candidateBlocks = candidateBlocks.filter(b =>(b._roomId != player.roomId()));
         }
 
@@ -257,7 +257,7 @@ export class USearch {
 
         const roomId = entity.roomId();
 
-        const items = MRLively.map.entities().filter(e => {
+        const items = MRLively.camera.currentMap.entities().filter(e => {
             if (e.roomId() != roomId) return false;
             if (!this.isNeutralItem(e)) return false;
             return true;
@@ -275,7 +275,7 @@ export class USearch {
      * (mx,my) は含まない。
      */
     public static findFirstWallInDirection(mx: number, my: number, dir: number): LBlock {
-        const map = MRLively.map;
+        const map = MRLively.camera.currentMap;
         let i = 1;
         while (true) {
             const offset = Helpers._dirToTileOffsetTable[dir];

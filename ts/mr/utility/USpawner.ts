@@ -12,9 +12,9 @@ import { UEffect } from "./UEffect";
 export class USpawner {
 
     public static spawnSingleEntity(entityKey: string, mx: number, my: number): LEntity {
-        const floorId = MRLively.map.floorId();
+        const floorId = MRLively.camera.currentMap.floorId();
         const entity = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity(entityKey).id), floorId);
-        MRLively.world.transferEntity(entity, floorId, mx, my);
+        MRLively.world.transferEntity(undefined, entity, floorId, mx, my);
         return entity;
     }
 

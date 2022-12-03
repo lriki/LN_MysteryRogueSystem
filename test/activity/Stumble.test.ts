@@ -36,7 +36,7 @@ test("concretes.activity.Stumble.player", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 持ち物が前方に落ちてダメージも受けている;
-    const item1 = MRLively.map.block(11, 10).getFirstEntity();
+    const item1 = MRLively.camera.currentMap.block(11, 10).getFirstEntity();
     expect(item1).toBe(weapon1);
 });
 
@@ -72,14 +72,14 @@ test("concretes.activity.Stumble.player.wall", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 持ち物が前方に落ちる。壁にはめり込まない。
-    expect(MRLively.map.block(0, 2).getFirstEntity() === undefined).toBe(true);
-    expect(MRLively.map.block(0, 3).getFirstEntity() === undefined).toBe(true);
-    expect(MRLively.map.block(0, 4).getFirstEntity() === undefined).toBe(true);
-    expect(MRLively.map.block(0, 5).getFirstEntity() === undefined).toBe(true);
-    expect(MRLively.map.block(0, 6).getFirstEntity() === undefined).toBe(true);
-    expect(MRLively.map.block(1, 3).getFirstEntity() !== undefined).toBe(true);
-    expect(MRLively.map.block(1, 4).getFirstEntity() !== undefined).toBe(true);
-    expect(MRLively.map.block(1, 5).getFirstEntity() !== undefined).toBe(true);
+    expect(MRLively.camera.currentMap.block(0, 2).getFirstEntity() === undefined).toBe(true);
+    expect(MRLively.camera.currentMap.block(0, 3).getFirstEntity() === undefined).toBe(true);
+    expect(MRLively.camera.currentMap.block(0, 4).getFirstEntity() === undefined).toBe(true);
+    expect(MRLively.camera.currentMap.block(0, 5).getFirstEntity() === undefined).toBe(true);
+    expect(MRLively.camera.currentMap.block(0, 6).getFirstEntity() === undefined).toBe(true);
+    expect(MRLively.camera.currentMap.block(1, 3).getFirstEntity() !== undefined).toBe(true);
+    expect(MRLively.camera.currentMap.block(1, 4).getFirstEntity() !== undefined).toBe(true);
+    expect(MRLively.camera.currentMap.block(1, 5).getFirstEntity() !== undefined).toBe(true);
     expect(inventory.items.length).toBe(6);
 });
 
@@ -106,7 +106,7 @@ test("concretes.activity.Stumble.player.onItem", () => {
 
     // アイテムを置く
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_ちからの草A").id, [], "item1"));
-    MRLively.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    TestEnv.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -120,7 +120,7 @@ test("concretes.activity.Stumble.player.onItem", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 持ち物が前方に落ちる。壁にはめり込まない。
-    expect(MRLively.map.block(11, 10).getEntities().length === 1).toBe(true);
+    expect(MRLively.camera.currentMap.block(11, 10).getEntities().length === 1).toBe(true);
     expect(inventory.items.length).toBe(2);
 });
 
@@ -132,7 +132,7 @@ test("concretes.activity.Stumble.enemy", () => {
     
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -147,7 +147,7 @@ test("concretes.activity.Stumble.enemy", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 何か足元に落ちてる
-    const item1 = MRLively.map.block(13, 10).getFirstEntity();
+    const item1 = MRLively.camera.currentMap.block(13, 10).getFirstEntity();
     expect(item1 !== undefined).toBe(true);
     expect(enemy1.mx).toBe(12);
 
@@ -162,7 +162,7 @@ test("concretes.activity.Stumble.enemy", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 2回目は何も落とさない
-    const item2 = MRLively.map.block(12, 10).getFirstEntity();
+    const item2 = MRLively.camera.currentMap.block(12, 10).getFirstEntity();
     expect(item2 === undefined).toBe(true);
 });
 

@@ -139,7 +139,7 @@ export class LItemImitatorBehavior extends LBehavior {
             this.parentAs(LState)?.removeThisState();
             
             self.removeFromParent();
-            MRLively.map.appearEntity(self, actor.mx, actor.my);
+            MRLively.camera.currentMap.appearEntity(self, actor.mx, actor.my);
             UAction.postDropOrDestroyOnCurrentPos(MRSystem.commandContext, self, self.getHomeLayer());
 
             return SCommandResponse.Canceled;

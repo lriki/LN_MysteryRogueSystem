@@ -63,6 +63,9 @@ export function checkContinuousResponse(r: SCommandResponse): boolean {
  * 
  * LActivity と似ているが、こちらは Recoding 対象外。シリアライズされるものではない。
  * LActivity は意思決定の履歴と考えることができる。対して SCommand は単純な引数のセットである。
+ * 
+ * Entity の行動ではなく、 GUI フレームワークでよくあるイベントのようなものであると考えるとわかりやすいかもしれない。
+ * 例えばメニューを実行するコマンドはよく使うが、それと同じ仕組みで、メニューの実行自体ができるかどうかをチェックするコマンドもある。
  */
 export class SCommand {
     public readonly id: DCommandId;

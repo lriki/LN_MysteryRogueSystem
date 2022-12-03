@@ -8,6 +8,7 @@ import { SDebugHelpers } from "ts/mr/system/SDebugHelpers";
 import { MRData } from "ts/mr/data/MRData";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { STransferMapDialog } from "ts/mr/system/dialogs/STransferMapDialog";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -23,16 +24,13 @@ test("Combat.DamageAndCollapse", () => {
     TestEnv.newGame();
 
     // Player
-    const actor1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
+    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     actor1.addState(TestEnv.StateId_CertainDirectAttack);   // 攻撃必中にする
-    MRLively.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 10, 10);  // 配置
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);  // 配置
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);  // 配置
     SDebugHelpers.setHP(enemy1, 1); // HP1 にして攻撃が当たったら倒れるようにする
-
-    TestEnv.performFloorTransfer();
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
     
@@ -53,17 +51,13 @@ test("Combat.DamageAndGameover", () => {
     TestEnv.newGame();
 
     // Player
-    const actor1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
-    actor1._name = "actor1";
-    MRLively.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);  // 配置
+    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 5, 5);
     SDebugHelpers.setHP(actor1, 1); // HP1 にして攻撃が当たったら倒れるようにする
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     enemy1.addState(TestEnv.StateId_CertainDirectAttack);   // 攻撃必中にする
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 3, 5);  // 配置
-
-    TestEnv.performFloorTransfer();
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 3, 5);  // 配置
 
     // Player 入力待ちまで進める
     MRSystem.scheduler.stepSimulation();
@@ -78,5 +72,5 @@ test("Combat.DamageAndGameover", () => {
     MRSystem.scheduler.stepSimulation();
 
     // 遷移中。コアスクリプト側で遷移処理が必要
-    expect(MRLively.camera.isFloorTransfering()).toBe(true);
+    expect(STransferMapDialog.isFloorTransfering).toBe(true);
 });

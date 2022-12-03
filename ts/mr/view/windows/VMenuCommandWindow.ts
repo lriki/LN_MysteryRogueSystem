@@ -17,7 +17,7 @@ export class VMenuCommandWindow extends Window_Command {
         this.addCommand(TextManager.item, "item", true, undefined);
         //this.addCommand(tr2("その他"), "other", true, undefined);
 
-        if (MRLively.map.floorId().isSafetyMap()) {
+        if (MRLively.camera.currentMap.floorId().isSafetyMap()) {
             this.addCommand(DTextManager.save, "save", true, undefined);
         }
         else {

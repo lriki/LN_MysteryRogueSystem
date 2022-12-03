@@ -118,12 +118,12 @@ export class LEscapeAI extends LCharacterAI {
             // 逃げたい Unit が視界内にいる。（部屋内・通路内は問わない）
 
 
-            const block = MRLively.map.block(self.mx, self.my);
-            const room = MRLively.map.room(block._roomId);
+            const block = MRLively.camera.currentMap.block(self.mx, self.my);
+            const room = MRLively.camera.currentMap.room(block._roomId);
 
             // 自分が部屋内の入り口に立っていて、隣接する通路は逃げても大丈夫そうなら、通路へ逃げ込む
             if (block.isRoomInnerEntrance()) {
-                const roomOuterEntrance = UBlock.adjacentBlocks4(MRLively.map, block.mx, block.my).find(x => x.isPassageway());
+                const roomOuterEntrance = UBlock.adjacentBlocks4(MRLively.camera.currentMap, block.mx, block.my).find(x => x.isPassageway());
                 if (roomOuterEntrance && !this.checkDeadInArea(self, target, roomOuterEntrance.mx, roomOuterEntrance.my)) {
                     this._moveDeterminer.setTargetPosition(roomOuterEntrance.mx, roomOuterEntrance.my);
                     return false;

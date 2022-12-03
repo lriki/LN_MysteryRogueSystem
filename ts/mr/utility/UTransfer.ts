@@ -9,14 +9,17 @@ import { MRSystem } from "ts/mr/system/MRSystem";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { createNoSubstitutionTemplateLiteral } from "typescript";
 import { DFloorClass } from "../data/DLand";
+import { SCommand } from "../system/SCommand";
 
 
 export class UTransfer {
     /**
      * RMMZ コアスクリプト側からの マップ(と Player Entity) 遷移。
      * ニューゲーム時や [場所移動] イベントなどで使用する。
+     * 
+     * @param cctx マップ遷移が発生する場合、STransferMapDialog を post する。
      */
-    public static transterRmmzDirectly(newMapId: number, newX: number, newY: number): void {
+    public static transterRmmzDirectly(newMapId: number, newX: number, newY: number, cctx: SCommandContext | undefined): void {
         const landId = MRData.maps[newMapId].landId;
         const mapData = MRData.maps[newMapId];
         //let actualMapId = 0;
@@ -78,7 +81,7 @@ export class UTransfer {
         
         const playerEntity = MRLively.camera.focusedEntity();
         if (playerEntity) {
-            MRLively.world.transferEntity(playerEntity, floorId, actualX, actualY);
+            MRLively.world.transferEntity(cctx, playerEntity, floorId, actualX, actualY);
         }
 
         //$gamePlayer.reserveTransfer();
@@ -91,24 +94,24 @@ export class UTransfer {
         assert(entity == MRLively.camera.focusedEntity());    // Player であるはず
 
         entity.party()?.journal.commitLandResult(result);
-        const map = MRLively.map;
+        const map = MRLively.camera.currentMap;
         const exitMapFloorId = LFloorId.makeFromEventMapData(map.land2().landData().exitMapData);
         cctx.postTransferFloor(entity, exitMapFloorId);
     }
 
-    public static proceedFloorForwardForPlayer(interpreter?: Game_Interpreter | undefined) {
+    public static proceedFloorForwardForPlayer(cctx: SCommandContext, interpreter?: Game_Interpreter | undefined) {
         const entity = MRLively.camera.focusedEntity();
         if (entity) {
             const floorId = entity.floorId;
             const newFloorNumber = floorId.floorNumber() + 1;
 
             // 最後のフロアを踏破した？
-            if (newFloorNumber > MRLively.map.land2().maxFloorNumber()) {
+            if (newFloorNumber > MRLively.camera.currentMap.land2().maxFloorNumber()) {
                 // ExitMap 取得
                 const newFloorId = LFloorId.makeFromEventMapData(floorId.landData().exitMapData);
 
                 entity.party()?.journal.commitLandResult(LandExitResult.Goal);
-                MRLively.world.transferEntity(entity, newFloorId);
+                MRLively.world.transferEntity(cctx, entity, newFloorId);
 
                 //$gamePlayer.reserveTransfer(exitRMMZMapId, 0, 0, 2, 0);
                 //const result = this.command201([0, exitRMMZMapId, 0, 0, 2, 0]);
@@ -116,7 +119,7 @@ export class UTransfer {
             }
             else {
                 const newFloorId = LFloorId.make(floorId.landId(), DFloorClass.FloorMap, newFloorNumber);
-                MRLively.world.transferEntity(entity, newFloorId);
+                MRLively.world.transferEntity(cctx, entity, newFloorId);
             }
 
             if (interpreter) {

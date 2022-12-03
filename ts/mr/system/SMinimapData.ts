@@ -11,20 +11,24 @@ import { SView } from "./SView";
 import { DHelpers } from "../data/DHelper";
 import { LEntity } from "../lively/LEntity";
 import { LMinimapMarkerClass } from "../lively/LCommon";
+import { SEditMapHelper } from "./utils/SEditMapHelper";
 
-enum SubTile {
-    UL,
-    UR,
-    LL,
-    LR,
-}
-
-interface Point {
-    x: number;
-    y: number;
-}
 
 const ExitPointTileIdOffset = 14;
+
+class SMiniMapAutoTileHelper extends SEditMapHelper {
+    protected onIsValidPos(x: number, y: number): boolean { throw new Error("Unreachable"); }
+    protected onGetTileId(x: number, y: number, z: number): number { throw new Error("Unreachable"); }
+    protected onSetTileId(x: number, y: number, z: number, tileId: number): void { throw new Error("Unreachable"); }
+
+    protected getSameKindTile(x: number, y: number, z: number, component: FBlockComponent): boolean {
+        const block = MRLively.camera.currentMap.tryGetBlock(x, y);
+        if (!block) return true;        // マップ範囲外は同種とすることで、境界外にも広がっているように見せる
+        if (!block._passed) return true; // 未踏なら壁Edgeなどは表示したくないので、同種扱いする
+        if (block._blockComponent == component) return true;
+        return false;
+    }
+}
 
 export class SMinimapData {
     private _width: number = 0;
@@ -32,6 +36,7 @@ export class SMinimapData {
     private _data: number[] = [];
     private _tilemapResetNeeded: boolean = true;
     private _refreshNeeded: boolean = true;
+    private _autoTileHelper: SMiniMapAutoTileHelper = new SMiniMapAutoTileHelper();
 
     public clear(): void {
         this._width = 0;
@@ -111,7 +116,7 @@ export class SMinimapData {
 
     // 地形表示の更新
     public refresh(): void {
-        const map = MRLively.map;
+        const map = MRLively.camera.currentMap;
         const width = map.width();
         const height = map.height();
         for (let y = 0; y < height; y++) {
@@ -121,7 +126,7 @@ export class SMinimapData {
 
                 switch (block._blockComponent) {
                     default:
-                        const tileId = this.getAutotileShape(x, y, FBlockComponent.None);
+                        const tileId = this._autoTileHelper.getAutotileShape(x, y, 0, FBlockComponent.None);
 
                         if (block._passed)
                             this.setData(x, y, 0, DHelpers.TILE_ID_A2 + tileId);
@@ -142,7 +147,7 @@ export class SMinimapData {
     }
 
     public update() {
-        const map = MRLively.map;
+        const map = MRLively.camera.currentMap;
         const width = map.width();
         const height = map.height();
         const subject = MRLively.camera.focusedEntity();
@@ -219,90 +224,5 @@ export class SMinimapData {
         return 0;
     }
 
-
-    // 1: すべて同種タイル
-    // 2: 対角のみ異種タイル (縦と横が同種タイル)
-    // 3: 縦のみ異種タイル (横のみ同種タイル・対角は不問)
-    // 4: 横のみ異種タイル (縦のみ同種タイル・対角は不問)
-    // 5: 縦と横が異種タイル (非隣接タイル・対角は不問)
-    // これらを↓に沿って配置したもの
-    // https://www.f-sp.com/category/RPG%E3%83%84%E3%82%AF%E3%83%BC%E3%83%AB?page=1480575168
-    public static _subtileToAutoTileTable: number[][] = [
-        [1,1,1,1],[2,1,1,1],[1,2,1,1],[2,2,1,1], [1,1,1,2],[2,1,1,2],[1,2,1,2],[2,2,1,2],
-        [1,1,2,1],[2,1,2,1],[1,2,2,1],[2,2,2,1], [1,1,2,2],[2,1,2,2],[1,2,2,2],[2,2,2,2],
-        [4,1,4,1],[4,2,4,1],[4,1,4,2],[4,2,4,2], [3,3,1,1],[3,3,1,2],[3,3,2,1],[3,3,2,2],
-
-        [1,4,1,4],[1,4,2,4],[2,4,1,4],[2,4,2,4], [1,1,3,3],[2,1,3,3],[1,2,3,3],[2,2,3,3],
-        [4,4,4,4],[3,3,3,3],[5,3,4,1],[5,3,4,2], [3,5,1,4],[3,5,2,4],[1,4,3,5],[2,4,3,5],
-        [4,1,5,3],[4,2,5,3],[5,5,4,4],[5,3,5,3], [4,4,5,5],[3,5,3,5],[5,5,5,5],[5,5,5,5],
-    ];
-    
-    public static _subtileToAutoTileTable_Wall: number[][] = [
-        [1,1,1,1],[4,1,4,1],[3,3,1,1],[5,2,4,1],
-        [1,4,1,4],[4,4,4,4],[3,5,1,4],[5,5,4,4],
-        [1,1,3,3],[4,1,5,4],[3,3,3,3],[5,3,5,3],
-        [1,4,3,5],[4,4,5,5],[3,5,3,5],[5,5,5,5],
-    ];
-
-    private getAutotileShape(x: number, y: number, component: FBlockComponent): number {
-        let subtiles: number[] = [0, 0, 0, 0];
-        {
-            const checkOffsets: Point[] = [ { x: -1, y: -1 }, { x: 1, y: -1 }, { x: -1, y: 1 }, { x: 1, y: 1 } ];
-
-            // 左上、右上、左下、右下、の順で SubtileID (1~5) を決定する
-            for (let i = 0; i < 4; i++) {
-                const ox = checkOffsets[i].x;
-                const oy = checkOffsets[i].y;
-                const diag = this.getSameKindTile(x + ox, y + oy, component);   // 対角
-                const hori = this.getSameKindTile(x + ox, y, component);        // 横
-                const vert = this.getSameKindTile(x, y + oy, component);        // 縦
-                if (diag && vert && hori) subtiles[i] = 1;             // 1: すべて同種タイル
-                else if (!diag && vert && hori) subtiles[i] = 2;       // 2: 縦と横が同種タイル (対角のみ異種タイル)
-                else if (!vert && hori) subtiles[i] = 3;               // 3: 縦のみ異種タイル (横のみ同種タイル・対角は不問)
-                else if (vert && !hori) subtiles[i] = 4;               // 4: 横のみ異種タイル (縦のみ同種タイル・対角は不問)
-                else subtiles[i] = 5;                                  // 5: 縦と横が異種タイル (対角は不問)
-            }
-        }
-
-		// subtiles が一致するものを線形で検索
-        const id = SMinimapData._subtileToAutoTileTable.findIndex(x => {
-            return x[SubTile.UL] == subtiles[SubTile.UL] &&
-                x[SubTile.UR] == subtiles[SubTile.UR] &&
-                x[SubTile.LL] == subtiles[SubTile.LL] &&
-                x[SubTile.LR] == subtiles[SubTile.LR];
-        });
-        if (id >= 0)
-            return id;
-        else
-            return 0;
-    }
-
-
-    /*
-    private getAutoTileDirBits(x: number, y: number, component: FBlockComponent): number {
-        const map = REGame.map;
-        let result = 0;
-        result |= (this.getSameKindTile(x - 1, y + 1, component)) ? 0b000000000 : 0b000000001;
-        result |= (this.getSameKindTile(x + 0, y + 1, component)) ? 0b000000000 : 0b000000010;
-        result |= (this.getSameKindTile(x + 1, y + 1, component)) ? 0b000000000 : 0b000000100;
-        result |= (this.getSameKindTile(x - 1, y + 0, component)) ? 0b000000000 : 0b000001000;
-        result |= (this.getSameKindTile(x + 0, y + 0, component)) ? 0b000000000 : 0b000010000;
-        result |= (this.getSameKindTile(x + 1, y + 0, component)) ? 0b000000000 : 0b000100000;
-        result |= (this.getSameKindTile(x - 1, y - 1, component)) ? 0b000000000 : 0b001000000;
-        result |= (this.getSameKindTile(x + 0, y - 1, component)) ? 0b000000000 : 0b010000000;
-        result |= (this.getSameKindTile(x + 1, y - 1, component)) ? 0b000000000 : 0b100000000;
-        return result;
-    }
-    */
-
-    // (x, y) のタイルが、component と同種かどうか
-    private getSameKindTile(x: number, y: number, component: FBlockComponent): boolean {
-        const block = MRLively.map.tryGetBlock(x, y);
-        if (!block) return true;        // マップ範囲外は同種とすることで、境界外にも広がっているように見せる
-        if (!block._passed) return true; // 未踏なら壁Edgeなどは表示したくないので、同種扱いする
-        if (block._blockComponent == component) return true;
-        return false;
-    }
-    
 
 }

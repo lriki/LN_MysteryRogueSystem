@@ -20,7 +20,7 @@ test("Trap.TriggerRate", () => {
     const hp1 = player1.getActualParam(MRBasics.params.hp);
 
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_地雷A").id, [], "trap1"));
-    MRLively.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    TestEnv.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     const trapBehavior = trap1.getEntityBehavior(LTrapBehavior);
     
     MRLively.world.random().resetSeed(5);     // 乱数調整
@@ -40,7 +40,7 @@ test("Trap.TriggerRate", () => {
 
         const hp2 = player1.getActualParam(MRBasics.params.hp);
         if (hp2 < hp1) triggerd1++;
-        MRLively.world.transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+        TestEnv.transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 10, 10);
         player1.setParamCurrentValue(MRBasics.params.hp, hp1);
     }
 
@@ -58,7 +58,7 @@ test("Trap.TriggerRate", () => {
 
         const hp2 = player1.getActualParam(MRBasics.params.hp);
         if (hp2 < hp1) triggerd2++;
-        MRLively.world.transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+        TestEnv.transferEntity(player1, TestEnv.FloorId_FlatMap50x50, 10, 10);
         player1.setParamCurrentValue(MRBasics.params.hp, hp1);
     }
 
@@ -77,7 +77,7 @@ test("Trap.Basic", () => {
 
     // trap1 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_SleepTrap, [], "trap1"));
-    MRLively.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    TestEnv.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
@@ -101,12 +101,12 @@ test("Trap.Enemy", () => {
     // trap1 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_SleepTrap));
     trap1._name = "trap1";
-    MRLively.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    TestEnv.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
     // TODO: 罠state:必ず発動
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
@@ -130,11 +130,11 @@ test("Trap.Attack", () => {
 
     // trap1
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_SleepTrap, [], "trap1"));
-    MRLively.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    TestEnv.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10); // 罠の上に配置
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10); // 罠の上に配置
     const hp1 = enemy1.getActualParam(MRBasics.params.hp);
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
@@ -158,7 +158,7 @@ test("Trap.Attack", () => {
     //----------------------------------------------------------------------------------------------------
 
     // Enemy をどける
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10); // 罠の上に配置
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10); // 罠の上に配置
 
     // 右を向いて攻撃
     MRSystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, MRData.system.skills.normalAttack, 6).withConsumeAction());
@@ -177,10 +177,10 @@ test("Trap.Attack", () => {
 
     // Player の右下に罠を作る
     const trap2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_SleepTrap, [], "trap2"));
-    MRLively.world.transferEntity(trap2, TestEnv.FloorId_FlatMap50x50, 11, 11);
+    TestEnv.transferEntity(trap2, TestEnv.FloorId_FlatMap50x50, 11, 11);
 
     // Player の下に壁を作る
-    MRLively.map.block(10, 11)._tileShape = LTileShape.Wall;
+    MRLively.camera.currentMap.block(10, 11)._tileShape = LTileShape.Wall;
 
     // 右下を向いて攻撃
     MRSystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, MRData.system.skills.normalAttack, 3).withConsumeAction());

@@ -27,7 +27,7 @@ test("concretes.trap.StumbleTrap", () => {
 
     // trap1 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_転び石A").id, [], "trap1"));
-    MRLively.world.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    MRLively.world.transferEntity(undefined, trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
@@ -57,6 +57,6 @@ test("concretes.trap.StumbleTrap", () => {
     expect((sequels2_2 as SMotionSequel).sequelId()).toBe(MRBasics.sequels.stumble);
 
     // アイテムが目の前に落ちる
-    const item1 = MRLively.map.block(12, 10).getFirstEntity();
+    const item1 = MRLively.camera.currentMap.block(12, 10).getFirstEntity();
     expect(item1).toBe(weapon1);
 });

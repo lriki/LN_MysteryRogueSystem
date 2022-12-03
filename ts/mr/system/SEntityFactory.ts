@@ -239,13 +239,13 @@ export class SEntityFactory {
         const party = MRLively.world.newParty();
 
         for (const entityId of troop.members) {
-            const entity = this.newEntity(DEntityCreateInfo.makeSingle(entityId, stateIds), MRLively.map.floorId());
+            const entity = this.newEntity(DEntityCreateInfo.makeSingle(entityId, stateIds), MRLively.camera.currentMap.floorId());
             party.addMember(entity);
             result.push(entity);
 
             const block = UMovement.selectNearbyLocatableBlock(MRLively.world.random(), mx, my, entity.getHomeLayer(), entity);
             if (block) {
-                MRLively.world.transferEntity(entity, MRLively.map.floorId(), block.mx, block.my);
+                MRLively.world.transferEntity(undefined, entity, MRLively.camera.currentMap.floorId(), block.mx, block.my);
             }
             else {
                 // 配置できないなら無理に出さない

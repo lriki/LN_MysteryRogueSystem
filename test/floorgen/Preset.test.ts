@@ -29,7 +29,7 @@ test("Preset.GreatHall", () => {
     MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     // 全部床であることを確認する
-    const map = MRLively.map;
+    const map = MRLively.camera.currentMap;
     const room = map.rooms()[1];
     room.forEachBlocks(block => {
         assert(block.tileShape() == LTileShape.Floor);
@@ -51,7 +51,7 @@ test("Preset.GreatHallMonsterHouse", () => {
 
     MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
-    const map = MRLively.map;
+    const map = MRLively.camera.currentMap;
     const structures = map.structures();
     const monsterHouse = structures[1] as LMonsterHouseStructure;
     assert(monsterHouse);
@@ -69,7 +69,7 @@ test("Preset.PoorVisibility", () => {
     floorInfo.presetId = MRData.getFloorPreset("kFloorPreset_GreatHall").id;
 
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50); 
-    const map = MRLively.map;
+    const map = MRLively.camera.currentMap;
 
     // 部屋全体が Pass になっていないこと
     const room = map.rooms()[1];
@@ -87,12 +87,12 @@ test("Preset.PoorVisibility", () => {
     //----------
 
     // Player を左上に配置
-    MRLively.world.transferEntity(player1, TestEnv.FloorId_FlatMap50x50, room.mx1, room.my1);
+    MRLively.world.transferEntity(undefined, player1, TestEnv.FloorId_FlatMap50x50, room.mx1, room.my1);
 
     // Enemy を右上に配置 (下向き)
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     enemy1.dir = 2;
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, room.mx2, room.my1);
+    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, room.mx2, room.my1);
 
     MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
@@ -121,7 +121,7 @@ test("Preset.DefaultMonsterHouse", () => {
     MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
     // ひとつ MH ができている
-    const map = MRLively.map;
+    const map = MRLively.camera.currentMap;
     const structures = map.structures();
     const monsterHouse = structures[1] as LMonsterHouseStructure;
     assert(monsterHouse);

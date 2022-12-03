@@ -414,7 +414,7 @@ export class SEmittorPerformer {
         }
         else if (emittor.scope.range == DEffectFieldScopeType.Center) {
             const targets: LEntity[] = [];
-            const block = MRLively.map.tryGetBlock(performer.mx, performer.my);
+            const block = MRLively.camera.currentMap.tryGetBlock(performer.mx, performer.my);
             if (block) {
                 for (const entity of block.getEntities()) {
                     if (!entity.equals(performer)) {
@@ -426,7 +426,7 @@ export class SEmittorPerformer {
         }
         else if (emittor.scope.range == DEffectFieldScopeType.Room) {
             const targets: LEntity[] = [];
-            MRLively.map.room(performer.roomId()).forEachEntities(entity => {
+            MRLively.camera.currentMap.room(performer.roomId()).forEachEntities(entity => {
                 if (UAction.testFactionMatch(performer, entity, DRmmzEffectScope.Opponent_All)) {
                     targets.push(entity);
                 };
@@ -435,7 +435,7 @@ export class SEmittorPerformer {
         }
         else if (emittor.scope.range == DEffectFieldScopeType.Map) {
             const targets: LEntity[] = [];
-            MRLively.map.entities().filter(entity => {
+            MRLively.camera.currentMap.entities().filter(entity => {
                 if (UAction.testFactionMatch(performer, entity, DRmmzEffectScope.Everyone)) {
                     targets.push(entity);
                 };
@@ -457,7 +457,7 @@ export class SEmittorPerformer {
     {
         const createInfo = DEntityCreateInfo.makeSingle(MRData.getEntity(emittor.scope.projectilePrefabKey).id).withStackCount(1);
         const bullet = SEntityFactory.newEntity(createInfo);
-        MRLively.map.appearEntity(bullet, startX, startY);
+        MRLively.camera.currentMap.appearEntity(bullet, startX, startY);
         bullet.dir = dir;
 
         // Projectile は item とは異なる Entity であり、Projectile 自体はデータベース上では Effect を持たない。

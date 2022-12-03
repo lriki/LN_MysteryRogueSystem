@@ -106,7 +106,7 @@ export class LBlock {
 
     public room(): LRoom | undefined {
         if (this._roomId > 0)
-            return MRLively.map.room(this._roomId);
+            return MRLively.camera.currentMap.room(this._roomId);
         else
             return undefined;
     }

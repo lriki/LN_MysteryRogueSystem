@@ -54,7 +54,9 @@ test("concretes.states.くちなし.AutoRemove", () => {
     // Player
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     actor1.addState(stateId);
-    MRLively.world.transferEntity(actor1, LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
+
+    // 別フロアへ移動
+    MRLively.world.transferEntity(MRSystem.commandContext, actor1, LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 

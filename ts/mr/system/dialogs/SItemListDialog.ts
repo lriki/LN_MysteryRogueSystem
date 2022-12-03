@@ -47,7 +47,7 @@ export class SItemListDialog extends SDialog {
 
     public makeActionList(item: LEntity): SDialogCommand[] {
         // SafetyMap など、ダンジョンマップ以外では ActionList を生成しない
-        if (!MRLively.map.floorId().isTacticsMap()) {
+        if (!MRLively.camera.currentMap.floorId().isTacticsMap()) {
             return [];
         }
 
@@ -98,7 +98,7 @@ export class SItemListDialog extends SDialog {
 
             // 足元に何かあれば [置く] を [交換] にする
             {
-                const feetEntity = MRLively.map.firstFeetEntity(actor);
+                const feetEntity = MRLively.camera.currentMap.firstFeetEntity(actor);
                 if (feetEntity) {
                     if (actualActions.mutableRemove(x => x.actionId == MRBasics.actions.PutActionId)) {
                         actualActions.push({ actionId: MRBasics.actions.ExchangeActionId });

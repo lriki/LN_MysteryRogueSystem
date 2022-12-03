@@ -201,7 +201,7 @@ export class SView {
         //if (subject.entityId().equals(target.entityId())) return true;
 
         //if (REGame.map.unitClarity) return true;
-        const map = MRLively.map;
+        const map = MRLively.camera.currentMap;
 
         // あかりの巻物など、フロア自体に可視効果がある
         if (map.unitClarity) {
@@ -224,7 +224,7 @@ export class SView {
         
         // 中立 target は、踏破済みの Block 上なら見える
         if (!Helpers.isHostile(subject, target)) {
-            const targetBlock = MRLively.map.block(target.mx, target.my);
+            const targetBlock = MRLively.camera.currentMap.block(target.mx, target.my);
             if (targetBlock._passed) {
                 return true;
             }

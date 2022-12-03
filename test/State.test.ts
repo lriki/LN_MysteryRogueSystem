@@ -21,15 +21,13 @@ test("State_Brace", () => {
     TestEnv.newGame();
 
     // Player
-    const actor1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
-    MRLively.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
-    TestEnv.performFloorTransfer();
+    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 5, 5);
 
     // "睡眠" 強制付加
     actor1.addState(TestEnv.StateId_Sleep);
 
     // 行動できる Entity は Player(行動不能) しかいない状態。
-    assert(MRLively.map.entities().filter(e => e.findEntityBehavior(LUnitBehavior)).length == 1);
+    assert(MRLively.camera.currentMap.entities().filter(e => e.findEntityBehavior(LUnitBehavior)).length == 1);
 
     // シミュレーション実行
     MRSystem.scheduler.stepSimulation();
@@ -44,9 +42,7 @@ test("State.AutoRemove", () => {
     TestEnv.newGame();
 
     // Player
-    const actor1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
-    MRLively.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
-    TestEnv.performFloorTransfer();
+    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 5, 5);
 
     // "睡眠" 強制付加
     actor1.addState(TestEnv.StateId_Sleep);
@@ -71,9 +67,7 @@ test("State.Proficiency", () => {
     TestEnv.newGame();
     
     // Player
-    const actor1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
-    MRLively.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
-    TestEnv.performFloorTransfer();
+    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 5, 5);
 
     const inventory = actor1.getEntityBehavior(LInventoryBehavior);
 

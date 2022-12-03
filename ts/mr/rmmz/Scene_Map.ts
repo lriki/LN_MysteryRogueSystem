@@ -7,6 +7,7 @@ import { RMMZHelper } from "./RMMZHelper";
 import { SMainMenuDialog } from "ts/mr/system/dialogs/SMainMenuDialog";
 import { SGameManager } from "../system/SGameManager";
 import { FloorRestartSequence } from "./FloorRestartSequence";
+import { STransferMapDialog } from "../system/dialogs/STransferMapDialog";
 
 declare global {
     interface Scene_Map {
@@ -46,7 +47,7 @@ Scene_Map.prototype.createDisplayObjects = function() {
     // refresh はホントは onMapLoaded のフック内で呼ぶのが自然な気がするが、
     // createDisplayObjects() の前に呼んでおきたい。
     // そうしないと、特にランダムダンジョン内にいるときのセーブデータをロードした後、Tilemap 生成とのタイミングの問題で何も表示されなくなる。
-    if (MRLively.map.floorId().isTacticsMap()) {
+    if (MRLively.camera.currentMap.floorId().isTacticsMap()) {
         MRSystem.mapManager.attemptRefreshVisual();
     }
 
@@ -96,10 +97,10 @@ Scene_Map.prototype.update = function() {
     FloorRestartSequence.update(this);
 
     if (!isTransterEffectRunning()) {
-        if (MRLively.map.floorId().isTacticsMap()) {
+        if (MRLively.camera.currentMap.floorId().isTacticsMap()) {
             if (!$gameMap.isEventRunning()) {   // イベント実行中はシミュレーションを行わない
     
-                if (MRLively.camera.isFloorTransfering()) {
+                if (STransferMapDialog.isFloorTransfering) {
                     // マップ遷移中はコアシステムとしては何もしない。
                     // performFloorTransfer() すること。
                     //return;
@@ -128,7 +129,7 @@ Scene_Map.prototype.update = function() {
     // 位置合わせは Game_Player だけではなく Game_Map や Game_Screen など様々なオブジェクトに対しても影響するため、
     // ここでまず Game_Player を調整した後、残りはコアスクリプトに任せる。
     // (ただし _realX などが中途半端だと座標移動がかかえるので、REMap 上ではすべての Character の update を切っている)
-    if (MRLively.map.floorId().isTacticsMap()) {
+    if (MRLively.camera.currentMap.floorId().isTacticsMap()) {
         if (MRView._syncCamera) {
             RMMZHelper.syncCameraPositionToGamePlayer();
         }
@@ -139,7 +140,7 @@ Scene_Map.prototype.update = function() {
 
 const _Scene_Map_callMenu = Scene_Map.prototype.callMenu;
 Scene_Map.prototype.callMenu = function() {
-    if (MRLively.map.floorId().isRMMZDefaultSystemMap()) {
+    if (MRLively.camera.currentMap.floorId().isRMMZDefaultSystemMap()) {
         // 通常の RMMZ マップ & システム
         _Scene_Map_callMenu.call(this);
     }
@@ -155,11 +156,11 @@ Scene_Map.prototype.callMenu = function() {
 
 const _Scene_Map_updateCallMenu = Scene_Map.prototype.updateCallMenu;
 Scene_Map.prototype.updateCallMenu = function() {
-    if (MRLively.map.floorId().isRMMZDefaultSystemMap()) {
+    if (MRLively.camera.currentMap.floorId().isRMMZDefaultSystemMap()) {
         // 通常の RMMZ マップ & システム
         _Scene_Map_updateCallMenu.call(this);
     }
-    else if (MRLively.map.floorId().isTacticsMap()) {
+    else if (MRLively.camera.currentMap.floorId().isTacticsMap()) {
         // タクティクスマップ。MainMenu の表示は ManualActionDialog から行う。
         // Scene_Map からのメニュー表示は行わない。
         this.menuCalling = false;
@@ -174,7 +175,7 @@ Scene_Map.prototype.updateCallMenu = function() {
 
 const _Scene_Map_shouldAutosave = Scene_Map.prototype.shouldAutosave;
 Scene_Map.prototype.shouldAutosave = function() {
-    if (MRLively.map.floorId().isTacticsMap()) {
+    if (MRLively.camera.currentMap.floorId().isTacticsMap()) {
         return true;
     }
     else {
@@ -184,7 +185,7 @@ Scene_Map.prototype.shouldAutosave = function() {
 
 const _Scene_Map_isAutosaveEnabled = Scene_Map.prototype.isAutosaveEnabled;
 Scene_Base.prototype.isAutosaveEnabled = function() {
-    if (MRLively.map.floorId().isTacticsMap()) {
+    if (MRLively.camera.currentMap.floorId().isTacticsMap()) {
         return true;
     }
     else {

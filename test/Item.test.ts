@@ -29,7 +29,7 @@ test("Items.Stack", () => {
     const info1 = DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢A").id);
     info1.stackCount = 1;
     const item1 = SEntityFactory.newEntity(info1);
-    MRLively.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
+    TestEnv.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
 
     // 足元のアイテムを拾う
     MRSystem.dialogContext.postActivity(LActivity.makePick(player1).withConsumeAction());
@@ -41,7 +41,7 @@ test("Items.Stack", () => {
     const info2 = DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢A").id);
     info2.stackCount = 2;
     const item2 = SEntityFactory.newEntity(info2);
-    MRLively.world.transferEntity(item2, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
+    TestEnv.transferEntity(item2, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
 
     // 足元のアイテムを拾う
     MRSystem.dialogContext.postActivity(LActivity.makePick(player1).withConsumeAction());
@@ -55,7 +55,7 @@ test("Items.Stack", () => {
     const info3 = DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢A").id);
     info3.stackCount = 99;
     const item3 = SEntityFactory.newEntity(info3);
-    MRLively.world.transferEntity(item3, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
+    TestEnv.transferEntity(item3, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
 
     // 足元のアイテムを拾う
     MRSystem.dialogContext.postActivity(LActivity.makePick(player1).withConsumeAction());
@@ -67,7 +67,7 @@ test("Items.Stack", () => {
 
     // 矢1本
     const item4 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢A").id));
-    MRLively.world.transferEntity(item4, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
+    TestEnv.transferEntity(item4, TestEnv.FloorId_FlatMap50x50, 10, 10);  // Player の足元へ
 
     // 足元のアイテムを拾う
     MRSystem.dialogContext.postActivity(LActivity.makePick(player1).withConsumeAction());

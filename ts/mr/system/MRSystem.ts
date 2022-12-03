@@ -14,6 +14,8 @@ import { STurnContext } from "./STurnContext";
 import { SSpecialEffectManager } from "./effects/SSpecialEffectManager";
 import { SFormulaOperand } from "./SFormulaOperand";
 import { LEntityId } from "../lively/LObject";
+import { SFovShadowMap } from "./SFovShadowMap";
+import { SMapDataManager } from "./SMapDataManager";
 
 export class MRSystem {
     static propertyData:EntityProperty[] = [
@@ -36,9 +38,11 @@ export class MRSystem {
     static integration: SIntegration;
     static scheduler: SScheduler;
     static minimapData: SMinimapData;
+    static fovShadowMap: SFovShadowMap;
     static mapManager: SMapManager;
     static groundRules: SGroundRules;
     static effectBehaviorManager: SSpecialEffectManager;
+    static mapDataManager: SMapDataManager;
     static requestedPlayback: boolean = false;
     static unittest: boolean = false;
 

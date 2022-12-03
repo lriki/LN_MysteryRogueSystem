@@ -42,7 +42,7 @@ export class VDirectionArrow extends Sprite {
     // override
     update(): void {
         
-        if (MRLively.map.floorId().isTacticsMap()) {
+        if (MRLively.camera.currentMap.floorId().isTacticsMap()) {
             this.visible = true;
         }
         else {

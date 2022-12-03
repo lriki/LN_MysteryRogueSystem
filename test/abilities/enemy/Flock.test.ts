@@ -13,14 +13,12 @@ test("Abilities.Enemy.Flock", () => {
     const floor = LFloorId.makeFromKeys("MR-Land:UnitTestDungeon1", "kFloor_UT軍隊ウルフ(ランダム)");
 
     // Player
-    const actor1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
-    MRLively.world.transferEntity(actor1, floor);
-    TestEnv.performFloorTransfer();
+    const actor1 = TestEnv.setupPlayer(floor);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // ひとまず、Troop 指定で Spawn 出来ていることを確認する。
-    const entites = MRLively.map.entities();
+    const entites = MRLively.camera.currentMap.entities();
     const enemy1 = entites.find(x => x.data.entity.key == "kEnemy_軍隊ウルフA");
     expect(enemy1 != undefined).toBe(true);
 });

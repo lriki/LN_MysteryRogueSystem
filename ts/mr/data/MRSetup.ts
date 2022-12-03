@@ -1220,6 +1220,9 @@ export class MRSetup {
             case "kEnemy_店主A":
                 entity.factionId = MRData.system.factions.neutral;
                 break;
+            case "kEnemy_ボスドラゴンA":
+                entity.selfTraits.push({ code: MRBasics.traits.DisableMovement, dataId: 0, value: 0 });
+                break;
         }
     }
     

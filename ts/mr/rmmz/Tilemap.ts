@@ -107,7 +107,7 @@ Tilemap.prototype._addSpot = function(startX, startY, x, y) {
 
     //if (REGame.map.isValid()) {
     if (show) {
-        const block = MRLively.map.block(mx, my);
+        const block = MRLively.camera.currentMap.block(mx, my);
         if (block._roomId > 0) {
             this._addTile(this._upperLayer, startTileId + block._roomId, dx, dy);
         }
@@ -177,7 +177,7 @@ const _Tilemap__addAutotile = Tilemap.prototype._addAutotile;
 Tilemap.prototype._addAutotile = function(layer, tileId, dx, dy) {
     const kind = Tilemap.getAutotileKind(tileId);
 
-    if (MRLively.map.floorId().isTacticsMap() && Tilemap.isTileA4(tileId)) {
+    if (MRLively.camera.currentMap.floorId().isTacticsMap() && Tilemap.isTileA4(tileId)) {
         const x = dx / this._tileWidth;
         const y = dy / this._tileHeight;
     

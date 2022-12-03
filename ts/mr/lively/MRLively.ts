@@ -13,6 +13,7 @@ import { LScheduler2 } from "./LScheduler";
 import { MRGameExtension } from "./MRGameExtension";
 import { LLand } from "./LLand";
 import { LChronus } from "./LChronus";
+import { SMapDataManager } from "../system/SMapDataManager";
 
 /**
  * 各 REGame_* インスタンスを保持する。
@@ -26,7 +27,7 @@ export class MRLively {
     static immediatelyCommandExecuteScheduler: SImmediatelyCommandExecuteScheduler;
     static system: LSystem;
     static world: LWorld;
-    static map: LMap;
+    //static map: LMap;
     static camera: LCamera;
     static scheduler: LScheduler2;
     static recorder: SActivityRecorder;
@@ -44,7 +45,7 @@ export class MRLively {
     static signalFlushSequelSet: ((sequelSet: SSequelSet) => void) | undefined;
 
     static getCurrentLand(): LLand {
-        return this.map.land2();
+        return this.camera.currentMap.land2();
     }
 
     static getCurrentIdentifyer(): LIdentifyer {

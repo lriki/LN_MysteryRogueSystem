@@ -31,13 +31,13 @@ test("concretes.item.arrow.PenetrationArrow", () => {
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy2"));
-    MRLively.world.transferEntity(enemy1, floorId, 15, 10);
-    MRLively.world.transferEntity(enemy2, floorId, 17, 10);
+    MRLively.world.transferEntity(undefined, enemy1, floorId, 15, 10);
+    MRLively.world.transferEntity(undefined, enemy2, floorId, 17, 10);
     const enemy1HP1 = enemy1.getActualParam(MRBasics.params.hp);
     const enemy2HP1 = enemy2.getActualParam(MRBasics.params.hp);
 
     // Player の右に壁を作る
-    MRLively.map.block(11, 10)._tileShape = LTileShape.Wall;
+    MRLively.camera.currentMap.block(11, 10)._tileShape = LTileShape.Wall;
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

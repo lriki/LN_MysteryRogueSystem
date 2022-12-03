@@ -7,6 +7,7 @@ import { assert } from "ts/mr/Common";
 import { LandExitResult, MRData } from "ts/mr/data/MRData";
 import { UTransfer } from "ts/mr/utility/UTransfer";
 import { LFloorId } from "ts/mr/lively/LFloorId";
+import { STransferMapDialog } from "ts/mr/system/dialogs/STransferMapDialog";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -32,9 +33,7 @@ test("system.Gameover.Basic", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
     // 同じ Land の ExitMap へ遷移中
-    const camera = MRLively.camera;
-    expect(camera.isFloorTransfering()).toBeTruthy();
-    expect(camera.transferingNewFloorId().landId()).toBe(land.id);
+    expect(STransferMapDialog.current.newFloorId.landId()).toBe(land.id);
 
     // HP はまだ回復していない
     expect(player1.getActualParam(MRBasics.params.hp)).toBe(0); 
@@ -44,25 +43,32 @@ test("system.Gameover.Basic", () => {
     assert(party);
     expect(party.journal.exitResult).toBe(LandExitResult.Gameover);
 
+    // 移動待機状態
+    expect(STransferMapDialog.isFloorTransfering).toBeTruthy();
+
     //----------------------------------------------------------------------------------------------------
 
     // 遷移実行
-    MRLively.map.releaseMap();
+    MRLively.camera.currentMap.releaseMap();
     TestEnv.performFloorTransfer();
 
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
     // 移動完了済み
-    expect(camera.isFloorTransfering()).toBeFalsy();
+    expect(STransferMapDialog.isFloorTransfering).toBeFalsy();
 
     // ExitMap にある自動実行イベントからの [マップの移動] イベントが実行されるのを想定する
     const map = MRData.getMap("MR-Safety:テスト拠点");
-    UTransfer.transterRmmzDirectly(map.mapId, 0, 0);
+    UTransfer.transterRmmzDirectly(map.mapId, 0, 0, MRSystem.commandContext);
 
     // MR-FinishChallenge
     player1.party()?.finishChallenging();
 
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
+
     // 遷移中になる
-    expect(camera.isFloorTransfering()).toBeTruthy();
-    expect(camera.transferingNewFloorId().rmmzMapId()).toBe(map.mapId);
+    expect(STransferMapDialog.isFloorTransfering).toBeTruthy();
+    expect(STransferMapDialog.current.newFloorId.rmmzMapId()).toBe(map.mapId);
 
     // この時点で HPは回復している
     expect(player1.getActualParam(MRBasics.params.hp)).toBeGreaterThan(0);
@@ -70,6 +76,6 @@ test("system.Gameover.Basic", () => {
     //----------------------------------------------------------------------------------------------------
 
     // 遷移実行
-    MRLively.map.releaseMap();
+    MRLively.camera.currentMap.releaseMap();
     TestEnv.performFloorTransfer();
 });

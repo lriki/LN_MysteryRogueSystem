@@ -30,7 +30,7 @@ test("concretes.item.scroll.ItemVisitorScroll", () => {
 
     // item
     const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_千里眼の巻物A").id, [], "item1"));
-    MRLively.world.transferEntity(item2, floorId, 19, 4);  
+    TestEnv.transferEntity(item2, floorId, 19, 4);  
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

@@ -21,7 +21,7 @@ test("ai.Escape.1", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [stateId], "enemy1"));
-    MRLively.world.transferEntity(enemy1, floorId, 11, 4);
+    TestEnv.transferEntity(enemy1, floorId, 11, 4);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -40,8 +40,8 @@ test("ai.Escape.1", () => {
     //----------------------------------------------------------------------------------------------------
 
     // Player が通路側に立ちはだかる
-    MRLively.world.transferEntity(player1, floorId, 11, 4);
-    MRLively.world.transferEntity(enemy1, floorId, 10, 4);
+    TestEnv.transferEntity(player1, floorId, 11, 4);
+    TestEnv.transferEntity(enemy1, floorId, 10, 4);
     MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     MRSystem.dialogContext.activeDialog().submit();
 
@@ -56,8 +56,8 @@ test("ai.Escape.1", () => {
     // - Player が通路側に立ちはだかる
     // - Enemy の後ろが壁
     // - Player と Enemy は隣接していない
-    MRLively.world.transferEntity(player1, floorId, 11, 4);
-    MRLively.world.transferEntity(enemy1, floorId, 9, 4);
+    TestEnv.transferEntity(player1, floorId, 11, 4);
+    TestEnv.transferEntity(enemy1, floorId, 9, 4);
     MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     MRSystem.dialogContext.activeDialog().submit();
 
@@ -72,8 +72,8 @@ test("ai.Escape.1", () => {
     // - Player が通路側に立ちはだかる
     // - Enemy の後ろが壁
     // - Player と Enemy は隣接している
-    MRLively.world.transferEntity(player1, floorId, 10, 4);
-    MRLively.world.transferEntity(enemy1, floorId, 9, 4);
+    TestEnv.transferEntity(player1, floorId, 10, 4);
+    TestEnv.transferEntity(enemy1, floorId, 9, 4);
     MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     MRSystem.dialogContext.activeDialog().submit();
 
@@ -95,7 +95,7 @@ test("ai.Escape.2", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [stateId], "enemy1"));
-    MRLively.world.transferEntity(enemy1, floorId, 13, 4);   // 部屋入り口へ配置
+    TestEnv.transferEntity(enemy1, floorId, 13, 4);   // 部屋入り口へ配置
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -136,7 +136,7 @@ test("ai.Escape.3", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [stateId], "enemy1"));
-    MRLively.world.transferEntity(enemy1, floorId, 13, 4);   // 部屋入り口へ配置
+    TestEnv.transferEntity(enemy1, floorId, 13, 4);   // 部屋入り口へ配置
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -178,7 +178,7 @@ test("ai.Escape.SpeedLevel2", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_金剛猫A").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, floorId, 12, 4);
+    TestEnv.transferEntity(enemy1, floorId, 12, 4);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -206,8 +206,8 @@ test("ai.Escape.Issue1", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_金剛猫A").id, [], "enemy1"));
     const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_金剛猫A").id, [stateId], "enemy2"));
-    MRLively.world.transferEntity(enemy1, floorId, 13, 4);   // 部屋入り口
-    MRLively.world.transferEntity(enemy2, floorId, 14, 4);   // 通路
+    TestEnv.transferEntity(enemy1, floorId, 13, 4);   // 部屋入り口
+    TestEnv.transferEntity(enemy2, floorId, 14, 4);   // 通路
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -231,8 +231,8 @@ test("ai.Escape.Issue2", () => {
     
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_金剛猫A").id, [], "enemy1"));
     const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy2"));
-    MRLively.world.transferEntity(enemy1, floorId, 7, 13);
-    MRLively.world.transferEntity(enemy2, floorId, 8, 13);
+    TestEnv.transferEntity(enemy1, floorId, 7, 13);
+    TestEnv.transferEntity(enemy2, floorId, 8, 13);
     enemy1.dir = 6;
     enemy2.dir = 4;
 

@@ -53,7 +53,7 @@ export class SChainAfterScheduler {
                     throw new Error("Unreachable.");
             }
 
-            if (cctx.isRunning()) {
+            if (cctx.isRunning) {
                 break;
             }
         }
@@ -66,8 +66,8 @@ export class SChainAfterScheduler {
     private process_StabilizeSituation(cctx: SCommandContext): void {
         
         {
-            for (const entity of MRLively.map.entities()) {
-                const block = MRLively.map.block(entity.mx, entity.my);
+            for (const entity of MRLively.camera.currentMap.entities()) {
+                const block = MRLively.camera.currentMap.block(entity.mx, entity.my);
                 const currentLayer = block.findEntityLayerKind(entity);
                 assert(currentLayer);
                 const homeLayer = entity.getHomeLayer();
@@ -77,7 +77,7 @@ export class SChainAfterScheduler {
             }
         }
         
-        for (const entity of MRLively.map.entities()) {
+        for (const entity of MRLively.camera.currentMap.entities()) {
             entity.iterateBehaviorsReverse(b => {
                 b.onStabilizeSituation(entity, cctx);
                 return true;
@@ -92,7 +92,7 @@ export class SChainAfterScheduler {
 
     private process_PreviewDead(cctx: SCommandContext): void {
 
-        for (const entity of MRLively.map.entities()) {
+        for (const entity of MRLively.camera.currentMap.entities()) {
             if (entity.isDeathStateAffected()) {
                 cctx.postActivity( (new LActivity()).setup(MRBasics.actions.dead, entity));
             }
@@ -105,7 +105,7 @@ export class SChainAfterScheduler {
     private process_ResolvePermanentDeath(cctx: SCommandContext): void {
         
         // 戦闘不能の確定処理
-        for (const entity of MRLively.map.entities()) {
+        for (const entity of MRLively.camera.currentMap.entities()) {
             if (entity.isDeathStateAffected()) {
                 let result = SCommandResponse.Pass;
                 entity.iterateBehaviorsReverse(b => {

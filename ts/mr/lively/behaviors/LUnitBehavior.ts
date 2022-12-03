@@ -198,6 +198,9 @@ export class LUnitBehavior extends LBehavior {
             return SCommandResponse.Handled;
         }
         else if (activity.actionId() == MRBasics.actions.MoveToAdjacentActionId) {
+            if (self.hasTrait(MRBasics.traits.DisableMovement)) {
+                return SCommandResponse.Canceled;
+            }
 
             const offset = Helpers.dirToTileOffset(activity.effectDirection());
             const startX = self.mx;
@@ -244,7 +247,7 @@ export class LUnitBehavior extends LBehavior {
         else if (activity.actionId() == MRBasics.actions.PickActionId) {
             const inventory = self.findEntityBehavior(LInventoryBehavior);
             if (inventory) {
-                const block = MRLively.map.block(self.mx, self.my);
+                const block = MRLively.camera.currentMap.block(self.mx, self.my);
                 const layer = block.layer(DBlockLayerKind.Ground);
                 const itemEntity = layer.firstEntity();
                 if (itemEntity) {
@@ -256,7 +259,7 @@ export class LUnitBehavior extends LBehavior {
                         if (gold) {
                             // お金だった
                             inventory.gainGold(gold.gold());
-                            MRLively.map._removeEntity(itemEntity);
+                            MRLively.camera.currentMap._removeEntity(itemEntity);
                             cctx.postDestroy(itemEntity);
                             cctx.postMessage(tr2("%1は%2をひろった").format(name, UName.makeNameAsItem(itemEntity)));
                             SSoundManager.playPickItem();
@@ -264,7 +267,7 @@ export class LUnitBehavior extends LBehavior {
                         else {
                             // 普通のアイテムだった
                             if (inventory.canAddEntityWithStacking(itemEntity)) {
-                                MRLively.map._removeEntity(itemEntity);
+                                MRLively.camera.currentMap._removeEntity(itemEntity);
                                 inventory.addEntityWithStacking(itemEntity);
                                 cctx.postMessage(tr2("%1は%2をひろった").format(name, UName.makeNameAsItem(itemEntity)));
                                 SSoundManager.playPickItem();
@@ -291,7 +294,7 @@ export class LUnitBehavior extends LBehavior {
             assert(itemEntity);
             assert(inventory);
             
-            const block = MRLively.map.block(self.mx, self.my);
+            const block = MRLively.camera.currentMap.block(self.mx, self.my);
             const layer = block.layer(DBlockLayerKind.Ground);
             if (!layer.isContainsAnyEntity()) {
                 // 足元に置けそうなら試行
@@ -302,7 +305,7 @@ export class LUnitBehavior extends LBehavior {
                         }
                         else {
                             itemEntity.removeFromParent();
-                            MRLively.map.appearEntity(itemEntity, self.mx, self.my);
+                            MRLively.camera.currentMap.appearEntity(itemEntity, self.mx, self.my);
 
                             cctx.postMessage(tr("{0} を置いた。", UName.makeNameAsItem(itemEntity)));
                             cctx.post(itemEntity, self, subject, undefined, onGrounded);
@@ -399,16 +402,16 @@ export class LUnitBehavior extends LBehavior {
             
             const inventory = self.getEntityBehavior(LInventoryBehavior);
             const item1 = activity.object();
-            const block = MRLively.map.block(self.mx, self.my);
+            const block = MRLively.camera.currentMap.block(self.mx, self.my);
             const layer = block.layer(DBlockLayerKind.Ground);
             const item2 = layer.firstEntity();
             if (item2) {
                 // TODO: 呪いの処理など、アイテムを今いる場所から取り外せるかチェック入れる
 
-                MRLively.map._removeEntity(item2);
+                MRLively.camera.currentMap._removeEntity(item2);
                 inventory.removeEntity(item1);
 
-                MRLively.map.appearEntity(item1, self.mx, self.my);
+                MRLively.camera.currentMap.appearEntity(item1, self.mx, self.my);
                 inventory.addEntity(item2);
 
                 cctx.postMessage(tr("{0} と {1} を交換した。", UName.makeNameAsItem(item1), UName.makeNameAsItem(item2)));
@@ -616,7 +619,7 @@ export class LUnitBehavior extends LBehavior {
     private judgeFeetProcess(self: LEntity): [LFeetProcess, LEntity | undefined] {
         if (this._manualMovement) {
             if (self.immediatelyAfterAdjacentMoving) {
-                const targetEntity = MRLively.map.firstFeetEntity(self);
+                const targetEntity = MRLively.camera.currentMap.firstFeetEntity(self);
                 if (targetEntity && !targetEntity.findEntityBehavior(LTrapBehavior)) {
                     const reactions = targetEntity.queryReactions();
                     if (reactions.length > 0) {

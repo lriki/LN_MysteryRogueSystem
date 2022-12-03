@@ -18,15 +18,11 @@ test("activity.PickAndPut", () => {
     TestEnv.newGame();
 
     // actor1 配置
-    const actor1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
-    MRLively.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);  // (5, 5) へ配置
+    const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 5, 5);
 
     // item1 生成&配置
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb, [], "item1"));
-    MRLively.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 6, 5);  // (6, 5) へ配置。Item のデフォルトの追加先レイヤーは Ground.
-
-    // マップ移動
-    TestEnv.performFloorTransfer();
+    TestEnv.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 6, 5);  // (6, 5) へ配置。Item のデフォルトの追加先レイヤーは Ground.
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
@@ -50,7 +46,7 @@ test("activity.PickAndPut", () => {
     assert(inventory);
 
     // item1 は Map 上から外れている
-    const block = MRLively.map.block(6, 5);
+    const block = MRLively.camera.currentMap.block(6, 5);
     expect(block.layer(DBlockLayerKind.Ground).isContains(item1)).toBe(false);
 
     // item1 がインベントリに追加されている
@@ -78,17 +74,15 @@ test("activity.PickAtMoved", () => {
 
     // actor1 配置
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
+    TestEnv.integration.records = [];
 
     // item1 生成&配置
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb, [], "item1"));
-    MRLively.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    TestEnv.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     // enemy1 (ターン経過チェック用)
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
-
-    // マップ移動
-    //TestEnv.performFloorTransfer();
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 20, 10);
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
@@ -101,7 +95,7 @@ test("activity.PickAtMoved", () => {
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-    expect(enemy1.mx).toBe(19);  // enemy は動いていない (ターンは回っていない)
+    expect(enemy1.mx).toBe(19);
     expect(actor1.getEntityBehavior(LInventoryBehavior).items[0]).toBe(item1);   // アイテムを拾えていること
 
     // Item は移動アニメの後に Map から除外されること
@@ -127,7 +121,7 @@ test("activity.PickAtMoved.Maximum", () => {
 
     // item1 生成&配置
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb, [], "item1"));
-    MRLively.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    TestEnv.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
@@ -142,7 +136,7 @@ test("activity.PickAtMoved.Maximum", () => {
 
     const message = MRLively.messageHistory;
 
-    const block = MRLively.map.block(11, 10);
+    const block = MRLively.camera.currentMap.block(11, 10);
     const item = block.layer(DBlockLayerKind.Ground).firstEntity();
     expect(item).toBe(item1);
     expect(message.includesText("薬草")).toBeTruthy();

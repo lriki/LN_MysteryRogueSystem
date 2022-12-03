@@ -25,7 +25,7 @@ test("projectiles.Breath", () => {
     actor1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
     // 投げ当てテスト用に壁を作る
-    MRLively.map.block(12, 10)._tileShape = LTileShape.Wall;
+    MRLively.camera.currentMap.block(12, 10)._tileShape = LTileShape.Wall;
 
     MRSystem.scheduler.stepSimulation();
 
@@ -38,7 +38,7 @@ test("projectiles.Breath", () => {
     MRSystem.scheduler.stepSimulation();
 
     // スキル起点の特殊効果を持った Projectile は地面に落下せずに消える
-    const proj = MRLively.map.block(11, 10).layer(DBlockLayerKind.Ground).firstEntity();
+    const proj = MRLively.camera.currentMap.block(11, 10).layer(DBlockLayerKind.Ground).firstEntity();
     expect(proj).toBe(undefined);
 });
 

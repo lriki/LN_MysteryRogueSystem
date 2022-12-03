@@ -28,7 +28,7 @@ test("system.Inventory.Fully", () => {
 
     // item1 生成&配置
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草A").id, [], "item1"));
-    MRLively.world.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    MRLively.world.transferEntity(undefined, item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     

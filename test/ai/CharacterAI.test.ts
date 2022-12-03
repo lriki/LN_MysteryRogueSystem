@@ -20,7 +20,7 @@ test("ai.CharacterAI.Moving1", () => {
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_CharacterAI, 13, 5);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_CharacterAI, 13, 5);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
@@ -58,10 +58,10 @@ test("ai.CharacterAI.AttackOnDiagonalEdge", () => {
 
     // enemy1 (Player の右下に配置)
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 11);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 11);
 
     // Player の右に壁を作る
-    MRLively.map.block(11, 10)._tileShape = LTileShape.Wall;
+    MRLively.camera.currentMap.block(11, 10)._tileShape = LTileShape.Wall;
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
@@ -88,7 +88,7 @@ test("ai.CharacterAI.ActionPattern", () => {
 
     // enemy1 
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ドラゴンA").id));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_CharacterAI, 4, 4);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_CharacterAI, 4, 4);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
@@ -116,7 +116,7 @@ test("ai.CharacterAI.issue1", () => {
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, floorId, 11, 13);
+    TestEnv.transferEntity(enemy1, floorId, 11, 13);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
@@ -143,12 +143,12 @@ test("ai.CharacterAI.Issue2", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, floorId, 15, 4);
+    TestEnv.transferEntity(enemy1, floorId, 15, 4);
     enemy1.dir = 4;
 
     // enemy2 (x2 速, 1回攻撃)
     const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ウルフA").id, [], "enemy2"));
-    MRLively.world.transferEntity(enemy2, floorId, 14, 4);
+    TestEnv.transferEntity(enemy2, floorId, 14, 4);
     enemy2.dir = 6;
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -172,7 +172,7 @@ test("ai.CharacterAI.Issue3", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, floorId, 26, 14);
+    TestEnv.transferEntity(enemy1, floorId, 26, 14);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -204,27 +204,27 @@ test("ai.CharacterAI.Issue_NS#10", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_バットA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, floorId, 26, 14);
+    TestEnv.transferEntity(enemy1, floorId, 26, 14);
 
     const info = DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [MRData.getState("kState_仮眠2").id], "enemy1");
     const enemy2 = SEntityFactory.newEntity(info);
-    MRLively.world.transferEntity(enemy2, floorId, 25, 13);
+    TestEnv.transferEntity(enemy2, floorId, 25, 13);
     const enemy3 = SEntityFactory.newEntity(info);
-    MRLively.world.transferEntity(enemy3, floorId, 26, 13);
+    TestEnv.transferEntity(enemy3, floorId, 26, 13);
     const enemy4 = SEntityFactory.newEntity(info);
-    MRLively.world.transferEntity(enemy4, floorId, 27, 13);
+    TestEnv.transferEntity(enemy4, floorId, 27, 13);
 
     const enemy5 = SEntityFactory.newEntity(info);
-    MRLively.world.transferEntity(enemy5, floorId, 25, 14);
+    TestEnv.transferEntity(enemy5, floorId, 25, 14);
     const enemy6 = SEntityFactory.newEntity(info);
-    MRLively.world.transferEntity(enemy6, floorId, 27, 14);
+    TestEnv.transferEntity(enemy6, floorId, 27, 14);
 
     const enemy7 = SEntityFactory.newEntity(info);
-    MRLively.world.transferEntity(enemy7, floorId, 25, 15);
+    TestEnv.transferEntity(enemy7, floorId, 25, 15);
     const enemy8 = SEntityFactory.newEntity(info);
-    MRLively.world.transferEntity(enemy8, floorId, 26, 15);
+    TestEnv.transferEntity(enemy8, floorId, 26, 15);
     const enemy9 = SEntityFactory.newEntity(info);
-    MRLively.world.transferEntity(enemy9, floorId, 27, 15);
+    TestEnv.transferEntity(enemy9, floorId, 27, 15);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

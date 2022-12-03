@@ -13,15 +13,16 @@ beforeAll(() => {
 
 test("Abilities.Enemy.Division", () => {
     TestEnv.newGame();
+    const floorId = TestEnv.FloorId_FlatMap50x50;
 
     // actor1
-    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     player1.addState(TestEnv.StateId_CertainDirectAttack);   // 攻撃必中にする
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_苗色スライムA").id, [], "enemy1"));
     enemy1.addState(MRData.getState("kState_UTからぶり").id);   // Player を倒さないように
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    TestEnv.transferEntity(enemy1, floorId, 11, 10);
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
@@ -33,18 +34,18 @@ test("Abilities.Enemy.Division", () => {
     MRSystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, MRData.system.skills.normalAttack, 6).withConsumeAction());
     MRSystem.dialogContext.activeDialog().submit();
 
-    const entityCount1 = MRLively.map.entities().length;
+    const entityCount1 = MRLively.camera.currentMap.entities().length;
 
     MRLively.world.random().resetSeed(9);     // 乱数調整
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const eintites = MRLively.map.entities();
+    const eintites = MRLively.camera.currentMap.entities();
     const enemy2 = eintites[eintites.length - 1];
 
     const atk2 = enemy1.getActualParam(MRBasics.params.atk);
     expect(atk2).toBe(atk1);    // 分裂後にパラメータが増えてしまう問題の修正確認
 
     expect(enemy1.isDeathStateAffected()).toBeFalsy();  // 倒しちゃってない？
-    const entityCount2 = MRLively.map.entities().length;
+    const entityCount2 = MRLively.camera.currentMap.entities().length;
     expect(entityCount2).toBe(entityCount1 + 1);    // 分裂でエンティティが増えていること
 });

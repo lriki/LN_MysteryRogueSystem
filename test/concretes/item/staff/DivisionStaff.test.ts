@@ -26,11 +26,11 @@ test("concretes.item.staff.DivisionStaff.basic", () => {
 
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
+    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
-    const entityCount1 = MRLively.map.entities().length;
+    const entityCount1 = MRLively.camera.currentMap.entities().length;
 
     //----------------------------------------------------------------------------------------------------
 
@@ -40,7 +40,7 @@ test("concretes.item.staff.DivisionStaff.basic", () => {
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const entityCount2 = MRLively.map.entities().length;
+    const entityCount2 = MRLively.camera.currentMap.entities().length;
     expect(entityCount2).toBe(entityCount1 + 1);    // 分裂でエンティティが増えていること
 });
 
@@ -56,7 +56,7 @@ test("concretes.item.staff.DivisionStaff.Issue1", () => {
     inventory.addEntity(item1);
 
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ウルフA").id, [stateId], "enemy1"));
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
+    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -69,7 +69,7 @@ test("concretes.item.staff.DivisionStaff.Issue1", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // findLast
-    const entities = MRLively.map.entities();
+    const entities = MRLively.camera.currentMap.entities();
     let enemy2;
     for (let i = entities.length - 1; entities.length >= 0; --i) {
         const entity = entities[i];

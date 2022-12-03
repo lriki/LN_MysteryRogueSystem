@@ -22,7 +22,7 @@ test("concretes.states.目つぶし", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [stateId], "enemy1"));
     enemy1.dir = 6; // 右へ
-    MRLively.world.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     expect(SView.getLookNames(actor1, enemy1).name != enemy1.getDisplayName().name).toBe(true);
     expect(SView.getTilemapView().visible).toBe(false);

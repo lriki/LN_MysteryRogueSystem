@@ -28,14 +28,14 @@ import { DAppearanceTableEntity } from "../data/DLand";
  * LMap へのアイテムや敵の生成・配置など、ゲーム進行に伴う Map 上の変化を管理するクラス。
  */
 export class SMapManager {
-    private _map: LMap;
+    private _map: LMap | undefined;
     private _enemySpanwRate: number = 10;
     private _enemySpawnCount: number = 0;   // TODO: これは Ojbect 側に持って行かないとまずいかも
     private _needRefreshVisual: boolean = false;
     private _exitPoint: LEntity | undefined;
 
     constructor() {
-        this._map = MRLively.map;
+        //this._map = MRLively.camera.currentMap;
         this._enemySpawnCount = this._enemySpanwRate;
     }
 
@@ -48,7 +48,8 @@ export class SMapManager {
         this._map = map;
     }
 
-    public map(): LMap {
+    public get map(): LMap {
+        assert(this._map);
         return this._map;
     }
 
@@ -57,7 +58,7 @@ export class SMapManager {
     }
 
     public setupMap(initialMap: FMap): void {
-        const newFloorId = this._map.floorId();
+        const newFloorId = this.map.floorId();
 
         if (newFloorId.isNormalMap()) {
             
@@ -71,7 +72,7 @@ export class SMapManager {
     }
 
     private setupRandomMap(initialMap: FMap): void {
-        const floorId = this._map.floorId();
+        const floorId = this.map.floorId();
 
         this.requestRefreshVisual();
 
@@ -87,7 +88,7 @@ export class SMapManager {
                 assert(prefab);
 
                 this._exitPoint = SEntityFactory.newBasicExitPoint();
-                MRLively.world.transferEntity(this._exitPoint, floorId, exitPoint.mx(), exitPoint.my());
+                MRLively.world.transferEntity(undefined, this._exitPoint, floorId, exitPoint.mx(), exitPoint.my());
             }
         }
         
@@ -100,7 +101,7 @@ export class SMapManager {
             
             //const objects = REGame.world.objects();
             for (const entity of enterdEntities) {
-                if (entity.floorId.equals(this._map.floorId())) {
+                if (entity.floorId.equals(this.map.floorId())) {
 
                     const layer = entity.getHomeLayer();
                     const block = this.findSpawnableBlockRandom(layer);
@@ -114,7 +115,7 @@ export class SMapManager {
         // Enemy 初期生成
         const enemyCount = 5;
         for (let i = 0; i < enemyCount; i++) {
-            const candidateBlocks = this._map.getSpawnableBlocks(DBlockLayerKind.Unit);
+            const candidateBlocks = this.map.getSpawnableBlocks(DBlockLayerKind.Unit);
             if (candidateBlocks.length > 0) {
                 const block = candidateBlocks[this.rand().nextIntWithMax(candidateBlocks.length)];
                 this.spawnEnemy(block.mx, block.my);
@@ -124,7 +125,7 @@ export class SMapManager {
         // Item 初期生成
         const itemCount = 5;
         for (let i = 0; i < itemCount; i++) {
-            const candidateBlocks = this._map.getSpawnableBlocks(DBlockLayerKind.Ground);
+            const candidateBlocks = this.map.getSpawnableBlocks(DBlockLayerKind.Ground);
             if (candidateBlocks.length > 0) {
                 const block = candidateBlocks[this.rand().nextIntWithMax(candidateBlocks.length)];
                 this.spawnItem(block.mx, block.my);
@@ -136,7 +137,7 @@ export class SMapManager {
         this.spawnTraps(trapCount);
 
         // Event 配置
-        const eventTable = this._map.land2().landData().appearanceTable.events[floorId.floorNumber()];
+        const eventTable = this.map.land2().landData().appearanceTable.events[floorId.floorNumber()];
         for (const i of eventTable) {
             MRSystem.integration.onLocateRmmzEvent(i.rmmzEventId, 0, 0);
         }
@@ -167,7 +168,7 @@ export class SMapManager {
 
     public buildStructurs(): void {
         // モンスターハウス
-        for (const s of this._map.structures()) {
+        for (const s of this.map.structures()) {
             if (s.id() == 0) {
                 // dummy
             }
@@ -192,8 +193,8 @@ export class SMapManager {
 
     public attemptRefreshVisual(): void {
         if (this._needRefreshVisual) {
-            if (this._map.floorId().isRandomMap()) {
-                MRSystem.integration.refreshGameMap(MRLively.map);
+            if (this.map.floorId().isRandomMap()) {
+                MRSystem.integration.refreshGameMap(MRLively.camera.currentMap);
             }
             else {
                 // 固定マップの場合は RMMZ 側で既に準備済みなので更新不要
@@ -219,7 +220,7 @@ export class SMapManager {
         assert(player)
 
         const result: LEntity[] = [];
-        const isFixedMap = this._map.floorId().isFixedMap();
+        const isFixedMap = this.map.floorId().isFixedMap();
 
         const objects = MRLively.world.objects();
         for (let i = 1; i < objects.length; i++) {
@@ -234,9 +235,9 @@ export class SMapManager {
                 // onLoadFixedMapEvents() によって既に追加されているものは対象外
                 if (entity.isAppearedOnMap()) continue;
 
-                if (this._map.floorId().equals(entity.floorId) && !isEnterd) {
+                if (this.map.floorId().equals(entity.floorId) && !isEnterd) {
                     //if (isFixedMap) {
-                        this._map._reappearEntity(entity);
+                        this.map._reappearEntity(entity);
                         result.push(entity);
                     //}
                     /*
@@ -263,7 +264,7 @@ export class SMapManager {
         
 
         // 
-        const spawnableBlocks = this._map.roomFloorBlocks().filter(b => b.isContinuation() && !b.layer(layer).isContainsAnyEntity());
+        const spawnableBlocks = this.map.roomFloorBlocks().filter(b => b.isContinuation() && !b.layer(layer).isContainsAnyEntity());
         if (spawnableBlocks.length == 0) return undefined;
 
         const candidateBlocks = spawnableBlocks;
@@ -284,8 +285,8 @@ export class SMapManager {
 
     /** 出現テーブルからランダムに選択して Entity を作る */
     public spawnEnemy(mx: number, my: number): LEntity[] {
-        const floorId = this._map.floorId();
-        const table = this._map.land2().landData().appearanceTable;
+        const floorId = this.map.floorId();
+        const table = this.map.land2().landData().appearanceTable;
         if (table.enemies.length == 0) return [];    // 出現テーブルが空
         const list = table.enemies[floorId.floorNumber()];
         if (list.length == 0) return [];    // 出現テーブルが空
@@ -297,7 +298,7 @@ export class SMapManager {
         }
         else {
             const entity = SEntityFactory.newEntity(data.spawiInfo, floorId);
-            MRLively.world.transferEntity(entity, floorId, mx, my);
+            MRLively.world.transferEntity(undefined, entity, floorId, mx, my);
             entites = [entity];
         }
 
@@ -312,27 +313,27 @@ export class SMapManager {
 
     /** 出現テーブルからランダムに選択して Item を作る */
     public spawnItem(mx: number, my: number): LEntity | undefined {
-        const floorId = this._map.floorId();
+        const floorId = this.map.floorId();
         const entity = USpawner.createItemFromSpawnTable(floorId, this.rand());
         if (entity) {
-            MRLively.world.transferEntity(entity, floorId, mx, my);
+            MRLively.world.transferEntity(undefined, entity, floorId, mx, my);
         }
         return entity;
     }
 
     /** 出現テーブルからランダムに選択して Trap を作る */
     public spawnTrap(mx: number, my: number): void {
-        const floorId = this._map.floorId();
+        const floorId = this.map.floorId();
         const entity = USpawner.createTrapFromSpawnTable(floorId, this.rand());
         if (entity) {
-            MRLively.world.transferEntity(entity, floorId, mx, my);
+            MRLively.world.transferEntity(undefined, entity, floorId, mx, my);
         }
     }
 
     public spawnTraps(count: number): void {
         const remain = paramMaxTrapsInMap - ULimitations.getTrapCountInMap();
         const actualCount = Math.min(count, remain);
-        const candidateBlocks = this._map.getSpawnableBlocks(DBlockLayerKind.Ground);
+        const candidateBlocks = this.map.getSpawnableBlocks(DBlockLayerKind.Ground);
         for (let i = 0; i < actualCount; i++) {
             if (candidateBlocks.length > 0) {
                 const block = candidateBlocks[this.rand().nextIntWithMax(candidateBlocks.length)];

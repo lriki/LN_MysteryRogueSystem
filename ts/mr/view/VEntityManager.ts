@@ -38,7 +38,7 @@ export class VEntityManager {
         }
         this._visualEntities = [];
 
-        MRLively.map.entities().forEach(x => {
+        MRLively.camera.currentMap.entities().forEach(x => {
             this.createVisual2(x);
         });
     }
@@ -139,8 +139,8 @@ export class VEntityManager {
     public createVisual2(entity: LEntity): void {
 
         let overrideEvent: IDataMapEvent | undefined;
-        const floorNumber = MRLively.map.floorId().floorNumber();
-        const land = MRLively.map.land2();
+        const floorNumber = MRLively.camera.currentMap.floorId().floorNumber();
+        const land = MRLively.camera.currentMap.land2();
         for (const info of land.landData().appearanceTable.entities) {
             if (info.startFloorNumber <= floorNumber && floorNumber <= info.lastFloorNumber) {
                 if (info.spawiInfo.entityId == entity.dataId) {

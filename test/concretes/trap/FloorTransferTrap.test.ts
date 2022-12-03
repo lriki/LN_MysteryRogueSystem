@@ -19,7 +19,7 @@ test("concretes.trap.FloorTransferTrap.nextFloor", () => {
 
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_突風の罠A").id, [], "trap1"));
-    MRLively.world.transferEntity(trap1, floorId, 11, 10);
+    MRLively.world.transferEntity(undefined, trap1, floorId, 11, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     

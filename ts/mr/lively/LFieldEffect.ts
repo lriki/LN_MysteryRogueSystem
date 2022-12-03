@@ -52,7 +52,7 @@ export class LSanctuaryFieldEffect extends LFieldEffect {
     // カバーしきれるように onStabilizeSituation() を使う。
     onStabilizeSituation(cctx: SCommandContext): SCommandResponse {
         const owner = this.owner;
-        const block = MRLively.map.tryGetBlock(owner.mx, owner.my);
+        const block = MRLively.camera.currentMap.tryGetBlock(owner.mx, owner.my);
         if (block) {
             for (const entity of block.getEntities()) {
                 // 戦闘不能ステート 付加

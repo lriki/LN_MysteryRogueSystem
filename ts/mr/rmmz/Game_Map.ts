@@ -4,7 +4,9 @@ import { Log } from "../Common";
 import { MRData } from "../data/MRData";
 import { MRDataManager } from "../data/MRDataManager";
 import { MRLively } from "../lively/MRLively";
+import { STransferMapDialog } from "../system/dialogs/STransferMapDialog";
 import { SGameManager } from "../system/SGameManager";
+import { MRView } from "../view/MRView";
 import { RMMZHelper } from "./RMMZHelper";
 
 declare global {
@@ -42,7 +44,7 @@ Game_Map.prototype.setup = function(mapId: number) {
     // 先に REMap をクリーンアップしておく。
     // 内部から onEntityLeavedMap() が呼び出され、ここで Game_Event の erase が走るため、
     // Game_Map 構築後にクリーンアップしてしまうと、新しく作成された Event が消えてしまう。
-    MRLively.map.releaseMap();
+    MRLively.camera.currentMap.releaseMap();
     MRLively.messageHistory.clear();
     
     // Game_Map.setup が呼ばれるのは、マップが切り替わるとき。
@@ -75,32 +77,7 @@ Game_Map.prototype.setup = function(mapId: number) {
     }
     */
 
-
-    if (MRLively.camera.isFloorTransfering()) {
-        if (MRLively.camera.transferingNewFloorId().isTacticsMap()) {
-            // Land 定義マップなど、初期配置されているイベントを非表示にしておく。
-            // ランダム Entity 生成ではこれが動的イベントの原本になることもあるので、削除はしない。
-            if (MRDataManager.isLandMap(mapId)) {
-                this.events().forEach(e => e.setTransparent(true));
-            }
-
-            $gamePlayer.hideFollowers();
-        }
-    }
-
-    SGameManager.performFloorTransfer();   // TODO: transferEntity でフラグ立った後すぐに performFloorTransfer() してるので、まとめていいかも
-
-    // レコーディング開始
-    MRLively.recorder.startRecording();
-
-    RMMZHelper.triggerOnStartEvent();
-    
-    // 新しいマップへの移動時は、遅くてもここで RMMZ 側の Map への更新をかけておく。
-    // Game_Map.setup は抜けるとこの後する Game_Player の locate が行われるが、それまでにマップのサイズを確定させておく必要がある。
-    // そうしないと、focusedEntity と Game_Player の位置同期がずれる。
-    MRSystem.mapManager.attemptRefreshVisual();
-
-    Log.d("RMMZ map setup finished.");
+    MRView.dialogManager?.onRmmzSetupMapCompleted();
 }
 
 
@@ -133,11 +110,11 @@ Game_Map.prototype.update = function(sceneActive: boolean) {
 
     //SGameManager.attemptRestartFloor();
 
-    if (MRLively.map.lastKeeperCount != MRLively.map.keeperCount &&
-        MRLively.map.keeperCount == 0) {
+    if (MRLively.camera.currentMap.lastKeeperCount != MRLively.camera.currentMap.keeperCount &&
+        MRLively.camera.currentMap.keeperCount == 0) {
         RMMZHelper.triggerOnKeeperLostEvent();
     }
-    MRLively.map.lastKeeperCount = MRLively.map.keeperCount;
+    MRLively.camera.currentMap.lastKeeperCount = MRLively.camera.currentMap.keeperCount;
 }
 
 /*
@@ -152,7 +129,7 @@ Game_Map.prototype.isRESystemMap = function(): boolean {
 
 const _Game_Map_autoplay = Game_Map.prototype.autoplay;
 Game_Map.prototype.autoplay = function() {
-    const floorId = MRLively.map.floorId();
+    const floorId = MRLively.camera.currentMap.floorId();
     if (floorId.isDungeonMap()) {
         const data = floorId.floorInfo();
         if (data.bgmName != "") {

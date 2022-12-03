@@ -74,7 +74,7 @@ test("Basic1", () => {
     const actor1 = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
 
     // フロア移動。最初はどこでもないフロアにいるので、マップ遷移が要求される。
-    MRLively.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
+    TestEnv.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
 
     // 【RMMZ で使うときはこのあたりで $dataMap をロードしたりする】
 

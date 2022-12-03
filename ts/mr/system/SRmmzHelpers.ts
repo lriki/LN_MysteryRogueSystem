@@ -11,6 +11,7 @@ import { DEntityCreateInfo, DEntitySpawner2 } from "ts/mr/data/DEntity";
 import { LEntity } from "../lively/LEntity";
 import { RmmzEventPrefabAttribute } from "../data/importers/DAttributeReader";
 import { DHelpers } from "../data/DHelper";
+import { MRSystem } from "./MRSystem";
 
 
 
@@ -63,7 +64,7 @@ export class SRmmzHelpers {
     }
 
     public static createEntityFromRmmzEvent(data: DEntityCreateInfo, eventId: number, x: number, y: number): LEntity {
-        const entity = SEntityFactory.newEntity(data, MRLively.map.floorId());
+        const entity = SEntityFactory.newEntity(data, MRLively.camera.currentMap.floorId());
 
         
         if (data.override) {
@@ -78,7 +79,7 @@ export class SRmmzHelpers {
         // }
         //entity.rmmzEventId = eventId;
         //entity.inhabitsCurrentFloor = true;
-        MRLively.world.transferEntity(entity, MRLively.map.floorId(), x, y);
+        MRLively.world.transferEntity(MRSystem.commandContext, entity, MRLively.camera.currentMap.floorId(), x, y);
         return entity;
     }
 

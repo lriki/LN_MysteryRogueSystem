@@ -31,7 +31,7 @@ export class LMonsterHouseStructure extends LStructure {
     }
 
     public get room(): LRoom {
-        return MRLively.map.room(this._roomId);
+        return MRLively.camera.currentMap.room(this._roomId);
     }
 
     public monsterHouseTypeId(): DMonsterHouseTypeId {
@@ -68,7 +68,7 @@ export class LMonsterHouseStructure extends LStructure {
     }
     
     onEntityLocated(cctx: SCommandContext, entity: LEntity): void {
-        const block = MRLively.map.block(entity.mx, entity.my);
+        const block = MRLively.camera.currentMap.block(entity.mx, entity.my);
         if (block._roomId == this._roomId) {
             // モンスターハウスから見て、侵入してきた entity が敵対関係にあれば、起動する
             if (Helpers.isHostileFactionId(this.monsterHouseFactionId(), entity.getOutwardFactionId()) &&

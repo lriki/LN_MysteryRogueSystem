@@ -26,8 +26,8 @@ export class VMapGuideGrid {
         let refresh = false;
 
         const entity = MRLively.camera.focusedEntity();
-        if (this._mapdataRevision != MRLively.map.mapdataRevision()) {
-            this._mapdataRevision = MRLively.map.mapdataRevision();
+        if (this._mapdataRevision != MRLively.camera.currentMap.mapdataRevision()) {
+            this._mapdataRevision = MRLively.camera.currentMap.mapdataRevision();
             refresh = true;
         }
 
@@ -57,7 +57,7 @@ export class VMapGuideGrid {
             this._mapData = new Array<number>(len);
         }
 
-        const map = MRLively.map;
+        const map = MRLively.camera.currentMap;
         for (let y = 0; y < this._mapHeight; y++) {
             for (let x = 0; x < this._mapWidth; x++) {
                 const block = map.block(x, y);

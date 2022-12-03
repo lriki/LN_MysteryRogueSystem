@@ -221,7 +221,7 @@ export class LScheduler2 {
         this.currentRunIndex = 0;
 
         // 行動できるすべての entity を集める
-        for (const entity of MRLively.map.entities()) {
+        for (const entity of MRLively.camera.currentMap.entities()) {
             const behavior = entity.findEntityBehavior(LUnitBehavior);
             if (behavior) {
                 //const canAct = entity.iterateStates(s => s.stateEffect().restriction != DStateRestriction.NotAction);

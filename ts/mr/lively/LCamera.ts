@@ -5,6 +5,9 @@ import { assert, Log, MRSerializable } from "ts/mr/Common";
 import { LEntityId } from "./LObject";
 import { LFloorId } from "./LFloorId";
 import { LUnitBehavior } from "./behaviors/LUnitBehavior";
+import { STransferMapDialog, STransferMapSource } from "../system/dialogs/STransferMapDialog";
+import { SCommandContext } from "../system/SCommandContext";
+import { LMap } from "./LMap";
 
 /**
  * 始点位置。ツクールの Game_Player と連携する。
@@ -48,11 +51,18 @@ import { LUnitBehavior } from "./behaviors/LUnitBehavior";
  * 
  */
 @MRSerializable
-export class LCamera {
+export class LCamera {  // TODO: MapView とかの方がいいかもしれない
     private _focusedEntityId: LEntityId = LEntityId.makeEmpty();
-    private _transferingNewFloorId: LFloorId = LFloorId.makeEmpty();
-    private _transferingNewX: number = 0;
-    private _transferingNewY: number = 0;
+
+    currentFloorId: LFloorId = LFloorId.makeEmpty();
+
+    // private _transferingNewFloorId: LFloorId = LFloorId.makeEmpty();
+    // private _transferingNewX: number = 0;
+    // private _transferingNewY: number = 0;
+
+    public get currentMap(): LMap {
+        return MRLively.world.map(this.currentFloorId);
+    }
     
 
     focusedEntityId(): LEntityId {
@@ -85,6 +95,7 @@ export class LCamera {
         }
 
         this._focusedEntityId = entity.entityId();
+        this.currentFloorId = entity.floorId.clone();
 
         const unit = entity.findEntityBehavior(LUnitBehavior);
         if (unit) {
@@ -96,32 +107,37 @@ export class LCamera {
         this._focusedEntityId = LEntityId.makeEmpty();
     }
 
-    isFloorTransfering(): boolean {
-        return this._transferingNewFloorId.hasAny();
-    }
+    // isFloorTransfering(): boolean {
+    //     return this._transferingNewFloorId.hasAny();
+    // }
 
-    transferingNewFloorId(): LFloorId {
-        return this._transferingNewFloorId;
-    }
+    // transferingNewFloorId(): LFloorId {
+    //     return this._transferingNewFloorId;
+    // }
     
-    _reserveFloorTransferToFocusedEntity(): void {
+    _reserveFloorTransferToFocusedEntity(cctx: SCommandContext): void {
         const entity = this.focusedEntity();
         if (entity) {
-            this.reserveFloorTransfer(entity.floorId, entity.mx, entity.my, 2);
+            //cctx.openDialog(entity, new STransferMapDialog(STransferMapSource.FromCommand, entity.floorId, entity.mx, entity.my, 2), false);
+            MRSystem.dialogContext.open(new STransferMapDialog(STransferMapSource.FromCommand, entity.floorId, entity.mx, entity.my, entity.dir));
+            this.currentFloorId = entity.floorId.clone();
+
+            //this.reserveFloorTransfer(entity.floorId, entity.mx, entity.my, 2);
         }
     }
 
-    private reserveFloorTransfer(floorId: LFloorId, x: number, y: number, d: number): void {
-        this._transferingNewFloorId = floorId;
-        this._transferingNewX = x;
-        this._transferingNewY = y;
-        MRSystem.integration.onReserveTransferMap(floorId.rmmzMapId(), x, y, d);
-    }
+    /** @deprecated */
+    // private reserveFloorTransfer(floorId: LFloorId, x: number, y: number, d: number): void {
+    //     this._transferingNewFloorId = floorId;
+    //     this._transferingNewX = x;
+    //     this._transferingNewY = y;
+    //     MRSystem.integration.onReserveTransferMap(floorId.rmmzMapId(), x, y, d);
+    // }
 
-    clearFloorTransfering() {
-        this._transferingNewFloorId = LFloorId.makeEmpty();
-        this._transferingNewX = 0;
-        this._transferingNewY = 0;
-    }
+    // clearFloorTransfering() {
+    //     this._transferingNewFloorId = LFloorId.makeEmpty();
+    //     this._transferingNewX = 0;
+    //     this._transferingNewY = 0;
+    // }
 }
 

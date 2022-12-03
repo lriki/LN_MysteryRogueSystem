@@ -20,7 +20,7 @@ test("concretes.trap.WarpTrap.Basic", () => {
 
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_バネA").id, [], "trap1"));
-    MRLively.world.transferEntity(trap1, floorId, 11, 10);
+    MRLively.world.transferEntity(undefined, trap1, floorId, 11, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     

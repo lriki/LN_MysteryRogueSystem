@@ -74,7 +74,7 @@ export class LTrapBehavior extends LBehavior {
     }
 
     public isExposedFor(target: LEntity): boolean {
-        if (MRLively.map.trapClarity) return true;
+        if (MRLively.camera.currentMap.trapClarity) return true;
         if (target.hasTrait(MRBasics.traits.ForceVisible)) return true;
         return this.exposed();
     }

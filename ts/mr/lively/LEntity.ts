@@ -147,7 +147,7 @@ export class LEntity extends LObject
             SEntityFactory.buildEntity(this);
 
             // 現在マップ上での変更であれば、再出現の処理を回すことで、見た目もリセットする
-            if (this.floorId.equals(MRLively.map.floorId())) {
+            if (this.floorId.equals(MRLively.camera.currentMap.floorId())) {
                 MRSystem.integration.entityReEnterMap(this);
             }
         }
@@ -341,8 +341,8 @@ export class LEntity extends LObject
 
     onFinalize(): void {
         // 現在マップ上の Entity 削除
-        if (this.floorId.equals(MRLively.map.floorId())) {
-            MRLively.map._removeEntity(this);
+        if (this.floorId.equals(MRLively.camera.currentMap.floorId())) {
+            MRLively.camera.currentMap._removeEntity(this);
         }
         this.clearInstance();
         MRLively.scheduler.invalidateEntity(this);
@@ -1535,7 +1535,7 @@ export class LEntity extends LObject
      */
     isOnGround(): boolean {
         if (this.floorId.hasAny()) {
-            const block = MRLively.map.block(this.mx, this.my);
+            const block = MRLively.camera.currentMap.block(this.mx, this.my);
             return block.findEntityLayerKind(this) == DBlockLayerKind.Ground;
         }
         else {
@@ -1549,7 +1549,7 @@ export class LEntity extends LObject
 
     /** 0 is Invalid. */
     public roomId(): LRoomId {
-        return MRLively.map.block(this.mx, this.my)._roomId;
+        return MRLively.camera.currentMap.block(this.mx, this.my)._roomId;
     }
 
     public isOnRoom(): boolean {
@@ -1561,7 +1561,7 @@ export class LEntity extends LObject
     }
 
     public layer(): DBlockLayerKind {
-        const r = MRLively.map.block(this.mx, this.my).findEntityLayerKind(this);
+        const r = MRLively.camera.currentMap.block(this.mx, this.my).findEntityLayerKind(this);
         assert(r);
         return r;
     }
@@ -1573,8 +1573,8 @@ export class LEntity extends LObject
 
     /** 現在のマップ上に出現しているか (いずれかの Block 上に存在しているか) */
     public isAppearedOnMap(): boolean {
-        if (!MRLively.map.isValidPosition(this.mx, this.my)) return false;
-        const block = MRLively.map.block(this.mx, this.my);
+        if (!MRLively.camera.currentMap.isValidPosition(this.mx, this.my)) return false;
+        const block = MRLively.camera.currentMap.block(this.mx, this.my);
         return block.containsEntity(this);
     }
 

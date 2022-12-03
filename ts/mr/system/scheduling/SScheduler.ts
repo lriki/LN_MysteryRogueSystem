@@ -52,12 +52,12 @@ export class SScheduler {
                 break;
             }
 
-            if (MRLively.camera.isFloorTransfering()) {
-                // マップ遷移中。
-                // postTransferFloor() の実行によって遷移が発生した場合は一度実行ループを抜けておかないと、
-                // 遷移が実際に行われる前に次のコマンド実行に進んでしまう。
-                break;
-            }
+            // if (MRLively.camera.isFloorTransfering()) {
+            //     // マップ遷移中。
+            //     // postTransferFloor() の実行によって遷移が発生した場合は一度実行ループを抜けておかないと、
+            //     // 遷移が実際に行われる前に次のコマンド実行に進んでしまう。
+            //     break;
+            // }
 
             if (this._brace) {
                 this._brace = false;
@@ -78,7 +78,7 @@ export class SScheduler {
             */
 
             // 現在のコマンドリストの実行は終了しているが、Visual 側がアニメーション中であれば完了を待ってから次の Unit の行動を始めたい
-            if (!commandContext.isRunning() && MRSystem.integration.checkVisualSequelRunning()) {
+            if (!commandContext.isRunning && MRSystem.integration.checkVisualSequelRunning()) {
                 break;
             }
 
@@ -86,10 +86,10 @@ export class SScheduler {
             // Dialog 表示中でも update を抜けた時に詰まれているコマンドは実行されるようにしたい。
             // 向き変更なども Activity 化しておかないと、行動履歴が付けづらい。
             // そのため Dialog の update 前に Command 実行しておく。
-            if (commandContext.isRunning()) {
+            if (commandContext.isRunning) {
                 commandContext._processCommand();
 
-                if (!commandContext.isRunning()) {
+                if (!commandContext.isRunning) {
                     // _processCommand() の後で isRunning が落ちていたら、
                     // 実行中コマンドリストの実行が完了した。
                     this.onCommandChainConsumed();
@@ -130,7 +130,7 @@ export class SScheduler {
                 //if (!commandContext.isRecordingListEmpty()) {
                 //    commandContext._submit(); // swap
                 //}
-                assert(commandContext.isRecordingListEmpty());
+                assert(commandContext.isRecordingListEmpty);
 
 
                 

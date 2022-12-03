@@ -17,7 +17,7 @@ test("system.TaskContext.Basic", () => {
         result.push(2);
     });
 
-    while (ctx.isRunning()) {
+    while (ctx.isRunning) {
         ctx._processCommand();
     }
 
@@ -43,7 +43,7 @@ test("system.TaskContext.PostInHandler", () => {
         });
     });
 
-    while (ctx.isRunning()) {
+    while (ctx.isRunning) {
         ctx._processCommand();
     }
 
@@ -81,7 +81,7 @@ test("system.TaskContext.SingleThenCatch", () => {
         result.push(5);
     });
 
-    while (ctx.isRunning()) {
+    while (ctx.isRunning) {
         ctx._processCommand();
     }
 
@@ -109,7 +109,7 @@ test("system.TaskContext.SequentialThen", () => {
         result.push(3);
     });
     
-    while (ctx.isRunning()) {
+    while (ctx.isRunning) {
         ctx._processCommand();
     }
 
@@ -148,7 +148,7 @@ test("system.TaskContext.NearCache", () => {
         result.push(6);
     });
     
-    while (ctx.isRunning()) {
+    while (ctx.isRunning) {
         ctx._processCommand();
     }
 
@@ -194,7 +194,7 @@ test("system.TaskContext.Finally", () => {
         result.push(9);
     });
     
-    while (ctx.isRunning()) {
+    while (ctx.isRunning) {
         ctx._processCommand();
     }
 
@@ -230,12 +230,12 @@ test("system.TaskContext.DialogLike", () => {
     });
     
     
-    while (ctx.isRunning() || dlg) {
+    while (ctx.isRunning || dlg) {
         if (dlg) {
             dlg();
             dlg = undefined;
         }
-        if (ctx.isRunning()) {
+        if (ctx.isRunning) {
             ctx._processCommand();
         }
     }
@@ -268,7 +268,7 @@ test("system.TaskContext.Nesting", () => {
         result.push(4);
     });
     
-    while (ctx.isRunning()) {
+    while (ctx.isRunning) {
         ctx._processCommand();
     }
 
@@ -328,7 +328,7 @@ test("system.TaskContext.Nesting2", () => {
         c1.next();
     })
     
-    while (ctx.isRunning()) {
+    while (ctx.isRunning) {
         ctx._processCommand();
     }
 
@@ -374,7 +374,7 @@ test("system.TaskContext.WhenAll1", () => {
         result.push(5);
     });
 
-    while (ctx.isRunning()) {
+    while (ctx.isRunning) {
         ctx._processCommand();
     }
 

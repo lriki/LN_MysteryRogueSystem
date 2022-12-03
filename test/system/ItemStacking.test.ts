@@ -27,7 +27,7 @@ test("system.ItemStacking.FullyInventoryIssue", () => {
 
     // 5本の矢を作り、足元に置く
     const arrow2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢A").id, [], "item1").withStackCount(5));
-    MRLively.world.transferEntity(arrow2, floorId, 10, 10);
+    MRLively.world.transferEntity(undefined, arrow2, floorId, 10, 10);
 
     // 残り持てる数だけ適当なアイテムを持たせる
     const remaining = inventory.remaining;
