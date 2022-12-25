@@ -1,5 +1,5 @@
 import { assert } from "ts/mr/Common";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { MRData } from "ts/mr/data/MRData";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
@@ -63,7 +63,7 @@ test("concretes.enemies.ArrowShooter.OutOfSight", () => {
     
     // enemy1 (Player とは別の部屋に配置)
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_インプA").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, floorId, 9, 4);
+    TestEnv.transferEntity(enemy1, floorId, 9, 4);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -77,7 +77,7 @@ test("concretes.enemies.ArrowShooter.OutOfSight", () => {
     }
 
     // 矢が撃たれ、床に落ちていないこと
-    const item1 = MRLively.camera.currentMap.block(9, 4).getFirstEntity();
+    const item1 = MRLively.mapView.currentMap.block(9, 4).getFirstEntity();
     expect(item1).toBeUndefined();
 });
 
@@ -88,10 +88,10 @@ test("concretes.enemies.ArrowShooter.ArrowStack", () => {
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_インプA").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, floorId, 13, 10);
+    TestEnv.transferEntity(enemy1, floorId, 13, 10);
 
     // Player と Enemy の間に壁を作る
-    MRLively.camera.currentMap.block(11, 10)._tileShape = LTileShape.Wall;
+    MRLively.mapView.currentMap.block(11, 10)._tileShape = LTileShape.Wall;
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -104,7 +104,7 @@ test("concretes.enemies.ArrowShooter.ArrowStack", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 壁に当たって落ちた arrow のスタック数を確認
-    const arrow1 = MRLively.camera.currentMap.block(12, 10).getFirstEntity();
+    const arrow1 = MRLively.mapView.currentMap.block(12, 10).getFirstEntity();
     assert(arrow1);
     expect(arrow1._stackCount).toBe(1);
 });

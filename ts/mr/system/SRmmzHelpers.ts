@@ -7,9 +7,9 @@ import { MRLively } from "ts/mr/lively/MRLively";
 import { LTileShape } from "ts/mr/lively/LBlock";
 import { paramFixedMapItemShopRoomRegionId, paramFixedMapMonsterHouseRoomRegionId, paramFixedMapPassagewayRegionId, paramFixedMapRoomRegionId, paramRandomMapPaddingX, paramRandomMapPaddingY } from "ts/mr/PluginParameters";
 import { SEntityFactory } from "./internal";
-import { DEntityCreateInfo, DEntitySpawner2 } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo, DEntitySpawner2, DUniqueSpawner } from "ts/mr/data/DSpawner";
 import { LEntity } from "../lively/LEntity";
-import { RmmzEventPrefabAttribute } from "../data/importers/DAttributeReader";
+import { DAnnotationReader, DRmmzPrefabAnnotation, DRmmzUniqueSpawnerAnnotation } from "../data/importers/DAnnotationReader";
 import { DHelpers } from "../data/DHelper";
 import { MRSystem } from "./MRSystem";
 
@@ -49,7 +49,7 @@ export class SRmmzHelpers {
                 const data = DEntitySpawner2.makeFromEventData(e, rmmzMapId);
                 if (data) {
                     if (data.troopId > 0) {
-                        SEntityFactory.spawnTroopAndMembers( MRData.troops[data.troopId], e.x, e.y,data.stateIds);
+                        SEntityFactory.spawnTroopAndMembers(MRLively.mapView.currentMap, MRData.troops[data.troopId], e.x, e.y,data.stateIds);
                     }
                     else {
                         if (data.entityId < 0) {
@@ -63,13 +63,33 @@ export class SRmmzHelpers {
         });
     }
 
+    public static getUnqueSpawners(mapDate: IDataMap, rmmzMapId: number): DUniqueSpawner[] {
+        const result: DUniqueSpawner[] = [];
+        for (const e of mapDate.events) {
+            if (e) {
+                const annotation = DAnnotationReader.readUniqueSpawnerAnnotationFromPage(e.pages[0]);
+                if (annotation) {
+                    const spawner = DUniqueSpawner.makeFromAnnotation(annotation);
+                    spawner.mx = e.x;
+                    spawner.my = e.y;
+                    if (annotation.override) {
+                        spawner.overrideRmmzEventMapId = rmmzMapId;
+                        spawner.overrideRmmzEventId = e.id;
+                    }
+                    result.push(spawner);
+                }
+            }
+        }
+        return result;
+    }
+
     public static createEntityFromRmmzEvent(data: DEntityCreateInfo, eventId: number, x: number, y: number): LEntity {
-        const entity = SEntityFactory.newEntity(data, MRLively.camera.currentMap.floorId());
+        const entity = SEntityFactory.newEntity(data, MRLively.mapView.currentMap.floorId());
 
         
         if (data.override) {
             entity.inhabitsCurrentFloor = true;
-            entity.rmmzEventId = eventId;
+            entity.setRmmzEventId(eventId);
         }
 
         // if (eventId == 19) {
@@ -79,7 +99,7 @@ export class SRmmzHelpers {
         // }
         //entity.rmmzEventId = eventId;
         //entity.inhabitsCurrentFloor = true;
-        MRLively.world.transferEntity(MRSystem.commandContext, entity, MRLively.camera.currentMap.floorId(), x, y);
+        MRLively.world.transferEntity(entity, MRLively.mapView.currentMap.floorId(), x, y);
         return entity;
     }
 
@@ -103,6 +123,7 @@ export class SRmmzHelpers {
         const height = $dataMap.height ?? 10;
         map.resetFromFullSize(width, height, 0, 0);
 
+        let regionCount = 0;
         for (let y = 0; y < map.innerHeight; y++) {
             for (let x = 0; x < map.innerWidth; x++) {
                 const block = map.block(x, y);
@@ -122,6 +143,20 @@ export class SRmmzHelpers {
                 }
                 else if (regionId == paramFixedMapPassagewayRegionId) {
                     block.setComponent(FBlockComponent.Passageway);
+                }
+
+                if (regionId > 0) {
+                    regionCount++;
+                }
+            }
+        }
+
+        // region の指定が全く無いマップは、全てのブロックを Room にする
+        if (regionCount == 0) {
+            for (let y = 0; y < map.innerHeight; y++) {
+                for (let x = 0; x < map.innerWidth; x++) {
+                    const block = map.block(x, y);
+                    block.setComponent(FBlockComponent.Room);
                 }
             }
         }

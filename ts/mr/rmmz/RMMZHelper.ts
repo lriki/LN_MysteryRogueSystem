@@ -83,7 +83,7 @@ export class RMMZHelper {
         if ($gamePlayer.isTransferring()) return;
 
 
-        const entity = MRLively.camera.focusedEntity();
+        const entity = MRLively.mapView.focusedEntity();
         if (entity && MRView.entityVisualSet) {
             const visual = MRView.entityVisualSet.findEntityVisualByEntity(entity);
             if (visual) {

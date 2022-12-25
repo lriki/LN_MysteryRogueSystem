@@ -42,7 +42,7 @@ export class VDirectionArrow extends Sprite {
     // override
     update(): void {
         
-        if (MRLively.camera.currentMap.floorId().isTacticsMap()) {
+        if (MRLively.mapView.currentMap.floorId().isTacticsMap2) {
             this.visible = true;
         }
         else {
@@ -50,7 +50,7 @@ export class VDirectionArrow extends Sprite {
             return;
         }
 
-        const entity = MRLively.camera.focusedEntity();
+        const entity = MRLively.mapView.focusedEntity();
         if (entity && MRView.entityVisualSet) {
             const visual = MRView.entityVisualSet.findEntityVisualByEntity(entity);
             if (!visual) {

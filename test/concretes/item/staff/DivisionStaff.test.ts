@@ -3,10 +3,9 @@ import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { MRBasics } from "ts/mr/data/MRBasics";
 import { assert } from "ts/mr/Common";
 
 beforeAll(() => {
@@ -26,11 +25,11 @@ test("concretes.item.staff.DivisionStaff.basic", () => {
 
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
-    const entityCount1 = MRLively.camera.currentMap.entities().length;
+    const entityCount1 = MRLively.mapView.currentMap.entities().length;
 
     //----------------------------------------------------------------------------------------------------
 
@@ -40,7 +39,7 @@ test("concretes.item.staff.DivisionStaff.basic", () => {
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const entityCount2 = MRLively.camera.currentMap.entities().length;
+    const entityCount2 = MRLively.mapView.currentMap.entities().length;
     expect(entityCount2).toBe(entityCount1 + 1);    // 分裂でエンティティが増えていること
 });
 
@@ -56,7 +55,7 @@ test("concretes.item.staff.DivisionStaff.Issue1", () => {
     inventory.addEntity(item1);
 
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ウルフA").id, [stateId], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -69,7 +68,7 @@ test("concretes.item.staff.DivisionStaff.Issue1", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // findLast
-    const entities = MRLively.camera.currentMap.entities();
+    const entities = MRLively.mapView.currentMap.entities();
     let enemy2;
     for (let i = entities.length - 1; entities.length >= 0; --i) {
         const entity = entities[i];

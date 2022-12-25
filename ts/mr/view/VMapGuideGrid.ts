@@ -25,9 +25,9 @@ export class VMapGuideGrid {
     public update(): void {
         let refresh = false;
 
-        const entity = MRLively.camera.focusedEntity();
-        if (this._mapdataRevision != MRLively.camera.currentMap.mapdataRevision()) {
-            this._mapdataRevision = MRLively.camera.currentMap.mapdataRevision();
+        const entity = MRLively.mapView.focusedEntity();
+        if (this._mapdataRevision != MRLively.mapView.currentMap.mapdataRevision()) {
+            this._mapdataRevision = MRLively.mapView.currentMap.mapdataRevision();
             refresh = true;
         }
 
@@ -57,7 +57,7 @@ export class VMapGuideGrid {
             this._mapData = new Array<number>(len);
         }
 
-        const map = MRLively.camera.currentMap;
+        const map = MRLively.mapView.currentMap;
         for (let y = 0; y < this._mapHeight; y++) {
             for (let x = 0; x < this._mapWidth; x++) {
                 const block = map.block(x, y);
@@ -73,7 +73,7 @@ export class VMapGuideGrid {
             }
         }
 
-        const entity = MRLively.camera.focusedEntity();
+        const entity = MRLively.mapView.focusedEntity();
         if (entity) {
             for (let i = 0; i < 100; i++) {
                 const offset = Helpers._dirToTileOffsetTable[entity.dir];

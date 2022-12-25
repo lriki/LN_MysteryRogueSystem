@@ -32,7 +32,7 @@ export class LEntryPointBehavior extends LBehavior {
     [onProceedFloorReaction](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
         const entity = args.self;
 
-        cctx.openDialog(entity, new SEventExecutionDialog(entity.rmmzEventId, entity), false);
+        cctx.openDialog(entity, new SEventExecutionDialog(entity.rmmzEventId, entity, entity), false);
 
         return SCommandResponse.Handled;
     }

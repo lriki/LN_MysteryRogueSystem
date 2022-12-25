@@ -4,7 +4,7 @@ import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { LTileShape } from "ts/mr/lively/LBlock";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
@@ -23,11 +23,11 @@ test("concretes.item.scroll.Sanctuary.NoEffect", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     enemy1.addState(TestEnv.StateId_CertainDirectAttack);   // 攻撃必中にする
-    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
 
     // item1: player1 と enemy1 の間に聖域を置いてみる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_聖域の巻物A").id, [], "item1"));
-    MRLively.world.transferEntity(undefined, item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    TestEnv.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
@@ -63,7 +63,7 @@ test("concretes.item.scroll.Sanctuary.Basic", () => {
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     // item1: 持たせる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_聖域の巻物A").id, [], "item1"));
@@ -104,14 +104,14 @@ test("concretes.item.scroll.Sanctuary.ForceDeth", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 9, 10);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 9, 10);
 
     // item1: player1 と enemy1 の間に聖域を置いてみる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_聖域の巻物A").id, [], "item1"));
     item1.getEntityBehavior(LGlueToGroundBehavior).glued = true;    // 張り付き状態にする
-    MRLively.world.transferEntity(undefined, item1, TestEnv.FloorId_FlatMap50x50, 6, 10);
+    TestEnv.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 6, 10);
     
-    MRLively.camera.currentMap.block(5, 10)._tileShape = LTileShape.Wall;
+    MRLively.mapView.currentMap.block(5, 10)._tileShape = LTileShape.Wall;
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 

@@ -1,16 +1,12 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
-import { TestUtils } from "test/TestUtils";
 import { LGoldBehavior } from "ts/mr/lively/behaviors/LGoldBehavior";
 import { MRBasics } from "ts/mr/data/MRBasics";
-import { SFormulaOperand } from "ts/mr/system/SFormulaOperand";
-import { LActionTokenType } from "ts/mr/lively/LActionToken";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -26,7 +22,7 @@ test("concretes.item.Gold", () => {
     // gold1 - 地面に配置
     const gold1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_GoldA").id, [], "gold1"));
     gold1.getEntityBehavior(LGoldBehavior).setGold(1000);
-    MRLively.world.transferEntity(undefined, gold1, TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
+    TestEnv.transferEntity(gold1, TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
 
     // gold2 - インベントリに入れる
     const gold2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_GoldA").id, [], "gold2"));
@@ -35,7 +31,7 @@ test("concretes.item.Gold", () => {
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 13, 10);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 13, 10);
     const hp1 = enemy1.getActualParam(MRBasics.params.hp);
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------

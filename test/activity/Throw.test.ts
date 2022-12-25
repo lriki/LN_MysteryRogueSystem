@@ -5,7 +5,7 @@ import { LTileShape } from "ts/mr/lively/LBlock";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../TestEnv";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { SDebugHelpers } from "ts/mr/system/SDebugHelpers";
 import { MRData } from "ts/mr/data/MRData";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
@@ -29,7 +29,7 @@ test("activity.Throw", () => {
     actor1.getEntityBehavior(LInventoryBehavior).addEntity(item2);
 
     // 投げ当てテスト用に壁を作る
-    MRLively.camera.currentMap.block(actor1.mx, actor1.my + 2)._tileShape = LTileShape.Wall;
+    MRLively.mapView.currentMap.block(actor1.mx, actor1.my + 2)._tileShape = LTileShape.Wall;
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 

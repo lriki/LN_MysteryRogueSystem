@@ -3,11 +3,9 @@ import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
-import { TestUtils } from "test/TestUtils";
 import { MRLively } from "ts/mr/lively/MRLively";
-import { MRBasics } from "ts/mr/data/MRBasics";
 import { SView } from "ts/mr/system/SView";
 import { SNavigationHelper } from "ts/mr/system/SNavigationHelper";
 
@@ -47,7 +45,7 @@ test("concretes.item.scroll.MapVisitorScroll", () => {
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    expect(MRLively.camera.currentMap.block(19, 4)._passed).toBeTruthy();
+    expect(MRLively.mapView.currentMap.block(19, 4)._passed).toBeTruthy();
     
     const visibility2 = SView.getEntityVisibility(enemy1);
     expect(visibility2.visible).toBeTruthy();
@@ -60,13 +58,13 @@ test("concretes.item.scroll.MapVisitorScroll", () => {
     
     const floorId2 = TestEnv.FloorId_UnitTestFlatMap50x50;
     
-    MRLively.world.transferEntity(MRSystem.commandContext, player1, floorId2, 10, 10);
+    MRLively.world.transferEntity(player1, floorId2, 10, 10);
     TestEnv.performFloorTransfer();
 
     // マップを切り替えれば可視フラグはリセットされる
-    expect(MRLively.camera.currentMap.unitClarity).toBeFalsy();
-    expect(MRLively.camera.currentMap.itemClarity).toBeFalsy();
-    expect(MRLively.camera.currentMap.trapClarity).toBeFalsy();
-    expect(MRLively.camera.currentMap.sightClarity).toBeFalsy();
+    expect(MRLively.mapView.currentMap.unitClarity).toBeFalsy();
+    expect(MRLively.mapView.currentMap.itemClarity).toBeFalsy();
+    expect(MRLively.mapView.currentMap.trapClarity).toBeFalsy();
+    expect(MRLively.mapView.currentMap.sightClarity).toBeFalsy();
 });
 

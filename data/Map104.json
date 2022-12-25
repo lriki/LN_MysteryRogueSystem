@@ -271,7 +271,7 @@
     null,
     {
       "id": 1,
-      "name": "ワールドマップ",
+      "name": "kFloor_ワールドマップ",
       "note": "",
       "pages": [
         {
@@ -345,7 +345,7 @@
     },
     {
       "id": 2,
-      "name": "自宅",
+      "name": "kFloor_自宅",
       "note": "",
       "pages": [
         {
@@ -385,6 +385,20 @@
               "indent": 0,
               "parameters": [
                 "    fixedMap: \"2-自宅\","
+              ]
+            },
+            {
+              "code": 408,
+              "indent": 0,
+              "parameters": [
+                "    unique: true,"
+              ]
+            },
+            {
+              "code": 408,
+              "indent": 0,
+              "parameters": [
+                "    fovSystem: \"SymmetricShadowcast\","
               ]
             },
             {

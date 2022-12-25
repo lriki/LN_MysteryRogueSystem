@@ -1,4 +1,4 @@
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { MRData } from "ts/mr/data/MRData";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
@@ -23,7 +23,7 @@ test("system.BDash.ArrowDamageStop", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_インプA").id, [], "enemy1"));
     enemy1.addState(MRData.getState("kState_UnitTest_投擲必中").id);    // 投擲必中
-    MRLively.world.transferEntity(undefined, enemy1, floorId, 15, 10);
+    TestEnv.transferEntity(enemy1, floorId, 15, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

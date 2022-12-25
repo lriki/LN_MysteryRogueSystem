@@ -18,17 +18,6 @@ export class VTransferMapDialog extends VDialog {
         const mapId = $gameMap.mapId();
 
         const transfaringInfo = this._model;//STransferMapDialog.current;
-        //if (MRLively.camera.isFloorTransfering()) {
-            if (transfaringInfo.newFloorId.isTacticsMap()) {
-                // Land 定義マップなど、初期配置されているイベントを非表示にしておく。
-                // ランダム Entity 生成ではこれが動的イベントの原本になることもあるので、削除はしない。
-                if (MRDataManager.isLandMap(mapId)) {
-                    $gameMap.events().forEach(e => e.setTransparent(true));
-                }
-
-                $gamePlayer.hideFollowers();
-            }
-        //}
 
         transfaringInfo.performFloorTransfer();   // TODO: transferEntity でフラグ立った後すぐに performFloorTransfer() してるので、まとめていいかも
 

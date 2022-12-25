@@ -1,8 +1,7 @@
 import { DBlockLayerKind } from "ts/mr/data/DCommon";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { MRData } from "ts/mr/data/MRData";
-import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { SFeetDialog } from "ts/mr/system/dialogs/SFeetDialog";
@@ -46,7 +45,7 @@ test("concretes.dialogs.FeetDialog.test", () => {
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 
     // item1 は Map 上から外れている
-    const block = MRLively.camera.currentMap.block(10, 10);
+    const block = MRLively.mapView.currentMap.block(10, 10);
     expect(block.layer(DBlockLayerKind.Ground).isContains(item1)).toBe(false);
 
     // item1 がインベントリに追加されている

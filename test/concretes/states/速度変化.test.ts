@@ -7,10 +7,8 @@ import { DBuffLevelOp, DBuffMode, DBuffType, DParamBuff, LStateLevelType } from 
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { LGenericRMMZStateBehavior } from "ts/mr/lively/states/LGenericRMMZStateBehavior";
-import { LActionTokenType } from "ts/mr/lively/LActionToken";
 import { LScheduler2 } from "ts/mr/lively/LScheduler";
 
 beforeAll(() => {
@@ -131,7 +129,7 @@ test("concretes.states.速度変化.Issue1", () => {
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 30, 10);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 30, 10);
 
     const wait = () => {
         MRSystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());

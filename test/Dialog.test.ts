@@ -1,11 +1,8 @@
-import { assert } from "ts/mr/Common";
-import { MRLively } from "ts/mr/lively/MRLively";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "./TestEnv";
-import { LFloorId } from "ts/mr/lively/LFloorId";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { MRData } from "ts/mr/data/MRData";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { SMotionSequel } from "ts/mr/system/SSequel";

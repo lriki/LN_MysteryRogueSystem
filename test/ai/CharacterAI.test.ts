@@ -2,7 +2,7 @@ import { TestEnv } from "../TestEnv";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { MRSystem } from "ts/mr/system/MRSystem";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { LTileShape } from "ts/mr/lively/LBlock";
 import { MRData } from "ts/mr/data/MRData";
@@ -12,6 +12,7 @@ beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
+// 部屋の入口へ向かって移動する
 test("ai.CharacterAI.Moving1", () => {
     TestEnv.newGame();
 
@@ -49,6 +50,41 @@ test("ai.CharacterAI.Moving1", () => {
     expect(enemy1.my).toBe(4);
 });
 
+test.each([1, 2, 3, 4, 5])("ai.CharacterAI.Tracking1(%i)", (a) => {
+    TestEnv.newGame();
+
+    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_CharacterAI, 17, 4);
+
+    const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_CharacterAI, 20, 4);
+
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    
+    //----------------------------------------------------------------------------------------------------
+
+    // Player は左へ移動して通路に入る。まだ Enemy の視界からは消えない。
+    MRSystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 4).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
+    
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    
+    // Enemy は接近している。
+    expect(enemy1.mx).toBe(19);
+    expect(enemy1.my).toBe(4);
+
+    //----------------------------------------------------------------------------------------------------
+
+    // Player は左へ移動。Enemy の視界から消える。
+    MRSystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 4).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
+    
+    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
+    
+    // Enemy は Player の匂いに従って、必ず接近してくる。
+    expect(enemy1.mx).toBe(18);
+    expect(enemy1.my).toBe(4);
+});
+
 // 壁角斜め方向への攻撃はしない
 test("ai.CharacterAI.AttackOnDiagonalEdge", () => {
     TestEnv.newGame();
@@ -61,7 +97,7 @@ test("ai.CharacterAI.AttackOnDiagonalEdge", () => {
     TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 11);
 
     // Player の右に壁を作る
-    MRLively.camera.currentMap.block(11, 10)._tileShape = LTileShape.Wall;
+    MRLively.mapView.currentMap.block(11, 10)._tileShape = LTileShape.Wall;
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     

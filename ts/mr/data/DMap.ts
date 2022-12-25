@@ -8,7 +8,7 @@ export enum REFloorMapKind {
 
     FixedMap,
     ShuffleMap,
-    RandomMap,
+    //RandomMap,
 }
 
 

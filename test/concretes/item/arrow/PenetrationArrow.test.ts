@@ -5,7 +5,7 @@ import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { LTileShape } from "ts/mr/lively/LBlock";
 
@@ -31,13 +31,13 @@ test("concretes.item.arrow.PenetrationArrow", () => {
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy2"));
-    MRLively.world.transferEntity(undefined, enemy1, floorId, 15, 10);
-    MRLively.world.transferEntity(undefined, enemy2, floorId, 17, 10);
+    TestEnv.transferEntity(enemy1, floorId, 15, 10);
+    TestEnv.transferEntity(enemy2, floorId, 17, 10);
     const enemy1HP1 = enemy1.getActualParam(MRBasics.params.hp);
     const enemy2HP1 = enemy2.getActualParam(MRBasics.params.hp);
 
     // Player の右に壁を作る
-    MRLively.camera.currentMap.block(11, 10)._tileShape = LTileShape.Wall;
+    MRLively.mapView.currentMap.block(11, 10)._tileShape = LTileShape.Wall;
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

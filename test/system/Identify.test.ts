@@ -3,7 +3,7 @@ import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { TestEnv } from "../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LFloorId } from "ts/mr/lively/LFloorId";
 import { UName } from "ts/mr/utility/UName";
 import { SDetailsDialog } from "ts/mr/system/dialogs/SDetailsDialog";
@@ -35,7 +35,7 @@ test("system.Identify.Details", () => {
 test("system.Identify.Details.KindIdetified", () => {
     TestEnv.newGame();
 
-    const floor1 = new LFloorId(TestEnv.UnitTestLandId, DFloorClass.FloorMap, 2);
+    const floor1 = new LFloorId(TestEnv.UnitTestLandId, 2);
     const player1 = TestEnv.setupPlayer(floor1, 10, 10);
     const inventory = player1.getEntityBehavior(LInventoryBehavior);
 

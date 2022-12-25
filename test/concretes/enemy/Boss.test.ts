@@ -1,9 +1,8 @@
-import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 
 beforeAll(() => {
@@ -16,7 +15,7 @@ test("concretes.enemies.Boss.FixedLocation", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ボスドラゴンA").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 15, 15);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 15);
 
     MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 

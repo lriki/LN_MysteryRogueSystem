@@ -18,14 +18,17 @@ import { assert } from "ts/mr/Common";
 import { DStateId } from "ts/mr/data/DState";
 import { SDialogContext } from "ts/mr/system/SDialogContext";
 import { SDialog } from "ts/mr/system/SDialog";
-import { DEntityCreateInfo, DEntityId } from "ts/mr/data/DEntity";
+import { DEntityId } from "ts/mr/data/DEntity";
 import { LBlock } from "ts/mr/lively/LBlock";
 import { DEventId } from "ts/mr/data/predefineds/DBasicEvents";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { DLandId } from "ts/mr/data/DCommon";
 import { DFloorClass } from "ts/mr/data/DLand";
-import { STransferMapDialog } from "ts/mr/system/dialogs/STransferMapDialog";
+import { STransferMapDialog, STransferMapSource } from "ts/mr/system/dialogs/STransferMapDialog";
+import { LTransferEntityResult } from "ts/mr/lively/LWorld";
+import { DRmmzUniqueSpawnerAnnotation } from "ts/mr/data/importers/DAnnotationReader";
+import { DEntityCreateInfo, DUniqueSpawner } from "ts/mr/data/DSpawner";
 
 declare global {
     interface Number {
@@ -85,11 +88,11 @@ export class TestEnv {
         MRSystem.unittest = true;
 
         this.UnitTestLandId = MRData.lands.findIndex(x => x.name.includes("UnitTestDungeon1"));
-        this.FloorId_DefaultNormalMap = LFloorId.makeByRmmzNormalMapId(MRData.getMap("MR-Safety:テスト拠点").mapId);
+        this.FloorId_DefaultNormalMap = LFloorId.makeByRmmzFixedMapName("MR-Safety:テスト拠点");
         this.FloorId_FlatMap50x50 = LFloorId.makeByRmmzFixedMapName("FlatMap50x50");
         this.FloorId_UnitTestFlatMap50x50 = LFloorId.makeByRmmzFixedMapName("UnitTestFlatMap50x50");
         this.FloorId_CharacterAI = LFloorId.makeByRmmzFixedMapName("CharacterAI");
-        this.FloorId_RandomMapFloor = LFloorId.make(this.UnitTestLandId, DFloorClass.FloorMap, 3);
+        this.FloorId_RandomMapFloor = LFloorId.make(this.UnitTestLandId, 3);
         this.StateId_debug_MoveRight = MRData.getState("kState_Test_MoveRight").id
         this.StateId_Sleep = MRData.getState("kState_睡眠").id;
         this.StateId_CertainDirectAttack = MRData.states.findIndex(x => x.key == "kState_UnitTest_攻撃必中");
@@ -103,25 +106,35 @@ export class TestEnv {
         //actor1._name = "actor1";
     }
 
+    public static newGame(): void {
+        this.sequelSets = [];
+        SGameManager.createGameObjects();
+        SGameManager.setupNewGame();
+        this.performFloorTransfer();
+    }
+
     public static setupPlayer(floorId: LFloorId, mx?: number, my?: number, dir: number = 0): LEntity {
         const player = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
         player._name = "Player";
         if (dir) {
             player.dir = dir;
         }
-        MRLively.world.transferEntity(MRSystem.commandContext, player, floorId, mx, my);
-        TestEnv.performFloorTransfer();
+        const result = MRLively.world.transferEntity(player, floorId, mx, my);
+        if (result >= LTransferEntityResult.FloorMoved) {
+            //MRLively.camera.syncToFocusedEntity(MRSystem.dialogContext);
+            TestEnv.performFloorTransfer();
+        }
         return player;
     }
 
     // まだ色々使用が変わりそうなのでひとつ Wrapper を用意する
     public static transferEntity(entity: LEntity, floorId: LFloorId, mx: number = -1, my: number = -1): void {
-        MRLively.world.transferEntity(MRSystem.commandContext, entity, floorId, mx, my);
+        MRLively.world.transferEntity(entity, floorId, mx, my);
     }
 
     public static createReflectionObject(floorId: LFloorId, mx: number, my: number): LEntity {
         const object1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_投擲反射石A").id, [MRData.getState("kState_System_ItemStanding").id], "object1"));
-        MRLively.world.transferEntity(MRSystem.commandContext, object1, floorId, 13, 10);
+        MRLively.world.transferEntity(object1, floorId, 13, 10);
         return object1;
     }
 
@@ -129,12 +142,12 @@ export class TestEnv {
         const dctx = MRSystem.dialogContext;
 
         // CommandList を実行して実際に Dialog を開かせる
-        MRSystem.scheduler.stepSimulation();
+        //MRSystem.scheduler.stepSimulation();
         const dialog = dctx.activeDialog() as STransferMapDialog;
         assert(dialog);
 
 
-        this.loadMapData(dialog.newFloorId.rmmzMapId());
+        this.loadMapData(dialog.newFloorId.rmmzMapId);
         dialog.performFloorTransfer();
         dialog.submit();
         //SGameManager.performFloorTransfer();
@@ -173,13 +186,6 @@ export class TestEnv {
         } else {
             throw new Error("Invalid map data.");
         }
-    }
-
-    public static newGame(): void {
-        this.sequelSets = [];
-        SGameManager.createGameObjects();
-        SGameManager.setupNewGame();
-        this.performFloorTransfer();
     }
 
     public static padZero(v: number, length: number) {
@@ -265,6 +271,13 @@ export class TestEnvIntegration extends SIntegration {
         SRmmzHelpers.createEntitiesFromRmmzFixedMapEventData(0);
     }
     
+    override onGetFixedMapUnqueSpawners(): DUniqueSpawner[] {
+        return SRmmzHelpers.getUnqueSpawners($dataMap, 0);
+    }
+
+    override onMapSetupCompleted(map: LMap): void {
+    }
+    
     onUpdateBlock(block: LBlock): void {
         // Visual 表示は伴わない
     }
@@ -299,6 +312,10 @@ export class TestEnvIntegration extends SIntegration {
 
     onUpdateDialog(context: SDialogContext): void {
         // Dialog の処理はテストコード内で行う
+    }
+
+    override onCurrentMapChanged(): void {
+
     }
 
     onEntityEnteredMap(entity: LEntity): void {

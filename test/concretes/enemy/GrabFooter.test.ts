@@ -1,11 +1,9 @@
-import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
-import { SDebugHelpers } from "ts/mr/system/SDebugHelpers";
 import { MRBasics } from "ts/mr/data/MRBasics";
 
 beforeAll(() => {
@@ -24,7 +22,7 @@ test("concretes.enemy.GrabFooter", () => {
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_バインドゴーレムA").id, [], "enemy1"));
     enemy1.addState(TestEnv.StateId_CertainDirectAttack);       // 攻撃必中にする
     enemy1.addState(MRData.getState("kState_UT10ダメージ").id);
-    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
 

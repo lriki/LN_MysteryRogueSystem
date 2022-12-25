@@ -6,6 +6,7 @@ import { MRDataManager } from "../data/MRDataManager";
 import { MRLively } from "../lively/MRLively";
 import { STransferMapDialog } from "../system/dialogs/STransferMapDialog";
 import { SGameManager } from "../system/SGameManager";
+import { SRmmzHelpers } from "../system/SRmmzHelpers";
 import { MRView } from "../view/MRView";
 import { RMMZHelper } from "./RMMZHelper";
 
@@ -41,10 +42,6 @@ Game_Map.prototype.unlinkREEvents = function(): void {
 
 const _Game_Map_setup = Game_Map.prototype.setup;
 Game_Map.prototype.setup = function(mapId: number) {
-    // 先に REMap をクリーンアップしておく。
-    // 内部から onEntityLeavedMap() が呼び出され、ここで Game_Event の erase が走るため、
-    // Game_Map 構築後にクリーンアップしてしまうと、新しく作成された Event が消えてしまう。
-    MRLively.camera.currentMap.releaseMap();
     MRLively.messageHistory.clear();
     
     // Game_Map.setup が呼ばれるのは、マップが切り替わるとき。
@@ -63,37 +60,28 @@ Game_Map.prototype.setup = function(mapId: number) {
     // 本当に別マップに移動したときだけ処理したいものは Game_Map.setup() で行った方がよい。
 
 
-
-
-    /*
-    const playerEntity = REGame.world.entity(REGame.system.mainPlayerEntityId);
-    console.log("playerEntity", playerEntity);
-    if (playerEntity) {
-        REGame.world._transferEntity(playerEntity, floorId, $gamePlayer._newX, $gamePlayer._newY);
-        assert(REGame.camera.isFloorTransfering());
+    // Land 定義マップ、初期配置されているイベントを非表示にしておく。
+    // ランダム Entity 生成ではこれが動的イベントの原本になることもあるので、削除はしない。
+    if (MRDataManager.isLandMap(mapId)) {
+        for (const event of this.events()) {
+            event.setTransparent(true);
+        }
+        $gamePlayer.hideFollowers();
     }
-    else {
-        throw new Error();
-    }
-    */
 
     MRView.dialogManager?.onRmmzSetupMapCompleted();
-}
 
-
-    /*
-Game_Map.prototype.setTileData = function(x: number, y: number, z: number, value: number) : void {
-    const width = this.width();
-    const height = this.height();
-    assert(0 <= x && x < width && 0 <= y && y < height);
-
-    const data = $dataMap.data;
-    if (data) {
-        data[(z * height + y) * width + x] = value;
+    // TacticsMap であれば、@MR-Spawner である Event を非表示にしておく
+    if (MRLively.mapView.currentFloorId.isTacticsMap2) {
+        for (const event of this.events()) {
+            const data = SRmmzHelpers.readEntityMetadata(event, $gameMap.mapId());
+            if (data) {
+                event.setTransparent(true);
+            }
+        }
+        $gamePlayer.hideFollowers();
     }
 }
-*/
-
 
 const _Game_Map_tileset = Game_Map.prototype.tileset;
 Game_Map.prototype.tileset = function() {
@@ -110,11 +98,11 @@ Game_Map.prototype.update = function(sceneActive: boolean) {
 
     //SGameManager.attemptRestartFloor();
 
-    if (MRLively.camera.currentMap.lastKeeperCount != MRLively.camera.currentMap.keeperCount &&
-        MRLively.camera.currentMap.keeperCount == 0) {
+    if (MRLively.mapView.currentMap.lastKeeperCount != MRLively.mapView.currentMap.keeperCount &&
+        MRLively.mapView.currentMap.keeperCount == 0) {
         RMMZHelper.triggerOnKeeperLostEvent();
     }
-    MRLively.camera.currentMap.lastKeeperCount = MRLively.camera.currentMap.keeperCount;
+    MRLively.mapView.currentMap.lastKeeperCount = MRLively.mapView.currentMap.keeperCount;
 }
 
 /*
@@ -129,9 +117,9 @@ Game_Map.prototype.isRESystemMap = function(): boolean {
 
 const _Game_Map_autoplay = Game_Map.prototype.autoplay;
 Game_Map.prototype.autoplay = function() {
-    const floorId = MRLively.camera.currentMap.floorId();
-    if (floorId.isDungeonMap()) {
-        const data = floorId.floorInfo();
+    const floorId = MRLively.mapView.currentMap.floorId();
+    if (floorId.isDungeonMap2) {
+        const data = floorId.floorInfo;
         if (data.bgmName != "") {
             AudioManager.playBgm({ name: data.bgmName, pan: 0, pitch: data.bgmPitch, volume: data.bgmVolume }, 0);
             return;

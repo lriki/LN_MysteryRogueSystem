@@ -27,13 +27,13 @@ test("MapTransfarDirectly", () => {
     const actor1 = TestEnv.setupPlayer(TestEnv.FloorId_DefaultNormalMap, 5, 5);
 
     // 移動できていること
-    expect(MRLively.camera.currentMap.floorId().equals(TestEnv.FloorId_DefaultNormalMap)).toBe(true);
+    expect(MRLively.mapView.currentMap.floorId().equals(TestEnv.FloorId_DefaultNormalMap)).toBe(true);
 
 
     //----------------------------------------------------------------------------------------------------
     // 固定マップへの移動 (EntryPoint を移動先とする)
 
-    MRLively.world.transferEntity(MRSystem.commandContext, actor1, TestEnv.FloorId_FlatMap50x50, -1, -1);
+    MRLively.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, -1, -1);
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
@@ -41,7 +41,7 @@ test("MapTransfarDirectly", () => {
 
     TestEnv.performFloorTransfer();
 
-    expect(MRLively.camera.currentMap.floorId().equals(TestEnv.FloorId_FlatMap50x50)).toBe(true);   // 移動できていること
+    expect(MRLively.mapView.currentMap.floorId().equals(TestEnv.FloorId_FlatMap50x50)).toBe(true);   // 移動できていること
     expect(actor1.mx).toBe(1);   // EntryPoint の位置へ移動できていること
     expect(actor1.my).toBe(2);   // EntryPoint の位置へ移動できていること
 
@@ -49,8 +49,8 @@ test("MapTransfarDirectly", () => {
     //----------------------------------------------------------------------------------------------------
     // ランダムマップフロアへの移動
 
-    const floor2 = new LFloorId(TestEnv.UnitTestLandId, DFloorClass.FloorMap, 2);
-    MRLively.world.transferEntity(MRSystem.commandContext, actor1, floor2, -1, -1);
+    const floor2 = new LFloorId(TestEnv.UnitTestLandId, 2);
+    MRLively.world.transferEntity(actor1, floor2, -1, -1);
     
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
@@ -58,7 +58,7 @@ test("MapTransfarDirectly", () => {
 
     TestEnv.performFloorTransfer();
 
-    expect(MRLively.camera.currentMap.floorId().equals(floor2)).toBe(true);   // 移動できていること
+    expect(MRLively.mapView.currentMap.floorId().equals(floor2)).toBe(true);   // 移動できていること
     expect(actor1.mx).not.toBe(-1);  // いずれかの座標に配置されていること
     expect(actor1.my).not.toBe(-1);  // いずれかの座標に配置されていること
 
@@ -70,14 +70,14 @@ test("MapTransfarDirectly", () => {
     //----------------------------------------------------------------------------------------------------
     // 固定マップへの移動 (座標指定)
 
-    MRLively.world.transferEntity(MRSystem.commandContext, actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
+    MRLively.world.transferEntity(actor1, TestEnv.FloorId_FlatMap50x50, 5, 5);
     
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     expect(STransferMapDialog.isFloorTransfering).toBe(true);  // Camera が移動待機状態になっていること
 
     TestEnv.performFloorTransfer();
-    expect(MRLively.camera.currentMap.floorId().equals(TestEnv.FloorId_FlatMap50x50)).toBe(true);   // 移動できていること
+    expect(MRLively.mapView.currentMap.floorId().equals(TestEnv.FloorId_FlatMap50x50)).toBe(true);   // 移動できていること
     expect(actor1.mx).toBe(5);   // EntryPoint の位置へ移動できていること
     expect(actor1.my).toBe(5);   // EntryPoint の位置へ移動できていること
 });
@@ -163,8 +163,8 @@ test("MoveDiagonal_CollideWalls", () => {
     const actor1 = TestEnv.setupPlayer( TestEnv.FloorId_FlatMap50x50, 5, 5);
 
     // 右下に移動できないような壁を作る
-    MRLively.camera.currentMap.block(6, 5)._tileShape = LTileShape.Wall;
-    MRLively.camera.currentMap.block(5, 6)._tileShape = LTileShape.Wall;
+    MRLively.mapView.currentMap.block(6, 5)._tileShape = LTileShape.Wall;
+    MRLively.mapView.currentMap.block(5, 6)._tileShape = LTileShape.Wall;
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

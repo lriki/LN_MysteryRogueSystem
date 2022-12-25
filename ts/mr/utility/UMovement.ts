@@ -116,7 +116,7 @@ export class UMovement {
      * entity が指定方向(斜め)を向くとき、壁の角と交差しているかを確認する。
      */
     public static checkDiagonalWallCornerCrossing(entity: LEntity, d: number): boolean {
-        const map = MRLively.camera.currentMap;
+        const map = MRLively.mapView.currentMap;
         if (UMovement.isDiagonalMoving(d)) {
             // 斜め場合
             const fl = UMovement.rotatePositionByDir(7, d);  // 左前
@@ -138,7 +138,7 @@ export class UMovement {
      */
     public static checkPassageToDir(entity: LEntity, dir: number): boolean {
         const offset = Helpers.dirToTileOffset(dir);
-        const map = MRLively.camera.currentMap;
+        const map = MRLively.mapView.currentMap;
         const oldBlock = map.block(entity.mx, entity.my);
         const newBlock = map.block(entity.mx + offset.x, entity.my + offset.y);
         return this.checkPassageBlockToBlock(entity, oldBlock, newBlock, MovingMethod.Walk);
@@ -166,7 +166,7 @@ export class UMovement {
      * 例えば entity が水路侵入可能であり、Block が水路であれば移動先候補になる。
      */
     public static checkPassageBlockToBlock(entity: LEntity, oldBlock: LBlock, newBlock: LBlock, method: MovingMethod, layer?: DBlockLayerKind): boolean {
-        const map = MRLively.camera.currentMap;
+        const map = MRLively.mapView.currentMap;
         const actualLayer = layer || entity.getHomeLayer();
 
         const dx = newBlock.mx - oldBlock.mx;
@@ -274,7 +274,7 @@ export class UMovement {
      */
     static getAdjacentBlock(entity: LEntity, dir: number): LBlock {
         const offset = Helpers._dirToTileOffsetTable[dir];
-        const block = MRLively.camera.currentMap.block(entity.mx + offset.x, entity.my + offset.y);
+        const block = MRLively.mapView.currentMap.block(entity.mx + offset.x, entity.my + offset.y);
         return block;
     }
 
@@ -283,7 +283,7 @@ export class UMovement {
      */
     public static getFrontBlock(entity: LEntity): LBlock {
         const front = Helpers.makeEntityFrontPosition(entity, 1);
-        const block = MRLively.camera.currentMap.block(front.x, front.y);
+        const block = MRLively.mapView.currentMap.block(front.x, front.y);
         return block;
     }
 
@@ -291,7 +291,7 @@ export class UMovement {
      * Entity の周囲 8 マスの Block を取得する。(有効座標のみ)
      */
     public static getAdjacentBlocks(entity: LEntity): LBlock[] {
-        const map = MRLively.camera.currentMap;
+        const map = MRLively.mapView.currentMap;
         assert(map.floorId().equals(entity.floorId));
 
         const blocks: LBlock[] = [];
@@ -325,7 +325,7 @@ export class UMovement {
      * 
      */
     public static getNextAdjacentEntityDirCW(entity: LEntity): number {
-        const map = MRLively.camera.currentMap;
+        const map = MRLively.mapView.currentMap;
         let d = entity.dir;
         for (let i = 0; i < 9; i++) {
             const offset = Helpers.dirToTileOffset(d);
@@ -352,7 +352,7 @@ export class UMovement {
             if (block) result.push(block);
         }
         */
-        const map = MRLively.camera.currentMap;
+        const map = MRLively.mapView.currentMap;
         const oldBlock = map.block(entity.mx, entity.my);
         for (const offset of this.LHRuleOffsets) {
             const pos = this.transformRotationBlock(offset.x, offset.y, dir);
@@ -369,7 +369,7 @@ export class UMovement {
      */
     public static getWay3FrontBlocks(entity: LEntity, dir: number): LBlock[] {
         const result = [];
-        const map = MRLively.camera.currentMap;
+        const map = MRLively.mapView.currentMap;
         for (const offset of this.way3Offsets) {
             const pos = this.transformRotationBlock(offset.x, offset.y, dir);
             const block = map.tryGetBlock(entity.mx + pos.x, entity.my + pos.y);
@@ -386,7 +386,7 @@ export class UMovement {
      */
     public static getMovableAdjacentTiles(entity: LEntity): LBlock[] {
         const result: LBlock[] = [];
-        const map = MRLively.camera.currentMap;
+        const map = MRLively.mapView.currentMap;
         const oldBlock = map.block(entity.mx, entity.my);
         for (const d of this.AdjacentDirs) {
             const offset = Helpers.dirToTileOffset(d);
@@ -400,10 +400,10 @@ export class UMovement {
     private static AdjacentDirs: number[] = [1, 2, 3, 4, 6, 7, 8 ,9];
 
     /** entity を配置できる直近の Block を選択する。 */
-    public static selectNearbyLocatableBlock(rand: LRandom, mx: number, my: number, layerKind: DBlockLayerKind, entity: LEntity): LBlock | undefined {
+    public static selectNearbyLocatableBlock(map: LMap, rand: LRandom, mx: number, my: number, layerKind: DBlockLayerKind, entity: LEntity): LBlock | undefined {
         const maxDistance = 3;
         for (let distance = 0; distance <= maxDistance; distance++) {
-            const candidates = MRLively.camera.currentMap.getEdgeBlocks(mx, my, distance)
+            const candidates = map.getEdgeBlocks(mx, my, distance)
                 .filter(b => {
                     if (b.isWallLikeShape()) {
                         // 壁の中には落ちない
@@ -429,6 +429,7 @@ export class UMovement {
 
     // 2点間の距離 (到達に必要な移動ブロック数) を求める。
     // 斜め移動を許可している Block 単位の距離なので、マンハッタン距離やユークリッド距離とは違う点に注意。
+    /** @deprecated LBlockHelper */
     public static blockDistance(x1: number, y1: number, x2: number, y2: number): number {
         const dx = Math.abs(x2 - x1);
         const dy = Math.abs(y2 - y1);
@@ -550,7 +551,7 @@ export class UMovement {
     public static checkDashStopBlock(entity: LEntity): boolean {
         const x = entity.mx;
         const y = entity.my;
-        const map = MRLively.camera.currentMap;
+        const map = MRLively.mapView.currentMap;
         const front = Helpers.dirToTileOffset(entity.dir);
         const block = map.block(x, y);
         const frontBlock = map.block(x + front.x, y + front.y);
@@ -574,7 +575,7 @@ export class UMovement {
     }
 
     public static moveEntity(cctx: SCommandContext, entity: LEntity, x: number, y: number, method: MovingMethod, toLayer: DBlockLayerKind): boolean {
-        const map = MRLively.camera.currentMap;
+        const map = MRLively.mapView.currentMap;
 
         assert(entity.floorId.equals(map.floorId()));
 
@@ -590,6 +591,7 @@ export class UMovement {
             entity.mx = x;
             entity.my = y;
             newBlock.addEntity(toLayer, entity);
+            newBlock.setFootpoint(entity);
             this._postLocate(entity, oldBlock, newBlock, map, cctx);
             return true;
         }
@@ -598,33 +600,6 @@ export class UMovement {
         }
     }
     
-    /**
-     * Entity の位置設定
-     * 
-     * - moveEntity() と異なり、移動可能判定を行わずに強制移動する。
-     * - マップ生成時の Entity 配置や、ワープ移動などで使用する。
-     * - Visual に対して位置合わせを通知するため、歩行などアニメーションを伴う移動での使用は禁止。
-     * - 侵入判定を伴う。
-     */
-    public static locateEntity(entity: LEntity, x: number, y: number, toLayer?: DBlockLayerKind): void {
-        const map = MRLively.camera.currentMap;
-        assert(entity.floorId.equals(map.floorId()));
-
-        const oldBlock = map.block(entity.mx, entity.my);
-        const newBlock = map.block(x, y);
-        assert(newBlock);
-        
-        const layer = (toLayer) ? toLayer : entity.getHomeLayer();
-
-        oldBlock.removeEntity(entity);
-        entity.mx = x;
-        entity.my = y;
-        newBlock.addEntity(layer, entity);
-        this._postLocate(entity, oldBlock, newBlock, map, undefined);
-
-        // Located 通知。これはアニメを伴う移動時は通知したくないのでここで行う。
-        MRSystem.integration.onEntityLocated(entity);
-    }
     
     public static locateEntityAtFloorMoved(entity: LEntity, floorId: LFloorId, x: number, y: number): void {
         entity.floorId = floorId.clone();
@@ -635,8 +610,8 @@ export class UMovement {
     public static _postLocate(entity: LEntity, oldBlock: LBlock | undefined, newBlock: LBlock, map: LMap, cctx: SCommandContext | undefined) {
         assert(!entity.isOnOffstage());
 
-        if (MRLively.camera.focusedEntityId().equals(entity.entityId())) {
-            this.markPassed(map, newBlock);
+        if (MRLively.mapView.focusedEntityId().equals(entity.entityId())) {
+            MRSystem.fovSystem.markBlockPlayerPassed(map, newBlock.mx, newBlock.my);
         }
 
         if (oldBlock && cctx) {
@@ -653,33 +628,5 @@ export class UMovement {
         }
 
         entity._located = true;
-    }
-
-    private static markPassed(map: LMap, block: LBlock): void {
-        block._passed = true;
-        if (block._roomId > 0) {
-            const room = map.room(block._roomId);
-            if (room.poorVisibility) {
-                room.forEachSightableBlocks(b => {
-                    if (this.blockDistance(block.mx, block.my, b.mx, b.my) <= paramDefaultVisibiltyLength) {
-                        b._passed = true
-                    }
-                });
-            }
-            else {
-                room.forEachSightableBlocks(b => b._passed = true);
-            }
-        }
-        else {
-            // 通路なら外周1タイルを通過済みにする
-            this.adjacent8Offsets.forEach(offset => {
-                const x = block.mx + offset[0];
-                const y = block.my + offset[1];
-                if (map.isValidPosition(x, y)) {
-                    map.block(x, y)._passed = true;
-                }
-            });
-        }
-        MRSystem.minimapData.setRefreshNeeded();
     }
 }

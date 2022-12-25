@@ -1,65 +1,76 @@
 import { assert } from "ts/mr/Common";
 import { DFovSystem } from "ts/mr/data/DSystem";
 
-export interface SComputeFovResultBlock {
-    fov: boolean;
-    transparent: boolean;   // 壁の場合、false
-}
+// export interface SComputeFovResultBlock {
+//     fov: boolean;
+//     transparent: boolean;   // 壁の場合、false
+// }
 
-export class SComputeFovResult {
-    private _width: number;
-    private _height: number;
-    private _data: SComputeFovResultBlock[];
+// export class SComputeFovResult {
+//     private _width: number;
+//     private _height: number;
+//     private _data: SComputeFovResultBlock[];
 
-    public constructor() {
-        this._width = 0;
-        this._height = 0;
-        this._data = [];
-    }
+//     public constructor() {
+//         this._width = 0;
+//         this._height = 0;
+//         this._data = [];
+//     }
 
-    public get width(): number {
-        return this._width;
-    }
+//     public get width(): number {
+//         return this._width;
+//     }
 
-    public get height(): number {
-        return this._height;
-    }
+//     public get height(): number {
+//         return this._height;
+//     }
 
-    public get cells(): SComputeFovResultBlock[] {
-        return this._data;
-    }
+//     public get cells(): SComputeFovResultBlock[] {
+//         return this._data;
+//     }
 
-    public setup(width: number, height: number): void {
-        this._width = width;
-        this._height = height;
-        this._data = new Array(width * height);
-        for (let i = 0; i < this._data.length; i++) {
-            this._data[i] = {
-                fov: false,
-                transparent: true,
-            };
-        }
-    }
+//     public setup(width: number, height: number): void {
+//         this._width = width;
+//         this._height = height;
+//         this._data = new Array(width * height);
+//         for (let i = 0; i < this._data.length; i++) {
+//             this._data[i] = {
+//                 fov: false,
+//                 transparent: true,
+//             };
+//         }
+//     }
 
-    public clear(): void {
-        for (let i = 0; i < this._data.length; i++) {
-            this._data[i].fov = false;
-            this._data[i].transparent = true;
-        }
-    }
+//     public clear(): void {
+//         for (let i = 0; i < this._data.length; i++) {
+//             this._data[i].fov = false;
+//             this._data[i].transparent = true;
+//         }
+//     }
 
-    public clearFov(): void {
-        for (let i = 0; i < this._data.length; i++) {
-            this._data[i].fov = false;
-        }
-    }
+//     public clearFov(): void {
+//         for (let i = 0; i < this._data.length; i++) {
+//             this._data[i].fov = false;
+//         }
+//     }
+
+//     public inBounds(x: number, y: number): boolean {
+//         return 0 <= x && x < this.width && 0 <= y && y < this.height;
+//     }
+
+//     public get(x: number, y: number): SComputeFovResultBlock {
+//         return this._data[y * this.width + x];
+//     }
+// }
+
+export abstract class IFovMap {
+    public abstract getWidth(): number;
+    public abstract getHeight(): number;
+    public abstract getTransparent(x: number, y: number): boolean;      // 壁の場合、false
+    public abstract setFov(x: number, y: number, fov: boolean): void;   // 可視の場合、true
 
     public inBounds(x: number, y: number): boolean {
-        return 0 <= x && x < this.width && 0 <= y && y < this.height;
-    }
-
-    public get(x: number, y: number): SComputeFovResultBlock {
-        return this._data[y * this.width + x];
+        return 0 <= x && x < this.getWidth() && 0 <= y && y < this.getHeight();
     }
 }
 
@@ -74,14 +85,14 @@ interface Row {
 
 export class SFovHelper {
     public static computeFov(
-        map: SComputeFovResult,
+        map: IFovMap,
         pov_x: number,
         pov_y: number,
         max_radius: number,
         light_walls: boolean,
         algo: DFovSystem) {
         assert(map.inBounds(pov_x, pov_y));
-        map.clear();
+        //map.clear();
         switch (algo) {
             case DFovSystem.RoomBounds:
                 //SFovHelper.computeFovDfov(pov_x, pov_y, max_radius, light_walls, map);
@@ -95,14 +106,14 @@ export class SFovHelper {
     }
 
     private static compute_fov_symmetric_shadowcast(
-        map: SComputeFovResult,
+        map: IFovMap,
         pov_x: number,
         pov_y: number,
         max_radius: number,
         light_walls: boolean) {
         // 始点のセルを可視にする。
-        map.cells[pov_x + pov_y * map.width].fov = true;
-
+        map.setFov(pov_x, pov_y, true); // map.cells[pov_x + pov_y * map.width].fov = true;
+        
         for (let quadrant = 0; quadrant < 4; quadrant++) {
             const row: Row = {
                 pov_x: pov_x,
@@ -115,11 +126,12 @@ export class SFovHelper {
             this.scan(map, row);
         }
         const radius_squared = max_radius * max_radius;
-        for (let y = 0; y < map.height; ++y) {
-            for (let x = 0; x < map.width; ++x) {
-                const i = x + y * map.width;
-                if (!light_walls && !map.cells[i].transparent) {
-                    map.cells[i].fov = false;
+        const width = map.getWidth();
+        const height = map.getHeight();
+        for (let y = 0; y < height; ++y) {
+            for (let x = 0; x < width; ++x) {
+                if (!light_walls && !map.getTransparent(x, y)) {
+                    map.setFov(x, y, false);
                 }
 
                 // 最大範囲外は強制的に不可視とする。
@@ -127,7 +139,7 @@ export class SFovHelper {
                     const dx = x - pov_x;
                     const dy = y - pov_y;
                     if (dx * dx + dy * dy >= radius_squared) {
-                        map.cells[i].fov = false;
+                        map.setFov(x, y, false);
                     }
                 }
             }
@@ -141,7 +153,7 @@ export class SFovHelper {
         [-1, 0, 0, -1],
     ]
 
-    private static scan(map: SComputeFovResult, row: Row): void {
+    private static scan(map: IFovMap, row: Row): void {
         const xx = this.quadrant_table[row.quadrant][0];
         const xy = this.quadrant_table[row.quadrant][1];
         const yx = this.quadrant_table[row.quadrant][2];
@@ -158,10 +170,10 @@ export class SFovHelper {
             if (!map.inBounds(map_x, map_y)) {
                 continue;  // Tile is out-of-bounds.
             }
-            const map_cell: SComputeFovResultBlock = map.cells[map_x + map_y * map.width];
-            const is_wall = !map_cell.transparent;
+            //const map_cell: SComputeFovResultBlock = map.cells[map_x + map_y * map.width];
+            const is_wall = !map.getTransparent(map_x, map_y);
             if (is_wall || this.is_symmetric(row, column)) {
-                map_cell.fov = true;
+                map.setFov(map_x, map_y, true);
             }
             if (prev_tile_is_wall && !is_wall) {  // Floor tile to wall tile.
                 row.slope_low = this.slope(row.depth, column);  // Shrink the view.

@@ -22,7 +22,7 @@ class SMiniMapAutoTileHelper extends SEditMapHelper {
     protected onSetTileId(x: number, y: number, z: number, tileId: number): void { throw new Error("Unreachable"); }
 
     protected getSameKindTile(x: number, y: number, z: number, component: FBlockComponent): boolean {
-        const block = MRLively.camera.currentMap.tryGetBlock(x, y);
+        const block = MRLively.mapView.currentMap.tryGetBlock(x, y);
         if (!block) return true;        // マップ範囲外は同種とすることで、境界外にも広がっているように見せる
         if (!block._passed) return true; // 未踏なら壁Edgeなどは表示したくないので、同種扱いする
         if (block._blockComponent == component) return true;
@@ -116,7 +116,7 @@ export class SMinimapData {
 
     // 地形表示の更新
     public refresh(): void {
-        const map = MRLively.camera.currentMap;
+        const map = MRLively.mapView.currentMap;
         const width = map.width();
         const height = map.height();
         for (let y = 0; y < height; y++) {
@@ -147,10 +147,10 @@ export class SMinimapData {
     }
 
     public update() {
-        const map = MRLively.camera.currentMap;
+        const map = MRLively.mapView.currentMap;
         const width = map.width();
         const height = map.height();
-        const subject = MRLively.camera.focusedEntity();
+        const subject = MRLively.mapView.focusedEntity();
         assert(subject);
 
         if (width != this._width || height != this._height) {

@@ -85,7 +85,7 @@ export class VEntity {
     }
 
     public isVisible(): boolean {
-        const focusedEntity = MRLively.camera.focusedEntity()
+        const focusedEntity = MRLively.mapView.focusedEntity()
         return focusedEntity ? SNavigationHelper.testVisibilityForMinimap(focusedEntity, this._entity) : false;
     }
 

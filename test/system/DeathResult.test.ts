@@ -2,7 +2,7 @@ import { TestEnv } from "../TestEnv";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { MRSystem } from "ts/mr/system/MRSystem";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { LTileShape } from "ts/mr/lively/LBlock";
 import { MRData } from "ts/mr/data/MRData";
@@ -23,7 +23,7 @@ test("system.DeathResult.State", () => {
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, floorId, 11, 10);
+    TestEnv.transferEntity(enemy1, floorId, 11, 10);
     enemy1.addState(TestEnv.StateId_CertainDirectAttack);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------

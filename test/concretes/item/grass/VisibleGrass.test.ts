@@ -1,10 +1,9 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
 import { SView } from "ts/mr/system/SView";
@@ -22,7 +21,7 @@ test("concretes.item.grass.VisibleGrass", () => {
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_黒幕バットA").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 15, 10);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 15, 10);
 
     // アイテム作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_めぐすり草A").id, [], "item1"));
@@ -30,7 +29,7 @@ test("concretes.item.grass.VisibleGrass", () => {
 
     // trap1 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_SleepTrap, [], "trap1"));
-    MRLively.world.transferEntity(undefined, trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    TestEnv.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     const enemy1Visibility1 = SView.getEntityVisibility(enemy1);
     expect(enemy1Visibility1.visible).toBeFalsy();    // 一応確認

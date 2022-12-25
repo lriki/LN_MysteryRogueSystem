@@ -195,7 +195,7 @@ export class SStepScheduler2 {
     }
 
     private process_AfterProcess(): void {
-        for (const entity of MRLively.camera.currentMap.entities()) {
+        for (const entity of MRLively.mapView.currentMap.entities()) {
             entity._callBehaviorIterationHelper(behavior => behavior.onAfterStep(entity, MRSystem.commandContext));
         }
 
@@ -257,7 +257,7 @@ export class SStepScheduler2 {
             //     entity._callBehaviorIterationHelper(behavior => behavior.onStepEnd(RESystem.commandContext));
             // });
             // Trap の状態リセットも行いたいので、マップ上の全 Entity に対して通知する
-            for (const entity of MRLively.camera.currentMap.entities()) {
+            for (const entity of MRLively.mapView.currentMap.entities()) {
                 entity._callBehaviorIterationHelper(behavior => behavior.onStepEnd(MRSystem.commandContext));
             }
         //}

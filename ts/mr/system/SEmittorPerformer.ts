@@ -1,6 +1,6 @@
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { DEffectFieldScopeType, DSkillCostSource, DEmittorCost, DParamCostType, DParamCost, DEffectFieldScope, DRmmzEffectScope } from "ts/mr/data/DEffect";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { MRData } from "ts/mr/data/MRData";
 import { LProjectileBehavior } from "ts/mr/lively/behaviors/activities/LProjectileBehavior";
 import { onAttackReaction } from "ts/mr/lively/internal";
@@ -414,7 +414,7 @@ export class SEmittorPerformer {
         }
         else if (emittor.scope.range == DEffectFieldScopeType.Center) {
             const targets: LEntity[] = [];
-            const block = MRLively.camera.currentMap.tryGetBlock(performer.mx, performer.my);
+            const block = MRLively.mapView.currentMap.tryGetBlock(performer.mx, performer.my);
             if (block) {
                 for (const entity of block.getEntities()) {
                     if (!entity.equals(performer)) {
@@ -426,7 +426,7 @@ export class SEmittorPerformer {
         }
         else if (emittor.scope.range == DEffectFieldScopeType.Room) {
             const targets: LEntity[] = [];
-            MRLively.camera.currentMap.room(performer.roomId()).forEachEntities(entity => {
+            MRLively.mapView.currentMap.room(performer.roomId()).forEachEntities(entity => {
                 if (UAction.testFactionMatch(performer, entity, DRmmzEffectScope.Opponent_All)) {
                     targets.push(entity);
                 };
@@ -435,7 +435,7 @@ export class SEmittorPerformer {
         }
         else if (emittor.scope.range == DEffectFieldScopeType.Map) {
             const targets: LEntity[] = [];
-            MRLively.camera.currentMap.entities().filter(entity => {
+            MRLively.mapView.currentMap.entities().filter(entity => {
                 if (UAction.testFactionMatch(performer, entity, DRmmzEffectScope.Everyone)) {
                     targets.push(entity);
                 };
@@ -457,7 +457,7 @@ export class SEmittorPerformer {
     {
         const createInfo = DEntityCreateInfo.makeSingle(MRData.getEntity(emittor.scope.projectilePrefabKey).id).withStackCount(1);
         const bullet = SEntityFactory.newEntity(createInfo);
-        MRLively.camera.currentMap.appearEntity(bullet, startX, startY);
+        MRLively.mapView.currentMap.appearEntity(bullet, startX, startY);
         bullet.dir = dir;
 
         // Projectile は item とは異なる Entity であり、Projectile 自体はデータベース上では Effect を持たない。

@@ -5,7 +5,7 @@ import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "./../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { DBlockLayerKind } from "ts/mr/data/DCommon";
 
@@ -46,7 +46,7 @@ test("activity.PickAndPut", () => {
     assert(inventory);
 
     // item1 は Map 上から外れている
-    const block = MRLively.camera.currentMap.block(6, 5);
+    const block = MRLively.mapView.currentMap.block(6, 5);
     expect(block.layer(DBlockLayerKind.Ground).isContains(item1)).toBe(false);
 
     // item1 がインベントリに追加されている
@@ -136,7 +136,7 @@ test("activity.PickAtMoved.Maximum", () => {
 
     const message = MRLively.messageHistory;
 
-    const block = MRLively.camera.currentMap.block(11, 10);
+    const block = MRLively.mapView.currentMap.block(11, 10);
     const item = block.layer(DBlockLayerKind.Ground).firstEntity();
     expect(item).toBe(item1);
     expect(message.includesText("薬草")).toBeTruthy();

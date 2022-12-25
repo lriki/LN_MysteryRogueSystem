@@ -4,8 +4,9 @@ import { SView } from "ts/mr/system/SView";
 import { MRView } from "ts/mr/view/MRView";
 
 export enum TilemapRendererId {
-    Default,
+    Default = 0,
     Minimap = 2,
+    Shadow = 3,
 }
 
 const show = false;
@@ -107,7 +108,7 @@ Tilemap.prototype._addSpot = function(startX, startY, x, y) {
 
     //if (REGame.map.isValid()) {
     if (show) {
-        const block = MRLively.camera.currentMap.block(mx, my);
+        const block = MRLively.mapView.currentMap.block(mx, my);
         if (block._roomId > 0) {
             this._addTile(this._upperLayer, startTileId + block._roomId, dx, dy);
         }
@@ -177,7 +178,7 @@ const _Tilemap__addAutotile = Tilemap.prototype._addAutotile;
 Tilemap.prototype._addAutotile = function(layer, tileId, dx, dy) {
     const kind = Tilemap.getAutotileKind(tileId);
 
-    if (MRLively.camera.currentMap.floorId().isTacticsMap() && Tilemap.isTileA4(tileId)) {
+    if (MRLively.mapView.currentMap.floorId().isTacticsMap2&& Tilemap.isTileA4(tileId)) {
         const x = dx / this._tileWidth;
         const y = dy / this._tileHeight;
     
@@ -302,6 +303,18 @@ declare global {
 // RMMZ は複数の Tilemap を描画すると、Tileset を共有してしまう。
 // 通常のマップとは別に、ミニマップ描画用の Tilemap.Renderer を使うことで回避する。
 PIXI.Renderer.registerPlugin("rpgtilemap2", Tilemap.Renderer as any);
+PIXI.Renderer.registerPlugin("rpgtilemap3", Tilemap.Renderer as any);
+
+function getTilemapRenderer(renderer: any, id: TilemapRendererId): any {
+    switch (id) {
+        case TilemapRendererId.Minimap:
+            return renderer.plugins.rpgtilemap2;
+        case TilemapRendererId.Shadow:
+            return renderer.plugins.rpgtilemap3;
+        default:
+            return renderer.plugins.rpgtilemap;
+    }
+}
 
 const _Tilemap_initialize = Tilemap.prototype.initialize;
 Tilemap.prototype.initialize = function() {
@@ -315,7 +328,7 @@ Tilemap.prototype.setRendererId = function(id) {
 
 Tilemap.Layer.prototype.render = function(renderer: any) {
     const gl = renderer.gl;
-    const tilemapRenderer = this._rendererId == 2 ? renderer.plugins.rpgtilemap : renderer.plugins.rpgtilemap2;
+    const tilemapRenderer = getTilemapRenderer(renderer, this._rendererId);
     const shader = tilemapRenderer.getShader();
     const matrix = shader.uniforms.uProjectionMatrix;
 
@@ -325,6 +338,9 @@ Tilemap.Layer.prototype.render = function(renderer: any) {
     if (this.parent instanceof Tilemap && !this.parent.selfVisible) {
         return false;
     }
+
+    //--------------------
+    // 以下、 Tilemap.Layer.prototype.render  のコピー
     
     renderer.batch.setObjectRenderer(tilemapRenderer);
     renderer.projection.projectionMatrix.copyTo(matrix);

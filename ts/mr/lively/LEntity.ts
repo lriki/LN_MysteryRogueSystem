@@ -38,6 +38,9 @@ import { LDeathResult } from "./LDeathResult";
 import { LUnitBehavior } from "./behaviors/LUnitBehavior";
 import { LFieldEffect } from "./LFieldEffect";
 import { paramMaxEntityStackCount } from "../PluginParameters";
+import { LMap } from "./LMap";
+import { DUniqueSpawner } from "../data/DSpawner";
+import { TilingSprite } from "pixi.js";
 
 enum BlockLayer
 {
@@ -123,12 +126,15 @@ export class LEntity extends LObject
     private _params: LParamSet;
     private _basicBehaviors: LBehaviorId[] = [];    // Entity 生成時にセットされる基本 Behavior. Entity 破棄まで変更されることは無い。
 
+    private _rmmzEventId: number = 0;
+
     /**
      * この Entity 個体として識別済みであるか。
      */
     private _individualIdentified: boolean = false;
 
     _partyId: LPartyId = 0;
+
     
     //private _parentIsMap = false;
 
@@ -147,7 +153,7 @@ export class LEntity extends LObject
             SEntityFactory.buildEntity(this);
 
             // 現在マップ上での変更であれば、再出現の処理を回すことで、見た目もリセットする
-            if (this.floorId.equals(MRLively.camera.currentMap.floorId())) {
+            if (this.floorId.equals(MRLively.mapView.currentMap.floorId())) {
                 MRSystem.integration.entityReEnterMap(this);
             }
         }
@@ -200,7 +206,7 @@ export class LEntity extends LObject
 
     public isGCReady(): boolean {
         // 何らかのフロア上にいる場合は削除されない (明示的に除外されなければならない)
-        if (this.floorId.hasAny()) return false;
+        if (this.floorId.hasAny) return false;
 
         return super.isGCReady();
     }
@@ -210,8 +216,17 @@ export class LEntity extends LObject
     //     this._params._ownerId = id.clone();
     // }
 
-    
+    public get rmmzEventId(): number {
+        return this._rmmzEventId;
+    }
 
+    public setRmmzEventId(value: number): void {
+        this._rmmzEventId = value;
+    }
+
+    public getUniqueSpawner(): DUniqueSpawner | undefined {
+        return this.map.uniqueSpawners[this.dataId];
+    }
 
     _name: string = ""; // 主にデバッグ用
 
@@ -222,7 +237,6 @@ export class LEntity extends LObject
     _iconName: string = '';
     //_blockLayer: BlockLayer = BlockLayer.Unit;
 
-    rmmzEventId: number = 0;
 
     /**
      * 固定マップにおいて、エディタで配置したイベントを元に作られた Entity であるかどうか。
@@ -301,7 +315,7 @@ export class LEntity extends LObject
         entity._name = this._name;
         entity._displayName = this._displayName;
         entity._iconName = this._iconName;
-        entity.rmmzEventId = 0; // 固定マップのイベントを参照するわけではないのでリセット
+        entity._rmmzEventId = 0; // 固定マップのイベントを参照するわけではないのでリセット
         entity.inhabitsCurrentFloor = false;    // true のまま引き継いでしまうと、新たに生成された Entity に対応する RMMZ Event が生成されない
         entity.floorId = LFloorId.makeEmpty();
         entity.mx = 0;
@@ -341,8 +355,8 @@ export class LEntity extends LObject
 
     onFinalize(): void {
         // 現在マップ上の Entity 削除
-        if (this.floorId.equals(MRLively.camera.currentMap.floorId())) {
-            MRLively.camera.currentMap._removeEntity(this);
+        if (this.floorId.equals(MRLively.mapView.currentMap.floorId())) {
+            MRLively.mapView.currentMap._removeEntity(this);
         }
         this.clearInstance();
         MRLively.scheduler.invalidateEntity(this);
@@ -387,7 +401,7 @@ export class LEntity extends LObject
     }
 
     public isPlayer(): boolean {
-        return this.entityId().equals(MRLively.camera.focusedEntityId());
+        return this.entityId().equals(MRLively.mapView.focusedEntityId());
     }
 
     public isUnit(): boolean {
@@ -407,6 +421,10 @@ export class LEntity extends LObject
             return undefined;
         else
             return MRLively.world.party(this._partyId);
+    }
+
+    public get map(): LMap {
+        return MRLively.world.map(this.floorId);
     }
 
     public individualIdentified(): boolean {
@@ -1168,7 +1186,7 @@ export class LEntity extends LObject
      * メッセージ表示時に主語を省略するといった処理で参照する。
      */
     isFocused(): boolean {
-        return MRLively.camera.focusedEntityId().equals(this.entityId());
+        return MRLively.mapView.focusedEntityId().equals(this.entityId());
     }
 
     /**
@@ -1534,8 +1552,8 @@ export class LEntity extends LObject
      * Map 上に出現していても、Ground 以外のレイヤーに存在している場合は false を返す。
      */
     isOnGround(): boolean {
-        if (this.floorId.hasAny()) {
-            const block = MRLively.camera.currentMap.block(this.mx, this.my);
+        if (this.floorId.hasAny) {
+            const block = MRLively.mapView.currentMap.block(this.mx, this.my);
             return block.findEntityLayerKind(this) == DBlockLayerKind.Ground;
         }
         else {
@@ -1549,7 +1567,7 @@ export class LEntity extends LObject
 
     /** 0 is Invalid. */
     public roomId(): LRoomId {
-        return MRLively.camera.currentMap.block(this.mx, this.my)._roomId;
+        return MRLively.mapView.currentMap.block(this.mx, this.my)._roomId;
     }
 
     public isOnRoom(): boolean {
@@ -1561,7 +1579,7 @@ export class LEntity extends LObject
     }
 
     public layer(): DBlockLayerKind {
-        const r = MRLively.camera.currentMap.block(this.mx, this.my).findEntityLayerKind(this);
+        const r = MRLively.mapView.currentMap.block(this.mx, this.my).findEntityLayerKind(this);
         assert(r);
         return r;
     }
@@ -1573,8 +1591,8 @@ export class LEntity extends LObject
 
     /** 現在のマップ上に出現しているか (いずれかの Block 上に存在しているか) */
     public isAppearedOnMap(): boolean {
-        if (!MRLively.camera.currentMap.isValidPosition(this.mx, this.my)) return false;
-        const block = MRLively.camera.currentMap.block(this.mx, this.my);
+        if (!MRLively.mapView.currentMap.isValidPosition(this.mx, this.my)) return false;
+        const block = MRLively.mapView.currentMap.block(this.mx, this.my);
         return block.containsEntity(this);
     }
 

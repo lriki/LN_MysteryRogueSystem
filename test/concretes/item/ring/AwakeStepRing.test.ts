@@ -1,10 +1,9 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { UName } from "ts/mr/utility/UName";
@@ -30,7 +29,7 @@ test("concretes.item.ring.AwakeStepRing", () => {
 
     // Enemy1 (仮眠状態)
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [stateId], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, floorId, 19, 4);
+    TestEnv.transferEntity(enemy1, floorId, 19, 4);
 
     MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
     
@@ -59,7 +58,7 @@ test("concretes.item.ring.AwakeStepRing", () => {
         expect(enemy1.isStateAffected(stateId)).toBe(false);
         
         // 元に戻す
-        MRLively.world.transferEntity(undefined, player1, floorId, 16, 4);
+        TestEnv.transferEntity(player1, floorId, 16, 4);
         enemy1.addState(stateId);
     }
 

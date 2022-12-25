@@ -325,7 +325,7 @@ export class FMap {
         this._sectors = [];
         this._rooms = [];
         this._structures = [];
-        const floorData = floorId.floorInfo();
+        const floorData = floorId.floorInfo;
         const tempateData = floorData.template ? MRData.templateMaps.find(x => x.name == floorData.template) : undefined;
         this._templateId = (tempateData ?? MRData.templateMaps[1]).id;
     }
@@ -509,7 +509,7 @@ export class FMap {
     }
 
     public rmmzFixedMapData(): IDataMap {
-        assert(this._floorId.isFixedMap());
+        assert(this._floorId.isFixedMap2);
         return $dataMap;
     }
 

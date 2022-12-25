@@ -40,7 +40,10 @@ export class SScheduler {
         const dialogContext = MRSystem.dialogContext;
         const commandContext = MRSystem.commandContext;
 
+
         while (true) {
+            //MRLively.camera.syncToFocusedEntity(dialogContext);
+
             // フレーム待ち
             //if (REGame.scheduler.updateWaiting()) {
              //   break;
@@ -197,6 +200,8 @@ export class SScheduler {
             // ターン終了時に Sequel が残っていればすべて掃き出す
             MRSystem.sequelContext.flushSequelSet(false);
         }
+
+        MRLively.mapView.currentMap.updateFootpoints();
 
         this._data.chedulerPhase = LSchedulerPhase.RoundStarting
     }

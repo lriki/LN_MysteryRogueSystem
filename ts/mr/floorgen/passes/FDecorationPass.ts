@@ -3,7 +3,7 @@ import { FMapBuildPass } from "./FMapBuildPass";
 import { FBlockComponent, FEntryPont, FExitPont, FMap } from "../FMapData";
 import { DHelpers } from "ts/mr/data/DHelper";
 import { MRData } from "ts/mr/data/MRData";
-import { DAnnotationReader } from "ts/mr/data/importers/DAttributeReader";
+import { DAnnotationReader } from "ts/mr/data/importers/DAnnotationReader";
 import { DEntityCategory } from "ts/mr/data/DEntityCategory";
 import { PerlinNoise, SimplexNoise } from "ts/mr/math/Noise";
 import { DTemplateMap, DBlockVisualPartType } from "ts/mr/data/DTemplateMap";

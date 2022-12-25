@@ -312,7 +312,7 @@ export class SEffectContext {
             }
     
     
-            const focusedEntity = MRLively.camera.focusedEntity();
+            const focusedEntity = MRLively.mapView.focusedEntity();
             const friendlySubject = focusedEntity ? Helpers.isFriend(effect.subject(), focusedEntity) : false;
             if (friendlySubject) {  // subject は味方
                 result.focusedFriendly = Helpers.isFriend(effect.subject(), target);

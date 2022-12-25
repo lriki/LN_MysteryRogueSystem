@@ -1,5 +1,5 @@
 import { TestUtils } from "test/TestUtils";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { MRData } from "ts/mr/data/MRData";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
@@ -90,7 +90,7 @@ test("concretes.item.food.CorrodedFood", () => {
     
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, floorId, 15, 10);
+    TestEnv.transferEntity(enemy1, floorId, 15, 10);
     const enemy1Hp1 = enemy1.getActualParam(MRBasics.params.hp);
     const enemy1Pow1 = enemy1.getActualParam(MRBasics.params.pow);
 

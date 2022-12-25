@@ -1,5 +1,6 @@
 import { assert } from "ts/mr/Common";
 import { LFloorId } from "ts/mr/lively/LFloorId";
+import { LMap } from "ts/mr/lively/LMap";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { MRSystem } from "../MRSystem";
 import { SDialog } from "../SDialog";
@@ -35,27 +36,41 @@ export class STransferMapDialog extends SDialog {
     public constructor(source: STransferMapSource, floorId: LFloorId, x: number, y: number, d: number) {
         super();
         this.source = source;
-        this._transferingOldFloorId = MRLively.camera.currentFloorId.clone();
+        this._transferingOldFloorId = MRLively.mapView.currentFloorId.clone();
         this._transferingNewFloorId = floorId.clone();
         this._transferingNewX = x;
         this._transferingNewY = y;
         this._newDirection = d;
+        
+        console.log("STransferMapDialog", this);
 
         if (this.source == STransferMapSource.FromCommand) {
-            MRSystem.integration.onReserveTransferMap(floorId.rmmzMapId(), x, y, d);
+            MRSystem.integration.onReserveTransferMap(floorId.rmmzMapId, x, y, d);
         }
     }
 
     // 別 Land への遷移？
     public get isLandTransfering(): boolean {
-        return this._transferingOldFloorId.landId() != this._transferingNewFloorId.landId();
+        return this._transferingOldFloorId.landId != this._transferingNewFloorId.landId;
+    }
+
+    public get oldMap(): LMap | undefined {
+        if (this._transferingOldFloorId.isEmpty) return undefined;
+        return MRLively.world.map(this._transferingOldFloorId);
     }
 
     public get newFloorId(): LFloorId {
         return this._transferingNewFloorId;
     }
 
+    public get newMap(): LMap {
+        return MRLively.world.map(this._transferingNewFloorId);
+    }
+
     public performFloorTransfer(): void {
+        // MapManager による構築中は currentMap を遷移後のものとして扱っているため、事前に変更しておく
+        MRLively.mapView.currentFloorId = this._transferingNewFloorId.clone();
+
         SGameManager.performFloorTransfer(this);
     }
 }

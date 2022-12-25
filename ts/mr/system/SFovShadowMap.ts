@@ -1,10 +1,12 @@
 import { assert } from "../Common";
 import { MRData } from "../data";
+import { DFovSystem } from "../data/DSystem";
 import { LMap } from "../lively/LMap";
-import { SComputeFovResult, SFovHelper } from "./utils/SFovHelper";
+import { IFovMap, SFovHelper } from "./utils/SFovHelper";
 
 export class SFovShadowMap {
     private _map: LMap | undefined;
+    private _fovMap: FovMap | undefined;
     private _data: number[];
 
     public constructor() {
@@ -24,28 +26,35 @@ export class SFovShadowMap {
 
     public setup(map: LMap): void {
         this._map = map;
+        this._fovMap = new FovMap(this._map, this);
         this._data = new Array(map.width() * map.height());
         this.clear();
 
-        const fov = new SComputeFovResult();
-        fov.setup(map.width(), map.height());
-
         // test
-        // {
-        //     SFovHelper.computeFov(fov, 13, 24, 5, false, MRData.system.fovSystem);
-        //     for (let y = 0; y < this.height; y++) {
-        //         for (let x = 0; x < this.width; x++) {
-        //             if (fov.get(x, y).fov) {
-        //                 this.set(x, y, 1);
-        //             }
-        //         }
-        //     }
-        // }
+        {
+            //SFovHelper.computeFov(this._fovMap, 13, 24, 5, false, DFovSystem.SymmetricShadowcast);
+        }
 
         // test
         // this.set(13, 24, 1);
         // this.set(12, 24, 1);
         // this.set(13, 23, 1);
+    }
+
+    public locate(mx: number, my: number, radius: number): void {
+        if (!this._fovMap) return;
+        this.clear();
+        SFovHelper.computeFov(this._fovMap, mx, my, radius, false, DFovSystem.SymmetricShadowcast);
+    }
+
+    public isValid(mx: number, my: number): boolean {
+        return (0 <= mx && mx < this.width) && (0 <= my && my < this.height);
+    }
+
+    public isVisible(mx: number, my: number): boolean {
+        //if (!this._map) return false;
+        //return this._map.block(mx, my)._passed;
+        return this._data[my * this.width + mx] > 0;
     }
 
     public clear(): void {
@@ -54,15 +63,35 @@ export class SFovShadowMap {
         }
     }
 
-    public set(mx: number, my: number, shadow: number): void {
-        this._data[my * this.width + mx] = shadow;
+    public set(mx: number, my: number, visible: boolean): void {
+        this._data[my * this.width + mx] = visible ? 1 : 0;
+    }
+}
+
+class FovMap extends IFovMap {
+    private _map: LMap;
+    private _shadowMap: SFovShadowMap;
+
+    public constructor(map: LMap, shadowMap: SFovShadowMap) {
+        super();
+        this._map = map;
+        this._shadowMap = shadowMap;
     }
 
-    public isValid(mx: number, my: number): boolean {
-        return (0 <= mx && mx < this.width) && (0 <= my && my < this.height);
+    override getWidth(): number {
+        return this._map.width();
     }
 
-    public get(mx: number, my: number): number {
-        return this._data[my * this.width + mx];
+    override getHeight(): number {
+        return this._map.height();
+    }
+
+    override getTransparent(x: number, y: number): boolean {
+        return this._map.block(x, y).isFloorLikeShape();
+    }
+
+    override setFov(x: number, y: number, fov: boolean): void {
+        //this._map.block(x, y)._passed = fov;
+        this._shadowMap.set(x, y, fov);
     }
 }

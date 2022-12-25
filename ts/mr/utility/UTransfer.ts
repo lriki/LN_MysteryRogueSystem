@@ -9,6 +9,7 @@ import { MRSystem } from "ts/mr/system/MRSystem";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { createNoSubstitutionTemplateLiteral } from "typescript";
 import { DFloorClass } from "../data/DLand";
+import { STransferMapSource } from "../system/dialogs/STransferMapDialog";
 import { SCommand } from "../system/SCommand";
 
 
@@ -19,7 +20,7 @@ export class UTransfer {
      * 
      * @param cctx マップ遷移が発生する場合、STransferMapDialog を post する。
      */
-    public static transterRmmzDirectly(newMapId: number, newX: number, newY: number, cctx: SCommandContext | undefined): void {
+    public static transterRmmzDirectly(newMapId: number, newX: number, newY: number): void {
         const landId = MRData.maps[newMapId].landId;
         const mapData = MRData.maps[newMapId];
         //let actualMapId = 0;
@@ -38,12 +39,8 @@ export class UTransfer {
             assert(newY === 0);
             const floorNumber = newX;
             const land = MRData.lands[landId];
-            const info = land.floorInfos[floorNumber];
-            const fixedMap = land.findFixedMapByName(info.fixedMapName);
-            //if ()
-            
+            const fixedMap = land.getFixedMap(floorNumber);
 
-            //const rmmzFixedMapId = map.mapId;//$dataMapInfos.findIndex(x => x && x.name == info.fixedMapName);
             if (fixedMap) {
                 // Land 定義マップ経由の、固定マップへの移動
                 //actualMapId = rmmzFixedMapId;
@@ -63,10 +60,10 @@ export class UTransfer {
             // 固定マップへの直接遷移
             const mapInfo = $dataMapInfos[newMapId];
             assert(mapInfo);
-            const fixedMapName = mapInfo.name;
+            //const fixedMapName = mapInfo.name;
             const land = MRData.lands[landId];
             //actualMapId = newMapId;
-            actualFloorNumber = land.floorInfos.findIndex(x => x && x.fixedMapName == fixedMapName);
+            actualFloorNumber = land.findFloorNumberByMapId(newMapId);
             actualX = newX;
             actualY = newY;
             if (actualFloorNumber < 0) {
@@ -77,11 +74,11 @@ export class UTransfer {
             throw new Error("Unreachable.");
         }
         
-        const floorId = new LFloorId(landId, DFloorClass.FloorMap, actualFloorNumber);
+        const floorId = new LFloorId(landId, actualFloorNumber);
         
-        const playerEntity = MRLively.camera.focusedEntity();
+        const playerEntity = MRLively.mapView.focusedEntity();
         if (playerEntity) {
-            MRLively.world.transferEntity(cctx, playerEntity, floorId, actualX, actualY);
+            MRLively.world.transferEntity(playerEntity, floorId, actualX, actualY);
         }
 
         //$gamePlayer.reserveTransfer();
@@ -91,35 +88,36 @@ export class UTransfer {
      * entity を今いる Land から抜けさせ、ExitMap へ移動させる。
      */
     public static exitLand(cctx: SCommandContext, entity: LEntity, result: LandExitResult): void {
-        assert(entity == MRLively.camera.focusedEntity());    // Player であるはず
+        assert(entity == MRLively.mapView.focusedEntity());    // Player であるはず
 
         entity.party()?.journal.commitLandResult(result);
-        const map = MRLively.camera.currentMap;
-        const exitMapFloorId = LFloorId.makeFromEventMapData(map.land2().landData().exitMapData);
+        const map = MRLively.mapView.currentMap;
+        const landData = map.land2().landData();
+        const exitMapFloorId = LFloorId.make(landData.id, landData.exitMapFloorNumber);
         cctx.postTransferFloor(entity, exitMapFloorId);
     }
 
     public static proceedFloorForwardForPlayer(cctx: SCommandContext, interpreter?: Game_Interpreter | undefined) {
-        const entity = MRLively.camera.focusedEntity();
+        const entity = MRLively.mapView.focusedEntity();
         if (entity) {
             const floorId = entity.floorId;
-            const newFloorNumber = floorId.floorNumber() + 1;
+            const newFloorNumber = floorId.floorNumber + 1;
 
             // 最後のフロアを踏破した？
-            if (newFloorNumber > MRLively.camera.currentMap.land2().maxFloorNumber()) {
+            if (newFloorNumber > MRLively.mapView.currentMap.land2().maxFloorNumber()) {
                 // ExitMap 取得
-                const newFloorId = LFloorId.makeFromEventMapData(floorId.landData().exitMapData);
+                const newFloorId = LFloorId.make(floorId.landId, floorId.landData.exitMapFloorNumber);
 
                 entity.party()?.journal.commitLandResult(LandExitResult.Goal);
-                MRLively.world.transferEntity(cctx, entity, newFloorId);
+                MRLively.world.transferEntity(entity, newFloorId);
 
                 //$gamePlayer.reserveTransfer(exitRMMZMapId, 0, 0, 2, 0);
                 //const result = this.command201([0, exitRMMZMapId, 0, 0, 2, 0]);
                 //assert(result);
             }
             else {
-                const newFloorId = LFloorId.make(floorId.landId(), DFloorClass.FloorMap, newFloorNumber);
-                MRLively.world.transferEntity(cctx, entity, newFloorId);
+                const newFloorId = LFloorId.make(floorId.landId, newFloorNumber);
+                MRLively.world.transferEntity(entity, newFloorId);
             }
 
             if (interpreter) {

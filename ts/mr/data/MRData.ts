@@ -34,6 +34,7 @@ import { DMap } from "./DMap";
 import { DEntityTemplate, IEntityTemplateProps } from "./DEntityTemplate";
 import { DSpecialEffect } from "./DSpecialEffect";
 import { DChronus } from "./DChronus";
+import { DQuest } from "./DQuest";
 
 
 export type DFactionId = number;
@@ -132,6 +133,7 @@ export class MRData
     static terrainSettings: DTerrainSetting[] = [];
     static floorPresets: DFloorPreset[] = [];
     static pseudonymous: DPseudonymous = new DPseudonymous();
+    static quests: DQuest[] = [];
 
     static itemDataIdOffset: number = 0;
     static weaponDataIdOffset: number = 0;
@@ -174,6 +176,7 @@ export class MRData
         this.effects = [new DEffect(0, "null")];
         this.terrainSettings = [new DTerrainSetting(0)];
         this.floorPresets = [new DFloorPreset(0)];
+        this.quests = [new DQuest(0, "null")];
     }
 
     //--------------------------------------------------------------------------
@@ -767,6 +770,24 @@ export class MRData
         const d = this.findSkill(pattern);
         if (d) return d;
         throw new Error(`Skill "${pattern}" not found.`);
+    }
+
+    //--------------------------------------------------------------------------
+
+    static newQuest(key: string): DQuest {
+        const data = new DQuest(this.quests.length, key);
+        this.quests.push(data);
+        return data;
+    }
+
+    static findQuest(pattern: string): DQuest | undefined {
+        return this.findHelper(this.quests, pattern, x => x.key === pattern);
+    }
+
+    static getQuest(pattern: string): DQuest {
+        const d = this.findQuest(pattern);
+        if (!d) throw new Error(`Quest "${pattern}" not found.`);
+        return d;
     }
 
     //--------------------------------------------------------------------------

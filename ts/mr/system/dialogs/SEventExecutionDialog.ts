@@ -4,25 +4,32 @@ import { SDialogContext } from "ts/mr/system/SDialogContext";
 
 
 export class SEventExecutionDialog extends SDialog {
+    public readonly owner: LEntity;
+    public readonly player: LEntity;
     private _rmmzEventId: number;
 
     billingPrice: number;
     depositPrice: number;
-    owner: LEntity;
 
-    constructor(rmmzEventId: number, owner: LEntity) {
+    constructor(rmmzEventId: number, owner: LEntity, player: LEntity) {
         super();
+        this.owner = owner;
+        this.player = player;
         this._rmmzEventId = rmmzEventId;
         this.billingPrice = 0;
         this.depositPrice = 0;
-        this.owner = owner;
     }
 
+    /** @deprecated */
     rmmzEventId(): number {
         return this._rmmzEventId;
     }
 
-    onUpdate(context: SDialogContext): void {
+    public get rmmzEvent(): Game_Event | undefined {
+        const spawner = this.owner.getUniqueSpawner();
+        if (!spawner) return undefined;
+        if (spawner.overrideRmmzEventMapId != $gameMap.mapId()) return undefined;
+        return $gameMap.event(spawner.overrideRmmzEventId);
     }
 }
 

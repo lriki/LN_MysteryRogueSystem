@@ -3,7 +3,7 @@ import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { LTileShape } from "ts/mr/lively/LBlock";
 import { MRBasics } from "ts/mr/data/MRBasics";
@@ -52,13 +52,13 @@ test("concretes.states.RatedRandom.Issue1", () => {
     */
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_バットA").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, floorId, 11, 10);
-    MRLively.camera.currentMap.block(10, 9)._tileShape = LTileShape.Wall;
-    MRLively.camera.currentMap.block(11, 9)._tileShape = LTileShape.Wall;
-    MRLively.camera.currentMap.block(9, 10)._tileShape = LTileShape.Wall;
-    MRLively.camera.currentMap.block(12, 10)._tileShape = LTileShape.Wall;
-    MRLively.camera.currentMap.block(10, 11)._tileShape = LTileShape.Wall;
-    MRLively.camera.currentMap.block(11, 11)._tileShape = LTileShape.Wall;
+    TestEnv.transferEntity(enemy1, floorId, 11, 10);
+    MRLively.mapView.currentMap.block(10, 9)._tileShape = LTileShape.Wall;
+    MRLively.mapView.currentMap.block(11, 9)._tileShape = LTileShape.Wall;
+    MRLively.mapView.currentMap.block(9, 10)._tileShape = LTileShape.Wall;
+    MRLively.mapView.currentMap.block(12, 10)._tileShape = LTileShape.Wall;
+    MRLively.mapView.currentMap.block(10, 11)._tileShape = LTileShape.Wall;
+    MRLively.mapView.currentMap.block(11, 11)._tileShape = LTileShape.Wall;
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

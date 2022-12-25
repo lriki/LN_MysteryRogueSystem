@@ -10,11 +10,11 @@ beforeAll(() => {
     TestEnv.setupDatabase();
 });
 
-test("map/RandomSpawnLocation.NearPlayer", () => {
+test("map.RandomSpawnLocation.NearPlayer", () => {
     TestEnv.newGame();
 
-    const floorInfo = TestEnv.FloorId_FlatMap50x50.floorInfo();
-    floorInfo.fixedMapName = "";
+    const floorInfo = TestEnv.FloorId_FlatMap50x50.floorInfo;
+    floorInfo.fixedMapIndex = -1;
     floorInfo.presetId = MRData.getFloorPreset("kFloorPreset_HalfHall").id;
 
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50); 

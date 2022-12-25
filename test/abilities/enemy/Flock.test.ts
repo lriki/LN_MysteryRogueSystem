@@ -18,7 +18,7 @@ test("Abilities.Enemy.Flock", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // ひとまず、Troop 指定で Spawn 出来ていることを確認する。
-    const entites = MRLively.camera.currentMap.entities();
+    const entites = MRLively.mapView.currentMap.entities();
     const enemy1 = entites.find(x => x.data.entity.key == "kEnemy_軍隊ウルフA");
     expect(enemy1 != undefined).toBe(true);
 });

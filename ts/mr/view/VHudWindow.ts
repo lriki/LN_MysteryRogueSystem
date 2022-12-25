@@ -29,7 +29,7 @@ export class VHudWindow extends Window_Base {
     private refresh() {
         this.contents.clear();
 
-        const entity = MRLively.camera.focusedEntity();
+        const entity = MRLively.mapView.focusedEntity();
         if (!entity) return;
         const experience = entity.findEntityBehavior(LExperienceBehavior);
         if (!experience) return;
@@ -46,8 +46,8 @@ export class VHudWindow extends Window_Base {
         const nextExp = experience.nextLevelExp(entity);
         const extRatio = Math.max(0, (experience.currentExp(entity) - prevExp) / (nextExp - prevExp));
 
-        if (MRLively.camera.currentMap.floorId().isTacticsMap()) {
-            this.drawFloorNumber(0, 0, MRLively.camera.currentMap.floorId());
+        if (MRLively.mapView.currentMap.floorId().isTacticsMap2) {
+            this.drawFloorNumber(0, 0, MRLively.mapView.currentMap.floorId());
         }
         this.drawLevel(150, 0, level, extRatio);
         this.drawHpFp(300, 0, hp, mhp, fp, mfp);
@@ -57,7 +57,7 @@ export class VHudWindow extends Window_Base {
     update() {
         this.refresh();
 
-        if (MRLively.camera.currentMap.floorId().isTacticsMap() || MRLively.camera.currentMap.floorId().isSafetyMap()) {
+        if (MRLively.mapView.currentMap.floorId().isTacticsMap2 || MRLively.mapView.currentMap.floorId().isSafetyMap2) {
             this.visible = true;
         }
         else {
@@ -66,7 +66,7 @@ export class VHudWindow extends Window_Base {
     }
 
     private drawFloorNumber(x: number, y: number, floorId: LFloorId): void {
-        this.drawText(floorId.floorNumber().toString(), x, y, 32, "right");
+        this.drawText(floorId.floorNumber.toString(), x, y, 32, "right");
         this.changeTextColor(this.paramTitleColor());
         this.drawText("F", x + 32, y, 32, "left");
         this.resetTextColor();

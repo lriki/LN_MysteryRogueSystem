@@ -3,7 +3,7 @@ import { FMapBuildPass } from "./FMapBuildPass";
 import { FBlockComponent, FEntryPont, FExitPont, FMap } from "../FMapData";
 import { DHelpers } from "ts/mr/data/DHelper";
 import { MRData } from "ts/mr/data/MRData";
-import { DAnnotationReader } from "ts/mr/data/importers/DAttributeReader";
+import { DAnnotationReader } from "ts/mr/data/importers/DAnnotationReader";
 import { DEntityCategory } from "ts/mr/data/DEntityCategory";
 import { FMapBlock } from "../data/FMapBlock";
 
@@ -93,7 +93,7 @@ export class FMarkContinuationPass extends FMapBuildPass {
     }
 
     private selectSeekStartBlock(map: FMap): FMapBlock {
-        if (map.floorId().isRandomMap()) {
+        if (map.floorId().isRandomMap2) {
             // ランダムマップの場合は接続情報なども考慮し、
             // 埋蔵金部屋など独立した部屋を優先しないようにする
 
@@ -122,7 +122,7 @@ export class FMarkContinuationPass extends FMapBuildPass {
             // 固定マップの場合、EntryPoint を基準とする
             const entryPointEvent = map.rmmzFixedMapData().events.find(e => {
                 if (!e) return false;
-                const metadata = DAnnotationReader.readEntityMetadataFromPage(e.pages[0]);
+                const metadata = DAnnotationReader.readSpawnerAnnotationFromPage(e.pages[0]);
                 if (!metadata) return false;
                 const entity = MRData.findEntity(metadata.entity);
                 if (!entity) return false;
@@ -136,7 +136,7 @@ export class FMarkContinuationPass extends FMapBuildPass {
                 return map.block(entryPointEvent.x, entryPointEvent.y);
             }
             else {
-                throw new Error(`"RE-SystemPrefab:EntryPoint" not found. (in ${DHelpers.makeRmmzMapDebugName(map.floorId().rmmzFixedMapId())})`);
+                throw new Error(`"RE-SystemPrefab:EntryPoint" not found. (in ${DHelpers.makeRmmzMapDebugName(map.floorId().rmmzFixedMapId2)})`);
             }
         }
     }

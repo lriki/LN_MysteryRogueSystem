@@ -45,7 +45,7 @@ export class LNapStateBehavior extends LBehavior {
         // handleRoomEnterd
         if (eventId == MRBasics.events.roomEnterd) {
             const e = (args as RoomEventArgs);
-            const block = MRLively.camera.currentMap.block(self.mx, self.my);
+            const block = MRLively.mapView.currentMap.block(self.mx, self.my);
             if (block._roomId == e.newRoomId) {
                 this.attemptReserveGetUp(self, e.entity);
             }
@@ -58,7 +58,7 @@ export class LNapStateBehavior extends LBehavior {
         }
         else if (eventId == MRBasics.events.skillEmitted) {
             const e = (args as SkillEmittedArgs);
-            const block = MRLively.camera.currentMap.block(self.mx, self.my);
+            const block = MRLively.mapView.currentMap.block(self.mx, self.my);
             if (block._roomId == e.performer.roomId()) {
                 this.attemptReserveGetUp(self, e.performer);
             }

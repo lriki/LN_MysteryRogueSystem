@@ -79,7 +79,7 @@ export class UBlock {
         //     }
         // }
 
-        for (const entity2 of MRLively.camera.currentMap.entities()) {
+        for (const entity2 of MRLively.mapView.currentMap.entities()) {
             for (const fieldEffect of entity2.fieldEffects()) {
                 // TODO: とりあえず今は LSanctuaryBehavior でしか使っていないので、通行可否で判断している
                 if (!fieldEffect.onCheckPossibleMovement(entity, block.mx, block.my)) {

@@ -11,7 +11,7 @@ Game_Message.prototype.isBusy = function() {
 };
 
 function playerInventory(): LInventoryBehavior | undefined {
-    const player = MRLively.camera.focusedEntity();
+    const player = MRLively.mapView.focusedEntity();
     if (!player) return undefined;
     return player.findEntityBehavior(LInventoryBehavior);
 }

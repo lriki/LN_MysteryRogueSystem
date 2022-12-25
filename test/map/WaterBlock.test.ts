@@ -5,7 +5,7 @@ import { MRSystem } from "ts/mr/system/MRSystem";
 import { LTileShape } from "ts/mr/lively/LBlock";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { SEntityFactory } from "ts/mr/system/internal";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { MRData } from "ts/mr/data/MRData";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { MRBasics } from "ts/mr/data/MRBasics";
@@ -20,10 +20,10 @@ test("map.WaterBlock.EdgeMoving", () => {
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
 
     // Player と Enemy の間に水地を作る
-    MRLively.camera.currentMap.block(11, 10)._tileShape = LTileShape.Water;
+    MRLively.mapView.currentMap.block(11, 10)._tileShape = LTileShape.Water;
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
@@ -52,11 +52,11 @@ test("map.WaterBlock.WoodArrow.ProjectileOverMove", () => {
     inventory.addEntity(item1);
     
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, floorId, 13, 10);
+    TestEnv.transferEntity(enemy1, floorId, 13, 10);
     const initialHP = enemy1.getActualParam(MRBasics.params.hp);
 
     // Player と Enemy の間に水地を作る
-    MRLively.camera.currentMap.block(12, 10)._tileShape = LTileShape.Water;
+    MRLively.mapView.currentMap.block(12, 10)._tileShape = LTileShape.Water;
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -85,11 +85,11 @@ test("map.WaterBlock.WoodArrow.ProjectileOverMove", () => {
     inventory.addEntity(item1);
     
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, floorId, 13, 10);
+    TestEnv.transferEntity(enemy1, floorId, 13, 10);
     const initialHP = enemy1.getActualParam(MRBasics.params.hp);
 
     // Player と Enemy の間に水地を作る
-    MRLively.camera.currentMap.block(12, 10)._tileShape = LTileShape.Water;
+    MRLively.mapView.currentMap.block(12, 10)._tileShape = LTileShape.Water;
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
@@ -118,8 +118,8 @@ test("map.WaterBlock.WoodArrow.SinkProjectile", () => {
     inventory.addEntity(item1);
 
     // Player の前に水と壁を作る
-    MRLively.camera.currentMap.block(12, 10)._tileShape = LTileShape.Water;
-    MRLively.camera.currentMap.block(13, 10)._tileShape = LTileShape.Wall;
+    MRLively.mapView.currentMap.block(12, 10)._tileShape = LTileShape.Water;
+    MRLively.mapView.currentMap.block(13, 10)._tileShape = LTileShape.Wall;
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

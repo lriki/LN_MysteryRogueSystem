@@ -1,10 +1,9 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { TestEnv } from "test/TestEnv";
@@ -30,7 +29,7 @@ test("concretes.item.shield.LeatherShield.test", () => {
 
     // trap1 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_錆ワナA").id, [], "trap1"));
-    MRLively.world.transferEntity(undefined, trap1, floorId, 11, 10);
+    TestEnv.transferEntity(trap1, floorId, 11, 10);
     const shield1_UP1 = shield1.getActualParam(MRBasics.params.upgradeValue);
 
     MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------

@@ -1,11 +1,10 @@
-import { MRBasics } from "ts/mr/data/MRBasics";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 
 beforeAll(() => {
@@ -29,11 +28,11 @@ test("projectiles.MagicBullet", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, floorId, 15, 10);
+    TestEnv.transferEntity(enemy1, floorId, 15, 10);
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const count1 = MRLively.camera.currentMap.entities().length;
+    const count1 = MRLively.mapView.currentMap.entities().length;
 
     //----------------------------------------------------------------------------------------------------
 
@@ -46,7 +45,7 @@ test("projectiles.MagicBullet", () => {
     // const hp = enemy1.actualParam(REBasics.params.hp);
     // const count2 = REGame.map.entities().length;
     // // スキル起点の特殊効果を持った Projectile は地面に落下せずに消える
-    const block = MRLively.camera.currentMap.block(15, 10);
+    const block = MRLively.mapView.currentMap.block(15, 10);
     //const proj = .layer(DBlockLayerKind.Ground).firstEntity();
     expect(block.getFirstEntity()).toBe(undefined);
 });

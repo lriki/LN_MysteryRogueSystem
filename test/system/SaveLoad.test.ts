@@ -1,5 +1,5 @@
 import { TestJsonEx } from "test/TestJsonEx";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { MRData } from "ts/mr/data/MRData";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
@@ -28,7 +28,7 @@ test("system.SaveLoad.EventServerIssue", () => {
     inventory.addEntity(item1);
     
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [stateId], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, floorId, 20, 20);
+    TestEnv.transferEntity(enemy1, floorId, 20, 20);
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

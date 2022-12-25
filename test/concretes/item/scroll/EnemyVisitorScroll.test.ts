@@ -3,11 +3,8 @@ import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
-import { TestUtils } from "test/TestUtils";
-import { MRLively } from "ts/mr/lively/MRLively";
-import { MRBasics } from "ts/mr/data/MRBasics";
 import { SView } from "ts/mr/system/SView";
 import { SNavigationHelper } from "ts/mr/system/SNavigationHelper";
 
@@ -31,9 +28,9 @@ test("concretes.item.scroll.EnemyVisitorScroll", () => {
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_黒幕バットA").id, [], "enemy2"));
     const enemy3 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_梅キツネA").id, [MRData.getState("kState_UTアイテム擬態").id], "enemy3"));
-    MRLively.world.transferEntity(undefined, enemy1, floorId, 19, 4);
-    MRLively.world.transferEntity(undefined, enemy2, floorId, 20, 4);
-    MRLively.world.transferEntity(undefined, enemy3, floorId, 20, 5);
+    TestEnv.transferEntity(enemy1, floorId, 19, 4);
+    TestEnv.transferEntity(enemy2, floorId, 20, 4);
+    TestEnv.transferEntity(enemy3, floorId, 20, 5);
 
     expect(SNavigationHelper.testVisibilityForMinimap(player1, enemy1)).toBeFalsy();
 

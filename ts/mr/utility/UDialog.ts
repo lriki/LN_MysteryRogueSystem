@@ -24,7 +24,7 @@ export class UDialog {
     
     public static postOpenFeetDialog(cctx: SCommandContext, entity: LEntity, onClosed: (dialog: SFeetDialog) => void): boolean {
         const dctx = cctx.dialogContext;
-        const feetEntity = MRLively.camera.currentMap.firstFeetEntity(entity);
+        const feetEntity = MRLively.mapView.currentMap.firstFeetEntity(entity);
         if (feetEntity) {
             dctx.activeDialog().openSubDialog(new SFeetDialog(entity, feetEntity), onClosed);
             return true;

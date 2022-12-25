@@ -1,7 +1,7 @@
 import { MRLively } from "ts/mr/lively/MRLively";
 import { SRmmzHelpers } from "ts/mr/system/SRmmzHelpers";
 import { assert } from "../Common";
-import { DAnnotationReader, RmmzREEventAttribute } from "../data/importers/DAttributeReader";
+import { DAnnotationReader, DRmmzREEventAnnotation } from "../data/importers/DAnnotationReader";
 import { DPrefab, DPrefabId } from "../data/DPrefab";
 import { MRDataManager } from "../data/MRDataManager";
 import { LState } from "../lively/states/LState";
@@ -22,13 +22,13 @@ declare global {
     interface Game_Event {
         //_entityData: DEntitySpawner2 | undefined;
         _isREEntity: boolean;
-        _reEventData: RmmzREEventAttribute | undefined;
+        _reEventData: DRmmzREEventAnnotation | undefined;
 
         
         _spritePrepared_RE: boolean;
         _prefabId_RE: DPrefabId;
         _eventData_RE: IDataMapEvent | undefined;
-        _pageData_RE: (RmmzREEventAttribute | undefined)[];
+        _pageData_RE: (DRmmzREEventAnnotation | undefined)[];
 
         setupPrefab(prefab: DPrefab, mapId: number, eventData: IDataMapEvent): void;
         resetPrefab(prefab: DPrefab): void;
@@ -92,7 +92,7 @@ Game_Event.prototype.setupPageSettings = function() {
     _Game_Event_setupPageSettings.call(this);
 
     this._isREEntity = !!SRmmzHelpers.readEntityMetadata(this, this._mapId);
-    this._reEventData = (this._pageIndex >= 0) ? DAnnotationReader.readREEventMetadataFromPage(this.page()) : undefined;
+    this._reEventData = (this._pageIndex >= 0) ? DAnnotationReader.readREEventAnnotationFromPage(this.page()) : undefined;
 }
 
 var _Game_Event_meetsConditions = Game_Event.prototype.meetsConditions;
@@ -142,7 +142,7 @@ Game_Event.prototype.setupPrefab = function(prefab: DPrefab, mapId: number, even
     this._eventData_RE = eventData;
     this._pageData_RE = [];
     for (let i = 0; i < this._eventData_RE.pages.length; i++) {
-        const data = DAnnotationReader.readREEventMetadataFromPage(this._eventData_RE.pages[i]);
+        const data = DAnnotationReader.readREEventAnnotationFromPage(this._eventData_RE.pages[i]);
         if (data) {
             this._pageData_RE[i] = data;
         }

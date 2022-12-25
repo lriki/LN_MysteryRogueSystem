@@ -41,9 +41,9 @@ export interface DSystemSkills {
 }
 
 export enum DFovSystem {
-    RoomBounds,
+    RoomBounds = "RoomBounds",
     // https://www.albertford.com/shadowcasting/
-    SymmetricShadowcast,
+    SymmetricShadowcast = "SymmetricShadowcast",
 }
 
 /**

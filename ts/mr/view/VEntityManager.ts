@@ -29,7 +29,9 @@ export class VEntityManager {
         MRLively.signalFlushSequelSet = (x) => this.handleFlushSequelSet(x);
         
         // init 時点の map 上にいる Entity から Visual を作る
-        this.resetVisuals();
+        if (MRLively.mapView.currentFloorId.isTacticsMap2) {
+            this.resetVisuals();
+        }
     }
 
     public resetVisuals(): void {
@@ -38,7 +40,7 @@ export class VEntityManager {
         }
         this._visualEntities = [];
 
-        MRLively.camera.currentMap.entities().forEach(x => {
+        MRLively.mapView.currentMap.entities().forEach(x => {
             this.createVisual2(x);
         });
     }
@@ -137,10 +139,11 @@ export class VEntityManager {
     
 
     public createVisual2(entity: LEntity): void {
+        console.log("createVisual2", entity);
 
         let overrideEvent: IDataMapEvent | undefined;
-        const floorNumber = MRLively.camera.currentMap.floorId().floorNumber();
-        const land = MRLively.camera.currentMap.land2();
+        const floorNumber = MRLively.mapView.currentMap.floorId().floorNumber;
+        const land = MRLively.mapView.currentMap.land2();
         for (const info of land.landData().appearanceTable.entities) {
             if (info.startFloorNumber <= floorNumber && floorNumber <= info.lastFloorNumber) {
                 if (info.spawiInfo.entityId == entity.dataId) {
@@ -160,7 +163,7 @@ export class VEntityManager {
         }
         else {
             //assert(entity.rmmzEventId == 0);
-            if (entity.rmmzEventId > 0) {
+            if (entity.rmmzEventId > 0 && $gameMap.event(entity.rmmzEventId)) {
                 // セーブデータのロード後はここに来る。
                 // Visual 用に作った Event もセーブデータに含まれているため。
                 // ちょっと不自然な動作な気がするけど、対策するならまずオートセーブのタイミングを考え直さないとならない。
@@ -171,7 +174,7 @@ export class VEntityManager {
             else {
                 //  entity に対応する動的イベントを新たに生成する
                 const event = $gameMap.spawnREEvent(prefab, undefined, overrideEvent);
-                entity.rmmzEventId = event.eventId();
+                entity.setRmmzEventId(event.eventId());
             }
         }
 

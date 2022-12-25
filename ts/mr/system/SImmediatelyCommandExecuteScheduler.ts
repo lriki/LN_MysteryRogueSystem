@@ -17,6 +17,8 @@ export class SImmediatelyCommandExecuteScheduler {
     public stepSimulation(): void {
         const dialogContext = MRSystem.dialogContext;
         const commandContext = MRSystem.commandContext;
+        
+        //MRLively.camera.syncToFocusedEntity(dialogContext);
 
         while (true) {
 

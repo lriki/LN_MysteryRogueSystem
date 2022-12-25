@@ -21,6 +21,8 @@ import { DBlockLayerKind } from "../data/DCommon";
 import { UBlock } from "../utility/UBlock";
 import { LRoomId } from "./LCommon";
 import { USearch } from "../utility/USearch";
+import { DUniqueSpawner } from "../data/DSpawner";
+import { DEntityId } from "../data/DEntity";
 
 export enum MovingMethod {
     Walk,
@@ -28,34 +30,16 @@ export enum MovingMethod {
     Penetration,
 }
 
-/*
-    ### ランダムフロアへ移動したときのフロー
-    - マップ移動イベントにより、MR-Land マップの (x,0) へ移動
-    - FloorInfo を確認。ランダムマップであれば、FMap をランダム構築
-    - FMap を使って LMap を setup
-    - 
-
-    ### 固定フロアへ移動したときのフロー
-    - マップ移動イベントにより、固定マップの任意の座標へ移動
-    - FloorInfo を確認。固定マップであれば、$dataMap から FMap を構築
-    - FMap を使って LMap を setup
-
-*/
-
-
 /**
- * アクティブなマップオブジェクト。インスタンスは1つだけ存在する。
+ * マップオブジェクト。
  * 
- * Map 遷移が行われたとき、World に存在する Entity のうち、
- * この Map 上にいることになっている Entity は、自動的に追加される。
+ * RMMZ のマップに対応するものでは無く、 Floor に対応するものである点に注意。
+ * ID は RMMZ のマップ ID ではなく、 FloorId である。
  * 
- * このクラスのメソッドによる登場や移動は Sequel を伴わない。そういったものは Command 処理側で対応すること。
+ * インスタンスは NewGame 時には存在しない。
+ * 始めてそのマップへ遷移したときに生成され、以後は World に管理される Object としえ永久的に存在する。
+ * これは Game_Actors と同じく、セーブデータの引継ぎに対応するための仕組みである。
  * 
- * [2022/2/25] Player をマップ中央に表示するための、外周のマージンはどうやって表現しよう？
- * ----------
- * SFCシレンの場合、大部屋の左上が (4,4) となっており、4ブロック分のマージンがあることがわかる。
- * https://give-up-easily.hatenadiary.org/entry/20120223/1330019652
- * ちょうど1画面分。
  */
 @MRSerializable
 export class LMap extends LObject {
@@ -68,6 +52,8 @@ export class LMap extends LObject {
     private _structures: LStructure[] = [];
     private _mapdataRevision: number = 1;
     private _roundCount: number = 0;
+    
+    public uniqueSpawners: { [key: DEntityId]: DUniqueSpawner };
 
     // 巻物による気配察知・道具感知効果。
     // Trait とは別物。Trait は腕輪など装備品と共に使うが、こちらは巻物など一度効果を受けたらあとは永続するもの。
@@ -82,6 +68,7 @@ export class LMap extends LObject {
     constructor(floorId: LFloorId) {
         super(LObjectType.Map);
         this._floorId = floorId.clone();
+        this.uniqueSpawners = {};
     }
     
     public isGCReady(): boolean {
@@ -89,7 +76,7 @@ export class LMap extends LObject {
     }
 
     setup(mapData: FMap) {
-        assert(this._entityIds.length == 0);        // 外部で releaseMap してから setup すること
+        this.uniqueSpawners = {};
         this.unitClarity = false;
         this.itemClarity = false;
         this.trapClarity = false;
@@ -98,7 +85,6 @@ export class LMap extends LObject {
     }
 
     public setupForRMMZDefaultMap():void {
-        assert(this._entityIds.length == 0);        // 外部で releaseMap してから setup すること
         this.setupEmptyMap(1, 1);
     }
 
@@ -116,6 +102,10 @@ export class LMap extends LObject {
 
     public increaseRoundCount(): void {
         this._roundCount++;
+    }
+
+    public get hasMapData(): boolean {
+        return this._blocks.length > 0;
     }
 
     private setupEmptyMap(width: number, height: number) {
@@ -198,7 +188,7 @@ export class LMap extends LObject {
     }
 
     isValid(): boolean {
-        return this._floorId.hasAny() && this._width > 0;
+        return this._floorId.hasAny && this._width > 0;
     }
 
     public floorId(): LFloorId {
@@ -223,11 +213,11 @@ export class LMap extends LObject {
     }
 
     public land2(): LLand {
-        return MRLively.world.land(this._floorId.landId());
+        return MRLively.world.land(this._floorId.landId);
     }
 
     public floorData(): DFloorInfo {
-        return this.land2().landData().floorInfos[this._floorId.floorNumber()];
+        return this.land2().landData().floorInfos[this._floorId.floorNumber];
     }
 
     width(): number {
@@ -348,7 +338,8 @@ export class LMap extends LObject {
     }
 
     public isValidPosition(x: number, y: number): boolean {
-        return (0 <=  x|| x < this._width || 0 <= y || y < this._height);
+        return 0 <= x && x < this._width && 0 <= y && y < this._height;
+        //return (0 <=  x|| x < this._width || 0 <= y || y < this._height);
         //return (x < 0 || this._width <= x || y < 0 || this._height <= y);
     }
 
@@ -408,8 +399,9 @@ export class LMap extends LObject {
         entity.iterateBehaviorsReverse(b => {
             b.onEnteredMap(entity, this);
             return true;
-         });
-        MRSystem.integration.entityEnteredMap(entity);
+        });
+
+        MRLively.mapView.onEntityEnteredFromMap(entity);
     }
 
     /**
@@ -420,28 +412,28 @@ export class LMap extends LObject {
      * 既に現在の Floor 上に登場済みの Entity に対してこのメソッドを呼び出すと失敗する。
      */
     appearEntity(entity: LEntity, x: number, y: number, layer?: DBlockLayerKind): void {
-        assert(entity.floorId.isEmpty());
+        assert(entity.floorId.isEmpty);
         entity.floorId = this.floorId();
-        UMovement.locateEntity(entity, x, y, layer);
+        this.locateEntity(entity, x, y, layer);
         this._addEntityInternal(entity);
     }
 
     // appearEntity の、マップ遷移時用
-    _reappearEntity(entity: LEntity): void {
-        assert(entity.floorId.equals(this.floorId()));
+    // _reappearEntity(entity: LEntity): void {
+    //     assert(entity.floorId.equals(this.floorId()));
 
-        if (entity.isOnOffstage()) {
-            // ランダムマップ遷移時、Player などの UniqueEntity はこの状態になる
-            this._addEntityInternal(entity);
-        }
-        else {
-            const block = this.block(entity.mx, entity.my);
-            const layer = entity.getHomeLayer();
-            block.addEntity(layer, entity);
-            UMovement._postLocate(entity, undefined, block, this, undefined);
-            this._addEntityInternal(entity);
-        }
-    }
+    //     if (entity.isOnOffstage()) {
+    //         // ランダムマップ遷移時、Player などの UniqueEntity はこの状態になる
+    //         this._addEntityInternal(entity);
+    //     }
+    //     else {
+    //         const block = this.block(entity.mx, entity.my);
+    //         const layer = entity.getHomeLayer();
+    //         block.addEntity(layer, entity);
+    //         UMovement._postLocate(entity, undefined, block, this, undefined);
+    //         this._addEntityInternal(entity);
+    //     }
+    // }
 
     _removeEntity(entity: LEntity): void {
         this._entityIds = this._entityIds.filter(x => !x.equals(entity.entityId()));
@@ -466,10 +458,11 @@ export class LMap extends LObject {
 
         assert(entity.floorId.equals(this.floorId()));
         
-        if (entity.floorId.isTacticsMap()) {
+        if (entity.floorId.isTacticsMap2) {
             const block = this.block(entity.mx, entity.my);
-            const result = block.removeEntity(entity);
-            assert(result);
+            block.removeEntity(entity);
+            // MapData 未ロード時には、block には Entity が含まれていないこともあるため、
+            // 本当に削除できたかのチェックは不要。
         }
         else {
             // RESystem 外のマップでは block を作っていないこともある
@@ -477,7 +470,7 @@ export class LMap extends LObject {
         
         entity.floorId = LFloorId.makeEmpty();
         entity.clearParent();
-        MRSystem.integration.entityLeavedMap(entity);
+        MRLively.mapView.onEntityRemovedFromMap(entity);
     }
 
     onRemoveChild(obj: LObject): void {
@@ -486,7 +479,36 @@ export class LMap extends LObject {
         }
     }
 
+    /**
+     * Entity の位置設定
+     * 
+     * entity は map に追加済みであること。
+     * 
+     * - moveEntity() と異なり、移動可能判定を行わずに強制移動する。
+     * - マップ生成時の Entity 配置や、ワープ移動などで使用する。
+     * - Visual に対して位置合わせを通知するため、歩行などアニメーションを伴う移動での使用は禁止。
+     * - 侵入判定を伴う。
+     */
+     public locateEntity(entity: LEntity, x: number, y: number, toLayer?: DBlockLayerKind): void {
+        //const map = MRLively.mapView.currentMap;
+        assert(entity.floorId.equals(this.floorId()));
 
+        const oldBlock = this.block(entity.mx, entity.my);
+        const newBlock = this.block(x, y);
+        assert(newBlock);
+        
+        const layer = (toLayer) ? toLayer : entity.getHomeLayer();
+
+        oldBlock.removeEntity(entity);
+        entity.mx = x;
+        entity.my = y;
+        newBlock.addEntity(layer, entity);
+        newBlock.setFootpoint(entity);
+        UMovement._postLocate(entity, oldBlock, newBlock, this, undefined);
+
+        // Located 通知。これはアニメを伴う移動時は通知したくないのでここで行う。
+        MRSystem.integration.onEntityLocated(entity);
+    }
 
     /**
      * 指定した Block へ Entity が侵入できるか。
@@ -548,6 +570,47 @@ export class LMap extends LObject {
 
                 entity._located = false;
             }
+        }
+    }
+
+    // Map 内に存在するが Block に含まれていない Entity を Block に追加する。
+    // これは MapData が無いときに追加された Entity の状態を正常な状態にするために行う。
+    public refreshLocateToBlockAllEntites(): void {
+        for (const entity of this.entities()) {
+            const block = this.block(entity.mx, entity.my);
+            assert(block);
+            if (!block.containsEntity(entity)) {
+                const layer = entity.getHomeLayer();
+                block.setFootpoint(entity);
+                block.addEntity(layer, entity);
+                
+                if (!entity.isOnOffstage()) {
+                    UMovement._postLocate(entity, undefined, block, this, undefined);
+                }
+            }
+        }
+    }
+
+    public needsRebuild(): boolean {
+        const info = this._floorId.floorInfo;
+        if (info.unique) {
+            if (this._blocks.length == 0) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public shouldUnloadAtMapTransferred(): boolean {
+        return !this._floorId.floorInfo.unique;
+    }
+
+    public updateFootpoints(): void {
+        for (const block of this._blocks) {
+            block.updateFootpoints();
         }
     }
 

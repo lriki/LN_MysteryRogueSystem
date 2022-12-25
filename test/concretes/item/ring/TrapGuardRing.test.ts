@@ -1,10 +1,9 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { TestEnv } from "test/TestEnv";
 
@@ -28,7 +27,7 @@ test("concretes.item.ring.TrapGuardRing", () => {
 
     // Trap
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_SleepTrap, [], "trap1"));
-    MRLively.world.transferEntity(undefined, trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    TestEnv.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
@@ -38,7 +37,7 @@ test("concretes.item.ring.TrapGuardRing", () => {
     let count = 0;
     for (let i = 0; i < 100; i++) {
         // 移動
-        MRLively.world.transferEntity(undefined, player1, floorId, 10, 10);
+        TestEnv.transferEntity(player1, floorId, 10, 10);
         MRSystem.dialogContext.postActivity(LActivity.makeMoveToAdjacent(player1, 6).withEntityDirection(6).withConsumeAction());
         MRSystem.dialogContext.activeDialog().submit();
         

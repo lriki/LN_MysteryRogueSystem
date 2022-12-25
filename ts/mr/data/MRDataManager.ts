@@ -7,23 +7,23 @@ import { DState, DStateRestriction } from "./DState";
 import { DEquipmentType_Default } from "./DEquipmentType";
 import { DAbility, DAbility_Default } from "./DAbility";
 import { parseMetaToEntityProperties } from "./DEntityProperties";
-import { DLand, DLandIdentificationLevel } from "./DLand";
+import { DFloorClass, DLand, DLandIdentificationLevel } from "./DLand";
 import { DHelpers } from "./DHelper";
 import { DPrefabMoveType } from "./DPrefab";
 import { DEquipment } from './DItem';
 import { DTrait } from './DTrait';
 import { DRmmzEffectScope, DParameterEffectApplyType, DParameterQualifying, DEffectFieldScopeType, DSkillCostSource, DParamCostType } from './DEffect';
-import { DSystem } from './DSystem';
+import { DFovSystem, DSystem } from './DSystem';
 import { DSkill } from './DSkill';
 import { DTroop } from './DTroop';
 import { DStateGroup } from './DStateGroup';
 import { MRSetup } from './MRSetup';
 import { DElement } from './DElement';
 import { DParamMessageValueSource, DParameter, DParameterType } from './DParameter';
-import { DDataImporter } from './DDataImporter';
+import { DDataImporter, DLandMapDataDirectory, DMapDataNodeLeafType, DMapDataNodeRootType } from './DDataImporter';
 import { DDropItem } from './DEnemy';
 import { DTextManager } from './DTextManager';
-import { DAnnotationReader } from './importers/DAttributeReader';
+import { DAnnotationReader } from './importers/DAnnotationReader';
 import { DMetadataParser } from './importers/DMetadataParser';
 import { DSetupScript } from './importers/DSetupScript';
 import { DSectorConnectionPreset, FGenericRandomMapWayConnectionMode } from './DTerrainPreset';
@@ -35,6 +35,7 @@ import { DValidationHelper } from './DValidationHelper';
 import { DMapId } from './DCommon';
 import { REFloorMapKind } from './DMap';
 import { DEffectRef } from './DEffectSuite';
+import { DQuestTask } from './DQuest';
 
 type NextFunc = () => void;
 type TaskFunc = (next: NextFunc) => void;
@@ -568,6 +569,30 @@ export class MRDataManager {
             MRBasics.defaultTerrainPresetId = 1;
         }
 
+        // Test
+        {
+            {
+                const data = MRData.newQuest("kQuest_メインクエスト");
+                data.tasks.push(new DQuestTask("kQuestTask_メインクエスト戦_1"));
+            }
+            {
+                const data = MRData.newQuest("kQuest_ActorBからActorCへのお届け物");
+                data.tasks.push(new DQuestTask("kQuestTask_ActorBからActorCへのお届け物_1"));
+            }
+            {
+                const data = MRData.newQuest("kQuest_アイテムの納品");
+                data.tasks.push(new DQuestTask("kQuestTask_アイテムの納品_1"));
+            }
+            {
+                const data = MRData.newQuest("kQuest_特定フロアにいるモンスターの盗伐");
+                data.tasks.push(new DQuestTask("kQuestTask_特定フロアにいるモンスターの盗伐_1"));
+            }
+            {
+                const data = MRData.newQuest("kQuest_特定マップへ移動して殲滅戦");
+                data.tasks.push(new DQuestTask("kQuestTask_特定マップへ移動して殲滅戦_1"));
+            }
+        }
+
         next();
     }
 
@@ -965,7 +990,7 @@ export class MRDataManager {
             const troop = new DTroop(MRData.troops.length);
             MRData.troops.push(troop);
             if (x) {
-                const metadata = DAnnotationReader.readTroopAttributeFromPage(x.pages[0]);
+                const metadata = DAnnotationReader.readTroopAnnotationFromPage(x.pages[0]);
                 if (metadata) {
                     troop.key = metadata.key;
                     troop.members = [];
@@ -1020,31 +1045,32 @@ export class MRDataManager {
     }
 
     private static importLandAndFloors(next: NextFunc) {
-        // Import Lands
-        // 最初に Land を作る
-        MRData.lands = [];
-        MRData.lands.push(new DLand(0, false)); // [0] dummy
-
-        const defaltLand = new DLand(1, false);
-        MRData.lands.push(defaltLand);  // [1] REシステム管理外の RMMZ マップを表す Land
-
-        // const worldLand = new DLand(2);
-        // MRData.lands.push(worldLand);   // [2] World
-        
+        // 最初に Land のインスタンスを作っておく
         {
-            const level = DLandIdentificationLevel.Entity;
-            for (const kind of MRData.categories) {
-                defaltLand.identifiedKinds[kind.id] = level;
-            }
-        }
+            MRData.lands = [];
+            MRData.lands.push(new DLand(0, false)); // [0] dummy
 
-        for (var i = 0; i < $dataMapInfos.length; i++) {
-            const info = $dataMapInfos[i];
-            if (info && this.isLandMap(i)) {
-                const land = new DLand(MRData.lands.length, info.name.startsWith("MR-World:"));
-                land.name = info.name;
-                land.rmmzMapId = i;
-                MRData.lands.push(land);
+            const defaltLand = new DLand(1, false);
+            MRData.lands.push(defaltLand);  // [1] REシステム管理外の RMMZ マップを表す Land
+
+            // const worldLand = new DLand(2);
+            // MRData.lands.push(worldLand);   // [2] World
+            
+            {
+                const level = DLandIdentificationLevel.Entity;
+                for (const kind of MRData.categories) {
+                    defaltLand.identifiedKinds[kind.id] = level;
+                }
+            }
+
+            for (var i = 0; i < $dataMapInfos.length; i++) {
+                const info = $dataMapInfos[i];
+                if (info && this.isLandMap(i)) {
+                    const land = new DLand(MRData.lands.length, info.name.startsWith("MR-World:"));
+                    land.name = info.name;
+                    land.rmmzMapId = i;
+                    MRData.lands.push(land);
+                }
             }
         }
 
@@ -1054,86 +1080,80 @@ export class MRDataManager {
         //   ひとまず欠番は多くなるが、最大フロア数でデータを作ってみる。
         {
             // 固定マップ
-            //REData.maps = new Array($dataMapInfos.length);
             for (let i = 1; i < $dataMapInfos.length; i++) {
                 const info = $dataMapInfos[i];
-                
                 const mapData = MRData.newMap();
-                mapData.landId = DHelpers.VanillaLandId;
-                // DMap = {
-                //     id: i, landId: , mapId: 0, mapKind: REFloorMapKind.FixedMap, exitMap: false, defaultSystem: false, eventMap: false,
-                // };
-                //REData.maps[i] = mapData;
+                if (!info) continue;    // RMMZ のマップは歯抜けになることがある。その場合は採番のため DMap は作っておくが、関連付けは行わない。
 
-                if (!info) {
-                    // Map 無し。mapId は 0 のまま。
-                    continue;
-                }
-                else {
-                    mapData.mapId = i;
-                }
+                const nodeInfo = DDataImporter.getMapDataNodeInfo(i);
 
+                // Map が属する Land を求めておく
+                let land = MRData.lands[DHelpers.VanillaLandId];
+                if (nodeInfo.landRmmzMapId !== undefined && nodeInfo.landRmmzMapId > 0) {
+                    const r = MRData.lands.find(x => x.rmmzMapId == nodeInfo.landRmmzMapId);
+                    if (r) {
+                        land = r;
+                    }
+                }
+                
+                mapData.landId = land.id;
+                mapData.mapId = i;
                 assert(mapData.id == i);
+
+                if (info.name?.startsWith("MR-Safety:")) {
+                    mapData.safetyMap = true;
+                }
 
                 if (this.isDatabaseMap(i)) {
                     this.databaseMapId = i;
                 }
-                else {
-                    if (info.name?.startsWith("MR-Safety:")) {
-                        mapData.safetyMap = true;
+                else if (nodeInfo.rootType == DMapDataNodeRootType.MapTemplates && nodeInfo.leafType != DMapDataNodeLeafType.RootOrDirctory) {
+                    mapData.mapKind = REFloorMapKind.TemplateMap;
+                    const templateMap = MRData.newTemplateMap();
+                    templateMap.name = info.name;
+                    templateMap.mapId = mapData.id;
+                }
+                else if (info.name?.startsWith("MR-Land:") || info.name?.startsWith("MR-World:")) {
+                    const land = MRData.lands.find(x => x.rmmzMapId == i);
+                    assert(land);
+                    mapData.mapKind = REFloorMapKind.Land;
+                }
+                else if (nodeInfo.rootType == DMapDataNodeRootType.LandLike) {
+                    if (nodeInfo.directory === DLandMapDataDirectory.Shuffle && nodeInfo.leafType != DMapDataNodeLeafType.RootOrDirctory) {
+                        mapData.mapKind = REFloorMapKind.ShuffleMap;
                     }
-
-                    // 以下、必ず親Mapが必要なもの
-                    const parentInfo = $dataMapInfos[info.parentId];
-                    if (parentInfo) {
-                        if (info.parentId > 0 && parentInfo.name.includes("MR-MapTemplates")) {
-                            mapData.mapKind = REFloorMapKind.TemplateMap;
-                            const templateMap = MRData.newTemplateMap();
-                            templateMap.name = info.name;
-                            templateMap.mapId = mapData.id;
-                        }
-                        else if (info.name?.startsWith("MR-Land:") || info.name?.startsWith("MR-World:")) {
-                            const land = MRData.lands.find(x => x.rmmzMapId == i);
-                            assert(land);
-                            mapData.landId = land.id;
-                            mapData.mapKind = REFloorMapKind.Land;
-                        }
-                        else if (info.parentId) {
-                            const land = MRData.lands.find(x => parentInfo && parentInfo.parentId && x.rmmzMapId == parentInfo.parentId);
-                            if (land) {
-                                mapData.landId = land.id;
-                                if (parentInfo.name.includes("[Random]")) {
-                                    mapData.mapKind = REFloorMapKind.RandomMap;
-                                }
-                                else if (parentInfo.name.includes("[Shuffle]")) {
-                                    mapData.mapKind = REFloorMapKind.ShuffleMap;
-                                }
-                                else if (parentInfo.name.includes("[Fixed]")) {
-                                    mapData.mapKind = REFloorMapKind.FixedMap;
-                                    land.fixedMapIds.push(mapData.id);
-                                }
-                            }
-                        }
-                                
-                        DDataImporter.importMapData(
-                            mapData, info, parentInfo,
-                            parentInfo.parentId > 0 ? $dataMapInfos[parentInfo.parentId] : undefined);
+                    else if (nodeInfo.directory === DLandMapDataDirectory.Fixed && nodeInfo.leafType != DMapDataNodeLeafType.RootOrDirctory) {
+                        mapData.mapKind = REFloorMapKind.FixedMap;
+                        land.fixedMapIds.push(mapData.id);
                     }
                 }
 
-                // null 回避のため、 FloorInfo を作っておく
-                if (mapData.landId == DHelpers.VanillaLandId) {
-                    MRData.lands[mapData.landId].floorInfos[mapData.mapId] = {
+                DDataImporter.linkMapData(mapData, info, nodeInfo, land);
+
+                // VanillaLand は特別扱い。FloorNumber と RmmzMapId が一致するようにする。
+                if (land.id == DHelpers.VanillaLandId) {
+                    land.fixedMapIds.push(mapData.id);
+                    land.eventMapIds.push(mapData.id);
+                    land.floorInfos[mapData.mapId] = {
                         key: "",
                         template: undefined,
                         displayName: undefined,
-                        fixedMapName: "", safetyActions: true, bgmName: "", bgmVolume: 90, bgmPitch: 100,
+                        floorClass: DFloorClass.EventMap,
+                        fixedMapIndex: land.fixedMapIds.length - 1,
+                        eventMapIndex: land.eventMapIds.length - 1,
+                        safetyActions: true,
+                        bgmName: "",
+                        bgmVolume: 90,
+                        bgmPitch: 100,
                         presetId: 0,
+                        unique: false,
+                        fovSystem: DFovSystem.RoomBounds,
                     };
                 }
             }
         }
 
+        
         // 検証
         for (const land of MRData.lands) {
         }
@@ -1154,7 +1174,7 @@ export class MRDataManager {
             const mapData: IDataMap = obj;
             for (const event of mapData.events) {
                 if (!event) continue;
-                const data = DAnnotationReader.readPrefabMetadata(event, this.databaseMapId);
+                const data = DAnnotationReader.readPrefabAnnotation(event, this.databaseMapId);
                 if (!data) continue;
 
                 const prefab =  MRData.newPrefab();
@@ -1179,7 +1199,7 @@ export class MRDataManager {
                 MRData.prefabs.push(prefab);
 
                 for (let i = 1; i < event.pages.length; i++) {
-                    const pageData = DAnnotationReader.readPrefabSubPageMetadata(event.pages[i]);
+                    const pageData = DAnnotationReader.readPrefabSubPageAnnotation(event.pages[i]);
                     if (pageData) {
                         if (pageData.state === undefined) throw new Error(`@MR-PrefabSubPage requires state field.`);
                         prefab.subPages.push({ stateId: MRData.getState(pageData.state).id, rmmzEventPageIndex: i });

@@ -16,6 +16,14 @@ import { UState } from "ts/mr/utility/UState";
 import { DLandId } from "../data/DCommon";
 import { SCommandContext } from "../system/SCommandContext";
 import { LMap } from "./LMap";
+import { STransferMapSource } from "../system/dialogs/STransferMapDialog";
+
+export enum LTransferEntityResult {
+    NoMoved = 0,
+    BlockMoved = 1,
+    FloorMoved = 2,
+    LandMoved = 3, 
+}
 
 /**
  * 1ゲーム内に1インスタンス存在する。
@@ -55,19 +63,19 @@ export class LWorld {
     }
 
     public map(floorId: LFloorId): LMap {
-        assert(!floorId.isEmpty());
+        assert(!floorId.isEmpty);
         // セーブデータ引継ぎに備えて、動的作成とする。Game_Actors.actor() と同じ。
-        let floors = this._mapObjectIds[floorId.landId()];
+        let floors = this._mapObjectIds[floorId.landId];
         if (!floors) {
             floors = [];
-            this._mapObjectIds[floorId.landId()] = floors;
+            this._mapObjectIds[floorId.landId] = floors;
         }
-        let mapId = floors[floorId.floorNumber()];
+        let mapId = floors[floorId.floorNumber];
         if (!mapId) {
             const map = new LMap(floorId);
             this._registerObject(map);
             mapId = map.__objectId();
-            floors[floorId.floorNumber()] = mapId;
+            floors[floorId.floorNumber] = mapId;
         }
         return this.object(mapId) as LMap;
     }
@@ -242,68 +250,107 @@ export class LWorld {
      * 
      * mx, my は省略可能。これは、未ロードのランダムマップへの遷移時に使用する。
      */
-    public transferEntity(cctx: SCommandContext | undefined, entity: LEntity, floorId: LFloorId, mx: number = -1, my: number = -1): boolean {
+    public transferEntity(entity: LEntity, floorId: LFloorId, mx: number = -1, my: number = -1): LTransferEntityResult {
         //const currentMapId = MRLively.camera.currentMap;
 
-        const mapFloorId = MRLively.camera.currentFloorId;//currentMap.floorId();
-        const currentMap = mapFloorId.hasAny() ? MRLively.world.map(mapFloorId) : undefined;
+        const mapFloorId = MRLively.mapView.currentFloorId;//currentMap.floorId();
+        const currentMap = mapFloorId.hasAny ? MRLively.world.map(mapFloorId) : undefined;
 
-        if (!mapFloorId .equals(floorId) && floorId.isRandomMap()) {
+        if (entity.floorId.hasAny &&  // 遷移前のマップが存在すること
+            !mapFloorId .equals(floorId) && floorId.isRandomMap2) {
             // 未ロードのランダムマップへ遷移するとき、座標が明示されているのはおかしい
             assert(mx < 0);
             assert(my < 0);
         }
         
-        const oldLandId = entity.floorId.landId();
+        const oldMX = entity.mx;
+        const oldMY = entity.my;
+        const oldFloorNumber = entity.floorId.floorNumber;
+        const oldLandId = entity.floorId.landId;
+        const newMap = MRLively.world.map(floorId);
 
-        if (mapFloorId.hasAny() && !mapFloorId.equals(floorId) && mapFloorId.equals(entity.floorId)) {
-            // 現在マップからの離脱
-            assert(currentMap);
-            currentMap._removeEntity(entity);
-        }
 
         // Floor 間移動?
         if (!entity.floorId.equals(floorId)) {
             UState.attemptRemoveStateAtFloorTransfer(entity);
         }
 
-        if (mapFloorId.equals(floorId)) {
-            if (entity.floorId.equals(floorId)) {
-                // 現在マップ内での座標移動
-                UMovement.locateEntity(entity, mx, my);
-            }
-            else {
-                // 他の Floor から、現在表示中の Floor へ移動
-                entity.floorId = floorId;
-                UMovement.locateEntity(entity, mx, my);
-                assert(currentMap);
-                currentMap._addEntityInternal(entity);
-            }
+        // if (mapFloorId.hasAny() && !mapFloorId.equals(floorId) && mapFloorId.equals(entity.floorId)) {
+        //     // 現在マップからの離脱
+        //     assert(currentMap);
+        //     currentMap._removeEntity(entity);
+        // }
 
+        // 現在マップからの離脱
+        if (entity.floorId.hasAny) {
+            const oldMap = MRLively.world.map(entity.floorId);
+            oldMap._removeEntity(entity);
+        }
+
+        // 新しいマップへの登場
+        entity.floorId = floorId;
+        newMap._addEntityInternal(entity);
+
+        // 座標の設定
+        if (newMap.hasMapData) {
+            // MapView 表示中のマップ上での移動
+            newMap.locateEntity(entity, mx, my);
         }
         else {
-            // 現在マップから他のフロアへの移動
+            // 表示中ではないマップでの移動
             UMovement.locateEntityAtFloorMoved(entity, floorId, mx, my);
         }
 
-        // Camera が注視している Entity が別マップへ移動したら、マップ遷移
-        if (MRLively.camera.focusedEntityId().equals(entity.entityId()) &&
-            !mapFloorId.equals(entity.floorId) &&
-            cctx) {
-            MRLively.camera._reserveFloorTransferToFocusedEntity(cctx);
+
+
+
+
+
+        // if (mapFloorId.equals(floorId)) {
+        //     if (entity.floorId.equals(floorId)) {
+        //         // 現在マップ内での座標移動
+        //         UMovement.locateEntity(entity, mx, my);
+        //     }
+        //     else {
+        //         // 他の Floor から、現在表示中の Floor へ移動
+        //         entity.floorId = floorId;
+        //         UMovement.locateEntity(entity, mx, my);
+        //         assert(currentMap);
+        //         currentMap._addEntityInternal(entity);
+        //     }
+
+        // }
+        // else {
+        //     // 現在マップから他のフロアへの移動
+        //     UMovement.locateEntityAtFloorMoved(entity, floorId, mx, my);
+        // }
+
+        MRLively.mapView.onEntityTransferred(entity);
+
+        let result = LTransferEntityResult.NoMoved;
+        if (entity.mx != oldMX || entity.my != oldMY) {
+            result = LTransferEntityResult.BlockMoved;
+        }
+        if (entity.floorId.floorNumber != oldFloorNumber) {
+            result = LTransferEntityResult.FloorMoved;
+        }
+        if (entity.floorId.landId != oldLandId) {
+            result = LTransferEntityResult.LandMoved;
         }
 
         // Land 間移動が行われた
-        if (oldLandId != floorId.landId()) {
+        if (oldLandId != floorId.landId) {
             MRSystem.groundRules.onEntityLandLeaved(entity);
 
             const party = entity.party();
             if (party) {
-                party.onMemberMovedLand(entity, floorId.landId(), oldLandId)
+                party.onMemberMovedLand(entity, floorId.landId, oldLandId)
             }
         }
 
-        return true;
+
+
+        return result;
     }
 
     public _removeDestroyedObjects(): void {
@@ -320,8 +367,8 @@ export class LWorld {
                     obj.onFinalize();
                     this._objects[i] = undefined;
     
-                    if (MRLively.camera.focusedEntityId().equals(obj.__objectId())) {
-                        MRLively.camera.clearFocus();
+                    if (MRLively.mapView.focusedEntityId().equals(obj.__objectId())) {
+                        MRLively.mapView.clearFocus();
                     }
                 }
             }

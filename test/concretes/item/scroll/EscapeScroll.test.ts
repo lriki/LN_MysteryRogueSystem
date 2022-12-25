@@ -5,7 +5,7 @@ import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { LandExitResult, MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { UName } from "ts/mr/utility/UName";
 import { LFloorId } from "ts/mr/lively/LFloorId";
@@ -34,6 +34,8 @@ test("concretes.item.EscapeScroll.Basic", () => {
     TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
     const initialHP = enemy1.getActualParam(MRBasics.params.hp);
 
+    const map = MRLively.mapView.currentMap;
+
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     //----------------------------------------------------------------------------------------------------
@@ -55,8 +57,6 @@ test("concretes.item.EscapeScroll.Basic", () => {
     //----------------------------------------------------------------------------------------------------
 
     {
-        const ff1 = MRLively.camera.currentMap;
-
         // [読む]
         const activity = LActivity.makeRead(player1, item1).withConsumeAction();
         MRSystem.dialogContext.postActivity(activity);
@@ -64,11 +64,10 @@ test("concretes.item.EscapeScroll.Basic", () => {
         
         MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     
-        const ff2 = MRLively.camera.currentMap;
-        const cc = MRLively.camera;
+        const ff2 = MRLively.mapView.currentMap;
+        const cc = MRLively.mapView;
         // ExitMap へ遷移しているはず
-        const exitMapId = MRLively.camera.currentMap.land2().landData().exitMapData.id;
-        expect(player1.floorId.eventMapData().id).toBe(exitMapId);
+        expect(player1.floorId.floorNumber).toBe(MRLively.mapView.currentMap.land2().landData().exitMapFloorNumber);
 
         expect(TestEnv.integration.exitResult).toBe(LandExitResult.Escape);
     }

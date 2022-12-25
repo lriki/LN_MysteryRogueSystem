@@ -3,7 +3,7 @@ import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { MRBasics } from "ts/mr/data/MRBasics";
@@ -26,7 +26,7 @@ test("concretes.item.staff.StumbleStaff.basic", () => {
 
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 13, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
@@ -39,7 +39,7 @@ test("concretes.item.staff.StumbleStaff.basic", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // 何か足元に落ちてる
-    const item2 = MRLively.camera.currentMap.block(13, 10).getFirstEntity();
+    const item2 = MRLively.mapView.currentMap.block(13, 10).getFirstEntity();
     expect(item2 !== undefined).toBe(true);
 });
 
@@ -63,7 +63,7 @@ test("concretes.activity.Stumble.prevention", () => {
 
     // trap1 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_転び石A").id, [], "trap1"));
-    MRLively.world.transferEntity(undefined, trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    TestEnv.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

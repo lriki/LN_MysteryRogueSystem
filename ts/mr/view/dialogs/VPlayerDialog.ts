@@ -217,7 +217,7 @@ export class VPlayerDialog extends VDialog {
         }
         else if (this.isOffDirectionButton()) {
             this._updateMode = UpdateMode.DirSelecting;
-            MRLively.camera.currentMap.increaseRevision();
+            MRLively.mapView.currentMap.increaseRevision();
             MRView.guideGrid?.setVisible(true);
             context.postActivity(LActivity.makeDirectionChange(entity, UMovement.getNextAdjacentEntityDirCW(entity)));
         }
@@ -281,7 +281,7 @@ export class VPlayerDialog extends VDialog {
             if (this._waitCount <= 0 && Input.dir8 != 0 && Input.dir8 != entity.dir) {
                 //context.closeDialog(false); // 行動消費無しで close
                 context.postActivity(LActivity.makeDirectionChange(entity, Input.dir8));
-                MRLively.camera.currentMap.increaseRevision();
+                MRLively.mapView.currentMap.increaseRevision();
                 this._waitCount = 10;
             }
         }

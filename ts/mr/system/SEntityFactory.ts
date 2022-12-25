@@ -12,7 +12,7 @@ import { LTrapBehavior } from "ts/mr/lively/behaviors/LTrapBehavior";
 import { LEnemyBehavior } from "ts/mr/lively/behaviors/LEnemyBehavior";
 import { LEquipmentBehavior } from "ts/mr/lively/behaviors/LEquipmentBehavior";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
-import { DEntity, DEntityId, DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntity, DEntityId } from "ts/mr/data/DEntity";
 import { LEntryPointBehavior } from "ts/mr/lively/behaviors/LEntryPointBehavior";
 import { LActorBehavior } from "ts/mr/lively/behaviors/LActorBehavior";
 import { SBehaviorFactory } from "./SBehaviorFactory";
@@ -47,6 +47,8 @@ import { LActivityCharmBehavior } from "../lively/behaviors/LActivityCharmBehavi
 import { LExperienceBehavior } from "../lively/behaviors/LExperienceBehavior";
 import { LRaceBehavior } from "../lively/behaviors/LRaceBehavior";
 import { DEntityCategory } from "../data/DEntityCategory";
+import { LMap } from "../lively/LMap";
+import { DEntityCreateInfo } from "../data/DSpawner";
 
 export class SEntityFactory {
     public static newActor(entityId: DEntityId): LEntity {
@@ -191,7 +193,7 @@ export class SEntityFactory {
 
         // 個体識別済みチェック
         if (floorId) {
-            if (floorId.landData().checkIdentifiedEntity(entity.kindData())) {
+            if (floorId.landData.checkIdentifiedEntity(entity.kindData())) {
                 entity.setIndividualIdentified(true);
             }
         }
@@ -234,18 +236,18 @@ export class SEntityFactory {
         }
     }
 
-    public static spawnTroopAndMembers(troop: DTroop, mx: number, my: number, stateIds: DStateId[]): LEntity[] {
+    public static spawnTroopAndMembers(map: LMap, troop: DTroop, mx: number, my: number, stateIds: DStateId[]): LEntity[] {
         const result = [];
         const party = MRLively.world.newParty();
 
         for (const entityId of troop.members) {
-            const entity = this.newEntity(DEntityCreateInfo.makeSingle(entityId, stateIds), MRLively.camera.currentMap.floorId());
+            const entity = this.newEntity(DEntityCreateInfo.makeSingle(entityId, stateIds), map.floorId());
             party.addMember(entity);
             result.push(entity);
 
-            const block = UMovement.selectNearbyLocatableBlock(MRLively.world.random(), mx, my, entity.getHomeLayer(), entity);
+            const block = UMovement.selectNearbyLocatableBlock(map, MRLively.world.random(), mx, my, entity.getHomeLayer(), entity);
             if (block) {
-                MRLively.world.transferEntity(undefined, entity, MRLively.camera.currentMap.floorId(), block.mx, block.my);
+                MRLively.world.transferEntity(entity, map.floorId(), block.mx, block.my);
             }
             else {
                 // 配置できないなら無理に出さない

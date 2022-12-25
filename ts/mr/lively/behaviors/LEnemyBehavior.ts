@@ -2,7 +2,7 @@
 import { assert, MRSerializable } from "ts/mr/Common";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import {  DEnemy, DDropItem } from "ts/mr/data/DEnemy";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { DParameterId } from "ts/mr/data/DCommon";
 import {  SPhaseResult } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";

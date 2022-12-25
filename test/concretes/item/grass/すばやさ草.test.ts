@@ -1,16 +1,12 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { TestUtils } from "test/TestUtils";
-import { MRBasics } from "ts/mr/data/MRBasics";
-import { LActionTokenType } from "ts/mr/lively/LActionToken";
 import { LScheduler2 } from "ts/mr/lively/LScheduler";
-import { LUnitBehavior } from "ts/mr/lively/behaviors/LUnitBehavior";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -24,7 +20,7 @@ test("concretes.item.grass.すばやさ草.eat", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 10, 11);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 10, 11);
     enemy1.addState(TestEnv.StateId_debug_MoveRight);
 
     // アイテム作成 & インベントリに入れる
@@ -87,7 +83,7 @@ test("concretes.item.grass.すばやさ草.throw", () => {
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 15, 10);
 
     // アイテム作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_すばやさ草A").id, [], "item3"));
@@ -118,14 +114,14 @@ test("concretes.item.grass.すばやさ草.2", () => {
 
     // Enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1,floorId, 15, 10);
+    TestEnv.transferEntity(enemy1,floorId, 15, 10);
 
     // アイテム作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_すばやさ草A").id, [], "item3"));
     player1.getEntityBehavior(LInventoryBehavior).addEntity(item1);
 
     const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_すばやさ草A").id, [], "item2"));
-    MRLively.world.transferEntity(undefined, item2, floorId, 11, 10);
+    TestEnv.transferEntity(item2, floorId, 11, 10);
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
     

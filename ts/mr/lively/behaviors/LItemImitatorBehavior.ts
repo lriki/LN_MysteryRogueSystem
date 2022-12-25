@@ -17,7 +17,7 @@ import { LState } from "../states/LState";
 import { CommandArgs, DecisionPhase, LBehavior, LNameView, testPickOutItem } from "./LBehavior";
 import { DActionId, DBlockLayerKind } from "ts/mr/data/DCommon";
 import { LMap } from "../LMap";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LMinimapMarkerClass, LReaction } from "../LCommon";
 
 
@@ -89,7 +89,7 @@ export class LItemImitatorBehavior extends LBehavior {
         if (this._itemEntityId.isEmpty()) {
             const rand = MRLively.world.random();
             const floorId = map.floorId();
-            const list = map.land2().landData().appearanceTable.items[floorId.floorNumber()];
+            const list = map.land2().landData().appearanceTable.items[floorId.floorNumber];
             const data = rand.selectOrUndefined(list);
 
             const item = (data) ?
@@ -139,7 +139,7 @@ export class LItemImitatorBehavior extends LBehavior {
             this.parentAs(LState)?.removeThisState();
             
             self.removeFromParent();
-            MRLively.camera.currentMap.appearEntity(self, actor.mx, actor.my);
+            MRLively.mapView.currentMap.appearEntity(self, actor.mx, actor.my);
             UAction.postDropOrDestroyOnCurrentPos(MRSystem.commandContext, self, self.getHomeLayer());
 
             return SCommandResponse.Canceled;

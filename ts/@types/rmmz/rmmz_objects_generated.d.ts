@@ -1088,7 +1088,7 @@ declare class Game_Message {
      * 
      * @param callback 
      */
-    setChoiceCallback(callback: () => void): void;
+    setChoiceCallback(callback: (n: number) => void): void;
 
     /**
      * 

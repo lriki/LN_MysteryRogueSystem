@@ -64,20 +64,25 @@ export class SChainAfterScheduler {
         this._phase = SChainAfterSchedulerPhase.StabilizeSituation;
     }
     private process_StabilizeSituation(cctx: SCommandContext): void {
-        
+        const currentMap = MRLively.mapView.currentMap;
         {
-            for (const entity of MRLively.camera.currentMap.entities()) {
-                const block = MRLively.camera.currentMap.block(entity.mx, entity.my);
+            for (const entity of currentMap.entities()) {
+                const block = currentMap.block(entity.mx, entity.my);
                 const currentLayer = block.findEntityLayerKind(entity);
-                assert(currentLayer);
-                const homeLayer = entity.getHomeLayer();
-                if (currentLayer != homeLayer) {
-                    UAction.postDropOrDestroyOnCurrentPos(cctx, entity, homeLayer);
+                if (currentLayer) {
+                    const homeLayer = entity.getHomeLayer();
+                    if (currentLayer != homeLayer) {
+                        UAction.postDropOrDestroyOnCurrentPos(cctx, entity, homeLayer);
+                    }
+                }
+                else {
+                    // 脱出の巻物などでマップを移動したときは、この時点で currentMap が変わっている。
+                    // また currentMap は MapData 未ロードである場合もある。
                 }
             }
         }
         
-        for (const entity of MRLively.camera.currentMap.entities()) {
+        for (const entity of currentMap.entities()) {
             entity.iterateBehaviorsReverse(b => {
                 b.onStabilizeSituation(entity, cctx);
                 return true;
@@ -92,7 +97,7 @@ export class SChainAfterScheduler {
 
     private process_PreviewDead(cctx: SCommandContext): void {
 
-        for (const entity of MRLively.camera.currentMap.entities()) {
+        for (const entity of MRLively.mapView.currentMap.entities()) {
             if (entity.isDeathStateAffected()) {
                 cctx.postActivity( (new LActivity()).setup(MRBasics.actions.dead, entity));
             }
@@ -105,7 +110,7 @@ export class SChainAfterScheduler {
     private process_ResolvePermanentDeath(cctx: SCommandContext): void {
         
         // 戦闘不能の確定処理
-        for (const entity of MRLively.camera.currentMap.entities()) {
+        for (const entity of MRLively.mapView.currentMap.entities()) {
             if (entity.isDeathStateAffected()) {
                 let result = SCommandResponse.Pass;
                 entity.iterateBehaviorsReverse(b => {

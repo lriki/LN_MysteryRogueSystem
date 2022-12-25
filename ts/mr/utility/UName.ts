@@ -10,7 +10,7 @@ export class UName {
      * [focus] から見た [entity] のユニット名。アイコンを伴わない。
      */
     public static makeUnitName(entity: LEntity, viewSubject?: LEntity): string {
-        if (!viewSubject) viewSubject = MRLively.camera.focusedEntity();
+        if (!viewSubject) viewSubject = MRLively.mapView.focusedEntity();
         assert(viewSubject);
         const nameView = SView.getLookNames(viewSubject, entity);
         const targetName = LEntityDescription.makeDisplayText(nameView.name, DescriptionHighlightColor.UnitName);
@@ -21,7 +21,7 @@ export class UName {
      * アイコンを伴う。識別状態によってテキストの色が変わる。
      */
     public static makeNameAsItem(entity: LEntity, viewSubject?: LEntity): string {
-        if (!viewSubject) viewSubject = MRLively.camera.focusedEntity();
+        if (!viewSubject) viewSubject = MRLively.mapView.focusedEntity();
         assert(viewSubject);
         return MRLively.getCurrentIdentifyer().makeDisplayText(viewSubject, entity);
     }

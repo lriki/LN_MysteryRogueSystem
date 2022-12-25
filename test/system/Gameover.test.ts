@@ -16,7 +16,7 @@ beforeAll(() => {
 test("system.Gameover.Basic", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_FlatMap50x50;
-    const land = floorId.landData();
+    const land = floorId.landData;
 
     const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     
@@ -33,7 +33,7 @@ test("system.Gameover.Basic", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
     // 同じ Land の ExitMap へ遷移中
-    expect(STransferMapDialog.current.newFloorId.landId()).toBe(land.id);
+    expect(STransferMapDialog.current.newFloorId.landId).toBe(land.id);
 
     // HP はまだ回復していない
     expect(player1.getActualParam(MRBasics.params.hp)).toBe(0); 
@@ -49,7 +49,7 @@ test("system.Gameover.Basic", () => {
     //----------------------------------------------------------------------------------------------------
 
     // 遷移実行
-    MRLively.camera.currentMap.releaseMap();
+    MRLively.mapView.currentMap.releaseMap();
     TestEnv.performFloorTransfer();
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -59,7 +59,7 @@ test("system.Gameover.Basic", () => {
 
     // ExitMap にある自動実行イベントからの [マップの移動] イベントが実行されるのを想定する
     const map = MRData.getMap("MR-Safety:テスト拠点");
-    UTransfer.transterRmmzDirectly(map.mapId, 0, 0, MRSystem.commandContext);
+    UTransfer.transterRmmzDirectly(map.mapId, 0, 0);
 
     // MR-FinishChallenge
     player1.party()?.finishChallenging();
@@ -68,14 +68,19 @@ test("system.Gameover.Basic", () => {
 
     // 遷移中になる
     expect(STransferMapDialog.isFloorTransfering).toBeTruthy();
-    expect(STransferMapDialog.current.newFloorId.rmmzMapId()).toBe(map.mapId);
+    expect(STransferMapDialog.current.newFloorId.rmmzMapId).toBe(map.mapId);
 
     // この時点で HPは回復している
     expect(player1.getActualParam(MRBasics.params.hp)).toBeGreaterThan(0);
 
+    // FP は最大値になっている
+    const fp = player1.getActualParam(MRBasics.params.fp);
+    const maxfp = player1.getParamActualMax(MRBasics.params.fp);
+    expect(fp).toBe(maxfp);
+
     //----------------------------------------------------------------------------------------------------
 
     // 遷移実行
-    MRLively.camera.currentMap.releaseMap();
-    TestEnv.performFloorTransfer();
+    // MRLively.camera.currentMap.releaseMap();
+    // TestEnv.performFloorTransfer();
 });

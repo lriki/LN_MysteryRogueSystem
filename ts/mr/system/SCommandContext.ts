@@ -690,7 +690,7 @@ export class SCommandContext
     postTransferFloor(entity: LEntity, floorId: LFloorId, x: number = 0, y:number = 0, d: number = 0) {
         const m1 = () => {
             Log.doCommand("TransferFloor");
-            MRLively.world.transferEntity(this, entity, floorId, x, y);
+            MRLively.world.transferEntity(entity, floorId, x, y);
             return SCommandResponse.Handled;
         };
         this.pushRecodingCommandList(new STask("TransferFloor", m1));

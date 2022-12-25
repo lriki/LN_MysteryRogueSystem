@@ -73,7 +73,7 @@ export class VMessageLogWindow extends Window_Base {
     
     // override
     update() {
-        if (!MRLively.camera.currentMap.floorId().isTacticsMap()) return;
+        if (!MRLively.mapView.currentMap.floorId().isTacticsMap2) return;
 
         this.checkToNotClose();
         Window_Base.prototype.update.call(this);

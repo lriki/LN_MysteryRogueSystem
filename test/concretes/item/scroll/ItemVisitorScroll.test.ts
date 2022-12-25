@@ -3,11 +3,8 @@ import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
-import { TestUtils } from "test/TestUtils";
-import { MRLively } from "ts/mr/lively/MRLively";
-import { MRBasics } from "ts/mr/data/MRBasics";
 import { SNavigationHelper } from "ts/mr/system/SNavigationHelper";
 import { SView } from "ts/mr/system/SView";
 

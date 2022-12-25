@@ -35,6 +35,10 @@ export enum LBlockSystemDecoration {
     ItemShop,
 }
 
+export interface LBlockFootprints {
+    factionDensities: (number | undefined)[]; // 要素番号は FactionKind
+}
+
 /**
  * GameBlock
  * 
@@ -86,12 +90,15 @@ export class LBlock {
     // _visualDecorationType: number = 0;   // 0:invalid
     // _visualDecorationIndex: number = 0;  // 0~
 
+    public readonly footprints: LBlockFootprints;
+
     constructor(x: number, y: number) {
         this._mx = x;
         this._my = y;
         this._layers = [new REBlockLayer(), new REBlockLayer(), new REBlockLayer(), new REBlockLayer(), new REBlockLayer()];
         this._shapeVisualPartIndex = 0;
         this._decorationVisualPartIndex = 0;
+        this.footprints = { factionDensities: [] };
     }
 
     /** 絶対座標 X */
@@ -106,7 +113,7 @@ export class LBlock {
 
     public room(): LRoom | undefined {
         if (this._roomId > 0)
-            return MRLively.camera.currentMap.room(this._roomId);
+            return MRLively.mapView.currentMap.room(this._roomId);
         else
             return undefined;
     }
@@ -270,5 +277,22 @@ export class LBlock {
     /** 指定した Entity がこの Block に含まれているか */
     public containsEntity(entity: LEntity): boolean {
         return this.findEntityLayerKind(entity) != undefined;
+    }
+
+    public updateFootpoints(): void {
+        const fd = this.footprints.factionDensities as any;
+        for (let i = 0; i < fd.length; i++) {
+            if (fd[i] !== undefined && fd[i] > 0) {
+                fd[i] -= 1;
+            }
+        }
+    }
+
+    public setFootpoint(entity: LEntity): void {
+        const factionId = entity.getInnermostFactionId();
+        if (factionId) {
+            const fd = this.footprints.factionDensities;
+            fd[factionId] = 3;
+        }
     }
 }

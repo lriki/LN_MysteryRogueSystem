@@ -1,10 +1,9 @@
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { MRBasics } from "ts/mr/data/MRBasics";
 
@@ -28,8 +27,8 @@ test("concretes.item.scroll.InSightDamageScroll", () => {
     // enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy2"));
-    MRLively.world.transferEntity(undefined, enemy1, floorId, 15, 10);
-    MRLively.world.transferEntity(undefined, enemy2, floorId, 10, 15);
+    TestEnv.transferEntity(enemy1, floorId, 15, 10);
+    TestEnv.transferEntity(enemy2, floorId, 10, 15);
     const enemy1HP1 = enemy1.getActualParam(MRBasics.params.hp);
     const enemy2HP1 = enemy2.getActualParam(MRBasics.params.hp);
 

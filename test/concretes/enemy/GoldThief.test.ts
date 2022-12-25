@@ -3,13 +3,11 @@ import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
-import { SDebugHelpers } from "ts/mr/system/SDebugHelpers";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { LGoldBehavior } from "ts/mr/lively/behaviors/LGoldBehavior";
-import { LItemBehavior } from "ts/mr/lively/behaviors/LItemBehavior";
 import { assert } from "ts/mr/Common";
 
 beforeAll(() => {
@@ -27,10 +25,10 @@ test("concretes.enemy.GoldThief.Basic", () => {
 
     const gold1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_GoldA").id, [], "gold1"));
     gold1.getEntityBehavior(LGoldBehavior).setGold(1000);
-    MRLively.world.transferEntity(undefined, gold1, floorId, 13, 10);
+    TestEnv.transferEntity(gold1, floorId, 13, 10);
     
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_小金猫A").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, floorId, 12, 10);
+    TestEnv.transferEntity(enemy1, floorId, 12, 10);
     const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
     
     // □□□□□
@@ -110,7 +108,7 @@ test("concretes.enemy.GoldThief.DropItem", () => {
 
     // Enemy は倒れ、足元に item が落ちている。ドロップ率 100%
     expect(enemy1.isDestroyed()).toBe(true);
-    const item = MRLively.camera.currentMap.block(11, 10).getFirstEntity();
+    const item = MRLively.mapView.currentMap.block(11, 10).getFirstEntity();
     assert(item);
     expect(!!item.findEntityBehavior(LGoldBehavior)).toBe(true);
 });

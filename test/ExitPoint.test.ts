@@ -23,7 +23,7 @@ test("ExitPoint.Reactions", () => {
     MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // ひとまず、Troop 指定で Spawn 出来ていることを確認する。
-    const entites = MRLively.camera.currentMap.entities();
+    const entites = MRLively.mapView.currentMap.entities();
     const exitpoint = entites.find(x => x.data.entity.key == "kEntity_ExitPointA");
     assert(exitpoint);
     const reactions = exitpoint.queryReactions();

@@ -1,5 +1,5 @@
 import { assert } from "ts/mr/Common";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { MRData } from "ts/mr/data/MRData";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
@@ -32,7 +32,7 @@ test("system.Leveling.levelUp", () => {
     
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     enemy1.setParamCurrentValue(MRBasics.params.hp, 1);               // 1 ダメージで倒せるようにしておく
-    MRLively.world.transferEntity(undefined, enemy1, floorId, 11, 10);
+    TestEnv.transferEntity(enemy1, floorId, 11, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 

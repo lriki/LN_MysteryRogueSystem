@@ -29,7 +29,7 @@ export class LSystem
 
     public getEventCommandTarget(): LEntity | undefined {
         if (!this.eventInterpreterContextKey) {
-            if (MRLively.camera.currentMap.floorId().isNormalMap()) {
+            if (MRLively.mapView.currentMap.floorId().isNormalMap2) {
                 // key が指定されていないが、現在のマップがツクール標準システムのマップであれば、ツクール標準のコマンドを実行する
                 return undefined;
             }

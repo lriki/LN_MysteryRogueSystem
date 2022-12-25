@@ -29,7 +29,7 @@ export class LDebugMoveRightBehavior extends LBehavior {
             //const dir = table[REGame.world.random().nextIntWithMax(8)];
 
 
-            if (dir != 0 && MRLively.camera.currentMap.checkPassage(self, dir, MovingMethod.Walk)) {
+            if (dir != 0 && MRLively.mapView.currentMap.checkPassage(self, dir, MovingMethod.Walk)) {
                 cctx.postActivity(LActivity.makeDirectionChange(self, dir));
                 cctx.postActivity(LActivity.makeMoveToAdjacent(self, dir));
             }

@@ -8,6 +8,7 @@ import { LUnitBehavior } from "./behaviors/LUnitBehavior";
 import { STransferMapDialog, STransferMapSource } from "../system/dialogs/STransferMapDialog";
 import { SCommandContext } from "../system/SCommandContext";
 import { LMap } from "./LMap";
+import { SDialogContext } from "../system/SDialogContext";
 
 /**
  * 始点位置。ツクールの Game_Player と連携する。
@@ -51,10 +52,12 @@ import { LMap } from "./LMap";
  * 
  */
 @MRSerializable
-export class LCamera {  // TODO: MapView とかの方がいいかもしれない
+export class LMapView {  // TODO: MapView とかの方がいいかもしれない
     private _focusedEntityId: LEntityId = LEntityId.makeEmpty();
 
     currentFloorId: LFloorId = LFloorId.makeEmpty();
+
+    initializing: boolean = true;
 
     // private _transferingNewFloorId: LFloorId = LFloorId.makeEmpty();
     // private _transferingNewX: number = 0;
@@ -115,16 +118,45 @@ export class LCamera {  // TODO: MapView とかの方がいいかもしれない
     //     return this._transferingNewFloorId;
     // }
     
-    _reserveFloorTransferToFocusedEntity(cctx: SCommandContext): void {
-        const entity = this.focusedEntity();
-        if (entity) {
-            //cctx.openDialog(entity, new STransferMapDialog(STransferMapSource.FromCommand, entity.floorId, entity.mx, entity.my, 2), false);
-            MRSystem.dialogContext.open(new STransferMapDialog(STransferMapSource.FromCommand, entity.floorId, entity.mx, entity.my, entity.dir));
-            this.currentFloorId = entity.floorId.clone();
+    // _reserveFloorTransferToFocusedEntity(cctx: SCommandContext): void {
+    //     const entity = this.focusedEntity();
+    //     if (entity) {
+    //         //cctx.openDialog(entity, new STransferMapDialog(STransferMapSource.FromCommand, entity.floorId, entity.mx, entity.my, 2), false);
+    //         MRSystem.dialogContext.open(new STransferMapDialog(STransferMapSource.FromCommand, entity.floorId, entity.mx, entity.my, entity.dir));
+    //         this.currentFloorId = entity.floorId.clone();
 
-            //this.reserveFloorTransfer(entity.floorId, entity.mx, entity.my, 2);
+    //         //this.reserveFloorTransfer(entity.floorId, entity.mx, entity.my, 2);
+    //     }
+    // }
+
+    public onEntityTransferred(entity: LEntity): void {
+        if (this.initializing) return;  // NewGame 中は GameManager 側に任せる
+
+        if (entity.entityId().equals(this._focusedEntityId)) {
+            if (!this.currentFloorId.equals(entity.floorId)) {
+                MRSystem.dialogContext.open(new STransferMapDialog(STransferMapSource.FromCommand, entity.floorId, entity.mx, entity.my, entity.dir));
+            
+                // この時点ではまだ CurrentFloorId は変更しない。STransferMapDialog でしかるべきタイミングで行う。
+                // こうしておかないと performFloorTransfer() する前に、別マップへの遷移したことになってしまう。
+            }
         }
+
+        // // Camera が注視している Entity が別マップへ移動したら、マップ遷移
+        // if (MRLively.camera.focusedEntityId().equals(entity.entityId()) &&
+        //     !mapFloorId.equals(entity.floorId) &&
+        //     cctx) {
+        //     MRLively.camera._reserveFloorTransferToFocusedEntity(cctx);
+        // }
     }
+
+    public onEntityEnteredFromMap(entity: LEntity): void {
+        MRSystem.integration.entityEnteredMap(entity);
+    }
+
+    public onEntityRemovedFromMap(entity: LEntity): void {
+        MRSystem.integration.entityLeavedMap(entity);
+    }
+
 
     /** @deprecated */
     // private reserveFloorTransfer(floorId: LFloorId, x: number, y: number, d: number): void {

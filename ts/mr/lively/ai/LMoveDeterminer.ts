@@ -4,15 +4,25 @@ import { SAIHelper } from "ts/mr/system/SAIHelper";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { UMovement } from "ts/mr/utility/UMovement";
 import { LActivity } from "../activities/LActivity";
+import { LBlockHelper } from "../helpers/LBlockHelper";
 import { LBlock } from "../LBlock";
 import { LActionTokenConsumeType } from "../LCommon";
 import { LEntity } from "../LEntity";
+import { LRandom } from "../LRandom";
+import { LRoom } from "../LRoom";
 import { MRLively } from "../MRLively";
 
 export enum LMovingMethod {
     ToTarget,
     LHRule,
 }
+
+// export enum LMovingTargetPriority {
+//     Default,
+
+//     /** 位置を強制。 */
+//     Forced,
+// }
 
 export interface LUpdateMovingTargetResult {
     method: LMovingMethod;
@@ -47,7 +57,7 @@ export class LMoveDeterminer {
 
     public decide(cctx: SCommandContext, self: LEntity): void {
         const rand = cctx.random();
-        const block = MRLively.camera.currentMap.block(self.mx, self.my);
+        const block = MRLively.mapView.currentMap.block(self.mx, self.my);
 
         if (!this.hasDestination()) {
             if (!block.isRoom()) {
@@ -57,15 +67,13 @@ export class LMoveDeterminer {
                 return;
             }
             else {
-                const room = MRLively.camera.currentMap.room(block._roomId);
+                const room = MRLively.mapView.currentMap.room(block._roomId);
                 if (!block.isRoomInnerEntrance()) {
                     // 目的地なし, 現在位置が部屋
                     // => ランダムな入口を目的地に設定し、目的地に向かう移動。
                     // => 入口が無ければ左折の法則による移動
-
-                    const candidates = room.getRoomInnerEntranceBlocks();
-                    if (candidates.length > 0) {
-                        const block = candidates[rand.nextIntWithMax(candidates.length)];
+                    const block = this.findTargetRoomInnerEntranceBlock(self, rand, room)
+                    if (block) {
                         this._targetPositionX = block.mx;
                         this._targetPositionY = block.my;
                         this._decired = { method: LMovingMethod.ToTarget };
@@ -81,10 +89,8 @@ export class LMoveDeterminer {
                     // 目的地なし, 現在位置が部屋の入口
                     // => 現在位置以外のランダムな入口を目的地に設定し、左折の法則による移動
                     // => 他に入口がなければ逆方向を向き、左折の法則による移動
-    
-                    const candidates = room.getRoomInnerEntranceBlocks().filter(b => b.mx != self.mx && b.my != self.my);    // 足元フィルタ
-                    if (candidates.length > 0) {
-                        const block = candidates[rand.nextIntWithMax(candidates.length)];
+                    const block = this.findTargetRoomInnerEntranceBlock(self, rand, room)
+                    if (block) {
                         this._targetPositionX = block.mx;
                         this._targetPositionY = block.my;
                     }
@@ -100,8 +106,7 @@ export class LMoveDeterminer {
         else if (!this.canModeToTarget(self)) {
             // 目的地あり 目的地が現在位置
             // => 目的地を解除し、左折の法則による移動
-            this._targetPositionX = -1;
-            this._targetPositionY = -1;
+            this.clearTargetPosition();
 
             // これは SFC シレン Wiki には乗っていない細工。
             // 部屋内から目的地にたどり着いたとき、現在の向きと通路の方向が直角だと、左折の法則で通路に侵入できなくなる。
@@ -121,6 +126,30 @@ export class LMoveDeterminer {
             // => 目的地に向かう移動 (moveToTarget() で移動)
             this._decired = { method: LMovingMethod.ToTarget };
             return;
+        }
+    }
+
+    private clearTargetPosition(): void {
+        this._targetPositionX = -1;
+        this._targetPositionY = -1;
+    }
+
+    private findTargetRoomInnerEntranceBlock(self: LEntity, rand: LRandom, room: LRoom): LBlock | undefined {
+        const candidates1 = room.getRoomInnerEntranceBlocks().filter(b => b.mx != self.mx || b.my != self.my);    // 足元フィルタ
+        if (candidates1.length <= 0) return undefined;
+
+        const candidates2: LBlock[] = [];
+        for (const block of candidates1) {
+            if (LBlockHelper.hasHostileFootpoint(block, self.getInnermostFactionId())) {
+                candidates2.push(block);
+            }
+        }
+        if (candidates2.length > 0) {
+            return LBlockHelper.selectNearestBlock(candidates2, self);
+        }
+        else {
+            const block = candidates1[rand.nextIntWithMax(candidates1.length)];
+            return block;
         }
     }
     
@@ -154,6 +183,15 @@ export class LMoveDeterminer {
             return true;
         }
 
+
+        if (this.hasDestination() &&
+            self.mx == this._targetPositionX &&
+            self.my == this._targetPositionY) {
+            // 目標座標が指定されているが既に到達済みの場合は、ランダム移動を行わない。
+            // 店主など、明示的に移動させない Entity が該当する。
+            return true;
+        }
+
         // 左折の法則による移動
         if (this._decired.method == LMovingMethod.LHRule) {
             const block = UMovement.getMovingCandidateBlockAsLHRule(self, self.dir);
@@ -168,15 +206,6 @@ export class LMoveDeterminer {
 
                 return true;
             }
-        }
-
-
-        if (this.hasDestination() &&
-            self.mx == this._targetPositionX &&
-            self.my == this._targetPositionY) {
-            // 目標座標が指定されているが既に到達済みの場合は、ランダム移動を行わない。
-            // 店主など、明示的に移動させない Entity が該当する。
-            return true;
         }
 
         this._noActionTurnCount++;

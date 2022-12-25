@@ -38,7 +38,7 @@ export class LShopkeeperBehavior extends LBehavior {
     }
 
     public shop(): LItemShopStructure {
-        return MRLively.camera.currentMap.structures()[this._shopStructureId] as LItemShopStructure;
+        return MRLively.mapView.currentMap.structures()[this._shopStructureId] as LItemShopStructure;
     }
 
     // この店主が守るべき入り口情報。大部屋の場合は全店主が同じ個所を指すこともある。
@@ -82,7 +82,7 @@ export class LShopkeeperBehavior extends LBehavior {
     
     onTalk(self: LEntity, cctx: SCommandContext, person: LEntity): SCommandResponse {
 
-        const dialog = new SEventExecutionDialog(self.rmmzEventId, self);
+        const dialog = new SEventExecutionDialog(self.rmmzEventId, self, person);
         dialog.billingPrice = this.shop().getBillingPrice();
         dialog.depositPrice = this.shop().getDepositPriece();
 

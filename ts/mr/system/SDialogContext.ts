@@ -23,14 +23,14 @@ export class SDialogContext
     }
 
     public open(dialog: SDialog): void {
-        dialog._openedFloorId = MRLively.camera.currentFloorId.clone();
+        dialog._openedFloorId = MRLively.mapView.currentFloorId.clone();
         this._dialogs.push(dialog);
         MRSystem.integration.openDialog(dialog);
     }
 
     private pop(): void {
         const dialogIsPlaybck = this.activeDialog() instanceof SActivityPlaybackDialog;
-        const otherFloorOpened = !this.activeDialog()._openedFloorId.equals(MRLively.camera.currentMap.floorId());
+        const otherFloorOpened = !this.activeDialog()._openedFloorId.equals(MRLively.mapView.currentMap.floorId());
 
         this._dialogs.pop();
 

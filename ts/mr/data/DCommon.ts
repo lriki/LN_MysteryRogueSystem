@@ -24,6 +24,9 @@ export type DEntityTemplateId = number & { readonly brand?: unique symbol };
 /** Animation データのインデックス。 RMMZ の AnimationId と等しい。 */
 export type DAnimationId = number & { readonly brand?: unique symbol };
 
+export type DQuestId = number & { readonly brand?: unique symbol };
+
+
 
 export type DLandId = number;
 

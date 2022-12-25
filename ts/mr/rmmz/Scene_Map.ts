@@ -47,7 +47,7 @@ Scene_Map.prototype.createDisplayObjects = function() {
     // refresh はホントは onMapLoaded のフック内で呼ぶのが自然な気がするが、
     // createDisplayObjects() の前に呼んでおきたい。
     // そうしないと、特にランダムダンジョン内にいるときのセーブデータをロードした後、Tilemap 生成とのタイミングの問題で何も表示されなくなる。
-    if (MRLively.camera.currentMap.floorId().isTacticsMap()) {
+    if (MRLively.mapView.currentMap.floorId().isTacticsMap2) {
         MRSystem.mapManager.attemptRefreshVisual();
     }
 
@@ -97,7 +97,7 @@ Scene_Map.prototype.update = function() {
     FloorRestartSequence.update(this);
 
     if (!isTransterEffectRunning()) {
-        if (MRLively.camera.currentMap.floorId().isTacticsMap()) {
+        if (MRLively.mapView.currentMap.floorId().isTacticsMap2) {
             if (!$gameMap.isEventRunning()) {   // イベント実行中はシミュレーションを行わない
     
                 if (STransferMapDialog.isFloorTransfering) {
@@ -129,7 +129,7 @@ Scene_Map.prototype.update = function() {
     // 位置合わせは Game_Player だけではなく Game_Map や Game_Screen など様々なオブジェクトに対しても影響するため、
     // ここでまず Game_Player を調整した後、残りはコアスクリプトに任せる。
     // (ただし _realX などが中途半端だと座標移動がかかえるので、REMap 上ではすべての Character の update を切っている)
-    if (MRLively.camera.currentMap.floorId().isTacticsMap()) {
+    if (MRLively.mapView.currentMap.floorId().isTacticsMap2) {
         if (MRView._syncCamera) {
             RMMZHelper.syncCameraPositionToGamePlayer();
         }
@@ -140,14 +140,14 @@ Scene_Map.prototype.update = function() {
 
 const _Scene_Map_callMenu = Scene_Map.prototype.callMenu;
 Scene_Map.prototype.callMenu = function() {
-    if (MRLively.camera.currentMap.floorId().isRMMZDefaultSystemMap()) {
+    if (MRLively.mapView.currentMap.floorId().isRMMZDefaultSystemMap2) {
         // 通常の RMMZ マップ & システム
         _Scene_Map_callMenu.call(this);
     }
     else {
         // セーフティマップ。ManualActionDialog は無いので、ここから MainMenu を表示する。
         assert(MRSystem.dialogContext.dialogs().length == 0);
-        const actorEntity = MRLively.camera.focusedEntity();
+        const actorEntity = MRLively.mapView.focusedEntity();
         assert(actorEntity);
         MRSystem.commandContext.openDialog(actorEntity, new SMainMenuDialog(actorEntity), false);
         this.menuCalling = false;
@@ -156,11 +156,11 @@ Scene_Map.prototype.callMenu = function() {
 
 const _Scene_Map_updateCallMenu = Scene_Map.prototype.updateCallMenu;
 Scene_Map.prototype.updateCallMenu = function() {
-    if (MRLively.camera.currentMap.floorId().isRMMZDefaultSystemMap()) {
+    if (MRLively.mapView.currentMap.floorId().isRMMZDefaultSystemMap2) {
         // 通常の RMMZ マップ & システム
         _Scene_Map_updateCallMenu.call(this);
     }
-    else if (MRLively.camera.currentMap.floorId().isTacticsMap()) {
+    else if (MRLively.mapView.currentMap.floorId().isTacticsMap2) {
         // タクティクスマップ。MainMenu の表示は ManualActionDialog から行う。
         // Scene_Map からのメニュー表示は行わない。
         this.menuCalling = false;
@@ -175,7 +175,7 @@ Scene_Map.prototype.updateCallMenu = function() {
 
 const _Scene_Map_shouldAutosave = Scene_Map.prototype.shouldAutosave;
 Scene_Map.prototype.shouldAutosave = function() {
-    if (MRLively.camera.currentMap.floorId().isTacticsMap()) {
+    if (MRLively.mapView.currentMap.floorId().isTacticsMap2) {
         return true;
     }
     else {
@@ -185,7 +185,7 @@ Scene_Map.prototype.shouldAutosave = function() {
 
 const _Scene_Map_isAutosaveEnabled = Scene_Map.prototype.isAutosaveEnabled;
 Scene_Base.prototype.isAutosaveEnabled = function() {
-    if (MRLively.camera.currentMap.floorId().isTacticsMap()) {
+    if (MRLively.mapView.currentMap.floorId().isTacticsMap2) {
         return true;
     }
     else {

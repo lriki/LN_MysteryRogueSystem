@@ -153,6 +153,21 @@
  * @desc イベントコマンドの操作対象となる Entity を変更します。詳細は http://... を参照してください。
  * @arg key
  * @type string
+ *
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ * @command MR-AddPostTalkingCommand
+ * @text [experimental] MR-AddPostTalkingCommand
+ * @desc 次の MR-ShowPostTalkingDialog で表示するコマンドを追加します。
+ * @arg key
+ * @type string
+ * @arg name
+ * @type string
+ * 
+ * @command MR-ShowPostTalkingDialog
+ * @text [experimental] MR-ShowPostTalkingDialog
+ * 
  */
  
 

@@ -1,10 +1,8 @@
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
-import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { TestEnv } from "test/TestEnv";
@@ -29,7 +27,7 @@ test("concretes.enemy.LevelDowner.Basic", () => {
     // Enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_くねくねインプA").id, [], "enemy1"));
     enemy1.addState(MRData.getState("kState_UTからぶり").id);
-    MRLively.world.transferEntity(undefined, enemy1, floorId, 11, 4);
+    TestEnv.transferEntity(enemy1, floorId, 11, 4);
 
     MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 
@@ -67,7 +65,7 @@ test("concretes.enemy.LevelDowner.RemainingExpAtLevelDown", () => {
     // Enemy
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_くねくねインプA").id, [], "enemy1"));
     enemy1.dir = 4;
-    MRLively.world.transferEntity(undefined, enemy1, floorId, 11, 10);
+    TestEnv.transferEntity(enemy1, floorId, 11, 10);
 
     MRSystem.scheduler.stepSimulation();   // Advance Simulation ----------
 

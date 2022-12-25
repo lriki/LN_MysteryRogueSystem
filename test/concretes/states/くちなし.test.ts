@@ -3,7 +3,7 @@ import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { LFloorId } from "ts/mr/lively/LFloorId";
@@ -56,7 +56,7 @@ test("concretes.states.くちなし.AutoRemove", () => {
     actor1.addState(stateId);
 
     // 別フロアへ移動
-    MRLively.world.transferEntity(MRSystem.commandContext, actor1, LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
+    MRLively.world.transferEntity(actor1, LFloorId.makeByRmmzFixedMapName("Sandbox-識別"), 10, 10);
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 

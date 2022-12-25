@@ -5,7 +5,7 @@ import { LWorld } from "../lively/LWorld";
 import { LSystem } from "../lively/LSystem";
 import { MRData } from "../data/MRData";
 import { SScheduler } from "./scheduling/SScheduler";
-import { LCamera } from "../lively/LCamera";
+import { LMapView } from "../lively/LMapView";
 import { MRSystem } from "./MRSystem";
 import { SActivityRecorder } from "./SActivityRecorder";
 import { assert, Log } from "ts/mr/Common";
@@ -33,7 +33,7 @@ import { SSpecialEffectManager } from "./effects/SSpecialEffectManager";
 import { SFormulaOperand } from "./SFormulaOperand";
 import { LEntity } from "../lively/LEntity";
 import { LInventoryBehavior } from "../lively/behaviors/LInventoryBehavior";
-import { DEntityCreateInfo } from "../data/DEntity";
+import { DEntityCreateInfo } from "../data/DSpawner";
 import { UEffect } from "../utility/UEffect";
 import { DTerrainSettingRef } from "../data/DLand";
 import { MRBasics } from "../data/MRBasics";
@@ -42,7 +42,9 @@ import { LChronus } from "../lively/LChronus";
 import { SFovShadowMap } from "./SFovShadowMap";
 import { SMapDataManager } from "./SMapDataManager";
 import { STransferMapDialog, STransferMapSource } from "./dialogs/STransferMapDialog";
-//import { REVisual } from "../visual/REVisual";
+import { SRoomBoundsFovSystem } from "./fov/SRoomBoundsFovSystem";
+import { SSymmetricShadowcastFovSystem } from "./fov/SSymmetricShadowcastFovSystem";
+import { LQuestManager } from "../lively/LQuestManager";
 
 /**
  */
@@ -63,6 +65,8 @@ export class SGameManager {
         MRSystem.formulaOperandA = new SFormulaOperand();
         MRSystem.formulaOperandB = new SFormulaOperand();
         MRSystem.formulaOperandC = new SFormulaOperand();
+        MRSystem.roomBoundsFovSystem = new SRoomBoundsFovSystem();
+        MRSystem.symmetricShadowcastFovSystem = new SSymmetricShadowcastFovSystem();
     }
 
     // DataManager.createGameObjects に従って呼び出される。
@@ -73,12 +77,13 @@ export class SGameManager {
         MRLively.system = new LSystem();
         MRLively.world = new LWorld();
         //MRLively.camera.currentMap = new LMap();
-        MRLively.camera = new LCamera();
+        MRLively.mapView = new LMapView();
         MRLively.scheduler = new LScheduler2();
         MRLively.recorder = new SActivityRecorder();
         MRLively.messageHistory = new LMessageHistory();
         MRLively.eventServer = new LEventServer();
         MRLively.chronus = new LChronus();
+        MRLively.questManager = new LQuestManager();
         MRLively.borderWall = new LBlock(-1, -1);
 
         //MRLively.world._registerObject(MRLively.camera.currentMap);
@@ -101,6 +106,7 @@ export class SGameManager {
 
     // もともとは createGameObjects() と一緒だったが、タイミングを Game_Player の位置設定後にしたかったため分けた
     public static setupNewGame() {
+        MRLively.mapView.initializing = true;
 
         // TODO: とりあえずまずは全部同じにしてテスト
         //RESystem.skillBehaviors = REData.skills.map(x => new LNormalAttackSkillBehavior());
@@ -126,19 +132,20 @@ export class SGameManager {
         });
         assert(firstActor);
         MRLively.system.mainPlayerEntityId = firstActor.entityId();
-        MRLively.camera.focus(firstActor);
+        MRLively.mapView.focus(firstActor);
 
         // Player を Party に入れる
         const party = MRLively.world.newParty();
         party.addMember(firstActor);
 
         // Player の初期位置を、RMMZ 初期位置に合わせる
-        UTransfer.transterRmmzDirectly($dataSystem.startMapId, $dataSystem.startX, $dataSystem.startY, undefined);
+        UTransfer.transterRmmzDirectly($dataSystem.startMapId, $dataSystem.startX, $dataSystem.startY);
         MRSystem.dialogContext.open(new STransferMapDialog(STransferMapSource.FromRmmzNewGame, firstActor.floorId, firstActor.mx, firstActor.my, firstActor.dir));
-        MRLively.camera.currentFloorId = firstActor.floorId.clone();
+        MRLively.mapView.currentFloorId = firstActor.floorId.clone();
         // Game_Player.setupForNewGame() でも reserveTransfer() してるので、
         // こちらも座標設定だけではなく、遷移のフレームワークを動かしておくのがよいかも。
         
+        MRLively.mapView.initializing = false;
         
         // ニューゲーム時には、チャレンジ開始状態にする (主にテストプレイで直接 Land 内に遷移したときのために)
         party.startChallenging();
@@ -185,58 +192,71 @@ export class SGameManager {
         //if (MRLively.camera.isFloorTransfering()) {
             //const focusedEntity = REGame.camera.focusedEntity();
             //const currentFloorId = focusedEntity ? focusedEntity.floorId : LFloorId.makeEmpty();
-            const currentFloorId = MRLively.camera.currentMap.floorId();
+            //const currentFloorId = MRLively.mapView.currentMap.floorId();
             const newFloorId = transfaringInfo.newFloorId;
 
             // 別 Land への遷移？
             if (transfaringInfo.isLandTransfering) {
-                MRLively.world.land(newFloorId.landId()).resetIdentifyer();
+                MRLively.world.land(newFloorId.landId).resetIdentifyer();
+            }
+
+            const oldMap = transfaringInfo.oldMap;
+            if (oldMap && oldMap.shouldUnloadAtMapTransferred()) {
+                //oldMap._removeAllEntities();
+                
+                // 先に Map をクリーンアップしておく。
+                // 内部から onEntityLeavedMap() が呼び出され、ここで Game_Event の erase が走るため、
+                // Game_Map 構築後にクリーンアップしてしまうと、新しく作成された Event が消えてしまう。
+                oldMap.releaseMap();
             }
     
-            if (newFloorId.isTacticsMap()) {
-                const rand = MRLively.world.random();
-                const mapSeed = rand.nextInt();
-                console.log("seed:", mapSeed);
-
-                const mapData = new FMap(newFloorId, mapSeed);
-                if (newFloorId.rmmzFixedMapId() > 0) {
-                    // 固定マップ
-                    MRSystem.integration.onLoadFixedMapData(mapData);
-                    const builder = new FMapBuilder();
-                    builder.buildForFixedMap(mapData);
+            const newMap = transfaringInfo.newMap;
+            if (newFloorId.isTacticsMap2) {
+                if (newMap.needsRebuild()) {
+                    const rand = MRLively.world.random();
+                    const mapSeed = rand.nextInt();
+                    console.log("seed:", mapSeed);
+    
+                    const mapData = new FMap(newFloorId, mapSeed);
+                    if (newFloorId.rmmzFixedMapId2 > 0) {
+                        // 固定マップ
+                        MRSystem.integration.onLoadFixedMapData(mapData);
+                        const builder = new FMapBuilder();
+                        builder.buildForFixedMap(mapData);
+                    }
+                    else {
+                        const floorInto = newFloorId.floorInfo;
+    
+                        const preset = floorInto.presetId ? MRData.floorPresets[floorInto.presetId] : MRData.floorPresets[MRBasics.defaultTerrainPresetId];
+                        const settingId = UEffect.selectRating<DTerrainSettingRef>(rand, preset.terrains, x => x.rating);
+                        assert(settingId);
+                        
+                        const setting = MRData.terrainSettings[settingId.terrainSettingsId];
+                        (new FGenericRandomMapGenerator(mapData, setting).generate());
+                        const builder = new FMapBuilder();
+                        builder.buildForRandomMap(mapData);
+                        
+                        mapData.print();
+                    }
+        
+                    // マップ構築
+                    assert(newFloorId.equals(newMap.floorId()));
+                    newMap.setup(mapData);
+                    MRSystem.mapManager.setMap(newMap);
+                    MRSystem.mapManager.setupMap(mapData);
                 }
                 else {
-                    const floorInto = newFloorId.floorInfo();
 
-                    const preset = floorInto.presetId ? MRData.floorPresets[floorInto.presetId] : MRData.floorPresets[MRBasics.defaultTerrainPresetId];
-                    const settingId = UEffect.selectRating<DTerrainSettingRef>(rand, preset.terrains, x => x.rating);
-                    assert(settingId);
-                    
-                    const setting = MRData.terrainSettings[settingId.terrainSettingsId];
-                    (new FGenericRandomMapGenerator(mapData, setting).generate());
-                    const builder = new FMapBuilder();
-                    builder.buildForRandomMap(mapData);
-                    
-                    mapData.print();
                 }
-    
-    
-                // マップ構築
-                assert(newFloorId.equals(MRLively.camera.currentMap.floorId()));
-                MRLively.camera.currentMap._removeAllEntities();
-                MRLively.camera.currentMap.setup(mapData);
-                MRSystem.mapManager.setMap(MRLively.camera.currentMap);
-                MRSystem.mapManager.setupMap(mapData);
-    
             }
             else {
                 // Entity を登場させない、通常の RMMZ マップ
-                assert(newFloorId.equals(MRLively.camera.currentMap.floorId()));
-                MRLively.camera.currentMap.setupForRMMZDefaultMap();
+                assert(newFloorId.equals(newMap.floorId()));
+                newMap.setupForRMMZDefaultMap();
             }
 
             MRSystem.minimapData.clear();
-            MRSystem.fovShadowMap.setup(MRLively.camera.currentMap);
+            MRSystem.fovShadowMap.setup(newMap);
             MRSystem.scheduler.reset();
             //MRLively.camera.clearFloorTransfering();
             Log.d("PerformFloorTransfer");
@@ -248,12 +268,13 @@ export class SGameManager {
         let contents: any = {};
         contents.system = MRLively.system;
         contents.world = MRLively.world;
-        contents.map = MRLively.camera.currentMap;
-        contents.camera = MRLively.camera;
+        contents.map = MRLively.mapView.currentMap;
+        contents.camera = MRLively.mapView;
         contents.scheduler = MRLively.scheduler;
         contents.messageHistory = MRLively.messageHistory;
         contents.eventServer = MRLively.eventServer;
         contents.chronus = MRLively.chronus;
+        contents.questManager = MRLively.questManager;
         return contents;
     }
 
@@ -261,11 +282,12 @@ export class SGameManager {
         MRLively.system = contents.system;
         MRLively.world = contents.world;
         //MRLively.camera.currentMap = contents.map;
-        MRLively.camera = contents.camera;
+        MRLively.mapView = contents.camera;
         MRLively.scheduler = contents.scheduler;
         MRLively.messageHistory = contents.messageHistory;
         MRLively.eventServer = contents.eventServer;
         MRLively.chronus = contents.chronus;
+        MRLively.questManager = contents.questManager;
     }
 
     public static makeSaveContents(): any {
@@ -283,7 +305,7 @@ export class SGameManager {
         // const map = MRLively.world.objects().find(x => x && x.objectType() == LObjectType.Map);
         // assert(map);
         // MRLively.camera.currentMap = map as LMap;
-        MRSystem.mapManager.setMap(MRLively.camera.currentMap);
+        MRSystem.mapManager.setMap(MRLively.mapView.currentMap);
 
         // Visual 側の準備が整い次第、Game レイヤーが持っているマップ情報を Visual に反映してほしい
         MRSystem.mapManager.requestRefreshVisual();

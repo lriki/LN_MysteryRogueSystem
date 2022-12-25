@@ -1,6 +1,7 @@
 import { UTransfer } from "ts/mr/utility/UTransfer";
 import { assert } from "../Common";
-import { DEntityCreateInfo, DEntityId } from "../data/DEntity";
+import { DEntityId } from "../data/DEntity";
+import { DEntityCreateInfo } from "../data/DSpawner";
 import { MRData } from "../data/MRData";
 import { LExperienceBehavior } from "../lively/behaviors/LExperienceBehavior";
 import { LInventoryBehavior } from "../lively/behaviors/LInventoryBehavior";
@@ -8,6 +9,22 @@ import { LEntity } from "../lively/LEntity";
 import { MRLively } from "../lively/MRLively";
 import { SEntityFactory } from "../system/internal";
 import { MRSystem } from "../system/MRSystem";
+import { Game_MRInterpreterContext } from "./Game_MRInterpreterContext";
+
+declare global {
+    interface Game_Interpreter {
+        _MR_gameInterpreterContext: Game_MRInterpreterContext | undefined;
+
+        getMRInterpreterContext(): Game_MRInterpreterContext;
+    }
+}
+
+Game_Interpreter.prototype.getMRInterpreterContext = function(): Game_MRInterpreterContext {
+    if (!this._MR_gameInterpreterContext) {
+        this._MR_gameInterpreterContext = new Game_MRInterpreterContext();
+    }
+    return this._MR_gameInterpreterContext;
+}
 
 const _Game_Interpreter_setup = Game_Interpreter.prototype.setup;
 Game_Interpreter.prototype.setup = function(list, eventId) {
@@ -87,7 +104,7 @@ const _Game_Interpreter_command201 = Game_Interpreter.prototype.command201;
 Game_Interpreter.prototype.command201 = function(params: any): boolean {
     if (!_Game_Interpreter_command201.call(this, params)) return false;
 
-    UTransfer.transterRmmzDirectly($gamePlayer._newMapId, $gamePlayer._newX, $gamePlayer._newY, MRSystem.commandContext);
+    UTransfer.transterRmmzDirectly($gamePlayer._newMapId, $gamePlayer._newX, $gamePlayer._newY);
     return true;
 }
 
@@ -96,7 +113,7 @@ const _Game_Interpreter_command129 = Game_Interpreter.prototype.command129;
 Game_Interpreter.prototype.command129 = function(params: any): boolean {
     const result = _Game_Interpreter_command129.call(this, params);
     const rmmzActorId = $gameParty.members()[0].actorId();
-    MRLively.camera.focus(MRLively.world.getEntityByRmmzActorId(rmmzActorId));
+    MRLively.mapView.focus(MRLively.world.getEntityByRmmzActorId(rmmzActorId));
     return result;
 }
 

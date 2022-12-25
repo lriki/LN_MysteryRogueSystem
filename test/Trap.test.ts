@@ -3,7 +3,7 @@ import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "./TestEnv";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { LTrapBehavior } from "ts/mr/lively/behaviors/LTrapBehavior";
 import { MRBasics } from "ts/mr/data/MRBasics";
@@ -180,7 +180,7 @@ test("Trap.Attack", () => {
     TestEnv.transferEntity(trap2, TestEnv.FloorId_FlatMap50x50, 11, 11);
 
     // Player の下に壁を作る
-    MRLively.camera.currentMap.block(10, 11)._tileShape = LTileShape.Wall;
+    MRLively.mapView.currentMap.block(10, 11)._tileShape = LTileShape.Wall;
 
     // 右下を向いて攻撃
     MRSystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, MRData.system.skills.normalAttack, 3).withConsumeAction());

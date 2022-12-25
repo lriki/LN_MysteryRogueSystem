@@ -19,6 +19,8 @@ import { FloorRestartSequence } from "./FloorRestartSequence";
 import { MRBasics } from "../data/MRBasics";
 import { LActorBehavior } from "../lively/behaviors/LActorBehavior";
 import { LEquipmentUserBehavior } from "../lively/behaviors/LEquipmentUserBehavior";
+import { DRmmzUniqueSpawnerAnnotation } from "../data/importers/DAnnotationReader";
+import { DUniqueSpawner } from "../data/DSpawner";
 
 export class RMMZIntegration extends SIntegration {
 
@@ -44,11 +46,7 @@ export class RMMZIntegration extends SIntegration {
     }
 
     onEntityLocated(entity: LEntity): void {
-        if (entity.entityId().equals(MRLively.camera.focusedEntityId())) {
-            //console.log("★★★★★");
-            //$gamePlayer.reserveTransfer($gameMap.mapId(), entity.x, entity.y, $gamePlayer.direction(), 2);
-            //$gamePlayer.locate(entity.x, entity.y);
-            //$gamePlayer.refresh();
+        if (entity.entityId().equals(MRLively.mapView.focusedEntityId())) {
             MRView._playerPosRefreshNeed = true;
         }
     }
@@ -63,14 +61,14 @@ export class RMMZIntegration extends SIntegration {
     }
 
     onLoadFixedMapEvents(): void {
-        MRLively.camera.currentMap.keeperCount = 0;
+        MRLively.mapView.currentMap.keeperCount = 0;
 
         // 固定マップ上のイベント情報から Entity を作成する
         $gameMap.events().forEach((e: Game_Event) => {
             const data = SRmmzHelpers.readEntityMetadata(e, $gameMap.mapId());
             if (e && data) {
                 if (data.troopId > 0) {
-                    SEntityFactory.spawnTroopAndMembers(MRData.troops[data.troopId], e.x, e.y,data.stateIds);
+                    SEntityFactory.spawnTroopAndMembers(MRLively.mapView.currentMap, MRData.troops[data.troopId], e.x, e.y,data.stateIds);
                     e.setTransparent(true);
                 }
                 else {
@@ -78,7 +76,7 @@ export class RMMZIntegration extends SIntegration {
                     assert(entity.data.prefabId > 0);
 
                     if (entity.inhabitsCurrentFloor) {
-                        entity.rmmzEventId = e.eventId();
+                        entity.setRmmzEventId(e.eventId());
                     }
                     else {
                         e.setTransparent(true);
@@ -86,15 +84,28 @@ export class RMMZIntegration extends SIntegration {
 
                     if (data.keeper) {
                         entity.keeper = true;
-                        MRLively.camera.currentMap.keeperCount++;
+                        MRLively.mapView.currentMap.keeperCount++;
                     }
                 }
             }
         });
 
-        MRLively.camera.currentMap.lastKeeperCount = MRLively.camera.currentMap.keeperCount;
+        MRLively.mapView.currentMap.lastKeeperCount = MRLively.mapView.currentMap.keeperCount;
     }
 
+    override onGetFixedMapUnqueSpawners(): DUniqueSpawner[] {
+        return SRmmzHelpers.getUnqueSpawners($dataMap, $gameMap.mapId());
+    }
+
+    override onMapSetupCompleted(map: LMap): void {
+        // マップの初期化が完了したら、マップ上のイベントを非表示にする。
+        for (const event of $gameMap.events()) {
+            if (!event.isREEvent()) {
+                event.setTransparent(true);
+            }
+        }
+    }
+    
     onUpdateBlock(block: LBlock): void {
         if (MRView.mapBuilder) {
             //const width = $dataMap.width;
@@ -165,6 +176,11 @@ export class RMMZIntegration extends SIntegration {
         }
     }
     
+
+    override onCurrentMapChanged(): void {
+
+    }
+    
     onEntityEnteredMap(entity: LEntity): void {
         if (MRView.entityVisualSet) {
             MRView.entityVisualSet.createVisual2(entity);
@@ -182,10 +198,10 @@ export class RMMZIntegration extends SIntegration {
 
         // Entity と RMMZ-Event の関連付けを解除
         entity.inhabitsCurrentFloor = false;
-        entity.rmmzEventId = 0;
+        entity.setRmmzEventId(0);
         if (entity.keeper) {
             entity.keeper = false;
-            MRLively.camera.currentMap.keeperCount--;
+            MRLively.mapView.currentMap.keeperCount--;
         }
     }
 

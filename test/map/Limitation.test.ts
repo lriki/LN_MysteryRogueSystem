@@ -3,7 +3,7 @@ import { TestEnv } from "./../TestEnv";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { MRData } from "ts/mr/data/MRData";
 import { paramMaxItemsInMap } from "ts/mr/PluginParameters";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
@@ -30,7 +30,7 @@ test("map.Limitation.Item", () => {
         const x = i % 20;
         const y = Math.floor(i / 20);
         const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草A").id, [], "item1"));
-        MRLively.world.transferEntity(undefined, item1, floorId, 10 + x, 10 + y);
+        TestEnv.transferEntity(item1, floorId, 10 + x, 10 + y);
     }
     
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草A").id, [], "item1"));

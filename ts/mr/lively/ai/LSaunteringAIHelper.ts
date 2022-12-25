@@ -51,7 +51,7 @@ export class LSaunteringAIHelper {
     public thinkMovingCore(self: LEntity, cctx: SCommandContext): boolean {
         let moveToLHRule = false;
         let moveToPassageWay: LBlock | undefined;
-        const block = MRLively.camera.currentMap.block(self.mx, self.my);
+        const block = MRLively.mapView.currentMap.block(self.mx, self.my);
 
         if (!this.hasDestination()) {
             if (!block.isRoom()) {
@@ -60,7 +60,7 @@ export class LSaunteringAIHelper {
                 moveToLHRule = true;
             }
             else {
-                const room = MRLively.camera.currentMap.room(block._roomId);
+                const room = MRLively.mapView.currentMap.room(block._roomId);
                 if (!block.isRoomInnerEntrance()) {
                     // 目的地なし, 現在位置が部屋
                     // => ランダムな入口を目的地に設定し、目的地に向かう移動。

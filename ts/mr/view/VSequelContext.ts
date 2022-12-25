@@ -45,7 +45,7 @@ export class VSequelContext {
     }
     
     public isDashing(): boolean {
-        const entty = MRLively.camera.focusedEntity();
+        const entty = MRLively.mapView.focusedEntity();
         if (!entty) return false;
         const behavior = entty.findEntityBehavior(LUnitBehavior);
         if (!behavior) return false;

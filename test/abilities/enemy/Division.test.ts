@@ -5,7 +5,7 @@ import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { MRBasics } from "ts/mr/data/MRBasics";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -34,18 +34,18 @@ test("Abilities.Enemy.Division", () => {
     MRSystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, MRData.system.skills.normalAttack, 6).withConsumeAction());
     MRSystem.dialogContext.activeDialog().submit();
 
-    const entityCount1 = MRLively.camera.currentMap.entities().length;
+    const entityCount1 = MRLively.mapView.currentMap.entities().length;
 
     MRLively.world.random().resetSeed(9);     // 乱数調整
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const eintites = MRLively.camera.currentMap.entities();
+    const eintites = MRLively.mapView.currentMap.entities();
     const enemy2 = eintites[eintites.length - 1];
 
     const atk2 = enemy1.getActualParam(MRBasics.params.atk);
     expect(atk2).toBe(atk1);    // 分裂後にパラメータが増えてしまう問題の修正確認
 
     expect(enemy1.isDeathStateAffected()).toBeFalsy();  // 倒しちゃってない？
-    const entityCount2 = MRLively.camera.currentMap.entities().length;
+    const entityCount2 = MRLively.mapView.currentMap.entities().length;
     expect(entityCount2).toBe(entityCount1 + 1);    // 分裂でエンティティが増えていること
 });

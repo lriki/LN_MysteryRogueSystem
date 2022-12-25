@@ -100,6 +100,7 @@ nav:
   - 未整理メモ:
     - 99-note/index.md
     - ステータスリセットのタイミング: 99-note/status-reset.md
+    - 入口マークについて: 99-note/entry-point-marker.md
   # - 内部的なこと:
   #     - index: dev/index.md
   #     - XX: dev/xx.md

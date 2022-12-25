@@ -1,14 +1,15 @@
 
 import { assert, tr, tr2 } from "../Common";
-import { DAnnotationReader } from "./importers/DAttributeReader";
+import { DAnnotationReader } from "./importers/DAnnotationReader";
 import { DLandId, DMapId, DTerrainPresetId, DTerrainSettingId } from "./DCommon";
-import { DEntitySpawner2 } from "./DEntity";
+import { DEntitySpawner2 } from "./DSpawner";
 import { DEntityCategory } from "./DEntityCategory";
 import { DHelpers } from "./DHelper";
 import { MRData } from "./MRData";
 import { DMap } from "./DMap";
 import { Diag } from "../Diag";
 import { DValidationHelper } from "./DValidationHelper";
+import { DFovSystem } from "./DSystem";
 
 
 export enum DFloorClass {
@@ -90,7 +91,10 @@ export interface DFloorInfo {
     key: string;
     template: string | undefined;
     displayName: string | undefined;
-    fixedMapName: string;   // Land から固定マップへの遷移については LFloorId のコメント参照。
+    floorClass: DFloorClass;
+    //fixedMapName: string;   // Land から固定マップへの遷移については LFloorId のコメント参照。
+    fixedMapIndex: number;  // DLand.fixedMapIds のインデックス。-1 なら固定マップではない。
+    eventMapIndex: number;
 
     /** false の場合は通常の RMMZ マップ。Entity は登場せず、Event を非表示にすることもない。 */
     //entitySystem: boolean;
@@ -106,6 +110,9 @@ export interface DFloorInfo {
     bgmPitch: number;
 
     presetId: DTerrainPresetId;
+
+    unique: boolean;
+    fovSystem: DFovSystem;
 }
 
 export enum DLandIdentificationLevel {
@@ -202,6 +209,11 @@ export class DLandRule {
 
 /**
  * ダンジョンや町ひとつ分。
+ * 
+ * Id=1 の Land は VanillaLand と呼ばれる。VanillaLand は、
+ * - ゲーム開始時に自動的に生成される。
+ * - いずれの Land にも属さない RmmzMap に対応する DMap は全てここに属する。
+ * - RmmzMapId と等しい FloorNumber の Floor が存在する。Floor は歯抜けになっていることもある。
  */
 export class DLand {
     /*
@@ -244,10 +256,12 @@ export class DLand {
     //exitFloorId: DFloorId;
 
     /** @MR-Floor から読み取った Floor 情報 */
+    // やっぱり EventMap もこれに含んでみる。LFloorInfo の誤用が多くなってしまったため。
     floorInfos: DFloorInfo[];
+    lastFloorNumber: number;    // 最後のフロア番号
 
     /** Land に含まれるフロア ([0] is Invalid) 要素数は MRData.MAX_DUNGEON_FLOORS だが、最大フロア数ではないため注意。 */
-    floorIds: DMapId[];
+    //floorIds: DMapId[];
 
     fixedMapIds: DMapId[];
 
@@ -258,15 +272,15 @@ export class DLand {
 
     // イベントマップ。 ExitMap も含む。
     // FixedMap は含まない。FixedMap への遷移はつまり DungeonFloor への遷移であるため、EventMap への遷移と混同しないようにする。
-    private _eventMapIds: DMapId[];
+    eventMapIds: DMapId[];
     
     
     /**
      * 主にシステムの都合で行先が明示されずに、Land から "出される" ときの移動先となるマップ。
      * ゲームオーバーや "脱出の巻物" などでダンジョンから抜けるときに参照される。
-     * このマップは通過点として演出や遷移先の指定のみ利用する。REシステム管理下のマップではない。
+     * このマップは通過点として演出や遷移先の指定のみ利用する。
      */
-    private _exitEventMapIndex: number;
+    private _exitEventMapFlooNumber: number;
 
     private _isWorld: boolean;
 
@@ -295,10 +309,11 @@ export class DLand {
         //trapTable = { entities = [] },
         //exitFloorId = { landId = 0, floorNumber = 0 },
         this.floorInfos = [];
-        this.floorIds = [];
+        this.lastFloorNumber = -1;
+        //this.floorIds = [];
         this.fixedMapIds = [];
-        this._eventMapIds = [];
-        this._exitEventMapIndex = -1;
+        this.eventMapIds = [];
+        this._exitEventMapFlooNumber = -1;
         this.identifiedKinds = [];
         this.forwardDirection = DLandForwardDirection.Uphill;
         this._isWorld = isWorld;
@@ -313,7 +328,7 @@ export class DLand {
 
     public validate(): void {
         if (this.id > 0 && !this.isVanillaLand) {
-            if (this._exitEventMapIndex == 0) {
+            if (this._exitEventMapFlooNumber <= 0) {
                 Diag.error(this.toDebugName() + tr("の ExitMap が設定されていません。"));
             }
         }
@@ -333,29 +348,42 @@ export class DLand {
     //     return DHelpers.isDungeonLand(this.id);
     // }
     
-    public get eventMapIds(): readonly DMapId[] {
-        return this._eventMapIds;
-    }
-    
-    public get exitMapId(): DMapId {
-        assert(this._exitEventMapIndex >= 0);
-        return this._eventMapIds[this._exitEventMapIndex];
+    public get exitMapFloorNumber(): number {
+        assert(this._exitEventMapFlooNumber >= 0);
+        return this._exitEventMapFlooNumber;
     }
 
-    public get exitMapData(): DMap {
-        return MRData.maps[this.exitMapId];
-    }
+    // public get eventMapIds(): readonly DMapId[] {
+    //     return this._eventMapIds;
+    // }
+    
+    // public get exitMapId(): DMapId {
+    //     assert(this._exitEventMapFlooNumber >= 0);
+    //     return this._eventMapIds[this._exitEventMapIndex];
+    // }
+
+    // public get exitMapData(): DMap {
+    //     return MRData.maps[this.exitMapId];
+    // }
+
 
     public getFloorClass(mapData: DMap) {
         assert(mapData.landId === this.id);
         //if (this._exitMapId == mapData.id) return DFloorClass.ExitMap;
-        if (!!this._eventMapIds.find(id => mapData.id)) return DFloorClass.EventMap;
+        if (!!this.eventMapIds.find(id => mapData.id)) return DFloorClass.EventMap;
         return DFloorClass.FloorMap;
     }
 
     // public getMapDataIndex(floorNumber: number): number {
 
     // }
+
+    public getFixedMap(floorNumber: number): DMap | undefined {
+        const floorInfo = this.floorInfos[floorNumber];
+        if (!floorInfo) return undefined;
+        if (floorInfo.fixedMapIndex < 0) return undefined;
+        return MRData.maps[this.fixedMapIds[floorInfo.fixedMapIndex]];
+    }
 
     public findFixedMapByName(name: string): DMap | undefined {
         if (!name) return undefined;
@@ -364,21 +392,58 @@ export class DLand {
         return MRData.maps[mapId];
     }
 
-    public addEventMap(map: DMap): void {
-        assert(map.landId === 0);
-        map.landId = this.id;
-        this._eventMapIds.push(map.id);
+    // 見つからない場合は -1.
+    public findFloorNumberByMapId(mapId: DMapId): number {
+        return this.floorInfos.findIndex(x => x && x.fixedMapIndex >= 0 && this.fixedMapIds[x.fixedMapIndex] === mapId);
     }
 
-    public addEventMapAsExitMap(map: DMap): void {
-        if (this._exitEventMapIndex >= 0) Diag.error(this.toDebugName() + tr2("既に ExitMap が設定されています。"));
-        //assert(map.landId === 0);
-        assert(map.landId === this.id); // TODO: 一時的に許容
-        map.landId = this.id;
-        map.exitMap = true;
-        this._exitEventMapIndex = this._eventMapIds.length;
-        this._eventMapIds.push(map.id);
+    public addEventMap(map: DMap): void {
+        // assert(map.landId === 0);
+        // map.landId = this.id;
+        this.eventMapIds.push(map.id);
+
+        // const info: DFloorInfo = {
+        //     key: map.name,
+        //     template: undefined,
+        //     displayName: map.name,
+        //     fixedMapIndex: -1,
+        //     floorClass: DFloorClass.EventMap,
+        //     safetyActions: true,
+        //     bgmName: "",
+        //     bgmVolume: 90,
+        //     bgmPitch: 100,
+        //     presetId: 1,
+        //     unique: false,
+        //     fovSystem: DFovSystem.RoomBounds,
+        // };
+        // this.floorInfos.push(info);
     }
+
+    // public addEventMapAsExitMap(map: DMap): void {
+    //     if (this._exitEventMapFlooNumber >= 0) Diag.error(this.toDebugName() + tr2("既に ExitMap が設定されています。"));
+    //     //assert(map.landId === 0);
+    //     assert(map.landId === this.id); // TODO: 一時的に許容
+    //     map.landId = this.id;
+    //     map.exitMap = true;
+    //     this._eventMapIds.push(map.id);
+        
+    //     this._exitEventMapFlooNumber = this.floorInfos.length;
+    //     const info: DFloorInfo = {
+    //         key: map.name,
+    //         template: undefined,
+    //         displayName: map.name,
+    //         fixedMapIndex: -1,
+    //         floorClass: DFloorClass.EventMap,
+    //         safetyActions: true,
+    //         bgmName: "",
+    //         bgmVolume: 90,
+    //         bgmPitch: 100,
+    //         presetId: 1,
+    //         unique: false,
+    //         fovSystem: DFovSystem.RoomBounds,
+    //     };
+    //     this.floorInfos.push(info);
+    // }
 
     // public getFixedMapByName(name: string): DMap {
     //     const mapId = this.fixedMapIds.find(x => REData.maps[x].name == name);
@@ -388,12 +453,13 @@ export class DLand {
     
     public import(mapData: IDataMap): void {
         
-        this.floorInfos = DLand.buildFloorTable(mapData);
+        this.floorInfos = this.buildFloorTable(mapData);
+        this.lastFloorNumber = this.floorInfos.length - 1;
         this.appearanceTable = DLand.buildAppearanceTableSet(mapData, this.rmmzMapId, this.floorInfos.length);
 
         for (const event of mapData.events) {
             if (!event) continue;
-            const data = DAnnotationReader.readLandMetadata(event);
+            const data = DAnnotationReader.readLandAnnotation(event);
             if (data) {
                 if (data.identifications) {
                     for (const pair of data.identifications) {
@@ -419,12 +485,39 @@ export class DLand {
         // Pick prefab
         for (const event of mapData.events) {
             if (event) {
-                const prefabData = DAnnotationReader.readPrefabMetadata(event, this.rmmzMapId);
+                const prefabData = DAnnotationReader.readPrefabAnnotation(event, this.rmmzMapId);
                 if (prefabData) {
                     const prefab = MRData.newPrefab();
                     prefab.rmmzMapId = this.rmmzMapId;
                     prefab.rmmzEventData = event;
                 }
+            }
+        }
+
+        // EventMap の Floor は通常 Floor の後に追加したい
+        for (let i = 0; i < this.eventMapIds.length; i++) {
+            const mapId = this.eventMapIds[i];
+            const mapData = MRData.maps[mapId];
+
+            const info: DFloorInfo = {
+                key: mapData.name,
+                template: undefined,
+                displayName: mapData.name,
+                floorClass: DFloorClass.EventMap,
+                fixedMapIndex: -1,
+                eventMapIndex: i,
+                safetyActions: true,
+                bgmName: "",
+                bgmVolume: 90,
+                bgmPitch: 100,
+                presetId: 1,
+                unique: false,
+                fovSystem: DFovSystem.RoomBounds,
+            };
+            this.floorInfos.push(info);
+
+            if (mapData.exitMap) {
+                this._exitEventMapFlooNumber = this.floorInfos.length - 1;
             }
         }
     }
@@ -452,24 +545,31 @@ export class DLand {
         return e >= DLandIdentificationLevel.Entity;
     }
 
-    public static buildFloorTable(mapData: IDataMap): DFloorInfo[] {
+    private buildFloorTable(mapData: IDataMap): DFloorInfo[] {
         const floors: DFloorInfo[] = [];
         for (const event of mapData.events) {
             if (!event) continue;
             // @MR-Floor 設定を取り出す
-            const floorData = DAnnotationReader.readFloorMetadataFromPage(event.pages[0]);
+            const floorData = DAnnotationReader.readFloorAnnotationFromPage(event.pages[0]);
             if (floorData) {
-
+                const fixedMapName = floorData.fixedMap ?? "";
                 const info: DFloorInfo = {
                     key: event.name,
                     template: floorData.template ?? undefined,
                     displayName: floorData.displayName ?? undefined,
-                    fixedMapName: floorData.fixedMap ?? "",
+                    floorClass: DFloorClass.FloorMap,
+                    fixedMapIndex: this.fixedMapIds.findIndex(x => MRData.maps[x].name == fixedMapName),
+                    eventMapIndex: -1,
                     safetyActions: floorData.safety ?? false,
                     bgmName: floorData.bgm ? floorData.bgm[0] : "",
                     bgmVolume: floorData.bgm ? floorData.bgm[1] : 90,
                     bgmPitch: floorData.bgm ? floorData.bgm[2] : 100,
                     presetId: floorData.preset ? MRData.getFloorPreset(floorData.preset).id : 1,
+                    unique: floorData.unique ?? false,
+                    fovSystem: DHelpers.stringToEnum(floorData.fovSystem, {
+                        "SymmetricShadowcast": DFovSystem.SymmetricShadowcast,
+                        "_": DFovSystem.RoomBounds,
+                    }),
                 }
 
                 const x2 = event.x + DHelpers.countSomeTilesRight_E(mapData, event.x, event.y);
@@ -504,7 +604,7 @@ export class DLand {
             const y = event.y;
 
             // @MR-Spawner
-            const entityMetadata = DAnnotationReader.readEntityMetadataFromPage(event.pages[0]);
+            const entityMetadata = DAnnotationReader.readSpawnerAnnotationFromPage(event.pages[0]);
             if (entityMetadata) {
                 const spawnInfo = DEntitySpawner2.makeFromEventData(event, rmmzMapId);
                 if (!spawnInfo) {
@@ -524,7 +624,7 @@ export class DLand {
             }
             
             // @MR-Event
-            const eventMetadata = DAnnotationReader.readREEventMetadataFromPage(event.pages[0]);
+            const eventMetadata = DAnnotationReader.readREEventAnnotationFromPage(event.pages[0]);
             if (eventMetadata) {
                 const tableItem: DAppearanceTableEvent = {
                     rmmzEventId: event.id,
@@ -597,7 +697,7 @@ export class DLand {
             const y = event.y;
 
             // @MR-Spawner
-            const entityMetadata = DAnnotationReader.readEntityMetadataFromPage(event.pages[0]);
+            const entityMetadata = DAnnotationReader.readSpawnerAnnotationFromPage(event.pages[0]);
             if (entityMetadata) {
                 const spawnInfo = DEntitySpawner2.makeFromEventData(event, rmmzMapId);
                 if (!spawnInfo) {

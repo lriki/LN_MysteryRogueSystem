@@ -1,10 +1,11 @@
-import { DEntity, DEntityCreateInfo, DEntityId } from "ts/mr/data/DEntity";
+import { DEntity, DEntityId } from "ts/mr/data/DEntity";
 import { MRData } from "ts/mr/data/MRData";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { LFloorId } from "ts/mr/lively/LFloorId";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { DAppearanceTableEntity } from "../data/DLand";
+import { DEntityCreateInfo } from "../data/DSpawner";
 import { LRandom } from "../lively/LRandom";
 import { UEffect } from "./UEffect";
 
@@ -12,18 +13,18 @@ import { UEffect } from "./UEffect";
 export class USpawner {
 
     public static spawnSingleEntity(entityKey: string, mx: number, my: number): LEntity {
-        const floorId = MRLively.camera.currentMap.floorId();
+        const floorId = MRLively.mapView.currentMap.floorId();
         const entity = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity(entityKey).id), floorId);
-        MRLively.world.transferEntity(undefined, entity, floorId, mx, my);
+        MRLively.world.transferEntity(entity, floorId, mx, my);
         return entity;
     }
 
     public static getEnemiesFromSpawnTable(floorId: LFloorId): DEntity[] {
         const result = new Set<DEntityId>();
 
-        const table = floorId.landData().appearanceTable;
+        const table = floorId.landData.appearanceTable;
 
-        const enemyList = table.enemies[floorId.floorNumber()];
+        const enemyList = table.enemies[floorId.floorNumber];
         if (enemyList) {
             for (const enemy of enemyList) {
                 if (enemy.spawiInfo.troopId > 0) {
@@ -52,9 +53,9 @@ export class USpawner {
      * 作成したアイテムはマップ上に出現していない。
      */
     public static createItemFromSpawnTable(floorId: LFloorId, rand: LRandom): LEntity | undefined {
-        const table = floorId.landData().appearanceTable;
+        const table = floorId.landData.appearanceTable;
         if (table.items.length == 0) return undefined;    // 出現テーブルが空
-        const list = table.items[floorId.floorNumber()];
+        const list = table.items[floorId.floorNumber];
         if (list.length == 0) return undefined;    // 出現テーブルが空
 
         const data = UEffect.selectRatingForce<DAppearanceTableEntity>(rand, list, 100, x => x.spawiInfo.rate);
@@ -67,9 +68,9 @@ export class USpawner {
      * 作成したアイテムはマップ上に出現していない。
      */
     public static createTrapFromSpawnTable(floorId: LFloorId, rand: LRandom): LEntity | undefined {
-        const table = floorId.landData().appearanceTable;
+        const table = floorId.landData.appearanceTable;
         if (table.traps.length == 0) return undefined;    // 出現テーブルが空
-        const list = table.traps[floorId.floorNumber()];
+        const list = table.traps[floorId.floorNumber];
         if (list.length == 0) return undefined;    // 出現テーブルが空
 
         const data = UEffect.selectRatingForce<DAppearanceTableEntity>(rand, list, 100, x => x.spawiInfo.rate);

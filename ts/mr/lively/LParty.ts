@@ -131,6 +131,7 @@ export class LParty {
         // ステータスをリセット
         for (const member of this.members) {
             member.resetStatus();
+            member.recoverAll();
         }
 
         if (this.journal.isPenaltyResult) {

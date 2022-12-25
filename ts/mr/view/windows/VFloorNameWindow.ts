@@ -60,12 +60,12 @@ export class VFloorNameWindow extends Window_Base {
         this.contents.clear();
         if ($gameMap.displayName()) {
 
-            const floorId = MRLively.camera.currentMap.floorId();
-            const floorInfo = floorId.floorInfo();
+            const floorId = MRLively.mapView.currentMap.floorId();
+            const floorInfo = floorId.floorInfo;
 
             const displayName = floorInfo.displayName ? floorInfo.displayName : $gameMap.displayName();
 
-            const lines = displayName.format(floorId.floorNumber()).split("\\n");
+            const lines = displayName.format(floorId.floorNumber).split("\\n");
 
             const height = this.lineHeight() * lines.length;
 

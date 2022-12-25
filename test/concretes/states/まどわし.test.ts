@@ -1,12 +1,10 @@
-import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { SView } from "ts/mr/system/SView";
-import { LFloorId } from "ts/mr/lively/LFloorId";
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -23,11 +21,11 @@ test("concretes.states.まどわし", () => {
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [stateId], "enemy1"));
     enemy1.dir = 6; // 右へ
-    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     // item1
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草A").id, [], "item1"));
-    MRLively.world.transferEntity(undefined, item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    TestEnv.transferEntity(item1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     // View には何か別のものを表示させようとする
     const enemy1Visibility1 = SView.getEntityVisibility(enemy1);

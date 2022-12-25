@@ -5,7 +5,7 @@ import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "./../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { DBlockLayerKind } from "ts/mr/data/DCommon";
 import { MRBasics } from "ts/mr/data/MRBasics";
@@ -68,7 +68,7 @@ test("Item.DropAndDestroy", () => {
     for (let y = 0; y < 7; y++) {
         for (let x = 0; x < 7; x++) {
             const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(TestEnv.EntityId_Herb));
-            MRLively.world.transferEntity(undefined, item, TestEnv.FloorId_FlatMap50x50, ox + x, oy + y);
+            TestEnv.transferEntity(item, TestEnv.FloorId_FlatMap50x50, ox + x, oy + y);
         }
     }
 
@@ -100,11 +100,11 @@ test("Item.ThrowingDropByWall", () => {
     ｐ□□■
     □□■■
     */
-    MRLively.camera.currentMap.block(7, 4)._tileShape = LTileShape.Wall;
-    MRLively.camera.currentMap.block(8, 4)._tileShape = LTileShape.Wall;
-    MRLively.camera.currentMap.block(8, 5)._tileShape = LTileShape.Wall;
-    MRLively.camera.currentMap.block(7, 6)._tileShape = LTileShape.Wall;
-    MRLively.camera.currentMap.block(8, 6)._tileShape = LTileShape.Wall;
+    MRLively.mapView.currentMap.block(7, 4)._tileShape = LTileShape.Wall;
+    MRLively.mapView.currentMap.block(8, 4)._tileShape = LTileShape.Wall;
+    MRLively.mapView.currentMap.block(8, 5)._tileShape = LTileShape.Wall;
+    MRLively.mapView.currentMap.block(7, 6)._tileShape = LTileShape.Wall;
+    MRLively.mapView.currentMap.block(8, 6)._tileShape = LTileShape.Wall;
 
     // アイテムを作ってインベントリに入れる
     const items = [];
@@ -125,10 +125,10 @@ test("Item.ThrowingDropByWall", () => {
         MRSystem.scheduler.stepSimulation();
     }
     
-    const item1 = MRLively.camera.currentMap.block(7, 5).getFirstEntity();
-    const item2 = MRLively.camera.currentMap.block(6, 4).getFirstEntity();
-    const item3 = MRLively.camera.currentMap.block(6, 5).getFirstEntity();
-    const item4 = MRLively.camera.currentMap.block(6, 6).getFirstEntity();
+    const item1 = MRLively.mapView.currentMap.block(7, 5).getFirstEntity();
+    const item2 = MRLively.mapView.currentMap.block(6, 4).getFirstEntity();
+    const item3 = MRLively.mapView.currentMap.block(6, 5).getFirstEntity();
+    const item4 = MRLively.mapView.currentMap.block(6, 6).getFirstEntity();
     assert(item1);
     assert(item2);
     assert(item3);
@@ -152,7 +152,7 @@ test("projectiles.Item.AwfulThrowing", () => {
 
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 12, 10);
 
     MRSystem.scheduler.stepSimulation();
 
@@ -166,7 +166,7 @@ test("projectiles.Item.AwfulThrowing", () => {
     MRSystem.scheduler.stepSimulation();
 
     // 下手投げ状態なので当たらず、落下している
-    const block = MRLively.camera.currentMap.block(12, 10);
+    const block = MRLively.mapView.currentMap.block(12, 10);
     const item = block.layer(DBlockLayerKind.Ground).firstEntity();
     expect(item).toBe(item1);
     expect(item1.mx).toBe(12);

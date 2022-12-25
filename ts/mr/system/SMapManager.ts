@@ -60,15 +60,16 @@ export class SMapManager {
     public setupMap(initialMap: FMap): void {
         const newFloorId = this.map.floorId();
 
-        if (newFloorId.isNormalMap()) {
+        if (newFloorId.isNormalMap2) {
             
         }
-        else if (newFloorId.isRandomMap()) {
+        else if (newFloorId.isRandomMap2) {
             this.setupRandomMap(initialMap);
         }
         else {
             this.setupFixedMap(initialMap);
         }
+        MRSystem.integration.onMapSetupCompleted(this.map);
     }
 
     private setupRandomMap(initialMap: FMap): void {
@@ -81,14 +82,14 @@ export class SMapManager {
         {
             const exitPoint = initialMap.exitPont();
             if (exitPoint) {
-                const appearanceTable = MRData.lands[floorId.landId()].appearanceTable;
-                const prefab = appearanceTable.system[floorId.floorNumber()].find(e => {
+                const appearanceTable = MRData.lands[floorId.landId].appearanceTable;
+                const prefab = appearanceTable.system[floorId.floorNumber].find(e => {
                     return DEntityCategory.isExitPoint(e.spawiInfo.entityData());
                 });
                 assert(prefab);
 
                 this._exitPoint = SEntityFactory.newBasicExitPoint();
-                MRLively.world.transferEntity(undefined, this._exitPoint, floorId, exitPoint.mx(), exitPoint.my());
+                MRLively.world.transferEntity(this._exitPoint, floorId, exitPoint.mx(), exitPoint.my());
             }
         }
         
@@ -107,7 +108,7 @@ export class SMapManager {
                     const block = this.findSpawnableBlockRandom(layer);
                     assert(block);
                     
-                    UMovement.locateEntity(entity, block.mx, block.my);
+                    this.map.locateEntity(entity, block.mx, block.my);
                 }
             }
         }
@@ -137,7 +138,7 @@ export class SMapManager {
         this.spawnTraps(trapCount);
 
         // Event 配置
-        const eventTable = this.map.land2().landData().appearanceTable.events[floorId.floorNumber()];
+        const eventTable = this.map.land2().landData().appearanceTable.events[floorId.floorNumber];
         for (const i of eventTable) {
             MRSystem.integration.onLocateRmmzEvent(i.rmmzEventId, 0, 0);
         }
@@ -157,8 +158,16 @@ export class SMapManager {
 
                 // TODO: 複数 Entity が重なるときの対策
 
-                UMovement.locateEntity(entity, entryPoint.mx(), entryPoint.my());
+                this.map.locateEntity(entity, entryPoint.mx(), entryPoint.my());
             }
+        }
+
+        // Locate unique entites
+        const uniqueSpawners = MRSystem.integration.onGetFixedMapUnqueSpawners();
+        for (const spawner of uniqueSpawners) {
+            const entity = USearch.getUniqueActorById(spawner.entityId);
+            this.map.uniqueSpawners[entity.dataId] = spawner;
+            MRLively.world.transferEntity(entity, this.map.floorId(), spawner.mx, spawner.my);
         }
     }
 
@@ -193,8 +202,8 @@ export class SMapManager {
 
     public attemptRefreshVisual(): void {
         if (this._needRefreshVisual) {
-            if (this.map.floorId().isRandomMap()) {
-                MRSystem.integration.refreshGameMap(MRLively.camera.currentMap);
+            if (this.map.floorId().isRandomMap2) {
+                MRSystem.integration.refreshGameMap(MRLively.mapView.currentMap);
             }
             else {
                 // 固定マップの場合は RMMZ 側で既に準備済みなので更新不要
@@ -216,48 +225,51 @@ export class SMapManager {
     // 現在の Map(Floor) に存在するべき Entity を、Map に登場 (追加) させる
     // ※追加だけ。配置方法はマップの種類によって変わるので、この関数では行わない。
     private enterEntitiesToCurrentMap(): LEntity[] {
-        const player = MRLively.camera.focusedEntity();
-        assert(player)
+        this.map.refreshLocateToBlockAllEntites();
+        return this.map.entities();
 
-        const result: LEntity[] = [];
-        const isFixedMap = this.map.floorId().isFixedMap();
+        // const player = MRLively.mapView.focusedEntity();
+        // assert(player)
 
-        const objects = MRLively.world.objects();
-        for (let i = 1; i < objects.length; i++) {
-            const obj = objects[i];
-            if (obj && obj.objectType() == LObjectType.Entity) {
-                const entity = obj as LEntity;
-                // enterEntitiesToCurrentMap() が呼ばれる前に Map の setup が行われている。
-                // 固定マップの場合は既にいくつか Entity が追加されていることがあるので、
-                // それはここでは追加しない。
-                const isEnterd = entity.hasParent();
+        // const result: LEntity[] = [];
+        // const isFixedMap = this.map.floorId().isFixedMap();
 
-                // onLoadFixedMapEvents() によって既に追加されているものは対象外
-                if (entity.isAppearedOnMap()) continue;
+        // const objects = MRLively.world.objects();
+        // for (let i = 1; i < objects.length; i++) {
+        //     const obj = objects[i];
+        //     if (obj && obj.objectType() == LObjectType.Entity) {
+        //         const entity = obj as LEntity;
+        //         // enterEntitiesToCurrentMap() が呼ばれる前に Map の setup が行われている。
+        //         // 固定マップの場合は既にいくつか Entity が追加されていることがあるので、
+        //         // それはここでは追加しない。
+        //         const isEnterd = entity.hasParent();
 
-                if (this.map.floorId().equals(entity.floorId) && !isEnterd) {
-                    //if (isFixedMap) {
-                        this.map._reappearEntity(entity);
-                        result.push(entity);
-                    //}
-                    /*
-                    else {
-                        const layer = entity.queryProperty(RESystem.properties.homeLayer);
-                        const block = this.findSpawnableBlockRandom(entity, layer);
-                        assert(block);
+        //         // onLoadFixedMapEvents() によって既に追加されているものは対象外
+        //         if (entity.isAppearedOnMap()) continue;
+
+        //         if (this.map.floorId().equals(entity.floorId) && !isEnterd) {
+        //             //if (isFixedMap) {
+        //                 this.map._reappearEntity(entity);
+        //                 result.push(entity);
+        //             //}
+        //             /*
+        //             else {
+        //                 const layer = entity.queryProperty(RESystem.properties.homeLayer);
+        //                 const block = this.findSpawnableBlockRandom(entity, layer);
+        //                 assert(block);
                         
                         
-                        //const block = this.block(entity.x, entity.y);
-                        //const layer = entity.queryProperty(RESystem.properties.homeLayer);
-                        block.addEntity(layer, entity);
-                        this._map._addEntityInternal(entity);
-                    }
-                    */
-                }
-            }
-        }
+        //                 //const block = this.block(entity.x, entity.y);
+        //                 //const layer = entity.queryProperty(RESystem.properties.homeLayer);
+        //                 block.addEntity(layer, entity);
+        //                 this._map._addEntityInternal(entity);
+        //             }
+        //             */
+        //         }
+        //     }
+        // }
 
-        return result;
+        // return result;
     }
 
     private findSpawnableBlockRandom(layer: DBlockLayerKind): LBlock | undefined {
@@ -279,7 +291,7 @@ export class SMapManager {
             this.spawnEnemy(block.mx, block.my);
         }
         else {
-            throw new Error("Not implemented.");
+            //throw new Error("Not implemented.");
         }
     }
 
@@ -288,17 +300,17 @@ export class SMapManager {
         const floorId = this.map.floorId();
         const table = this.map.land2().landData().appearanceTable;
         if (table.enemies.length == 0) return [];    // 出現テーブルが空
-        const list = table.enemies[floorId.floorNumber()];
+        const list = table.enemies[floorId.floorNumber];
         if (list.length == 0) return [];    // 出現テーブルが空
 
         const data = UEffect.selectRatingForce<DAppearanceTableEntity>(this.rand(), list, 100, x => x.spawiInfo.rate);
         let entites: LEntity[];
         if (data.spawiInfo.troopId > 0) {
-            entites = SEntityFactory.spawnTroopAndMembers( MRData.troops[data.spawiInfo.troopId], mx, my, data.spawiInfo.stateIds);
+            entites = SEntityFactory.spawnTroopAndMembers(this.map, MRData.troops[data.spawiInfo.troopId], mx, my, data.spawiInfo.stateIds);
         }
         else {
             const entity = SEntityFactory.newEntity(data.spawiInfo, floorId);
-            MRLively.world.transferEntity(undefined, entity, floorId, mx, my);
+            MRLively.world.transferEntity(entity, floorId, mx, my);
             entites = [entity];
         }
 
@@ -316,7 +328,7 @@ export class SMapManager {
         const floorId = this.map.floorId();
         const entity = USpawner.createItemFromSpawnTable(floorId, this.rand());
         if (entity) {
-            MRLively.world.transferEntity(undefined, entity, floorId, mx, my);
+            MRLively.world.transferEntity(entity, floorId, mx, my);
         }
         return entity;
     }
@@ -326,7 +338,7 @@ export class SMapManager {
         const floorId = this.map.floorId();
         const entity = USpawner.createTrapFromSpawnTable(floorId, this.rand());
         if (entity) {
-            MRLively.world.transferEntity(undefined, entity, floorId, mx, my);
+            MRLively.world.transferEntity(entity, floorId, mx, my);
         }
     }
 

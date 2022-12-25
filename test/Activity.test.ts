@@ -3,7 +3,7 @@ import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "./TestEnv";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 
 beforeAll(() => {
@@ -68,6 +68,6 @@ test("Activity.Exchange", () => {
 
     expect(inventory.items.length).toBe(1);
     expect(inventory.contains(item2)).toBe(true);                          // item2 が持ち物に入っている
-    expect(MRLively.camera.currentMap.block(10, 10).containsEntity(item1)).toBe(true);  // item1 が足元にある
+    expect(MRLively.mapView.currentMap.block(10, 10).containsEntity(item1)).toBe(true);  // item1 が足元にある
 });
 

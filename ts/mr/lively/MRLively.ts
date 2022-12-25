@@ -1,7 +1,7 @@
 import { LMap } from "./LMap";
 import { LWorld } from "./LWorld";
 import { LSystem } from "./LSystem";
-import { LCamera } from "./LCamera";
+import { LMapView } from "./LMapView";
 import { SActivityRecorder } from "ts/mr/system/SActivityRecorder";
 import { LMessageHistory } from "./LMessageHistory";
 import { LIdentifyer } from "./LIdentifyer";
@@ -14,6 +14,7 @@ import { MRGameExtension } from "./MRGameExtension";
 import { LLand } from "./LLand";
 import { LChronus } from "./LChronus";
 import { SMapDataManager } from "../system/SMapDataManager";
+import { LQuestManager } from "./LQuestManager";
 
 /**
  * 各 REGame_* インスタンスを保持する。
@@ -28,12 +29,13 @@ export class MRLively {
     static system: LSystem;
     static world: LWorld;
     //static map: LMap;
-    static camera: LCamera;
+    static mapView: LMapView;
     static scheduler: LScheduler2;
     static recorder: SActivityRecorder;
     static messageHistory: LMessageHistory;
     static eventServer: LEventServer;
     static chronus: LChronus;
+    static questManager: LQuestManager;
 
     // 冒険結果の表示中かどうか
     static challengeResultShowing: boolean = false;
@@ -45,7 +47,7 @@ export class MRLively {
     static signalFlushSequelSet: ((sequelSet: SSequelSet) => void) | undefined;
 
     static getCurrentLand(): LLand {
-        return this.camera.currentMap.land2();
+        return this.mapView.currentMap.land2();
     }
 
     static getCurrentIdentifyer(): LIdentifyer {

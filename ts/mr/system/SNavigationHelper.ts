@@ -31,8 +31,8 @@ export class SNavigationHelper {
      * @deprecated SView.getEntityVisibility
      */
     public static testVisibilityForMinimap(subject: LEntity, target: LEntity): boolean {
-        const map = MRLively.camera.currentMap;
-        const targetBlock = MRLively.camera.currentMap.block(target.mx, target.my);
+        const map = MRLively.mapView.currentMap;
+        const targetBlock = MRLively.mapView.currentMap.block(target.mx, target.my);
 
         // Trap は未発見の場合、どのような勢力からであっても不可視
         const trap = target.findEntityBehavior(LTrapBehavior);

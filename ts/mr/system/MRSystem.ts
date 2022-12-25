@@ -16,6 +16,11 @@ import { SFormulaOperand } from "./SFormulaOperand";
 import { LEntityId } from "../lively/LObject";
 import { SFovShadowMap } from "./SFovShadowMap";
 import { SMapDataManager } from "./SMapDataManager";
+import { SFovSystem } from "./fov/SFovSystem";
+import { SRoomBoundsFovSystem } from "./fov/SRoomBoundsFovSystem";
+import { SSymmetricShadowcastFovSystem } from "./fov/SSymmetricShadowcastFovSystem";
+import { MRLively } from "../lively/MRLively";
+import { DFovSystem } from "../data/DSystem";
 
 export class MRSystem {
     static propertyData:EntityProperty[] = [
@@ -55,8 +60,19 @@ export class MRSystem {
     static formulaOperandA: SFormulaOperand;
     static formulaOperandB: SFormulaOperand;
     static formulaOperandC: SFormulaOperand;
+    static roomBoundsFovSystem: SRoomBoundsFovSystem;
+    static symmetricShadowcastFovSystem: SSymmetricShadowcastFovSystem;
 
-    //static skillBehaviors: LSkillBehavior[];
+    static get fovSystem(): SFovSystem {
+        switch (MRLively.mapView.currentFloorId.floorInfo.fovSystem) {
+            case DFovSystem.RoomBounds:
+                return this.roomBoundsFovSystem;
+            case DFovSystem.SymmetricShadowcast:
+                return this.symmetricShadowcastFovSystem;
+            default:
+                throw new Error("Unknown fov system");
+        }
+    }
 }
 
 

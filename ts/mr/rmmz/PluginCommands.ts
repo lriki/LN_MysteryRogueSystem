@@ -39,7 +39,7 @@ PluginManager.registerCommand(pluginName, "MR-ShowWarehouseStoreDialog", (args: 
     const serviceProviderKey: string = args.serviceProviderKey;
     const serviceUserKey: string = args.serviceUserKey;
     if (MRView.sequelFactory) {
-        const player = MRLively.camera.getFocusedEntity();
+        const player = MRLively.mapView.getFocusedEntity();
         MRSystem.commandContext.openDialog(player, new SWarehouseStoreDialog(USearch.getEntityByKeyPattern(serviceUserKey), USearch.getEntityByKeyPattern(serviceProviderKey)), false)
         .then((d: SWarehouseStoreDialog) => {
             $gameVariables.setValue(MRBasics.variables.result, d.result);
@@ -52,7 +52,7 @@ PluginManager.registerCommand(pluginName, "MR-ShowWarehouseWithdrawDialog", (arg
     const serviceProviderKey: string = args.serviceProviderKey;
     const serviceUserKey: string = args.serviceUserKey;
     if (MRView.sequelFactory) {
-        const player = MRLively.camera.getFocusedEntity();
+        const player = MRLively.mapView.getFocusedEntity();
         MRSystem.commandContext.openDialog(player, new SWarehouseWithdrawDialog(USearch.getEntityByKeyPattern(serviceUserKey), USearch.getEntityByKeyPattern(serviceProviderKey)), false)
         .then((d: SWarehouseWithdrawDialog) => {
             $gameVariables.setValue(MRBasics.variables.result, d.result);
@@ -66,7 +66,7 @@ PluginManager.registerCommand(pluginName, "MR-ShowItemSellDialog", (args: any) =
     const serviceUserKey: string = args.serviceUserKey;
     const inventoryOwnerKey: string = args.inventoryOwnerKey;
     if (MRView.sequelFactory) {
-        const player = MRLively.camera.getFocusedEntity();
+        const player = MRLively.mapView.getFocusedEntity();
         MRSystem.commandContext.openDialog(player, new SItemSellDialog(USearch.getEntityByKeyPattern(serviceProviderKey), USearch.getEntityByKeyPattern(serviceUserKey), USearch.getEntityByKeyPattern(inventoryOwnerKey)), false)
         .then((d: SItemSellDialog) => {
             $gameVariables.setValue(MRBasics.variables.result, d.resultItems.length);
@@ -80,24 +80,26 @@ PluginManager.registerCommand(pluginName, "MR-ProceedFloorForward", function(thi
 });
 
 PluginManager.registerCommand(pluginName, "MR-ProceedFloorBackword", function(this: Game_Interpreter, args: any) {
-    const entity = MRLively.camera.focusedEntity();
+    const entity = MRLively.mapView.focusedEntity();
     if (entity) {
         const floorId = entity.floorId;
-        const newFloorNumber = floorId.floorNumber() - 1;
+        const newFloorNumber = floorId.floorNumber - 1;
 
         // 最初のフロアから戻った？
         if (newFloorNumber <= 0) {
             MRSystem.integration.onSetLandExitResult(LandExitResult.Escape);
 
-            const exitRMMZMapId = floorId.landData().exitMapData.mapId;
-            assert(exitRMMZMapId > 0);
+            throw new Error("Not implemented"); // TODO: ExitFloorId とる
+
+            // const exitRMMZMapId = floorId.landData.exitMapData.mapId;
+            // assert(exitRMMZMapId > 0);
             
-            const result = this.command201([0, exitRMMZMapId, 0, 0, 2, 0]);
-            assert(result);
+            //const result = this.command201([0, exitRMMZMapId, 0, 0, 2, 0]);
+            //assert(result);
         }
         else {
-            const newFloorId = LFloorId.make(floorId.landId(), DFloorClass.FloorMap, newFloorNumber);
-            MRLively.world.transferEntity(MRSystem.commandContext, entity, newFloorId);
+            const newFloorId = LFloorId.make(floorId.landId, newFloorNumber);
+            MRLively.world.transferEntity(entity, newFloorId);
 
             // イベントからの遷移は普通の [場所移動] コマンドと同じように WaitMode を設定する必要がある。
             // しないと、例えば直前に表示していたメッセージウィンドウのクローズなどを待たずに遷移が発生し、isBusy() でハングする。
@@ -125,7 +127,7 @@ PluginManager.registerCommand(pluginName, "MR-LivingResult-GetIncludesState", fu
         }
     }
     else {
-        const r = MRLively.camera.focusedEntity();
+        const r = MRLively.mapView.focusedEntity();
         if (r) {
             actor = r;
         }
@@ -189,4 +191,33 @@ PluginManager.registerCommand(pluginName, "MR-ResetInventory", function(this: Ga
     if (inventory) {
         inventory.reset();
     }
+});
+
+PluginManager.registerCommand(pluginName, "MR-AddPostTalkingCommand", function(this: Game_Interpreter, args: any) {
+    const label = args["label"];
+    const name = args["name"];
+    const ctx = this.getMRInterpreterContext();
+    ctx.talkingCommands.push({ label: label, displayName: name });
+});
+
+PluginManager.registerCommand(pluginName, "MR-ShowPostTalkingDialog", function(this: Game_Interpreter, args: any) {
+    const ctx = this.getMRInterpreterContext();
+    const choices = ctx.talkingCommands.map(x => x.displayName);
+    const cancelIndex = ctx.talkingCommands.findIndex(x => x.label == "MR-TalkingBye");
+    if (cancelIndex < 0) {
+        throw new Error("MR-TalkingBye not found.");
+    }
+
+    // command102 (Show Choices) と同様の処理
+    const cancelType = -2;
+    const defaultType = cancelIndex;
+    const positionType = 2;
+    const background = 0;
+    $gameMessage.setChoices(choices, defaultType, cancelType);
+    $gameMessage.setChoiceBackground(background);
+    $gameMessage.setChoicePositionType(positionType);
+    $gameMessage.setChoiceCallback(n => {
+        (this._branch as any)[this._indent] = n;
+    });
+    this.setWaitMode("message");
 });

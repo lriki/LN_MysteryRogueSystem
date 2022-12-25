@@ -5,7 +5,7 @@ import { MRSystem } from "ts/mr/system/MRSystem";
 import { LUnitBehavior } from "ts/mr/lively/behaviors/LUnitBehavior";
 import { assert } from "ts/mr/Common";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { MRData } from "ts/mr/data/MRData";
@@ -27,7 +27,7 @@ test("State_Brace", () => {
     actor1.addState(TestEnv.StateId_Sleep);
 
     // 行動できる Entity は Player(行動不能) しかいない状態。
-    assert(MRLively.camera.currentMap.entities().filter(e => e.findEntityBehavior(LUnitBehavior)).length == 1);
+    assert(MRLively.mapView.currentMap.entities().filter(e => e.findEntityBehavior(LUnitBehavior)).length == 1);
 
     // シミュレーション実行
     MRSystem.scheduler.stepSimulation();

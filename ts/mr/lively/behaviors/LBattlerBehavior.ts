@@ -90,7 +90,7 @@ export class LBattlerBehavior extends LBehavior {
     onPermanentDeath(self: LEntity, cctx: SCommandContext): SCommandResponse {
         const entity = this.ownerEntity();
         if (entity.isUnique()) {
-            if (entity == MRLively.camera.focusedEntity()) {
+            if (entity == MRLively.mapView.focusedEntity()) {
                 cctx.postSequel(entity, MRBasics.sequels.CollapseSequel);
                 cctx.postWait(entity, 100);
                 cctx.postWaitSequel();   // ゲームオーバー時の遷移で、"倒れた" メッセージの後に Wait が動くようにしたい

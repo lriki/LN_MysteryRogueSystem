@@ -7,7 +7,7 @@ import { UName } from "./UName";
 
 export class UIdentify {
     public static identifyByTiming(cctx: SCommandContext, actor: LEntity , target: LEntity, actionId: DActionId, withMessage: boolean = true): void {
-        if (MRLively.camera.focusedEntity() != actor) return;
+        if (MRLively.mapView.focusedEntity() != actor) return;
 
         const data = target.data;
         if (data.identificationReaction > 0 && data.identificationReaction == actionId) {

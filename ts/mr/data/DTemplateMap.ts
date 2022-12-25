@@ -1,4 +1,4 @@
-import { DAnnotationReader } from "./importers/DAttributeReader";
+import { DAnnotationReader } from "./importers/DAnnotationReader";
 import { DHelpers } from "./DHelper";
 import { DMapId } from "./DCommon";
 
@@ -133,7 +133,7 @@ export class DTemplateMap {
             const y = event.y;
     
             // @MR-TemplatePart
-            const attr = DAnnotationReader.readTemplatePartAttributeFromPage(event.pages[0]);
+            const attr = DAnnotationReader.readTemplatePartAnnotationFromPage(event.pages[0]);
             if (!attr) continue;
 
             if (!attr.type) {

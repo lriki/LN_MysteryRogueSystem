@@ -12,9 +12,9 @@ import { SSpecialEffect } from "./SSpecialEffect";
 export class STransferToNextFloorSpecialEffect extends SSpecialEffect {
 
     public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void {
-        const land = MRLively.camera.currentMap.land2();
+        const land = MRLively.mapView.currentMap.land2();
         const currentFloorId = target.floorId;
-        const newFloorNumber = currentFloorId.floorNumber() + 1;
+        const newFloorNumber = currentFloorId.floorNumber + 1;
 
         if (1 <= newFloorNumber || newFloorNumber < land.maxFloorNumber()) {
             // 次のフロアへ
@@ -22,8 +22,8 @@ export class STransferToNextFloorSpecialEffect extends SSpecialEffect {
                 UTransfer.proceedFloorForwardForPlayer(cctx);
             }
             else {
-                const newFloorId = LFloorId.make(currentFloorId.landId(), DFloorClass.FloorMap, newFloorNumber);
-                MRLively.world.transferEntity(cctx, target, newFloorId);
+                const newFloorId = LFloorId.make(currentFloorId.landId, newFloorNumber);
+                MRLively.world.transferEntity(target, newFloorId);
             }
             result.makeSuccess();
         }

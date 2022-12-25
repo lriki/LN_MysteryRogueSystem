@@ -10,6 +10,9 @@ import { LObjectType } from "../lively/LObject";
 import { MRSystem } from "./MRSystem";
 import { SDialog } from "./SDialog";
 import { SDialogContext } from "./SDialogContext";
+import { assert } from "../Common";
+import { DRmmzUniqueSpawnerAnnotation } from "../data/importers/DAnnotationReader";
+import { DUniqueSpawner } from "../data/DSpawner";
 
 export abstract class SIntegration {
     public abstract onEventPublished(eventId: DEventId, args: any, handled: boolean): void;
@@ -28,11 +31,21 @@ export abstract class SIntegration {
 
     abstract onLocateRmmzEvent(eventId: number, x: number, y: number): void;
 
+    //--------------------------------------------------------------------------
+    // Map building
+
     abstract onLoadFixedMapData(map: FMap): void;
     
     abstract onLoadFixedMapEvents(): void;
 
+    abstract onGetFixedMapUnqueSpawners(): DUniqueSpawner[];
+
+    abstract onMapSetupCompleted(map: LMap): void;
+
     abstract onUpdateBlock(block: LBlock): void;
+    
+    //--------------------------------------------------------------------------
+
 
 
 
@@ -52,6 +65,9 @@ export abstract class SIntegration {
 
     /** Dialog が閉じられたとき。 */
     protected abstract onDialogClosed(context: SDialogContext, dialog: SDialog): void;
+
+    /** MapView の current が切り替わった後 */
+    protected abstract onCurrentMapChanged(): void;
 
     /** Entity が Map 上に出現したとき。 */
     protected abstract onEntityEnteredMap(entity: LEntity): void;
@@ -125,8 +141,15 @@ export abstract class SIntegration {
         }
     }
 
+    public raiseCurrentMapChanged(): void {
+        if (!MRLively.recorder.isSilentPlayback()) {
+            this.onCurrentMapChanged();
+        }
+    }
+
     public entityEnteredMap(entity: LEntity): void {
         if (!MRLively.recorder.isSilentPlayback()) {
+            if (!entity.floorId.equals(MRLively.mapView.currentFloorId)) return;
             this.onEntityEnteredMap(entity);
         }
     }
@@ -139,6 +162,7 @@ export abstract class SIntegration {
 
     public entityReEnterMap(entity: LEntity): void {
         if (!MRLively.recorder.isSilentPlayback()) {
+            if (!entity.floorId.equals(MRLively.mapView.currentFloorId)) return;
             this.onEntityReEnterMap(entity);
         }
     }

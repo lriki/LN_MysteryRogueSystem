@@ -9,6 +9,7 @@ import { DPrefabMoveType } from "ts/mr/data/DPrefab";
 import { LMovingTargetFinder, LMovingTargetFinder_Item } from "./LMovingTargetFinder";
 import { LActionTokenType } from "../LActionToken";
 import { LActionTokenConsumeType } from "../LCommon";
+import { DUniqueSpawnerMoveType } from "ts/mr/data/DSpawner";
 
 /**
  * https://yttm-work.jp/game_ai/game_ai_0001.html
@@ -40,9 +41,9 @@ export class LCharacterAI_Normal extends LCharacterAI {
         
         this._actionDeterminer.decide(cctx, self);
 
-        this.applyTargetPosition(self, hasPrimaryTarget);
-
         this._moveDeterminer.decide(cctx, self);
+
+        this.applyTargetPosition(self, hasPrimaryTarget);
 
         // moveDeterminer.decide によって決定された標準的な移動目標のオーバーライド
         {
@@ -81,16 +82,20 @@ export class LCharacterAI_Normal extends LCharacterAI {
     }
 
     private applyTargetPosition(self: LEntity, prevHasPrimaryTarget: boolean): void {
-
+        const spawner = self.getUniqueSpawner();
 
         if (this._actionDeterminer.hasPrimaryTarget()) {
             // 攻撃対象が設定されていれば、常に目標座標を更新し続ける
             const target = this._actionDeterminer.primaryTarget();
             this._moveDeterminer.setTargetPosition(target.mx, target.my);
         }
+        else if (spawner && spawner.moveType == DUniqueSpawnerMoveType.Homecoming) {
+            this._moveDeterminer.setTargetPosition(spawner.mx, spawner.my);
+        }
         else if (prevHasPrimaryTarget != this._actionDeterminer.hasPrimaryTarget()) {
             // decide() によってこれまでの PrimaryTarget を見失った
-            this._moveDeterminer.setTargetPosition(-1, -1);
+            //this._moveDeterminer.setTargetPosition(-1, -1);
+            // ↑見失った場合、Footpoint などを考慮して選択済みの移動目標を維持したいので、コメントアウトして様子を見る。
         }
     }
 

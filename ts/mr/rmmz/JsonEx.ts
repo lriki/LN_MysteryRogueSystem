@@ -1,5 +1,5 @@
 import { LAbility } from "ts/mr/lively/abilities/LAbility";
-import { LCamera } from "ts/mr/lively/LCamera";
+import { LMapView } from "ts/mr/lively/LMapView";
 import { LEffectResult, LParamEffectResult } from "ts/mr/lively/LEffectResult";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { LEntityId } from "ts/mr/lively/LObject";

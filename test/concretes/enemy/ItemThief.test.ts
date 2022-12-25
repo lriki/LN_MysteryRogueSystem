@@ -3,12 +3,10 @@ import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
-import { SDebugHelpers } from "ts/mr/system/SDebugHelpers";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { LActionTokenType } from "ts/mr/lively/LActionToken";
 import { assert } from "ts/mr/Common";
 import { LItemBehavior } from "ts/mr/lively/behaviors/LItemBehavior";
 
@@ -31,7 +29,7 @@ test("concretes.enemy.ItemThief.Basic", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_瑠璃猫A").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, floorId, 12, 10);
+    TestEnv.transferEntity(enemy1, floorId, 12, 10);
     const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
     
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -57,7 +55,7 @@ test("concretes.enemy.ItemThief.Basic", () => {
 
     // Enemy を攻撃して倒す
     enemy1.setParamCurrentValue(MRBasics.params.hp, 1);
-    MRLively.world.transferEntity(undefined, enemy1, floorId, 12, 10);
+    TestEnv.transferEntity(enemy1, floorId, 12, 10);
     MRSystem.dialogContext.postActivity(LActivity.makePerformSkill(player1, MRData.system.skills.normalAttack, 6).withConsumeAction());
     MRSystem.dialogContext.activeDialog().submit();
 
@@ -183,7 +181,7 @@ test("concretes.enemy.ItemThief.DropItem", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_瑠璃猫A").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, floorId, 11, 10);
+    TestEnv.transferEntity(enemy1, floorId, 11, 10);
     
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
@@ -198,7 +196,7 @@ test("concretes.enemy.ItemThief.DropItem", () => {
 
     // Enemy は倒れ、足元に item が落ちている。ドロップ率 100%
     expect(enemy1.isDestroyed()).toBe(true);
-    const item = MRLively.camera.currentMap.block(11, 10).getFirstEntity();
+    const item = MRLively.mapView.currentMap.block(11, 10).getFirstEntity();
     assert(item);
     expect(!!item.findEntityBehavior(LItemBehavior)).toBe(true);
 });
@@ -248,15 +246,15 @@ test("concretes.enemy.ItemThief.Issue2", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_瑠璃猫A").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, floorId, 15, 10);
+    TestEnv.transferEntity(enemy1, floorId, 15, 10);
 
     // enemy2
     const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_瑠璃猫A").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy2, floorId, 15, 11);
+    TestEnv.transferEntity(enemy2, floorId, 15, 11);
     
     // Item1
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_薬草A").id, [], "item1"));
-    MRLively.world.transferEntity(undefined, item1, floorId, 16, 11);
+    TestEnv.transferEntity(item1, floorId, 16, 11);
 
     /*
     □□□□
@@ -293,7 +291,7 @@ test("concretes.enemy.ItemThief.Issue3_Seal", () => {
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_瑠璃猫A").id, [], "enemy1"));
     enemy1.addState(MRData.getState("kState_System_Seal").id);
     const inventory2 = enemy1.getEntityBehavior(LInventoryBehavior);
-    MRLively.world.transferEntity(undefined, enemy1, floorId, 11, 10);
+    TestEnv.transferEntity(enemy1, floorId, 11, 10);
 
     // Item1作成 & インベントリに入れる
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_薬草A").id, [], "item1"));
@@ -350,15 +348,15 @@ test("concretes.enemy.ItemThief.Issue5_FootItem", () => {
     
     // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_瑠璃猫A").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, floorId, 15, 10);
+    TestEnv.transferEntity(enemy1, floorId, 15, 10);
 
     // enemy2
     const enemy2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy2, floorId, 16, 10);
+    TestEnv.transferEntity(enemy2, floorId, 16, 10);
     
     // Item1
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle( MRData.getEntity("kEntity_薬草A").id, [], "item1"));
-    MRLively.world.transferEntity(undefined, item1, floorId, 16, 10);
+    TestEnv.transferEntity(item1, floorId, 16, 10);
 
     /*
     □□□□
@@ -378,7 +376,7 @@ test("concretes.enemy.ItemThief.Issue5_FootItem", () => {
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // 床上のアイテムは盗まれていない
-    expect(MRLively.camera.currentMap.block(16, 10).containsEntity(item1)).toBeTruthy();
+    expect(MRLively.mapView.currentMap.block(16, 10).containsEntity(item1)).toBeTruthy();
     expect(enemy2.mx).toBe(16);
     expect(enemy2.my).toBe(10);
 

@@ -25,7 +25,6 @@ export class VVisibilityShadow {
     private _my1Animation: VAnimationInstance | undefined;
     private _mx2Animation: VAnimationInstance | undefined;
     private _my2Animation: VAnimationInstance | undefined;
-    private _fovAutoTileHelper: SFovAutoTileHelper;
 
     constructor(spritesetMap: Spriteset_Map) {
         this._spritesetMap = spritesetMap;
@@ -55,12 +54,10 @@ export class VVisibilityShadow {
         this._mx2 = -1000;
         this._my2 = -1000;
         this._inRoom = false;
-
-        this._fovAutoTileHelper = new SFovAutoTileHelper();
     }
 
     _update() {
-        const spritesVisible = !MRLively.camera.currentMap.sightClarity;
+        const spritesVisible = !MRLively.mapView.currentMap.sightClarity;
         for (const s of this._visibilityShadowInnerSprites) {
             if (s) s.visible = spritesVisible;
         }
@@ -68,11 +65,11 @@ export class VVisibilityShadow {
             if (s) s.visible = spritesVisible;
         }
 
-        if (MRLively.camera.currentMap.sightClarity) {
+        if (MRLively.mapView.currentMap.sightClarity) {
             return;
         }
 
-        const focusedEntity = MRLively.camera.focusedEntity();
+        const focusedEntity = MRLively.mapView.focusedEntity();
         if (MRView.entityVisualSet && focusedEntity) {
             const visual = MRView.entityVisualSet.findEntityVisualByEntity(focusedEntity);
             if (visual) {
@@ -91,7 +88,7 @@ export class VVisibilityShadow {
                     // LRoom は四捨五入した値から得るようにすると、部屋に入った時滑らかに影を動かせる
                     const unitX = Math.round(unitRealX);
                     const unitY = Math.round(unitRealY);
-                    const room = MRLively.camera.currentMap.rooms().find(room => room.contains(unitX, unitY));
+                    const room = MRLively.mapView.currentMap.rooms().find(room => room.contains(unitX, unitY));
                     if (room) {
                         tx1 = $gameMap.adjustX(room.mx1);
                         tx2 = $gameMap.adjustX(room.mx2);
@@ -139,8 +136,6 @@ export class VVisibilityShadow {
                 }
             }
         }
-
-        this.updateShadowTiles();
     }
 
     private animateVisibleAreaRect(mx1: number, my1: number, mx2: number, my2: number) {
@@ -235,57 +230,4 @@ export class VVisibilityShadow {
         return sprite;
     }
 
-    private updateShadowTiles(): void {
-        if (MRData.system.fovSystem == DFovSystem.RoomBounds) return;
-
-        //console.log("updateShadowTiles");
-        const map = MRSystem.fovShadowMap;
-        const w = map.width;
-        const h = map.height;
-        const z = 3;
-        for (let y = 0; y < h; y++) {
-            for (let x = 0; x < w; x++) {
-                if (map.get(x, y) > 0) {
-                    this._fovAutoTileHelper.putAutoTile(x, y, z, DHelpers.getAutotileKind(DHelpers.TILE_ID_A2) + 14);
-                    //$dataMap.data[(z * h + y) * w + x] = DHelpers.TILE_ID_A1;
-                    //console.log("set");
-                }
-            }
-        }
-    }
-
 }
-
-class SFovAutoTileHelper extends SEditMapHelper {
-    private get map(): SFovShadowMap {
-        return MRSystem.fovShadowMap;
-    }
-    
-    protected onIsValidPos(x: number, y: number): boolean { 
-        return this.map.isValid(x, y);
-    }
-
-    protected onGetTileId(x: number, y: number, z: number): number {
-        return $dataMap.data[(z * this.map.height + y) * this.map.width + x];
-    }
-
-    protected onSetTileId(x: number, y: number, z: number, tileId: number): void {
-        $dataMap.data[(z * this.map.height + y) * this.map.width + x] = tileId;
-    }
-
-    protected getSameKindTile(x: number, y: number, z: number, componentOrAutoTileKind: number): boolean {
-        if (!this.map.isValid(x, y)) return true;        // マップ範囲外は同種とすることで、境界外にも広がっているように見せる
-        const tileId = this.onGetTileId(x, y, z);
-        if (Tilemap.isAutotile(tileId) && Tilemap.getAutotileKind(tileId) == componentOrAutoTileKind) {
-            return true;
-        }
-        else {
-            return false;
-        }
-
-        // const shadow = MRSystem.fovShadowMap.get(x, y);
-        // if (shadow == component) return true;
-        // return false;
-    }
-}
-

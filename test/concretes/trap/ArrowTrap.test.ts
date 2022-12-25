@@ -3,7 +3,7 @@ import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
-import { DEntityCreateInfo } from "ts/mr/data/DEntity";
+import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { LTileShape } from "ts/mr/lively/LBlock";
@@ -25,7 +25,7 @@ test("concretes.trap.ArrowTrap.Basic", () => {
 
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢の罠A").id, [], "trap1"));
-    MRLively.world.transferEntity(undefined, trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
+    TestEnv.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
@@ -52,11 +52,11 @@ test("concretes.trap.ArrowTrap.HitOtherUnit", () => {
 
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢の罠A").id, [], "trap1"));
-    MRLively.world.transferEntity(undefined, trap1, TestEnv.FloorId_FlatMap50x50, 10, 10);
+    TestEnv.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 10, 10);
 
     // 右を向く Player の右、つまり下から矢が飛んでくるので、それに当たる位置に Enemy を配置する
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    MRLively.world.transferEntity(undefined, enemy1, TestEnv.FloorId_FlatMap50x50, 10, 15);
+    TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 10, 15);
     const enemyhp1 = enemy1.getActualParam(MRBasics.params.hp);
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
@@ -95,11 +95,11 @@ test("concretes.trap.ArrowTrap.DropAsItem", () => {
 
     // trap 生成&配置
     const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_木の矢の罠A").id, [], "trap1"));
-    MRLively.world.transferEntity(undefined, trap1, TestEnv.FloorId_FlatMap50x50, 12, 10);
+    TestEnv.transferEntity(trap1, TestEnv.FloorId_FlatMap50x50, 12, 10);
     
     // 右下に移動できないような壁を作る
-    MRLively.camera.currentMap.block(12, 9)._tileShape = LTileShape.Wall;
-    MRLively.camera.currentMap.block(13, 10)._tileShape = LTileShape.Wall;
+    MRLively.mapView.currentMap.block(12, 9)._tileShape = LTileShape.Wall;
+    MRLively.mapView.currentMap.block(13, 10)._tileShape = LTileShape.Wall;
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
     
@@ -114,7 +114,7 @@ test("concretes.trap.ArrowTrap.DropAsItem", () => {
     // 矢アイテムが、床に落ちている。上記状況では、Trap と隣接した場所に落ちるはず
     const itemData2 = MRData.getEntity("kEntity_木の矢A");
 
-    const item2 = MRLively.camera.currentMap.entities().find(e => e.dataId == itemData2.id);
+    const item2 = MRLively.mapView.currentMap.entities().find(e => e.dataId == itemData2.id);
     assert(item2);
     //expect(item2 !== undefined).toBe(true);
     expect(UMovement.checkAdjacentEntities(item2, trap1)).toBe(true);

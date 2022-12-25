@@ -1,24 +1,28 @@
 import { TilemapRendererId } from "ts/mr/rmmz/Tilemap";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { SView } from "../system/SView";
+import { VSymmetricFovShadow } from "./fov/VSymmetricFovShadow";
 import { VDirectionArrow } from "./VDirectionArrow";
 import { VHudWindow } from "./VHudWindow";
 import { VVisibilityShadow } from "./VVisibilityShadow";
 
 export class VSpriteSet {
-    private _spritesetMap: Spriteset_Map;
+    public readonly spritesetMap: Spriteset_Map;
     private _visibilityShadow: VVisibilityShadow;
+    private _symmetricFovShadow: VSymmetricFovShadow;
     private _minimapTilemap: Tilemap;
     private _directionArrow: VDirectionArrow;
     private _initialUpdate: boolean;
 
     constructor(spritesetMap: Spriteset_Map) {
-        this._spritesetMap = spritesetMap;
+        this.spritesetMap = spritesetMap;
         this._visibilityShadow = new VVisibilityShadow(spritesetMap);
+        this._symmetricFovShadow = new VSymmetricFovShadow(this);
         this._directionArrow = new VDirectionArrow();
-        this._spritesetMap.addChild(this._directionArrow);
+        this.spritesetMap.addChild(this._directionArrow);
         this._initialUpdate = true;
 
+        this.spritesetMap._tilemap.setRendererId(TilemapRendererId.Default);
             
         const width = $dataMap.width ?? 1;
         const height = $dataMap.height ?? 1;
@@ -41,10 +45,9 @@ export class VSpriteSet {
         this._minimapTilemap.scale.set(0.75, 0.75);
         //this._spritesetMap._baseSprite.addChild(this._minimapTilemap);
         //REVisual.scene._windowLayer.
-        this._spritesetMap.addChild(this._minimapTilemap);
+        this.spritesetMap.addChild(this._minimapTilemap);
         this._minimapTilemap.setRendererId(TilemapRendererId.Minimap);
 
-        this._spritesetMap._tilemap.setRendererId(TilemapRendererId.Default);
         
         const bitmaps = [];
         const tilesetNames = ["World_A1","RE-Minimap_A2","","","RE-Minimap_A5","World_B","World_C","",""];
@@ -56,10 +59,6 @@ export class VSpriteSet {
 
     public destroy(): void {
         
-    }
-
-    public get spritesetMap(): Spriteset_Map { 
-        return this._spritesetMap;
     }
 
     public directionArrow(): VDirectionArrow {
@@ -75,7 +74,7 @@ export class VSpriteSet {
         }
         this._minimapTilemap.refresh();
 
-        this._minimapTilemap.selfVisible = this._spritesetMap._tilemap.selfVisible = SView.getTilemapView().visible;
+        this._minimapTilemap.selfVisible = this.spritesetMap._tilemap.selfVisible = SView.getTilemapView().visible;
         // if (!) {
         //     this._minimapTilemap.visible = false;
         //     return;
@@ -84,6 +83,7 @@ export class VSpriteSet {
 
         
         this._visibilityShadow._update();
+        this._symmetricFovShadow.updateShadowTiles();
         
         this._initialUpdate  = false;
 

@@ -47,7 +47,7 @@ export class VMapEditor {
         $dataMap.data = new Array<number>($dataMap.width * $dataMap.height * 5);
         $gameMap.changeTileset($dataMap.tilesetId);
 
-        if (this._coreMap.floorId().isFixedMap()) {
+        if (this._coreMap.floorId().isFixedMap2) {
 
         }
         else {
