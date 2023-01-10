@@ -15,6 +15,7 @@ import { LLand } from "./LLand";
 import { LChronus } from "./LChronus";
 import { SMapDataManager } from "../system/SMapDataManager";
 import { LQuestManager } from "./LQuestManager";
+import { LScriptManager } from "./LScriptManager";
 
 /**
  * 各 REGame_* インスタンスを保持する。
@@ -36,6 +37,7 @@ export class MRLively {
     static eventServer: LEventServer;
     static chronus: LChronus;
     static questManager: LQuestManager;
+    static scriptManager: LScriptManager;
 
     // 冒険結果の表示中かどうか
     static challengeResultShowing: boolean = false;

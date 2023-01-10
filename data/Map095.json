@@ -5487,14 +5487,28 @@
               ]
             },
             {
+              "code": 408,
+              "indent": 0,
+              "parameters": [
+                "    name: \"ワールドマップ\","
+              ]
+            },
+            {
+              "code": 408,
+              "indent": 0,
+              "parameters": [
+                "    reactions: [ {key: \"kAction_BackwardFloor\", name: \"すすむ\"} ],"
+              ]
+            },
+            {
               "code": 201,
               "indent": 0,
               "parameters": [
                 0,
                 102,
                 42,
-                25,
-                0,
+                24,
+                2,
                 0
               ]
             },
@@ -5526,7 +5540,7 @@
         }
       ],
       "x": 14,
-      "y": 27
+      "y": 22
     },
     {
       "id": 2,
@@ -5554,8 +5568,8 @@
             "tileId": 0,
             "characterName": "MR-Iconic2",
             "direction": 4,
-            "pattern": 0,
-            "characterIndex": 4
+            "pattern": 2,
+            "characterIndex": 1
           },
           "list": [
             {
@@ -5600,7 +5614,7 @@
         }
       ],
       "x": 13,
-      "y": 26
+      "y": 23
     },
     {
       "id": 3,
@@ -5628,8 +5642,8 @@
             "tileId": 0,
             "characterName": "MR-Iconic2",
             "direction": 4,
-            "pattern": 0,
-            "characterIndex": 4
+            "pattern": 2,
+            "characterIndex": 1
           },
           "list": [
             {
@@ -5674,7 +5688,7 @@
         }
       ],
       "x": 15,
-      "y": 26
+      "y": 22
     },
     {
       "id": 4,
@@ -5751,6 +5765,21 @@
               "parameters": [
                 "test"
               ]
+            },
+            {
+              "code": 357,
+              "indent": 0,
+              "parameters": [
+                "LN_MysteryRogueSystem",
+                "MR-ShowPostTalkDialog",
+                "[experimental] MR-ShowPostTalkDialog",
+                {}
+              ]
+            },
+            {
+              "code": 115,
+              "indent": 0,
+              "parameters": []
             },
             {
               "code": 0,

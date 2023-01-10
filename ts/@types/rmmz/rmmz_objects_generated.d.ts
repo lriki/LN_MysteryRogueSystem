@@ -9531,6 +9531,7 @@ declare class Game_Vehicle extends Game_Character {
  * The interpreter for running event commands.
  */
 declare class Game_Interpreter {
+    _list: IDataList[];
 
     /**
      * 

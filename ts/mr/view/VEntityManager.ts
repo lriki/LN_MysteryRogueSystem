@@ -139,8 +139,6 @@ export class VEntityManager {
     
 
     public createVisual2(entity: LEntity): void {
-        console.log("createVisual2", entity);
-
         let overrideEvent: IDataMapEvent | undefined;
         const floorNumber = MRLively.mapView.currentMap.floorId().floorNumber;
         const land = MRLively.mapView.currentMap.land2();

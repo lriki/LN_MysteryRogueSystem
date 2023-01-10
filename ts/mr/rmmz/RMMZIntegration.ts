@@ -19,8 +19,8 @@ import { FloorRestartSequence } from "./FloorRestartSequence";
 import { MRBasics } from "../data/MRBasics";
 import { LActorBehavior } from "../lively/behaviors/LActorBehavior";
 import { LEquipmentUserBehavior } from "../lively/behaviors/LEquipmentUserBehavior";
-import { DRmmzUniqueSpawnerAnnotation } from "../data/importers/DAnnotationReader";
-import { DUniqueSpawner } from "../data/DSpawner";
+import { DEntitySpawner } from "../data/DSpawner";
+import { LScriptContext } from "../lively/LScript";
 
 export class RMMZIntegration extends SIntegration {
 
@@ -65,14 +65,15 @@ export class RMMZIntegration extends SIntegration {
 
         // 固定マップ上のイベント情報から Entity を作成する
         $gameMap.events().forEach((e: Game_Event) => {
-            const data = SRmmzHelpers.readEntityMetadata(e, $gameMap.mapId());
-            if (e && data) {
-                if (data.troopId > 0) {
-                    SEntityFactory.spawnTroopAndMembers(MRLively.mapView.currentMap, MRData.troops[data.troopId], e.x, e.y,data.stateIds);
+            const spawner = SRmmzHelpers.readEntityMetadata(e, $gameMap.mapId());
+            if (e && spawner) {
+                if (spawner.troopId > 0) {
+                    SEntityFactory.spawnTroopAndMembers(MRLively.mapView.currentMap, MRData.troops[spawner.troopId], e.x, e.y,spawner.stateIds);
                     e.setTransparent(true);
                 }
                 else {
-                    const entity = SRmmzHelpers.createEntityFromRmmzEvent(data, e.eventId(), e.x, e.y);
+                    const entity = SRmmzHelpers.createEntityFromRmmzEvent(spawner, e.eventId(), e.x, e.y);
+                    MRLively.mapView.currentMap.uniqueSpawners[entity.dataId] = spawner;
                     assert(entity.data.prefabId > 0);
 
                     if (entity.inhabitsCurrentFloor) {
@@ -82,7 +83,7 @@ export class RMMZIntegration extends SIntegration {
                         e.setTransparent(true);
                     }
 
-                    if (data.keeper) {
+                    if (spawner.keeper) {
                         entity.keeper = true;
                         MRLively.mapView.currentMap.keeperCount++;
                     }
@@ -93,7 +94,7 @@ export class RMMZIntegration extends SIntegration {
         MRLively.mapView.currentMap.lastKeeperCount = MRLively.mapView.currentMap.keeperCount;
     }
 
-    override onGetFixedMapUnqueSpawners(): DUniqueSpawner[] {
+    override onGetFixedMapUnqueSpawners(): DEntitySpawner[] {
         return SRmmzHelpers.getUnqueSpawners($dataMap, $gameMap.mapId());
     }
 
@@ -236,5 +237,9 @@ export class RMMZIntegration extends SIntegration {
             }
             rmmzActor.refresh();
         }
+    }
+
+    override onStartEventScript(script: LScriptContext): void {
+        $gameSystem.getMREventScriptRunnerManager().start(script);
     }
 }

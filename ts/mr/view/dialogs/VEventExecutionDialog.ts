@@ -1,5 +1,7 @@
 
 import { assert } from "ts/mr/Common";
+import { DScript } from "ts/mr/data/DScript";
+import { MRLively } from "ts/mr/lively/MRLively";
 import { RmmzEventTriggerType } from "ts/mr/rmmz/Common";
 import { SEventExecutionDialog } from "ts/mr/system/dialogs/SEventExecutionDialog";
 import { UMovement } from "ts/mr/utility/UMovement";
@@ -21,7 +23,13 @@ export class VEventExecutionDialog extends VDialog {
             event = $gameMap.event(this.model.rmmzEventId());
         }
 
-        event.start();
+        if (1) {
+            const data = new DScript(event.list());
+            MRLively.scriptManager.callCommand(this.model.owner, data, "MRCommand-OnTalk");
+        }
+        else {
+            event.start();
+        }
 
         // Game_Event.start() 相当の向き変更の実装
         if (event.list().length > 0) {
@@ -30,6 +38,7 @@ export class VEventExecutionDialog extends VDialog {
                 this.model.owner.dir = UMovement.getLookAtDir(this.model.owner, this.model.player);
             }
         }
+
     }
 
     override onUpdate() {

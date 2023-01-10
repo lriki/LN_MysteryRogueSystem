@@ -59,7 +59,7 @@ test("system.Gameover.Basic", () => {
 
     // ExitMap にある自動実行イベントからの [マップの移動] イベントが実行されるのを想定する
     const map = MRData.getMap("MR-Safety:テスト拠点");
-    UTransfer.transterRmmzDirectly(map.mapId, 0, 0);
+    UTransfer.transterRmmzDirectly(map.mapId, 0, 0, 2);
 
     // MR-FinishChallenge
     player1.party()?.finishChallenging();

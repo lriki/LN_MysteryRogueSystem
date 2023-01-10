@@ -43,12 +43,13 @@ export class DEntityCreateInfo {
 }
 
 // こっちは Event の metadata としての情報
-export class DEntitySpawner2 extends DEntityCreateInfo {
-    public troopId: DTroopId;
+export class DEntitySpawner extends DEntityCreateInfo {
+    // entityId と troopId は共存しないが、どちらかは必須。
+    public readonly entityId: DEntityId;
+    public readonly troopId: DTroopId;
+
     public overrideEvent: IDataMapEvent | undefined;
     public keeper: boolean;
-    //public entityId: DEntityId;
-    //public stateIds: DStateId[];
     public xName: string | undefined;//
     
     /**
@@ -59,67 +60,48 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
      * https://oyasen20.tripod.com/torneco_obtainable.html
      */
     public rate: number;
-
-    public constructor() {
-        super();
-        this.troopId = 0;
-        this.overrideEvent = undefined;
-        this.keeper = false;
-        this.rate = 100;
-        //this.entityId = 0;
-        //this.stateIds = [];
-    }
-
-    public entityData(): DEntity {
-        assert(this.entityId > 0);
-        return MRData.entities[this.entityId];
-    }
     
-    // public isEnemyKind(): boolean {
-    //     if (this.entityId <= 0) return false;
-    //     return REData.entities[this.entityId].entity.kindId == REBasics.entityKinds.MonsterKindId;
-    // }
+    public mx: number;
+    public my: number;
+    public moveType: DUniqueSpawnerMoveType;
+    public overrideRmmzEventMapId: number;  // Override している RMMZ のイベントがあるマップ ID。変なイベントを参照しないよう、ガードをかけるために使う。
+    public overrideRmmzEventId: number;
+    public displayName: string | undefined;
+    public reactions: ({ key: string, name: string }[]) | undefined;
 
-    // public isItemKind(): boolean {
-    //     if (this.entityId <= 0) return false;
-    //     return REData.prefabs[REData.entities[this.entityId].prefabId].isItemKind();
-    // }
+    public static makeFromAnnotation(data: DRmmzUniqueSpawnerAnnotation): DEntitySpawner {
+        const spawner = new DEntitySpawner(MRData.getEntity(data.entityKey).id, 0);
+        spawner.moveType = DHelpers.stringToEnum(data.moveType, {
+            "_": DUniqueSpawnerMoveType.Default,
+            "Homecoming": DUniqueSpawnerMoveType.Homecoming,
+        });
+        return spawner;
+    }
 
-    // public isTrapKind(): boolean {
-    //     if (this.entityId <= 0) return false;
-    //     return REData.entities[this.entityId].entity.kindId == REBasics.entityKinds.TrapKindId;
-    // }
 
-    // public isEntryPoint(): boolean {
-    //     if (this.entityId <= 0) return false;
-    //     return REData.prefabs[REData.entities[this.entityId].prefabId].isEntryPoint();
-    // }
-
-    // public isExitPoint(): boolean {
-    //     if (this.entityId <= 0) return false;
-    //     return REData.prefabs[REData.entities[this.entityId].prefabId].isExitPoint();
-    // }
-
-    public static makeFromEventData(event: IDataMapEvent, rmmzMapId: number): DEntitySpawner2 | undefined {
+    public static makeFromEventData(event: IDataMapEvent, rmmzMapId: number): DEntitySpawner | undefined {
         return this.makeFromEventPageData(event, event.pages[0], rmmzMapId);
     }
 
-    public static makeFromEventPageData(event: IDataMapEvent, page: IDataMapEventPage, rmmzMapId: number): DEntitySpawner2 | undefined {
+    public static makeFromEventPageData(event: IDataMapEvent, page: IDataMapEventPage, rmmzMapId: number): DEntitySpawner | undefined {
         const entityMetadata = DAnnotationReader.readSpawnerAnnotationFromPage(page);
         if (!entityMetadata) return undefined;
-        
-        const entity = new DEntitySpawner2();
-        entity.troopId = entityMetadata.troopId;
-        entity.entityId = MRData.entities.findIndex(x => x.entity.key == entityMetadata.entity);
-        entity.stackCount = entityMetadata.stackCount;
-        entity.override = entityMetadata.override;
-        entity.gold = entityMetadata.gold;
-        entity.overrideEvent = entityMetadata.overrideEvent ? event : undefined;
-        entity.keeper = entityMetadata.keeper ?? false;
-        entity.xName = entityMetadata.entity;
-        entity.rate = entityMetadata.rate ?? 100;
 
-        if (entityMetadata.entity != "" && entity.entityId <= 0) {
+        const entityId = MRData.entities.findIndex(x => x.entity.key == entityMetadata.entity);
+        const troopId = entityMetadata.troopId;
+        
+        const spawner = new DEntitySpawner(entityId, troopId);
+        spawner.stackCount = entityMetadata.stackCount;
+        spawner.override = entityMetadata.override;
+        spawner.gold = entityMetadata.gold;
+        spawner.overrideEvent = entityMetadata.overrideEvent ? event : undefined;
+        spawner.keeper = entityMetadata.keeper ?? false;
+        spawner.xName = entityMetadata.entity;
+        spawner.rate = entityMetadata.rate ?? 100;
+        spawner.displayName = entityMetadata.name;
+        spawner.reactions = entityMetadata.reactions;
+
+        if (entityMetadata.entity != "" && spawner.entityId <= 0) {
             throw new Error(tr2("@MR-Spawner で指定された Entity Key '%1' が存在しません。 %2 %3").format(
                 entityMetadata.entity,
                 DValidationHelper.makeRmmzMapName(rmmzMapId),
@@ -129,14 +111,35 @@ export class DEntitySpawner2 extends DEntityCreateInfo {
         for (const stateKey of entityMetadata.states) {
             const index = MRData.states.findIndex(s => s.key == stateKey);
             if (index > 0) {
-                entity.stateIds.push(index);
+                spawner.stateIds.push(index);
             }
             else {
                 throw new Error(`State "${stateKey}" not found.`);
             }
         }
 
-        return entity;
+        return spawner;
+    }
+
+    public constructor(entityId: DEntityId, troopId: DTroopId) {
+        super();
+        this.entityId = entityId;
+        this.troopId = troopId;
+        this.overrideEvent = undefined;
+        this.keeper = false;
+        this.rate = 100;
+        //this.entityId = 0;
+        //this.stateIds = [];
+        this.mx = 0;
+        this.my = 0;
+        this.moveType = DUniqueSpawnerMoveType.Default;
+        this.overrideRmmzEventMapId = 0;
+        this.overrideRmmzEventId = 0;
+    }
+
+    public entityData(): DEntity {
+        assert(this.entityId > 0);
+        return MRData.entities[this.entityId];
     }
 }
 
@@ -149,29 +152,29 @@ export enum DUniqueSpawnerMoveType {
  * @MR-UniqueSpawner の情報。
  * マップに遷移したときにインスタンスを作成する。
  */
-export class DUniqueSpawner {
-    public readonly entityId: DEntityId;
-    public mx: number;
-    public my: number;
-    public moveType: DUniqueSpawnerMoveType;
-    public overrideRmmzEventMapId: number;  // Override している RMMZ のイベントがあるマップ ID。変なイベントを参照しないよう、ガードをかけるために使う。
-    public overrideRmmzEventId: number;     
+// export class DUniqueSpawner {
+//     public readonly entityId: DEntityId;
+//     public mx: number;
+//     public my: number;
+//     public moveType: DUniqueSpawnerMoveType;
+//     public overrideRmmzEventMapId: number;  // Override している RMMZ のイベントがあるマップ ID。変なイベントを参照しないよう、ガードをかけるために使う。
+//     public overrideRmmzEventId: number;     
 
-    public static makeFromAnnotation(data: DRmmzUniqueSpawnerAnnotation): DUniqueSpawner {
-        const spawner = new DUniqueSpawner(MRData.getEntity(data.entityKey).id);
-        spawner.moveType = DHelpers.stringToEnum(data.moveType, {
-            "_": DUniqueSpawnerMoveType.Default,
-            "Homecoming": DUniqueSpawnerMoveType.Homecoming,
-        });
-        return spawner;
-    }
+//     public static makeFromAnnotation(data: DRmmzUniqueSpawnerAnnotation): DUniqueSpawner {
+//         const spawner = new DUniqueSpawner(MRData.getEntity(data.entityKey).id);
+//         spawner.moveType = DHelpers.stringToEnum(data.moveType, {
+//             "_": DUniqueSpawnerMoveType.Default,
+//             "Homecoming": DUniqueSpawnerMoveType.Homecoming,
+//         });
+//         return spawner;
+//     }
 
-    public constructor(entityId: DEntityId) {
-        this.entityId = entityId;
-        this.mx = 0;
-        this.my = 0;
-        this.moveType = DUniqueSpawnerMoveType.Default;
-        this.overrideRmmzEventMapId = 0;
-        this.overrideRmmzEventId = 0;
-    }
-}
+//     public constructor(entityId: DEntityId) {
+//         this.entityId = entityId;
+//         this.mx = 0;
+//         this.my = 0;
+//         this.moveType = DUniqueSpawnerMoveType.Default;
+//         this.overrideRmmzEventMapId = 0;
+//         this.overrideRmmzEventId = 0;
+//     }
+// }

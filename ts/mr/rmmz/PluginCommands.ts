@@ -17,6 +17,8 @@ import { RMMZHelper } from "./RMMZHelper";
 import { LInventoryBehavior } from "../lively/behaviors/LInventoryBehavior";
 import { DFloorClass } from "../data/DLand";
 import { Diag } from "../Diag";
+import { DScript } from "../data/DScript";
+import { LScriptContext } from "../lively/LScript";
 
 const pluginName: string = "LN_MysteryRogueSystem";
 
@@ -193,31 +195,62 @@ PluginManager.registerCommand(pluginName, "MR-ResetInventory", function(this: Ga
     }
 });
 
-PluginManager.registerCommand(pluginName, "MR-AddPostTalkingCommand", function(this: Game_Interpreter, args: any) {
+PluginManager.registerCommand(pluginName, "MR-AddPostTalkCommand", function(this: Game_Interpreter, args: any) {
     const label = args["label"];
     const name = args["name"];
-    const ctx = this.getMRInterpreterContext();
+    const ctx = this.getMRInterpreterContext().scriptContext;
     ctx.talkingCommands.push({ label: label, displayName: name });
 });
 
-PluginManager.registerCommand(pluginName, "MR-ShowPostTalkingDialog", function(this: Game_Interpreter, args: any) {
-    const ctx = this.getMRInterpreterContext();
-    const choices = ctx.talkingCommands.map(x => x.displayName);
-    const cancelIndex = ctx.talkingCommands.findIndex(x => x.label == "MR-TalkingBye");
+PluginManager.registerCommand(pluginName, "MR-ShowPostTalkDialog", function(this: Game_Interpreter, args: any) {
+    const sctx = this.getMRInterpreterContext().scriptContext;
+
+    // NOTE: コモンイベントの呼び出し同様、子スクリプトを実行するときは Context を新しく作る。
+    //{
+        console.log("MR-ShowPostTalkDialog1", this);
+        const s = new DScript((this as any)._list);
+        const r = MRLively.scriptManager.callQuery(sctx.entity, s, "MRQuery-GetPostTalkCommands");
+        console.log("MR-ShowPostTalkDialog2", s, r, $gameVariables);
+        const commands = r.talkingCommands;
+    //return;
+    //}
+    //const ctx = this.getMRInterpreterContext().scriptContext;
+
+
+
+    const choices = commands.map(x => x.displayName);
+    const cancelIndex = commands.findIndex(x => x.label == "MRCommand-OnEndTalk");
     if (cancelIndex < 0) {
-        throw new Error("MR-TalkingBye not found.");
+        commands.push({ label: "MRCommand-OnEndTalk", displayName: "さようなら" });
     }
 
     // command102 (Show Choices) と同様の処理
     const cancelType = -2;
-    const defaultType = cancelIndex;
+    const defaultType = 0;
     const positionType = 2;
     const background = 0;
     $gameMessage.setChoices(choices, defaultType, cancelType);
     $gameMessage.setChoiceBackground(background);
     $gameMessage.setChoicePositionType(positionType);
     $gameMessage.setChoiceCallback(n => {
-        (this._branch as any)[this._indent] = n;
+        console.log("setChoiceCallback", n);
+
+        // Jump to label
+        const result = sctx.findListAndLabel(commands[n].label);
+        if (result) {
+            if (result.list == this._list) {
+                this._index = result.index;
+            }
+            else {
+                this.MR_resetList(result.list, result.index);
+            }
+        }
+
+        // const index = LScriptContext.findLabelIndex(this._list, commands[n].label);
+        // if (index >= 0) {
+        //     this._index = index;
+        // }
+        //(this._branch as any)[this._indent] = n;
     });
     this.setWaitMode("message");
 });

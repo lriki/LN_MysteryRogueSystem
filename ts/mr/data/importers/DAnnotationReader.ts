@@ -1,4 +1,5 @@
 import { assert, tr2 } from "../../Common";
+import { DFloorMode } from "../DLand";
 import { DTroopId } from "../DTroop";
 import { MRData } from "../MRData";
 
@@ -21,6 +22,7 @@ export interface DRmmzFloorRawAnnotation {
     preset?: string;
     unique?: boolean;
     fovSystem?: string;
+    mode?: string;
 }
 
 // @MR-Prefab
@@ -73,6 +75,8 @@ interface DRmmzSpawnerRawAnnotation {
     gold?: number;
 
     rate?: number;
+    name?: string;
+    reactions?: { key: string, name: string }[];
 }
 
 // @MR-Spawner
@@ -86,6 +90,8 @@ export interface DRmmzSpawnerAnnotation {
     keeper: boolean;
     gold: number;
     rate: number;
+    name?: string;
+    reactions?: { key: string, name: string }[];
 }
 
 // @MR-UniqueSpawner
@@ -245,6 +251,8 @@ export class DAnnotationReader {
             keeper: rawData.keeper ?? false,
             gold: rawData.gold ?? 0,
             rate: rawData.rate ?? 100,
+            name: rawData.name,
+            reactions: rawData.reactions,
         };
     }
 

@@ -8,6 +8,7 @@ import "./mr/rmmz/Game_Event";
 import "./mr/rmmz/Game_Map";
 import "./mr/rmmz/Game_Interpreter";
 import "./mr/rmmz/Game_Message";
+import "./mr/rmmz/Game_System";
 import "./mr/rmmz/PrefabEvent";
 import "./mr/view/ui/Window_Base";
 

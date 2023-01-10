@@ -2,7 +2,7 @@
 import { assert, tr, tr2 } from "../Common";
 import { DAnnotationReader } from "./importers/DAnnotationReader";
 import { DLandId, DMapId, DTerrainPresetId, DTerrainSettingId } from "./DCommon";
-import { DEntitySpawner2 } from "./DSpawner";
+import { DEntitySpawner } from "./DSpawner";
 import { DEntityCategory } from "./DEntityCategory";
 import { DHelpers } from "./DHelper";
 import { MRData } from "./MRData";
@@ -11,17 +11,21 @@ import { Diag } from "../Diag";
 import { DValidationHelper } from "./DValidationHelper";
 import { DFovSystem } from "./DSystem";
 
-
 export enum DFloorClass {
     FloorMap = 0,
     EventMap = 1,
+}
+
+export enum DFloorMode {    // RMMZ のタイルセットモードから名前を付けてみた
+    Field = "Field",
+    Area = "Area",
 }
 
 
 export interface DAppearanceTableEntity {
     startFloorNumber: number;
     lastFloorNumber: number;
-    spawiInfo: DEntitySpawner2;
+    spawiInfo: DEntitySpawner;
 }
 
 export interface DAppearanceTableEvent {
@@ -91,6 +95,7 @@ export interface DFloorInfo {
     key: string;
     template: string | undefined;
     displayName: string | undefined;
+    mode: DFloorMode;
     floorClass: DFloorClass;
     //fixedMapName: string;   // Land から固定マップへの遷移については LFloorId のコメント参照。
     fixedMapIndex: number;  // DLand.fixedMapIds のインデックス。-1 なら固定マップではない。
@@ -482,18 +487,6 @@ export class DLand {
             }
         }
 
-        // Pick prefab
-        for (const event of mapData.events) {
-            if (event) {
-                const prefabData = DAnnotationReader.readPrefabAnnotation(event, this.rmmzMapId);
-                if (prefabData) {
-                    const prefab = MRData.newPrefab();
-                    prefab.rmmzMapId = this.rmmzMapId;
-                    prefab.rmmzEventData = event;
-                }
-            }
-        }
-
         // EventMap の Floor は通常 Floor の後に追加したい
         for (let i = 0; i < this.eventMapIds.length; i++) {
             const mapId = this.eventMapIds[i];
@@ -503,6 +496,7 @@ export class DLand {
                 key: mapData.name,
                 template: undefined,
                 displayName: mapData.name,
+                mode: DFloorMode.Area,
                 floorClass: DFloorClass.EventMap,
                 fixedMapIndex: -1,
                 eventMapIndex: i,
@@ -557,6 +551,10 @@ export class DLand {
                     key: event.name,
                     template: floorData.template ?? undefined,
                     displayName: floorData.displayName ?? undefined,
+                    mode: DHelpers.stringToEnum(floorData.mode, {
+                        "Field": DFloorMode.Field,
+                        "_": DFloorMode.Area,
+                    }),
                     floorClass: DFloorClass.FloorMap,
                     fixedMapIndex: this.fixedMapIds.findIndex(x => MRData.maps[x].name == fixedMapName),
                     eventMapIndex: -1,
@@ -606,7 +604,7 @@ export class DLand {
             // @MR-Spawner
             const entityMetadata = DAnnotationReader.readSpawnerAnnotationFromPage(event.pages[0]);
             if (entityMetadata) {
-                const spawnInfo = DEntitySpawner2.makeFromEventData(event, rmmzMapId);
+                const spawnInfo = DEntitySpawner.makeFromEventData(event, rmmzMapId);
                 if (!spawnInfo) {
                     throw new Error(`Entity "${entityMetadata.entity}" not found. (Map:${DHelpers.makeRmmzMapDebugName(rmmzMapId)}, Event:${event.id}.${event.name})`);
                 }
@@ -699,7 +697,7 @@ export class DLand {
             // @MR-Spawner
             const entityMetadata = DAnnotationReader.readSpawnerAnnotationFromPage(event.pages[0]);
             if (entityMetadata) {
-                const spawnInfo = DEntitySpawner2.makeFromEventData(event, rmmzMapId);
+                const spawnInfo = DEntitySpawner.makeFromEventData(event, rmmzMapId);
                 if (!spawnInfo) {
                     throw new Error(`Entity "${entityMetadata.entity}" not found. (Map:${DHelpers.makeRmmzMapDebugName(rmmzMapId)}, Event:${event.id}.${event.name})`);
                 }

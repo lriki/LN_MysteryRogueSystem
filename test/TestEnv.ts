@@ -28,7 +28,8 @@ import { DFloorClass } from "ts/mr/data/DLand";
 import { STransferMapDialog, STransferMapSource } from "ts/mr/system/dialogs/STransferMapDialog";
 import { LTransferEntityResult } from "ts/mr/lively/LWorld";
 import { DRmmzUniqueSpawnerAnnotation } from "ts/mr/data/importers/DAnnotationReader";
-import { DEntityCreateInfo, DUniqueSpawner } from "ts/mr/data/DSpawner";
+import { DEntityCreateInfo, DEntitySpawner } from "ts/mr/data/DSpawner";
+import { LScriptContext } from "ts/mr/lively/LScript";
 
 declare global {
     interface Number {
@@ -271,7 +272,7 @@ export class TestEnvIntegration extends SIntegration {
         SRmmzHelpers.createEntitiesFromRmmzFixedMapEventData(0);
     }
     
-    override onGetFixedMapUnqueSpawners(): DUniqueSpawner[] {
+    override onGetFixedMapUnqueSpawners(): DEntitySpawner[] {
         return SRmmzHelpers.getUnqueSpawners($dataMap, 0);
     }
 
@@ -336,5 +337,8 @@ export class TestEnvIntegration extends SIntegration {
     }
     
     override onEquipmentChanged(entity: LEntity): void {
+    }
+
+    override onStartEventScript(script: LScriptContext): void {
     }
 }

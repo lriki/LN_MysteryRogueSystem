@@ -7,7 +7,7 @@ import { DState, DStateRestriction } from "./DState";
 import { DEquipmentType_Default } from "./DEquipmentType";
 import { DAbility, DAbility_Default } from "./DAbility";
 import { parseMetaToEntityProperties } from "./DEntityProperties";
-import { DFloorClass, DLand, DLandIdentificationLevel } from "./DLand";
+import { DFloorClass, DFloorMode, DLand, DLandIdentificationLevel } from "./DLand";
 import { DHelpers } from "./DHelper";
 import { DPrefabMoveType } from "./DPrefab";
 import { DEquipment } from './DItem';
@@ -36,6 +36,7 @@ import { DMapId } from './DCommon';
 import { REFloorMapKind } from './DMap';
 import { DEffectRef } from './DEffectSuite';
 import { DQuestTask } from './DQuest';
+import { DScript } from './DScript';
 
 type NextFunc = () => void;
 type TaskFunc = (next: NextFunc) => void;
@@ -1138,6 +1139,7 @@ export class MRDataManager {
                         key: "",
                         template: undefined,
                         displayName: undefined,
+                        mode: DFloorMode.Area,
                         floorClass: DFloorClass.EventMap,
                         fixedMapIndex: land.fixedMapIds.length - 1,
                         eventMapIndex: land.eventMapIds.length - 1,
@@ -1177,8 +1179,7 @@ export class MRDataManager {
                 const data = DAnnotationReader.readPrefabAnnotation(event, this.databaseMapId);
                 if (!data) continue;
 
-                const prefab =  MRData.newPrefab();
-                prefab.key = event.name;
+                const prefab =  MRData.newPrefab(event.name);
                 prefab.rmmzMapId = this.databaseMapId;
                 prefab.rmmzEventData = event;
 
@@ -1198,12 +1199,21 @@ export class MRDataManager {
 
                 MRData.prefabs.push(prefab);
 
+                // SubPages
                 for (let i = 1; i < event.pages.length; i++) {
-                    const pageData = DAnnotationReader.readPrefabSubPageAnnotation(event.pages[i]);
+                    const page = event.pages[i];
+                    const pageData = DAnnotationReader.readPrefabSubPageAnnotation(page);
                     if (pageData) {
                         if (pageData.state === undefined) throw new Error(`@MR-PrefabSubPage requires state field.`);
                         prefab.subPages.push({ stateId: MRData.getState(pageData.state).id, rmmzEventPageIndex: i });
                     }
+                }
+
+                // Scripts
+                for (let i = 0; i < event.pages.length; i++) {
+                    const page = event.pages[i];
+                    const script = new DScript(page.list);
+                    prefab.scripts.push(script);
                 }
             }
 

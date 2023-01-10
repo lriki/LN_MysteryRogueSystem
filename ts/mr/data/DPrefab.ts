@@ -1,6 +1,7 @@
 import { MRBasics } from "./MRBasics";
 import { DStateId } from "./DState";
 import { MRData } from "./MRData";
+import { DScript } from "./DScript";
 
 export type DPrefabId = number;
 
@@ -48,33 +49,14 @@ export enum DPrefabMoveType {
 }
 
 /**
- * DPrefab
- * 
- * [2021/4/19] DPrefabKind といった enum で Enemy, Trap, Item などを分類していたのだが、厳しくなってきた。
- * 基本として真に種類を表すのは DItem など別のデータ構造の Kind フィールドなので、こちら側で種類を持つとデータの多重管理になる。
- * また、たくさんある Item の種類をどのくらいの粒度で interface 分けするべきなのかも手探り状態。（Item と Trap は DItem にまとめるか？分けるか？）
- * そのため Prefab 側で kind を持つのはやめて、メソッドでラップする。
+ * プレハブデータ
  */
 export class DPrefab {
-    /*
-    DPrefab
-    
-    [2021/4/19]
-    ----------
-    DPrefabKind といった enum で Enemy, Trap, Item などを分類していたのだが、厳しくなってきた。
-    基本として真に種類を表すのは DItem など別のデータ構造の Kind フィールドなので、こちら側で種類を持つとデータの多重管理になる。
-    また、たくさんある Item の種類をどのくらいの粒度で interface 分けするべきなのかも手探り状態。（Item と Trap は DItem にまとめるか？分けるか？）
-    そのため Prefab 側で kind を持つのはやめて、メソッドでラップする。
-    
-    [2021/9/18]
-    ----------
-    このデータは本来、Data-Layer と View-Layer ２つの情報に分けるべきかも。
-    */
-
-    id: DPrefabId = 0;
-    key: string = "";
+    public readonly id: DPrefabId;
+    public readonly key: string;
     image: DPrefabActualImage;
     subPages: DPrefabPageInfo[];
+    scripts: DScript[];
     stateImages: DPrefabStateImage[];
 
     /** DownSequel のイメージ */
@@ -89,8 +71,9 @@ export class DPrefab {
     rmmzMapId: number;
     rmmzEventData: IDataMapEvent;
 
-    public constructor(id: DPrefabId) {
+    public constructor(id: DPrefabId, key: string) {
         this.id = id;
+        this.key = key;
         this.image = {
             characterName: "",
             direction: 2,
@@ -101,6 +84,7 @@ export class DPrefab {
             walkAnime: false,
         };
         this.subPages = [];
+        this.scripts = [];
         this.stateImages = [];
         this.downImage = {};
         this.moveType = DPrefabMoveType.Random;

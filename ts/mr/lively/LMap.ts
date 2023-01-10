@@ -21,7 +21,7 @@ import { DBlockLayerKind } from "../data/DCommon";
 import { UBlock } from "../utility/UBlock";
 import { LRoomId } from "./LCommon";
 import { USearch } from "../utility/USearch";
-import { DUniqueSpawner } from "../data/DSpawner";
+import { DEntitySpawner } from "../data/DSpawner";
 import { DEntityId } from "../data/DEntity";
 
 export enum MovingMethod {
@@ -53,7 +53,7 @@ export class LMap extends LObject {
     private _mapdataRevision: number = 1;
     private _roundCount: number = 0;
     
-    public uniqueSpawners: { [key: DEntityId]: DUniqueSpawner };
+    public uniqueSpawners: { [key: DEntityId]: DEntitySpawner };    // マップ移動時の消去忘れ防止のため、Entity ではなく Map 側に持たせている
 
     // 巻物による気配察知・道具感知効果。
     // Trait とは別物。Trait は腕輪など装備品と共に使うが、こちらは巻物など一度効果を受けたらあとは永続するもの。
@@ -503,7 +503,6 @@ export class LMap extends LObject {
         entity.mx = x;
         entity.my = y;
         newBlock.addEntity(layer, entity);
-        newBlock.setFootpoint(entity);
         UMovement._postLocate(entity, oldBlock, newBlock, this, undefined);
 
         // Located 通知。これはアニメを伴う移動時は通知したくないのでここで行う。
@@ -581,7 +580,6 @@ export class LMap extends LObject {
             assert(block);
             if (!block.containsEntity(entity)) {
                 const layer = entity.getHomeLayer();
-                block.setFootpoint(entity);
                 block.addEntity(layer, entity);
                 
                 if (!entity.isOnOffstage()) {

@@ -157,16 +157,16 @@
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
- * @command MR-AddPostTalkingCommand
- * @text [experimental] MR-AddPostTalkingCommand
- * @desc 次の MR-ShowPostTalkingDialog で表示するコマンドを追加します。
- * @arg key
- * @type string
+ * @command MR-AddPostTalkCommand
+ * @text [experimental] MR-AddPostTalkCommand
+ * @desc 次の MR-ShowPostTalkDialog で表示するコマンドを追加します。
  * @arg name
  * @type string
+ * @arg label
+ * @type string
  * 
- * @command MR-ShowPostTalkingDialog
- * @text [experimental] MR-ShowPostTalkingDialog
+ * @command MR-ShowPostTalkDialog
+ * @text [experimental] MR-ShowPostTalkDialog
  * 
  */
  

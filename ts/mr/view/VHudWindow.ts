@@ -4,6 +4,7 @@ import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { LFloorId } from "ts/mr/lively/LFloorId";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { LExperienceBehavior } from "../lively/behaviors/LExperienceBehavior";
+import { VTextImage } from "./ui/VTextImage";
 
 
 const gaugeHeight = 6;
@@ -12,12 +13,42 @@ export class VHudWindow extends Window_Base {
     static readonly HeaderHeight = 70;
     //private _floorNumberBitmap: Bitmap;
     //private _floorNumberSprite: Sprite;
+    // private _levelLabel: VTextImage;
+    // private _floorLabel: VTextImage;
 
     constructor() {
         super(new Rectangle(0, 0, Graphics.boxWidth, 100)); // 画面全体を覆うとツクールデフォルトの MessageWindow などが見えなくなってしまう
         this.frameVisible = false;
         this.backOpacity = 0;
         this.visible = false;
+
+        // this._levelLabel = new VTextImage(ImageManager.loadSystem("MRUI-1"));
+        // this._levelLabel.setFrame(0, 0, 82, 30);
+        // this._levelLabel.label = "Lv";
+        // this._levelLabel.labelMarginLeft = 8;
+        // this._levelLabel.labelMarginTop = 6;
+        // this._levelLabel.labelMarginRight = 8;
+        // this._levelLabel.text = "100";
+        // this._levelLabel.textMarginLeft = 36;
+        // this._levelLabel.textMarginTop = 9;
+        // this._levelLabel.textMarginRight = 8;
+        // this.addChild(this._levelLabel);
+
+        // this._floorLabel = new VTextImage(ImageManager.loadSystem("MRUI-1"));
+        // this._floorLabel.x = 0;
+        // this._floorLabel.y = 30;
+        // this._floorLabel.setFrame(0, 30, 82, 64);
+        // this._floorLabel.label = "Floor";
+        // this._floorLabel.labelFontSize = 14;
+        // this._floorLabel.labelMarginLeft = 10;
+        // this._floorLabel.labelMarginTop = 6;
+        // this._floorLabel.labelMarginRight = 8;
+        // this._floorLabel.text = "100";
+        // this._floorLabel.textAligntment = "center";
+        // this._floorLabel.textMarginLeft = 8;
+        // this._floorLabel.textMarginTop = 24;
+        // this._floorLabel.textMarginRight = 8;
+        // this.addChild(this._floorLabel);
 
         //this._floorNumberBitmap = new Bitmap(64, 64);
         //this._floorNumberBitmap.drawText("1F", 0, 0, 64, lineHeight, "left");
@@ -63,6 +94,9 @@ export class VHudWindow extends Window_Base {
         else {
             this.visible = false;
         }
+
+        // this._levelLabel.update();
+        // this._floorLabel.update();
     }
 
     private drawFloorNumber(x: number, y: number, floorId: LFloorId): void {

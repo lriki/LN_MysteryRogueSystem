@@ -39,8 +39,7 @@ import { LUnitBehavior } from "./behaviors/LUnitBehavior";
 import { LFieldEffect } from "./LFieldEffect";
 import { paramMaxEntityStackCount } from "../PluginParameters";
 import { LMap } from "./LMap";
-import { DUniqueSpawner } from "../data/DSpawner";
-import { TilingSprite } from "pixi.js";
+import { DEntitySpawner } from "../data/DSpawner";
 
 enum BlockLayer
 {
@@ -224,8 +223,9 @@ export class LEntity extends LObject
         this._rmmzEventId = value;
     }
 
-    public getUniqueSpawner(): DUniqueSpawner | undefined {
-        return this.map.uniqueSpawners[this.dataId];
+    public getUniqueSpawner(): DEntitySpawner | undefined {
+        // this.map だと、アイテムを拾った瞬間に FloorId は Empty となるため、メッセージなどに正しい名前が表示できなかったりする。
+        return MRLively.mapView.currentMap.uniqueSpawners[this.dataId];
     }
 
     _name: string = ""; // 主にデバッグ用
@@ -799,12 +799,20 @@ export class LEntity extends LObject
     // Property
 
     public getDisplayName(): LNameView {
-        for (const b of this.collectBehaviors().reverse()) {
-            const v = b.queryDisplayName();
-            if (v) return v;
-        }
         const data = this.data;
-        let name = data.makeDisplayName(this._stackCount);
+        
+        let name = "";
+        const spawner = this.getUniqueSpawner();
+        if (spawner && spawner.displayName) {
+            name = spawner.displayName;
+        }
+        else {
+            for (const b of this.collectBehaviors().reverse()) {
+                const v = b.queryDisplayName();
+                if (v) return v;
+            }
+            name = data.makeDisplayName(this._stackCount);
+        }
 
         const result: LNameView = { name: name, iconIndex: data.display.iconIndex, upgrades: 0 };
 
@@ -1321,6 +1329,19 @@ export class LEntity extends LObject
         for (const b of this.collectBehaviors()) {
             b.onQueryReactions(this, result);
         }
+
+        // Spawner によって Reaction 名が指定されていれば、それを使う
+        const spawner = this.getUniqueSpawner();
+        if (spawner && spawner.reactions) {
+            for (const reaction of result) {
+                const key = MRData.skills[reaction.actionId].key;
+                const r = spawner.reactions.find(x => x.key === key);
+                if (r) {
+                    reaction.displayName = r.name;
+                }
+            }
+        }
+
         return result;
     }
 

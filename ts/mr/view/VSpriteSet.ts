@@ -1,5 +1,6 @@
 import { TilemapRendererId } from "ts/mr/rmmz/Tilemap";
 import { MRSystem } from "ts/mr/system/MRSystem";
+import { MRLively } from "../lively/MRLively";
 import { SView } from "../system/SView";
 import { VSymmetricFovShadow } from "./fov/VSymmetricFovShadow";
 import { VDirectionArrow } from "./VDirectionArrow";
@@ -66,19 +67,13 @@ export class VSpriteSet {
     }
 
     public update(): void {
-        
-        const minimap = MRSystem.minimapData;
-        if (minimap.isTilemapResetNeeded() || this._initialUpdate ) {
-            this._minimapTilemap.setData(minimap.width(), minimap.height(), minimap.data());
-            minimap.clearTilemapResetNeeded();
+        if (MRLively.mapView.currentFloorId.isFieldMap) {
+            this._minimapTilemap.visible = false;
         }
-        this._minimapTilemap.refresh();
-
-        this._minimapTilemap.selfVisible = this.spritesetMap._tilemap.selfVisible = SView.getTilemapView().visible;
-        // if (!) {
-        //     this._minimapTilemap.visible = false;
-        //     return;
-        // }
+        else {
+            this._minimapTilemap.visible = true;
+            this.updateMinimap();
+        }
         
 
         
@@ -91,6 +86,17 @@ export class VSpriteSet {
         //this._spritesetMap._tilemap.visible = SView.getTilemapView().visible;
         
         //this._spritesetMap._tilemap.setBitmaps([]);
+    }
+
+    private updateMinimap(): void {
+        const minimap = MRSystem.minimapData;
+        if (minimap.isTilemapResetNeeded() || this._initialUpdate ) {
+            this._minimapTilemap.setData(minimap.width(), minimap.height(), minimap.data());
+            minimap.clearTilemapResetNeeded();
+        }
+        this._minimapTilemap.refresh();
+
+        this._minimapTilemap.selfVisible = this.spritesetMap._tilemap.selfVisible = SView.getTilemapView().visible;
     }
 }
 

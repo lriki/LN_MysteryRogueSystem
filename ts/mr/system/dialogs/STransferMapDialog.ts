@@ -2,6 +2,7 @@ import { assert } from "ts/mr/Common";
 import { LFloorId } from "ts/mr/lively/LFloorId";
 import { LMap } from "ts/mr/lively/LMap";
 import { MRLively } from "ts/mr/lively/MRLively";
+import { UMovement } from "ts/mr/utility/UMovement";
 import { MRSystem } from "../MRSystem";
 import { SDialog } from "../SDialog";
 import { SGameManager } from "../SGameManager";
@@ -42,8 +43,6 @@ export class STransferMapDialog extends SDialog {
         this._transferingNewY = y;
         this._newDirection = d;
         
-        console.log("STransferMapDialog", this);
-
         if (this.source == STransferMapSource.FromCommand) {
             MRSystem.integration.onReserveTransferMap(floorId.rmmzMapId, x, y, d);
         }
@@ -72,6 +71,14 @@ export class STransferMapDialog extends SDialog {
         MRLively.mapView.currentFloorId = this._transferingNewFloorId.clone();
 
         SGameManager.performFloorTransfer(this);
+
+        // 今のところ、map の needsRebuild() が立ってないと Map 内の Entity の再配置が行われず、 located が発生しない。
+        // そのままだと Minimap 等が更新されないため、ここで located を発生させる。
+        const player =  MRLively.mapView.focusedEntity();
+        assert(player);
+        const map = this.newMap;
+        const block = map.block(player.mx, player.my);
+        UMovement._postLocate(player, undefined, block, map, undefined);
     }
 }
 

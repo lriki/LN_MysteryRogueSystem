@@ -93,6 +93,7 @@ function isTransterEffectRunning(): boolean {
 
 const _Scene_Map_update = Scene_Map.prototype.update;
 Scene_Map.prototype.update = function() {
+    $gameSystem.getMREventScriptRunnerManager().update();
 
     FloorRestartSequence.update(this);
 

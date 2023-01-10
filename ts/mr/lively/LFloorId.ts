@@ -1,6 +1,6 @@
 import { assert, MRSerializable } from "ts/mr/Common";
 import { DHelpers } from "ts/mr/data/DHelper";
-import { DFloorClass, DFloorInfo, DLand } from "ts/mr/data/DLand";
+import { DFloorClass, DFloorInfo, DFloorMode, DLand } from "ts/mr/data/DLand";
 import { MRData } from "ts/mr/data/MRData";
 import { MRDataManager } from "ts/mr/data/MRDataManager";
 import { DLandId } from "../data/DCommon";
@@ -189,6 +189,10 @@ export class LFloorId {
     /** FloorInfo を取ることができるか */
     public get isDungeonMap2(): boolean {
         return this.floorInfo.floorClass == DFloorClass.FloorMap;
+    }
+
+    public get isFieldMap(): boolean {
+        return this.floorInfo.mode == DFloorMode.Field;
     }
 
     public get isRMMZDefaultSystemMap2(): boolean {

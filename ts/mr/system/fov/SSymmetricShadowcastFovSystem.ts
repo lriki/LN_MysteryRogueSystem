@@ -16,16 +16,19 @@ export class SSymmetricShadowcastFovSystem extends SFovSystem {
     public markBlockPlayerPassed(map: LMap, mx: number, my: number): void {
         const radius = 6;
 
+        // LBlock のフラグを更新
         this._fovMap.setMap(map);
         this._fovMap.clear();
         SFovHelper.computeFov(this._fovMap, mx, my, radius, false, DFovSystem.SymmetricShadowcast);
         this._fovMap.apply();
 
+        // 表示用のシャドウマップデータを更新
         MRSystem.fovShadowMap.locate(mx, my, radius);
         MRSystem.minimapData.setRefreshNeeded();
     }
 }
 
+// computeFov の結果を LBlock へ反映させるためのもの
 class FovMap extends IFovMap {
     private _map: LMap | undefined;
     private _data: number[];

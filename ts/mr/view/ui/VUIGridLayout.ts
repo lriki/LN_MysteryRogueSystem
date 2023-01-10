@@ -131,7 +131,7 @@ export class VUIGridLayout extends VUIContainer {
             if (row.type == VUIGridLayoutLengthType.Auto || row.type == VUIGridLayoutLengthType.Ratio) {
                 row.desiredSize = Math.max(row.desiredSize, child.desiredHeight());
             }
-            if (col.type == VUIGridLayoutLengthType.Auto || row.type == VUIGridLayoutLengthType.Ratio) {
+            if (col.type == VUIGridLayoutLengthType.Auto || col.type == VUIGridLayoutLengthType.Ratio) {
                 col.desiredSize = Math.max(col.desiredSize, child.desiredWidth());
             }
         }

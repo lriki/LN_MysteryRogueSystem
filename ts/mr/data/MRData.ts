@@ -169,7 +169,7 @@ export class MRData
         this.items = [];
 
         this.states = [];
-        this.prefabs = [new DPrefab(0)];
+        this.prefabs = [new DPrefab(0, "null")];
         this.entities = [new DEntity(0)];
         this.entityTemplates = [new DEntityTemplate(0, "null", { type: "null" })];
         this.emittors = [new DEmittor(0, "null")];
@@ -365,9 +365,8 @@ export class MRData
 
     //--------------------------------------------------------------------------
 
-    static newPrefab(): DPrefab {
-        const newId = this.prefabs.length;
-        const data = new DPrefab(newId);
+    static newPrefab(key: string): DPrefab {
+        const data = new DPrefab(this.prefabs.length, key);
         this.prefabs.push(data);
         return data;
     }

@@ -45,6 +45,7 @@ import { STransferMapDialog, STransferMapSource } from "./dialogs/STransferMapDi
 import { SRoomBoundsFovSystem } from "./fov/SRoomBoundsFovSystem";
 import { SSymmetricShadowcastFovSystem } from "./fov/SSymmetricShadowcastFovSystem";
 import { LQuestManager } from "../lively/LQuestManager";
+import { LScriptManager } from "../lively/LScriptManager";
 
 /**
  */
@@ -84,6 +85,7 @@ export class SGameManager {
         MRLively.eventServer = new LEventServer();
         MRLively.chronus = new LChronus();
         MRLively.questManager = new LQuestManager();
+        MRLively.scriptManager = new LScriptManager();
         MRLively.borderWall = new LBlock(-1, -1);
 
         //MRLively.world._registerObject(MRLively.camera.currentMap);
@@ -139,7 +141,7 @@ export class SGameManager {
         party.addMember(firstActor);
 
         // Player の初期位置を、RMMZ 初期位置に合わせる
-        UTransfer.transterRmmzDirectly($dataSystem.startMapId, $dataSystem.startX, $dataSystem.startY);
+        UTransfer.transterRmmzDirectly($dataSystem.startMapId, $dataSystem.startX, $dataSystem.startY, 2);
         MRSystem.dialogContext.open(new STransferMapDialog(STransferMapSource.FromRmmzNewGame, firstActor.floorId, firstActor.mx, firstActor.my, firstActor.dir));
         MRLively.mapView.currentFloorId = firstActor.floorId.clone();
         // Game_Player.setupForNewGame() でも reserveTransfer() してるので、
@@ -212,6 +214,8 @@ export class SGameManager {
     
             const newMap = transfaringInfo.newMap;
             if (newFloorId.isTacticsMap2) {
+                MRSystem.fovShadowMap.setup(newMap);
+                
                 if (newMap.needsRebuild()) {
                     const rand = MRLively.world.random();
                     const mapSeed = rand.nextInt();
@@ -238,7 +242,7 @@ export class SGameManager {
                         
                         mapData.print();
                     }
-        
+
                     // マップ構築
                     assert(newFloorId.equals(newMap.floorId()));
                     newMap.setup(mapData);
@@ -256,9 +260,7 @@ export class SGameManager {
             }
 
             MRSystem.minimapData.clear();
-            MRSystem.fovShadowMap.setup(newMap);
             MRSystem.scheduler.reset();
-            //MRLively.camera.clearFloorTransfering();
             Log.d("PerformFloorTransfer");
         //}
     }

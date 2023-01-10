@@ -83,6 +83,11 @@ Game_Map.prototype.setup = function(mapId: number) {
     }
 }
 
+const _Game_Map_isEventRunning = Game_Map.prototype.isEventRunning;
+Game_Map.prototype.isEventRunning = function() {
+    return _Game_Map_isEventRunning.call(this) || $gameSystem.getMREventScriptRunnerManager().isAnyRunning();
+};
+
 const _Game_Map_tileset = Game_Map.prototype.tileset;
 Game_Map.prototype.tileset = function() {
     const view = SView.getTilemapView();

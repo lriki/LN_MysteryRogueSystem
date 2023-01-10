@@ -7,7 +7,7 @@ import { MRLively } from "ts/mr/lively/MRLively";
 import { LTileShape } from "ts/mr/lively/LBlock";
 import { paramFixedMapItemShopRoomRegionId, paramFixedMapMonsterHouseRoomRegionId, paramFixedMapPassagewayRegionId, paramFixedMapRoomRegionId, paramRandomMapPaddingX, paramRandomMapPaddingY } from "ts/mr/PluginParameters";
 import { SEntityFactory } from "./internal";
-import { DEntityCreateInfo, DEntitySpawner2, DUniqueSpawner } from "ts/mr/data/DSpawner";
+import { DEntityCreateInfo, DEntitySpawner } from "ts/mr/data/DSpawner";
 import { LEntity } from "../lively/LEntity";
 import { DAnnotationReader, DRmmzPrefabAnnotation, DRmmzUniqueSpawnerAnnotation } from "../data/importers/DAnnotationReader";
 import { DHelpers } from "../data/DHelper";
@@ -22,11 +22,11 @@ import { MRSystem } from "./MRSystem";
  */
 export class SRmmzHelpers {
 
-    static readEntityMetadata(event: Game_Event, rmmzMapId: number): DEntitySpawner2 | undefined {
+    static readEntityMetadata(event: Game_Event, rmmzMapId: number): DEntitySpawner | undefined {
         if (event._pageIndex >= 0) {
             const data = event.event();
             assert(data);
-            return DEntitySpawner2.makeFromEventPageData(data, event.page(), rmmzMapId);
+            return DEntitySpawner.makeFromEventPageData(data, event.page(), rmmzMapId);
         }
         else {
             return undefined;
@@ -46,7 +46,7 @@ export class SRmmzHelpers {
     public static createEntitiesFromRmmzFixedMapEventData(rmmzMapId: number): void {
         $dataMap.events.forEach((e: (IDataMapEvent | null)) => {
             if (e) {
-                const data = DEntitySpawner2.makeFromEventData(e, rmmzMapId);
+                const data = DEntitySpawner.makeFromEventData(e, rmmzMapId);
                 if (data) {
                     if (data.troopId > 0) {
                         SEntityFactory.spawnTroopAndMembers(MRLively.mapView.currentMap, MRData.troops[data.troopId], e.x, e.y,data.stateIds);
@@ -63,13 +63,13 @@ export class SRmmzHelpers {
         });
     }
 
-    public static getUnqueSpawners(mapDate: IDataMap, rmmzMapId: number): DUniqueSpawner[] {
-        const result: DUniqueSpawner[] = [];
+    public static getUnqueSpawners(mapDate: IDataMap, rmmzMapId: number): DEntitySpawner[] {
+        const result: DEntitySpawner[] = [];
         for (const e of mapDate.events) {
             if (e) {
                 const annotation = DAnnotationReader.readUniqueSpawnerAnnotationFromPage(e.pages[0]);
                 if (annotation) {
-                    const spawner = DUniqueSpawner.makeFromAnnotation(annotation);
+                    const spawner = DEntitySpawner.makeFromAnnotation(annotation);
                     spawner.mx = e.x;
                     spawner.my = e.y;
                     if (annotation.override) {
@@ -92,13 +92,6 @@ export class SRmmzHelpers {
             entity.setRmmzEventId(eventId);
         }
 
-        // if (eventId == 19) {
-        //     const unit = entity.getEntityBehavior(LUnitBehavior);
-        //     unit.setFactionId(REData.system.factions.player);
-        //     console.log("FACTION!!");
-        // }
-        //entity.rmmzEventId = eventId;
-        //entity.inhabitsCurrentFloor = true;
         MRLively.world.transferEntity(entity, MRLively.mapView.currentMap.floorId(), x, y);
         return entity;
     }

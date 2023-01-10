@@ -288,7 +288,7 @@ export class LWorld {
         }
 
         // 新しいマップへの登場
-        entity.floorId = floorId;
+        entity.floorId = floorId.clone();
         newMap._addEntityInternal(entity);
 
         // 座標の設定

@@ -20,7 +20,7 @@ export class UTransfer {
      * 
      * @param cctx マップ遷移が発生する場合、STransferMapDialog を post する。
      */
-    public static transterRmmzDirectly(newMapId: number, newX: number, newY: number): void {
+    public static transterRmmzDirectly(newMapId: number, newX: number, newY: number, newDir: number): void {
         const landId = MRData.maps[newMapId].landId;
         const mapData = MRData.maps[newMapId];
         //let actualMapId = 0;
@@ -79,9 +79,11 @@ export class UTransfer {
         const playerEntity = MRLively.mapView.focusedEntity();
         if (playerEntity) {
             MRLively.world.transferEntity(playerEntity, floorId, actualX, actualY);
-        }
 
-        //$gamePlayer.reserveTransfer();
+            if (newDir !== 0) {
+                playerEntity.dir = newDir;
+            }
+        }
     }
 
     /**

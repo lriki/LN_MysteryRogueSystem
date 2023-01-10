@@ -591,7 +591,6 @@ export class UMovement {
             entity.mx = x;
             entity.my = y;
             newBlock.addEntity(toLayer, entity);
-            newBlock.setFootpoint(entity);
             this._postLocate(entity, oldBlock, newBlock, map, cctx);
             return true;
         }
@@ -610,6 +609,8 @@ export class UMovement {
     public static _postLocate(entity: LEntity, oldBlock: LBlock | undefined, newBlock: LBlock, map: LMap, cctx: SCommandContext | undefined) {
         assert(!entity.isOnOffstage());
 
+        newBlock.setFootpoint(entity);
+        
         if (MRLively.mapView.focusedEntityId().equals(entity.entityId())) {
             MRSystem.fovSystem.markBlockPlayerPassed(map, newBlock.mx, newBlock.my);
         }

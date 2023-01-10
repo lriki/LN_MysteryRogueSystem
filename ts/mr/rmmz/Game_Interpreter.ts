@@ -9,21 +9,37 @@ import { LEntity } from "../lively/LEntity";
 import { MRLively } from "../lively/MRLively";
 import { SEntityFactory } from "../system/internal";
 import { MRSystem } from "../system/MRSystem";
-import { Game_MRInterpreterContext } from "./Game_MRInterpreterContext";
+import { Game_MREventScriptRunner } from "./Game_MREventScriptRunner";
 
 declare global {
     interface Game_Interpreter {
-        _MR_gameInterpreterContext: Game_MRInterpreterContext | undefined;
+        _MR_EventScriptRunnerId: number | undefined;
 
-        getMRInterpreterContext(): Game_MRInterpreterContext;
+        getMRInterpreterContext(): Game_MREventScriptRunner;
+        nextEventCommand(): IDataList | undefined;
+        MR_resetList(list: IDataList[], index: number): void;
     }
 }
 
-Game_Interpreter.prototype.getMRInterpreterContext = function(): Game_MRInterpreterContext {
-    if (!this._MR_gameInterpreterContext) {
-        this._MR_gameInterpreterContext = new Game_MRInterpreterContext();
+Game_Interpreter.prototype.getMRInterpreterContext = function(): Game_MREventScriptRunner {
+    assert(this._MR_EventScriptRunnerId);
+    return $gameSystem.getMREventScriptRunnerManager().getRunner(this._MR_EventScriptRunnerId);
+}
+
+Game_Interpreter.prototype.nextEventCommand = function(): IDataList | undefined {
+    const command = this._list[this._index + 1];
+    if (command) {
+        return command;
+    } else {
+        return undefined;
     }
-    return this._MR_gameInterpreterContext;
+};
+
+Game_Interpreter.prototype.MR_resetList = function(list: IDataList[], index: number): void {
+    this._list = list;
+    this._index = index;
+    this._waitCount = 0;
+    this._waitMode = "";
 }
 
 const _Game_Interpreter_setup = Game_Interpreter.prototype.setup;
@@ -48,6 +64,20 @@ Game_Interpreter.prototype.updateWaitMode = function(): boolean {
     else {
         return _Game_Interpreter_updateWaitMode.call(this);
     }
+}
+
+const _Game_Interpreter_command101 = Game_Interpreter.prototype.command101;
+Game_Interpreter.prototype.command101 = function(params: any): boolean {
+    const result = _Game_Interpreter_command101.call(this, params);
+
+    const next = this.nextEventCommand();
+    console.log("next!!", next);
+    if (next && next.code == 357 && next.parameters[1] == "MR-ShowPostTalkDialog") {
+        this._index++;
+        this.command357(next.parameters);
+    }
+
+    return result;
 }
 
 // [条件分岐] Conditional Branch
@@ -104,7 +134,7 @@ const _Game_Interpreter_command201 = Game_Interpreter.prototype.command201;
 Game_Interpreter.prototype.command201 = function(params: any): boolean {
     if (!_Game_Interpreter_command201.call(this, params)) return false;
 
-    UTransfer.transterRmmzDirectly($gamePlayer._newMapId, $gamePlayer._newX, $gamePlayer._newY);
+    UTransfer.transterRmmzDirectly($gamePlayer._newMapId, $gamePlayer._newX, $gamePlayer._newY, $gamePlayer._newDirection);
     return true;
 }
 

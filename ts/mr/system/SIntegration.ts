@@ -12,7 +12,8 @@ import { SDialog } from "./SDialog";
 import { SDialogContext } from "./SDialogContext";
 import { assert } from "../Common";
 import { DRmmzUniqueSpawnerAnnotation } from "../data/importers/DAnnotationReader";
-import { DUniqueSpawner } from "../data/DSpawner";
+import { DEntitySpawner } from "../data/DSpawner";
+import { LScriptContext } from "../lively/LScript";
 
 export abstract class SIntegration {
     public abstract onEventPublished(eventId: DEventId, args: any, handled: boolean): void;
@@ -38,7 +39,7 @@ export abstract class SIntegration {
     
     abstract onLoadFixedMapEvents(): void;
 
-    abstract onGetFixedMapUnqueSpawners(): DUniqueSpawner[];
+    abstract onGetFixedMapUnqueSpawners(): DEntitySpawner[];
 
     abstract onMapSetupCompleted(map: LMap): void;
 
@@ -81,6 +82,7 @@ export abstract class SIntegration {
 
     abstract onEquipmentChanged(entity: LEntity): void;
 
+    abstract onStartEventScript(script: LScriptContext): void;
 
     //--------------------
     // Visual notifications

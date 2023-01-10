@@ -44,6 +44,13 @@ export class DQuest {
     - 選択肢がひとつもなければ、「さようなら」も表示しない。
     ということで、クエスト会話用ページの先頭に注釈で発生条件を示し、書いていくようにしてみる。
 
+    ### MR-AddPostTalkCommand と MR-ShowPostTalkDialog を使う方式は？
+    これを使うのは、現在の会話の文脈で、独自の選択肢を表示したいときに使う。
+    例えばあらかじめ MR-AddPostTalkCommand しておくと、MR-ShowPostTalkDialog したときに、
+    - それらのコマンド
+    - 有効なクエスト用の選択肢
+    がまとめて表示される。
+
 
     実装 - お届け物クエスト、特定アイテムの納品
     ----------
@@ -106,6 +113,41 @@ export class DQuest {
 
     ラベルを利用するのは現実的か？
     → アリだと思う。でも Quest と Chronous は無理に分離してコモンイベントで結び付けようとすると、かえって複雑になってしまうかも。
+
+
+    Prefab のイベントページを Behavior スクリプトとする？
+    ----------
+    ラベルを使えば疑似的な関数を表現できる。
+
+    ```
+    ラベル: MRQuery-GetPostTalkCommands
+        if (プラグインコマンド: MR.isQuestTaskActive("kQuestTask_薬草の採取_1")
+            MR-AddPostTalkCommand("薬草について…", "OnExecutePostTalkCommand_薬草")
+
+    ラベル: OnExecutePostTalkCommand_薬草
+        if (...)
+            MR-CompleteQuestTask("kQuestTask_薬草の採取_1")
+        if (...)
+            MR-FailQuest("kQuest_薬草の採取")
+    ```
+
+    受託待ちクエストの発生やデイリークエストの発生はどうする？
+    ----------
+    World 全体を通して使用できる Behavior が要るかも。
+
+    メインクエストのような１回のみ発生するものであれば事前定義でもよい気がするが、
+    ランダムデイリー(地域ごとの発生最大数つき)はどうだろう？
+
+    ### ランダムデイリー
+    - Randomと地域名のタグを振っておく。
+    - マップごとにイベントを配置するとマップ外からの実行が大変なので、コモンイベントにする。
+    ```
+    ラベル: MRQuery-OnAdvanceDay
+        MRQuery-AbandonQuestFromTags("Random,地域名")   # 現在発生しているクエストを終了
+        MRQuery-OpenQuestFromTags("Random,地域名", 4)  # 最大4つ
+    ```
+
+
     */
 }
 
