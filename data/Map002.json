@@ -9059,7 +9059,7 @@
           "directionFix": false,
           "image": {
             "tileId": 0,
-            "characterName": "MR-Actor1-X",
+            "characterName": "Actor1",
             "direction": 2,
             "pattern": 1,
             "characterIndex": 0

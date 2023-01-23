@@ -22,44 +22,66 @@
  *
  * @param Group_Inventory
  * @text 持ち物
- * @default --------------------
+ * @default ------------------------------
  * 
  * @param InventoryCapacity
- * @text 持ち物の最大数
  * @parent Group_Inventory
- * @default 24
+ * @text 持ち物の最大数
  * @type number
+ * @default 24
  * 
  * @param InventoryItemsPerPage
- * @text ウィンドウの1ページ分のアイテム数
  * @parent Group_Inventory
- * @default 12
+ * @text ウィンドウの1ページ分のアイテム数
  * @type number
+ * @default 12
  * 
  * @param Group_Map
  * @text マップ
- * @default --------------------
-  * 
+ * @default ------------------------------
+* 
  * @param RandomMapPaddingX
+ * @parent Group_Map
  * @text ランダムマップの外周幅 (上下)
  * @desc ランダムマップ作成時の、マップ外周の侵入不可領域の大きさです。ゲーム画面のサイズに応じて、プレイヤーキャラを画面中央に表示するために変更できます。
- * @parent Group_Map
- * @default 8
  * @type number
+ * @default 8
  *
  * @param RandomPaddingY
+* @parent Group_Map
  * @text ランダムマップの外周幅 (左右)
  * @desc ランダムマップ作成時の、マップ外周の侵入不可領域の大きさです。ゲーム画面のサイズに応じて、プレイヤーキャラを画面中央に表示するために変更できます。
- * @parent Group_Map
- * @default 6
  * @type number
+ * @default 6
  *
  * @param SuspendMenuEnabled
  * @text [中断] メニューの表示有無
  * @desc MRタクティクスマップ上でのメニュー画面で、[中断] を表示するかどうかを指定します。
- * @default false
  * @type boolean
+ * @default false
  *
+ * @param Group_System
+ * @text システム
+ * @default ------------------------------
+  * 
+ * @param SyncActorParams
+ * @text ステータスの同期
+ * @desc エンティティからアクターへステータスを同期します。
+ * @parent Group_System
+ * @type boolean
+ * @default true
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ * @param Group_Experimental
+ * @text 試験的な機能
+ * @default ------------------------------
+ *
+ * @param UIMode
+ * @text UIモード
+ * @parent Group_Experimental
+ * @default Traditional
+ * @type string
  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *

@@ -2,6 +2,7 @@
 import "./mr/lively/Extensions";
 
 import "./mr/rmmz/DataManager";
+import "./mr/rmmz/Game_BattlerBase";
 import "./mr/rmmz/Game_CharacterBase";
 import "./mr/rmmz/Game_Player";
 import "./mr/rmmz/Game_Event";

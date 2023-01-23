@@ -1,5 +1,7 @@
 import { SGameManager } from "../system/SGameManager";
 import { DHelpers } from "../data/DHelper";
+import { paramForceSync } from "../PluginParameters";
+import { MRLively } from "../lively/MRLively";
 
 /*
  [2020/11/2] マップ読み込みメモ
@@ -49,6 +51,22 @@ const _DataManager_createGameObjects = DataManager.createGameObjects;
 DataManager.createGameObjects = function() {
     _DataManager_createGameObjects.call(this);
     SGameManager.createGameObjects();
+
+    // Link UniqueUnit and Game_Actor
+    if (paramForceSync) {
+        for (const entityId of MRLively.system.uniqueActorUnits) {
+            const entity = MRLively.world.entity(entityId);
+            if (entity) {
+                const actorId = entity.data.actor?.rmmzActorId;
+                if (actorId) {
+                    const gameActor = $gameActors.actor(actorId);
+                    if (gameActor) {
+                        gameActor._entityId_MR = entityId.clone();
+                    }
+                }
+            }
+        }
+    }
 }
 
 const _DataManager_setupNewGame = DataManager.setupNewGame;

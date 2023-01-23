@@ -1,4 +1,8 @@
 import { MRLively } from "ts/mr/lively/MRLively";
+import { paramUIMode } from "../PluginParameters";
+import { VPlayerStatusWindow2 } from "./rules/default/VPartyStatusWindow";
+import { VSceneMapView_Default } from "./rules/default/VSceneMapView_Default";
+import { VSceneMapView } from "./rules/VSceneMapView";
 import { VHudWindow } from "./VHudWindow";
 import { VFloorNameWindow } from "./windows/VFloorNameWindow";
 import { VMessageLogWindow } from "./windows/VMessageLogWindow";
@@ -13,10 +17,11 @@ import { VWindowHelper } from "./windows/VWindowHelper";
 export class VMessageWindowSet {
 
     private _scene: Scene_Map;
+    private _sceneMapView: VSceneMapView | undefined;
     
-    private _hudSpriteSet: VHudWindow;
+    private _hudSpriteSet: VHudWindow | undefined;
 
-    private _logWindow: VMessageLogWindow;
+    private _logWindow: VMessageLogWindow | undefined;
     //private _messageWindow: VMessageWindow;
 
     // コアスクリプトのフェード機能は Window 全体にも影響する。つまり、黒画面の上に文字だけ出すような演出ができない。
@@ -32,8 +37,6 @@ export class VMessageWindowSet {
     constructor(scene: Scene_Map) {
         this._scene = scene;
 
-        this._hudSpriteSet = new VHudWindow();
-        this._scene.addWindow(this._hudSpriteSet);
 
 
         this._shadowBitmap = new Bitmap(32, 32);
@@ -45,8 +48,6 @@ export class VMessageWindowSet {
         //this._shadowSprite.visible = false;
         scene._spriteset.addChild(this._shadowSprite);
 
-        this._logWindow = new VMessageLogWindow(MRLively.messageHistory, this.messageWindowRect());
-        this._scene.addWindow(this._logWindow);
 
         //this._messageWindow = new VMessageWindow(REGame.message, this.messageWindowRect());
         //this._scene.addWindow(this._messageWindow);
@@ -59,10 +60,16 @@ export class VMessageWindowSet {
         this._fadeOpacity = 0;
         this._fadeSign = 0;
 
-    }
-
-    public get messageLogWindow(): VMessageLogWindow {
-        return this._logWindow;
+        if (paramUIMode.toLowerCase() === "traditional") {
+            this._hudSpriteSet = new VHudWindow();
+            this._scene.addWindow(this._hudSpriteSet);
+            
+            this._logWindow = new VMessageLogWindow(MRLively.messageHistory, this.messageWindowRect());
+            this._scene.addWindow(this._logWindow);
+        }
+        else {
+            this._sceneMapView = new VSceneMapView_Default(scene);
+        }
     }
 
     private messageWindowRect(): Rectangle {
@@ -109,6 +116,10 @@ export class VMessageWindowSet {
         }
 
         this._shadowSprite.opacity = this._fadeOpacity;
+
+        if (this._sceneMapView) {
+            this._sceneMapView.update();
+        }
     }
 }
 

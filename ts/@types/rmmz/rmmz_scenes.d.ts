@@ -4,6 +4,24 @@
 // Definitions: https://github.com/borisyankov/DefinitelyTyped
 
 
+
+/**
+ * -----------------------------------------------------------------------------
+ * The layer which contains game windows.
+ * 
+ * @class
+ * @extends PIXI.Container
+ */
+declare interface WindowLayer extends PIXI.Container {
+		
+	/**
+	 * 
+	 * @return  
+	 */
+	new (): WindowLayer;
+}
+
+
 /**
  * -----------------------------------------------------------------------------
  * Scene_Base

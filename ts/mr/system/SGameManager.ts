@@ -19,7 +19,7 @@ import { SMinimapData } from "./SMinimapData";
 import { LScheduler2 } from "ts/mr/lively/LScheduler";
 import { FMap } from "ts/mr/floorgen/FMapData";
 import { FMapBuilder } from "ts/mr/floorgen/FMapBuilder";
-import { paramRandomMapPaddingX, paramRandomMapPaddingY, paramRandomMapDefaultHeight, paramRandomMapDefaultWidth } from "ts/mr/PluginParameters";
+import { paramRandomMapPaddingX, paramRandomMapPaddingY, paramRandomMapDefaultHeight, paramRandomMapDefaultWidth, paramForceSync } from "ts/mr/PluginParameters";
 import { FGenericRandomMapGenerator } from "ts/mr/floorgen/FGenericRandomMapGenerator";
 import { SMapManager } from "./SMapManager";
 import { LUnitBehavior } from "ts/mr/lively/behaviors/LUnitBehavior";

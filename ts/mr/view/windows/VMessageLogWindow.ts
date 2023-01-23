@@ -28,6 +28,10 @@ interface TextLineState {
  */
 export class VMessageLogWindow extends Window_Base {
 
+    public _autoCloseEnabled: boolean;
+    public textPaddingX: number;
+    public lineWidth: number | undefined;
+
     private _message: LMessageHistory;
     private _waitCount: number = 0;
     private _autoScroll: boolean = true;;
@@ -35,7 +39,6 @@ export class VMessageLogWindow extends Window_Base {
     private _autoScrollCountMax: number = 10;
     private _maxLines: number = 2;
 
-    public _autoCloseEnabled: boolean;
     private _autoCloseCount: number = 0;
     private _autoCloseCountMax: number = 200;
     private _lineSpriteCache: Sprite[] = [];
@@ -44,6 +47,7 @@ export class VMessageLogWindow extends Window_Base {
     constructor(message: LMessageHistory, rect: Rectangle) {
         super(rect);
         this._autoCloseEnabled = true;
+        this.textPaddingX = 4;
         this._message = message;
         this.openness = 0;
         this.initMembers();
@@ -224,8 +228,7 @@ export class VMessageLogWindow extends Window_Base {
     }
     
     private newLineX(textState: TextLineState) {
-        const margin = 4;
-        return textState.rtl ? this.innerWidth - margin : margin;
+        return textState.rtl ? this.innerWidth - this.textPaddingX : this.textPaddingX;
     }
 
     private canScrollStart() {
@@ -359,7 +362,7 @@ export class VMessageLogWindow extends Window_Base {
             return sprite;
         }
         else {
-            const bitmap = new Bitmap(this.width, this.lineHeight());
+            const bitmap = new Bitmap(this.lineWidth ?? this.width, this.lineHeight());
             bitmap.fontSize = $gameSystem.mainFontSize();
             const sprite = new Sprite(bitmap);
             this._clientArea.addChild(sprite);

@@ -16,6 +16,13 @@ function getBoolean(key: string, defaultValue: boolean): boolean {
     return v.toLowerCase() === 'true';
 }
 
+function getString(key: string, defaultValue: string): string {
+    if (typeof PluginManager == "undefined") return defaultValue;
+    const v = PluginManager.parameters(pluginName)[key];
+    if (v === undefined) return defaultValue;
+    return v;
+}
+
 // 固定マップで部屋をマークするためのリージョンID
 export var paramFixedMapRoomRegionId = 1;
 
@@ -79,6 +86,9 @@ export const paramInventoryCapacity = getNumber("InventoryCapacity", 24);
 // ウィンドウの1ページ分のアイテム数
 export const paramInventoryItemsPerPage = getNumber("InventoryItemsPerPage", 12);
 
+export const paramUIMode = getString("UIMode", "Traditional"); //"Default");//
+
+export const paramForceSync = getBoolean("SyncActorParams", true);
 
 //Maximum number of items in the map
 

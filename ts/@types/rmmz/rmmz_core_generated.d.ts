@@ -827,22 +827,6 @@ declare interface ScreenSprite {
 
 
 /**
- * The layer which contains game windows.
- * 
- * @class
- * @extends PIXI.Container
- */
-declare interface WindowLayer {
-		
-	/**
-	 * 
-	 * @return  
-	 */
-	new (): WindowLayer;
-}
-
-
-/**
  * The weather effect which displays rain, storm, or snow.
  * 
  * @class

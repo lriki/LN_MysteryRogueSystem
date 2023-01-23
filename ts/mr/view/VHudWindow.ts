@@ -9,7 +9,7 @@ import { VTextImage } from "./ui/VTextImage";
 
 const gaugeHeight = 6;
 
-export class VHudWindow extends Window_Base {
+export class VHudWindow extends Window_StatusBase {
     static readonly HeaderHeight = 70;
     //private _floorNumberBitmap: Bitmap;
     //private _floorNumberSprite: Sprite;
@@ -57,7 +57,8 @@ export class VHudWindow extends Window_Base {
         this.refresh();
     }
 
-    private refresh() {
+    override refresh() {
+        super.refresh();
         this.contents.clear();
 
         const entity = MRLively.mapView.focusedEntity();
@@ -83,6 +84,8 @@ export class VHudWindow extends Window_Base {
         this.drawLevel(150, 0, level, extRatio);
         this.drawHpFp(300, 0, hp, mhp, fp, mfp);
         this.drawGold(inventory.gold());
+
+        //this.placeBasicGauges($gameParty.members()[0], 0, 0);
     }
 
     update() {

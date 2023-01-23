@@ -37,6 +37,7 @@ declare class Window extends PIXI.Container {
 	_contentsSprite: Sprite;
 	_contentsBackSprite: Sprite;
 	_container: PIXI.Container;
+	_isWindow: boolean;;
 
     constructor();
 
@@ -1870,6 +1871,152 @@ class Window_NameEdit extends Window_StatusBase {
 	 * 
 	 */
 	_maxLength : number;
+}
+
+
+/**
+ * -----------------------------------------------------------------------------
+ * Window_BattleStatus
+ * 
+ * The window for displaying the status of party members on the battle screen.
+ */
+class Window_BattleStatus extends Window_StatusBase {
+		
+	/**
+	 * 
+	 * @param rect 
+	 */
+	initialize(rect : any): void;
+		
+	/**
+	 * 
+	 * @return  
+	 */
+	extraHeight(): number;
+		
+	/**
+	 * 
+	 * @return  
+	 */
+	maxCols(): number;
+		
+	/**
+	 * 
+	 * @return  
+	 */
+	itemHeight(): /* !this.innerHeight */ any;
+		
+	/**
+	 * 
+	 * @return  
+	 */
+	maxItems(): number;
+		
+	/**
+	 * 
+	 * @return  
+	 */
+	rowSpacing(): number;
+		
+	/**
+	 * 
+	 */
+	updatePadding(): void;
+		
+	/**
+	 * 
+	 * @param index 
+	 * @return  
+	 */
+	actor(index : number): Game_Actor;
+		
+	/**
+	 * 
+	 * @param actor 
+	 */
+	selectActor(actor : Game_Actor): void;
+		
+	/**
+	 * 
+	 */
+	update(): void;
+		
+	/**
+	 * 
+	 */
+	preparePartyRefresh(): void;
+		
+	/**
+	 * 
+	 */
+	performPartyRefresh(): void;
+		
+	/**
+	 * 
+	 * @param index 
+	 */
+	drawItem(index : number): void;
+		
+	/**
+	 * 
+	 * @param index 
+	 */
+	drawItemImage(index : number): void;
+		
+	/**
+	 * 
+	 * @param index 
+	 */
+	drawItemStatus(index : number): void;
+		
+	/**
+	 * 
+	 * @param index 
+	 * @return  
+	 */
+	faceRect(index : any): Window_BattleStatus.prototype.FaceRectRet;
+		
+	/**
+	 * 
+	 * @param rect 
+	 * @return  
+	 */
+	nameX(rect : /* Window_Selectable.prototype.itemRectWithPadding.!ret */ any):  /* error */ any;
+		
+	/**
+	 * 
+	 * @param rect 
+	 * @return  
+	 */
+	nameY(rect : /* Window_Selectable.prototype.itemRectWithPadding.!ret */ any | /* Window_BattleStatus.prototype.faceRect.!ret */ any): number;
+		
+	/**
+	 * 
+	 * @param rect 
+	 * @return  
+	 */
+	stateIconX(rect : /* Window_Selectable.prototype.itemRectWithPadding.!ret */ any): number;
+		
+	/**
+	 * 
+	 * @param rect 
+	 * @return  
+	 */
+	stateIconY(rect : /* Window_Selectable.prototype.itemRectWithPadding.!ret */ any): number;
+		
+	/**
+	 * 
+	 * @param rect 
+	 * @return  
+	 */
+	basicGaugesX(rect : /* Window_Selectable.prototype.itemRectWithPadding.!ret */ any):  /* error */ any;
+		
+	/**
+	 * 
+	 * @param rect 
+	 * @return  
+	 */
+	basicGaugesY(rect : /* Window_Selectable.prototype.itemRectWithPadding.!ret */ any | /* Window_BattleStatus.prototype.faceRect.!ret */ any): number;
 }
 
 }
