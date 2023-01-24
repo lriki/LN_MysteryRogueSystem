@@ -142,7 +142,6 @@ export class LInventoryBehavior extends LBehavior {
         this._entities.splice(0);
 
         this._gold = 0;
-        this._capacity = 0;
     }
 
     public get capacity(): number {
