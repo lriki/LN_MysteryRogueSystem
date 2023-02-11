@@ -1,3 +1,4 @@
+import { HMovement } from "ts/mr/lively/helpers/HMovement";
 import { LMap } from "ts/mr/lively/LMap";
 import { paramDefaultVisibiltyLength } from "ts/mr/PluginParameters";
 import { UMovement } from "ts/mr/utility/UMovement";
@@ -12,7 +13,7 @@ export class SRoomBoundsFovSystem extends SFovSystem {
             const room = map.room(block._roomId);
             if (room.poorVisibility) {
                 room.forEachSightableBlocks(b => {
-                    if (UMovement.blockDistance(block.mx, block.my, b.mx, b.my) <= paramDefaultVisibiltyLength) {
+                    if (HMovement.blockDistance(block.mx, block.my, b.mx, b.my) <= paramDefaultVisibiltyLength) {
                         b._passed = true;
                     }
                 });

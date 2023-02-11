@@ -109,6 +109,15 @@ export class LMapView {  // TODO: MapView とかの方がいいかもしれな�
     clearFocus() {
         this._focusedEntityId = LEntityId.makeEmpty();
     }
+    
+
+    public get isFastForward(): boolean {
+        const entty = this.focusedEntity();
+        if (!entty) return false;
+        const behavior = entty.findEntityBehavior(LUnitBehavior);
+        if (!behavior) return false;
+        return behavior.dashInfo != undefined || behavior._fastforwarding;
+    }
 
     // isFloorTransfering(): boolean {
     //     return this._transferingNewFloorId.hasAny();

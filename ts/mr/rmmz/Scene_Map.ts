@@ -213,3 +213,27 @@ Scene_Map.prototype.needsFadeIn = function() {
         return _Scene_Map_needsFadeIn.call(this);
     }
 }
+
+
+
+// const _Scene_Map_isMapTouchOk = Scene_Map.prototype.isMapTouchOk;
+// Scene_Map.prototype.isMapTouchOk = function() {
+//     if (MRLively.mapView.currentMap.floorId().isTacticsMap2) {
+//     }
+//     else {
+//     }
+// }
+
+// const _Scene_Map_onMapTouch = Scene_Map.prototype.onMapTouch;
+// Scene_Map.prototype.onMapTouch = function() {
+//     console.log("onMapTouch");
+//     if (MRLively.mapView.currentMap.floorId().isTacticsMap2) {
+//         const x = $gameMap.canvasToMapX(TouchInput.x);
+//         const y = $gameMap.canvasToMapY(TouchInput.y);
+//         console.log("onMapTouch: " + x + ", " + y);
+//     }
+//     else {
+//         _Scene_Map_onMapTouch.call(this);
+//     }
+// }
+

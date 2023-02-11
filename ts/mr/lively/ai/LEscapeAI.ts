@@ -12,6 +12,7 @@ import { MRSerializable } from "ts/mr/Common";
 import { LMoveDeterminer } from "./LMoveDeterminer";
 import { LActionTokenConsumeType } from "../LCommon";
 import { UBlock } from "ts/mr/utility/UBlock";
+import { HMovement } from "../helpers/HMovement";
 
 @MRSerializable
 export class LEscapeAI extends LCharacterAI {
@@ -151,7 +152,7 @@ export class LEscapeAI extends LCharacterAI {
                 
                 // まず背面にまったく移動できないかチェック
                 const blocks = UMovement.getWay3FrontBlocks(self, rdir);
-                if (!blocks.find(b => UMovement.checkPassageBlockToBlock(self, block, b, MovingMethod.Walk))) {
+                if (!blocks.find(b => HMovement.checkPassageBlockToBlock(self, block, b, MovingMethod.Walk))) {
 
                     if (!UMovement.checkAdjacentPositions(self.mx, self.my, target.mx, target.my)) {
                         // 隣接していなければ相手を向いて待機。

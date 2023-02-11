@@ -90,6 +90,8 @@ export const paramUIMode = getString("UIMode", "Traditional"); //"Default");//
 
 export const paramForceSync = getBoolean("SyncActorParams", true);
 
+export const paramTouchMoveEnabled = false;
+
 //Maximum number of items in the map
 
 /*

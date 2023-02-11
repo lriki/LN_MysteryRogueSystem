@@ -63,6 +63,7 @@ export class MRDataManager {
         this._loadTasks.push((n) => this.importLandDatabase(n));
         this._loadTasks.push((n) => this.importTemplateMaps(n));
         this._loadTasks.push((n) => this.importSetupScript(n));
+        this._loadTasks.push((n) => this.notifyDatabaseReady(n));
         
         if (DHelpers.isNode()) {
             this._currentTask = this._loadTasks.shift();
@@ -1344,8 +1345,11 @@ export class MRDataManager {
                 }
             });
         }
+    }
 
-
+    private static notifyDatabaseReady(next: NextFunc): void {
+        MRData.ext?.onDatabaseLoaded();
+        next();
     }
     
     private static beginLoadMapData(rmmzMapId: number, onLoad: (obj: any) => void) {

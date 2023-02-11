@@ -342,7 +342,6 @@ export abstract class LBehavior extends LObject {
      */
     public onQueryReactions(self: LEntity, reactions: LReaction[]): void { }
 
-    public onQueryCharacterAI(characterAIs: LCharacterAI[]): void { }
     
     // Game_Actor.prototype.attackAnimationId1
     // Game_Actor.prototype.attackAnimationId2

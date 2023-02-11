@@ -9,7 +9,7 @@ import { assert, MRSerializable, tr, tr2 } from "ts/mr/Common";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { UMovement } from "ts/mr/utility/UMovement";
 import { SEffectContext, SEffectSubject } from "ts/mr/system/SEffectContext";
-import { LActivity } from "../activities/LActivity";
+import { LActivity, LDashInfo, LDashType } from "../activities/LActivity";
 import { DescriptionHighlightColor, LEntityDescription } from "../LIdentifyer";
 import { SSoundManager } from "ts/mr/system/SSoundManager";
 import { DFactionId, MRData } from "ts/mr/data/MRData";
@@ -50,7 +50,8 @@ export class LUnitBehavior extends LBehavior {
     _manualMovement: boolean = false;    // マニュアル操作するかどうか。
     _targetingEntityId: number = 0;   // AIMinor Phase で、攻撃対象を確定したかどうか。以降、Run 内では iterationCount が残っていても MinorAction を行わない
 
-    _straightDashing: boolean = false;
+    //_straightDashing: boolean = false;
+    dashInfo: LDashInfo | undefined = undefined;
     _fastforwarding: boolean = false;
     
     public clone(newOwner: LEntity): LBehavior {
@@ -60,7 +61,7 @@ export class LUnitBehavior extends LBehavior {
         b._waitTurnCount = this._waitTurnCount;
         b._manualMovement = this._manualMovement;
         b._targetingEntityId = this._targetingEntityId;
-        b._straightDashing = this._straightDashing;
+        b.dashInfo = this.dashInfo ? {...this.dashInfo} : undefined;
         b._fastforwarding = this._fastforwarding;
         return b;
     }
@@ -81,7 +82,7 @@ export class LUnitBehavior extends LBehavior {
     setManualMovement(value: boolean): LUnitBehavior { this._manualMovement = value; return this; }
 
     public clearStraightDashing(): void {
-        this._straightDashing = false;
+        this.dashInfo = undefined;
     }
 
 
@@ -167,7 +168,7 @@ export class LUnitBehavior extends LBehavior {
     }
 
     onEffectSensed(self: LEntity, cctx: SCommandContext): SCommandResponse { 
-        this._straightDashing = false;
+        this.dashInfo = undefined;
         return SCommandResponse.Pass;
      }
 
@@ -210,8 +211,9 @@ export class LUnitBehavior extends LBehavior {
             const args: WalkEventArgs = { walker: self, targetX: self.mx + offset.x, targetY: self.my + offset.y };
             if (!MRLively.eventServer.publish(cctx, MRBasics.events.preWalk, args)) return SCommandResponse.Canceled;
 
-            if (activity.isFastForward()) {
-                this._straightDashing = true;
+            const dashInfo = activity.args();
+            if (dashInfo && (dashInfo as LDashInfo)) {
+                this.dashInfo = dashInfo;
             }
 
             const layer = self.getHomeLayer();
@@ -625,7 +627,7 @@ export class LUnitBehavior extends LBehavior {
                     if (reactions.length > 0) {
                         if (!!reactions.find(x => x.actionId == MRBasics.actions.PickActionId) &&
                             !targetEntity._shopArticle.isSalling()) {
-                            if (this._straightDashing) {
+                            if (this.dashInfo && this.dashInfo.type == LDashType.StraightDash) {
                                 return [LFeetProcess.RideOnMessage, targetEntity];
                             }
                             else {

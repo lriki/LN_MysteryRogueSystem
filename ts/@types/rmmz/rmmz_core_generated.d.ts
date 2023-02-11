@@ -1740,12 +1740,12 @@ declare namespace TouchInput{
 	/**
 	 * 
 	 */
-	export var _x : number;
+	export var x : number;
 		
 	/**
 	 * 
 	 */
-	export var _y : number;
+	export var y : number;
 		
 	/**
 	 * 

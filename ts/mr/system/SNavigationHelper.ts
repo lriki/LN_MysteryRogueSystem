@@ -3,6 +3,7 @@ import { LEntity } from "ts/mr/lively/LEntity";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { MRBasics } from "../data/MRBasics";
 import { LExitPointBehavior } from "../lively/behaviors/LExitPointBehavior";
+import { HMovement } from "../lively/helpers/HMovement";
 import { paramDefaultVisibiltyLength } from "../PluginParameters";
 import { UMovement } from "../utility/UMovement";
 import { Helpers } from "./Helpers";
@@ -56,7 +57,7 @@ export class SNavigationHelper {
             const room = map.room(subject.roomId());
             if (room.poorVisibility) {
                 // 視界不明瞭マップでは視界半径をチェック
-                if (UMovement.blockDistance(subject.mx, subject.my, target.mx, target.my) <= paramDefaultVisibiltyLength) {
+                if (HMovement.blockDistance(subject.mx, subject.my, target.mx, target.my) <= paramDefaultVisibiltyLength) {
                     return true;
                 }
             }

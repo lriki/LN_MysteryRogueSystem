@@ -26,7 +26,7 @@
                 "--coverage", "false",
 
                 // 個別テスト実行
-                "-t", "concretes.item.ring.SleepGuardRing",
+                "-t", "extension.Extension.Basic",
             ],
             "cwd": "${workspaceRoot}",
             "console": "integratedTerminal",

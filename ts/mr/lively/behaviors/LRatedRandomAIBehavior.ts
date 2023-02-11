@@ -33,10 +33,6 @@ export class LRatedRandomAIBehavior extends LBehavior {
         return LBehaviorGroup.SpecialAbility;
     }
 
-    onQueryCharacterAI(characterAIs: LCharacterAI[]): void {
-        characterAIs.push(this._characterAI);
-    }
-
     onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult {
 
         if (phase == DecisionPhase.Manual) {

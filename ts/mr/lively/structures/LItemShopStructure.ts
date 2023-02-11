@@ -9,6 +9,7 @@ import { UMovement } from "ts/mr/utility/UMovement";
 import { LEntityId } from "../LObject";
 import { DFactionId, MRData } from "ts/mr/data/MRData";
 import { LRoomId } from "../LCommon";
+import { HMovement } from "../helpers/HMovement";
 
 // 店の入り口情報
 @MRSerializable
@@ -24,7 +25,7 @@ export class LShopEntrance {
     }
 
     public setup(homeX: number, homeY: number, gateX: number, gateY: number): void {
-        assert(UMovement.blockDistance(homeX, homeY, gateX, gateY) == 1);
+        assert(HMovement.blockDistance(homeX, homeY, gateX, gateY) == 1);
         this._homeX = homeX;
         this._homeY = homeY;
         this._gateX = gateX;

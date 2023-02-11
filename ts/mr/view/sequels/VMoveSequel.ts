@@ -16,7 +16,7 @@ export class REVisualSequel_Move extends VSequel {
     private _curveY: VKeyFrameAnimationCurve | undefined;
 
     onUpdate(visual: VEntity, context: VSequelContext): void {
-        if (context.isDashing()) {
+        if (context.isFastForward()) {
             // ダッシュ中は座標をそろえて即終了
             context.unlockCamera();
             visual.resetPosition();

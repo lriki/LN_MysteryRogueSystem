@@ -15,6 +15,7 @@ export class Helpers {
         return this._dirToTileOffsetTable[dir];
     }
 
+    /** @deprecated HMovement */
     public static offsetToDir(offsetX: number, offsetY: number): number {
         if (offsetX == 0) {
             if (offsetY == 0) {

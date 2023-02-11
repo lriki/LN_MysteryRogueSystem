@@ -1,5 +1,6 @@
 import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
 import { MRBasics } from "ts/mr/data/MRBasics";
+import { HMovement } from "ts/mr/lively/helpers/HMovement";
 import { LEffectResult } from "ts/mr/lively/LEffectResult";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { MovingMethod } from "ts/mr/lively/LMap";
@@ -17,7 +18,7 @@ export class SDivisionSpecialEffect extends SSpecialEffect {
         result.makeSuccess();
 
         // 有効な隣接 Block があり、その方向へ移動可能かを調べる
-        const candidates = UMovement.getAdjacentBlocks(target).filter(b => UMovement.checkPassageBlockToBlock(target, block, b, MovingMethod.Walk));
+        const candidates = UMovement.getAdjacentBlocks(target).filter(b => HMovement.checkPassageBlockToBlock(target, block, b, MovingMethod.Walk));
         if (candidates.length > 1) {
             const newBlock = candidates[cctx.random().nextIntWithMax(candidates.length)];
             const newEntity = target.clone();

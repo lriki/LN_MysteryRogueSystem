@@ -16,6 +16,21 @@ export interface LEntityIdData {
     key: number;
 }
 
+export enum LDashType {
+    /** 直線ダッシュ。アイテムの前で止まる。 */
+    StraightDash,
+
+    /** iダッシュ。 */
+    PositionalDash,
+}
+
+export interface LDashInfo {
+    type: LDashType;
+    targetX?: number | undefined;
+    targetY?: number | undefined;
+}
+
+
 // LActivity を保存するためのデータ。
 // UnitTest では JsonEx が使えなかったり、JsonEx 使うと型情報を含むため Save/Load の時間が気になったりするので用意したもの。
 export interface LActivityData {
@@ -28,7 +43,7 @@ export interface LActivityData {
     direction: number;
     entityDirection: number;
     actionTokenConsumeType: LActionTokenConsumeType | undefined;
-    fastForward: boolean;
+    args: LDashInfo | undefined;
     selectedAction: string;
 }
 
@@ -54,7 +69,7 @@ export class LActivity {
     private _effectDirection: number;     // 行動に伴う向き。0 の場合は未指定。
     private _entityDirection: number;   // 行動前に Entity を向かせたい向き。0 の場合は向きを変更しない。
     private _actionTokenConsumeType: (LActionTokenConsumeType | undefined);
-    private _fastForward: boolean;  // ダッシュ移動など、本来 Activity を伴う個々のアクションをまとめて行うフラグ
+    private _args: LDashInfo | undefined;
     private _selectedAction: string;    // yes, no などの DialogResult
     //private _selectedItems: LEntityId[];
 
@@ -68,7 +83,7 @@ export class LActivity {
         this._effectDirection = 0;
         this._entityDirection = 0;
         this._actionTokenConsumeType = undefined;
-        this._fastForward = false;
+        this._args = undefined;
         this._selectedAction = "";
     }
 
@@ -81,7 +96,7 @@ export class LActivity {
         this._effectDirection = dir ?? 0;
         this._entityDirection = 0;
         this._actionTokenConsumeType = undefined;
-        this._fastForward = false;
+        this._args = undefined;
         this._selectedAction = "";
         return this;
     }
@@ -181,13 +196,13 @@ export class LActivity {
         return this._actionTokenConsumeType;
     }
 
-    public withFastForward(): this {
-        this._fastForward = true;
+    public withArgs(args: LDashInfo | undefined): this {
+        this._args = args;
         return this;
     }
 
-    public isFastForward(): boolean {
-        return this._fastForward;
+    public args(): LDashInfo | undefined {
+        return this._args;
     }
 
     public selectedAction(): string {
@@ -205,7 +220,7 @@ export class LActivity {
             direction: this._effectDirection,
             entityDirection: this._entityDirection,
             actionTokenConsumeType: this._actionTokenConsumeType,
-            fastForward: this._fastForward,
+            args: this._args,
             selectedAction: this._selectedAction,
         }
     }
@@ -221,7 +236,7 @@ export class LActivity {
         i._effectDirection = data.direction;
         i._entityDirection = data.entityDirection;
         i._actionTokenConsumeType = data.actionTokenConsumeType;
-        i._fastForward = data.fastForward;
+        i._args = data.args;
         i._selectedAction = data.selectedAction;
         return i;
     }

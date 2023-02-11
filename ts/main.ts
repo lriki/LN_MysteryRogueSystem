@@ -36,7 +36,5 @@ import "./mr/rmmz/PluginCommands";
 import "./mr/rmmz/JsonEx";
 import "./mr/ConsoleCommands";
 
-import "./extensions/index";
-
 export * from "./mr/data/index";
 

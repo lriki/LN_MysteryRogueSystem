@@ -11,6 +11,7 @@ import { LActivity } from "../activities/LActivity";
 import { LCharacterAI_Normal } from "../ai/LStandardAI";
 import { MRSerializable } from "ts/mr/Common";
 import { LActionTokenConsumeType } from "../LCommon";
+import { LRouteSearch } from "../helpers/LRouteSearch";
 
 /**
  * Scheduler から通知された各タイミングにおいて、行動決定を行う Behavior.
@@ -34,10 +35,6 @@ export class LDecisionBehavior extends LBehavior {
         return this._characterAI;
     }
 
-    onQueryCharacterAI(characterAIs: LCharacterAI[]): void {
-        characterAIs.push(this._characterAI);
-    }
-
     onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult {
 
         if (phase == DecisionPhase.Manual) {    // TODO: Manual っていう名前が良くない気がするので直したい。
@@ -45,18 +42,14 @@ export class LDecisionBehavior extends LBehavior {
             const unit = self.getEntityBehavior(LUnitBehavior);
             unit._fastforwarding = false;
 
-            if (unit._straightDashing && UMovement.checkDashStopBlock(self)) {
-                cctx.postActivity(LActivity.makeMoveToAdjacent(self, self.dir).withConsumeAction(LActionTokenConsumeType.MinorActed));
+            if (this.decideAutoMove(cctx, self, unit)) {
                 return SPhaseResult.Handled;
             }
-            else {
-                const dialog = new SPlayerDialog();
-                dialog.dashingEntry = unit._straightDashing;
-                cctx.openDialog(self, dialog, false);
-                unit.clearStraightDashing();
-                return SPhaseResult.Handled;
-            }
-
+            
+            const dialog = new SPlayerDialog();
+            cctx.openDialog(self, dialog, false);
+            unit.clearStraightDashing();
+            return SPhaseResult.Handled;
         }
         else if (phase == DecisionPhase.AIMinor) {
             if (this.forceMajorActivity) {
@@ -79,4 +72,29 @@ export class LDecisionBehavior extends LBehavior {
         return SPhaseResult.Pass;
     }
 
+    private decideAutoMove(cctx: SCommandContext, self: LEntity, unit: LUnitBehavior): boolean {
+
+        if (unit.dashInfo) {
+            let dir = self.dir;
+            if (unit.dashInfo.targetX !== undefined && unit.dashInfo.targetY !== undefined) {
+                if (self.mx == unit.dashInfo.targetX && self.my == unit.dashInfo.targetY) {
+                    return false;   // 到達済み
+                }
+
+                let d = LRouteSearch.findDirectionTo(MRLively.mapView.currentMap, self, self.mx, self.my, unit.dashInfo.targetX, unit.dashInfo.targetY);
+                if (d) {
+                    dir = d;
+                }
+            }
+
+            if (UMovement.checkDashStopBlock(self, dir, unit.dashInfo.type)) {
+                cctx.postActivity(LActivity.makeMoveToAdjacent(self, dir)
+                    .withEntityDirection(dir)
+                    .withConsumeAction(LActionTokenConsumeType.MinorActed));
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

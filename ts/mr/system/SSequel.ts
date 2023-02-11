@@ -2,6 +2,7 @@ import { assert } from "ts/mr/Common";
 import { DSequel, DSequelId } from "ts/mr/data/DSequel";
 import { MRData } from "../data/MRData";
 import { LEntity } from "../lively/LEntity";
+import { MRLively } from "../lively/MRLively";
 
 /**
  * Sequel
@@ -222,9 +223,11 @@ export class SWaitSequel extends SSequelUnit {
  */
 export class SSequelClip {
     private _sequels: SSequelUnit[];
+    public fastForward: boolean;       // ダッシュ移動が完全に完了するまでフラグを維持したいので、LEntity からは独立して持たせておく。
 
     constructor(firstItem: SSequelUnit) {
         this._sequels = [firstItem];
+        this.fastForward = MRLively.mapView.isFastForward;
     }
 
     sequels(): readonly SSequelUnit[] {

@@ -1,48 +1,8 @@
-// NOTE:
-//   https://qiita.com/t-toyota/items/93cce73004b9f765cfcf
-
-import { LUnitBehavior } from "ts/mr/lively/behaviors/LUnitBehavior";
 import { SPlayerDialog } from "ts/mr/system/dialogs/SPlayerDialog";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "./TestEnv";
-import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { MRBasics } from "ts/mr/data/MRBasics";
-import { MRData } from "ts/mr/data/MRData";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
-
-//import "js/rmmz_objects.js"
-
-//var aaa = require("./../js/rmmz_objects.js");
-//(global as any).Game_Temp = aaa.Game_Temp;
-
-
-/*
-const fs = require("fs");
-var ttttt = fs.readFileSync("./js/rmmz_objects.js").toString();
-//eval(ttttt);
-
-(window as any)["Game_Temp"] = function() {
-    // New class name constructor code
-};
-
-const gt = Game_Temp;
-const proto = Game_Temp.prototype;
-(window as any)["Game_Temp"].prototype = Game_Temp.prototype;
-
-(window as any)["Game_Temp"] = gt;
-*/
-
-
-
-//function Game_Temp() {
-    //this.initialize(...arguments);
-//}
-
-//eval("function Game_Temp() { }");
-
-
-//var ss = Game_Temp;
 
 beforeAll(() => {
     TestEnv.setupDatabase();
@@ -51,22 +11,7 @@ beforeAll(() => {
 afterAll(() => {
 });
 
-/*
-class BattlerAttr extends REGame_Attribute {
-
-}
-class ActorAttr extends BattlerAttr {
-    
-}
-*/
-
 test("Basic1", () => {
-    //const taa = aaa;
-    //const t = Game_Temp;
-    //const ac = new Game_Temp();
-   // const tc = ac._destinationY;
-   // ac._destinationX = 1000;
-
     // NewGame.
     TestEnv.newGame();
 

@@ -10,11 +10,13 @@ import { SDialogContext } from "ts/mr/system/SDialogContext";
 import { SMainMenuDialog } from "ts/mr/system/dialogs/SMainMenuDialog";
 import { VDialog } from "./VDialog";
 import { UMovement } from "ts/mr/utility/UMovement";
-import { LActivity } from "ts/mr/lively/activities/LActivity";
+import { LActivity, LDashType } from "ts/mr/lively/activities/LActivity";
 import { Helpers } from "ts/mr/system/Helpers";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 import { LActionTokenConsumeType } from "ts/mr/lively/LCommon";
 import { MRData } from "ts/main";
+import { HMovement } from "ts/mr/lively/helpers/HMovement";
+import { paramTouchMoveEnabled } from "ts/mr/PluginParameters";
 
 enum UpdateMode {
     Normal,
@@ -201,6 +203,17 @@ export class VPlayerDialog extends VDialog {
     private updateNormal(context: SDialogContext, entity: LEntity): void {
         let dir = Input.dir8;
 
+        if (paramTouchMoveEnabled && TouchInput.isTriggered()) {
+            const x = $gameMap.canvasToMapX(TouchInput.x);
+            const y = $gameMap.canvasToMapY(TouchInput.y);
+            const activity = LActivity.makeMoveToAdjacent(entity, HMovement.offsetToDirectionSafety(x - entity.mx, y - entity.my))
+                .withArgs({type: LDashType.PositionalDash, targetX: x, targetY: y})
+                .withConsumeAction(LActionTokenConsumeType.MinorActed);
+            context.postActivity(activity);
+            this.model.submit();
+            return;
+        }
+
         // 移動
         if (dir != 0 && this._movingInputWaitCount >= this.MovingInputInterval) {
             this.attemptMoveEntity(context, entity, dir);
@@ -330,10 +343,7 @@ export class VPlayerDialog extends VDialog {
             const activity = LActivity.makeMoveToAdjacent(entity, dir).withConsumeAction(LActionTokenConsumeType.MinorActed);
             
             if (this.isDashButtonPressed()) {
-                //const behavior = entity.findBehavior(LUnitBehavior);
-                //assert(behavior);
-                //behavior._straightDashing = true;
-                activity.withFastForward();
+                activity.withArgs({type: LDashType.StraightDash});
             }
 
             context.postActivity(activity);

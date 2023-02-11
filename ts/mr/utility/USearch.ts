@@ -10,6 +10,7 @@ import { LExitPointBehavior } from "../lively/behaviors/LExitPointBehavior";
 import { LItemBehavior } from "../lively/behaviors/LItemBehavior";
 import { LTrapBehavior } from "../lively/behaviors/LTrapBehavior";
 import { LUnitBehavior } from "../lively/behaviors/LUnitBehavior";
+import { HMovement } from "../lively/helpers/HMovement";
 import { LBlock } from "../lively/LBlock";
 import { LEntity } from "../lively/LEntity";
 import { LRandom } from "../lively/LRandom";
@@ -70,7 +71,7 @@ export class USearch {
 
             // 視界不明瞭部屋の場合、遠いところにいる target は見えない。
             if (subjectRoom.poorVisibility) {
-                if (UMovement.blockDistance(subject.mx, subject.my, target.mx, target.my) > paramDefaultVisibiltyLength) {
+                if (HMovement.blockDistance(subject.mx, subject.my, target.mx, target.my) > paramDefaultVisibiltyLength) {
                     return false;
                 }
             }

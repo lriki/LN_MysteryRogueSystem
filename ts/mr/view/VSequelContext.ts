@@ -44,12 +44,8 @@ export class VSequelContext {
         return this._timeScale;
     }
     
-    public isDashing(): boolean {
-        const entty = MRLively.mapView.focusedEntity();
-        if (!entty) return false;
-        const behavior = entty.findEntityBehavior(LUnitBehavior);
-        if (!behavior) return false;
-        return behavior._straightDashing || behavior._fastforwarding;
+    public isFastForward(): boolean {
+        return this._clip ? this._clip.fastForward : false;
     }
 
     /** Sequel 開始時の Visual の position */
