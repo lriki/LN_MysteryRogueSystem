@@ -34,5 +34,5 @@ test("concretes.enemy.PanicToRoom", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     // ステートが追加されている
-    expect(!!actor1.states().find(x => x.stateDataId() == stateId)).toBe(true);
+    expect(!!actor1.states.find(x => x.stateDataId() == stateId)).toBe(true);
 });

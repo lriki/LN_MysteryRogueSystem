@@ -27,6 +27,7 @@ import { ULimitations } from "./ULimitations";
 import { SCommand } from "../system/SCommand";
 import { STask } from "../system/tasks/STask";
 import { STransferMapSource } from "../system/dialogs/STransferMapDialog";
+import { LThinkingActionRatings } from "../lively/ai2/LThinkingAgent";
 
 export interface LCandidateSkillAction {
     action: IDataAction;
@@ -340,7 +341,7 @@ export class UAction {
                     conditionParam1: undefined,
                     conditionParam2: undefined,
                     conditionType: undefined,
-                    rating: 3,
+                    rating: LThinkingActionRatings.Moving,
                     skillId: MRData.system.skills.move,
                 },
                 targets: []
@@ -573,7 +574,8 @@ export class UAction {
      * 正面に話しかけられる Entity がいれば返す。
      */
     public static findTalkableFront(entity: LEntity): LEntity | undefined {
-        const frontTarget = UMovement.getFrontBlock(entity).getFirstEntity();
+        const frontBlock = UMovement.getFrontBlock(entity);
+        const frontTarget = frontBlock.getFirstEntity();
         if (frontTarget && !Helpers.isHostile(entity, frontTarget)) {
             if (!!frontTarget.queryReactions().find(x => x.actionId == MRBasics.actions.talk)) {
                 return frontTarget;

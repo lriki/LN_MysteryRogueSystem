@@ -10,7 +10,7 @@ export class SRemoveStatesByIntentionsSpecialEffect extends SSpecialEffect {
 
     public onApplyTargetEffect(cctx: SCommandContext, data: DSpecialEffectRef, performer: LEntity, item: LEntity | undefined, modifier: SEffect, target: LEntity, result: LEffectResult): void {
         const intentions = data.value as DStateIntentions;
-        const removeStateIds = target.states()
+        const removeStateIds = target.states
             .filter(x => (x.stateData().intentions & intentions) === intentions)
             .map(x => x.stateDataId());
         if (removeStateIds.length > 0) {

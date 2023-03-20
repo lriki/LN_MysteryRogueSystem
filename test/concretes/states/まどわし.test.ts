@@ -39,8 +39,8 @@ test("concretes.states.まどわし", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     for (let i = 0; i < 10; i++) {
         // 10 ターンの間はステートが追加されている
-        expect(!!actor1.states().find(x => x.stateDataId() == stateId)).toBe(true);
-        expect(!!enemy1.states().find(x => x.stateDataId() == stateId)).toBe(true);
+        expect(!!actor1.states.find(x => x.stateDataId() == stateId)).toBe(true);
+        expect(!!enemy1.states.find(x => x.stateDataId() == stateId)).toBe(true);
 
         // 待機
         MRSystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
@@ -50,8 +50,8 @@ test("concretes.states.まどわし", () => {
     }
 
     // 10 ターンで解除
-    expect(!!actor1.states().find(x => x.stateDataId() == stateId)).toBe(false);
-    expect(!!enemy1.states().find(x => x.stateDataId() == stateId)).toBe(false);
+    expect(!!actor1.states.find(x => x.stateDataId() == stateId)).toBe(false);
+    expect(!!enemy1.states.find(x => x.stateDataId() == stateId)).toBe(false);
 
     // 表示が元に戻ること
     const enemy1Visibility2 = SView.getEntityVisibility(enemy1);

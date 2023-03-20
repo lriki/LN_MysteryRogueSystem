@@ -82,8 +82,8 @@ test("concretes.item.staff.DivisionStaff.Issue1", () => {
 
     // 複製や親子関係をチェック
     expect(enemy2).not.toBe(enemy1);
-    const states1 = enemy1.states();
-    const states2 = enemy2.states();
+    const states1 = enemy1.states;
+    const states2 = enemy2.states;
     expect(states1.length).toBe(states2.length);
     for (let i = 0; i < states2.length; ++i) {
         expect(states2[i]).not.toBe(states1[i]);

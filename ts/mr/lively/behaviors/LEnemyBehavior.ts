@@ -125,22 +125,6 @@ export class LEnemyBehavior extends LBattlerBehavior {
     }
 
 
-    onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult {
-        if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
-
-            // 相手のいる方向を向く
-            // const target = UAction.findInSightNearlyHostileEntity(self);
-            // if (target) {
-            //     const dir = SAIHelper.entityDistanceToDir(self, target);
-            //     self.dir = dir;
-            // }
-
-
-            return SPhaseResult.Pass;
-        }
-        return SPhaseResult.Pass;
-    }
-
     public selectDropItem(rand: LRandom): DDropItem | undefined {
         const items = this.enemyData().dropItems;
         const total = items.reduce((s, x) => s + x.denominator, 0);

@@ -26,7 +26,7 @@ test("concretes.states.混乱.move", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     for (let i = 0; i < 10; i++) {
         // 10 ターンの間はステートが追加されている
-        expect(!!enemy1.states().find(x => x.stateDataId() == stateId)).toBe(true);
+        expect(!!enemy1.states.find(x => x.stateDataId() == stateId)).toBe(true);
 
         MRSystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
         MRSystem.dialogContext.activeDialog().submit();
@@ -35,7 +35,7 @@ test("concretes.states.混乱.move", () => {
     }
 
     // 10 ターンで解除
-    expect(!!enemy1.states().find(x => x.stateDataId() == stateId)).toBe(false);
+    expect(!!enemy1.states.find(x => x.stateDataId() == stateId)).toBe(false);
 
     // ふらふら移動するため、まっすぐこちらに向かってくることはないはず
     expect(enemy1.mx > 11).toBe(true);

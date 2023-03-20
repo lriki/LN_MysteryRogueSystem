@@ -38,7 +38,7 @@ test("concretes.item.grass.まどわし草", () => {
     MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // まどわし状態になる
-    expect(!!player1.states().find(x => x.stateDataId() == MRData.getState("kState_UTまどわし").id)).toBe(true);
+    expect(!!player1.states.find(x => x.stateDataId() == MRData.getState("kState_UTまどわし").id)).toBe(true);
 
     // [投げる]
     MRSystem.dialogContext.postActivity(LActivity.makeThrow(player1, item2).withEntityDirection(6).withConsumeAction());
@@ -47,7 +47,7 @@ test("concretes.item.grass.まどわし草", () => {
     MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // まどわし状態になる
-    expect(!!enemy1.states().find(x => x.stateDataId() == MRData.getState("kState_UTまどわし").id)).toBe(true);
+    expect(!!enemy1.states.find(x => x.stateDataId() == MRData.getState("kState_UTまどわし").id)).toBe(true);
     
     TestUtils.testCommonGrassEnd(player1, item1);
 });

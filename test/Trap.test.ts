@@ -118,7 +118,7 @@ test("Trap.Enemy", () => {
     
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
-    expect(enemy1.states().length).toBe(0); // Enemy は罠にはかからないこと
+    expect(enemy1.states.length).toBe(0); // Enemy は罠にはかからないこと
 });
 
 test("Trap.Attack", () => {

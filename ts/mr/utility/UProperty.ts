@@ -94,7 +94,7 @@ export class UProperty {
             return op;
         }
         else if (path.componentType == UComponentType.State) {
-            return entity.states().find(x => x.stateData().key == path.element);
+            return entity.states.find(x => x.stateData().key == path.element);
         }
         // else if (path.componentType == UComponentType.Behavior) {
         //     let behavior;

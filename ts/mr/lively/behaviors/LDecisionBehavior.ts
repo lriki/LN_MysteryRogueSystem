@@ -9,9 +9,12 @@ import { UMovement } from "ts/mr/utility/UMovement";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { LActivity } from "../activities/LActivity";
 import { LCharacterAI_Normal } from "../ai/LStandardAI";
-import { MRSerializable } from "ts/mr/Common";
+import { assert, MRSerializable } from "ts/mr/Common";
 import { LActionTokenConsumeType } from "../LCommon";
 import { LRouteSearch } from "../helpers/LRouteSearch";
+import { paramUseThinkingAgent } from "ts/mr/PluginParameters";
+import { LThinkingAgent_Standard } from "../ai2/LThinkingAgent_Standard";
+import { LThinkingAgent } from "../ai2/LThinkingAgent";
 
 /**
  * Scheduler から通知された各タイミングにおいて、行動決定を行う Behavior.
@@ -22,6 +25,7 @@ import { LRouteSearch } from "../helpers/LRouteSearch";
 @MRSerializable
 export class LDecisionBehavior extends LBehavior {
     _characterAI: LCharacterAI_Normal = new LCharacterAI_Normal();
+    _thinkingAgent: LThinkingAgent_Standard = new LThinkingAgent_Standard();
 
     forceMajorActivity: LActivity | undefined;  // for test
 
@@ -33,6 +37,11 @@ export class LDecisionBehavior extends LBehavior {
 
     public characterAI(): LCharacterAI_Normal {
         return this._characterAI;
+    }
+
+    
+    public onCollectThinkingAgent(actions: LThinkingAgent[]): void {
+        actions.push(this._thinkingAgent);
     }
 
     onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult {
@@ -55,7 +64,15 @@ export class LDecisionBehavior extends LBehavior {
             if (this.forceMajorActivity) {
                 return SPhaseResult.Pass;
             }
-            return this._characterAI.thinkMoving(cctx, self);
+
+            if (paramUseThinkingAgent) {
+                self.think();
+                assert(self.thinkingAgent);
+                return self.thinkingAgent.executeMinorActionIfNeeded(cctx, self);
+            }
+            else {
+                return this._characterAI.thinkMoving(cctx, self);
+            }
         }
         else if (phase == DecisionPhase.ResolveAdjacentAndMovingTarget) {
             // 後続をブロックする理由はない
@@ -66,7 +83,18 @@ export class LDecisionBehavior extends LBehavior {
                 cctx.postActivity(this.forceMajorActivity);
                 return SPhaseResult.Handled;
             }
-            return this._characterAI.thinkAction(cctx, self);
+            if (paramUseThinkingAgent) {
+                if (self.thinkingAgent) {
+                    return self.thinkingAgent.executeMajorActionIfNeeded(cctx, self);
+                }
+                else {
+                    // 仮眠状態の Enemy が起きた場合、ステート側の onDecisionPhase で Minor がハンドルされた後、Major に飛んでくることがある。
+                    return SPhaseResult.Pass;
+                }
+            }
+            else {
+                return this._characterAI.thinkAction(cctx, self);
+            }
         }
 
         return SPhaseResult.Pass;

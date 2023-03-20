@@ -26,7 +26,7 @@ test("concretes.states.Paralysis.FP", () => {
     while (true) {
         MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-        if (!player1.states().find(x => x.stateDataId() == stateId)) {
+        if (!player1.states.find(x => x.stateDataId() == stateId)) {
             break;
         }
 
@@ -57,7 +57,7 @@ test("concretes.states.Paralysis.Attack", () => {
 
     // 被ダメージにかかわらず、攻撃試行されればステートは解除されている
     const hp2 = player1.getActualParam(MRBasics.params.hp);
-    expect(!player1.states().find(x => x.stateDataId() == stateId)).toBe(true);
+    expect(!player1.states.find(x => x.stateDataId() == stateId)).toBe(true);
 });
 
 test("concretes.states.Paralysis.Pos", () => {

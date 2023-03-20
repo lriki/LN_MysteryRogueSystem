@@ -92,6 +92,8 @@ export const paramForceSync = getBoolean("SyncActorParams", true);
 
 export const paramTouchMoveEnabled = false;
 
+export const paramUseThinkingAgent = true;
+
 //Maximum number of items in the map
 
 /*

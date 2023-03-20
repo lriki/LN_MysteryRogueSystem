@@ -17,6 +17,11 @@ import { UName } from "ts/mr/utility/UName";
 import { DSequelId } from "ts/mr/data/DSequel";
 import { SActivityContext } from "ts/mr/system/SActivityContext";
 import { MRData } from "ts/mr/data/MRData";
+import { LThinkingDeterminer } from "../ai2/LThinkingDeterminer";
+import { paramUseThinkingAgent } from "ts/mr/PluginParameters";
+import { LThinkingDeterminer_Confusion } from "../ai2/LThinkingDeterminer_Confusion";
+import { LThinkingDeterminer_Blind } from "../ai2/LThinkingDeterminer_Blind";
+import { LThinkingAgent } from "../ai2/LThinkingAgent";
 
 
 
@@ -25,6 +30,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
     _stateTurn: number | null = 0;
     //private _persistent: boolean = false;   // 永続ステータス？
     private _characterAI: LCharacterAI | undefined;
+    private _thinking: LThinkingDeterminer | undefined;
     
     constructor() {
         super();
@@ -33,6 +39,7 @@ export class LGenericRMMZStateBehavior extends LBehavior {
     public clone(newOwner: LEntity): LBehavior {
         const b = MRLively.world.spawn(LGenericRMMZStateBehavior);
         b._stateTurn = this._stateTurn;
+        b._thinking = this._thinking?.clone();
         return b;
     }
     
@@ -96,11 +103,22 @@ export class LGenericRMMZStateBehavior extends LBehavior {
         //REGame.eventServer.subscribe(DBasics.events.roomEnterd, this);
         
         const effect = this.stateEffect();
-        if (effect.restriction == DStateRestriction.AttackToOther) {
-            this._characterAI = new LConfusionAI(LConfusionAIRestriction.AttackToOther);
+
+        if (paramUseThinkingAgent) {
+            if (effect.restriction == DStateRestriction.AttackToOther) {
+                this._thinking = new LThinkingDeterminer_Confusion(LConfusionAIRestriction.AttackToOther);
+            }
+            else if (effect.restriction == DStateRestriction.Blind) {
+                this._thinking = new LThinkingDeterminer_Blind();
+            }
         }
-        else if (effect.restriction == DStateRestriction.Blind) {
-            this._characterAI = new LBlindAI();
+        else {
+            if (effect.restriction == DStateRestriction.AttackToOther) {
+                this._characterAI = new LConfusionAI(LConfusionAIRestriction.AttackToOther);
+            }
+            else if (effect.restriction == DStateRestriction.Blind) {
+                this._characterAI = new LBlindAI();
+            }
         }
     }
 
@@ -140,6 +158,9 @@ export class LGenericRMMZStateBehavior extends LBehavior {
                 return this._characterAI.thinkAction(cctx, self);
             }
         }
+        // if (this._thinking) {
+        //     return SPhaseResult.Pass;
+        // }
 
         // 解除判定
         if (phase == DecisionPhase.UpdateState) {
@@ -175,7 +196,16 @@ export class LGenericRMMZStateBehavior extends LBehavior {
             return SPhaseResult.Pass;
         }
     }
-    
+
+    override onThink(self: LEntity, agent: LThinkingAgent): SPhaseResult {
+        if (this._thinking) {
+            return this._thinking.onThink(agent, self);
+        }
+        else {
+            return SPhaseResult.Pass;
+        }
+    }
+        
     onActivity(self: LEntity, cctx: SCommandContext, actx: SActivityContext): SCommandResponse {
         const state = this.state();
         const traits: IDataTrait[] = [];

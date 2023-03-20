@@ -31,8 +31,8 @@ test("concretes.states.目つぶし", () => {
     MRSystem.scheduler.stepSimulation();    // Advance Simulation --------------------------------------------------
     for (let i = 0; i < 10; i++) {
         // 10 ターンの間はステートが追加されている
-        expect(!!actor1.states().find(x => x.stateDataId() == stateId)).toBe(true);
-        expect(!!enemy1.states().find(x => x.stateDataId() == stateId)).toBe(true);
+        expect(!!actor1.states.find(x => x.stateDataId() == stateId)).toBe(true);
+        expect(!!enemy1.states.find(x => x.stateDataId() == stateId)).toBe(true);
 
         // 待機
         MRSystem.dialogContext.postActivity(LActivity.make(actor1).withConsumeAction());
@@ -42,8 +42,8 @@ test("concretes.states.目つぶし", () => {
     }
 
     // 10 ターンで解除
-    expect(!!actor1.states().find(x => x.stateDataId() == stateId)).toBe(false);
-    expect(!!enemy1.states().find(x => x.stateDataId() == stateId)).toBe(false);
+    expect(!!actor1.states.find(x => x.stateDataId() == stateId)).toBe(false);
+    expect(!!enemy1.states.find(x => x.stateDataId() == stateId)).toBe(false);
 
     // Player に隣接していても攻撃せず、まっすぐ進む
     expect(enemy1.mx == 20).toBe(true);

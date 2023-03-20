@@ -2,8 +2,6 @@ import { assert, MRSerializable } from "ts/mr/Common";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { SCommandResponse, SPhaseResult } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
-import { LCharacterAI } from "../ai/LCharacterAI";
-import { LRatedRandomAI } from "../ai/LRatedRandomAI";
 import { LEntity } from "../LEntity";
 import { MRLively } from "../MRLively";
 import { DecisionPhase, LBehavior, LBehaviorGroup } from "./LBehavior";

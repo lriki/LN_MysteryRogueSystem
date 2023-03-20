@@ -52,6 +52,7 @@ import { SActivityContext } from "ts/mr/system/SActivityContext";
 import { LFieldEffect } from "../LFieldEffect";
 import { SSubTaskChain } from "ts/mr/system/tasks/STask";
 import { LParam } from "../LParam";
+import { LThinkingAgent } from "../ai2/LThinkingAgent";
 
 export enum DecisionPhase {
     //Prepare,
@@ -253,6 +254,20 @@ export abstract class LBehavior extends LObject {
         }
     }
 
+    //--------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+    //--------------------------------------------------------------------------
+    // Draft
+
     /**
      * 子オブジェクトが破棄されるなど、親オブジェクトから直ちに取り除くべき時に呼び出される。
      * この動作はキャンセルできないため、例えば呪い状態による装備の着脱判定などは行わず、確実に除外しなければならない。
@@ -270,6 +285,9 @@ export abstract class LBehavior extends LObject {
     onEvent(cctx: SCommandContext, eventId: DEventId, args: any): LEventResult { return LEventResult.Pass; }
     onPartyEvent(eventId: DEventId, args: any): LEventResult { return LEventResult.Pass; }
     onResetStatus(self: LEntity): void {}
+
+    
+    public onThink(self: LEntity, agent: LThinkingAgent): SPhaseResult { return SPhaseResult.Pass; }
 
 
 
@@ -341,6 +359,8 @@ export abstract class LBehavior extends LObject {
      * なお "階段" Entity がこのメソッドで PickAction を返すと、階段を拾うことができてしまう。
      */
     public onQueryReactions(self: LEntity, reactions: LReaction[]): void { }
+
+    public onCollectThinkingAgent(actions: LThinkingAgent[]): void { }
 
     
     // Game_Actor.prototype.attackAnimationId1

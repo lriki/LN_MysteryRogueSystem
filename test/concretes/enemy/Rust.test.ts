@@ -15,7 +15,6 @@ beforeAll(() => {
 test("concretes.enemy.Rust", () => {
     TestEnv.newGame();
 
-    // Player
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_FlatMap50x50, 10, 10);
     player1.addState(TestEnv.StateId_CertainDirectAttack);
     const inventory2 = player1.getEntityBehavior(LInventoryBehavior);
@@ -30,8 +29,8 @@ test("concretes.enemy.Rust", () => {
     inventory2.addEntity(shield1);
     const shield1_UP1 = shield1.getActualParam(MRBasics.params.upgradeValue);
 
-    // enemy1
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEnemy_ラストゾンビA").id, [], "enemy1"));
+    enemy1.addState(MRData.getState("kState_Anger").id);
     TestEnv.transferEntity(enemy1, TestEnv.FloorId_FlatMap50x50, 11, 10);
 
     MRSystem.scheduler.stepSimulation();
@@ -44,7 +43,6 @@ test("concretes.enemy.Rust", () => {
     MRSystem.dialogContext.postActivity(LActivity.make(player1).withConsumeAction());
     MRSystem.dialogContext.activeDialog().submit();
 
-    MRLively.world.random().resetSeed(5);     // 乱数調整
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
     const weapon1_UP2 = weapon1.getActualParam(MRBasics.params.upgradeValue);

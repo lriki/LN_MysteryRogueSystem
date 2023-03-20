@@ -8,6 +8,10 @@ import { LActivity } from "../activities/LActivity";
 import { LActionTokenType } from "../LActionToken";
 import { LActionTokenConsumeType } from "../LCommon";
 import { MRSerializable } from "ts/mr/Common";
+import { LThinkingActionRatings, LThinkingAgent } from "../ai2/LThinkingAgent";
+import { MRData } from "ts/mr/data/MRData";
+import { paramUseThinkingAgent } from "ts/mr/PluginParameters";
+import { LThinkingAction } from "../ai2/LThinkingAction";
 
 
 @MRSerializable
@@ -19,6 +23,7 @@ export class LDebugMoveRightBehavior extends LBehavior {
     }
 
     onDecisionPhase( self: LEntity, cctx: SCommandContext,phase: DecisionPhase): SPhaseResult {
+        if (paramUseThinkingAgent) return SPhaseResult.Pass;
         
         if (phase == DecisionPhase.AIMinor) {
             // 右へ移動するだけ
@@ -38,5 +43,19 @@ export class LDebugMoveRightBehavior extends LBehavior {
         }
 
         return super.onDecisionPhase(self, cctx, phase);
+    }
+
+    
+    public onThink(self: LEntity, agent: LThinkingAgent): SPhaseResult {
+        const action = new LThinkingAction(
+            { 
+                rating: LThinkingActionRatings.Max,
+                skillId: MRData.system.skills.move,
+            },
+            []
+        );
+        action.priorityMovingDirection = 6;
+        agent.addCandidateAction(action);
+        return SPhaseResult.Pass; 
     }
 }

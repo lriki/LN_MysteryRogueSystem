@@ -116,6 +116,7 @@ export class SSchedulerPhase_AIMinorAction extends SSchedulerPhase {
                 if (unit.isManual() ||
                     entity._schedulingResult.consumedActionToken(scheduler.data().currentPhaseIndex()) !== undefined) {
                     entity._callDecisionPhase(MRSystem.commandContext, DecisionPhase.UpdateState);
+                    entity._schedulingResult.stateUpdatedInRun = true;
                 }
 
                 // 現在 step 内で何らかのトークン消費があった場合は行動が発生したとみなし、それに関する処理を行う
@@ -222,7 +223,12 @@ export class SSchedulerPhase_AIMajorAction extends SSchedulerPhase {
         if (this.testProcessable(entity, unitBehavior)) {
             entity._callDecisionPhase(MRSystem.commandContext, DecisionPhase.AIMajor);
             
-            entity._callDecisionPhase(MRSystem.commandContext, DecisionPhase.UpdateState);
+            // if (entity._schedulingResult.consumedActionToken(scheduler.data().currentPhaseIndex()) !== undefined) {
+            // }
+            if (!entity._schedulingResult.stateUpdatedInRun) {
+                entity._callDecisionPhase(MRSystem.commandContext, DecisionPhase.UpdateState);
+                entity._schedulingResult.stateUpdatedInRun = true;
+            }
         }
     }
 }

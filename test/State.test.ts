@@ -35,7 +35,7 @@ test("State_Brace", () => {
     // ハングせずに stepSimulation を抜けてくればOK.
 
     // 1回 Simulation しただけでは解除されていないこと。
-    expect(actor1.states()[0].stateDataId()).toBe(TestEnv.StateId_Sleep);
+    expect(actor1.states[0].stateDataId()).toBe(TestEnv.StateId_Sleep);
 });
 
 test("State.AutoRemove", () => {
@@ -47,7 +47,7 @@ test("State.AutoRemove", () => {
     // "睡眠" 強制付加
     actor1.addState(TestEnv.StateId_Sleep);
 
-    const stateObjectId = actor1.states()[0].id();
+    const stateObjectId = actor1.states[0].id();
 
     // 10 ターン分 シミュレーション実行
     for (let i = 0; i < 10; i++) {
@@ -55,7 +55,7 @@ test("State.AutoRemove", () => {
     }
 
     // 自然解除されている
-    expect(actor1.states().length).toBe(0);
+    expect(actor1.states.length).toBe(0);
 
     // State Object も GC で削除されている
     const state = MRLively.world.findEntity(stateObjectId);

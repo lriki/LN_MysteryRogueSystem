@@ -246,7 +246,7 @@ export class VEntity {
                 const entity = this.entity();
 
                 if (entity.findEntityBehavior(LUnitBehavior)) {
-                    sprite.setStateIcons(entity.states().map(state => state.stateData().iconIndex));
+                    sprite.setStateIcons(entity.states.map(state => state.stateData().iconIndex));
                 }
 
             }

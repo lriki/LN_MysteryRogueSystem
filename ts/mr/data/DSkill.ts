@@ -4,6 +4,11 @@ import { DEmittor } from "./DEmittor";
 import { DFlavorEffect, IFlavorEffectProps } from "./DFlavorEffect";
 import { MRData } from "./MRData";
 
+export enum DSkillClass {
+    Major = 0,
+    Minor = 1,
+}
+
 export class DSkill {
     /*
     [2022/9/7] なぜ Action と Skill を関連付けたのか
@@ -56,6 +61,8 @@ export class DSkill {
     /** スキル発動者に対する FlavorEffect */
     flavorEffect: DFlavorEffect | undefined;
     // NOTE: こちらは主にスキル発動の message を持つためのものであるため、DEmittor が持つものとは区別している。
+
+    skillClass: DSkillClass = DSkillClass.Major;
 
     constructor(id: DSkillId, key: string) {
         this.id = id,

@@ -47,7 +47,7 @@ export class UState {
      */
     public static resolveStates(entity: LEntity, newStates: StateAddition[], removeStateIds: DStateId[]): LState[] {
         const entityData = entity.data;
-        const currentStates: WorkState[] = entity.states().map(s => { return { data: s.stateData(), submatchEffectIndex: s.submatchEffectIndex(), removing: false, new: false, level: s.level() }; });
+        const currentStates: WorkState[] = entity.states.map(s => { return { data: s.stateData(), submatchEffectIndex: s.submatchEffectIndex(), removing: false, new: false, level: s.level() }; });
         const stateGroups: WorkStateGroup[] = MRData.stateGroups.map(sg => { return { data: sg, states: [] }; });
 
         // 新規ステート
@@ -191,7 +191,7 @@ export class UState {
 
 
         // 削除マーク付きで、実際に存在している LState を削除する
-        const oldStates = entity.states();
+        const oldStates = entity.states;
         for (const workState of currentStates) {
             if (workState.removing) {
                 const state = oldStates.find(s => s.stateDataId() == workState.data.id);

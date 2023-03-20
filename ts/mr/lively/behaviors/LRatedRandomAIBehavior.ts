@@ -1,8 +1,11 @@
 import { MRSerializable } from "ts/mr/Common";
+import { paramUseThinkingAgent } from "ts/mr/PluginParameters";
 import { SPhaseResult } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { LRatedRandomAI } from "../ai/LRatedRandomAI";
+import { LThinkingAgent } from "../ai2/LThinkingAgent";
+import { LThinkingDeterminer_RatedRandom } from "../ai2/LThinkingDeterminer_RatedRandom";
 import { LEntity } from "../LEntity";
 import { MRLively } from "../MRLively";
 import { DecisionPhase, LBehavior, LBehaviorGroup } from "./LBehavior";
@@ -22,10 +25,12 @@ export class LRatedRandomAIBehavior extends LBehavior {
     */
 
     private _characterAI: LRatedRandomAI = new LRatedRandomAI();
+    private _thinking: LThinkingDeterminer_RatedRandom = new LThinkingDeterminer_RatedRandom();
 
     public clone(newOwner: LEntity): LBehavior {
         const b = MRLively.world.spawn(LRatedRandomAIBehavior);
         b._characterAI = this._characterAI.clone() as LRatedRandomAI;
+        b._thinking = this._thinking.clone();
         return b;
     }
 
@@ -34,6 +39,10 @@ export class LRatedRandomAIBehavior extends LBehavior {
     }
 
     onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult {
+
+        if (paramUseThinkingAgent) {
+            return SPhaseResult.Pass;
+        }
 
         if (phase == DecisionPhase.Manual) {
             throw new Error("Not implemented.");
@@ -48,6 +57,13 @@ export class LRatedRandomAIBehavior extends LBehavior {
             return this._characterAI.thinkAction(cctx, self);
         }
 
+        return SPhaseResult.Pass;
+    }
+
+    public override onThink(self: LEntity, agent: LThinkingAgent): SPhaseResult {
+        if (paramUseThinkingAgent) {
+            return this._thinking.onThink(agent, self);
+        }
         return SPhaseResult.Pass;
     }
 

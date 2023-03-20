@@ -303,7 +303,7 @@ export class LIdentifyer {
         }
         else if (entityIdentificationLevel >= EntityIdentificationLevel.IndividualIdentified) {
             // 個体識別済み
-            const states = entity.states();
+            const states = entity.states;
             if (states.length > 0) {
                 // 祝福など、アイコン表示したいステートが付いているか？
                 const state = states.find(x => x.stateData().displayNameIcon);

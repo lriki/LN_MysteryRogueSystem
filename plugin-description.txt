@@ -80,10 +80,13 @@
  * @param UIMode
  * @text UIモード
  * @parent Group_Experimental
- * @default Traditional
  * @type string
+ * @default Traditional
  *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ *
+ *
+ *
  *
  * @command MR-FinishChallenge
  * @text MR-FinishChallenge

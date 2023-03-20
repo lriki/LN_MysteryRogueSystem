@@ -45,32 +45,32 @@ test("concretes.states.速度変化", () => {
     assert(param);
     expect(param.getConstantBuff().level).toBe(1);
     expect(LScheduler2.getSpeedLevel(actor1)).toBe(2);
-    expect(!!actor1.states().find(x => x.stateDataId() == MRData.getState("kState_UT鈍足").id)).toBe(false);
-    expect(!!actor1.states().find(x => x.stateDataId() == MRData.getState("kState_UT倍速").id)).toBe(true);
-    expect(!!actor1.states().find(x => x.stateDataId() == MRData.getState("kState_UT3倍速").id)).toBe(false);
+    expect(!!actor1.states.find(x => x.stateDataId() == MRData.getState("kState_UT鈍足").id)).toBe(false);
+    expect(!!actor1.states.find(x => x.stateDataId() == MRData.getState("kState_UT倍速").id)).toBe(true);
+    expect(!!actor1.states.find(x => x.stateDataId() == MRData.getState("kState_UT3倍速").id)).toBe(false);
 
     // 3倍速化
     actor1.addBuff(buff1);
     expect(param.getConstantBuff().level).toBe(2);
     expect(LScheduler2.getSpeedLevel(actor1)).toBe(3);
-    expect(!!actor1.states().find(x => x.stateDataId() == MRData.getState("kState_UT鈍足").id)).toBe(false);
-    expect(!!actor1.states().find(x => x.stateDataId() == MRData.getState("kState_UT倍速").id)).toBe(false);
-    expect(!!actor1.states().find(x => x.stateDataId() == MRData.getState("kState_UT3倍速").id)).toBe(true);
+    expect(!!actor1.states.find(x => x.stateDataId() == MRData.getState("kState_UT鈍足").id)).toBe(false);
+    expect(!!actor1.states.find(x => x.stateDataId() == MRData.getState("kState_UT倍速").id)).toBe(false);
+    expect(!!actor1.states.find(x => x.stateDataId() == MRData.getState("kState_UT3倍速").id)).toBe(true);
     
     // 鈍足化
     actor1.addBuff(buff2);
     expect(param.getConstantBuff().level).toBe(-1);
     expect(LScheduler2.getSpeedLevel(actor1)).toBe(-1);
-    expect(!!actor1.states().find(x => x.stateDataId() == MRData.getState("kState_UT鈍足").id)).toBe(true);
-    expect(!!actor1.states().find(x => x.stateDataId() == MRData.getState("kState_UT倍速").id)).toBe(false);
-    expect(!!actor1.states().find(x => x.stateDataId() == MRData.getState("kState_UT3倍速").id)).toBe(false);
+    expect(!!actor1.states.find(x => x.stateDataId() == MRData.getState("kState_UT鈍足").id)).toBe(true);
+    expect(!!actor1.states.find(x => x.stateDataId() == MRData.getState("kState_UT倍速").id)).toBe(false);
+    expect(!!actor1.states.find(x => x.stateDataId() == MRData.getState("kState_UT3倍速").id)).toBe(false);
 
     // 解除
     actor1.removeBuff(MRBasics.params.agi);
     expect(LScheduler2.getSpeedLevel(actor1)).toBe(1);
-    expect(!!actor1.states().find(x => x.stateDataId() == MRData.getState("kState_UT鈍足").id)).toBe(false);
-    expect(!!actor1.states().find(x => x.stateDataId() == MRData.getState("kState_UT倍速").id)).toBe(false);
-    expect(!!actor1.states().find(x => x.stateDataId() == MRData.getState("kState_UT3倍速").id)).toBe(false);
+    expect(!!actor1.states.find(x => x.stateDataId() == MRData.getState("kState_UT鈍足").id)).toBe(false);
+    expect(!!actor1.states.find(x => x.stateDataId() == MRData.getState("kState_UT倍速").id)).toBe(false);
+    expect(!!actor1.states.find(x => x.stateDataId() == MRData.getState("kState_UT3倍速").id)).toBe(false);
 
     MRSystem.scheduler.stepSimulation();
 });

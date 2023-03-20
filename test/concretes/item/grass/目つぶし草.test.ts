@@ -40,7 +40,7 @@ test("concretes.item.grass.目つぶし草", () => {
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // めつぶし状態になる
-    expect(!!player1.states().find(x => x.stateDataId() == MRData.getState("kState_UT目つぶし").id)).toBe(true);
+    expect(!!player1.states.find(x => x.stateDataId() == MRData.getState("kState_UT目つぶし").id)).toBe(true);
 
     //----------------------------------------------------------------------------------------------------
     
@@ -51,7 +51,7 @@ test("concretes.item.grass.目つぶし草", () => {
     MRSystem.scheduler.stepSimulation(); // Advance Simulation ----------
 
     // めつぶし状態になる
-    expect(!!enemy1.states().find(x => x.stateDataId() == MRData.getState("kState_UT目つぶし").id)).toBe(true);
+    expect(!!enemy1.states.find(x => x.stateDataId() == MRData.getState("kState_UT目つぶし").id)).toBe(true);
     
     TestUtils.testCommonGrassEnd(player1, item1);
 });

@@ -30,7 +30,7 @@ export class USearch {
      * 失明状態であるか (self は他を視認できないか)
      */
     public static hasBlindness(self: LEntity): boolean {
-        return self.states().find(s => s.stateEffect().restriction == DStateRestriction.Blind) !== undefined;
+        return self.states.find(s => s.stateEffect().restriction == DStateRestriction.Blind) !== undefined;
     }
 
     /**

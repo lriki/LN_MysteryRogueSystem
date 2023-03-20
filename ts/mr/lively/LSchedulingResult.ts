@@ -19,8 +19,13 @@ export class LPhaseResult {
 export class LSchedulingResult {
     private _phaseResults: (LPhaseResult | undefined)[];
 
+    // UpdateState を実行したかどうか。
+    // Enemy は、Minor または Major のどちらかのトークンを消費した場合に UpdateState を実行する。
+    public stateUpdatedInRun: boolean;
+
     public constructor() {
         this._phaseResults = [];
+        this.stateUpdatedInRun = false;
     }
 
     public clear(): void {
@@ -29,6 +34,7 @@ export class LSchedulingResult {
                 phase.clear();
             }
         }
+        this.stateUpdatedInRun = false;
     }
 
     public setConsumedActionToken(phaseIndex: number, type: LActionTokenType): void {

@@ -61,5 +61,5 @@ test("concretes.states.くちなし.AutoRemove", () => {
     MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
     // フロア移動でステート解除
-    expect(!!actor1.states().find(x => x.stateDataId() == stateId)).toBe(false);
+    expect(!!actor1.states.find(x => x.stateDataId() == stateId)).toBe(false);
 });

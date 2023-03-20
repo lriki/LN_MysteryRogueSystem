@@ -40,6 +40,8 @@ import { LFieldEffect } from "./LFieldEffect";
 import { paramMaxEntityStackCount } from "../PluginParameters";
 import { LMap } from "./LMap";
 import { DEntitySpawner } from "../data/DSpawner";
+import { LThinkingAgent } from "./ai2/LThinkingAgent";
+import { LThinkingContext } from "./ai2/LThinkingContext";
 
 enum BlockLayer
 {
@@ -339,7 +341,7 @@ export class LEntity extends LObject
             entity._basicBehaviors.push(i2.id());
             i2.setParent(entity);
         }
-        for (const i of this.states()) {
+        for (const i of this.states) {
             const i2 = i.clone(entity);
             entity._states.push(i2.id());
             i2.setParent(entity);
@@ -615,7 +617,7 @@ export class LEntity extends LObject
         const hpParam = this._params.param(MRBasics.params.hp);
         if (hpParam) {
             hpSideEffects = !hpParam.isDamageValueChanged;
-            const dead = !!this.states().find(s => s.stateDataId() == MRBasics.states.dead || s.stateData().deadState);
+            const dead = !!this.states.find(s => s.stateDataId() == MRBasics.states.dead || s.stateData().deadState);
             const hp = this.getActualParam(MRBasics.params.hp);
 
             // 外部から addState() 等で DeathState が与えられた場合は HP0 にする
@@ -1005,12 +1007,12 @@ export class LEntity extends LObject
         }
     }
 
-    public states(): readonly LState[] {
+    public get states(): readonly LState[] {
         return this._states.map(id => MRLively.world.object(id) as LState);
     }
 
     public isStateAffected(stateId: DStateId): boolean {
-        return this.states().findIndex(s => s.stateDataId() == stateId) >= 0;
+        return this.states.findIndex(s => s.stateDataId() == stateId) >= 0;
     }
 
     public removeStates(stateIds: DStateId[]) {
@@ -1030,11 +1032,11 @@ export class LEntity extends LObject
     /** 全ての State を除外します。 */
     public removeAllStates(withoutDeadStates: boolean): void {
         if (withoutDeadStates) {
-            const removes = this.states().filter(s => !s.isDeathState).map(s => s.stateDataId());
+            const removes = this.states.filter(s => !s.isDeathState).map(s => s.stateDataId());
             this.removeStates(removes);
         }
         else {
-            this.states().forEach(s => {
+            this.states.forEach(s => {
                 s.clearParent();
                 s.onDetached(this);
             });
@@ -1073,11 +1075,11 @@ export class LEntity extends LObject
 
     // Game_BattlerBase.prototype.isDeathStateAffected
     public isDeathStateAffected(): boolean {
-        return !!this.states().find(s => s.isDeathState);
+        return !!this.states.find(s => s.isDeathState);
     }
 
     public removeDeadStates(): void {
-        const stateIds = this.states().filter(s => s.stateDataId() == MRBasics.states.dead || s.stateData().deadState).map(s => s.stateDataId());
+        const stateIds = this.states.filter(s => s.stateDataId() == MRBasics.states.dead || s.stateData().deadState).map(s => s.stateDataId());
         this.removeStates(stateIds);
     }
 
@@ -1253,7 +1255,7 @@ export class LEntity extends LObject
     }
 
     private _iterateBehaviors(func: (x: LBehavior) => boolean) {
-        const states = this.states();
+        const states = this.states;
         for (let i = states.length - 1; i >= 0; i--) {
             const behabiors = states[i].stateBehabiors();
             for (let i2 = behabiors.length - 1; i2 >= 0; i2--) {
@@ -1398,7 +1400,7 @@ export class LEntity extends LObject
     // 今後印なども同じような実装となるが、型の違う Behavior を検索して呼び出すのが煩雑になりすぎる。
     /** @deprecated  use collectBehaviors*/
     _callStateIterationHelper(func: (x: LBehavior) => SCommandResponse): SCommandResponse {
-        const states = this.states();
+        const states = this.states;
         let response = SCommandResponse.Pass;
         for (let i = states.length - 1; i >= 0; i--) {
             response = states[i]._callStateIterationHelper(func);
@@ -1616,6 +1618,28 @@ export class LEntity extends LObject
         const block = MRLively.mapView.currentMap.block(this.mx, this.my);
         return block.containsEntity(this);
     }
+
+    //----------------------------------------
+    // Think
+
+    thinkingAgent: LThinkingAgent | undefined;
+    //_thinkingContext: LThinkingContext | undefined;
+
+    public think(): void {
+        // Priority の一番大きい Agent を取得する
+        const agents: LThinkingAgent[] = [];
+        this.iterateBehaviorsReverse(b => {
+            b.onCollectThinkingAgent(agents);
+        });
+        if (agents.length == 0) return;
+        const agent = agents.reduce((prev, current) => (prev.priority > current.priority) ? prev : current);
+        this.thinkingAgent = agent;
+        this.thinkingAgent.clearCandidateSctions();
+        this.thinkingAgent.think(this);
+        //this._thinkingContext = new LThinkingContext();
+    }
+
+
 
     //----------------------------------------
     

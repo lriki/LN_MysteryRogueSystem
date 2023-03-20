@@ -15,6 +15,9 @@ import { MRBasics } from "ts/mr/data/MRBasics";
 import { LActivity } from "../activities/LActivity";
 import { LInventoryBehavior } from "./LInventoryBehavior";
 import { MRSerializable } from "ts/mr/Common";
+import { LThinkingActionRatings, LThinkingAgent } from "../ai2/LThinkingAgent";
+import { MRData } from "ts/mr/data/MRData";
+import { LThinkingAction } from "../ai2/LThinkingAction";
 
 
 /**
@@ -54,6 +57,37 @@ export class LShopkeeperBehavior extends LBehavior {
     onAttached(self: LEntity): void {
         const decision = self.getEntityBehavior(LDecisionBehavior);
         decision.characterAI().setMovingTargetFinder(new LMovingTargetFinder_Shopkeeper(this));
+    }
+
+    override onThink(self: LEntity, agent: LThinkingAgent): SPhaseResult {
+        const shop = this.shop();
+        const entrance = this.shopEntrance();
+        const targetPos = shop.checkBilling() ? [entrance.gateX(), entrance.gateY()] : [entrance.homeX(), entrance.homeY()];
+        
+        if (targetPos[0] == self.mx && targetPos[1] == self.my) {
+            const action = new LThinkingAction(
+                { 
+                    rating: LThinkingActionRatings.BasicActionsEnd + 1,
+                    skillId: MRData.system.skills.wait,
+                },
+                [],
+            );
+            agent.addCandidateAction(action);
+        }
+        else {
+            const action = new LThinkingAction(
+                { 
+                    rating: LThinkingActionRatings.Moving,
+                    skillId: MRData.system.skills.move,
+                },
+                [],
+            );
+            action.priorityTargetX = targetPos[0];
+            action.priorityTargetY = targetPos[1];
+            agent.addCandidateAction(action);
+        }
+
+        return SPhaseResult.Pass;
     }
 
     onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult {

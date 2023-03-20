@@ -2,6 +2,7 @@ import { DClassId } from "./DClass";
 import { DSkillId } from "./DCommon";
 import { DEntityId } from "./DEntity";
 import { DFlavorEffect } from "./DFlavorEffect";
+import { DSkillClass } from "./DSkill";
 import { DStateId } from "./DState";
 import { DFactionId, MRData } from "./MRData";
 
@@ -36,7 +37,9 @@ export interface DSystemStates {
 // }
 
 export interface DSystemSkills {
+    wait: DSkillId;
     move: DSkillId;
+    escape: DSkillId;
     normalAttack: DSkillId;
 }
 
@@ -89,7 +92,9 @@ export class DSystem {
         };
         this.trapTargetFactionId = this.factions.player;
         this.skills = {
+            wait: 0,
             move: 0,
+            escape: 0,
             normalAttack: 0,
         }
         this.states = {
@@ -117,8 +122,15 @@ export class DSystem {
         curse.displayNameIcon = true;
         seal.displayNameIcon = true;
 
-        this.skills.normalAttack = MRData.getSkill("kSkill_System_NormalAttack").id;
+        this.skills.wait = MRData.getSkill("kSkill_System_Wait").id;
         this.skills.move = MRData.getSkill("kSkill_System_Move").id;
+        this.skills.escape = MRData.getSkill("kSkill_System_Escape").id;
+        this.skills.normalAttack = MRData.getSkill("kSkill_System_NormalAttack").id;
+
+        MRData.skills[this.skills.wait].skillClass = DSkillClass.Minor;
+        MRData.skills[this.skills.move].skillClass = DSkillClass.Minor;
+        MRData.skills[this.skills.escape].skillClass = DSkillClass.Minor;
+
 
         this.states.bless = bless.id;
         this.states.curse = curse.id;
