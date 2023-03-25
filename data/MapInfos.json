@@ -15,8 +15,8 @@
     "name": "MR-Prefabs",
     "order": 2,
     "parentId": 1,
-    "scrollX": 798.5999999999999,
-    "scrollY": 503.4
+    "scrollX": 811,
+    "scrollY": 757.5
   },
   {
     "id": 3,
@@ -25,7 +25,7 @@
     "order": 3,
     "parentId": 1,
     "scrollX": 811,
-    "scrollY": 453.5
+    "scrollY": 457.5
   },
   {
     "id": 4,
@@ -195,8 +195,8 @@
     "name": "7:装備品は 旅の友",
     "order": 137,
     "parentId": 99,
-    "scrollX": 982.8,
-    "scrollY": 553.8
+    "scrollX": 983,
+    "scrollY": 553.5
   },
   {
     "id": 23,
@@ -204,8 +204,8 @@
     "name": "10:杖",
     "order": 138,
     "parentId": 99,
-    "scrollX": 1042.8,
-    "scrollY": 605.4
+    "scrollX": 1043,
+    "scrollY": 605.5
   },
   {
     "id": 24,
@@ -213,8 +213,8 @@
     "name": "x:モンスターハウス",
     "order": 139,
     "parentId": 99,
-    "scrollX": 1033.2,
-    "scrollY": 603
+    "scrollX": 1033,
+    "scrollY": 603.5
   },
   {
     "id": 25,
@@ -231,8 +231,8 @@
     "name": "MR-Land:UnitTestDungeon1",
     "order": 55,
     "parentId": 25,
-    "scrollX": 1129.2,
-    "scrollY": 549
+    "scrollX": 819,
+    "scrollY": 449.5
   },
   {
     "id": 27,
@@ -240,8 +240,8 @@
     "name": "[Fixed]",
     "order": 62,
     "parentId": 26,
-    "scrollX": 973.1999999999999,
-    "scrollY": 549
+    "scrollX": 819,
+    "scrollY": 449.5
   },
   {
     "id": 28,
@@ -285,8 +285,8 @@
     "name": "MR-Safety:インデックス",
     "order": 125,
     "parentId": 35,
-    "scrollX": 982.8,
-    "scrollY": 891
+    "scrollX": 811,
+    "scrollY": 822.5
   },
   {
     "id": 33,
@@ -312,8 +312,8 @@
     "name": "標準システムマップ",
     "order": 122,
     "parentId": 25,
-    "scrollX": 973.1999999999999,
-    "scrollY": 548.4
+    "scrollX": 811,
+    "scrollY": 457.5
   },
   {
     "id": 36,
@@ -321,8 +321,8 @@
     "name": "MR-Safety:テスト拠点",
     "order": 123,
     "parentId": 35,
-    "scrollX": 982.8,
-    "scrollY": 891
+    "scrollX": 811,
+    "scrollY": 982.5
   },
   {
     "id": 37,
@@ -330,8 +330,8 @@
     "name": "宿屋",
     "order": 124,
     "parentId": 35,
-    "scrollX": 973.1999999999999,
-    "scrollY": 549
+    "scrollX": 811,
+    "scrollY": 457.5
   },
   {
     "id": 38,
@@ -358,7 +358,7 @@
     "order": 66,
     "parentId": 27,
     "scrollX": 819,
-    "scrollY": 463
+    "scrollY": 463.5
   },
   {
     "id": 41,
@@ -484,7 +484,7 @@
     "order": 140,
     "parentId": 98,
     "scrollX": 811,
-    "scrollY": 461
+    "scrollY": 449.5
   },
   {
     "id": 55,
@@ -493,7 +493,7 @@
     "order": 97,
     "parentId": 27,
     "scrollX": 811,
-    "scrollY": 454
+    "scrollY": 454.5
   },
   {
     "id": 56,
@@ -573,8 +573,8 @@
     "name": "[Table]",
     "order": 56,
     "parentId": 26,
-    "scrollX": 982.8,
-    "scrollY": 539.4
+    "scrollX": 819,
+    "scrollY": 449.5
   },
   {
     "id": 65,
@@ -592,7 +592,7 @@
     "order": 82,
     "parentId": 27,
     "scrollX": 817,
-    "scrollY": 463
+    "scrollY": 463.5
   },
   {
     "id": 67,
@@ -691,7 +691,7 @@
     "order": 84,
     "parentId": 27,
     "scrollX": 811,
-    "scrollY": 453.5
+    "scrollY": 449.5
   },
   {
     "id": 78,
@@ -700,7 +700,7 @@
     "order": 85,
     "parentId": 27,
     "scrollX": 824,
-    "scrollY": 499
+    "scrollY": 499.5
   },
   {
     "id": 79,
@@ -772,7 +772,7 @@
     "order": 93,
     "parentId": 27,
     "scrollX": 811,
-    "scrollY": 462
+    "scrollY": 462.5
   },
   {
     "id": 87,
@@ -790,7 +790,7 @@
     "order": 95,
     "parentId": 27,
     "scrollX": 819,
-    "scrollY": 462
+    "scrollY": 462.5
   },
   {
     "id": 89,
@@ -799,7 +799,7 @@
     "order": 96,
     "parentId": 27,
     "scrollX": 819,
-    "scrollY": 499
+    "scrollY": 499.5
   },
   {
     "id": 90,
@@ -821,12 +821,12 @@
   },
   {
     "id": 92,
-    "expanded": true,
+    "expanded": false,
     "name": "MR-Land:ダンジョン1",
     "order": 128,
     "parentId": 38,
     "scrollX": 811,
-    "scrollY": 461.5
+    "scrollY": 457.5
   },
   {
     "id": 93,
@@ -852,8 +852,8 @@
     "name": "2-自宅",
     "order": 147,
     "parentId": 105,
-    "scrollX": 982.8,
-    "scrollY": 799.8
+    "scrollX": 811,
+    "scrollY": 982.5
   },
   {
     "id": 96,
@@ -884,7 +884,7 @@
   },
   {
     "id": 99,
-    "expanded": true,
+    "expanded": false,
     "name": "[Fixed]",
     "order": 135,
     "parentId": 98,
@@ -897,12 +897,12 @@
     "name": "階段を目指せ！",
     "order": 136,
     "parentId": 99,
-    "scrollX": 973.1999999999999,
-    "scrollY": 539.4
+    "scrollX": 861,
+    "scrollY": 502.5
   },
   {
     "id": 101,
-    "expanded": true,
+    "expanded": false,
     "name": "[Table]",
     "order": 143,
     "parentId": 104,
@@ -915,8 +915,8 @@
     "name": "1-ワールドマップ",
     "order": 146,
     "parentId": 105,
-    "scrollX": 1712.3999999999999,
-    "scrollY": 1242.6
+    "scrollX": 1712,
+    "scrollY": 1242.5
   },
   {
     "id": 103,
@@ -938,12 +938,12 @@
   },
   {
     "id": 105,
-    "expanded": true,
+    "expanded": false,
     "name": "[Fixed]",
     "order": 145,
     "parentId": 104,
-    "scrollX": 973.1999999999999,
-    "scrollY": 549
+    "scrollX": 811,
+    "scrollY": 457.5
   },
   {
     "id": 106,
@@ -974,7 +974,7 @@
   },
   {
     "id": 109,
-    "expanded": true,
+    "expanded": false,
     "name": "[System]",
     "order": 131,
     "parentId": 92,
@@ -983,7 +983,7 @@
   },
   {
     "id": 110,
-    "expanded": true,
+    "expanded": false,
     "name": "[System]",
     "order": 148,
     "parentId": 104,

@@ -3491,7 +3491,7 @@
           "directionFix": false,
           "image": {
             "tileId": 0,
-            "characterName": "!Switch1",
+            "characterName": "MR-SpawnerMarkers/!Switch1-Marker",
             "direction": 4,
             "pattern": 0,
             "characterIndex": 4

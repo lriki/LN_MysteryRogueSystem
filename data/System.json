@@ -9,7 +9,8 @@
     "fallbackFonts": "Verdana, sans-serif",
     "fontSize": 26,
     "mainFontFilename": "mplus-1m-regular.woff",
-    "windowOpacity": 192
+    "windowOpacity": 192,
+    "screenScale": 1
   },
   "airship": {
     "bgm": {
@@ -562,7 +563,7 @@
     "",
     ""
   ],
-  "versionId": 37550988,
+  "versionId": 34538237,
   "victoryMe": {
     "name": "Victory1",
     "pan": 0,

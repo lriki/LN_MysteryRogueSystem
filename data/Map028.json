@@ -15059,7 +15059,7 @@
           "directionFix": false,
           "image": {
             "tileId": 0,
-            "characterName": "MR-Objects1",
+            "characterName": "MR-SpawnerMarkers/MR-Objects1-Marker",
             "direction": 2,
             "pattern": 0,
             "characterIndex": 0

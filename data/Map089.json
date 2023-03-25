@@ -4259,7 +4259,7 @@
           "directionFix": true,
           "image": {
             "tileId": 0,
-            "characterName": "MR-Objects1",
+            "characterName": "MR-SpawnerMarkers/MR-Objects1-Marker",
             "direction": 4,
             "pattern": 0,
             "characterIndex": 0
@@ -4343,7 +4343,7 @@
           "directionFix": true,
           "image": {
             "tileId": 0,
-            "characterName": "MR-Objects1",
+            "characterName": "MR-SpawnerMarkers/MR-Objects1-Marker",
             "direction": 2,
             "pattern": 0,
             "characterIndex": 0
@@ -4427,7 +4427,7 @@
           "directionFix": true,
           "image": {
             "tileId": 0,
-            "characterName": "Iconic1",
+            "characterName": "MR-SpawnerMarkers/Iconic1-Marker",
             "direction": 6,
             "pattern": 1,
             "characterIndex": 5
@@ -4501,7 +4501,7 @@
           "directionFix": true,
           "image": {
             "tileId": 0,
-            "characterName": "Iconic1",
+            "characterName": "MR-SpawnerMarkers/Iconic1-Marker",
             "direction": 6,
             "pattern": 1,
             "characterIndex": 5
@@ -4575,7 +4575,7 @@
           "directionFix": true,
           "image": {
             "tileId": 0,
-            "characterName": "Iconic1",
+            "characterName": "MR-SpawnerMarkers/Iconic1-Marker",
             "direction": 6,
             "pattern": 1,
             "characterIndex": 5
@@ -4649,7 +4649,7 @@
           "directionFix": true,
           "image": {
             "tileId": 0,
-            "characterName": "Iconic1",
+            "characterName": "MR-SpawnerMarkers/Iconic1-Marker",
             "direction": 6,
             "pattern": 1,
             "characterIndex": 5
@@ -4723,7 +4723,7 @@
           "directionFix": true,
           "image": {
             "tileId": 0,
-            "characterName": "Iconic1",
+            "characterName": "MR-SpawnerMarkers/Iconic1-Marker",
             "direction": 6,
             "pattern": 1,
             "characterIndex": 5
@@ -4797,7 +4797,7 @@
           "directionFix": false,
           "image": {
             "tileId": 0,
-            "characterName": "Monster",
+            "characterName": "MR-SpawnerMarkers/Monster-Marker",
             "direction": 2,
             "pattern": 1,
             "characterIndex": 2
@@ -4878,7 +4878,7 @@
           "directionFix": false,
           "image": {
             "tileId": 0,
-            "characterName": "!Switch1",
+            "characterName": "MR-SpawnerMarkers/!Switch1-Marker",
             "direction": 4,
             "pattern": 0,
             "characterIndex": 4
@@ -4959,7 +4959,7 @@
           "directionFix": true,
           "image": {
             "tileId": 0,
-            "characterName": "Iconic1",
+            "characterName": "MR-SpawnerMarkers/Iconic1-Marker",
             "direction": 6,
             "pattern": 1,
             "characterIndex": 5
@@ -5033,7 +5033,7 @@
           "directionFix": true,
           "image": {
             "tileId": 0,
-            "characterName": "Iconic1",
+            "characterName": "MR-SpawnerMarkers/Iconic1-Marker",
             "direction": 6,
             "pattern": 1,
             "characterIndex": 5
@@ -5107,7 +5107,7 @@
           "directionFix": true,
           "image": {
             "tileId": 0,
-            "characterName": "Iconic1",
+            "characterName": "MR-SpawnerMarkers/Iconic1-Marker",
             "direction": 6,
             "pattern": 1,
             "characterIndex": 5
@@ -5181,7 +5181,7 @@
           "directionFix": true,
           "image": {
             "tileId": 0,
-            "characterName": "Iconic1",
+            "characterName": "MR-SpawnerMarkers/Iconic1-Marker",
             "direction": 6,
             "pattern": 1,
             "characterIndex": 5
@@ -5255,7 +5255,7 @@
           "directionFix": false,
           "image": {
             "tileId": 0,
-            "characterName": "!Switch1",
+            "characterName": "MR-SpawnerMarkers/!Switch1-Marker",
             "direction": 4,
             "pattern": 0,
             "characterIndex": 4
@@ -5336,7 +5336,7 @@
           "directionFix": false,
           "image": {
             "tileId": 0,
-            "characterName": "Monster_MV3",
+            "characterName": "MR-SpawnerMarkers/Monster_MV3-Marker",
             "direction": 2,
             "pattern": 1,
             "characterIndex": 0
@@ -5417,7 +5417,7 @@
           "directionFix": true,
           "image": {
             "tileId": 0,
-            "characterName": "Iconic1",
+            "characterName": "MR-SpawnerMarkers/Iconic1-Marker",
             "direction": 6,
             "pattern": 1,
             "characterIndex": 5
@@ -5491,7 +5491,7 @@
           "directionFix": false,
           "image": {
             "tileId": 0,
-            "characterName": "Monster_MV2",
+            "characterName": "MR-SpawnerMarkers/Monster_MV2-Marker",
             "direction": 2,
             "pattern": 1,
             "characterIndex": 4
@@ -5572,7 +5572,7 @@
           "directionFix": false,
           "image": {
             "tileId": 0,
-            "characterName": "Monster_MV3",
+            "characterName": "MR-SpawnerMarkers/Monster_MV3-Marker",
             "direction": 2,
             "pattern": 1,
             "characterIndex": 4
@@ -5653,7 +5653,7 @@
           "directionFix": true,
           "image": {
             "tileId": 0,
-            "characterName": "Iconic1",
+            "characterName": "MR-SpawnerMarkers/Iconic1-Marker",
             "direction": 6,
             "pattern": 1,
             "characterIndex": 5
@@ -5727,7 +5727,7 @@
           "directionFix": true,
           "image": {
             "tileId": 0,
-            "characterName": "Iconic1",
+            "characterName": "MR-SpawnerMarkers/Iconic1-Marker",
             "direction": 6,
             "pattern": 1,
             "characterIndex": 5
@@ -5801,7 +5801,7 @@
           "directionFix": false,
           "image": {
             "tileId": 0,
-            "characterName": "!Switch1",
+            "characterName": "MR-SpawnerMarkers/!Switch1-Marker",
             "direction": 4,
             "pattern": 0,
             "characterIndex": 4
@@ -5882,7 +5882,7 @@
           "directionFix": false,
           "image": {
             "tileId": 0,
-            "characterName": "Monster_MV1",
+            "characterName": "MR-SpawnerMarkers/Monster_MV1-Marker",
             "direction": 2,
             "pattern": 0,
             "characterIndex": 1

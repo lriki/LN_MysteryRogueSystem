@@ -840,7 +840,7 @@
           "directionFix": true,
           "image": {
             "tileId": 0,
-            "characterName": "MR-Iconic2",
+            "characterName": "MR-SpawnerMarkers/MR-Iconic2-Marker",
             "direction": 4,
             "pattern": 2,
             "characterIndex": 1
@@ -914,7 +914,7 @@
           "directionFix": true,
           "image": {
             "tileId": 0,
-            "characterName": "Iconic1",
+            "characterName": "MR-SpawnerMarkers/Iconic1-Marker",
             "direction": 6,
             "pattern": 0,
             "characterIndex": 0
@@ -988,7 +988,7 @@
           "directionFix": true,
           "image": {
             "tileId": 0,
-            "characterName": "Iconic1",
+            "characterName": "MR-SpawnerMarkers/Iconic1-Marker",
             "direction": 4,
             "pattern": 0,
             "characterIndex": 4

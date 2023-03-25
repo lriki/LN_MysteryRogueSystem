@@ -4259,7 +4259,7 @@
           "directionFix": false,
           "image": {
             "tileId": 0,
-            "characterName": "MR-Objects1",
+            "characterName": "MR-SpawnerMarkers/MR-Objects1-Marker",
             "direction": 4,
             "pattern": 0,
             "characterIndex": 0
@@ -4333,7 +4333,7 @@
           "directionFix": false,
           "image": {
             "tileId": 0,
-            "characterName": "MR-Objects1",
+            "characterName": "MR-SpawnerMarkers/MR-Objects1-Marker",
             "direction": 2,
             "pattern": 0,
             "characterIndex": 0
@@ -4407,7 +4407,7 @@
           "directionFix": false,
           "image": {
             "tileId": 0,
-            "characterName": "Nature",
+            "characterName": "MR-SpawnerMarkers/Nature-Marker",
             "direction": 2,
             "pattern": 1,
             "characterIndex": 4
@@ -4488,7 +4488,7 @@
           "directionFix": false,
           "image": {
             "tileId": 0,
-            "characterName": "Nature",
+            "characterName": "MR-SpawnerMarkers/Nature-Marker",
             "direction": 2,
             "pattern": 1,
             "characterIndex": 5
@@ -4569,7 +4569,7 @@
           "directionFix": false,
           "image": {
             "tileId": 0,
-            "characterName": "Nature",
+            "characterName": "MR-SpawnerMarkers/Nature-Marker",
             "direction": 2,
             "pattern": 1,
             "characterIndex": 7
@@ -4650,7 +4650,7 @@
           "directionFix": true,
           "image": {
             "tileId": 0,
-            "characterName": "MR-Iconic2",
+            "characterName": "MR-SpawnerMarkers/MR-Iconic2-Marker",
             "direction": 4,
             "pattern": 2,
             "characterIndex": 1
@@ -4724,7 +4724,7 @@
           "directionFix": true,
           "image": {
             "tileId": 0,
-            "characterName": "MR-Iconic2",
+            "characterName": "MR-SpawnerMarkers/MR-Iconic2-Marker",
             "direction": 8,
             "pattern": 0,
             "characterIndex": 0

@@ -294,7 +294,7 @@
           "directionFix": true,
           "image": {
             "tileId": 0,
-            "characterName": "MR-Iconic2",
+            "characterName": "MR-SpawnerMarkers/MR-Iconic2-Marker",
             "direction": 4,
             "pattern": 2,
             "characterIndex": 1
