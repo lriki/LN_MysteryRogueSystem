@@ -169,6 +169,28 @@ export class SMapManager {
             this.map.uniqueSpawners[entity.dataId] = spawner;
             MRLively.world.transferEntity(entity, this.map.floorId(), spawner.mx, spawner.my);
         }
+
+        
+        // 仲間
+        {
+            const player = MRLively.mapView.getFocusedEntity();
+            assert(player.floorId.equals(this.map.floorId()));
+            const party = player.party();
+            console.log("party", party);
+            assert(party);
+            console.log("party.members", party.members);
+            for (const member of party.members) {
+                this.map.locateEntity(member, player.mx + 1, player.my);
+
+                console.log("member", member);
+                // if (member.floorId.equals(this.map.floorId())) {
+                //     const layer = member.getHomeLayer();
+                //     const block = this.findSpawnableBlockRandom(layer);
+                //     assert(block);
+                // }
+            }
+        }
+
     }
 
     public setupInitial(): void {
