@@ -127,20 +127,30 @@ export class SGameManager {
         // else {
         //     firstActor = REGame.world.entity(REGame.system.uniqueActorUnits[0]);
         // }
-        MRLively.world.iterateEntity(x => {
-            if ( x.dataId == MRData.system.initialPartyMembers[0]) {
-                firstActor = x;
-                return false;
+
+        const party = MRLively.world.newParty();
+        for (const dataId of MRData.system.initialPartyMembers) {
+            const actor = MRLively.world.findFirstEntity(x => x.dataId == dataId);
+            if (actor) {
+                party.addMember(actor);
             }
-            return true;
-        });
+        }
+        firstActor = party.members[0];
         assert(firstActor);
+
+        // MRLively.world.iterateEntity(x => {
+        //     if ( x.dataId == MRData.system.initialPartyMembers[0]) {
+        //         firstActor = x;
+        //         return false;
+        //     }
+        //     return true;
+        // });
+        // assert(firstActor);
         MRLively.system.mainPlayerEntityId = firstActor.entityId();
         MRLively.mapView.focus(firstActor);
 
         // Player を Party に入れる
-        const party = MRLively.world.newParty();
-        party.addMember(firstActor);
+        //party.addMember(firstActor);
 
         // Player の初期位置を、RMMZ 初期位置に合わせる
         UTransfer.transterRmmzDirectly($dataSystem.startMapId, $dataSystem.startX, $dataSystem.startY, 2);
