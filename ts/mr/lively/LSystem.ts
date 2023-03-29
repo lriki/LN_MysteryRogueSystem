@@ -15,7 +15,7 @@ export class LSystem
     // もし仲間がいるような場合、MainPlayerEntity がマップ移動したらついてきたりする。
     mainPlayerEntityId: LEntityId = LEntityId.makeEmpty();
 
-    uniqueActorUnits: LEntityId[] = [];
+    uniqueActorUnitIds: LEntityId[] = [];
 
     eventInterpreterContextKey: string | undefined;
 
@@ -25,6 +25,10 @@ export class LSystem
 
     public get mainPlayerEntity(): LEntity {
         return MRLively.world.entity(MRLively.system.mainPlayerEntityId);
+    }
+
+    public get uniqueActorUnits(): LEntity[] {
+        return this.uniqueActorUnitIds.map(id => MRLively.world.entity(id));
     }
 
     public getEventCommandTarget(): LEntity | undefined {

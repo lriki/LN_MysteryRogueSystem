@@ -105,6 +105,9 @@ export class TestEnv {
         this.performFloorTransfer();
     }
 
+    /**
+     * フロアと座標を指定してプレイヤーを移動し、フロアに遷移した状態にする。
+     */
     public static setupPlayer(floorId: LFloorId, mx?: number, my?: number, dir: number = 0): LEntity {
         const player = MRLively.world.entity(MRLively.system.mainPlayerEntityId);
         player._name = "Player";

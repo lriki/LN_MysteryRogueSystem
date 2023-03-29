@@ -180,6 +180,7 @@ export class SMapManager {
             assert(party);
             console.log("party.members", party.members);
             for (const member of party.members) {
+                if (member == player) continue;
                 this.map.locateEntity(member, player.mx + 1, player.my);
 
                 console.log("member", member);

@@ -296,14 +296,14 @@ export class USearch {
     }
     
     public static getUniqueActorByKey(key: string): LEntity {
-        const entity = MRLively.system.uniqueActorUnits
+        const entity = MRLively.system.uniqueActorUnitIds
             .map(x => MRLively.world.entity(x))
             .find(x => x.data.entity.key == key);
         if (!entity) throw new Error(tr2("%1はアクターの中から見つかりませんでした。").format(key));
         return entity;
     }
     public static getUniqueActorById(dataId: DEntityId): LEntity {
-        const entity = MRLively.system.uniqueActorUnits
+        const entity = MRLively.system.uniqueActorUnitIds
             .map(x => MRLively.world.entity(x))
             .find(x => x.data.id == dataId);
         if (!entity) throw new Error(tr2("%1はアクターの中から見つかりませんでした。").format(dataId));
@@ -315,7 +315,7 @@ export class USearch {
             return MRLively.mapView.getFocusedEntity();
         }
         else {
-            const entity = MRLively.system.uniqueActorUnits
+            const entity = MRLively.system.uniqueActorUnitIds
                 .map(x => MRLively.world.entity(x))
                 .find(x => x.data.entity.key == keyPattern);
             if (!entity) throw new Error(tr2("%1は見つかりませんでした。").format(keyPattern));

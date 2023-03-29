@@ -54,7 +54,7 @@ DataManager.createGameObjects = function() {
 
     // Link UniqueUnit and Game_Actor
     if (paramForceSync) {
-        for (const entityId of MRLively.system.uniqueActorUnits) {
+        for (const entityId of MRLively.system.uniqueActorUnitIds) {
             const entity = MRLively.world.entity(entityId);
             if (entity) {
                 const actorId = entity.data.actor?.rmmzActorId;

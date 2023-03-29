@@ -1228,7 +1228,7 @@ export class LEntity extends LObject
      * UniqueEntity のインベントリに入れられたアイテム等は UniqueEntity ではないので注意。
      */
     isUnique(): boolean {
-        return MRLively.system.uniqueActorUnits.findIndex(id => id.equals(this.entityId())) >= 0;
+        return MRLively.system.uniqueActorUnitIds.findIndex(id => id.equals(this.entityId())) >= 0;
     }
 
     /**

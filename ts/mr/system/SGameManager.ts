@@ -102,7 +102,7 @@ export class SGameManager {
                     //unit.floorId = LFlo;//x.initialFloorId;
                     unit.mx = actor.initialX;
                     unit.my = actor.initialY;
-                    MRLively.system.uniqueActorUnits.push(unit.entityId().clone());
+                    MRLively.system.uniqueActorUnitIds.push(unit.entityId().clone());
                 }
             }
         }
