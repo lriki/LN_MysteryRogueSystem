@@ -159,7 +159,7 @@ export class MRDataManager {
             pow: MRData.parameters.findIndex(x => x.code == "pow"),
             upgradeValue: MRData.parameters.findIndex(x => x.code == "upg"),
             remaining: MRData.parameters.findIndex(x => x.code == "rem"),
-            capacity: MRData.parameters.findIndex(x => x.code == "cap"),
+            //capacity: MRData.parameters.findIndex(x => x.code == "cap"),
             gold: MRData.parameters.findIndex(x => x.code == "gold"),
             level: MRData.parameters.findIndex(x => x.code == "level"),
             exp: MRData.parameters.findIndex(x => x.code == "exp"),
@@ -341,6 +341,7 @@ export class MRDataManager {
             MRBasics.traits.DeathVulnerableElement = MRData.newTrait("DeathVulnerableElement").id;
             MRBasics.traits.ForceParameter = MRData.newTrait("ForceParameter").id;
             MRBasics.traits.DisableMovement = MRData.newTrait("DisableMovement").id;
+            MRBasics.traits.DisallowIntoStorage = MRData.newTrait("DisallowIntoStorage").id;
         }
 
         // Factions
@@ -392,10 +393,10 @@ export class MRDataManager {
         // };
         // MRData.actions[ MRBasics.actions.ShootActionId].flavorEffect.sound = new DSound({ name: "Crossbow", volume: 100, pitch: 100, pan: 0 });
 
-        MRBasics.commands = {
-            testPickOutItem: MRData.newCommand("testPickOutItem").id,
-            testPutInItem: MRData.newCommand("testPutInItem").id,
-        };
+        // MRBasics.commands = {
+        //     testPickOutItem: MRData.newCommand("testPickOutItem").id,
+        //     testPutInItem: MRData.newCommand("testPutInItem").id,
+        // };
         
         // Sequels
         MRBasics.sequels = {
@@ -415,6 +416,7 @@ export class MRDataManager {
             warp: MRData.addSequel("warp"),
             stumble: MRData.addSequel("stumble"),
             jump: MRData.addSequel("stumble"),
+            crack: MRData.addSequel("crack"),
         };
         MRData.sequels[MRBasics.sequels.MoveSequel].parallel = true;
         MRData.sequels[MRBasics.sequels.MoveSequel].fluidSequence = true;
@@ -463,6 +465,53 @@ export class MRDataManager {
             performeSkill: MRData.newEffectBehavior("PerformeSkill").id,
         };
 
+        MRData.newBehavior("kBehavior_Common", "LCommonBehavior", "Common");
+        MRData.newBehavior("kBehavior_Decision", "LDecisionBehavior", "Decision");
+        MRData.newBehavior("kBehavior_Unit", "LUnitBehavior", "Unit");
+        MRData.newBehavior("kBehavior_Inventory", "LInventoryBehavior", "Inventory");
+        MRData.newBehavior("kBehavior_ItemUser", "LItemUserBehavior", "_ItemUser");
+        MRData.newBehavior("kBehavior_Equipment", "LEquipmentBehavior", "Equipment");
+        MRData.newBehavior("kBehavior_EquipmentUser", "LEquipmentUserBehavior", "_EquipmentUser");
+        MRData.newBehavior("kBehavior_Actor", "LActorBehavior", "_Actor");
+        MRData.newBehavior("kBehavior_ExitPoint", "LExitPointBehavior", "_ExitPoint");
+        MRData.newBehavior("kBehavior_EntryPoint", "LEntryPointBehavior", "_EntryPoint");
+        MRData.newBehavior("kBehavior_Enemy", "LEnemyBehavior", "_Enemy");
+        MRData.newBehavior("kBehavior_GenericRMMZState", "LGenericRMMZStateBehavior", "_GenericRMMZState");
+        MRData.newBehavior("kBehavior_Item", "LItemBehavior", "_Item");
+        MRData.newBehavior("kBehavior_NapState", "LNapStateBehavior", "NapState");
+        MRData.newBehavior("kBehavior_ItemImitator", "LItemImitatorBehavior", "ItemImitator");
+        MRData.newBehavior("kBehavior_IllusionState", "LIllusionStateBehavior", "IllusionState");
+        MRData.newBehavior("kBehavior_GrabFoot", "LGrabFootBehavior", "FootBehavior");
+        MRData.newBehavior("kBehavior_RevivalItem", "LRevivalItemBehavior", "RevivalItem");
+        MRData.newBehavior("kBehavior_ItemStanding", "LItemStandingBehavior", "ItemStanding");
+        MRData.newBehavior("kBehavior_Projectile", "LProjectileBehavior", "Projectile");
+        MRData.newBehavior("kBehavior_Decision", "LDecisionBehavior", "Decision");
+        MRData.newBehavior("kBehavior_Experience", "LExperienceBehavior", "Experience");
+        MRData.newBehavior("kBehavior_Eater", "LEaterBehavior", "Eater");
+        MRData.newBehavior("kBehavior_Survivor", "LSurvivorBehavior", "Survivor");
+        MRData.newBehavior("kBehavior_ExitPoint", "LExitPointBehavior", "ExitPoint");
+        MRData.newBehavior("kBehavior_Race", "LRaceBehavior", "Race");
+        MRData.newBehavior("kBehavior_Trap", "LTrapBehavior", "Trap");
+        MRData.newBehavior("kBehavior_Param", "LParamBehavior", "Param");
+        MRData.newBehavior("kBehavior_RatedRandomAI", "LRatedRandomAIBehavior", "RatedRandomAI");
+        MRData.newBehavior("kBehavior_EntityDivision", "LEntityDivisionBehavior", "EntityDivision");
+        MRData.newBehavior("kBehavior_Sanctuary", "LSanctuaryBehavior", "Sanctuary");
+        MRData.newBehavior("kBehavior_GlueToGround", "LGlueToGroundBehavior", "GlueToGround");
+        MRData.newBehavior("kBehavior_StumblePrevention", "LStumblePreventionBehavior", "StumblePrevention");
+        MRData.newBehavior("kBehavior_GoldThief", "LGoldThiefBehavior", "GoldThief");
+        MRData.newBehavior("kBehavior_ActivityCharm", "LActivityCharmBehavior", "ActivityCharm");
+        MRData.newBehavior("kBehavior_Gold", "LGoldBehavior", "Gold");
+        MRData.newBehavior("kBehavior_Escape", "LEscapeBehavior", "Escape");
+        MRData.newBehavior("kBehavior_Flock", "LFlockBehavior", "Flock");
+        MRData.newBehavior("kBehavior_Storage", "LStorageBehavior", "Storage");
+        MRData.newBehavior("kBehavior_ItemThief", "LItemThiefBehavior", "ItemThief");
+        MRData.newBehavior("kBehavior_Shopkeeper", "LShopkeeperBehavior", "Shopkeeper");
+        MRData.newBehavior("kBehavior_CrackedBehavior", "LCrackedBehavior", "CrackedBehavior");
+        MRData.newBehavior("kBehavior_Knockback", "LKnockbackBehavior", "Knockback");
+        MRData.newBehavior("kBehavior_SelfExplosion", "LSelfExplosionBehavior", "SelfExplosion");
+        MRData.newBehavior("kBehavior_DebugMoveRight", "LDebugMoveRightBehavior", "DebugMoveRight");
+        
+        
         // EntityTemplate
         {
             MRData.newEntityTemplate("kEntityTemplate_Weapon", {

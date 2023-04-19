@@ -336,7 +336,7 @@ export class LEntity extends LObject
 
 
 
-        for (const i of this.basicBehaviors()) {
+        for (const i of this.basicBehaviors) {
             const i2 = i.clone(entity);
             entity._basicBehaviors.push(i2.id());
             i2.setParent(entity);
@@ -372,7 +372,7 @@ export class LEntity extends LObject
 
     protected onRemoveChild(obj: LObject): void {
         if (obj instanceof LEntity) {
-            for (const b of this.basicBehaviors()) {
+            for (const b of this.basicBehaviors) {
                 b.onRemoveChild(obj);
             }
         }
@@ -388,7 +388,7 @@ export class LEntity extends LObject
     }
     
     protected onRemoveFromParent(): void {
-        for (const b of this.basicBehaviors()) {
+        for (const b of this.basicBehaviors) {
             b.onOwnerRemoveFromParent(this);
         }
     }
@@ -630,7 +630,7 @@ export class LEntity extends LObject
         // Min/Max clamp.
         this._params.refresh(this);
         
-        this.basicBehaviors().forEach(b => b.onRefreshConditions(this));
+        this.basicBehaviors.forEach(b => b.onRefreshConditions(this));
         
     
         // refresh 後、HP が 0 なら DeadState を付加する
@@ -945,17 +945,23 @@ export class LEntity extends LObject
         return this.findEntityBehaviorByName(name);
     }
 
-    public basicBehaviors(): LBehavior[] {
+    public get basicBehaviors(): LBehavior[] {
         return this._basicBehaviors.map(x => MRLively.world.behavior(x));
     }
 
     
-    public addBehavior<T extends LBehavior>(ctor: { new(...args: any[]): T }, ...args: any[]): T {
-        const behavior = new ctor();
-        (behavior as T).setup(...args);
+    // public addBehavior<T extends LBehavior>(ctor: { new(...args: any[]): T }, ...args: any[]): T {
+    //     const behavior = new ctor();
+    //     (behavior as T).setup(...args);
+    //     MRLively.world._registerObject(behavior);
+    //     this._addBehavior(behavior);
+    //     return behavior;
+    // }
+
+    /** 指定された Behavior を World に登録してから、この Entity に追加します。 */
+    public addBehavior(behavior: LBehavior) {
         MRLively.world._registerObject(behavior);
         this._addBehavior(behavior);
-        return behavior;
     }
 
     _addBehavior(behavior: LBehavior) {
@@ -964,6 +970,11 @@ export class LEntity extends LObject
         this._basicBehaviors.push(behavior.id());
         behavior.setParent(this);
         behavior.onAttached(this);
+
+        // TODO: newEntity 最後で、こてい Behavior 全部そろってからにしたい
+        // const params = this.data.getMergedBehaviorParams(behavior.fullName, behavior.friendlyName);
+        // behavior.onInitialized(this, params);
+
         return behavior;
     }
 
@@ -979,7 +990,7 @@ export class LEntity extends LObject
 
     /** 全ての Behavior を除外します。 */
     public removeAllBehaviors(): void {
-        this.basicBehaviors().forEach(b => {
+        this.basicBehaviors.forEach(b => {
             b.clearParent();
             b.onDetached(this);
             b.destroy();
@@ -1221,6 +1232,16 @@ export class LEntity extends LObject
             const a = MRLively.world.behavior(this._basicBehaviors[i]);
             if (a instanceof ctor) {
                 return a as T;
+            }
+        }
+        return undefined;
+    }
+    
+    public findEntityBehaviorBy(func: (b: LBehavior) => boolean): LBehavior | undefined {
+        for (let i = 0; i < this._basicBehaviors.length; i++) {
+            const b = MRLively.world.behavior(this._basicBehaviors[i]);
+            if (func(b)) {
+                return b;
             }
         }
         return undefined;

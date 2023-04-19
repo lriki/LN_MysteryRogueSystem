@@ -3,7 +3,15 @@ import { DActionId } from "ts/mr/data/DCommon";
 import { MRData } from "ts/mr/data/MRData";
 
 export type SActivityCommandHandler = (actionId: DActionId) => void;
-export type SSystemCommandHandler = (commandId: string) => void;
+export type SSystemCommandHandler = (commandId: SDialogSystemCommand) => void;
+
+export enum SDialogSystemCommand {
+    SetShortcutSet = "SetShortcutSet",
+    UnsetShortcutSet = "UnsetShortcutSet",
+    Peek = "Peek",
+    PutIn = "PutIn",
+    PickOut = "PickOut",
+}
 
 /**
  * UI のコマンドリストなどに表示するアクションアイテム。
@@ -13,7 +21,7 @@ export class SDialogCommand {
     private _displayName: string;
     private _actionId: DActionId;
     private _activityCommandHandler: SActivityCommandHandler | undefined;
-    private _systemCommandId: string;
+    private _systemCommandId: SDialogSystemCommand | undefined;
     private _systemCommandIdHandler: SSystemCommandHandler | undefined;
 
     public static makeActivityCommand(actionId: DActionId, displayName: string | undefined, handler: SActivityCommandHandler): SDialogCommand {
@@ -24,7 +32,7 @@ export class SDialogCommand {
         return cmd;
     }
 
-    public static makeSystemCommand(displayName: string, systemCommandId: string, handler: SSystemCommandHandler): SDialogCommand {
+    public static makeSystemCommand(displayName: string, systemCommandId: SDialogSystemCommand, handler: SSystemCommandHandler): SDialogCommand {
         const cmd = new SDialogCommand();
         cmd._displayName = displayName;
         cmd._systemCommandId = systemCommandId;
@@ -35,7 +43,6 @@ export class SDialogCommand {
     private constructor() {
         this._displayName = "";
         this._actionId = 0;
-        this._systemCommandId = "";
     }
 
     public get displayName(): string {
@@ -56,10 +63,11 @@ export class SDialogCommand {
     }
 
     public get isSystemCommand(): boolean {
-        return this._systemCommandId.length > 0;
+        return this._systemCommandId !== undefined;
     }
 
-    public get systemCommandId(): string {
+    public get systemCommandId(): SDialogSystemCommand {
+        assert(this._systemCommandId !== undefined)
         return this._systemCommandId;
     }
 
@@ -73,7 +81,7 @@ export class SDialogCommand {
             this._activityCommandHandler(this._actionId);
         }
         else if (this._systemCommandIdHandler) {
-            this._systemCommandIdHandler(this._systemCommandId);
+            this._systemCommandIdHandler(this.systemCommandId);
         }
         else {
             throw new Error("Unreachable.");

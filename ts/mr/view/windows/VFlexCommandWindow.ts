@@ -1,16 +1,16 @@
 import { DActionId } from "ts/mr/data/DCommon";
 import { MRData } from "ts/mr/data/MRData";
-import { SDialogCommand } from "ts/mr/system/dialogs/SDialogCommand";
+import { SDialogCommand, SDialogSystemCommand } from "ts/mr/system/dialogs/SDialogCommand";
 
 export type ActionCommandHandler = (actionId: DActionId) => void;
 
-export type SystemCommandHandler = (commandId: string) => void;
+export type SystemCommandHandler = (commandId: SDialogSystemCommand) => void;
 
 export interface CommandInfo
 {
     actionId: DActionId;     // 0 の場合はシステムコマンド
     displayText: string;
-    commandId: string;
+    commandId: string | SDialogSystemCommand;
     actionHandler: ActionCommandHandler | undefined;
     systemHandler: SystemCommandHandler | undefined;
 }
@@ -89,7 +89,7 @@ export class VFlexCommandWindow extends Window_Command {
                     this.addCommand(x.displayText, x.commandId, true, undefined);
                     this.setHandler(x.commandId, () => {
                         if (x.systemHandler) {
-                            x.systemHandler(x.commandId);
+                            x.systemHandler(x.commandId as SDialogSystemCommand);
                         }
                     });
                 }

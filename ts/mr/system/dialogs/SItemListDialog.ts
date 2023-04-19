@@ -14,38 +14,40 @@ import { MRSystem } from "../MRSystem";
 import { SDialog } from "../SDialog";
 import { SDialogContext } from "../SDialogContext";
 import { SCommonCommand } from "./SCommonCommand";
-import { SDialogCommand } from "./SDialogCommand";
+import { SDialogCommand, SDialogSystemCommand } from "./SDialogCommand";
 import { SItemSelectionDialog } from "./SItemSelectionDialog";
+import { SInventoryDialogBase } from "./SInventoryDialogBase";
 
-export class SItemListDialog extends SDialog {
+export enum SItemListDialogSourceAction {
+    Default,
+    Peek,
+}
+
+export class SItemListDialog extends SInventoryDialogBase {
     private _actorEntityId: LEntityId;
-    private _inventoryBehaviorId: LBehaviorId;
-    private _selectedEntity: LEntity | undefined;
+    
+    public readonly sourceAction: SItemListDialogSourceAction;
 
-    public constructor(actorEntity: LEntity, inventory: LInventoryBehavior) {
-        super();
+    public constructor(actorEntity: LEntity, inventory: LInventoryBehavior, sourceAction: SItemListDialogSourceAction) {
+        super(inventory);
         this._actorEntityId = actorEntity.entityId();
-        this._inventoryBehaviorId = inventory.id();
+        this.sourceAction = sourceAction;
     }
 
     public get actor(): LEntity {
         return MRLively.world.entity(this._actorEntityId);
     }
 
-    public get inventory(): LInventoryBehavior {
-        return MRLively.world.behavior(this._inventoryBehaviorId) as LInventoryBehavior;
+
+    public makeActionList(): SDialogCommand[] {
+        return (!this.isMultiSelectMode) ?
+            this.makeActionList_SingleSelected() :
+            this.makeActionList_MultiSelected();
     }
 
-    public setSelectedEntity(entity: LEntity): void {
-        this._selectedEntity = entity;
-    }
+    private makeActionList_SingleSelected(): SDialogCommand[] {
+        const item = this.selectedSingleEntity();
 
-    public selectedEntity(): LEntity {
-        assert(this._selectedEntity);
-        return this._selectedEntity;
-    }
-
-    public makeActionList(item: LEntity): SDialogCommand[] {
         // SafetyMap など、ダンジョンマップ以外では ActionList を生成しない
         if (!MRLively.mapView.currentMap.floorId().isTacticsMap2) {
             return [];
@@ -54,21 +56,26 @@ export class SItemListDialog extends SDialog {
         const actor = this.actor;
         let commands: SDialogCommand[] = [];
 
-        
-        if (item.findEntityBehavior(LStorageBehavior)) {
-            commands.push(SDialogCommand.makeSystemCommand("peek", tr2("見る"), _ => this.handlePeek()));
-            commands.push(SDialogCommand.makeSystemCommand("putIn", tr2("入れる"), _ => this.handlePutIn()));
+        if (this.sourceAction == SItemListDialogSourceAction.Peek) {
+            commands.push(SDialogCommand.makeSystemCommand(tr2("取り出す"), SDialogSystemCommand.PickOut, _ => this.handlePickOut()));
         }
+        else {
+            if (item.findEntityBehavior(LStorageBehavior)) {
+                commands.push(SDialogCommand.makeSystemCommand(tr2("見る"), SDialogSystemCommand.Peek, _ => this.handlePeek()));
+                commands.push(SDialogCommand.makeSystemCommand(tr2("入れる"), SDialogSystemCommand.PutIn, _ => this.handlePutIn()));
+            }
+        }
+        
         
         
         if (item.data.shortcut) {
             const equipments = actor.getEntityBehavior(LEquipmentUserBehavior);
             const shorcutItem = equipments.shortcutItem;
             if (shorcutItem && shorcutItem == item) {
-                commands.push(SDialogCommand.makeSystemCommand(tr2("はずす"), "UnsetShortcutSet", _ => this.handleShortcutUnset()));
+                commands.push(SDialogCommand.makeSystemCommand(tr2("はずす"), SDialogSystemCommand.UnsetShortcutSet, _ => this.handleShortcutUnset()));
             }
             else {
-                commands.push(SDialogCommand.makeSystemCommand(tr2("セット"), "SetShortcutSet", _ => this.handleShortcutSet()));
+                commands.push(SDialogCommand.makeSystemCommand(tr2("セット"),SDialogSystemCommand.SetShortcutSet, _ => this.handleShortcutSet()));
             }
         }
         
@@ -122,6 +129,16 @@ export class SItemListDialog extends SDialog {
         return commands;
     }
 
+    private makeActionList_MultiSelected(): SDialogCommand[] {
+        
+        let commands: SDialogCommand[] = [];
+        if (this.sourceAction == SItemListDialogSourceAction.Peek) {
+            commands.push(SDialogCommand.makeSystemCommand(tr2("取り出す"), SDialogSystemCommand.PickOut, _ => this.handlePickOut()));
+        }
+
+        return commands;
+    }
+
     public static normalizeActionList(actions: LReaction[]): LReaction[] {
         return actions
             .distinctObjects(x => x.actionId)
@@ -134,43 +151,53 @@ export class SItemListDialog extends SDialog {
     }
 
     private handleAction(actionId: DActionId): void {
-        const itemEntity = this.selectedEntity();
+        const itemEntity = this.selectedSingleEntity();
         SCommonCommand.handleAction(this, this.actor, this.inventory, itemEntity, actionId);
     }
 
     private handleShortcutSet(): void {
-        const itemEntity = this.selectedEntity();
+        const itemEntity = this.selectedSingleEntity();
         const equipmentUser = this.actor.getEntityBehavior(LEquipmentUserBehavior);
         equipmentUser.equipOnShortcut(MRSystem.commandContext, itemEntity);
         this.closeAllSubDialogs();
     }
 
     private handleShortcutUnset(): void {
-        const itemEntity = this.selectedEntity();
+        const itemEntity = this.selectedSingleEntity();
         const equipmentUser = this.actor.getEntityBehavior(LEquipmentUserBehavior);
         equipmentUser.equipOffShortcut(MRSystem.commandContext, itemEntity);
         this.closeAllSubDialogs();
     }
 
     private handlePeek(): void {
-        const itemEntity = this.selectedEntity();
+        const itemEntity = this.selectedSingleEntity();
         const inventory = itemEntity.getEntityBehavior(LInventoryBehavior);
-        this.openSubDialog(new SItemSelectionDialog(this.actor, inventory), (result: SItemSelectionDialog) => {
+        const model = new SItemListDialog(this.actor, inventory, SItemListDialogSourceAction.Peek);
+        model.multipleSelectionEnabled = true;
+        this.openSubDialog(model, (result: SItemListDialog) => {
             //this.submit();
             return false;
         });
     }
 
     private handlePutIn(): void {
-        const storage = this.selectedEntity();
-        const model = new SItemSelectionDialog(this.actor, this.inventory);
+        const storage = this.selectedSingleEntity();
+        const model = new SItemSelectionDialog(this.actor, this.inventory, true);
+        model.multipleSelectionEnabled = true;
         this.openSubDialog(model, (result: SItemSelectionDialog) => {
-            const item = model.selectedEntity();
-            assert(item);
-            const activity = LActivity.makePutIn(this.actor, storage, item);
+            console.log("model.selectedEntities()", model.selectedEntities());
+            const activity = LActivity.makePutIn(this.actor, storage, model.selectedEntities());
             MRSystem.dialogContext.postActivity(activity);
-            this.submit();
-            return false;
+
+            this.submit();  // submit にする。 (cancel ではなく)
+            return true;    // submit() を呼んだので Handled.
         });
+    }
+
+    private handlePickOut(): void {
+        const storage = this.inventory.ownerEntity();
+        const activity = LActivity.makePickOut(this.actor, storage, this.selectedEntities());
+        MRSystem.dialogContext.postActivity(activity);
+        this.submit(); 
     }
 }

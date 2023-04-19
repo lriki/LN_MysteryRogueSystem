@@ -102,17 +102,27 @@ import { MRLively } from "../MRLively";
 import { LEntity } from "../LEntity";
 import { LBehavior, SRejectionInfo } from "./LBehavior"
 import { SCommandContext } from "ts/mr/system/SCommandContext";
-import { SCommandResponse } from "ts/mr/system/SCommand";
+import { SCommand, SCommandResponse, STestAddItemCommand } from "ts/mr/system/SCommand";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { ItemRemovedFromInventoryArgs } from "ts/mr/data/predefineds/DBasicEvents";
 import { paramInventoryCapacity } from "ts/mr/PluginParameters";
+import { DBehaviorProps } from "ts/mr/data/DBehavior";
+import { SSubTaskChain } from "ts/mr/system/tasks/STask";
 
 @MRSerializable
 export class LInventoryBehavior extends LBehavior {
     _entities: LEntityId[] = [];
     private _gold: number = 0;
     private _capacity: number = paramInventoryCapacity;
+    private _storage: boolean = false;
+
+    override onInitialized(self: LEntity, props: DBehaviorProps): void {
+        if (props.code == "Inventory") {
+            this.capacity = MRLively.world.random().nextIntWithMinMax(props.minCapacity, props.maxCapacity + 1);
+            this._storage = props.storage;
+        }
+    }
 
     public clone(newOwner: LEntity): LBehavior {
         const b = MRLively.world.spawn(LInventoryBehavior);
@@ -284,6 +294,19 @@ export class LInventoryBehavior extends LBehavior {
         return SCommandResponse.Pass;
     }
     
+    override onCommand(self: LEntity, cctx: SCommandContext, chain: SSubTaskChain, cmd: SCommand): void {
+        if (cmd instanceof STestAddItemCommand) {
+            // 壺の中に壺は入れられない。
+            if (this._storage && cmd.item.hasTrait(MRBasics.traits.DisallowIntoStorage)) {
+                return;
+            }
+
+            if (!this.isFully) {
+                chain.accept();
+            }
+        }
+    }
+
     // onPreviewEffectRejection(cctx: SCommandContext, self: LEntity, effect: DEffect): SCommandResponse {
         
     //     let result = true;

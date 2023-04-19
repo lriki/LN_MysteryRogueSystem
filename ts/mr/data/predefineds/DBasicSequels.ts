@@ -42,4 +42,5 @@ export interface BasicSequels {
 
     stumble: DSequelId;
     jump: DSequelId;
+    crack: DSequelId;
 }

@@ -5,16 +5,19 @@ import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
 import { LItemBehavior } from "ts/mr/lively/behaviors/LItemBehavior";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { UName } from "ts/mr/utility/UName";
+import { VISelectableWindow } from "./VSelectableWindow";
+import { SItemListDialog } from "ts/mr/system/dialogs/SItemListDialog";
+import { SInventoryDialogBase } from "ts/mr/system/dialogs/SInventoryDialogBase";
 
-export class VItemListWindowItem {
-    public entity: LEntity;
-    public selectedIndex: number | undefined;
+// export class VItemListWindowItem {
+//     public entity: LEntity;
+//     public selectedIndex: number | undefined;
     
-    constructor(item: LEntity) {
-        this.entity = item;
-        this.selectedIndex = undefined;
-    }
-}
+//     constructor(item: LEntity) {
+//         this.entity = item;
+//         this.selectedIndex = undefined;
+//     }
+// }
 
 export enum VItemListPriceTag {
     None,
@@ -24,10 +27,11 @@ export enum VItemListPriceTag {
 
 /**
  */
-export class VItemListWindow extends Window_Selectable {
+export class VItemListWindow extends VISelectableWindow {
+    private readonly _model: SInventoryDialogBase;
     private _inventory: LInventoryBehavior | undefined;;
     private _equipmentUser: LEquipmentUserBehavior | undefined;
-    private _items: VItemListWindowItem[];
+    //private _items: VItemListWindowItem[];
     private _pagenationEnabled: boolean;
     private _currentPageIndex: number;
     private _leftArrowSprite: Sprite | undefined;
@@ -36,14 +40,16 @@ export class VItemListWindow extends Window_Selectable {
     public multipleSelectionEnabled: boolean;
     public priceTag: VItemListPriceTag;
 
-    constructor(rect: Rectangle) {
+    constructor(rect: Rectangle, model: SInventoryDialogBase) {
         super(rect);
-        this._items = [];
+        this._model = model;
+        //this._items = [];
         this._pagenationEnabled = true;
         this._currentPageIndex = 0;
         this.multipleSelectionEnabled = false;
         this.priceTag = VItemListPriceTag.None;
         this.createPagenationArrowSprites();
+        this.refresh();
     }
 
     public get itemsParPage(): number {
@@ -51,7 +57,7 @@ export class VItemListWindow extends Window_Selectable {
     }
 
     public get maxPageCount(): number {
-        return Math.max(Math.floor((this._items.length - 1) / this.itemsParPage) + 1, 0);
+        return Math.max(Math.floor((this._model.items.length - 1) / this.itemsParPage) + 1, 0);
     }
 
     public getActualPriceTag(item: LEntity): VItemListPriceTag {
@@ -69,57 +75,60 @@ export class VItemListWindow extends Window_Selectable {
         }
     }
     
-    public setInventory(inventory: LInventoryBehavior): void {
-        this._inventory = inventory;
-        this.refreshItems();
-    }
+    // public setInventory(inventory: LInventoryBehavior): void {
+    //     this._inventory = inventory;
+    //     this.refreshItems();
+    //     this.refresh();
+    // }
 
-    public refreshItems(): void {
-        if (this._inventory) {
-            this._items = this._inventory.items.map(x => new VItemListWindowItem(x));
-            this.refresh();
-        }
-    }
+    // public refreshItems(): void {
+    //     if (this._inventory) {
+    //         this._items = this._inventory.items.map(x => new VItemListWindowItem(x));
+    //         this.refresh();
+    //     }
+    // }
 
     public setEquipmentUser(equipmentUser: LEquipmentUserBehavior): void {
         this._equipmentUser = equipmentUser;
     }
     
     public selectedItem(): LEntity {
-        const item = this.itemAt(this.index());
+        const item =  this._model.focusedEntity();
+        // const item = this.itemAt(this.index());
         assert(item);
-        return item.entity;
+        return item;
+        //return item.entity;
     }
 
-    public isMultipleSelecting(): boolean {
-        return this._items.find(x => x.selectedIndex !== undefined) !== undefined;
-    }
+    // public isMultipleSelecting(): boolean {
+    //     return this._items.find(x => x.selectedIndex !== undefined) !== undefined;
+    // }
 
-    public getSelectedItems(): LEntity[] {
-        const result: VItemListWindowItem[] = [];
+    // public getSelectedItems(): LEntity[] {
+    //     const result: VItemListWindowItem[] = [];
         
-        // まずは複数選択状態の Item を探してみる
-        for (const item of this._items) {
-            if (item.selectedIndex !== undefined) {
-                result.push(item);
-            }
-        }
+    //     // まずは複数選択状態の Item を探してみる
+    //     for (const item of this._items) {
+    //         if (item.selectedIndex !== undefined) {
+    //             result.push(item);
+    //         }
+    //     }
 
-        if (result.length == 0) {
-            // もしひとつも選択状態ないなら、カーソル位置の Item を返す
-            const item = this.itemAt(this.index());
-            return item ? [item.entity] : [];
-        }
-        else {
-            // 選択された順で返す
-            const items = result.sort((a, b) => {
-                assert(a.selectedIndex !== undefined);
-                assert(b.selectedIndex !== undefined);
-                return a.selectedIndex - b.selectedIndex;
-            });
-            return items.map(x => x.entity);
-        }
-    }
+    //     if (result.length == 0) {
+    //         // もしひとつも選択状態ないなら、カーソル位置の Item を返す
+    //         const item = this.itemAt(this.index());
+    //         return item ? [item.entity] : [];
+    //     }
+    //     else {
+    //         // 選択された順で返す
+    //         const items = result.sort((a, b) => {
+    //             assert(a.selectedIndex !== undefined);
+    //             assert(b.selectedIndex !== undefined);
+    //             return a.selectedIndex - b.selectedIndex;
+    //         });
+    //         return items.map(x => x.entity);
+    //     }
+    // }
 
     // override
     maxCols(): number {
@@ -130,16 +139,16 @@ export class VItemListWindow extends Window_Selectable {
     maxItems(): number {
         if (this._pagenationEnabled) {
             const left = this.itemsParPage * this._currentPageIndex;
-            return Math.max(Math.min(this._items.length - left, this.itemsParPage), 0);
+            return Math.max(Math.min(this._model.items.length - left, this.itemsParPage), 0);
         }
         else {
-            return this._items.length;
+            return this._model.items.length;
         }
     }
     
     // override
     isCurrentItemEnabled(): boolean {
-        return this._items.length > 0;
+        return this._model.items.length > 0;
     }
 
     // override
@@ -164,12 +173,12 @@ export class VItemListWindow extends Window_Selectable {
 
     // override
     drawItem(index: number): void {
-        const item = this.itemAt(index);
+        const item = this._model.items[index];
         if (item) {
             const numberWidth = 0;//this.numberWidth();
             const rect = this.itemLineRect(index);
             this.changePaintOpacity(true);
-            this.drawEntityItemName(item, rect.x, rect.y, rect.width - numberWidth);
+            this.drawEntityItemName(index, rect.x, rect.y, rect.width - numberWidth);
             //this.drawItemNumber(item, rect.x, rect.y, rect.width);
             this.changePaintOpacity(true);
         }
@@ -180,10 +189,13 @@ export class VItemListWindow extends Window_Selectable {
         super.update();
         if (Input.isTriggered("pageup")) {
             if (this.multipleSelectionEnabled) {
-                const item = this.itemAt(this.index());
-                if (item) {
-                    this.toggleItemSelection(item);
-                }
+                this._model.toggleMultipeSelection();
+                this.playCursorSound();
+                this.paint();
+                // const item = this.itemAt(this.index());
+                // if (item) {
+                //     this.toggleItemSelection(item);
+                // }
             }
         }
     }
@@ -226,30 +238,30 @@ export class VItemListWindow extends Window_Selectable {
         }
     }
 
-    private toggleItemSelection(item: VItemListWindowItem): void {
-        if (item.selectedIndex === undefined) {
-            // 新しく選択する
-            let maxIndex = -1;
-            for (const item of this._items) {
-                if (item.selectedIndex !== undefined) {
-                    maxIndex = Math.max(maxIndex, item.selectedIndex);
-                }
-            }
-            item.selectedIndex = maxIndex + 1;
-        }
-        else {
-            // 選択解除
-            const removeIndex = item.selectedIndex;
-            for (const item of this._items) {
-                if (item.selectedIndex !== undefined && item.selectedIndex > removeIndex) {
-                    item.selectedIndex -= 1;
-                }
-            }
-            item.selectedIndex = undefined;
-        }
-        this.playCursorSound();
-        this.paint();
-    }
+    // private toggleItemSelection(item: VItemListWindowItem): void {
+    //     if (item.selectedIndex === undefined) {
+    //         // 新しく選択する
+    //         let maxIndex = -1;
+    //         for (const item of this._items) {
+    //             if (item.selectedIndex !== undefined) {
+    //                 maxIndex = Math.max(maxIndex, item.selectedIndex);
+    //             }
+    //         }
+    //         item.selectedIndex = maxIndex + 1;
+    //     }
+    //     else {
+    //         // 選択解除
+    //         const removeIndex = item.selectedIndex;
+    //         for (const item of this._items) {
+    //             if (item.selectedIndex !== undefined && item.selectedIndex > removeIndex) {
+    //                 item.selectedIndex -= 1;
+    //             }
+    //         }
+    //         item.selectedIndex = undefined;
+    //     }
+    //     this.playCursorSound();
+    //     this.paint();
+    // }
 
     private correctSelectedIndex(): void {
         const max = this.maxItems();
@@ -262,33 +274,34 @@ export class VItemListWindow extends Window_Selectable {
         return this.textWidth("000");
     }
 
-    private itemAt(index: number): VItemListWindowItem | undefined {
-        if (this._items.length == 0) {
-            return undefined;
-        }
-        else if (this._pagenationEnabled) {
-            return this._items[this._currentPageIndex * this.itemsParPage + index];
-        }
-        else {
-            return this._items[index];
-        }
-    }
+    // public itemAt(index: number): VItemListWindowItem | undefined {
+    //     if (this._items.length == 0) {
+    //         return undefined;
+    //     }
+    //     else if (this._pagenationEnabled) {
+    //         return this._items[this._currentPageIndex * this.itemsParPage + index];
+    //     }
+    //     else {
+    //         return this._items[index];
+    //     }
+    // }
 
     // private makeItemList(): void {
     // }
     
-    private drawEntityItemName(item: VItemListWindowItem, x: number, y: number, width: number): void {
+    private drawEntityItemName(index: number, x: number, y: number, width: number): void {
+        const item = this._model.items[index];
         if (item) {
-            const entity = item.entity;
+            const entity = item;
             const iconY = y + (this.lineHeight() - ImageManager.iconHeight) / 2;
             const nameX = x + ImageManager.iconWidth;
             const desc = UName.makeNameAsItem(entity);
 
-
-            if (item.selectedIndex !== undefined) {
+            const selectedIndex = this._model.getItemSelectedIndex(item);
+            if (selectedIndex >= 0) {
                 const size =  this.contents.fontSize;
                 this.contents.fontSize = 16;
-                this.drawText((item.selectedIndex + 1), x - 4, y - 6, 100, "left");
+                this.drawText((selectedIndex + 1), x - 4, y - 6, 100, "left");
                 this.contents.fontSize = size;
             }
 

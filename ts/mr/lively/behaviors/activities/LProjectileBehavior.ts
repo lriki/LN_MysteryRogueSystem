@@ -4,7 +4,7 @@ import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { Helpers } from "ts/mr/system/Helpers";
-import { SCommandResponse } from "ts/mr/system/SCommand";
+import { SCommandResponse, SEndProjectileMovingCause, SEndProjectileMovingCommand, SItemReactionCommand } from "ts/mr/system/SCommand";
 import { SEffectContext, SEffectIncidentType, SEffectSubject } from "ts/mr/system/SEffectContext";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { UMovement } from "ts/mr/utility/UMovement";
@@ -162,7 +162,7 @@ export class LProjectileBehavior extends LBehavior {
         else {
             // 移動できなかったら終了。
             // 遠投の場合もここに来る。
-            this.endMoving(cctx ,self);
+            this.endMoving(cctx ,self, SEndProjectileMovingCause.NoPassage);
         }
 
         return SCommandResponse.Pass;
@@ -213,7 +213,7 @@ export class LProjectileBehavior extends LBehavior {
             }
             else if (!SActionHitTest.testProjectle(subject.entity(), self, hitTarget, this.hitType(), cctx.random())) {
                 // 当たらなかった
-                this.endMoving(cctx, self);
+                this.endMoving(cctx, self, SEndProjectileMovingCause.Fall);
                 return;
             }
             else if (this._effectSet) {
@@ -247,15 +247,14 @@ export class LProjectileBehavior extends LBehavior {
                 return;
             }
             else {
-                cctx.postActivity(LActivity.makeCollide(self, hitTarget)
-                    .withOtherSubject(subject.entity())
-                    .withEffectDirection(this.blowDirection));
+                cctx.postCommandTask(new SItemReactionCommand(
+                    MRBasics.actions.collide, self, hitTarget, [], subject.entity(), this.blowDirection));
                 return;
             }
         }
     
         if (this.blowMoveCount <= 0) {
-            this.endMoving(cctx ,self);
+            this.endMoving(cctx, self, SEndProjectileMovingCause.Fall);
         }
         else {
             cctx.post(self, self, subject, undefined, onMoveAsProjectile);
@@ -312,50 +311,55 @@ export class LProjectileBehavior extends LBehavior {
         */
     }
 
-    private endMoving(cctx: SCommandContext, self: LEntity): void {
+    private endMoving(cctx: SCommandContext, self: LEntity, cause: SEndProjectileMovingCause): void {
         this.clearKnockback();
 
         const entityData = self.data;
 
-        /*
-        矢ワナは効果のオーバーライドがあるので startMoveAsEffectProjectile で開始する。
-        しかしこれで開始した場合、end 時に entity が消滅する。
+        // 表示変更用のステート解除
+        self.removeState(MRData.getState("kState_System_Projectile").id);
 
-        揮発性かどうかを属性として持たせたいが、次のどちらにするべきか？
-        - Entity側に持たせる
-        - Effect側に持たせる
-
-        Entity側に持たせるのが無難かも。
-        指定し忘れで魔法弾が地面に落ちてしまうようなことも無いだろう。
-        */
-        if (entityData.volatilityProjectile || this._penetration) {
-            cctx.postDestroy(self);
-        }
-        else {
-            // 表示変更用のステート解除
-            self.removeState(MRData.getState("kState_System_Projectile").id);
-
-            UAction.postFall(cctx, self);
-    
+        cctx.postCommandTask(new SEndProjectileMovingCommand(self, cause))
+        .then2(c => {
+        
             /*
-
-            UAction.postStepOnGround(cctx, self);
+            矢ワナは効果のオーバーライドがあるので startMoveAsEffectProjectile で開始する。
+            しかしこれで開始した場合、end 時に entity が消滅する。
     
-            // TODO: 落下先に罠があるときは、postStepOnGround と postDropToGroundOrDestroy の間でここで罠の処理を行いたい。
-            // 木の矢の罠の上にアイテムを落としたとき、矢の移動処理・攻撃判定が終わった後に、罠上に落ちたアイテムの drop の処理が行われる。
+            揮発性かどうかを属性として持たせたいが、次のどちらにするべきか？
+            - Entity側に持たせる
+            - Effect側に持たせる
     
-            cctx.postCall(() => {
-                UAction.postDropOrDestroyOnCurrentPos(cctx, self, self.getHomeLayer());
-            });
-    
-            // HomeLayer へ移動
-            //SMovementCommon.locateEntity(self, self.x, self.y);
-            //cctx.postSequel(self, RESystem.sequels.dropSequel, { movingDir: this.blowDirection });
-            //this.clearKnockback();
-            // TODO: 落下
-            //SActionCommon.postStepOnGround(cctx, self);
+            Entity側に持たせるのが無難かも。
+            指定し忘れで魔法弾が地面に落ちてしまうようなことも無いだろう。
             */
-        }
+            if (entityData.volatilityProjectile || this._penetration) {
+                cctx.postDestroy(self);
+            }
+            else {
+    
+                UAction.postFall(cctx, self);
+        
+                /*
+    
+                UAction.postStepOnGround(cctx, self);
+        
+                // TODO: 落下先に罠があるときは、postStepOnGround と postDropToGroundOrDestroy の間でここで罠の処理を行いたい。
+                // 木の矢の罠の上にアイテムを落としたとき、矢の移動処理・攻撃判定が終わった後に、罠上に落ちたアイテムの drop の処理が行われる。
+        
+                cctx.postCall(() => {
+                    UAction.postDropOrDestroyOnCurrentPos(cctx, self, self.getHomeLayer());
+                });
+        
+                // HomeLayer へ移動
+                //SMovementCommon.locateEntity(self, self.x, self.y);
+                //cctx.postSequel(self, RESystem.sequels.dropSequel, { movingDir: this.blowDirection });
+                //this.clearKnockback();
+                // TODO: 落下
+                //SActionCommon.postStepOnGround(cctx, self);
+                */
+            }
+        })
         
     }
 }

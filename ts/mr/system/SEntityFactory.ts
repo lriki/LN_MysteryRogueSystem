@@ -16,7 +16,7 @@ import { DEntity, DEntityId } from "ts/mr/data/DEntity";
 import { LEntryPointBehavior } from "ts/mr/lively/behaviors/LEntryPointBehavior";
 import { LActorBehavior } from "ts/mr/lively/behaviors/LActorBehavior";
 import { SBehaviorFactory } from "./SBehaviorFactory";
-import { LEaterBehavior } from "ts/mr/lively/behaviors/actors/LEaterBehavior";
+//import { LEaterBehavior } from "ts/mr/lively/behaviors/actors/LEaterBehavior";
 import {  DItemDataId } from "ts/mr/data/DItem";
 import { LProjectileBehavior } from "ts/mr/lively/behaviors/activities/LProjectileBehavior";
 import { LSurvivorBehavior } from "ts/mr/lively/behaviors/LSurvivorBehavior";
@@ -49,33 +49,284 @@ import { LRaceBehavior } from "../lively/behaviors/LRaceBehavior";
 import { DEntityCategory } from "../data/DEntityCategory";
 import { LMap } from "../lively/LMap";
 import { DEntityCreateInfo } from "../data/DSpawner";
+import { LBehavior } from "../lively/behaviors/LBehavior";
+import { DBehaviorId } from "../data/DCommon";
+import { DBehaviorProps } from "../data/DBehavior";
+import { LCrackedBehavior } from "../lively/behaviors/LCrackedBehavior";
+
+// export class DBehaviorInstantiationList {
+//     private readonly _list: DBehaviorInstantiation[] = [];
+    
+//     public addBehavior(fullName: string, params: any): void {
+//         const entry = this._list.find(e => e.name === fullName);
+//         if (entry) {
+//             entry.params = params;
+//             return;
+//         }
+//         else {
+//             this._list.push(new DBehaviorInstantiation(fullName, params));
+//         }
+
+//         this._list.push(new DBehaviorInstantiation(name, params));
+//     }
+// }
+
+
+interface SBehaviorInstantiation {
+    behaviorId: DBehaviorId;
+    params: DBehaviorProps | undefined;
+}
+
+export class SEntityBuilder {
+    private readonly _baseList: SBehaviorInstantiation[] = [];
+
+    public readonly data: DEntity;
+
+    public constructor(data: DEntity) {
+        this.data = data;
+        //this.setupCommon();
+    }
+
+    public addBaseBehavior<T extends LBehavior>(ctor: { new(...args: any[]): T }, params: DBehaviorProps | undefined = undefined): this {
+        const data = MRData.getBehavior(ctor.name);
+        const entry = this._baseList.find(e => e.behaviorId === data.id);
+        if (entry) {
+            if (params) {
+                if (entry.params) {
+                    assert(entry.params.code === params.code);
+                    Object.assign(entry.params, params);
+                }
+                else {
+                    entry.params = {...params};
+                }
+            }
+        }
+        else {
+            this._baseList.push({ behaviorId: data.id, params: params });
+        }
+        return this;
+    }
+
+    /**
+     * 新しい Entity を作成し、World に追加する
+     */
+    public spawn(): LEntity {
+        const entity = MRLively.world.spawnEntity(this.data.id);
+        this.build(entity);
+        return entity;
+    }
+
+    /**
+     * 既存の Entity に対して構築処理を実行する。
+     */
+    public build(entity: LEntity): void {
+        assert(entity.behaviorIds().length === 0);
+
+        // Merge
+        const behaviorList = [...this._baseList];
+        for (const entryInstantiation of this.data.entity.behaviors) {
+            const entry = behaviorList.find(e => e.behaviorId == entryInstantiation.behaviorId);
+            if (entry) {
+                if (entryInstantiation.props) {
+                    if (entry.params) {
+                        assert(entry.params.code === entryInstantiation.props.code);
+                        Object.assign(entry.params, entryInstantiation.props);
+                    }
+                    else {
+                        entry.params = {...entryInstantiation.props};
+                    }
+                }
+            }
+            else {
+                behaviorList.push({ behaviorId: entryInstantiation.behaviorId, params: entryInstantiation.props });
+            }
+        }
+
+        // Behavior を作成
+        const initPairs: [LBehavior, SBehaviorInstantiation][] = [];
+        for (const entry of behaviorList) {
+            const data = MRData.behavior[entry.behaviorId];
+            if (!entity.findEntityBehaviorBy(b => b.fullName == data.fullName)) {
+                const behavior = SBehaviorFactory.createBehaviorInstance(data.fullName);
+                if (!behavior) {
+                    throw new Error(`Behavior ${data.fullName} not found.`);
+                }
+                entity.addBehavior(behavior);
+                initPairs.push([behavior, entry]);
+            }
+        }
+
+        // 最後に onInitialized を呼ぶ
+        for (const [behavior, entry] of initPairs) {
+            behavior.onInitialized(entity, entry.params ?? {code: "Unknown"});
+        }
+
+        MRSystem.ext.onNewEntity(entity, entity.data);
+    }
+
+
+    // public addBaseBehavior(name: string): this {
+    //     this._baseList.push({ name: name });
+    //     return this;
+    // }
+
+    // public addBaseBehavior(name: string): this {
+    //     this._baseList.push({ name: name });
+    //     return this;
+    // }
+    
+    private setupCommon(): void {
+        this.addBaseBehavior(LCommonBehavior);
+        this.addBaseBehavior(LProjectileBehavior);
+        this.addBaseBehavior(LItemBehavior);
+    }
+
+    public setupActor(): this {
+        this.setupCommon();
+        this.addBaseBehavior(LDecisionBehavior);
+        this.addBaseBehavior(LUnitBehavior, { code: "Unit", factionId: MRData.system.factions.player });
+        this.addBaseBehavior(LInventoryBehavior);
+        this.addBaseBehavior(LEquipmentUserBehavior);
+        this.addBaseBehavior(LExperienceBehavior);
+        this.addBaseBehavior(LActorBehavior);    // この時点の装備品などで初期パラメータを作るので、後ろに追加しておく
+        //this.addBaseBehavior(LEaterBehavior);
+        this.addBaseBehavior(LSurvivorBehavior);
+        return this;
+    }
+    
+    public setupMonster(enemyEntityData: DEntity): this {
+        this.setupCommon();
+        this.addBaseBehavior(LDecisionBehavior);
+        this.addBaseBehavior(LUnitBehavior, { code: "Unit", factionId: enemyEntityData.factionId });
+        this.addBaseBehavior(LInventoryBehavior);
+        this.addBaseBehavior(LEnemyBehavior);
+        this.addBaseBehavior(LRaceBehavior);
+        this.setupDirectly_Enemy(enemyEntityData);
+        return this;
+    }
+    
+    public setupItem(): this {
+        this.setupCommon();
+        const entityData = this.data;
+
+        if (entityData.entity.kindId == MRBasics.entityCategories.WeaponKindId ||
+            entityData.entity.kindId == MRBasics.entityCategories.ShieldKindId) {
+            this.addBaseBehavior(LEquipmentBehavior);
+        }
+
+        // for (const name of entityData.entity.abilityNames) {
+        //     const data = MRData.abilities.find(x => x.key == name);
+        //     if (!data) throw new Error(`Ability "${name}" not found.`);
+        //     e.addAbility(data.id);
+        // }
+
+        this.setupDirectly_Item(entityData);
+        return this;
+    }
+    
+    public setupTrap(itemId: DItemDataId): this {
+        const item = MRData.itemData(itemId);
+        this.setupCommon();
+        this.addBaseBehavior(LTrapBehavior);
+        return this;
+    }
+    
+    public setupEntryPoint(): this {
+        this.addBaseBehavior(LProjectileBehavior);
+        this.addBaseBehavior(LEntryPointBehavior);
+        return this;
+    }
+
+    public setupExitPoint(): this {
+        this.addBaseBehavior(LProjectileBehavior);
+        this.addBaseBehavior(LExitPointBehavior);
+        return this;
+    }
+
+    public setupOrnament(prefab: DPrefab): this {
+        this.addBaseBehavior(LProjectileBehavior);
+        return this;
+    }
+
+    
+    // NOTE: エディタ側である程度カスタマイズできるように Note の設計を進めていたのだが、
+    // どのぐらいの粒度で Behabior を分けるべきなのか現時点では決められなかった。(Activity単位がいいのか、Ability単位か、機能単位か)
+    // そのためここで直定義して一通り作ってみた後、再検討する。
+    private setupDirectly_Item(entityData: DEntity) {
+        switch (entityData.entity.key) {
+            case "kEntity_聖域の巻物A":
+                this.addBaseBehavior(LSanctuaryBehavior);
+                this.addBaseBehavior(LGlueToGroundBehavior);
+                break;
+            case "kEntity_保存の壺A":
+                this.addBaseBehavior(LInventoryBehavior);
+                this.addBaseBehavior(LStorageBehavior);
+                this.addBaseBehavior(LCrackedBehavior);
+                break;
+            case "kEntity_GoldA":
+                this.addBaseBehavior(LGoldBehavior);
+                break;
+            case "kEntity_転ばぬ先の杖A":
+                this.addBaseBehavior(LStumblePreventionBehavior);
+                break;
+            case "kEntity_RevivalGrassA":
+                this.addBaseBehavior(LActivityCharmBehavior);
+                break;
+        }
+    }
+
+    private setupDirectly_Enemy(entityData: DEntity) {
+        switch (entityData.entity.key) {
+            case "kEnemy_バットA":
+            case "kEnemy_黒幕バットA":
+                this.addBaseBehavior(LRatedRandomAIBehavior);
+                break;
+            case "kEnemy_ウルフA":
+                this.addBaseBehavior(LParamBehavior, { code: "Param", paramId: MRBasics.params.agi, value: 100 });
+                break;
+            case "kEnemy_苗色スライムA":
+                this.addBaseBehavior(LEntityDivisionBehavior);
+                break;
+            case "kEnemy_軍隊ウルフA":
+                this.addBaseBehavior(LFlockBehavior);
+                break;
+            case "kEnemy_バインドゴーレムA":
+                this.addBaseBehavior(LGrabFootBehavior);
+                break;
+                
+            case "kEnemy_NPC汎用A":
+                this.addBaseBehavior(LUnitBehavior, { code: "Unit", factionId: MRData.system.factions.neutral});   // overwrite
+                break;
+            case "kEnemy_瑠璃猫A":
+                this.addBaseBehavior(LItemThiefBehavior);
+                break;
+            case "kEnemy_小金猫A":
+                this.addBaseBehavior(LGoldThiefBehavior);
+                break;
+            case "kEnemy_金剛猫A":
+                this.addBaseBehavior(LEscapeBehavior);
+                this.addBaseBehavior(LParamBehavior, { code: "Param", paramId: MRBasics.params.agi, value: 100 });
+                break;
+            case "kEnemy_店主A":
+                this.addBaseBehavior(LShopkeeperBehavior);
+                break;
+        }
+    }
+}
+
 
 export class SEntityFactory {
     public static newActor(entityId: DEntityId): LEntity {
-        const e = MRLively.world.spawnEntity(entityId);
-        this.buildActor(e);
-        return e;
+       return new SEntityBuilder(MRData.entities[entityId])
+            .setupActor()
+            .spawn();
     }
 
-    private static setupCommon(e: LEntity): void {
-        e.addBehavior(LCommonBehavior);
-        e.addBehavior(LProjectileBehavior);
-        e.addBehavior(LItemBehavior);
-    }
-
-    public static buildActor(e: LEntity): void {
-        assert(e.behaviorIds().length === 0);
-        this.setupCommon(e);
-        e.addBehavior(LDecisionBehavior);
-        e.addBehavior(LUnitBehavior).setFactionId(MRData.system.factions.player);
-        e.addBehavior(LInventoryBehavior);
-        //e.addBehavior(LItemUserBehavior);
-        e.addBehavior(LEquipmentUserBehavior);
-        e.addBehavior(LExperienceBehavior);
-        e.addBehavior(LActorBehavior);    // この時点の装備品などで初期パラメータを作るので、後ろに追加しておく
-        e.addBehavior(LEaterBehavior);
-        e.addBehavior(LSurvivorBehavior);
-    }
+    // private static setupCommon(e: LEntity): void {
+    //     e.addBehavior(LCommonBehavior);
+    //     e.addBehavior(LProjectileBehavior);
+    //     e.addBehavior(LItemBehavior);
+    // }
 
     // public static newMonster(enemyEntityData: DEntity): LEntity {
     //     const e = REGame.world.spawnEntity(enemyEntityData.id);
@@ -83,56 +334,11 @@ export class SEntityFactory {
     //     return e;
     // }
     
-    public static buildMonster(e: LEntity, enemyEntityData: DEntity): void {
-        this.setupCommon(e);
-        e.addBehavior(LDecisionBehavior);
-        e.addBehavior(LUnitBehavior).setFactionId(enemyEntityData.factionId);
-        e.addBehavior(LInventoryBehavior);
-        //e.addBehavior(LExperiencedBehavior);
-        e.addBehavior(LEnemyBehavior);
-        e.addBehavior(LRaceBehavior);
-        SBehaviorFactory.attachBehaviors(e, enemyEntityData.entity.behaviors);
-        this.setupDirectly_Enemy(e, enemyEntityData);
-    }
-    
-    public static buildItem(e: LEntity): void {
-        this.setupCommon(e);
-        const entityData = e.data;
-
-        if (entityData.entity.kindId == MRBasics.entityCategories.WeaponKindId ||
-            entityData.entity.kindId == MRBasics.entityCategories.ShieldKindId) {
-            e.addBehavior(LEquipmentBehavior);
-        }
-
-        SBehaviorFactory.attachBehaviors(e, entityData.entity.behaviors);
-
-        for (const name of entityData.entity.abilityNames) {
-            const data = MRData.abilities.find(x => x.key == name);
-            if (!data) throw new Error(`Ability "${name}" not found.`);
-            e.addAbility(data.id);
-        }
-
-        //e.addAbility(REData.abilities[1].id);  // TODO: Test
-        this.setupDirectly_Item(e, entityData);
-    }
-
-    // public static newTrap(itemId: DItemDataId): LEntity {
-    //     const item = REData.itemData(itemId);
-    //     const e = REGame.world.spawnEntity(item.entityId);
-    //     this.buildTrap(e, itemId);
-    //     return e;
-    // }
-    
-    public static buildTrap(e: LEntity, itemId: DItemDataId): void {
-        const item = MRData.itemData(itemId);
-        this.setupCommon(e);
-        e.addBehavior(LTrapBehavior);
-    }
 
     public static newBasicExitPoint(): LEntity {
-        const e = MRLively.world.spawnEntity(MRData.getEntity("kEntity_ExitPointA").id);
-        this.buildExitPoint(e);
-        return e;
+        return new SEntityBuilder(MRData.getEntity("kEntity_ExitPointA"))
+             .setupExitPoint()
+             .spawn();
     }
 
     // public static newEntryPoint(entityId: DEntityId): LEntity {
@@ -142,32 +348,6 @@ export class SEntityFactory {
     //     return e;
     // }
 
-    public static buildEntryPoint(e: LEntity): void {
-        e.addBehavior(LProjectileBehavior);
-        e.addBehavior(LEntryPointBehavior);
-    }
-
-    // public static newExitPoint(entityId: DEntityId): LEntity {
-    //     assert(REData.getEntity("kEntity_ExitPointA").id == entityId);
-    //     const e = REGame.world.spawnEntity(REData.getEntity("kEntity_ExitPointA").id);
-    //     this.buildExitPoint(e);
-    //     return e;
-    // }
-
-    public static buildExitPoint(e: LEntity): void {
-        e.addBehavior(LProjectileBehavior);
-        e.addBehavior(LExitPointBehavior);
-    }
-
-    // public static newOrnament(entityId: DEntityId, prefab: DPrefab): LEntity {
-    //     const e = REGame.world.spawnEntity(entityId);
-    //     this.buildOrnament(e, prefab);
-    //     return e;
-    // }
-
-    public static buildOrnament(e: LEntity, prefab: DPrefab): void {
-        e.addBehavior(LProjectileBehavior);
-    }
 
     public static newEntity(createInfo: DEntityCreateInfo, floorId?: LFloorId): LEntity {
         const entityData = MRData.entities[createInfo.entityId];
@@ -215,25 +395,28 @@ export class SEntityFactory {
         assert(dataId > 0);
         const entityData = MRData.entities[dataId];
         const prefab = MRData.prefabs[entityData.prefabId];
+        const builder = new SEntityBuilder(entityData);
         
         if (DEntityCategory.isMonster(entityData)) {
-            this.buildMonster(entity, entityData);
+            builder.setupMonster(entityData);
         }
         else if (DEntityCategory.isTrap(entityData)) {
-            this.buildTrap(entity, entityData.item().id);
+            builder.setupTrap(entityData.item().id);
         }
         else if (DEntityCategory.isEntryPoint(entityData)) {
-            this.buildEntryPoint(entity);
+            builder.setupEntryPoint();
         }
         else if (DEntityCategory.isExitPoint(entityData)) {
-            this.buildExitPoint(entity);
+            builder.setupExitPoint();
         }
         else if (DEntityCategory.isOrnament(entityData)) {
-            this.buildOrnament(entity, prefab);
+            builder.setupOrnament(prefab);
         }
         else {
-            this.buildItem(entity);
+            builder.setupItem();
         }
+
+        builder.build(entity);
     }
 
     public static spawnTroopAndMembers(map: LMap, troop: DTroop, mx: number, my: number, stateIds: DStateId[]): LEntity[] {
@@ -257,75 +440,6 @@ export class SEntityFactory {
         return result;
     }
 
-    // NOTE: エディタ側である程度カスタマイズできるように Note の設計を進めていたのだが、
-    // どのぐらいの粒度で Behabior を分けるべきなのか現時点では決められなかった。(Activity単位がいいのか、Ability単位か、機能単位か)
-    // そのためここで直定義して一通り作ってみた後、再検討する。
-    static setupDirectly_Item(entity: LEntity, entityData: DEntity) {
-        switch (entityData.entity.key) {
-            case "kEntity_聖域の巻物A":
-                entity.addBehavior(LSanctuaryBehavior);
-                entity.addBehavior(LGlueToGroundBehavior);
-                break;
-            // case "kEntity_突風の罠A":
-            //     break;
-            case "kEntity_保存の壺A":
-                entity.addBehavior(LInventoryBehavior);
-                entity.addBehavior(LStorageBehavior);
-                break;
-            case "kEntity_GoldA":
-                entity.addBehavior(LGoldBehavior);
-                break;
-            case "kEntity_転ばぬ先の杖A":
-                entity.addBehavior(LStumblePreventionBehavior);
-                break;
-            case "kEntity_RevivalGrassA":
-                entity.addBehavior(LActivityCharmBehavior);
-                break;
-
-                
-        }
-        MRSystem.ext.onNewEntity(entity, entityData);
-    }
-
-    static setupDirectly_Enemy(entity: LEntity, entityData: DEntity) {
-        switch (entityData.entity.key) {
-            case "kEnemy_バットA":
-            case "kEnemy_黒幕バットA":
-                entity.addBehavior(LRatedRandomAIBehavior);
-                break;
-            case "kEnemy_ウルフA":
-                entity.addBehavior(LParamBehavior).setParamBase(MRBasics.params.agi, 100);
-                break;
-            case "kEnemy_苗色スライムA":
-                entity.addBehavior(LEntityDivisionBehavior);
-                break;
-            case "kEnemy_軍隊ウルフA":
-                entity.addBehavior(LFlockBehavior);
-                break;
-            case "kEnemy_バインドゴーレムA":
-                entity.addBehavior(LGrabFootBehavior);
-                break;
-                
-            case "kEnemy_NPC汎用A":
-                const b = entity.getEntityBehavior(LUnitBehavior);
-                b.setFactionId(MRData.system.factions.neutral);
-                break;
-            case "kEnemy_瑠璃猫A":
-                entity.addBehavior(LItemThiefBehavior);
-                break;
-            case "kEnemy_小金猫A":
-                entity.addBehavior(LGoldThiefBehavior);
-                break;
-            case "kEnemy_金剛猫A":
-                entity.addBehavior(LEscapeBehavior);
-                entity.addBehavior(LParamBehavior).setParamBase(MRBasics.params.agi, 100);
-                break;
-            case "kEnemy_店主A":
-                entity.addBehavior(LShopkeeperBehavior);
-                break;
-        }
-        MRSystem.ext.onNewEntity(entity, entityData);
-    }
 }
 
 

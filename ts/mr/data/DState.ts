@@ -1,5 +1,5 @@
 import { DEntityCategoryId } from "./DCommon";
-import { DBehaviorInstantiation } from "./DEntityProperties";
+import { DBehaviorInstantiation } from "./DBehavior";
 import { DParameterId } from "ts/mr/data/DCommon";
 import { DSequelId } from "./DSequel";
 import { DStateGroupId } from "./DStateGroup";

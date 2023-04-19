@@ -10,6 +10,7 @@ import { SDialog } from "ts/mr/system/SDialog";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
 import { VItemListWindow } from "../windows/VItemListWindow";
 import { VDialog } from "./VDialog";
+import { SInventoryDialogBase } from "ts/mr/system/dialogs/SInventoryDialogBase";
 
 export enum VItemListMode {
     Use,
@@ -17,13 +18,15 @@ export enum VItemListMode {
 }
 
 export class VItemListDialogBase extends VDialog {
+    public readonly model: SInventoryDialogBase;
     private _inventory: LInventoryBehavior;
     private _itemListWindow: VItemListWindow;
     private _commandWindow: VFlexCommandWindow;
     private _mode: VItemListMode;
 
-    public constructor(inventory: LInventoryBehavior, model: SDialog, mode: VItemListMode) {
+    public constructor(inventory: LInventoryBehavior, model: SInventoryDialogBase, mode: VItemListMode) {
         super(model);
+        this.model = model;
         this._inventory = inventory;
         this._mode = mode;
 
@@ -31,13 +34,22 @@ export class VItemListDialogBase extends VDialog {
         
         const y = 100;
         const cw = 200;
-        this._itemListWindow = new VItemListWindow(new Rectangle(0, y, Graphics.boxWidth - cw, 400));
-        this._itemListWindow.setInventory(this._inventory);
+        this._itemListWindow = new VItemListWindow(new Rectangle(0, y, Graphics.boxWidth - cw, 400), model);
+        this._itemListWindow.multipleSelectionEnabled = model.multipleSelectionEnabled;
+        //this._itemListWindow.setInventory(this._inventory);
         this._itemListWindow.setHandler("ok", () => this.handleItemSubmit());
         this._itemListWindow.setHandler("cancel", () => this.handleItemCancel());
         this._itemListWindow.forceSelect(0);
         this.addWindow(this._itemListWindow);
         this.activateWindow(this._itemListWindow);
+        this._itemListWindow.selectionChanged = () => {
+            const item = this.model.items[this._itemListWindow.index()];
+            if (item) {
+                this.model.focusEntity(item);
+            }
+            //const items = this._itemListWindow.getSelectedItems();
+            //this.model.focusEntity(items[0]);    // TODO: multi
+        };
 
         // Layout
         {
@@ -72,16 +84,12 @@ export class VItemListDialogBase extends VDialog {
     onUpdate() {
     }
 
-    protected onSelectedItemsChanged(items: LEntity[]): void {
-
-    }
-
     protected onSelectionSubmit(): void {
 
     }
 
     protected onMakeCommandList(window: VFlexCommandWindow): void {
-        if (!this.itemListWindow.isMultipleSelecting()) {
+        if (!this.model.isMultiSelectMode) {
 
             if (1) {
                 const owner = this._inventory.ownerEntity();
@@ -103,7 +111,6 @@ export class VItemListDialogBase extends VDialog {
     }
 
     private handleItemSubmit(): void {
-        this.onSelectedItemsChanged(this._itemListWindow.getSelectedItems());
 
         if (this._mode == VItemListMode.Use) {
             if (this._itemListWindow && this._commandWindow) {

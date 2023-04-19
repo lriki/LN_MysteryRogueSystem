@@ -5,18 +5,18 @@ import { MRLively } from "ts/mr/lively/MRLively";
 import { UInventory } from "ts/mr/utility/UInventory";
 import { MRSystem } from "../MRSystem";
 import { SDialog } from "../SDialog";
+import { SInventoryDialogBase } from "./SInventoryDialogBase";
 
-export class SItemSellDialog extends SDialog {
+export class SItemSellDialog extends SInventoryDialogBase {
     private _serviceProviderId: LEntityId;
     private _serviceUserId: LEntityId;
-    private _inventoryId: LBehaviorId;
     private _resultItems: LEntityId[];
 
     public constructor(serviceProvider: LEntity, serviceUser: LEntity, inventoryHolder: LEntity) {
-        super();
+        super(inventoryHolder.getEntityBehavior(LInventoryBehavior));
+        this.multipleSelectionEnabled = true;
         this._serviceProviderId = serviceProvider.entityId();
         this._serviceUserId = serviceUser.entityId();
-        this._inventoryId = inventoryHolder.getEntityBehavior(LInventoryBehavior).id();
         this._resultItems = [];
     }
 
@@ -28,15 +28,11 @@ export class SItemSellDialog extends SDialog {
         return MRLively.world.entity(this._serviceUserId);
     }
 
-    public get inventory(): LInventoryBehavior {
-        return MRLively.world.behavior(this._inventoryId) as LInventoryBehavior;
-    }
-
     public get resultItems(): LEntity[] {
         return this._resultItems.map(e => MRLively.world.entity(e));
     }
 
-    public setResultItems(items: LEntity[]) {
+    public setResultItems(items: readonly LEntity[]) {
         this._resultItems = items.map(e => e.entityId());
     }
 

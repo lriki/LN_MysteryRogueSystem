@@ -15,7 +15,7 @@ export class VItemSelectionDialog extends VItemListDialogBase {
      * 足元に置いてある壺の中を覗いたときは、actorEntity は Player となる。
      */
     constructor(model: SItemSelectionDialog) {
-        super(model.inventory(), model, VItemListMode.Selection);
+        super(model.inventory, model, VItemListMode.Selection);
         this._model = model;
 
         const equipmentUser = this._model.entity().findEntityBehavior(LEquipmentUserBehavior);
@@ -33,6 +33,6 @@ export class VItemSelectionDialog extends VItemListDialogBase {
     }
 
     onSelectionSubmit(): void {
-        this._model.setSelectedEntity(this.itemListWindow.selectedItem());
+        this._model.focusEntity(this.itemListWindow.selectedItem());
     }
 }

@@ -2,7 +2,6 @@ import { DClassId } from "./DClass";
 import { DElementId, DSpecialEffectId as DSpecialEffectId, DTerrainPresetId, DTerrainSettingId } from "./DCommon";
 import { DStateId } from "./DState";
 import { DBasicActions } from "./predefineds/DBasicActions";
-import { DBasicCommands } from "./predefineds/DBasicCommands";
 import { BasicEntityKinds } from "./predefineds/DBasicEntityKinds";
 import { DBasicEvents } from "./predefineds/DBasicEvents";
 import { DBasicItemShops } from "./predefineds/DBasicItemShops";
@@ -62,7 +61,6 @@ export class MRBasics {
     static elements: DBasicElements;
     static events: DBasicEvents;
     static actions: DBasicActions;
-    static commands: DBasicCommands;
     static entityCategories: BasicEntityKinds;
     //static stateTraits: DBasicStateTraits;
     static states: DBasicStates;

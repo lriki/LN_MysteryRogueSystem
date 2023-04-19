@@ -6,21 +6,21 @@ import { SWarehouseActionResult, UInventory } from "ts/mr/utility/UInventory";
 import { MRSystem } from "../MRSystem";
 import { SWarehouseDialogResult } from "../SCommon";
 import { SDialog } from "../SDialog";
+import { SInventoryDialogBase } from "./SInventoryDialogBase";
 
-export class SWarehouseWithdrawDialog extends SDialog {
+export class SWarehouseWithdrawDialog extends SInventoryDialogBase {
     private _userEntityId: LEntityId;
     private _userInventoryBehaviorId: LBehaviorId;
     private _warehouseEntityId: LEntityId;
-    private _inventoryBehaviorId: LBehaviorId;
     private _resultItems: LEntityId[];
     private _result: SWarehouseDialogResult;
 
     public constructor(user: LEntity, warehouse: LEntity) {
-        super();
+        super(warehouse.getEntityBehavior(LInventoryBehavior));
+        this.multipleSelectionEnabled = true;
         this._userEntityId = user.entityId();
         this._userInventoryBehaviorId = user.getEntityBehavior(LInventoryBehavior).id();
         this._warehouseEntityId = warehouse.entityId();
-        this._inventoryBehaviorId = warehouse.getEntityBehavior(LInventoryBehavior).id();
         this._resultItems = [];
         this._result = SWarehouseDialogResult.Cancel;
     }
@@ -31,10 +31,6 @@ export class SWarehouseWithdrawDialog extends SDialog {
 
     public get userInventory(): LInventoryBehavior {
         return MRLively.world.behavior(this._userInventoryBehaviorId) as LInventoryBehavior;
-    }
-
-    public get inventory(): LInventoryBehavior {
-        return MRLively.world.behavior(this._inventoryBehaviorId) as LInventoryBehavior;
     }
 
     public get warehouseEntity(): LEntity {
@@ -53,7 +49,7 @@ export class SWarehouseWithdrawDialog extends SDialog {
         return this._result;
     }
     
-    public withdrawItems(items: LEntity[]): void {
+    public withdrawItems(items: readonly LEntity[]): void {
         this._resultItems = items.map(e => e.entityId());
         const r: SWarehouseActionResult = { code: SWarehouseDialogResult.Succeeded, items: [] };
         UInventory.postWithdrawItemsToWarehouse(MRSystem.commandContext, this.user, this.warehouseEntity, items, r)

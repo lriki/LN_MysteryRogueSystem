@@ -53,6 +53,7 @@ import { LFieldEffect } from "../LFieldEffect";
 import { SSubTaskChain } from "ts/mr/system/tasks/STask";
 import { LParam } from "../LParam";
 import { LThinkingAgent } from "../ai2/LThinkingAgent";
+import { DBehaviorProps } from "ts/mr/data/DBehavior";
 
 export enum DecisionPhase {
     //Prepare,
@@ -121,7 +122,7 @@ export const onPerformStepFeetProcess = Symbol("onPerformStepFeetProcess");
  * Response
  * - Canceled : 呪い状態等のため、Inventory からアイテムを取り出すことはできない。
  */
-export const testPickOutItem = Symbol("testPickOutItem");
+//export const testPickOutItem = Symbol("testPickOutItem");
 
 /**
  * knockback 状態の別の Entity が衝突しようとしている
@@ -228,6 +229,22 @@ export abstract class LBehavior extends LObject {
         super(LObjectType.Behavior);
     }
 
+    public get fullName(): string {
+        return this.constructor.name;
+    }
+
+    public get friendlyName(): string {
+        const name = this.fullName;
+        const index = name.indexOf("Behavior");
+        const longName = (index >= 0) ? name.substring(0, index) : name;
+        if (longName[0] == "L") {
+            return longName.substring(1);
+        }
+        else {
+            return longName;
+        }
+    }
+
     public setup(...args: any[]): void {
 
     }
@@ -268,6 +285,8 @@ export abstract class LBehavior extends LObject {
     //--------------------------------------------------------------------------
     // Draft
 
+    public onGetDescriptions(descriptions: string[]): void { }
+    
     /**
      * 子オブジェクトが破棄されるなど、親オブジェクトから直ちに取り除くべき時に呼び出される。
      * この動作はキャンセルできないため、例えば呪い状態による装備の着脱判定などは行わず、確実に除外しなければならない。
@@ -282,6 +301,7 @@ export abstract class LBehavior extends LObject {
 
     onAttached(self: LEntity): void {}
     onDetached(self: LEntity): void {}
+    onInitialized(self: LEntity, props: DBehaviorProps): void {}
     onEvent(cctx: SCommandContext, eventId: DEventId, args: any): LEventResult { return LEventResult.Pass; }
     onPartyEvent(eventId: DEventId, args: any): LEventResult { return LEventResult.Pass; }
     onResetStatus(self: LEntity): void {}
@@ -386,7 +406,7 @@ export abstract class LBehavior extends LObject {
     // また実行内容も onAction などとは少し毛色が違うので、あえて分離してみる。
     onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult { return SPhaseResult.Pass; }
 
-    onCommand(self: LEntity, cctx: SCommandContext, chain: SSubTaskChain, cmd: SCommand): SCommandResponse { return SCommandResponse.Pass; }
+    onCommand(self: LEntity, cctx: SCommandContext, chain: SSubTaskChain, cmd: SCommand): void { }
 
     public onPreprocessActivity(cctx: SCommandContext, activity: LActivity): LActivity { return activity; }
     

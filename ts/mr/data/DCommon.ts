@@ -26,7 +26,7 @@ export type DAnimationId = number & { readonly brand?: unique symbol };
 
 export type DQuestId = number & { readonly brand?: unique symbol };
 
-
+export type DBehaviorId = number & { readonly brand?: unique symbol };
 
 export type DLandId = number;
 

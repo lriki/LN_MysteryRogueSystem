@@ -1,4 +1,5 @@
-import { DEntityCategoryId } from "./DCommon";
+import { DBehavior, DBehaviorInstantiation } from "./DBehavior";
+import { DBehaviorId, DEntityCategoryId } from "./DCommon";
 import { DHelpers } from "./DHelper";
 import { DPrefabId } from "./DPrefab";
 import { MRData } from "./MRData";
@@ -23,17 +24,12 @@ export interface DEntityProperties {
     behaviors: DBehaviorInstantiation[];
     commandNames: string[];
     reactionNames: string[];
-    abilityNames: string[];
+    //abilityNames: string[];
     capacity?: string;
     
     equipmentImage: DItemEquipmentImage;
 
     meta_prefabName: string;
-}
-
-export interface DBehaviorInstantiation {
-    name: string;
-    args?: any[] | undefined;
 }
 
 export function DEntityProperties_Default(): DEntityProperties {
@@ -43,7 +39,7 @@ export function DEntityProperties_Default(): DEntityProperties {
         behaviors: [],
         commandNames: [],
         reactionNames: [],
-        abilityNames: [],
+        //abilityNames: [],
         capacity: undefined,
         equipmentImage: {
             name: "",
@@ -64,7 +60,7 @@ export function parseMetaToEntityProperties(meta: any | undefined): DEntityPrope
             behaviors: [],
             commandNames: [],
             reactionNames: [],
-            abilityNames: [],
+            //abilityNames: [],
             capacity: meta["RE-Capacity"],
             equipmentImage: {
                 name: "",
@@ -75,10 +71,11 @@ export function parseMetaToEntityProperties(meta: any | undefined): DEntityPrope
 
         const behaviors = meta["MR-Behavior"];
         if (behaviors) {
-            if (typeof(behaviors) == "string")
-                data.behaviors = parseMetadata_Behavior([behaviors]);
-            else
-                data.behaviors = parseMetadata_Behavior(behaviors);
+            throw new Error("MR-Behavior is obsoleted. Pleaes edit /data/mr/EntityBehaviors.json instead.");
+            // if (typeof(behaviors) == "string")
+            //     data.behaviors = parseMetadata_Behavior([behaviors]);
+            // else
+            //     data.behaviors = parseMetadata_Behavior(behaviors);
         }
 
         const commands = meta["RE-Command"];
@@ -91,10 +88,10 @@ export function parseMetaToEntityProperties(meta: any | undefined): DEntityPrope
             data.reactionNames = (reactions as string).split(";");
         }
 
-        const abilities = meta["RE-Ability"];
-        if (abilities) {
-            data.abilityNames = (abilities as string).split(";");
-        }
+        // const abilities = meta["RE-Ability"];
+        // if (abilities) {
+        //     data.abilityNames = (abilities as string).split(";");
+        // }
 
         const equipmentImage = meta["RE-EquipmentImage"];
         if (equipmentImage) {
@@ -119,11 +116,12 @@ export function parseMetaToEntityProperties(meta: any | undefined): DEntityPrope
     }
 }
 
-export function parseMetadata_Behavior(meta: string[]): DBehaviorInstantiation[] {
-    const result: DBehaviorInstantiation[] = [];
-    for (const data of meta) {
-        result.push(DHelpers.parseConstructionExpr(data));
-    }
-    return result;
-}
+// export function parseMetadata_Behavior(meta: string[]): DBehaviorInstantiation[] {
+//     const result: DBehaviorInstantiation[] = [];
+//     for (const data of meta) {
+//         const expr = DHelpers.parseConstructionExpr(data);
+//         result.push(new DBehaviorInstantiation( MRData.getBehavior(expr.name).id, expr.args));
+//     }
+//     return result;
+// }
 

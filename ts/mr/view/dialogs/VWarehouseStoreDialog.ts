@@ -16,7 +16,7 @@ export class VWarehouseStoreDialog extends VItemListDialogBase {
     public constructor(model: SWarehouseStoreDialog) {
         super(model.inventory, model, VItemListMode.Use);
         this._model = model;
-        this.itemListWindow.multipleSelectionEnabled = true;
+        this.itemListWindow.multipleSelectionEnabled = model.multipleSelectionEnabled;
 
         const inventory = model.warehouseInventory;
         const w = 200;
@@ -33,6 +33,6 @@ export class VWarehouseStoreDialog extends VItemListDialogBase {
     }
 
     private handleStore(): void {
-        this._model.storeItems(this.itemListWindow.getSelectedItems());
+        this._model.storeItems(this._model.selectedEntities());
     }
 }

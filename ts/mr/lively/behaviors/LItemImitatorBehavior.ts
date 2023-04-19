@@ -4,7 +4,7 @@ import { DPrefabId } from "ts/mr/data/DPrefab";
 import { DEventId, WalkEventArgs } from "ts/mr/data/predefineds/DBasicEvents";
 import { DFactionId, MRData } from "ts/mr/data/MRData";
 import { Helpers } from "ts/mr/system/Helpers";
-import { SCommandResponse, SPhaseResult } from "ts/mr/system/SCommand";
+import { SCommand, SCommandResponse, SPhaseResult, STestTakeItemCommand } from "ts/mr/system/SCommand";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { UAction } from "ts/mr/utility/UAction";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
@@ -14,11 +14,12 @@ import { LEventResult } from "../LEventServer";
 import { LEntityId } from "../LObject";
 import { MRLively } from "../MRLively";
 import { LState } from "../states/LState";
-import { CommandArgs, DecisionPhase, LBehavior, LNameView, testPickOutItem } from "./LBehavior";
+import { CommandArgs, DecisionPhase, LBehavior, LNameView } from "./LBehavior";
 import { DActionId, DBlockLayerKind } from "ts/mr/data/DCommon";
 import { LMap } from "../LMap";
 import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LMinimapMarkerClass, LReaction } from "../LCommon";
+import { SSubTaskChain } from "ts/mr/system/tasks/STask";
 
 
 /**
@@ -131,20 +132,21 @@ export class LItemImitatorBehavior extends LBehavior {
     queryOutwardFactionId(): DFactionId | undefined {
         return MRData.system.factions.neutral;
     }
+    
+    override onCommand(self: LEntity, cctx: SCommandContext, chain: SSubTaskChain, cmd: SCommand): void {
 
-    [testPickOutItem](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
-        const actor = args.sender;
-        const self = args.self;
-        if (Helpers.isHostileFactionId(actor.getOutwardFactionId(), self.getInnermostFactionId())) {
-            this.parentAs(LState)?.removeThisState();
-            
-            self.removeFromParent();
-            MRLively.mapView.currentMap.appearEntity(self, actor.mx, actor.my);
-            UAction.postDropOrDestroyOnCurrentPos(MRSystem.commandContext, self, self.getHomeLayer());
-
-            return SCommandResponse.Canceled;
+        // 
+        if (cmd instanceof STestTakeItemCommand) {
+            const actor = cmd.actor;
+            if (Helpers.isHostileFactionId(actor.getOutwardFactionId(), self.getInnermostFactionId())) {
+                this.parentAs(LState)?.removeThisState();
+                
+                self.removeFromParent();
+                MRLively.mapView.currentMap.appearEntity(self, actor.mx, actor.my);
+                UAction.postDropOrDestroyOnCurrentPos(MRSystem.commandContext, self, self.getHomeLayer());
+                chain.reject();
+            }
         }
-        return SCommandResponse.Pass;
     }
     
     onEvent(cctx: SCommandContext, eventId: DEventId, args: any): LEventResult {

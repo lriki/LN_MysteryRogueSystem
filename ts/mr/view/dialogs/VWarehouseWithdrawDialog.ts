@@ -12,7 +12,7 @@ export class VWarehouseWithdrawDialog extends VItemListDialogBase {
     public constructor(model: SWarehouseWithdrawDialog) {
         super(model.inventory, model, VItemListMode.Use);
         this._model = model;
-        this.itemListWindow.multipleSelectionEnabled = true;
+        this.itemListWindow.multipleSelectionEnabled = model.multipleSelectionEnabled;
 
         const inventory = model.userInventory;
         const w = 200;
@@ -23,12 +23,12 @@ export class VWarehouseWithdrawDialog extends VItemListDialogBase {
     }
 
     protected onMakeCommandList(window: VFlexCommandWindow): void {
-        const items = this.itemListWindow.getSelectedItems();
+        const items = this._model.selectedEntities();
         window.addSystemCommand(tr("引き出す"), "store", () => this.handleWithdraw(items));
         super.onMakeCommandList(window);
     }
     
-    private handleWithdraw(items: LEntity[]): void {
+    private handleWithdraw(items: readonly LEntity[]): void {
         this._model.withdrawItems(items);
     }
 }

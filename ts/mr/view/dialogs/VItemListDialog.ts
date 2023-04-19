@@ -27,27 +27,26 @@ export class VItemListDialog extends VItemListDialogBase {
         }
     }
     
-    onCreate() {
+    override onCreate() {
         super.onCreate();
     }
 
     
-    onUpdate() {
+    override onUpdate() {
         if (Input.isTriggered("pagedown")) {
             UInventory.sort(this._model.inventory);
-            this.itemListWindow.refreshItems();
+            this.itemListWindow.refresh();
             this.itemListWindow.playCursorSound();
         }
     }
 
-    onSelectedItemsChanged(items: LEntity[]): void {
-        this._model.setSelectedEntity(items[0]);    // TODO: multi
-    }
+    // onSelectedItemsChanged(items: LEntity[]): void {
+    //     this._model.setSelectedEntity(items[0]);    // TODO: multi
+    // }
 
     // override
-    onMakeCommandList(window: VFlexCommandWindow): void {
-        const itemEntity = this.itemListWindow.selectedItem();
-        this.commandWindow.setupFromCommandList(this._model.makeActionList(itemEntity));
+    override onMakeCommandList(window: VFlexCommandWindow): void {
+        this.commandWindow.setupFromCommandList(this._model.makeActionList());
         super.onMakeCommandList(window);
     }
 }

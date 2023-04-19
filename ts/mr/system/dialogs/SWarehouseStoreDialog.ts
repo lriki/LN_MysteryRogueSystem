@@ -6,10 +6,10 @@ import { SWarehouseActionResult, UInventory } from "ts/mr/utility/UInventory";
 import { MRSystem } from "../MRSystem";
 import { SWarehouseDialogResult } from "../SCommon";
 import { SDialog } from "../SDialog";
+import { SInventoryDialogBase } from "./SInventoryDialogBase";
 
-export class SWarehouseStoreDialog extends SDialog {
+export class SWarehouseStoreDialog extends SInventoryDialogBase {
     private _userEntityId: LEntityId;
-    private _inventoryBehaviorId: LBehaviorId;
     private _warehouseEntityId: LEntityId;
     private _warehouseInventoryBehaviorId: LBehaviorId;
     private _resultItems: LEntityId[];
@@ -17,9 +17,9 @@ export class SWarehouseStoreDialog extends SDialog {
     // private _closeRequested: boolean = false;
 
     public constructor(user: LEntity, warehouse: LEntity) {
-        super();
+        super(user.getEntityBehavior(LInventoryBehavior));
+        this.multipleSelectionEnabled = true;
         this._userEntityId = user.entityId();
-        this._inventoryBehaviorId = user.getEntityBehavior(LInventoryBehavior).id();
         this._warehouseEntityId = warehouse.entityId();
         this._warehouseInventoryBehaviorId = warehouse.getEntityBehavior(LInventoryBehavior).id();
         this._resultItems = [];
@@ -28,10 +28,6 @@ export class SWarehouseStoreDialog extends SDialog {
 
     public get user(): LEntity {
         return MRLively.world.entity(this._userEntityId);
-    }
-
-    public get inventory(): LInventoryBehavior {
-        return MRLively.world.behavior(this._inventoryBehaviorId) as LInventoryBehavior;
     }
 
     public get warehouseEntity(): LEntity {
@@ -50,7 +46,7 @@ export class SWarehouseStoreDialog extends SDialog {
         return this._result;
     }
     
-    public storeItems(items: LEntity[]): void {
+    public storeItems(items: readonly LEntity[]): void {
         this._resultItems = items.map(e => e.entityId());
         const r: SWarehouseActionResult = { code: SWarehouseDialogResult.Succeeded, items: [] };
         UInventory.postStoreItemsToWarehouse(MRSystem.commandContext, this.user, this.warehouseEntity, items, r)

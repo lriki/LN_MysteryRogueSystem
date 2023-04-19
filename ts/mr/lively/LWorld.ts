@@ -301,6 +301,9 @@ export class LWorld {
             UMovement.locateEntityAtFloorMoved(entity, floorId, mx, my);
         }
 
+        // 座標確定後に、View へ通知する
+        MRLively.mapView.onEntityEnteredFromMap(entity);
+
 
 
 

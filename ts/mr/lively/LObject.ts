@@ -199,6 +199,7 @@ export class LObject {
      * Behavior から Entity を削除する場合、CommandContext.postDestroy() を使用してください。
      */
     public destroy(): void {
+        if (this._destroyed) return;   // 複数回の呼び出しは許可する
         assert(!this.isUnique());
         this.removeFromParent();
         this._destroyed = true;

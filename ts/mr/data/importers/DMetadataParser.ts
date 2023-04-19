@@ -1,5 +1,5 @@
 import { assert, tr2 } from "../../Common";
-import { DBehaviorInstantiation } from "../DEntityProperties";
+import { DBehaviorInstantiation } from "../DBehavior";
 import { DHelpers } from "../DHelper";
 import { MRData } from "../MRData";
 
@@ -78,12 +78,13 @@ export class DMetadataParser {
         
         const behaviors = meta["MR-Behavior"];
         if (behaviors) {
-            if (typeof(behaviors) == "string") {
-                result.behaviors = this.parseMetadata_Behavior([behaviors]);
-            }
-            else {
-                result.behaviors = this.parseMetadata_Behavior(behaviors);
-            }
+            throw new Error("MR-Behavior is obsoleted. Pleaes edit /data/mr/EntityBehaviors.json instead.");
+            // if (typeof(behaviors) == "string") {
+            //     result.behaviors = this.parseMetadata_Behavior([behaviors]);
+            // }
+            // else {
+            //     result.behaviors = this.parseMetadata_Behavior(behaviors);
+            // }
         }
 
         const traits = meta["MR-Trait"];
@@ -110,13 +111,14 @@ export class DMetadataParser {
         return result;
     }
 
-    private static parseMetadata_Behavior(meta: string[]): DBehaviorInstantiation[] {
-        const result: DBehaviorInstantiation[] = [];
-        for (const data of meta) {
-            result.push(DHelpers.parseConstructionExpr(data));
-        }
-        return result;
-    }
+    // private static parseMetadata_Behavior(meta: string[]): DBehaviorInstantiation[] {
+    //     const result: DBehaviorInstantiation[] = [];
+    //     for (const data of meta) {
+    //         const expr = DHelpers.parseConstructionExpr(data);
+    //         result.push(new DBehaviorInstantiation(MRData.getBehavior(expr.name).id, expr.args));
+    //     }
+    //     return result;
+    // }
     
     
     private static parseTraitDataId(value: any): number {

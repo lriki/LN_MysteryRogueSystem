@@ -18,9 +18,9 @@ export class SStateFactory {
         //const behabiors: LStateTraitBehavior[] = [behavior];
         const behabiors: LBehavior[] = [behavior];
         for (const behavior of state.stateEffect().behaviors) {
-            assert(!behavior.args || behavior.args.length == 0);  // 未サポート
-            const b = SBehaviorFactory.createBehavior(behavior.name);// as LStateTraitBehavior;
-            if (!b) throw new Error(`Behavior "${behavior.name}" specified in state "${stateId}:${state.stateData().displayName}" is invalid.`);
+            assert(!behavior.props);  // 未サポート
+            const b = SBehaviorFactory.createBehavior(behavior.data.fullName);// as LStateTraitBehavior;
+            if (!b) throw new Error(`Behavior "${behavior.data.fullName}" specified in state "${stateId}:${state.stateData().displayName}" is invalid.`);
             behabiors.push(b);
         }
 

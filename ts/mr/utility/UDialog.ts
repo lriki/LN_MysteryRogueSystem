@@ -3,7 +3,7 @@ import { LInventoryBehavior } from "../lively/behaviors/LInventoryBehavior";
 import { LEntity } from "../lively/LEntity";
 import { MRLively } from "../lively/MRLively";
 import { SFeetDialog } from "../system/dialogs/SFeetDialog";
-import { SItemListDialog } from "../system/dialogs/SItemListDialog";
+import { SItemListDialog, SItemListDialogSourceAction } from "../system/dialogs/SItemListDialog";
 import { SCommandContext } from "../system/SCommandContext";
 import { SDialog } from "../system/SDialog";
 import { SDialogContext } from "../system/SDialogContext";
@@ -14,7 +14,7 @@ export class UDialog {
         const dctx = cctx.dialogContext;
         const inventory = entity.findEntityBehavior(LInventoryBehavior);
         if (inventory) {
-            dctx.activeDialog().openSubDialog(new SItemListDialog(entity, inventory), onClosed);
+            dctx.activeDialog().openSubDialog(new SItemListDialog(entity, inventory, SItemListDialogSourceAction.Default), onClosed);
             return true;
         }
         else {

@@ -30,7 +30,7 @@ export class VDialog {
 
     // NOTE: maindialog
     //protected openSubDialog(dialog: REDialog, result: LDialogResultCallback) {
-    /** @deprecated */
+    /** @deprecated use SDialog.openSubDialog */
     protected openSubDialog<T extends SDialog>(dialog: T, onResult: (model: T) => boolean) {
         dialog._resultCallbackVisual = (model: T) => {
             const handled = onResult(model);

@@ -2,7 +2,7 @@ import { assert, MRSerializable, tr2 } from "ts/mr/Common";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { DEquipmentPartId } from "ts/mr/data/DEquipmentPart";
 import { MRData } from "ts/mr/data/MRData";
-import { SCommandResponse } from "ts/mr/system/SCommand";
+import { SCommandResponse, STestTakeItemCommand } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { LEntityId } from "../LObject";
@@ -12,7 +12,6 @@ import { LBehavior } from "./LBehavior";
 import { DAnimationId, DParameterId } from "ts/mr/data/DCommon";
 import { SSoundManager } from "ts/mr/system/SSoundManager";
 import { SEffectSubject } from "ts/mr/system/SEffectContext";
-import { testPickOutItem } from "../internal";
 import { UIdentify } from "ts/mr/utility/UIdentify";
 import { UName } from "ts/mr/utility/UName";
 import { SActivityContext } from "ts/mr/system/SActivityContext";
@@ -229,10 +228,9 @@ NOTE:
     
                         // まずは外す
                         this.postEquipOff(cctx, self, MRLively.world.entity(localSlot.itemEntityId))
-                            .then(() => {
+                            .then2(c => {
                                 // 外せたら装備する
                                 this.equipOn(cctx, self, localSlot, itemEntity);
-                                return true;
                             });
                     }
                     else {
@@ -292,8 +290,8 @@ NOTE:
     }
 
     private postEquipOff(cctx: SCommandContext, self: LEntity, itemEntity: LEntity): STask {
-        return cctx.post(itemEntity, self, new SEffectSubject(self), undefined, testPickOutItem)
-            .then(() => {
+        return cctx.postCommandTask(new STestTakeItemCommand(itemEntity, self))
+            .then2(c => {
                 const removed = this.removeEquitment(itemEntity);
                 
                 if (removed) {
@@ -304,7 +302,6 @@ NOTE:
                     cctx.postMessage(tr2("何も起こらなかった。"));
                 }
                 this.onEquipmentChanged(self);
-                return true;
             });
     }
     

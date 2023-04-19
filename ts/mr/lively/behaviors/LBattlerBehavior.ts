@@ -64,6 +64,7 @@ export class LBattlerBehavior extends LBehavior {
         // 敵味方を問わず、話しかけることは可能。
         reactions.push({ actionId: MRBasics.actions.talk });
     }
+    
 
 
     // Game_BattlerBase.prototype.isGuard 

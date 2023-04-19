@@ -26,7 +26,7 @@
     "maxLevel": 99,
     "name": "リード",
     "nickname": "",
-    "note": "<MR-Type: Entity>\n<MR-Category: kEntityCategory_Actor>\n<MR-Key: kEntity_ActorA>\n<MR-Prefab: kPrefab_ActorA>\n<MR-Behavior: Eater(1, \"aa\")>\n<MR-Behavior: Waver(1, \"aa\")>\n",
+    "note": "<MR-Type: Entity>\n<MR-Category: kEntityCategory_Actor>\n<MR-Key: kEntity_ActorA>\n<MR-Prefab: kPrefab_ActorA>\n",
     "profile": ""
   },
   {

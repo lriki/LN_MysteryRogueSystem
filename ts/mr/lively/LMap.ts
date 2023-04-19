@@ -400,8 +400,6 @@ export class LMap extends LObject {
             b.onEnteredMap(entity, this);
             return true;
         });
-
-        MRLively.mapView.onEntityEnteredFromMap(entity);
     }
 
     /**
@@ -416,6 +414,7 @@ export class LMap extends LObject {
         entity.floorId = this.floorId();
         this.locateEntity(entity, x, y, layer);
         this._addEntityInternal(entity);
+        MRLively.mapView.onEntityEnteredFromMap(entity);
     }
 
     // appearEntity の、マップ遷移時用

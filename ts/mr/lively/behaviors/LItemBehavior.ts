@@ -2,7 +2,7 @@ import { assert, MRSerializable } from "ts/mr/Common";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { DItem, DItemDataId } from "ts/mr/data/DItem";
 import { MRData } from "ts/mr/data/MRData";
-import { SCommandResponse } from "ts/mr/system/SCommand";
+import { SCommand, SCommandResponse, SItemReactionCommand } from "ts/mr/system/SCommand";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { SCommandContext, SHandleCommandResult } from "ts/mr/system/SCommandContext";
 import { SEffectContext, SEffectSubject } from "ts/mr/system/SEffectContext";
@@ -16,6 +16,7 @@ import { CommandArgs, LBehavior, onAttackReaction } from "./LBehavior";
 import { UAction } from "ts/mr/utility/UAction";
 import { SActivityContext } from "ts/mr/system/SActivityContext";
 import { DActionId } from "ts/mr/data/DCommon";
+import { SSubTaskChain } from "ts/mr/system/tasks/STask";
 
 
 /**
@@ -63,6 +64,25 @@ export class LItemBehavior extends LBehavior {
     //     }
     // }
 
+    override onCommand(self: LEntity, cctx: SCommandContext, chain: SSubTaskChain, cmd: SCommand): void {
+        if (cmd instanceof SItemReactionCommand) {
+            if (cmd.itemActionId == MRBasics.actions.collide) {
+                
+                this.applyHitEffect(cctx, self, MRBasics.actions.collide, cmd.target, cmd.subject, cmd.direction, (targets: LEntity[]) => {
+                    if (targets.find(x => !x._effectResult.missed)) {
+                        // ここは postDestroy() ではなく普通の destroy().
+                        // 上記 applyEffect() の中から postAnimation() が実行されるが、
+                        // ここで postDestroy() してしまうと、アニメーション中ずっと表示され続けてしまう。
+                        self.destroy();
+                    }
+                    else {
+                        UAction.postDropOrDestroy(cctx, self, self.mx, self.my);
+                    }
+                });
+                //chain.accept();
+            }
+        }
+    }
 
     onCollectTraits(self: LEntity, result: IDataTrait[]): void {
         super.onCollectTraits(self, result);
@@ -71,6 +91,7 @@ export class LItemBehavior extends LBehavior {
         }
     }
 
+    /*
     onActivity(self: LEntity, cctx: SCommandContext, actx: SActivityContext): SCommandResponse {
         const activity = actx.activity();
         if (activity.actionId() == MRBasics.actions.collide) {
@@ -102,6 +123,8 @@ export class LItemBehavior extends LBehavior {
 
         return SCommandResponse.Pass;
     }
+    */
+
 
     onActivityReaction(self: LEntity, cctx: SCommandContext, activity: LActivity): SCommandResponse {
         // [振られた]

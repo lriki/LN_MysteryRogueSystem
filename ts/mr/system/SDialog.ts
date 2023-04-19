@@ -29,20 +29,9 @@ export type LDialogResultCallback = (result: any) => void;
  * Dialog と名前がついているが、必ずしも UI を持つものではない。
  * 名前通り、エンドユーザーとの「対話」のためのインターフェイスを実装する。
  * 
- * MVVM ライクな実装にしているが、これはユニットテスト可能にするため。
+ * MVP ライクな実装にしているが、これはユニットテスト可能にするため。
  * 
- * また基本的にすべての LDialog の派生と VDialog の派生はペアとなっている。
- * これはいずれの Dialog も Main/Sub 両方で使用できるようにするため。
- * これによって再利用がしやすくなる。例えば壺や倉庫にアイテムを入れるときのアイテム選択や、イベントリストからのアイテム選択。
  * 
- * [2021/5/11] Dialog は System モジュールに持っていくべき？
- * ----------
- * セーブデータに保存しない、ということになる。
- * Dialog の状態を保存できなくなるので、Dialog を開いている時のセーブは基本的に禁止になる。
- * 例えば Dialog からのイベント実行でセーブ画面を呼び出すようなことは禁止。
- * 
- * Object に持っていく場合はこれと併せて CommandContext の保存も必要になってくる。
- * ただそうすると想定外の領域にもどんどん保存の必要性が出てくるので、ここは制限付きにしておくのがベターかも。
  */
 export class SDialog {
     _resultCallback: SDialogResultCallback | undefined;
@@ -73,7 +62,7 @@ export class SDialog {
     }
 
     public submit(): void {
-        assert(this._dialogResult.action == SDialogAction.None);
+        assert(this._dialogResult.action == SDialogAction.None);    // ここでエラーになる場合は、resutl コールバック内で submit したのに return false した可能性がある。
         this._dialogResult.action = SDialogAction.Submit;
         this._closeSelfAndSubDialogs();
     }
@@ -84,6 +73,9 @@ export class SDialog {
         this._closeSelfAndSubDialogs();
     }
     
+    /**
+     * 全てのサブダイアログを閉じます。Action は Submit ではありません。
+     */
     public closeAllSubDialogs(): void {
         assert(MRSystem.dialogContext.dialogs().length >= 2);
         assert(this._dialogResult.action == SDialogAction.None);
@@ -121,22 +113,22 @@ export class SDialog {
     /**
      * SubDialog を開く。
      * 
-     * onResult が呼ばれる時点で、dialog はスタックから取り除かれている。
+     * onResult が呼ばれた時点で、dialog はスタックから取り除かれている。
      * 
-     * onClosed は、SubDialog が閉じられた時点で呼ばれます。
-     * onClosed で親 Dialog に対してデフォルトの処理を行う場合は、false または void を返してください。
+     * onResult は、SubDialog が閉じられた時点で呼ばれます。
+     * onResult で親 Dialog に対してデフォルトの処理を行う場合は、false または void を返してください。
      * デフォルトの処理は、子 Dialog の結果を親 Dialog に引き継ぐように反映します。
      * つまり、
      * - 子 Dialog が Submit された場合は、親 Dialog も Submit となり、 Close されます。
      * - 子 Dialog が Cancel された場合は、親 Dialog は Close されません。
      * 
-     * onClosed で親 Dialog に対してデフォルトの処理を行わない場合は、true を返してください。
+     * onResult で親 Dialog に対してデフォルトの処理を行わない場合は、true を返してください。
      * 例えば未識別アイテムの名前付けウィンドウでは、名前を決定すると Submit 結果となりますが、
      * その時その親 (通常は ItemListDialog) は Close しません。
      */
-    public openSubDialog<T extends SDialog>(dialog: T, onClosed?: ((model: T) => boolean | void) | undefined) {
+    public openSubDialog<T extends SDialog>(dialog: T, onResult?: ((model: T) => boolean | void) | undefined) {
         dialog._resultCallbackVisual = (model: T) => {
-            const handled = (onClosed) ? onClosed(model) : false;
+            const handled = (onResult) ? onResult(model) : false;
             if (!handled) {
                 switch (model.resultAction) {
                     case SDialogAction.Submit:

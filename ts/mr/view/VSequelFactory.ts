@@ -21,6 +21,7 @@ import { VStumbleSequel } from "./sequels/VStumbleSequel";
 import { VJumpSequel } from "./sequels/VJumpSequel";
 import { MRView } from "./MRView";
 import { VHelper } from "./VHelper";
+import { VCrackSequel } from "./sequels/VCrackSequel";
 
 /**
  */
@@ -44,6 +45,7 @@ export class VSequelFactory {
         this._visualSequelFactory[MRBasics.sequels.warp] = () => new VWarpSequel();
         this._visualSequelFactory[MRBasics.sequels.stumble] = () => new VStumbleSequel();
         this._visualSequelFactory[MRBasics.sequels.jump] = () => new VJumpSequel();
+        this._visualSequelFactory[MRBasics.sequels.crack] = () => new VCrackSequel();
     }
 
     public createVisualSequel(sequelId: DSequelId): VSequel {

@@ -1,7 +1,7 @@
 import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { MRData } from "ts/mr/data/MRData";
 import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { SItemListDialog } from "ts/mr/system/dialogs/SItemListDialog";
+import { SItemListDialog, SItemListDialogSourceAction } from "ts/mr/system/dialogs/SItemListDialog";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { TestEnv } from "../../TestEnv";
@@ -23,8 +23,9 @@ test("concretes.dialogs.ItemListDialog.test", () => {
 
     MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
 
-    const dialog = new SItemListDialog(player1, inventory1);
-    const actionList = dialog.makeActionList(item1);
+    const dialog = new SItemListDialog(player1, inventory1, SItemListDialogSourceAction.Default);
+    dialog.focusEntity(item1);
+    const actionList = dialog.makeActionList();
     expect(actionList.length).toBe(0);
 });
 

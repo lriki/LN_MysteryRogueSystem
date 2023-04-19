@@ -23,6 +23,12 @@ export class LParamBehavior extends LBehavior {
         return b;
     }
 
+    override onInitialized(self: LEntity, params: unknown): void {
+        if (params) {
+            this.setParamBase((params as any).paramId, (params as any).value);   // TODO: type
+        }
+    }
+
     public setParamBase(paramId: DParameterId, value: number): void {
         this._values[paramId] = value;
     }

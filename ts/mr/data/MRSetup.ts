@@ -16,6 +16,7 @@ import { DFlavorEffect, DSound } from "./DFlavorEffect";
 import { DTextManager } from "./DTextManager";
 import { DFactionType } from "./DFaction";
 import { DEffectRef } from "./DEffectSuite";
+import { DBehaviorInstantiation } from "./DBehavior";
 
 export class MRSetup {
 
@@ -115,7 +116,7 @@ export class MRSetup {
             //case MRBasics.params.pow:
             //case MRBasics.params.upgradeValue:
             case MRBasics.params.remaining:
-            case MRBasics.params.capacity:
+            //case MRBasics.params.capacity:
             case MRBasics.params.gold:
             //case MRBasics.params.level:
             case MRBasics.params.exp:
@@ -363,7 +364,7 @@ export class MRSetup {
                 break;
             case "kEntity_RevivalGrassA":
                 this.setupGrassCommon(entity);
-                entity.entity.behaviors.push({name: "RevivalItem"});
+                entity.entity.behaviors.push(new DBehaviorInstantiation(MRData.getBehavior("RevivalItem").id, undefined));
                 entity.addReaction(MRBasics.actions.dead, entity.mainEmittor());
                 break;
             case "kEntity_System_炎のブレスA":
@@ -802,6 +803,7 @@ export class MRSetup {
             case "kEntity_保存の壺A":
                 entity.addReaction(MRBasics.actions.PutInActionId);
                 entity.addReaction(MRBasics.actions.PickOutActionId);
+                entity.entity.behaviors.push(new DBehaviorInstantiation(MRData.getBehavior("Inventory").id, {code: "Inventory", minCapacity: 4, maxCapacity: 6, storage: true}));
                 break;
             case "kEntity_くちなしの巻物A":
                 this.setupScrollCommon(entity);
@@ -1197,7 +1199,7 @@ export class MRSetup {
         data.traits.push({ code: MRBasics.traits.DeathVulnerableElement, dataId: MRData.getElement("kElement_DeathExplosion").id, value: MRData.getState("kState_System_ExplosionDeath").id });
         switch (entity.entity.key) {
             case "kEnemy_ボムA":
-                entity.entity.behaviors.push({name: "SelfExplosion"});
+                entity.entity.behaviors.push(new DBehaviorInstantiation(MRData.getBehavior("SelfExplosion").id, undefined));
                 //entity.autoAdditionStates.push({ stateId: REData.getStateFuzzy("kState_UTかなしばり").id, condition: "a.hp<50" });
                 break;
             case "kEnemy_ウルフA":
@@ -1229,7 +1231,7 @@ export class MRSetup {
     public static setupDirectly_State(data: DState) {
         switch (data.key) {
             case "kState_System_ItemStanding":
-                data.effect.behaviors.push({ name: "LItemStandingBehavior" });
+                data.effect.behaviors.push(new DBehaviorInstantiation(MRData.getBehavior("LItemStandingBehavior").id, undefined));
                 break;
             case "kState_System_ExplosionDeath":
                 data.deadState = true;
@@ -1251,14 +1253,18 @@ export class MRSetup {
                 data.effect.traits.push({ code: MRBasics.traits.CertainIndirectAttack, dataId: 0, value: 0 });
                 break;
             case "kState_System_kNap":
+                data.effect.behaviors.push(new DBehaviorInstantiation(MRData.getBehavior("LNapStateBehavior").id, undefined));
                 data.effect.autoRemovals.push({ kind: DAutoRemovalTiming.DamageTesting, paramId: MRBasics.params.hp });
+                break;
+            case "kState_Test_MoveRight":
+                data.effect.behaviors.push(new DBehaviorInstantiation(MRData.getBehavior("LDebugMoveRightBehavior").id, undefined));
                 break;
             case "kState_仮眠2":
                 data.effect.traits.push({ code: MRBasics.traits.StateRemoveByEffect, dataId: 0, value: 0 });
                 data.idleSequel = MRBasics.sequels.asleep;
                 break;
             case "kState_UTアイテム擬態":
-                data.effect.behaviors.push({ name: "LItemImitatorBehavior" });
+                data.effect.behaviors.push(new DBehaviorInstantiation(MRData.getBehavior("LItemImitatorBehavior").id, undefined));
                 break;
             case "kState_UT魔法使い":
                 data.effect.traits.push({ code: MRBasics.traits.EquipmentProficiency, dataId: MRBasics.entityCategories.WeaponKindId, value: 0.5 });
@@ -1289,7 +1295,7 @@ export class MRSetup {
                 data.effect.restriction = DStateRestriction.Blind;
                 break;
             case "kState_UTまどわし":
-                data.effect.behaviors.push({ name: "LIllusionStateBehavior" });
+                data.effect.behaviors.push(new DBehaviorInstantiation(MRData.getBehavior("LIllusionStateBehavior").id, undefined));
                 break;
             case "kState_UTからぶり":
                 break;
@@ -1314,7 +1320,7 @@ export class MRSetup {
                 data.effect.matchConditions.kindId = MRBasics.entityCategories.MonsterKindId;
                 break;
             case "kState_UT足つかみ":
-                data.effect.behaviors.push({ name: "LGrabFootBehavior" });
+                data.effect.behaviors.push(new DBehaviorInstantiation(MRData.getBehavior("LGrabFootBehavior").id, undefined));
                 break;
             case "kState_物理投擲回避":
                 data.effect.traits.push({ code: MRBasics.traits.DodgePhysicalIndirectAttack, dataId: 0, value: 0 });
@@ -1424,7 +1430,7 @@ export class MRSetup {
 
     private static setupRingCommon(entity: DEntity): void {
         this.setupItemCommon(entity);
-        entity.entity.behaviors.push({name: "Equipment"});
+        entity.entity.behaviors.push(new DBehaviorInstantiation(MRData.getBehavior("Equipment").id, undefined));
     }
 
     public static setupFoodCommon(entity: DEntity, fp?: number): void {
@@ -1511,6 +1517,12 @@ export class MRSetup {
         this.setupItemCommon(entity);
         entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
         entity.identificationReaction = MRData.getSkill("kAction_Read").id;
+    }
+
+    public static setupStorageCommon(entity: DEntity): void {
+        this.setupItemCommon(entity);
+        entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
+        entity.selfTraits.push({ code: MRBasics.traits.DisallowIntoStorage, dataId: 0, value: 0 });
     }
 
     private static addVulnerableDeathExplosion(entity: DEntity) {

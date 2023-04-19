@@ -3,31 +3,26 @@ import { LEntity } from "ts/mr/lively/LEntity";
 import { LBehaviorId, LEntityId } from "ts/mr/lively/LObject";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { SDialog } from "../SDialog";
+import { SInventoryDialogBase } from "./SInventoryDialogBase";
 
-export class SItemSelectionDialog extends SDialog {
-    private _actorEntityId: LEntityId;
-    private _inventoryBehaviorId: LBehaviorId;
-    private _selectedEntity: LEntity | undefined;
+export class SItemSelectionDialog extends SInventoryDialogBase {
+    private readonly _actorEntityId: LEntityId;
+    private readonly _canMultiSelect: boolean;
 
-    public constructor(actorEntity: LEntity, inventory: LInventoryBehavior) {
-        super();
+    public constructor(actorEntity: LEntity, inventory: LInventoryBehavior, canMultiSelect: boolean) {
+        super(inventory);
         this._actorEntityId = actorEntity.entityId();
-        this._inventoryBehaviorId = inventory.id();
+        this._canMultiSelect = canMultiSelect;
     }
+
+    public canMultiSelect(): boolean {
+        return this._canMultiSelect;
+    }
+    // public get isMultiSelectMode(): boolean {
+    //     return this._multiSelectMode;
+    // }
 
     public entity(): LEntity {
         return MRLively.world.entity(this._actorEntityId);
-    }
-
-    public inventory(): LInventoryBehavior {
-        return MRLively.world.behavior(this._inventoryBehaviorId) as LInventoryBehavior;
-    }
-
-    public setSelectedEntity(entity: LEntity): void {
-        this._selectedEntity = entity;
-    }
-
-    public selectedEntity(): LEntity | undefined {
-        return this._selectedEntity;
     }
 }

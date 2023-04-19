@@ -324,9 +324,15 @@ export class LActivity {
         return a;
     }
 
-    public static makePutIn(actor: LEntity, storage: LEntity, item: LEntity): LActivity {
+    public static makePutIn(actor: LEntity, storage: LEntity, items: readonly LEntity[]): LActivity {
         const a = (new LActivity()).setup(MRBasics.actions.PutInActionId, actor, storage);
-        a._objects2 = [item.entityId()];
+        a._objects2 = items.map(x => x.entityId());
+        return a;
+    }
+
+    public static makePickOut(actor: LEntity, storage: LEntity, items: readonly LEntity[]): LActivity {
+        const a = (new LActivity()).setup(MRBasics.actions.PickOutActionId, actor, storage);
+        a._objects2 = items.map(x => x.entityId());
         return a;
     }
 
@@ -335,11 +341,11 @@ export class LActivity {
         return a;
     }
 
-    public static makeCollide(subject: LEntity, target: LEntity): LActivity {
-        const a = (new LActivity()).setup(MRBasics.actions.collide, subject);
-        a.setObjects2([target]);
-        return a;
-    }
+    // public static makeCollide(subject: LEntity, target: LEntity): LActivity {
+    //     const a = (new LActivity()).setup(MRBasics.actions.collide, subject);
+    //     a.setObjects2([target]);
+    //     return a;
+    // }
 
     public static makePerformSkill(actor: LEntity, skillId: DSkillId, dirToFace?: number): LActivity {
         assert(skillId > 0);

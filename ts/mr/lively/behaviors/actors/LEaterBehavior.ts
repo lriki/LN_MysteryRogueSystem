@@ -12,34 +12,34 @@ import { DActionId } from "ts/mr/data/DCommon";
 /**
  * @deprecated see kEntity_すばやさ草A
  */
-@MRSerializable
-export class LEaterBehavior extends LBehavior {
+// @MRSerializable
+// export class LEaterBehavior extends LBehavior {
     
-    public clone(newOwner: LEntity): LBehavior {
-        const b = MRLively.world.spawn(LEaterBehavior);
-        return b
-    }
+//     public clone(newOwner: LEntity): LBehavior {
+//         const b = MRLively.world.spawn(LEaterBehavior);
+//         return b
+//     }
     
-    onQueryActions(actions: DActionId[]): DActionId[] {
-        actions.push(MRBasics.actions.EatActionId);
-        return actions;
-    }
+//     onQueryActions(actions: DActionId[]): DActionId[] {
+//         actions.push(MRBasics.actions.EatActionId);
+//         return actions;
+//     }
 
     
-    onActivity(self: LEntity, cctx: SCommandContext, actx: SActivityContext): SCommandResponse {
-        /*
-        if (activity.actionId() == DBasics.actions.EatActionId) {
-            const reactor = activity.object();
-            if (reactor) {
-                UIdentify.identifyByTiming(context, self, reactor, DIdentifiedTiming.Eat);
-                context.post(reactor, self, new SEffectSubject(self), undefined, onEatReaction);
-            }
+//     onActivity(self: LEntity, cctx: SCommandContext, actx: SActivityContext): SCommandResponse {
+//         /*
+//         if (activity.actionId() == DBasics.actions.EatActionId) {
+//             const reactor = activity.object();
+//             if (reactor) {
+//                 UIdentify.identifyByTiming(context, self, reactor, DIdentifiedTiming.Eat);
+//                 context.post(reactor, self, new SEffectSubject(self), undefined, onEatReaction);
+//             }
             
-            return REResponse.Succeeded;
-        }
-        */
+//             return REResponse.Succeeded;
+//         }
+//         */
        
-        return SCommandResponse.Pass;
-    }
+//         return SCommandResponse.Pass;
+//     }
 
-}
+// }

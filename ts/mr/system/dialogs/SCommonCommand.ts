@@ -15,10 +15,10 @@ export class SCommonCommand {
         if (UAction.checkItemSelectionRequired(item, actionId)) {
             // 対象アイテムの選択が必要
             
-            const model = new SItemSelectionDialog(actor, inventory);
+            const model = new SItemSelectionDialog(actor, inventory, false);
             dialog.openSubDialog(model, (result: SItemSelectionDialog) => {
                 if (result.isSubmitted) {
-                    const target = model.selectedEntity();
+                    const target = model.selectedSingleEntity();
                     assert(target);
                     const activity = (new LActivity).setup(actionId, actor, item, actor.dir);
                     activity.setObjects2([target]);

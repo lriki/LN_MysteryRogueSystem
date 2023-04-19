@@ -1,12 +1,13 @@
 import { MRSerializable, tr2 } from "ts/mr/Common";
 import { MRBasics } from "ts/mr/data/MRBasics";
-import { SCommandResponse } from "ts/mr/system/SCommand";
+import { SCommand, SCommandResponse, STestTakeItemCommand } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { UName } from "ts/mr/utility/UName";
 import { LActivity } from "../activities/LActivity";
 import { LEntity } from "../LEntity";
 import { MRLively } from "../MRLively";
-import { CommandArgs, LBehavior, onGrounded, testPickOutItem } from "./LBehavior";
+import { CommandArgs, LBehavior, onGrounded } from "./LBehavior";
+import { SSubTaskChain } from "ts/mr/system/tasks/STask";
 
 /**
  * 置くと床に張り付く
@@ -39,20 +40,17 @@ export class LGlueToGroundBehavior extends LBehavior {
         return SCommandResponse.Pass;
     }
 
-    [testPickOutItem](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
-        const self = args.self;
-        if (this._glued) {
-            cctx.postMessage(tr2("%1は地面にはりついている。").format(UName.makeNameAsItem(self)));
-            return SCommandResponse.Canceled;
-        }
-        else {
-            return SCommandResponse.Pass;
-        }
-    }
-
     [onGrounded](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
         this._glued = true;
         return SCommandResponse.Pass;
     }
     
+    override onCommand(self: LEntity, cctx: SCommandContext, chain: SSubTaskChain, cmd: SCommand): void {
+        if (cmd instanceof STestTakeItemCommand) {
+            if (this._glued) {
+                cctx.postMessage(tr2("%1は地面にはりついている。").format(UName.makeNameAsItem(self)));
+                chain.reject();
+            }
+        }
+    }
 }

@@ -45,6 +45,9 @@ export class DEntityTemplate {
             case "Food":
                 this.applyTo_Food(entity);
                 break;
+            case "Storage":
+                this.applyTo_Storage(entity);
+                break;
             default:
                 assert(false);
         }
@@ -76,6 +79,11 @@ export class DEntityTemplate {
     private applyTo_Food(entity: DEntity): void {
         assert(this.props.type == "Food");
         MRSetup.setupFoodCommon(entity);
+    }
+
+    private applyTo_Storage(entity: DEntity): void {
+        assert(this.props.type == "Storage");
+        MRSetup.setupStorageCommon(entity);
     }
 }
 
@@ -114,11 +122,16 @@ export interface IEntityTemplateProps_Food {
     type: "Food",
 }
 
+export interface IEntityTemplateProps_Storage {
+    type: "Storage",
+}
+
 export type IEntityTemplateProps = 
+    IEntityTemplateProps_Null |
     IEntityTemplateProps_Weapon |
     IEntityTemplateProps_Shield |
     IEntityTemplateProps_Accessory |
     IEntityTemplateProps_Armor |
     IEntityTemplateProps_Grass |
     IEntityTemplateProps_Food |
-    IEntityTemplateProps_Null;
+    IEntityTemplateProps_Storage;

@@ -1,11 +1,8 @@
 import { tr2 } from "../Common";
-import { MRBasics } from "../data/MRBasics";
-import { testPickOutItem } from "../lively/behaviors/LBehavior";
 import { LEquipmentUserBehavior } from "../lively/behaviors/LEquipmentUserBehavior";
 import { LInventoryBehavior } from "../lively/behaviors/LInventoryBehavior";
 import { LEntity } from "../lively/LEntity";
-import { LEntityId } from "../lively/LObject";
-import { SCommand } from "../system/SCommand";
+import { STestAddItemCommand, STestTakeItemCommand } from "../system/SCommand";
 import { SCommandContext } from "../system/SCommandContext";
 import { SWarehouseDialogResult } from "../system/SCommon";
 import { SEffectSubject } from "../system/SEffectContext";
@@ -87,9 +84,9 @@ export class UInventory {
         }).then2(c => {
             const tasks = items.map(item =>
                 // item を取り出せるか確認
-                cctx.postCommandTask(item, SCommand.make(MRBasics.commands.testPickOutItem))
+                cctx.postCommandTask(new STestTakeItemCommand(item, user))
                     // item を格納できるか確認
-                    .thenTask(cctx.makeCommandTask(warehouse, SCommand.make(MRBasics.commands.testPutInItem).withObject(item)))
+                    .thenCommandTask(new STestAddItemCommand(warehouse, item))
                     .then2(_ => {
                         // Item を移す
                         userInventory.removeEntity(item);
@@ -119,9 +116,9 @@ export class UInventory {
         }).then2(_ => {
             const tasks = items.map(item =>
                 // item を取り出せるか確認
-                cctx.postCommandTask(item, SCommand.make(MRBasics.commands.testPickOutItem))
+                cctx.postCommandTask(new STestTakeItemCommand(item, user))
                     // item を格納できるか確認
-                    .thenTask(cctx.makeCommandTask(user, SCommand.make(MRBasics.commands.testPutInItem).withObject(item)))
+                    .thenCommandTask(new STestAddItemCommand(user, item))
                     .then2(_ => {
                         // Item を移す
                         warehouseInventory.removeEntity(item);
@@ -164,20 +161,20 @@ export class UInventory {
 
         let testCount = 0;
         for (const item of items) {
-            cctx.post(customer, customer, subject, item, testPickOutItem, () => {   // Item を取り出せるか確認
-                testCount++;
-                if (testCount >= items.length) {
-                    // 全部確認完了
-                    let price = 0;
-                    for (const item of items) {
-                        price += item.data.purchasePrice;
-                        item.removeFromParent();
-                        item.destroy();
+            cctx.postCommandTask(new STestTakeItemCommand(item, customer))  // item を取り出せる？
+                .then2(c => {
+                    testCount++;
+                    if (testCount >= items.length) {
+                        // 全部確認完了
+                        let price = 0;
+                        for (const item of items) {
+                            price += item.data.purchasePrice;
+                            item.removeFromParent();
+                            item.destroy();
+                        }
+                        customerInventory.gainGold(price);
                     }
-                    customerInventory.gainGold(price);
-                }
-                return true;
-            });
+                });
         }
     }
 }

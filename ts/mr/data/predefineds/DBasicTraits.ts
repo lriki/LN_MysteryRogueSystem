@@ -221,5 +221,12 @@ export interface DBasicTraits {
     ForceParameter: DTraitId;
 
     DisableMovement: DTraitId;
+
+    /**
+     * Storage Item への格納禁止
+     */
+    DisallowIntoStorage: DTraitId;
+
+    
 }
 

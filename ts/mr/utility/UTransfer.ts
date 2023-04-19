@@ -7,10 +7,6 @@ import { LFloorId } from "ts/mr/lively/LFloorId";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
-import { createNoSubstitutionTemplateLiteral } from "typescript";
-import { DFloorClass } from "../data/DLand";
-import { STransferMapSource } from "../system/dialogs/STransferMapDialog";
-import { SCommand } from "../system/SCommand";
 
 
 export class UTransfer {

@@ -49,6 +49,23 @@ export class RMMZIntegration extends SIntegration {
         if (entity.entityId().equals(MRLively.mapView.focusedEntityId())) {
             MRView._playerPosRefreshNeed = true;
         }
+
+        // NOTE: ここでは Visual と Entity の座標を同期するようなことはしない。
+        //
+        //       一部の Motion (例えば、DropMotion) では登場位置から現在位置に向かって
+        //      移動するようなモーションを組むことがあるが、そのような場合は
+        //      onEntityEnteredMap() 時点で設定された Visual の座標を登場位置として使い、
+        //      Motion 発生時の Entity の座標へ向かって移動させたい。
+        //
+        //      ここで同期してしまうと、その登場位置が失われてしまう。
+
+        // transferEntity 直後に Motion (例えば、DropMotion) を再生しようとすると、
+        // StartPosition が locate 前のものになってしまうので、ここで visual の座標を同期する。
+        // const visual = MRView.entityVisualSet?.findEntityVisualByEntity(entity);
+        // if (visual) {
+        //     visual.setX(entity.mx);
+        //     visual.setY(entity.my);
+        // }
     }
 
     onLocateRmmzEvent(eventId: number, x: number, y: number): void {

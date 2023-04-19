@@ -1,5 +1,5 @@
-import { assert } from "ts/mr/Common";
-import { SCommandResponse } from "../SCommand";
+import { assert, tr2 } from "ts/mr/Common";
+import { SCommand, SCommandResponse } from "../SCommand";
 import { SCommandContext } from "../SCommandContext";
 
 
@@ -14,7 +14,7 @@ export enum STaskStatus {
     Pending,    // 実行待ち。CommandList, thenなどのchain 追加済み。
     Running,    // 実行中。成否は未確定。
     Succeeded,  // 実行終了。成功。
-    Rejected,   // 実行終了。失敗。
+    Handled,    // 実行終了。次のタスクに進まない。
 }
 
 export class STask {
@@ -37,6 +37,7 @@ export class STask {
     _whenWaitingTasks: STask[] = [];    // whenAny, whenAll で指定された Task. これらの Task が全て完了したら、この Task を実行する。
     _blockingTask: STask | undefined    // then() に指定された処理の戻り値 Task.
 
+    public command: SCommand | undefined;
 
     constructor(name: string, entryFunc: MCEntryProc | undefined, chainFunc?: CommandResultCallback | undefined, prev?: STask | undefined) {
         assert(!(entryFunc && chainFunc));
@@ -70,6 +71,13 @@ export class STask {
         task._status = STaskStatus.Pending;
         this._nextTask = task;
         return this._nextTask;
+    }
+
+    // SCommand で thenTask() するユーティリティ
+    public thenCommandTask(cmd: SCommand): STask {
+        assert(this._subChain);
+        const cctx = this._subChain._ctx;
+        return this.thenTask(cctx.makeCommandTask(cmd));
     }
 
     public catch(func: TaskCatchFunc): this {
@@ -114,13 +122,13 @@ export class STask {
                 // };
     
                 if (this._entryFunc) {
-                    this._status = (this._entryFunc() != SCommandResponse.Canceled) ? STaskStatus.Succeeded : STaskStatus.Rejected;
+                    this._status = (this._entryFunc() != SCommandResponse.Canceled) ? STaskStatus.Succeeded : STaskStatus.Handled;
                 }
                 else if (this._chainFunc) {
-                    this._status = (this._chainFunc()) ? STaskStatus.Succeeded : STaskStatus.Rejected;
+                    this._status = (this._chainFunc()) ? STaskStatus.Succeeded : STaskStatus.Handled;
                 }
 
-                if (this._status != STaskStatus.Rejected) {
+                if (this._status != STaskStatus.Handled) {
                     // つながっている Task があれば、次にそれを実行してみる
                     if (this._nextTask && !this._subChain) {
                         cctx._setNextPriorityTask(this._nextTask);
@@ -167,7 +175,10 @@ export class STask {
         if (this._status != STaskStatus.Running) {
             // ハンドラ内でユーザーが明示的に next() や reject() した場合は、自動的な next() 呼び出しは不要。
         }
-        else if (!this._subChain._holding) {
+        else if (this._subChain._holding) {
+            // hold() が呼ばれた場合、ユーザーは明示的に next() や reject() を呼ばなければならない。
+        }
+        else {  // 上記以外は自動的に next() する
             if (blockTask) {
                 blockTask._blockingTask = this;
             }
@@ -189,8 +200,8 @@ export class STask {
                 status = STaskStatus.Running;
                 break;
             }
-            else if (task._status == STaskStatus.Rejected) {
-                status = STaskStatus.Rejected;
+            else if (task._status == STaskStatus.Handled) {
+                status = STaskStatus.Handled;
                 break;
             }
         }
@@ -217,26 +228,44 @@ export enum STaskCallMethod {
 
 enum STaskChainMethod {
     Next,
-    Reject,
+    Handled,
 }
 
+export enum STaskResult {
+    Reject,
+    Accept,
+}
+
+/**
+ * コンストラクタで指定された Task の実行状態の管理及び、次の Task の実行を行う。
+ * インスタンスは基本的に cctx.postTask() の時に作られる。
+ * STask の then() したときには新しいインスタンスは作られない。
+ */
 export class SSubTaskChain {
-    private _ctx: SCommandContext;
-    private _firstTask: STask;
+    _ctx: SCommandContext;
     private _currentTask: STask | undefined;
     private _error: boolean;
     private _errorHandled: boolean;
     private _postedMethod: STaskChainMethod;
+    _taskResult: STaskResult | undefined;
     private _postedChain: SSubTaskChain | undefined;
     _holding: boolean;
+    
+    public get allowReject(): boolean { return this._currentTask !== undefined && (this._currentTask.command === undefined || !this._currentTask.command.acceptRequired); }
+    public get allowAccept(): boolean { return this._currentTask !== undefined && (this._currentTask.command !== undefined && this._currentTask.command.acceptRequired); }
 
-    public constructor(ctx: SCommandContext, first: STask) {
+    // /**
+    //  * 明示的に accept() が呼ばれたときに、次の Task が実行されるようにするかどうか。
+    //  */
+    // requireExplicitAccept: boolean = false;
+
+    public constructor(ctx: SCommandContext, task: STask) {
         this._ctx = ctx;
-        this._firstTask = first;
-        this._currentTask = first;
+        this._currentTask = task;
         this._error = false;
         this._errorHandled = false;
         this._postedMethod = STaskChainMethod.Next;
+        this._taskResult = undefined;//STaskResult.Accept;
         this._holding = false;
     }
 
@@ -246,12 +275,30 @@ export class SSubTaskChain {
 
     public next(): void {
         this._postedMethod = STaskChainMethod.Next;
+        this._holding = false;
         this.processOrPost();
     }
     
+    public accept(): void {
+        if (!this.allowAccept) throw new Error(tr2("このコマンド %1 では accept() は呼び出せません。").format(this.makeCommandName()));
+        this.handleInternal(STaskResult.Accept);
+    }
+
     public reject(): void {
-        this._postedMethod = STaskChainMethod.Reject;
+        if (!this.allowReject) throw new Error(tr2("このコマンド %1 では reject() は呼び出せません。").format(this.makeCommandName()));
+        this.handleInternal(STaskResult.Reject);
+    }
+
+    public handleInternal(taskResult: STaskResult): void {
+        this._postedMethod = STaskChainMethod.Handled;
+        this._taskResult = taskResult;
+        this._holding = false;
         this.processOrPost();
+    }
+
+    private makeCommandName(): string {
+        if (!this._currentTask) return "null";
+        return this._currentTask.command ? this._currentTask.command.constructor.name : "anonymous";
     }
 
     private processOrPost(): void {
@@ -268,8 +315,8 @@ export class SSubTaskChain {
         if (this._postedMethod == STaskChainMethod.Next) {
             this.nextInternal();
         }
-        else if (this._postedMethod == STaskChainMethod.Reject) {
-            this.rejectInternal();
+        else if (this._postedMethod == STaskChainMethod.Handled) {
+            this.handledInternal();
         }
         else {
             throw new Error("Unreachable.");
@@ -321,11 +368,11 @@ export class SSubTaskChain {
         }
     }
     
-    private rejectInternal(): void {
+    private handledInternal(): void {
         assert(this._currentTask);
         assert(!this._errorHandled);
         this._error = true;
-        this._currentTask._status = STaskStatus.Rejected;
+        this._currentTask._status = STaskStatus.Handled;
 
         // Task につながっている直近の catch を探してみる
         let t: STask | undefined = this._currentTask._nextTask;

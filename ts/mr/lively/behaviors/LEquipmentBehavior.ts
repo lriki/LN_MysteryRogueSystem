@@ -1,14 +1,14 @@
 import { assert, MRSerializable, tr2 } from "ts/mr/Common";
 import { DActionId, DCommandId } from "ts/mr/data/DCommon";
 import { MRBasics } from "ts/mr/data/MRBasics";
-import { SCommand, SCommandResponse } from "ts/mr/system/SCommand";
+import { SCommand, SCommandResponse, STestTakeItemCommand } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { SSubTaskChain } from "ts/mr/system/tasks/STask";
 import { LReaction } from "../LCommon";
 import { LEntity } from "../LEntity";
 import { LObject } from "../LObject";
 import { MRLively } from "../MRLively";
-import { CommandArgs, LBehavior, testPickOutItem } from "./LBehavior";
+import { CommandArgs, LBehavior } from "./LBehavior";
 import { LEquipmentUserBehavior } from "./LEquipmentUserBehavior";
 import { LInventoryBehavior } from "./LInventoryBehavior";
 import { LItemBehavior } from "./LItemBehavior";
@@ -119,28 +119,14 @@ export class LEquipmentBehavior extends LBehavior {
             }
         }
     }
-
-    [testPickOutItem](args: CommandArgs, cctx: SCommandContext): SCommandResponse {
-        const self = args.self;
-        if (self.isCursed()) {
-            cctx.postMessage(tr2("呪われている！"));
-            return SCommandResponse.Canceled;
-        }
-        else {
-            return SCommandResponse.Handled;
-        }
-    }
-
     
-    onCommand(self: LEntity, cctx: SCommandContext, chain: SSubTaskChain, cmd: SCommand): SCommandResponse {
-        if (cmd.id == MRBasics.commands.testPickOutItem) {
+    override onCommand(self: LEntity, cctx: SCommandContext, chain: SSubTaskChain, cmd: SCommand): void {
+        if (cmd instanceof STestTakeItemCommand) {
             if (self.isCursed()) {
                 cctx.postMessage(tr2("呪われている！"));
                 chain.reject();
-                return SCommandResponse.Handled;
             }
         }
-        return SCommandResponse.Pass;
     }
     
 }

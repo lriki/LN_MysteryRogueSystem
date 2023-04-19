@@ -18,11 +18,12 @@ import { LActionTokenType } from "../lively/LActionToken";
 import { SActivityContext } from "./SActivityContext";
 import { DActionId, DCommandId } from "../data/DCommon";
 import { LActionTokenConsumeType } from "../lively/LCommon";
-import { CommandResultCallback, SSubTaskChain, STask, STaskCallMethod, STaskStatus, TaskThenFunc } from "./tasks/STask";
+import { CommandResultCallback, SSubTaskChain, STask, STaskCallMethod, STaskResult, STaskStatus, TaskThenFunc } from "./tasks/STask";
 import { DFlavorEffect } from "../data/DFlavorEffect";
 import { LEntityDescription } from "../lively/LIdentifyer";
 import { SSoundManager } from "./SSoundManager";
 import { SDialogContext } from "./SDialogContext";
+import { SDefaultCommandHandler } from "./SDefaultCommandHandler";
 
 export interface SDisplayFlavorEffectOptions {
     messageFormatArgs: unknown[],
@@ -209,7 +210,6 @@ export class HandleActivityCommand {
  * resolve() や reject() は遅延実行の形になるが実行はされるので、 Handled を返すべきである。
  * 
  * 
- * 
  */
 export class SCommandContext
 {
@@ -276,16 +276,11 @@ export class SCommandContext
     }
 
     // TODO: private. 同期的な実行なのでこれを読んだ後に c が何らかの結果を持っていることを期待してはならない。
-    public callCommand(c: SSubTaskChain, entity: LEntity, cmd: SCommand): void {
-        let result = SCommandResponse.Pass;
-        entity.iterateBehaviorsReverse(b => {
-            result = b.onCommand(entity, this, c, cmd);
-            return result == SCommandResponse.Pass;
-        });
-        // if (result == SCommandResponse.Pass) {
-        //     c.next();
-        // }
-    }
+    // public callCommand(c: SSubTaskChain, cmd: SCommand): void {
+    //     // if (result == SCommandResponse.Pass) {
+    //     //     c.next();
+    //     // }
+    // }
 
     public makeTask(action: TaskThenFunc): STask { 
         const task = new STask("Task", undefined);
@@ -295,10 +290,68 @@ export class SCommandContext
         return task;
     }
 
-    public makeCommandTask(entity: LEntity, cmd: SCommand): STask {
+    public makeCommandTask(cmd: SCommand): STask {
         const task = this.makeTask((c) => {
-            this.callCommand(c, entity, cmd);
+            c.hold();
+
+            // まずは普通に、onCommand() を呼び出すチェーンを作る
+            let lastTask: STask | undefined = undefined;
+            cmd.receiver.iterateBehaviorsReverse(b => {
+                lastTask = (!lastTask) ? 
+                    this.postTask((c2) => { b.onCommand(cmd.receiver, this, c2, cmd); }) :
+                    lastTask.then2((c2) => { b.onCommand(cmd.receiver, this, c2, cmd); });
+                lastTask.command = cmd;
+            });
+
+            // 最後に DefaultHandler を差し込む
+            lastTask = (!lastTask) ? 
+                this.postTask((c2) => { SDefaultCommandHandler.onCommand(cmd.receiver, this, c2, cmd); }) :
+                (lastTask as STask).then2((c2) => { SDefaultCommandHandler.onCommand(cmd.receiver, this, c2, cmd); });
+            assert(lastTask);
+
+            //this.callCommand(c, cmd);
+            if (cmd.acceptRequired) {
+                //if (lastTask) {
+                    // finally で結果を判断する。明示的に accept() されたら次の Task へ進む。
+                    (lastTask as STask).finally((c2) => {
+                        if (c2._taskResult === STaskResult.Accept)
+                            c.next();
+                        else
+                            c.handleInternal(STaskResult.Reject);
+                    });
+                    (lastTask as STask).command = cmd;
+                // }
+                // else {
+                //     // Behavior がひとつもない。 reject 扱い。
+                //     c.handleInternal(STaskResult.Reject);
+                // }
+            }
+            else {
+                // チェーンの最後にタスクを付ける。ここまでたどり着けば自動的に成功扱い。次の Task へ進む。
+                //if (lastTask) {
+                    lastTask = (lastTask as STask).then2((c2) => {
+                        c.next();
+                    });
+                    // 最後に catch. ここに来たら次の Task へは進めない。
+                    lastTask.catch((c2) => {
+                        c.handleInternal(STaskResult.Reject);
+                    });
+                    lastTask.command = cmd;
+                // }
+                // else {
+                //     // Behavior がひとつもない。 next 扱い。
+                //     c.next();
+                // }
+            }
+
+            
+            // let result = SCommandResponse.Pass;
+            // cmd.entity.iterateBehaviorsReverse(b => {
+            //     result = b.onCommand(cmd.entity, this, c, cmd);
+            //     return result == SCommandResponse.Pass;
+            // });
         });
+        task.command = cmd;
         return task;
     }
 
@@ -313,8 +366,8 @@ export class SCommandContext
         return task;
     }
 
-    public postCommandTask(entity: LEntity, cmd: SCommand): STask {
-        const task = this.makeCommandTask(entity, cmd);
+    public postCommandTask(cmd: SCommand): STask {
+        const task = this.makeCommandTask(cmd);
         this.postTask2(task);
         return task;
     }
@@ -418,7 +471,6 @@ export class SCommandContext
         Log.postCommand("Activity");
         return actx;
     }
-
 
     private attemptConsumeActionToken(entity: LEntity, tokenType: LActionTokenConsumeType): void {
         const consumedType = entity._actionToken.consume(tokenType);
@@ -582,7 +634,6 @@ export class SCommandContext
 
     postFloatingAnimation(entity: LEntity, mx: number, my: number, rmmzAnimationId: number, wait: boolean): void {
         
-        console.log("postFloatingAnimation", mx, my, rmmzAnimationId);
         if (rmmzAnimationId <= 0) return;
 
         const m1 = () => {
@@ -703,9 +754,13 @@ export class SCommandContext
         }
         else {
             if (this._messageIndex >= this._runningCommandList.length) {
-                if (this._recodingCommandList.length > 0 || this._afterChainCommandList.length > 0) {
+                if (this._recodingCommandList.length > 0 || this._afterChainCommandList.length > 0 || this.__whenWaitingTasks.length > 0) {
                     this._submit();
                 }
+                else {
+                }
+            }
+            else {
             }
         }
 
@@ -715,6 +770,7 @@ export class SCommandContext
             this._nextPriorityTask = undefined;
 
             // Task 実行
+            assert(task);
             task.call(this);
 
             // ここまでで、最後に実行した Task の nextTask が無ければ、TaskList にある次の Task へ進む
@@ -765,8 +821,6 @@ export class SCommandContext
                 }
 
                 if (completed) {
-                    
-                    console.log("when start");
                     this._runningCommandList.push(task);
                 }
                 else {
@@ -787,6 +841,7 @@ export class SCommandContext
     }
 
     _setNextPriorityTask(task: STask): void {
+        assert(task);
         assert(!this._nextPriorityTask);
         assert(task._status == STaskStatus.Pending);
         this._nextPriorityTask = task;

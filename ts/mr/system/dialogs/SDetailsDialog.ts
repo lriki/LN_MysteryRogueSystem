@@ -7,10 +7,17 @@ import { SDialog } from "../SDialog";
 
 export class SDetailsDialog extends SDialog {
     private _entity: LEntity;
+    
+    public readonly descriptions: string[];
 
     public constructor(entity: LEntity) {
         super();
         this._entity = entity;
+        this.descriptions = [];
+        this._entity.iterateBehaviors2((b) => {
+            b.onGetDescriptions(this.descriptions);
+            return true;
+        });
     }
 
     public entity(): LEntity {

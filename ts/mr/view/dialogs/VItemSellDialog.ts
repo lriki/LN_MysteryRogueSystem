@@ -12,17 +12,17 @@ export class VItemSellDialog extends VItemListDialogBase {
     public constructor(model: SItemSellDialog) {
         super(model.inventory, model, VItemListMode.Use);
         this._model = model;
-        this.itemListWindow.multipleSelectionEnabled = true;
+        this.itemListWindow.multipleSelectionEnabled = model.multipleSelectionEnabled;
         this.itemListWindow.priceTag = VItemListPriceTag.PurchasePrice;
     }
 
     protected onMakeCommandList(window: VFlexCommandWindow): void {
-        const items = this.itemListWindow.getSelectedItems();
+        const items = this._model.selectedEntities();
         window.addSystemCommand(tr2("売る"), "sell", () => this.handleSell(items));
         super.onMakeCommandList(window);
     }
     
-    private handleSell(items: LEntity[]): void {
+    private handleSell(items: readonly LEntity[]): void {
         SoundManager.playShop();
         this._model.setResultItems(items);
         this._model.submitSell();

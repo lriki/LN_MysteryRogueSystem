@@ -397,6 +397,17 @@ export class DEntity {
         
     }
 
+    // public getMergedBehaviorParams(fullName: string, friendlyName: string): unknown {
+    //     const params = {};
+    //     for (const behavior of this.entity.behaviors) {
+    //         if (!behavior.args) continue;
+    //         if (behavior.name == fullName || behavior.name == friendlyName) {
+    //             Object.assign(params, behavior.args);
+    //         }
+    //     }
+    //     return params;
+    // }
+
     public applyProps(props: IEntityProps): void {
         if (props.reactions) {
             this.reactions = [];

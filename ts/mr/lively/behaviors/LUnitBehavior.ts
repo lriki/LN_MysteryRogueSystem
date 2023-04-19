@@ -1,4 +1,4 @@
-import { SCommand, SCommandResponse, SPhaseResult } from "../../system/SCommand";
+import { SCommand, SCommandResponse, SPhaseResult, STestAddItemCommand, STestTakeItemCommand } from "../../system/SCommand";
 import { SCommandContext, SHandleCommandResult } from "../../system/SCommandContext";
 import { CommandArgs, LBehavior, onAttackReaction, onDirectAttackDamaged, onPreThrowReaction, onProceedFloorReaction, onThrowReaction, onWalkedOnTopAction, onWaveReaction } from "./LBehavior";
 import { MRLively } from "../MRLively";
@@ -64,6 +64,12 @@ export class LUnitBehavior extends LBehavior {
         b.dashInfo = this.dashInfo ? {...this.dashInfo} : undefined;
         b._fastforwarding = this._fastforwarding;
         return b;
+    }
+
+    override onInitialized(self: LEntity, params: unknown): void {
+        if (params) {
+            this.setFactionId((params as any).factionId);   // TODO: type
+        }
     }
 
     // Battler params
@@ -298,9 +304,9 @@ export class LUnitBehavior extends LBehavior {
             
             const block = MRLively.mapView.currentMap.block(self.mx, self.my);
             const layer = block.layer(DBlockLayerKind.Ground);
+            // 足元に置けそうなら試行
             if (!layer.isContainsAnyEntity()) {
-                // 足元に置けそうなら試行
-                cctx.postCommandTask(itemEntity, SCommand.make(MRBasics.commands.testPickOutItem))
+                cctx.postCommandTask(new STestTakeItemCommand(itemEntity, self))
                     .then2(() => {
                         if (ULimitations.isItemCountFullyInMap()) {
                             cctx.postMessage(tr2("不思議な力で行動できなかった。"));
@@ -454,10 +460,31 @@ export class LUnitBehavior extends LBehavior {
             const items = activity.objects2();
             
             for (const item of items) {
-                item.removeFromParent();
-                storageInventory.addEntity(item);
-                cctx.postMessage(tr("{0} を入れた。", UName.makeNameAsItem(item)));
+                cctx.postCommandTask(new STestTakeItemCommand(item, self))  // item を取り出せる？
+                    .thenCommandTask(new STestAddItemCommand(storage, item))   // item を格納できる？
+                    .then2(c => {
+                        item.removeFromParent();
+                        storageInventory.addEntity(item);
+                        cctx.postMessage(tr("{0} に {1} を入れた。", UName.makeNameAsItem(storage), UName.makeNameAsItem(item)));
+                    });
+                // item.removeFromParent();
+                // storageInventory.addEntity(item);
+                // cctx.postMessage(tr("{0} に {1} を入れた。", UName.makeNameAsItem(storage), UName.makeNameAsItem(item)));
             }
+        }
+        else if (activity.actionId() == MRBasics.actions.PickOutActionId) {
+            const selfInventory = self.getEntityBehavior(LInventoryBehavior);
+            for (const item of activity.objects2()) {
+                cctx.postCommandTask(new STestTakeItemCommand(item, self))  // item を取り出せる？
+                    .thenCommandTask(new STestAddItemCommand(self, item))   // item を格納できる？
+                    .then2(c => {
+                        item.removeFromParent();
+                        selfInventory.addEntity(item);
+                        cctx.postMessage(tr("{0} を取り出した。", UName.makeNameAsItem(item)));
+                    });
+            }
+
+            //PickOutActionId
         }
         else if (activity.actionId() == MRBasics.actions.talk) {
             const target = UAction.findTalkableFront(self);

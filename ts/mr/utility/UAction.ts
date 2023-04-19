@@ -24,7 +24,7 @@ import { SPoint } from "./UCommon";
 import { LEquipmentUserBehavior } from "../lively/behaviors/LEquipmentUserBehavior";
 import { LActivity } from "../lively/activities/LActivity";
 import { ULimitations } from "./ULimitations";
-import { SCommand } from "../system/SCommand";
+import { SCommand, STestAddItemCommand } from "../system/SCommand";
 import { STask } from "../system/tasks/STask";
 import { STransferMapSource } from "../system/dialogs/STransferMapDialog";
 import { LThinkingActionRatings } from "../lively/ai2/LThinkingAgent";
@@ -149,10 +149,7 @@ export class UAction {
 
     /** @deprecated */
     public static postPickItem(cctx: SCommandContext, self: LEntity, inventory: LInventoryBehavior, itemEntity: LEntity): STask {
-        const cmd = SCommand.make(MRBasics.commands.testPutInItem)
-            .withObjects([itemEntity]);
-
-        return cctx.postCommandTask(self, cmd)
+        return cctx.postCommandTask(new STestAddItemCommand(self, itemEntity))
             .then2(() => {
                 MRLively.mapView.currentMap._removeEntity(itemEntity);
                 inventory.addEntityWithStacking(itemEntity);
@@ -176,6 +173,7 @@ export class UAction {
     /**
      * entity を現在位置から HomeLayer へ落とす。"Fall" ではないため、これによって罠が発動したりすることは無い。
      * 
+     * @deprecated use TDrop
      */
     public static postDropOrDestroyOnCurrentPos(cctx: SCommandContext, entity: LEntity, targetLayer: DBlockLayerKind): void {
 

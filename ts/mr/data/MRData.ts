@@ -35,6 +35,7 @@ import { DEntityTemplate, IEntityTemplateProps } from "./DEntityTemplate";
 import { DSpecialEffect } from "./DSpecialEffect";
 import { DChronus } from "./DChronus";
 import { DQuest } from "./DQuest";
+import { DBehavior } from "./DBehavior";
 
 
 export type DFactionId = number;
@@ -134,6 +135,7 @@ export class MRData
     static floorPresets: DFloorPreset[] = [];
     static pseudonymous: DPseudonymous = new DPseudonymous();
     static quests: DQuest[] = [];
+    static behavior: DBehavior[] = [];
 
     static itemDataIdOffset: number = 0;
     static weaponDataIdOffset: number = 0;
@@ -141,7 +143,7 @@ export class MRData
     //static rmmzWeaponTypeIdOffset: number = 0;
     //static rmmzArmorTypeIdOffset: number = 0;
 
-    static _behaviorFactories: (() => LBehavior)[] = [];
+    //static _behaviorFactories: (() => LBehavior)[] = [];
 
     static reset() {
         this.chronus = new DChronus();
@@ -177,6 +179,7 @@ export class MRData
         this.terrainSettings = [new DTerrainSetting(0)];
         this.floorPresets = [new DFloorPreset(0)];
         this.quests = [new DQuest(0, "null")];
+        this.behavior = [new DBehavior(0, "null", "null", "null")];
     }
 
     //--------------------------------------------------------------------------
@@ -786,6 +789,20 @@ export class MRData
     static getQuest(pattern: string): DQuest {
         const d = this.findQuest(pattern);
         if (!d) throw new Error(`Quest "${pattern}" not found.`);
+        return d;
+    }
+
+    //--------------------------------------------------------------------------
+
+    static newBehavior(key: string, fullName: string, friendlyName: string): DBehavior {
+        const data = new DBehavior(this.behavior.length, key, fullName, friendlyName);
+        this.behavior.push(data);
+        return data;
+    }
+
+    static getBehavior(pattern: string): DBehavior {
+        const d = this.findHelper(this.behavior, pattern, x => x.key === pattern || x.fullName === pattern || x.friendlyName === pattern);
+        if (!d) throw new Error(`Behavior "${pattern}" not found.`);
         return d;
     }
 
