@@ -106,9 +106,10 @@ import { SCommand, SCommandResponse, STestAddItemCommand } from "ts/mr/system/SC
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { ItemRemovedFromInventoryArgs } from "ts/mr/data/predefineds/DBasicEvents";
-import { paramInventoryCapacity } from "ts/mr/PluginParameters";
+import { paramDefaultStorageLimit, paramDestroyOverflowingItems, paramInventoryCapacity } from "ts/mr/PluginParameters";
 import { DBehaviorProps } from "ts/mr/data/DBehavior";
 import { SSubTaskChain } from "ts/mr/system/tasks/STask";
+//import { TDrop } from "ts/mr/transactions/TDrop";
 
 @MRSerializable
 export class LInventoryBehavior extends LBehavior {
@@ -116,6 +117,38 @@ export class LInventoryBehavior extends LBehavior {
     private _gold: number = 0;
     private _capacity: number = paramInventoryCapacity;
     private _storage: boolean = false;
+
+    public get capacity(): number {
+        return this._capacity;
+    }
+
+    public set capacity(value: number) {
+        this._capacity = value;
+    }
+
+    public get itemCount(): number {
+        return this._entities.length;
+    }
+
+    public get remaining(): number {
+        return this._capacity - this._entities.length;
+    }
+
+    public get isFully(): boolean {
+        return this._entities.length >= this._capacity;
+    }
+
+    public get isStorage(): boolean {
+        return this._storage;
+    }
+
+    public hasAnyItem(): boolean {
+        return this._entities.length > 0;
+    }
+
+    public get items(): LEntity[] {
+        return this._entities.map(x => MRLively.world.entity(x));
+    }
 
     override onInitialized(self: LEntity, props: DBehaviorProps): void {
         if (props.code == "Inventory") {
@@ -154,32 +187,29 @@ export class LInventoryBehavior extends LBehavior {
         this._gold = 0;
     }
 
-    public get capacity(): number {
-        return this._capacity;
-    }
+    public resetCapacity(newCapacity: number): void {
+    //     // あふれる分は削除する
+    //     if (newCapacity < this._capacity) {
+    //         const items = this.items;
+    //         const removeItems = [];
+    //         for (let i = items.length - 1; i >= newCapacity; i--) {
+    //             removeItems.push(items[i]);
+    //         }
+    //         for (const item of removeItems) {
+    //             if (paramDestroyOverflowingItems) {
+    //                 item.removeFromParent();
+    //                 item.destroy();
+    //             }
+    //             else {
+    //                 //TDrop.dropOrDestroyEntityForce(cctx, item, mx, my);
+    //             }
+    //         }
+    //     }
 
-    public set capacity(value: number) {
-        this._capacity = value;
-    }
+        // 消える分のアイテムはあらかじめ呼び出し側で処理しておくこと。
+        assert(newCapacity >= this._entities.length);
 
-    public get itemCount(): number {
-        return this._entities.length;
-    }
-
-    public get remaining(): number {
-        return this._capacity - this._entities.length;
-    }
-
-    public get isFully(): boolean {
-        return this._entities.length >= this._capacity;
-    }
-
-    public hasAnyItem(): boolean {
-        return this._entities.length > 0;
-    }
-
-    public get items(): LEntity[] {
-        return this._entities.map(x => MRLively.world.entity(x));
+        this._capacity =  newCapacity.clamp(0, paramDefaultStorageLimit);
     }
 
     public iterateItems(func : ((item: LEntity) => void) | ((item: LEntity) => boolean)): void {

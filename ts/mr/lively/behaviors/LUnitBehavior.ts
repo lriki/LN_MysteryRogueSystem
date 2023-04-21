@@ -30,6 +30,7 @@ import { LTrapBehavior } from "./LTrapBehavior";
 import { SFeetDialog } from "ts/mr/system/dialogs/SFeetDialog";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { LReaction } from "../LCommon";
+import { TStumble } from "ts/mr/transactions/TStumble";
 
 enum LFeetProcess {
     None,
@@ -501,7 +502,7 @@ export class LUnitBehavior extends LBehavior {
             return SCommandResponse.Handled;
         }
         else if (activity.actionId() == MRBasics.actions.stumble) {
-            UAction.postStumble(cctx, self, self.dir);
+            TStumble.postStumble(cctx, self, self.dir);
             //return SCommandResponse.Handled;
         }
         else if (activity.actionId() == MRBasics.actions.trample) {

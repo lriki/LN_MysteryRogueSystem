@@ -357,8 +357,8 @@ export class Tilemap extends PIXI.Container {
     public origin: Point;
     public verticalWrap: boolean;
     public width: number;
-    public _tileWidth: number;
-	public _tileHeight: number;
+    public tileWidth: number;
+	public tileHeight: number;
 	public _upperLayer: Tilemap.Layer;
 	public _margin: number;
 

@@ -959,6 +959,22 @@ export class MRSetup {
                 entity.addReaction(MRBasics.actions.ReadActionId, entity.mainEmittor());
                 //entity.addEmittor(DEffectCause.Hit, REData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 break;
+            case "kEntity_壺増大の巻物A": {
+                this.setupScrollCommon(entity);
+                const emittor = entity.mainEmittor();
+                emittor.scope.range = DEffectFieldScopeType.Selection;
+                entity.addReaction(MRBasics.actions.ReadActionId, entity.mainEmittor());
+                emittor.effectSuite.targetEffect(0).effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.gainCapacity, entityId: 0, dataId: 0, value: 1 });
+                break;
+            }
+            case "kEntity_壺縮小の巻物A": {
+                this.setupScrollCommon(entity);
+                const emittor = entity.mainEmittor();
+                emittor.scope.range = DEffectFieldScopeType.Selection;
+                entity.addReaction(MRBasics.actions.ReadActionId, entity.mainEmittor());
+                emittor.effectSuite.targetEffect(0).effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.gainCapacity, entityId: 0, dataId: 0, value: -1 });
+                break;
+            }
             case "kEntity_投擲反射石A":
                 entity.selfTraits.push({code: MRBasics.traits.PhysicalProjectileReflector, dataId: 0, value: 0});
                 break;

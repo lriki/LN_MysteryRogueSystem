@@ -19,6 +19,7 @@ import { SRemoveStatesByIntentionsSpecialEffect } from "./SRemoveStatesByIntenti
 import { SPerformeSkillSpecialEffect } from "./SPerformeSkillSpecialEffect";
 import { SRemoveStateSpecialEffect } from "./SRemoveStateSpecialEffect";
 import { SAddStateSpecialEffect } from "./SAddStateSpecialEffect";
+import { SGainCapacitySpecialEffect } from "./SGainCapacitySpecialEffect";
 
 export class SSpecialEffectManager {
     private behaviors: (SSpecialEffect | undefined)[] = [];    // Index is DSkillBehaviorId
@@ -59,6 +60,7 @@ export class SSpecialEffectManager {
         this.register(MRBasics.effectBehaviors.removeState, new SRemoveStateSpecialEffect());
         this.register(MRBasics.effectBehaviors.removeStatesByIntentions, new SRemoveStatesByIntentionsSpecialEffect());
         this.register(MRBasics.effectBehaviors.performeSkill, new SPerformeSkillSpecialEffect());
+        this.register(MRBasics.effectBehaviors.gainCapacity, new SGainCapacitySpecialEffect());
     }
 }
 

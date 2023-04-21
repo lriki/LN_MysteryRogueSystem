@@ -11,6 +11,9 @@ export class TDrop {
 
     /**
      * entity を現在位置から HomeLayer へ落とす。"Fall" ではないため、これによって罠が発動したりすることは無い。
+     * 
+     * entity がその場所から取り出せるかはテストしない。
+     * 
      * @param cctx 
      * @param entity 
      */

@@ -29,8 +29,8 @@ export class VSymmetricFovShadow {
 
         this._tilemap = new Tilemap();
         this._tilemap.setRendererId(TilemapRendererId.Shadow);
-        this._tilemap._tileWidth = $gameMap.tileWidth();
-        this._tilemap._tileHeight = $gameMap.tileHeight();
+        this._tilemap.tileWidth = $gameMap.tileWidth();
+        this._tilemap.tileHeight = $gameMap.tileHeight();
         this._tilemap.setData(width, height, this._tilemapData);
         this._spriteSet.spritesetMap.addChild(this._tilemap);
 

@@ -220,3 +220,17 @@ export class SItemReactionCommand extends SCommand {
         this.direction = direction;
     }
 }
+
+/**
+ * 罠などで転びバラまかれた Item に対して通知するコマンド。
+ * 
+ * 転ばぬ先の杖や、モンスターが転び石にかかったときなど、いわゆる「アイテムドロップ」の時は発生しない。
+ * このコマンドでは、壺などのアイテムが割れる可能性がある。
+ */
+export class SSprinkleDropedCommand extends SCommand {
+    public readonly item: LEntity;
+    public constructor(item: LEntity) {
+        super(item, false);
+        this.item = item;
+    }
+}

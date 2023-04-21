@@ -451,6 +451,29 @@ export class LEntity extends LObject
         });
     }
 
+    /**
+     * この Entity 存在し得るマップ上の位置を取得する。
+     * Entity が別の Entity の持ち物などに入っている場合、その Entity の位置を返す。
+     */
+    public getLocation(): LGetLocationResult | undefined {
+        let result: LGetLocationResult | undefined;
+        this.findAncestor(obj => {
+            if (obj instanceof LEntity) {
+                const parent = obj.parentObject();
+                if (parent instanceof LMap) {
+                    result = {
+                        floorId: obj.floorId,
+                        mx: obj.mx,
+                        my: obj.my,
+                    };
+                    return true;
+                }
+            }
+            return false;
+        });
+        return result;
+    }
+
     //--------------------------------------------------------------------------------
     // Parameters
 
@@ -1824,3 +1847,5 @@ export class LEntity extends LObject
     }
 }
 
+
+interface LGetLocationResult { floorId: LFloorId, mx: number, my: number };

@@ -168,10 +168,10 @@ export class VVisibilityShadow {
 
         // InnerShadow の 9-Sprites の中心線を表す矩形
         // Shadow の Sprite は anchor(0.5, 0.5) であるため調整する
-        const sx1 = tx1 - (VisibilityShadowTileSize / 2.0);
-        const sx2 = tx2 + (VisibilityShadowTileSize / 2.0);
-        const sy1 = ty1 - (VisibilityShadowTileSize / 2.0);
-        const sy2 = ty2 + (VisibilityShadowTileSize / 2.0);
+        const sx1 = tx1 - (tileWidth / 2.0);
+        const sx2 = tx2 + (tileHeight / 2.0);
+        const sy1 = ty1 - (tileWidth / 2.0);
+        const sy2 = ty2 + (tileHeight / 2.0);
 
         const sw = sx2 - sx1;
         const sy = sy2 - sy1;
@@ -189,10 +189,10 @@ export class VVisibilityShadow {
         this._visibilityShadowInnerSprites[8].position.set(cx, sy1);
         this._visibilityShadowInnerSprites[9].position.set(sx2, sy1);
 
-        this._visibilityShadowInnerSprites[2].scale.x = tw / VisibilityShadowTileSize;
-        this._visibilityShadowInnerSprites[4].scale.y = th / VisibilityShadowTileSize;
-        this._visibilityShadowInnerSprites[6].scale.y = th / VisibilityShadowTileSize;
-        this._visibilityShadowInnerSprites[8].scale.x = tw / VisibilityShadowTileSize;
+        this._visibilityShadowInnerSprites[2].scale.x = tw / tileWidth;
+        this._visibilityShadowInnerSprites[4].scale.y = th / tileHeight;
+        this._visibilityShadowInnerSprites[6].scale.y = th / tileWidth;
+        this._visibilityShadowInnerSprites[8].scale.x = tw / tileHeight;
 
         // Outer
         // +------------------+
@@ -204,10 +204,10 @@ export class VVisibilityShadow {
         // +---+----------+---+
         // |        [2]       |
         // +------------------+
-        const osx1 = tx1 - VisibilityShadowTileSize;
-        const osx2 = tx2 + VisibilityShadowTileSize;
-        const osy1 = ty1 - VisibilityShadowTileSize;
-        const osy2 = ty2 + VisibilityShadowTileSize;
+        const osx1 = tx1 - tileWidth;
+        const osx2 = tx2 + tileHeight;
+        const osy1 = ty1 - tileWidth;
+        const osy2 = ty2 + tileHeight;
         const osw = (osx2 - osx1);
         const osh = (osy2 - osy1);
         this._visibilityShadowOuterSprites[2].position.set(osx1 + osw / 2.0, osy2);
@@ -215,16 +215,18 @@ export class VVisibilityShadow {
         this._visibilityShadowOuterSprites[6].position.set(osx2, osy1 + osh / 2.0);
         this._visibilityShadowOuterSprites[8].position.set(osx1 + osw / 2.0, osy1);
 
-        const scale = (this._mx2 - this._mx1) + (this._spritesetMap._tilemap.width / this._spritesetMap._tilemap._tileWidth);
+        const scale = (this._mx2 - this._mx1) + (this._spritesetMap._tilemap.width / this._spritesetMap._tilemap.tileWidth);
         this._visibilityShadowOuterSprites[2].scale.set(scale * 2, scale);
-        this._visibilityShadowOuterSprites[4].scale.set(scale, osh / VisibilityShadowTileSize);    // 上下と重ならないように縦だけ調整
-        this._visibilityShadowOuterSprites[6].scale.set(scale, osh / VisibilityShadowTileSize);    // 上下と重ならないように縦だけ調整
+        this._visibilityShadowOuterSprites[4].scale.set(scale, osh / tileHeight);    // 上下と重ならないように縦だけ調整
+        this._visibilityShadowOuterSprites[6].scale.set(scale, osh / tileHeight);    // 上下と重ならないように縦だけ調整
         this._visibilityShadowOuterSprites[8].scale.set(scale * 2, scale);
     }
 
     private createVisibilityShadowPart(frame: number, anchorX: number, anchorY: number): Sprite {
+        const tileWidth = $gameMap.tileWidth();
+        const tileHeight = $gameMap.tileHeight();
         const sprite = new Sprite(this._visibilityShadowBitmap);
-        sprite.setFrame((frame % 5) * VisibilityShadowTileSize, Math.floor(frame / 5) * VisibilityShadowTileSize, VisibilityShadowTileSize, VisibilityShadowTileSize);
+        sprite.setFrame((frame % 5) * tileWidth, Math.floor(frame / 5) * tileHeight, tileWidth, tileHeight);
         sprite.anchor.set(anchorX, anchorY);    // 9sprite で拡大を伴うものがあるため中央にしておいた方が計算しやすい
         this._spritesetMap.addChild(sprite);
         return sprite;

@@ -1,5 +1,5 @@
 import { MRSerializable, tr2 } from "ts/mr/Common";
-import { SCommand, SEndProjectileMovingCause, SEndProjectileMovingCommand, SItemReactionCommand, SPhaseResult } from "ts/mr/system/SCommand";
+import { SCommand, SEndProjectileMovingCause, SEndProjectileMovingCommand, SItemReactionCommand, SPhaseResult, SSprinkleDropedCommand } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { LEntity } from "../LEntity";
 import { MRLively } from "../MRLively";
@@ -9,6 +9,8 @@ import { SSubTaskChain } from "ts/mr/system/tasks/STask";
 import { UName } from "ts/mr/utility/UName";
 import { TDrop } from "ts/mr/transactions/TDrop";
 import { MRBasics } from "ts/mr/data/MRBasics";
+
+const SprinkleDropedRate = 15;  // 15%
 
 /**
  * 
@@ -32,17 +34,7 @@ export class LCrackedBehavior extends LBehavior {
 
             // 壁に当たった？
             if (cmd.cause == SEndProjectileMovingCause.NoPassage) {
-                cctx.postSequel(self, MRBasics.sequels.crack);
-                cctx.postMessage(tr2("%1は割れた。").format(UName.makeNameAsItem(self)));
-
-                const inventory = self.findEntityBehavior(LInventoryBehavior);
-                if (inventory) {
-                    for (const item of inventory.items) {
-                        TDrop.dropOrDestroyEntityForce(cctx, item, self.mx, self.my);
-                    }
-                }
-
-                cctx.postDestroy(self);
+                this.crackeAndDropItems(cctx, self);
                 chain.reject();
             }
         }
@@ -66,6 +58,28 @@ export class LCrackedBehavior extends LBehavior {
             cctx.postDestroy(self);
             // 衝突した時の Effect 発動など、後続の処理は行いたいので、処理済みにはしない。
         }
+
+        // 転んでバラまかれた？
+        if (cmd instanceof SSprinkleDropedCommand) {
+            if (cctx.random().nextIntWithMax(100) < SprinkleDropedRate) {
+                this.crackeAndDropItems(cctx, self);
+            }
+        }
     }
+
+    private crackeAndDropItems(cctx: SCommandContext, self: LEntity): void {
+        cctx.postSequel(self, MRBasics.sequels.crack);
+        cctx.postMessage(tr2("%1は割れた。").format(UName.makeNameAsItem(self)));
+
+        const inventory = self.findEntityBehavior(LInventoryBehavior);
+        if (inventory) {
+            for (const item of inventory.items) {
+                TDrop.dropOrDestroyEntityForce(cctx, item, self.mx, self.my);
+            }
+        }
+
+        cctx.postDestroy(self);
+    }
+
 }
 

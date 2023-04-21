@@ -86,6 +86,24 @@ const WALL_AUTOTILE_TABLE2: number[][][] = [
     [[0, 0], [3, 0], [0, 3], [3, 3]]
 ];
 
+
+function isTileA4Floor(tileId: number): boolean {
+    const kind = Tilemap.getAutotileKind(tileId);
+    if (80 <= kind && kind <= 87) return true;
+    if (96 <= kind && kind <= 103) return true;
+    if (112 <= kind && kind <= 119) return true;
+    return false;
+}
+
+function isTileA4Wall(tileId: number): boolean {
+    const kind = Tilemap.getAutotileKind(tileId);
+    if (88 <= kind && kind <= 95) return true;
+    if (104 <= kind && kind <= 111) return true;
+    if (120 <= kind && kind <= 127) return true;
+    return false;
+}
+
+
 const _Tilemap__addSpot = Tilemap.prototype._addSpot;
 Tilemap.prototype._addSpot = function(startX, startY, x, y) {
 
@@ -95,8 +113,8 @@ Tilemap.prototype._addSpot = function(startX, startY, x, y) {
 
     const mx = startX + x;
     const my = startY + y;
-    const dx = x * this._tileWidth;
-    const dy = y * this._tileHeight;
+    const dx = x * this.tileWidth;
+    const dy = y * this.tileHeight;
     const tileId5 = this._readMapData(mx, my, 5);   // region
 
     
@@ -157,35 +175,18 @@ Tilemap.prototype._addSpot = function(startX, startY, x, y) {
     */
 }
 
-function isTileA4Floor(tileId: number): boolean {
-    const kind = Tilemap.getAutotileKind(tileId);
-    if (80 <= kind && kind <= 87) return true;
-    if (96 <= kind && kind <= 103) return true;
-    if (112 <= kind && kind <= 119) return true;
-    return false;
-}
-
-function isTileA4Wall(tileId: number): boolean {
-    const kind = Tilemap.getAutotileKind(tileId);
-    if (88 <= kind && kind <= 95) return true;
-    if (104 <= kind && kind <= 111) return true;
-    if (120 <= kind && kind <= 127) return true;
-    return false;
-}
-
-
 const _Tilemap__addAutotile = Tilemap.prototype._addAutotile;
 Tilemap.prototype._addAutotile = function(layer, tileId, dx, dy) {
     const kind = Tilemap.getAutotileKind(tileId);
 
     if (MRLively.mapView.currentMap.floorId().isTacticsMap2&& Tilemap.isTileA4(tileId)) {
-        const x = dx / this._tileWidth;
-        const y = dy / this._tileHeight;
+        const x = dx / this.tileWidth;
+        const y = dy / this.tileHeight;
     
         const ox = Math.ceil(this.origin.x);
         const oy = Math.ceil(this.origin.y);
-        const startX = Math.floor((ox - this._margin) / this._tileWidth);
-        const startY = Math.floor((oy - this._margin) / this._tileHeight);
+        const startX = Math.floor((ox - this._margin) / this.tileWidth);
+        const startY = Math.floor((oy - this._margin) / this.tileHeight);
         
         const mx = startX + x;
         const my = startY + y;
@@ -195,8 +196,8 @@ Tilemap.prototype._addAutotile = function(layer, tileId, dx, dy) {
         const shape = Tilemap.getAutotileShape(tileId);
         const tx = kind % 8;
         const ty = Math.floor(kind / 8);
-        const w1 = this._tileWidth / 2;
-        const h1 = this._tileHeight / 2;
+        const w1 = this.tileWidth / 2;
+        const h1 = this.tileHeight / 2;
         let autotileTable = Tilemap.FLOOR_AUTOTILE_TABLE;
 
         
@@ -282,6 +283,7 @@ Tilemap.prototype._addAutotile = function(layer, tileId, dx, dy) {
     }
 }
 
+
 //--------------------------------------------------------------------------------
 // 複数 Tilemap 対策
 
@@ -308,8 +310,10 @@ PIXI.Renderer.registerPlugin("rpgtilemap3", Tilemap.Renderer as any);
 function getTilemapRenderer(renderer: any, id: TilemapRendererId): any {
     switch (id) {
         case TilemapRendererId.Minimap:
+            //return undefined;
             return renderer.plugins.rpgtilemap2;
         case TilemapRendererId.Shadow:
+            return undefined;
             return renderer.plugins.rpgtilemap3;
         default:
             return renderer.plugins.rpgtilemap;
@@ -326,9 +330,12 @@ Tilemap.prototype.setRendererId = function(id) {
     this._lowerLayer._rendererId = id;
 };
 
+
 Tilemap.Layer.prototype.render = function(renderer: any) {
     const gl = renderer.gl;
     const tilemapRenderer = getTilemapRenderer(renderer, this._rendererId);
+    if (!tilemapRenderer) return;
+
     const shader = tilemapRenderer.getShader();
     const matrix = shader.uniforms.uProjectionMatrix;
 

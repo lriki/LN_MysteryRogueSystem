@@ -154,9 +154,6 @@ export class LObject {
 
     public setParent(parent: LObject): void {
         if (this.hasParent()) {
-            console.error("this", this);
-            console.error("current parent", this.parentObject());
-            console.error("new parent", parent);
             assert(!this.hasParent());
         }
 
@@ -167,6 +164,17 @@ export class LObject {
 
     public clearParent(): void {
         this._parentObjectId = LEntityId.makeEmpty();
+    }
+
+    public findAncestor(func: (obj: LObject) => boolean): LObject | undefined {
+        let obj: LObject | undefined = this;
+        while (obj) {
+            if (func(obj)) {
+                return obj;
+            }
+            obj = obj.parentObject();
+        }
+        return undefined;
     }
 
     /**

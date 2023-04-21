@@ -463,6 +463,7 @@ export class MRDataManager {
             removeState: MRData.newEffectBehavior("RemoveState").id,
             removeStatesByIntentions: MRData.newEffectBehavior("RemoveStatesByIntentions").id,
             performeSkill: MRData.newEffectBehavior("PerformeSkill").id,
+            gainCapacity: MRData.newEffectBehavior("GainCapacity").id,
         };
 
         MRData.newBehavior("kBehavior_Common", "LCommonBehavior", "Common");

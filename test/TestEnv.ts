@@ -31,17 +31,6 @@ import { DRmmzUniqueSpawnerAnnotation } from "ts/mr/data/importers/DAnnotationRe
 import { DEntityCreateInfo, DEntitySpawner } from "ts/mr/data/DSpawner";
 import { LScriptContext } from "ts/mr/lively/LScript";
 
-declare global {
-    interface Number {
-        clamp(min: number, max: number): number;
-    }
-}
-
-Number.prototype.clamp = function(min: number, max: number): number{
-    const num = (this as Number).valueOf();
-    return Math.min(Math.max(num, min), max);
-};
-
 export class TestEnv {
     public static integration: TestEnvIntegration;
     public static UnitTestLandId: DLandId;

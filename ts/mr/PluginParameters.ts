@@ -94,6 +94,10 @@ export const paramTouchMoveEnabled = false;
 
 export const paramUseThinkingAgent = true;
 
+export const paramDefaultStorageLimit = 8;
+
+export const paramDestroyOverflowingItems = false;
+
 //Maximum number of items in the map
 
 /*

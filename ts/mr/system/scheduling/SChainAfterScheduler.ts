@@ -6,6 +6,7 @@ import { UAction } from "ts/mr/utility/UAction";
 import { LGenerateDropItemCause } from "ts/mr/lively/internal";
 import { assert } from "ts/mr/Common";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
+import { TStumble } from "ts/mr/transactions/TStumble";
 
 enum SChainAfterSchedulerPhase {
     Prologue,
@@ -120,7 +121,7 @@ export class SChainAfterScheduler {
 
                 if (result == SCommandResponse.Pass) {
                     cctx.postSequel(entity, MRBasics.sequels.CollapseSequel);
-                    UAction.postDropItems(cctx, entity, LGenerateDropItemCause.Dead);
+                    TStumble.postDropItems(cctx, entity, LGenerateDropItemCause.Dead);
                     cctx.postDestroy(entity);
                 }
             }

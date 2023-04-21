@@ -12,6 +12,7 @@ import { UAction } from "ts/mr/utility/UAction";
 import { MRSerializable } from "ts/mr/Common";
 import { LReaction } from "../LCommon";
 import { DFlavorEffect } from "ts/mr/data/DFlavorEffect";
+import { TStumble } from "ts/mr/transactions/TStumble";
 
 @MRSerializable
 export class LBattlerBehavior extends LBehavior {
@@ -96,7 +97,7 @@ export class LBattlerBehavior extends LBehavior {
                 cctx.postWait(entity, 100);
                 cctx.postWaitSequel();   // ゲームオーバー時の遷移で、"倒れた" メッセージの後に Wait が動くようにしたい
                 
-                UAction.postDropItems(cctx, entity, LGenerateDropItemCause.Dead);
+                TStumble.postDropItems(cctx, entity, LGenerateDropItemCause.Dead);
                 UTransfer.exitLand(cctx, entity, LandExitResult.Gameover);
             }
             else {

@@ -36,8 +36,8 @@ export class VSpriteSet {
         minimapData[(z * height + y) * width + x+1] = Tilemap.TILE_ID_A5 + 1;
         
         this._minimapTilemap = new Tilemap();
-        this._minimapTilemap._tileWidth = 12;//$gameMap.tileWidth();
-        this._minimapTilemap._tileHeight = 12;//$gameMap.tileHeight();
+        this._minimapTilemap.tileWidth = 12;//$gameMap.tileWidth();
+        this._minimapTilemap.tileHeight = 12;//$gameMap.tileHeight();
         //this._minimapTilemap.setData($gameMap.width(), $gameMap.height(), $gameMap.data());
         this._minimapTilemap.setData(width, height, minimapData);
         this._minimapTilemap.horizontalWrap = $gameMap.isLoopHorizontal();

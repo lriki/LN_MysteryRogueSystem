@@ -104,8 +104,9 @@ test("concretes.item.pots.PotBasic.PotIntoPot", () => {
 
 test("concretes.item.pots.PotBasic.CollideAllItems", () => {
     TestEnv.newGame();
+    const floorId = TestEnv.FloorId_UnitTestFlatMap50x50;
 
-    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
     const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
     
     const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_保存の壺A").id, [], "item1"));
@@ -119,7 +120,7 @@ test("concretes.item.pots.PotBasic.CollideAllItems", () => {
     item1Inventory.addEntity(item4);
 
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
-    TestEnv.transferEntity(enemy1, TestEnv.FloorId_UnitTestFlatMap50x50, 15, 10);
+    TestEnv.transferEntity(enemy1, floorId, 15, 10);
     enemy1.setParamCurrentValue(MRBasics.params.hp, 1); // HPを1にしておく
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
@@ -139,4 +140,39 @@ test("concretes.item.pots.PotBasic.CollideAllItems", () => {
     expect(item4.isDestroyed()).toBeTruthy();   // 衝突効果なく明示的に destroy() されていなくても、Inventory から取り出されて親が無ければ GC される
     expect(!!enemy1.states.find(x => x.stateDataId() == MRData.getState("kState_UT混乱").id)).toBe(true);
     expect(enemy1.getActualParam(MRBasics.params.hp)).toBeGreaterThan(10);
+});
+
+test("concretes.item.pots.PotBasic.StumbleCrack", () => {
+    TestEnv.newGame();
+    const floorId = TestEnv.FloorId_UnitTestFlatMap50x50;
+
+    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
+    const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
+    
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_保存の壺A").id, [], "item1"));
+    inventory1.addEntity(item1);
+    
+    const trap1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_転び石A").id, [], "trap1"));
+    TestEnv.transferEntity(trap1, floorId, 10, 10);
+
+    MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+    for (let i = 0; i < 100; i++) {
+        player1.setParamCurrentValue(MRBasics.params.hp, 100);  // 適当に HP を回復しておく
+
+        // [踏む]
+        MRSystem.dialogContext.postActivity(LActivity.makeTrample(player1));
+        MRSystem.dialogContext.activeDialog().submit();
+
+        MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
+
+        if (item1.isDestroyed()) break;
+
+        // 壺を持ち物に入れる
+        item1.removeFromParent();
+        inventory1.addEntity(item1);
+    }
+
+    // 何回か繰り返せば、落とした時に割れるはず
+    expect(item1.isDestroyed()).toBeTruthy();
 });

@@ -164,4 +164,17 @@ Array.prototype.binarySearchIndex = function<T>(target: T): number {
     return idx;
 }
 
+
+declare global {
+    interface Number {
+        clamp(min: number, max: number): number;
+    }
+}
+
+Number.prototype.clamp = function(min: number, max: number): number{
+    const num = (this as Number).valueOf();
+    return Math.min(Math.max(num, min), max);
+};
+
+
 export {}
