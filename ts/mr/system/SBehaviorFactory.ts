@@ -45,66 +45,81 @@ import { LStorageBehavior } from "../lively/behaviors/LStorageBehavior";
 import { LItemThiefBehavior } from "../lively/behaviors/LItemThiefBehavior";
 import { LShopkeeperBehavior } from "../lively/behaviors/LShopkeeperBehavior";
 import { LCrackedBehavior } from "../lively/behaviors/LCrackedBehavior";
+import { assert } from "../Common";
+import { MRData } from "../data/MRData";
+import { DBehaviorId } from "../data/DCommon";
 
-interface SBehaviorFactoryEntry {
-    fullName: string;
-    friendlyName: string;
+interface SBehaviorEntry {
+    dataId: DBehaviorId,
     create: () => LBehavior;
 };
 
-export class SBehaviorFactory {
-    private static _behaviorEntries: SBehaviorFactoryEntry[] = [
-        { fullName: "LCommonBehavior", friendlyName: "_Common", create: () => new LCommonBehavior() },
-        { fullName: "LDecisionBehavior", friendlyName: "_Decision", create: () => new LDecisionBehavior() },
-        { fullName: "LUnitBehavior", friendlyName: "_Unit", create: () => new LUnitBehavior() },
-        { fullName: "LInventoryBehavior", friendlyName: "_Inventory", create: () => new LInventoryBehavior() },
-        { fullName: "LItemUserBehavior", friendlyName: "_ItemUser", create: () => new LItemUserBehavior() },
-        { fullName: "LEquipmentBehavior", friendlyName: "Equipment", create: () => new LEquipmentBehavior() },
-        { fullName: "LEquipmentUserBehavior", friendlyName: "_EquipmentUser", create: () => new LEquipmentUserBehavior() },
-        { fullName: "LActorBehavior", friendlyName: "_Actor", create: () => new LActorBehavior() },
-        { fullName: "LExitPointBehavior", friendlyName: "_ExitPoint", create: () => new LExitPointBehavior() },
-        { fullName: "LEntryPointBehavior", friendlyName: "_EntryPoint", create: () => new LEntryPointBehavior() },
-        { fullName: "LEnemyBehavior", friendlyName: "_Enemy", create: () => new LEnemyBehavior() },
-        { fullName: "LGenericRMMZStateBehavior", friendlyName: "_GenericRMMZState", create: () => new LGenericRMMZStateBehavior() },
-        { fullName: "LItemBehavior", friendlyName: "_Item", create: () => new LItemBehavior() },
-        { fullName: "LNapStateBehavior", friendlyName: "NapState", create: () => new LNapStateBehavior() },
-        { fullName: "LItemImitatorBehavior", friendlyName: "ItemImitator", create: () => new LItemImitatorBehavior() },
-        { fullName: "LIllusionStateBehavior", friendlyName: "IllusionState", create: () => new LIllusionStateBehavior() },
-        { fullName: "LGrabFootBehavior", friendlyName: "FootBehavior", create: () => new LGrabFootBehavior() },
-        { fullName: "LRevivalItemBehavior", friendlyName: "RevivalItem", create: () => new LRevivalItemBehavior() },
-        { fullName: "LItemStandingBehavior", friendlyName: "ItemStanding", create: () => new LItemStandingBehavior() },
-        { fullName: "LProjectileBehavior", friendlyName: "Projectile", create: () => new LProjectileBehavior() },
-        { fullName: "LDecisionBehavior", friendlyName: "Decision", create: () => new LDecisionBehavior() },
-        { fullName: "LExperienceBehavior", friendlyName: "Experience", create: () => new LExperienceBehavior() },
-       // { fullName: "LEaterBehavior", friendlyName: "Eater", create: () => new LEaterBehavior() },
-        { fullName: "LSurvivorBehavior", friendlyName: "Survivor", create: () => new LSurvivorBehavior() },
-        { fullName: "LExitPointBehavior", friendlyName: "ExitPoint", create: () => new LExitPointBehavior() },
-        { fullName: "LRaceBehavior", friendlyName: "Race", create: () => new LRaceBehavior() },
-        { fullName: "LTrapBehavior", friendlyName: "Trap", create: () => new LTrapBehavior() },
-        { fullName: "LParamBehavior", friendlyName: "Param", create: () => new LParamBehavior() },
-        { fullName: "LRatedRandomAIBehavior", friendlyName: "RatedRandomAI", create: () => new LRatedRandomAIBehavior() },
-        { fullName: "LEntityDivisionBehavior", friendlyName: "EntityDivision", create: () => new LEntityDivisionBehavior() },
-        { fullName: "LSanctuaryBehavior", friendlyName: "Sanctuary", create: () => new LSanctuaryBehavior() },
-        { fullName: "LGlueToGroundBehavior", friendlyName: "GlueToGround", create: () => new LGlueToGroundBehavior() },
-        { fullName: "LStumblePreventionBehavior", friendlyName: "StumblePrevention", create: () => new LStumblePreventionBehavior() },
-        { fullName: "LGoldThiefBehavior", friendlyName: "GoldThief", create: () => new LGoldThiefBehavior() },
-        { fullName: "LActivityCharmBehavior", friendlyName: "ActivityCharm", create: () => new LActivityCharmBehavior() },
-        { fullName: "LGoldBehavior", friendlyName: "Gold", create: () => new LGoldBehavior() },
-        { fullName: "LEscapeBehavior", friendlyName: "Escape", create: () => new LEscapeBehavior() },
-        { fullName: "LFlockBehavior", friendlyName: "Flock", create: () => new LFlockBehavior() },
-        { fullName: "LStorageBehavior", friendlyName: "Storage", create: () => new LStorageBehavior() },
-        { fullName: "LItemThiefBehavior", friendlyName: "ItemThief", create: () => new LItemThiefBehavior() },
-        { fullName: "LShopkeeperBehavior", friendlyName: "Behavior", create: () => new LShopkeeperBehavior() },
-        { fullName: "LCrackedBehavior", friendlyName: "CrackedBehavior", create: () => new LCrackedBehavior() },
-        
-        
-        
-        { fullName: "LKnockbackBehavior", friendlyName: "Knockback", create: () => new LKnockbackBehavior() },
-        { fullName: "LSelfExplosionBehavior", friendlyName: "SelfExplosion", create: () => new LSelfExplosionBehavior() },
-        
-        { fullName: "LDebugMoveRightBehavior", friendlyName: "DebugMoveRight", create: () => new LDebugMoveRightBehavior() },
-    ];
+export class SBehaviorManager {
+
+    // Index is DBehaviorId.
+    private static _behaviorEntries: (SBehaviorEntry | undefined)[] = [];
     
+    /**
+     * ゲーム開始時の初期化処理。DB にも登録するので、繰り返し呼び出してはならない。
+     * @param fullName 
+     */
+    public static initialize(): void {
+        this._behaviorEntries = [];
+        this.register("kBehavior_Common", "LCommonBehavior", "Common", LCommonBehavior);
+        this.register("kBehavior_Decision", "LDecisionBehavior", "Decision", LDecisionBehavior);
+        this.register("kBehavior_Unit", "LUnitBehavior", "Unit", LUnitBehavior);
+        this.register("kBehavior_Inventory", "LInventoryBehavior", "Inventory", LInventoryBehavior);
+        this.register("kBehavior_ItemUser", "LItemUserBehavior", "_ItemUser", LItemUserBehavior);
+        this.register("kBehavior_Equipment", "LEquipmentBehavior", "Equipment", LEquipmentBehavior);
+        this.register("kBehavior_EquipmentUser", "LEquipmentUserBehavior", "_EquipmentUser", LEquipmentUserBehavior);
+        this.register("kBehavior_Actor", "LActorBehavior", "_Actor", LActorBehavior);
+        this.register("kBehavior_ExitPoint", "LExitPointBehavior", "_ExitPoint", LExitPointBehavior);
+        this.register("kBehavior_EntryPoint", "LEntryPointBehavior", "_EntryPoint", LEntryPointBehavior);
+        this.register("kBehavior_Enemy", "LEnemyBehavior", "_Enemy", LEnemyBehavior);
+        this.register("kBehavior_GenericRMMZState", "LGenericRMMZStateBehavior", "_GenericRMMZState", LGenericRMMZStateBehavior);
+        this.register("kBehavior_Item", "LItemBehavior", "_Item", LItemBehavior);
+        this.register("kBehavior_NapState", "LNapStateBehavior", "NapState", LNapStateBehavior);
+        this.register("kBehavior_ItemImitator", "LItemImitatorBehavior", "ItemImitator", LItemImitatorBehavior);
+        this.register("kBehavior_IllusionState", "LIllusionStateBehavior", "IllusionState", LIllusionStateBehavior);
+        this.register("kBehavior_GrabFoot", "LGrabFootBehavior", "FootBehavior", LGrabFootBehavior);
+        this.register("kBehavior_RevivalItem", "LRevivalItemBehavior", "RevivalItem", LRevivalItemBehavior);
+        this.register("kBehavior_ItemStanding", "LItemStandingBehavior", "ItemStanding", LItemStandingBehavior);
+        this.register("kBehavior_Projectile", "LProjectileBehavior", "Projectile", LProjectileBehavior);
+        this.register("kBehavior_Experience", "LExperienceBehavior", "Experience", LExperienceBehavior);
+        this.register("kBehavior_Eater", "LEaterBehavior", "Eater", LActorBehavior);
+        this.register("kBehavior_Survivor", "LSurvivorBehavior", "Survivor", LSurvivorBehavior);
+        this.register("kBehavior_Race", "LRaceBehavior", "Race", LRaceBehavior);
+        this.register("kBehavior_Trap", "LTrapBehavior", "Trap", LTrapBehavior);
+        this.register("kBehavior_Param", "LParamBehavior", "Param", LParamBehavior);
+        this.register("kBehavior_RatedRandomAI", "LRatedRandomAIBehavior", "RatedRandomAI", LRatedRandomAIBehavior);
+        this.register("kBehavior_EntityDivision", "LEntityDivisionBehavior", "EntityDivision", LEntityDivisionBehavior);
+        this.register("kBehavior_Sanctuary", "LSanctuaryBehavior", "Sanctuary", LSanctuaryBehavior);
+        this.register("kBehavior_GlueToGround", "LGlueToGroundBehavior", "GlueToGround", LGlueToGroundBehavior);
+        this.register("kBehavior_StumblePrevention", "LStumblePreventionBehavior", "StumblePrevention", LStumblePreventionBehavior);
+        this.register("kBehavior_GoldThief", "LGoldThiefBehavior", "GoldThief", LGoldThiefBehavior);
+        this.register("kBehavior_ActivityCharm", "LActivityCharmBehavior", "ActivityCharm", LActivityCharmBehavior);
+        this.register("kBehavior_Gold", "LGoldBehavior", "Gold", LGoldBehavior);
+        this.register("kBehavior_Escape", "LEscapeBehavior", "Escape", LEscapeBehavior);
+        this.register("kBehavior_Flock", "LFlockBehavior", "Flock", LFlockBehavior);
+        this.register("kBehavior_Storage", "LStorageBehavior", "Storage", LStorageBehavior);
+        this.register("kBehavior_ItemThief", "LItemThiefBehavior", "ItemThief", LItemThiefBehavior);
+        this.register("kBehavior_Shopkeeper", "LShopkeeperBehavior", "Shopkeeper", LShopkeeperBehavior);
+        this.register("kBehavior_CrackedBehavior", "LCrackedBehavior", "CrackedBehavior", LCrackedBehavior);
+        this.register("kBehavior_Knockback", "LKnockbackBehavior", "Knockback", LKnockbackBehavior);
+        this.register("kBehavior_SelfExplosion", "LSelfExplosionBehavior", "SelfExplosion", LSelfExplosionBehavior);
+        this.register("kBehavior_DebugMoveRight", "LDebugMoveRightBehavior", "DebugMoveRight", LDebugMoveRightBehavior);
+    }
+    
+    public static register<T extends LBehavior>(key: string, fullName: string, friendlyName: string , ctor: { new(...args: any[]): T }): void {
+        const data = MRData.getBehavior(key);//MRData.newBehavior(key, fullName, friendlyName);
+        assert(this._behaviorEntries[data.id] === undefined);
+        this._behaviorEntries[data.id] = {
+            dataId: data.id,
+            create: () => new ctor(),
+        };
+    }
+
+
     /**
      * プログラム内で Behavior を作成する際のユーティリティです。
      */
@@ -113,14 +128,6 @@ export class SBehaviorFactory {
         (behavior as T).setup(...args);
         target.addBehavior(behavior);
         return behavior;
-    }
-    
-    public static register<T extends LBehavior>(fullName: string, friendlyName: string , ctor: { new(...args: any[]): T }): void {
-        this._behaviorEntries.push({
-            fullName: fullName,
-            friendlyName: friendlyName,
-            create: () => new ctor(),
-        });
     }
     
     public static attachBehaviors(entity: LEntity, behaviors: DBehaviorInstantiation[]): void {
@@ -165,7 +172,11 @@ export class SBehaviorFactory {
     }
 
     public static createBehaviorInstance(name: string): LBehavior | undefined {
-        const e = this._behaviorEntries.find(x => x.fullName == name || x.friendlyName == name);
+        const e = this._behaviorEntries.find(x => {
+            if (!x) return false;
+            const data = MRData.behavior[x.dataId];
+            return data.fullName == name || data.friendlyName == name;
+        });
         if (e) {
             return e.create();
         }

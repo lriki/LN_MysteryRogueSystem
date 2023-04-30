@@ -486,11 +486,9 @@ export class MRDataManager {
         MRData.newBehavior("kBehavior_RevivalItem", "LRevivalItemBehavior", "RevivalItem");
         MRData.newBehavior("kBehavior_ItemStanding", "LItemStandingBehavior", "ItemStanding");
         MRData.newBehavior("kBehavior_Projectile", "LProjectileBehavior", "Projectile");
-        MRData.newBehavior("kBehavior_Decision", "LDecisionBehavior", "Decision");
         MRData.newBehavior("kBehavior_Experience", "LExperienceBehavior", "Experience");
         MRData.newBehavior("kBehavior_Eater", "LEaterBehavior", "Eater");
         MRData.newBehavior("kBehavior_Survivor", "LSurvivorBehavior", "Survivor");
-        MRData.newBehavior("kBehavior_ExitPoint", "LExitPointBehavior", "ExitPoint");
         MRData.newBehavior("kBehavior_Race", "LRaceBehavior", "Race");
         MRData.newBehavior("kBehavior_Trap", "LTrapBehavior", "Trap");
         MRData.newBehavior("kBehavior_Param", "LParamBehavior", "Param");
@@ -625,23 +623,24 @@ export class MRDataManager {
         {
             {
                 const data = MRData.newQuest("kQuest_メインクエスト");
-                data.tasks.push(new DQuestTask("kQuestTask_メインクエスト戦_1"));
+                data.tasks.push(MRData.newQuestTask("kQuestTask_メインクエスト_街へ向かう"));
+                data.tasks.push(MRData.newQuestTask("kQuestTask_メインクエスト_1"));
             }
             {
                 const data = MRData.newQuest("kQuest_ActorBからActorCへのお届け物");
-                data.tasks.push(new DQuestTask("kQuestTask_ActorBからActorCへのお届け物_1"));
+                data.tasks.push(MRData.newQuestTask("kQuestTask_ActorBからActorCへのお届け物_1"));
             }
             {
                 const data = MRData.newQuest("kQuest_アイテムの納品");
-                data.tasks.push(new DQuestTask("kQuestTask_アイテムの納品_1"));
+                data.tasks.push(MRData.newQuestTask("kQuestTask_アイテムの納品_1"));
             }
             {
                 const data = MRData.newQuest("kQuest_特定フロアにいるモンスターの盗伐");
-                data.tasks.push(new DQuestTask("kQuestTask_特定フロアにいるモンスターの盗伐_1"));
+                data.tasks.push(MRData.newQuestTask("kQuestTask_特定フロアにいるモンスターの盗伐_1"));
             }
             {
                 const data = MRData.newQuest("kQuest_特定マップへ移動して殲滅戦");
-                data.tasks.push(new DQuestTask("kQuestTask_特定マップへ移動して殲滅戦_1"));
+                data.tasks.push(MRData.newQuestTask("kQuestTask_特定マップへ移動して殲滅戦_1"));
             }
         }
 

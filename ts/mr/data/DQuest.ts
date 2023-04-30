@@ -1,16 +1,18 @@
-import { DQuestId } from "./DCommon";
+import { DQuestId, DQuestTaskId } from "./DCommon";
 
 export class DQuest {
     public readonly id: DQuestId;
     public readonly key: string;
-    public title: string;
     public readonly tasks: DQuestTask[];
+    public questClass: DQuestClass;
+    public title: string;
 
     public constructor(id: DQuestId, key: string) {
         this.id = id;
         this.key = key;
-        this.title = "null";
         this.tasks = [];
+        this.questClass = DQuestClass.Normal;
+        this.title = "null";
     }
 
     /*
@@ -147,17 +149,55 @@ export class DQuest {
         MRQuery-OpenQuestFromTags("Random,地域名", 4)  # 最大4つ
     ```
 
+    クエストマーカーの表示はどうする？
+    ----------
+    ### キャラクターの上に表示するもの
+    A. クエスト側で指定する
+    B. イベント側で指定する
+
+    A にすれば↓と統一できるけど、B をやりたいこともある。アドホックに固定マップに登場させたい障害物Entityとか。
+
+    ### 地域を示すもの
+    A. クエスト側で指定する
+    B. イベント側で指定する
+
+    エリアマップの表示は↑のキャラクターのと同じでよい。
+    
+    ワールドマップの場合はどうする？
+    → そもそもワールドマップをどうやって作るかを考えたほうがよさそう。
+        RMMZ的に一番簡単なのは、普通にフィールドタイプのマップとして作って、縮小して使うこと。
+
+        実際のところ、それで十分だと思うし、Event によるマーカー表示なども流用できる。
+    
+    A の場合は細かな指定ができないのがネック。
+    なので B を主軸にしつつ、A はユーティリティ的な使い方になるだろう。作るとしたら。
+
+
+
+
+
+
 
     */
 }
 
 
 export class DQuestTask {
+    public readonly id: DQuestTaskId;
     public readonly key: string;
 
-    public constructor(key: string) {
+    public constructor(id: DQuestTaskId, key: string) {
+        this.id = id;
         this.key = key;
     }
 }
 
 
+
+export enum DQuestClass {
+    /** イベントによって開始を制御する。通常、ゲーム中、一度しか発生しない。 */
+    Normal,
+
+    /** タイミングによって抽選される。デイリークエストや街の掲示板など。 */
+    Random,
+}

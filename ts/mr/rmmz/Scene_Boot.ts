@@ -3,6 +3,7 @@ import { RMMZIntegration } from "./RMMZIntegration";
 import { MRSystem } from "../system/MRSystem";
 import { MRView } from "../view/MRView";
 import { MRData } from "ts/mr/data/MRData";
+import { SBehaviorManager } from "../system/SBehaviorFactory";
 
 /*
 import { ImGuiIO } from "../imgui-js/imgui";
@@ -99,6 +100,7 @@ const _Scene_Boot_onDatabaseLoaded = Scene_Boot.prototype.onDatabaseLoaded;
 Scene_Boot.prototype.onDatabaseLoaded = function() {
     _Scene_Boot_onDatabaseLoaded.call(this);
     MRDataManager.load();
+    SBehaviorManager.initialize();
     
     MRView.initialize();
     MRSystem.integration = new RMMZIntegration();

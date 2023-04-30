@@ -100,7 +100,7 @@ import { assert, MRSerializable } from "ts/mr/Common";
 import { LEntityId } from "../LObject";
 import { MRLively } from "../MRLively";
 import { LEntity } from "../LEntity";
-import { LBehavior, SRejectionInfo } from "./LBehavior"
+import { LBehavior, LNameView, SRejectionInfo } from "./LBehavior"
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { SCommand, SCommandResponse, STestAddItemCommand } from "ts/mr/system/SCommand";
 import { MRBasics } from "ts/mr/data/MRBasics";
@@ -154,6 +154,12 @@ export class LInventoryBehavior extends LBehavior {
         if (props.code == "Inventory") {
             this.capacity = MRLively.world.random().nextIntWithMinMax(props.minCapacity, props.maxCapacity + 1);
             this._storage = props.storage;
+        }
+    }
+
+    override onQueryNameView(self: LEntity, nameView: LNameView): void {
+        if (this._storage) {
+            nameView.capacity = this.capacity - this._entities.length;
         }
     }
 

@@ -26,6 +26,7 @@ export class LEntityDescription {
     private _name: string;
     private _highlightLevel: DescriptionHighlightColor;
     private _upgrades: number;
+    private _remaining: number | undefined;
     private _capacity: number | undefined;
 
     private static _levelColorTable: number[] = [
@@ -36,11 +37,19 @@ export class LEntityDescription {
         23,  // Number
     ];
     
-    constructor(iconIndex: number, name: string, level: DescriptionHighlightColor, upgrades: number, capacity: number | undefined) {
+    constructor(
+        iconIndex: number,
+        name: string,
+        level: DescriptionHighlightColor,
+        upgrades: number,
+        remaining: number | undefined,
+        capacity: number | undefined
+    ) {
         this._iconIndex = iconIndex;
         this._name = name;
         this._highlightLevel = level;
         this._upgrades = upgrades;
+        this._remaining = remaining;
         this._capacity = capacity;
     }
 
@@ -58,22 +67,15 @@ export class LEntityDescription {
         if (this._upgrades != 0) {
             text += (this._upgrades > 0) ? `+${this._upgrades}` : this._upgrades.toString();
         }
+        if (this._remaining !== undefined) {
+            text += `[${this._remaining}]`;
+        }
         if (this._capacity !== undefined) {
             text += `[${this._capacity}]`;
         }
         text += `\\C[0]`;
         return text;
     }
-
-    /*
-    public displayTextWithoutIcon(): string {
-        let text = `${LEntityDescription.makeDisplayText(this._name, this._highlightLevel)}`;
-        if (this._capacity) {
-            text += `[${this._capacity}]`;
-        }
-        return text;
-    }
-    */
     
     private static getColorNumber(level: DescriptionHighlightColor): number {
         return this._levelColorTable[level];
@@ -281,21 +283,25 @@ export class LIdentifyer {
             upgrades = nameView.upgrades;
         }
 
-        let capacity = undefined;
-        if (nameView.capacity !== undefined && nameView.initialCapacity) {
+        let remaining = undefined;
+        if (nameView.remaining !== undefined && nameView.initialRemaining) {
             if (entityIdentificationLevel <= EntityIdentificationLevel.KindIdentified) {
                 // 何かしら未識別？
-                capacity = nameView.capacity - nameView.initialCapacity;
+                remaining = nameView.remaining - nameView.initialRemaining;
 
                 // 未識別で1回も使用していない場合は回数欄は表示しない
-                if (capacity === 0) capacity = undefined;
+                if (remaining === 0) remaining = undefined;
             }
             else {
                 // 識別済み
-                capacity = nameView.capacity;
+                remaining = nameView.remaining;
             }
         }
 
+        let capacity = undefined;
+        if (nameView.capacity !== undefined) {
+            capacity = nameView.capacity;
+        }
         
         let iconIndex = nameView.iconIndex;
         if (entityIdentificationLevel <= EntityIdentificationLevel.KindIdentified) {
@@ -313,7 +319,7 @@ export class LIdentifyer {
             }
         }
 
-        return new LEntityDescription(iconIndex, displayName, level, upgrades, capacity);
+        return new LEntityDescription(iconIndex, displayName, level, upgrades, remaining, capacity);
     }
 
     public checkGlobalIdentified(entity: LEntity): boolean {

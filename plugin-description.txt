@@ -193,6 +193,21 @@
  * @command MR-ShowPostTalkDialog
  * @text [experimental] MR-ShowPostTalkDialog
  * 
+ * 
+ * @command MR-OpenQuest
+ * @text [experimental] MR-OpenQuest
+ * @desc クエストを開始(受領)できる状態にします。
+ * @arg questKey
+ * @type string
+
+ * @command MR-AdvanceQuestTask
+ * @text [experimental] MR-AdvanceQuestTask
+ * @desc クエストを受領または進行させます
+ * @arg questKey
+ * @type string
+ * @arg questTaskKey
+ * @type string
+ * 
  */
  
 

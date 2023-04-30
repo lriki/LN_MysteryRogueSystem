@@ -1,11 +1,13 @@
 import { MRLively } from "ts/mr/lively/MRLively";
 import { SRmmzHelpers } from "ts/mr/system/SRmmzHelpers";
 import { assert } from "../Common";
-import { DAnnotationReader, DRmmzREEventAnnotation } from "../data/importers/DAnnotationReader";
+import { DAnnotationReader, DRmmzEventPageAnnotation, DRmmzFloorEventAnnotation, DRmmzPrefabEventAnnotation } from "../data/importers/DAnnotationReader";
 import { DPrefab, DPrefabId } from "../data/DPrefab";
 import { MRDataManager } from "../data/MRDataManager";
 import { LState } from "../lively/states/LState";
 import { MRView } from "../view/MRView";
+import { VEntityId } from "../view/VCommon";
+import { LEntityId } from "../lively/LObject";
 
 
 const dummyMapEvent: IDataMapEvent = {
@@ -22,13 +24,18 @@ declare global {
     interface Game_Event {
         //_entityData: DEntitySpawner2 | undefined;
         _isREEntity: boolean;
-        _reEventData: DRmmzREEventAnnotation | undefined;
+        _reEventData: DRmmzPrefabEventAnnotation | undefined;
 
         
         _spritePrepared_RE: boolean;
         _prefabId_RE: DPrefabId;
         _eventData_RE: IDataMapEvent | undefined;
-        _pageData_RE: (DRmmzREEventAnnotation | undefined)[];
+        _pageData_RE: (DRmmzPrefabEventAnnotation | undefined)[];
+        _MREventPageAnnotations: (DRmmzEventPageAnnotation | undefined)[];
+        //_MRVisualId: VEntityId;
+        _MRNeedsRefresh: boolean;
+        _MREntityId: LEntityId | undefined;
+        _MRFloorEventAnnotation: DRmmzFloorEventAnnotation | undefined;
 
         setupPrefab(prefab: DPrefab, mapId: number, eventData: IDataMapEvent): void;
         resetPrefab(prefab: DPrefab): void;
@@ -54,6 +61,21 @@ Game_Event.prototype.initialize = function(mapId: number, eventId: number) {
 };
 */
 
+var _Game_Event_initialize = Game_Event.prototype.initialize;
+Game_Event.prototype.initialize = function(mapId, eventId) {
+    _Game_Event_initialize.call(this, mapId, eventId);
+    
+    // @MR-EventPage によるページごとの追加情報を取り出しておく
+    const pages = this.event().pages;
+    for (let i = 0; i < pages.length; i++) {
+        const page = pages[i];
+        const annotation = page ?
+            DAnnotationReader.readEventPageAnnotation(page) :
+            undefined;
+        this._MREventPageAnnotations.push(annotation);
+    }
+}
+
 var _Game_Event_initMembers = Game_Event.prototype.initMembers;
 Game_Event.prototype.initMembers = function() {
     // RE-Event の場合、mapId は "MR-Prefabs" のマップのイベントとして扱う。
@@ -64,6 +86,10 @@ Game_Event.prototype.initMembers = function() {
     this._prefabId_RE = 0;
     this._spritePrepared_RE = false;
     this._pageData_RE = [];
+    this._MREventPageAnnotations = [];
+    //this._MRVisualId = 0;
+
+
 }
 
 var _Game_Event_event = Game_Event.prototype.event;
@@ -93,6 +119,7 @@ Game_Event.prototype.setupPageSettings = function() {
 
     this._isREEntity = !!SRmmzHelpers.readEntityMetadata(this, this._mapId);
     this._reEventData = (this._pageIndex >= 0) ? DAnnotationReader.readREEventAnnotationFromPage(this.page()) : undefined;
+    this._MRFloorEventAnnotation = (this._pageIndex >= 0) ? DAnnotationReader.readFloorEventAnnotationFromPage(this.page()) : undefined;
 }
 
 var _Game_Event_meetsConditions = Game_Event.prototype.meetsConditions;
@@ -102,6 +129,20 @@ Game_Event.prototype.meetsConditions = function(page: IDataMapEventPage): boolea
     }
 
     const index = this.event().pages.findIndex(x => x == page);
+
+    // @MR-EventPage による条件チェック
+    {
+        const additionalData = this._MREventPageAnnotations[index];
+        if (additionalData) {
+            if (additionalData.conditionActivatedQuestTaskKey) {
+                if (!MRLively.questManager.isQuestTaskAcivated(additionalData.conditionActivatedQuestTaskKey)) {
+                    return false;
+                }
+            }
+        }
+    }
+
+
     assert(index >= 0);
     const additionalData = this._pageData_RE[index];
     if (additionalData && additionalData.condition_state) {
@@ -134,6 +175,12 @@ Game_Event.prototype.update = function() {
     // else {
         _Game_Event_update.call(this);
     // }
+}
+
+const _Game_Event_refresh = Game_Event.prototype.refresh;
+Game_Event.prototype.refresh = function() {
+    _Game_Event_refresh.call(this);
+    this._MRNeedsRefresh = true;
 }
 
 Game_Event.prototype.setupPrefab = function(prefab: DPrefab, mapId: number, eventData: IDataMapEvent): void {

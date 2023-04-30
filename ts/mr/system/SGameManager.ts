@@ -46,6 +46,7 @@ import { SRoomBoundsFovSystem } from "./fov/SRoomBoundsFovSystem";
 import { SSymmetricShadowcastFovSystem } from "./fov/SSymmetricShadowcastFovSystem";
 import { LQuestManager } from "../lively/LQuestManager";
 import { LScriptManager } from "../lively/LScriptManager";
+import { SQuestManager } from "./SQuestManager";
 
 /**
  */
@@ -62,6 +63,7 @@ export class SGameManager {
         MRSystem.groundRules = new SGroundRules();
         MRSystem.effectBehaviorManager = new SSpecialEffectManager();
         MRSystem.mapDataManager = new SMapDataManager();
+        MRSystem.questManager = new SQuestManager();
         MRSystem.requestedPlayback = false;
         MRSystem.formulaOperandA = new SFormulaOperand();
         MRSystem.formulaOperandB = new SFormulaOperand();
@@ -88,7 +90,7 @@ export class SGameManager {
         MRLively.scriptManager = new LScriptManager();
         MRLively.borderWall = new LBlock(-1, -1);
 
-        //MRLively.world._registerObject(MRLively.camera.currentMap);
+        MRLively.questManager.setup();
 
         // Create unique units
         for (const entityId of MRData.actors) {

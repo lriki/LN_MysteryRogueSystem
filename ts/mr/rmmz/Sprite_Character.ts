@@ -4,6 +4,7 @@ import { VCharacterSpriteSet } from "ts/mr/view/VCharacterSpriteSet";
 import { VHelper } from "ts/mr/view/VHelper";
 import { assert } from "../Common";
 import { Sprite_CharacterDamage_RE } from "./Sprite_CharacterDamage_RE";
+import { VIconSprite } from "../view/sprites/VIconSprite";
 
 declare global {
     interface Sprite_Character {
@@ -12,9 +13,11 @@ declare global {
         _spriteIndex: number;
 
         // StateIcon 関係
-        _stateIconSprite: Sprite;
+        _stateIconSprite: VIconSprite;
         _stateIcons: number[];
         _reRevision: number;
+
+        _MRQuestMarkerIcon: VIconSprite;
 
         setStateIcons(icons: number[]): void;
         
@@ -58,10 +61,17 @@ Sprite_Character.prototype.initMembers = function() {
     _Sprite_Character_initMembers.call(this);
 
     this._stateIcons = [];
-    const bitmap = ImageManager.loadSystem("IconSet");
-    this._stateIconSprite = new Sprite(bitmap);
+    this._stateIconSprite = new VIconSprite();
+    this._stateIconSprite.anchor.x = 0.5;
+    this._stateIconSprite.anchor.y = 1;
     this._stateIconSprite.visible = false;  // ちらつき回避
     this.addChild(this._stateIconSprite);
+
+    this._MRQuestMarkerIcon = new VIconSprite();
+    this._MRQuestMarkerIcon.anchor.x = 0.5;
+    this._MRQuestMarkerIcon.anchor.y = 1;
+    this._MRQuestMarkerIcon.visible = false;
+    this.addChild(this._MRQuestMarkerIcon);
 
     this._reRevision = 0;
 }
@@ -102,15 +112,20 @@ Sprite_Character.prototype.update = function() {
         // Update state icon
         {
             if (this._stateIcons.length > 0) {
-                VHelper.setIconFrame(this._stateIconSprite, this._stateIcons[0]);   // TODO: 複数
-                this._stateIconSprite.anchor.x = 0.5;
-                this._stateIconSprite.anchor.y = 1;
+                this._stateIconSprite.setIcon(this._stateIcons[0]);   // TODO: 複数
                 this._stateIconSprite.y = this.bitmap ? -this.patternHeight() : 0;  // bitmap が無いと Character の高さが取れないので
                 this._stateIconSprite.visible = true;
             }
             else {
                 this._stateIconSprite.visible = false;
             }
+        }
+
+        // Quest flag icon
+        if (this._MRQuestMarkerIcon.visible) {
+            this._MRQuestMarkerIcon.x = 10;
+            this._MRQuestMarkerIcon.y = this.bitmap ? -(this.patternHeight() - 10): 0;
+            this._MRQuestMarkerIcon.scale.y = Math.sin(Graphics.frameCount/ 30.0) * 0.1 + 0.9;
         }
 
         // 寿命管理が複雑なので、間違ったものを参照していないか検証しておく
@@ -121,6 +136,7 @@ Sprite_Character.prototype.update = function() {
     }
     else {
         this._stateIconSprite.visible = false;
+        this._MRQuestMarkerIcon.visible = false;
     }
 
     this.updateDamagePopup_RE();

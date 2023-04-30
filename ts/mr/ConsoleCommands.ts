@@ -97,8 +97,9 @@ function addItem(itemKey: string) {
     const player = MRLively.mapView.focusedEntity();
     if (!player) return;
     player.getEntityBehavior(LInventoryBehavior).addEntity(item);
-
 }
+
+
 
 (window as any).MR = {
     entities: entities,

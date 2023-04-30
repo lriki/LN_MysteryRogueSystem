@@ -15,7 +15,7 @@ import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBeh
 import { DEntity, DEntityId } from "ts/mr/data/DEntity";
 import { LEntryPointBehavior } from "ts/mr/lively/behaviors/LEntryPointBehavior";
 import { LActorBehavior } from "ts/mr/lively/behaviors/LActorBehavior";
-import { SBehaviorFactory } from "./SBehaviorFactory";
+import { SBehaviorManager } from "./SBehaviorFactory";
 //import { LEaterBehavior } from "ts/mr/lively/behaviors/actors/LEaterBehavior";
 import {  DItemDataId } from "ts/mr/data/DItem";
 import { LProjectileBehavior } from "ts/mr/lively/behaviors/activities/LProjectileBehavior";
@@ -147,7 +147,7 @@ export class SEntityBuilder {
         for (const entry of behaviorList) {
             const data = MRData.behavior[entry.behaviorId];
             if (!entity.findEntityBehaviorBy(b => b.fullName == data.fullName)) {
-                const behavior = SBehaviorFactory.createBehaviorInstance(data.fullName);
+                const behavior = SBehaviorManager.createBehaviorInstance(data.fullName);
                 if (!behavior) {
                     throw new Error(`Behavior ${data.fullName} not found.`);
                 }

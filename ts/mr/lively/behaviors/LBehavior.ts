@@ -78,8 +78,9 @@ export interface LNameView {
     name: string;
     iconIndex: number;
     upgrades: number;
-    capacity?: number;
-    initialCapacity?: number;
+    remaining?: number;
+    initialRemaining?: number;
+    capacity?: number;  // 壺の容量。表記上は杖の使用回数と似ているが、表現方法が違うので別にする
 }
 
 export interface LParamMinMaxInfo {
@@ -117,35 +118,6 @@ export const onPreStepFeetProcess_Actor = Symbol("onPreStepFeetProcess_Actor");
 export const onPreStepFeetProcess = Symbol("onPreStepFeetProcess");
 export const onPerformStepFeetProcess = Symbol("onPerformStepFeetProcess");
 
-
-/**
- * Response
- * - Canceled : 呪い状態等のため、Inventory からアイテムを取り出すことはできない。
- */
-//export const testPickOutItem = Symbol("testPickOutItem");
-
-/**
- * knockback 状態の別の Entity が衝突しようとしている
- */
-export const onCollidePreReaction = Symbol("onCollidePreReaction");
-
-/**
- * 自分が knockback 状態であり、何らかの別の Entity に衝突した
- */
-export const onCollideAction = Symbol("onCollideAction");
-
-
-/**
- * 食べられた
- */
-export const onEatReaction = Symbol("onEatReaction");
-
-/**
- * (杖など) 振られた
- */
-export const onWaveReaction = Symbol("onWaveReaction");
-
-//export const onReadReaction = Symbol("onReadReaction");
 
 /**
  * (階段など) 進まれた
@@ -274,7 +246,7 @@ export abstract class LBehavior extends LObject {
     //--------------------------------------------------------------------------
 
 
-
+    public onQueryNameView(self: LEntity, nameView: LNameView): void { }
 
 
 
@@ -345,6 +317,8 @@ export abstract class LBehavior extends LObject {
     
     
     public onQueryPrice(result: LPriceInfo): void {}
+
+
 
     // Attach されている Behavior や Attribute の状態に依存して変化する情報を取得する。
     // propertyId: see EntityProperties

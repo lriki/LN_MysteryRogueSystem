@@ -1,5 +1,6 @@
 import { LScriptContext, LScriptId } from "../lively/LScript";
 import { MRLively } from "../lively/MRLively";
+import { MRSystem } from "../system/MRSystem";
 
 export class Game_MREventScriptRunner {
     public readonly scriptId: LScriptId;
@@ -10,8 +11,6 @@ export class Game_MREventScriptRunner {
         this._interpreter = new Game_Interpreter();
         this._interpreter._MR_EventScriptRunnerId = script.id;
         this._interpreter.setup(script.list, 0);
-
-        console.log("new Game_MREventScriptRunner", script.id);
 
         // ProgramCounter を label に合わせる。
         const index = LScriptContext.findLabelIndex(script.list, script.label);
@@ -30,5 +29,27 @@ export class Game_MREventScriptRunner {
 
     public update(): void {
         this._interpreter.update();
+    }
+
+    
+    //------------------------------------------------------------------------------
+    // 以下、イベントのスクリプトから呼び出すためのもの。
+    // 量が非常に多くなることが予想されるため、プラグインコマンドとは別に定義している。
+
+    public setQuestIcon(questIconKey: string) {
+        this.scriptContext.questIconKey = questIconKey;
+    }
+
+    public openQuest(questKey: string): void {
+        MRSystem.questManager.openQuest(questKey);
+        $gameMap.refresh();
+    }
+
+    public isQuestInactived(questKey: string): boolean {
+        return MRLively.questManager.isQuestInactived(questKey);
+    }
+
+    public isQuestTaskAcivated(questTaskKey: string): boolean {
+        return MRLively.questManager.isQuestTaskAcivated(questTaskKey);
     }
 }

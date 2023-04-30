@@ -30,7 +30,7 @@ test("Items.Staff.Knockback", () => {
 
     // Entity作成時に指定しない場合は DEntity の remaining パラメータから初期値が取られる
     const dn = item1.getDisplayName();
-    expect(dn.capacity).toBe(5);
+    expect(dn.remaining).toBe(5);
 
     // 残り使用回数を [1] にしておく
     item1.setParamCurrentValue(MRBasics.params.remaining, 1);

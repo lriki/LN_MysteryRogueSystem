@@ -7141,7 +7141,7 @@ declare class Game_CharacterBase {
     /**
      * 
      */
-    initialize(): void;
+    initialize(mapId: number, eventId: number): void;
 
     /**
      * 

@@ -21,6 +21,7 @@ import { SRoomBoundsFovSystem } from "./fov/SRoomBoundsFovSystem";
 import { SSymmetricShadowcastFovSystem } from "./fov/SSymmetricShadowcastFovSystem";
 import { MRLively } from "../lively/MRLively";
 import { DFovSystem } from "../data/DSystem";
+import { SQuestManager } from "./SQuestManager";
 
 export class MRSystem {
     static propertyData:EntityProperty[] = [
@@ -48,6 +49,7 @@ export class MRSystem {
     static groundRules: SGroundRules;
     static effectBehaviorManager: SSpecialEffectManager;
     static mapDataManager: SMapDataManager;
+    static questManager: SQuestManager;
     static requestedPlayback: boolean = false;
     static unittest: boolean = false;
 

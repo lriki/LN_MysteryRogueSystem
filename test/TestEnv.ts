@@ -30,6 +30,7 @@ import { LTransferEntityResult } from "ts/mr/lively/LWorld";
 import { DRmmzUniqueSpawnerAnnotation } from "ts/mr/data/importers/DAnnotationReader";
 import { DEntityCreateInfo, DEntitySpawner } from "ts/mr/data/DSpawner";
 import { LScriptContext } from "ts/mr/lively/LScript";
+import { SBehaviorManager } from "ts/mr/system/SBehaviorFactory";
 
 export class TestEnv {
     public static integration: TestEnvIntegration;
@@ -73,6 +74,7 @@ export class TestEnv {
         MRData.reset();
         MRDataManager.testMode = true;
         MRDataManager.load();
+        SBehaviorManager.initialize();
         this.integration = new TestEnvIntegration();
         MRSystem.integration = this.integration;
         MRSystem.unittest = true;
@@ -262,7 +264,7 @@ export class TestEnvIntegration extends SIntegration {
     }
     
     override onGetFixedMapUnqueSpawners(): DEntitySpawner[] {
-        return SRmmzHelpers.getUnqueSpawners($dataMap, 0);
+        return [];
     }
 
     override onMapSetupCompleted(map: LMap): void {

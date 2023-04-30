@@ -172,12 +172,14 @@ export class VEntityManager {
             else {
                 //  entity に対応する動的イベントを新たに生成する
                 const event = $gameMap.spawnREEvent(prefab, undefined, overrideEvent);
-                entity.setRmmzEventId(event.eventId());
+                SRmmzHelpers.linkEntityAndEvent(entity, event);
             }
         }
 
         this.createVisual(entity);
     }
+
+
 
     private createVisual(entity: LEntity) {
         let event: Game_Event | undefined = undefined;
@@ -199,9 +201,9 @@ export class VEntityManager {
 
         assert(event.isREEvent());
 
-        const visual = new VEntity(entity, event.eventId());
-        //event._visualId = this._visualEntities.length;
+        const visual = new VEntity(this._visualEntities.length, entity, event.eventId());
         this._visualEntities.push(visual);
+        //event._MRVisualId = visual.id;
     }
 }
 

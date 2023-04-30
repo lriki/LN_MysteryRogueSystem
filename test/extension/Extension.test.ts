@@ -13,7 +13,7 @@ import { LBehavior } from "ts/mr/lively/behaviors/LBehavior";
 import { LEntity } from "ts/mr/lively/LEntity";
 import { DEntity } from "ts/mr/data/DEntity";
 import { LEnemyBehavior } from "ts/mr/lively/behaviors/LEnemyBehavior";
-import { SBehaviorFactory } from "ts/mr/system/SBehaviorFactory";
+import { SBehaviorManager } from "ts/mr/system/SBehaviorFactory";
 
 
 export class TestDataExtension extends MRDataExtension {
@@ -29,7 +29,7 @@ export class TestLivelyExtension extends MRGameExtension {
 export class TestSystemExtension extends MRSystemExtension {
     onNewEntity(entity: LEntity, data: DEntity): void {
         if (entity.findEntityBehavior(LEnemyBehavior)) {
-            SBehaviorFactory.addBehavior(entity, Test_LSaboteurBehavior);
+            SBehaviorManager.addBehavior(entity, Test_LSaboteurBehavior);
         }
     }
 }

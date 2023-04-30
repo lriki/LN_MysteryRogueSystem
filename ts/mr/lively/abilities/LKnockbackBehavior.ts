@@ -1,8 +1,5 @@
 import { MRSerializable } from "ts/mr/Common";
-import { SCommandResponse } from "ts/mr/system/SCommand";
-import { SCommandContext } from "ts/mr/system/SCommandContext";
-import { LProjectileBehavior } from "../behaviors/activities/LProjectileBehavior";
-import { CollideActionArgs, CommandArgs, LBehavior, onCollideAction } from "../behaviors/LBehavior";
+import { LBehavior } from "../behaviors/LBehavior";
 import { LEntity } from "../LEntity";
 import { MRLively } from "../MRLively";
 

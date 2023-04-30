@@ -11,7 +11,7 @@ import { LBlock } from "ts/mr/lively/LBlock";
 import { LMap } from "ts/mr/lively/LMap";
 import { LState } from "ts/mr/lively/states/LState";
 import { LStructure } from "ts/mr/lively/structures/LStructure";
-import { SBehaviorFactory } from "ts/mr/system/SBehaviorFactory";
+import { SBehaviorManager } from "ts/mr/system/SBehaviorFactory";
 /**
  * セーブデータをロードするとき、JsonEx._decode の window[value["@"]] では
  * クラス名を指定して prototype をとることができなかった。
@@ -25,7 +25,7 @@ import { TypeStore } from "../Common";
 
 function createInstance(name: string): any {
     if (name.endsWith("Behavior")) {
-        const i = SBehaviorFactory.createBehaviorInstance(name);
+        const i = SBehaviorManager.createBehaviorInstance(name);
         if (i) return i;
     }
     return TypeStore.createInstance(name);

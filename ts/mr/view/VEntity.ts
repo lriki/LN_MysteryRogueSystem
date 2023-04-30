@@ -13,6 +13,9 @@ import { DPrefabActualImage } from "ts/mr/data/DPrefab";
 import { MRBasics } from "../data/MRBasics";
 import { DColorIndex } from "../data/DCommon";
 import { MRData } from "../data/MRData";
+import { VEntityId } from "./VCommon";
+import { DScript } from "../data/DScript";
+import { DSystem } from "../data/DSystem";
 
 /**
  * Entity の「見た目」を表現するためのクラス。
@@ -21,6 +24,8 @@ import { MRData } from "../data/MRData";
  * Mnager からのインスタンス生成と同時に、動的に Game_Event が生成され、このクラスはその Game_Event を操作する。
  */
 export class VEntity {
+    public readonly id: VEntityId;
+
     private _entity: LEntity; // EntityVisual が存在する間、Entity は必ず存在していると考えてよい
     private _rmmzEventId: number;
     private _rmmzSpriteIndex: number;   // Spriteset_Map._characterSprites の index
@@ -49,7 +54,8 @@ export class VEntity {
     reservedDestroy = false;
     visualTransparent: boolean = false;
 
-    constructor(entity: LEntity, rmmzEventId: number) {
+    constructor(id: VEntityId, entity: LEntity, rmmzEventId: number) {
+        this.id = id;
         this._entity = entity;
         this._rmmzEventId = rmmzEventId;
         this._rmmzSpriteIndex = -1;
@@ -249,7 +255,12 @@ export class VEntity {
                     sprite.setStateIcons(entity.states.map(state => state.stateData().iconIndex));
                 }
 
+                if (event._MRNeedsRefresh) {
+                    event._MRNeedsRefresh = false;
+                    this.refreshQuestIcon(event, sprite);
+                }
             }
+
         }
     }
 
@@ -352,6 +363,14 @@ export class VEntity {
                 event.popupDamage_RE(hpDamage, DColorIndex.Default);
             }
         }
+    }
+
+    private refreshQuestIcon(rmmzEvent: Game_Event, sprite: Sprite_Character): void {
+        const result = MRLively.scriptManager.callQuery(
+            this._entity,
+            new DScript(rmmzEvent.list()),
+            "MRQuery-GetQuestIcon");
+        sprite._MRQuestMarkerIcon.setIcon(DSystem.getQuestMarkerIcon(result.questIconKey));
     }
 }
 

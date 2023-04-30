@@ -18,19 +18,23 @@ export class LScriptManager {
         return script;
     }
 
-    public callQuery(entity: LEntity, finalClassScript: DScript, label: string): LScriptContext {
+    public callQuery(entity: LEntity | undefined, finalClassScript: DScript, label: string): LScriptContext {
         const id = this.getId();
         const script = new LScriptContext(id, entity, finalClassScript, label, LScriptCallMode.Query);
-        this._scriptContexts[id] = script;
-        MRSystem.integration.onStartEventScript(script);
+        if (script.isValid) {
+            this._scriptContexts[id] = script;
+            MRSystem.integration.onStartEventScript(script);
+        }
         return script;
     }
 
-    public callCommand(entity: LEntity, finalClassScript: DScript, label: string): void {
+    public callCommand(entity: LEntity | undefined, finalClassScript: DScript, label: string): void {
         const id = this.getId();
         const script = new LScriptContext(id, entity, finalClassScript, label, LScriptCallMode.Command);
-        this._scriptContexts[id] = script;
-        MRSystem.integration.onStartEventScript(script);
+        if (script.isValid) {
+            this._scriptContexts[id] = script;
+            MRSystem.integration.onStartEventScript(script);
+        }
     }
 
     private getId(): LScriptId {

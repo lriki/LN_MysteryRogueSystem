@@ -1,6 +1,7 @@
 import { MRDataManager } from "ts/mr/data/MRDataManager";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { MRView } from "ts/mr/view/MRView";
+import { DScript } from "../data/DScript";
 
 
 export class RMMZHelper {
@@ -119,10 +120,25 @@ export class RMMZHelper {
     public static triggerOnStartEvent(): void {
         for (const event of $gameMap.events()) {
             if (event._reEventData && event._reEventData.trigger && event._reEventData.trigger == "onStart") {
+                //console.log("trigger is deprecated. use MRCommand-OnStart.")
                 //if (event.x == 0) {
                     event.start();
                 //}
             }
+
+            if (event._MRFloorEventAnnotation) {
+                MRLively.scriptManager.callQuery(
+                    undefined,
+                    new DScript(event.list()),
+                    "MRCommand-OnStart");
+            }
+
+            // if (event._MREntityId) {
+            //     MRLively.scriptManager.callQuery(
+            //         MRLively.world.entity(event._MREntityId),
+            //         new DScript(event.list()),
+            //         "MRCommand-OnStart");
+            // }
         }
     }
 

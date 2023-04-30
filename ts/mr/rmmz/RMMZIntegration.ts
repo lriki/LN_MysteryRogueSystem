@@ -94,7 +94,7 @@ export class RMMZIntegration extends SIntegration {
                     assert(entity.data.prefabId > 0);
 
                     if (entity.inhabitsCurrentFloor) {
-                        entity.setRmmzEventId(e.eventId());
+                        SRmmzHelpers.linkEntityAndEvent(entity, e);
                     }
                     else {
                         e.setTransparent(true);
@@ -112,7 +112,7 @@ export class RMMZIntegration extends SIntegration {
     }
 
     override onGetFixedMapUnqueSpawners(): DEntitySpawner[] {
-        return SRmmzHelpers.getUnqueSpawners($dataMap, $gameMap.mapId());
+        return SRmmzHelpers.getUnqueSpawners($gameMap);
     }
 
     override onMapSetupCompleted(map: LMap): void {
@@ -216,7 +216,7 @@ export class RMMZIntegration extends SIntegration {
 
         // Entity と RMMZ-Event の関連付けを解除
         entity.inhabitsCurrentFloor = false;
-        entity.setRmmzEventId(0);
+        SRmmzHelpers.unlinkEntityAndEvent(entity);
         if (entity.keeper) {
             entity.keeper = false;
             MRLively.mapView.currentMap.keeperCount--;

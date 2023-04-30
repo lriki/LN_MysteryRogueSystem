@@ -3,7 +3,7 @@ import { LBehavior } from "../behaviors/LBehavior";
 import { LBehaviorId, LObject, LObjectId, LObjectType } from "../LObject";
 import { MRLively } from "../MRLively";
 import { LEntity } from "../LEntity";
-import { SBehaviorFactory } from "ts/mr/system/SBehaviorFactory";
+import { SBehaviorManager } from "ts/mr/system/SBehaviorFactory";
 import { assert, MRSerializable } from "ts/mr/Common";
 
 export type LAbilityId = LObjectId;
@@ -59,7 +59,7 @@ export class LAbility extends LObject {
 
         // TODO: test
         //this._behabiorIds = [new LKnockbackBehavior()];
-        const b = SBehaviorFactory.createBehavior("LKnockbackBehavior");
+        const b = SBehaviorManager.createBehavior("LKnockbackBehavior");
         assert(b);
         this.addBehavior(b);
     }

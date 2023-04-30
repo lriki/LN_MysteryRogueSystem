@@ -34,7 +34,7 @@ import { DMap } from "./DMap";
 import { DEntityTemplate, IEntityTemplateProps } from "./DEntityTemplate";
 import { DSpecialEffect } from "./DSpecialEffect";
 import { DChronus } from "./DChronus";
-import { DQuest } from "./DQuest";
+import { DQuest, DQuestTask } from "./DQuest";
 import { DBehavior } from "./DBehavior";
 
 
@@ -135,6 +135,7 @@ export class MRData
     static floorPresets: DFloorPreset[] = [];
     static pseudonymous: DPseudonymous = new DPseudonymous();
     static quests: DQuest[] = [];
+    static questTasks: DQuestTask[] = [];
     static behavior: DBehavior[] = [];
 
     static itemDataIdOffset: number = 0;
@@ -179,6 +180,7 @@ export class MRData
         this.terrainSettings = [new DTerrainSetting(0)];
         this.floorPresets = [new DFloorPreset(0)];
         this.quests = [new DQuest(0, "null")];
+        this.questTasks = [new DQuestTask(0, "null")];
         this.behavior = [new DBehavior(0, "null", "null", "null")];
     }
 
@@ -789,6 +791,24 @@ export class MRData
     static getQuest(pattern: string): DQuest {
         const d = this.findQuest(pattern);
         if (!d) throw new Error(`Quest "${pattern}" not found.`);
+        return d;
+    }
+
+    //--------------------------------------------------------------------------
+
+    static newQuestTask(key: string): DQuestTask {
+        const data = new DQuestTask(this.questTasks.length, key);
+        this.questTasks.push(data);
+        return data;
+    }
+
+    static findQuestTask(pattern: string): DQuestTask | undefined {
+        return this.findHelper(this.questTasks, pattern, x => x.key === pattern);
+    }
+
+    static getQuestTask(pattern: string): DQuestTask {
+        const d = this.findQuestTask(pattern);
+        if (!d) throw new Error(`QuestTask "${pattern}" not found.`);
         return d;
     }
 

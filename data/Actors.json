@@ -120,5 +120,28 @@
     "nickname": "",
     "note": "<MR-Type: Entity>\n<MR-Category: kEntityCategory_Actor>\n<MR-Key: kEntity_WarehouseA>\n<MR-Prefab: kPrefab_WarehouseA>",
     "profile": ""
+  },
+  {
+    "id": 6,
+    "battlerName": "",
+    "characterIndex": 0,
+    "characterName": "",
+    "classId": 1,
+    "equips": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "faceIndex": 1,
+    "faceName": "Nature",
+    "traits": [],
+    "initialLevel": 1,
+    "maxLevel": 99,
+    "name": "案内人",
+    "nickname": "",
+    "note": "<MR-Type: Entity>\n<MR-Category: kEntityCategory_Actor>\n<MR-Key: kEntity_案内人A>\n<MR-Prefab: kPrefab_案内人A>\n",
+    "profile": ""
   }
 ]

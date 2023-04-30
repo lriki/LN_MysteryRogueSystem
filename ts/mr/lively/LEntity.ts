@@ -849,9 +849,14 @@ export class LEntity extends LObject
         // TODO: test
         const remaining = this._params.param(MRBasics.params.remaining);
         if (remaining) {
-            result.capacity = this.getActualParam(MRBasics.params.remaining);
-            result.initialCapacity = remaining.initialActualValue();
+            result.remaining = this.getActualParam(MRBasics.params.remaining);
+            result.initialRemaining = remaining.initialActualValue();
         }
+
+        this.iterateBehaviors2(b => {
+            b.onQueryNameView(this, result);
+            return true;
+        });
 
         return result;
     }

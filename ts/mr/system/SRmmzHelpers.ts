@@ -63,18 +63,24 @@ export class SRmmzHelpers {
         });
     }
 
-    public static getUnqueSpawners(mapDate: IDataMap, rmmzMapId: number): DEntitySpawner[] {
+    /**
+     * 指定したマップ内に存在している Game_Event のアクティブなページから、UnqueSpawner を取得します。
+     * @param rmmzGameMap 
+     * @returns 
+     */
+    public static getUnqueSpawners(rmmzGameMap: Game_Map): DEntitySpawner[] {
         const result: DEntitySpawner[] = [];
-        for (const e of mapDate.events) {
+        for (const e of rmmzGameMap.events()) {
             if (e) {
-                const annotation = DAnnotationReader.readUniqueSpawnerAnnotationFromPage(e.pages[0]);
+                const annotation = DAnnotationReader.readUniqueSpawnerAnnotationFromPage(e.page());
                 if (annotation) {
                     const spawner = DEntitySpawner.makeFromAnnotation(annotation);
                     spawner.mx = e.x;
                     spawner.my = e.y;
                     if (annotation.override) {
-                        spawner.overrideRmmzEventMapId = rmmzMapId;
-                        spawner.overrideRmmzEventId = e.id;
+                        spawner.overrideRmmzEventMapId = rmmzGameMap.mapId();
+                        spawner.overrideRmmzEventId = e.event().id;
+                        spawner.overrideEvent = e.event();
                     }
                     result.push(spawner);
                 }
@@ -86,14 +92,29 @@ export class SRmmzHelpers {
     public static createEntityFromRmmzEvent(data: DEntityCreateInfo, eventId: number, x: number, y: number): LEntity {
         const entity = SEntityFactory.newEntity(data, MRLively.mapView.currentMap.floorId());
 
-        
         if (data.override) {
             entity.inhabitsCurrentFloor = true;
-            entity.setRmmzEventId(eventId);
+            //this.linkEntityAndEvent(entity, event);
         }
 
         MRLively.world.transferEntity(entity, MRLively.mapView.currentMap.floorId(), x, y);
         return entity;
+    }
+
+    public static linkEntityAndEvent(entity: LEntity, event: Game_Event): void {
+        entity.setRmmzEventId(event.eventId());
+        event._MREntityId = entity.entityId().clone();
+    }
+
+    public static unlinkEntityAndEvent(entity: LEntity): void {
+        const eventId = entity.rmmzEventId;
+        if (eventId > 0) {
+            const event = $gameMap.event(eventId);
+            if (event) {
+                event._MREntityId = undefined;
+            }
+        }
+        entity.setRmmzEventId(0);
     }
 
     public static getRegionId(x: number, y: number): number {

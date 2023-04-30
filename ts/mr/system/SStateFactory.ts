@@ -4,7 +4,7 @@ import { MRLively } from "ts/mr/lively/MRLively";
 import { LGenericRMMZStateBehavior } from "ts/mr/lively/states/LGenericRMMZStateBehavior";
 import { LState } from "ts/mr/lively/states/LState";
 import { assert } from "../Common";
-import { SBehaviorFactory } from "./internal";
+import { SBehaviorManager } from "./internal";
 
 export class SStateFactory {
 
@@ -19,7 +19,7 @@ export class SStateFactory {
         const behabiors: LBehavior[] = [behavior];
         for (const behavior of state.stateEffect().behaviors) {
             assert(!behavior.props);  // 未サポート
-            const b = SBehaviorFactory.createBehavior(behavior.data.fullName);// as LStateTraitBehavior;
+            const b = SBehaviorManager.createBehavior(behavior.data.fullName);// as LStateTraitBehavior;
             if (!b) throw new Error(`Behavior "${behavior.data.fullName}" specified in state "${stateId}:${state.stateData().displayName}" is invalid.`);
             behabiors.push(b);
         }

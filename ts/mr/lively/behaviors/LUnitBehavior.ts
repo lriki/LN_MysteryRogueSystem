@@ -1,6 +1,6 @@
 import { SCommand, SCommandResponse, SPhaseResult, STestAddItemCommand, STestTakeItemCommand } from "../../system/SCommand";
 import { SCommandContext, SHandleCommandResult } from "../../system/SCommandContext";
-import { CommandArgs, LBehavior, onAttackReaction, onDirectAttackDamaged, onPreThrowReaction, onProceedFloorReaction, onThrowReaction, onWalkedOnTopAction, onWaveReaction } from "./LBehavior";
+import { CommandArgs, LBehavior, onAttackReaction, onDirectAttackDamaged, onProceedFloorReaction, onWalkedOnTopAction } from "./LBehavior";
 import { MRLively } from "../MRLively";
 import { LEntity } from "../LEntity";
 import { Helpers } from "ts/mr/system/Helpers";
@@ -14,7 +14,7 @@ import { DescriptionHighlightColor, LEntityDescription } from "../LIdentifyer";
 import { SSoundManager } from "ts/mr/system/SSoundManager";
 import { DFactionId, MRData } from "ts/mr/data/MRData";
 import { MovingMethod } from "../LMap";
-import { DecisionPhase, onGrounded, onPreStepFeetProcess, onPreStepFeetProcess_Actor } from "../internal";
+import { DecisionPhase, onGrounded, onPreStepFeetProcess_Actor } from "../internal";
 import { PutEventArgs, WalkEventArgs } from "ts/mr/data/predefineds/DBasicEvents";
 import { UName } from "ts/mr/utility/UName";
 import { SEmittorPerformer } from "ts/mr/system/SEmittorPerformer";
@@ -31,6 +31,7 @@ import { SFeetDialog } from "ts/mr/system/dialogs/SFeetDialog";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { LReaction } from "../LCommon";
 import { TStumble } from "ts/mr/transactions/TStumble";
+import { TThrow } from "ts/mr/transactions/TThrow";
 
 enum LFeetProcess {
     None,
@@ -329,82 +330,11 @@ export class LUnitBehavior extends LBehavior {
         else if (activity.actionId() == MRBasics.actions.ThrowActionId) {
             // FIXME: [撃つ] とかなり似ているので、長くなるようならまとめたほうがいいかも
 
-            // [投げる] は便利コマンドのようなもの。
-            // 具体的にどのように振舞うのか (直線に飛ぶのか、放物線状に動くのか、転がるのか) を決めるのは相手側
-
-            const itemEntity = activity.object();
-            //const inventory = actor.findBehavior(LInventoryBehavior);
-            assert(itemEntity);
-            //assert(inventory);
-
-            cctx.post(itemEntity, self, subject, undefined, onPreThrowReaction)
-                .then(() => {
-                    //itemEntity.callRemoveFromWhereabouts(cctx);
-
-                    itemEntity.removeFromParent();
-                    itemEntity.mx = self.mx;
-                    itemEntity.my = self.my;
-
-                    /*
-                    let actual: LEntity;
-                    if (itemEntity.isStacked()) {
-                        // スタックされていれば減らして新たな entity を生成
-                        actual = itemEntity.decreaseStack();
-                        //console.log("self.floorId", self.floorId);
-                        //REGame.world._transferEntity(actual, self.floorId, self.x, self.y);
-                    }
-                    else {
-                        // スタックされていなければそのまま打ち出す
-                        itemEntity.removeFromParent();
-                        actual = itemEntity;
-                    }
-
-                    actual.x = self.x;
-                    actual.y = self.y;
-                    */
-
-
-                    cctx.post(itemEntity, self, subject, undefined, onThrowReaction)
-                        .then(() => {
-                            cctx.postMessage(tr("{0} を投げた。", UName.makeNameAsItem(itemEntity)));
-                            return true;
-                        });
-
-                    return true;
-                });
+            TThrow.throwAllStack(cctx, self, self, activity.object());
             return SCommandResponse.Handled;
         }
         else if (activity.actionId() == MRBasics.actions.ShootActionId) {
-            const itemEntity = activity.object();
-            assert(itemEntity);
-
-            cctx.post(itemEntity, self, subject, undefined, onPreThrowReaction)
-                .then(() => {
-                    let actual: LEntity;
-                    if (itemEntity.isStacked()) {
-                        // スタックされていれば減らして新たな entity を生成
-                        actual = itemEntity.decreaseStack();
-                        //console.log("self.floorId", self.floorId);
-                        //REGame.world._transferEntity(actual, self.floorId, self.x, self.y);
-                    }
-                    else {
-                        // スタックされていなければそのまま打ち出す
-                        itemEntity.removeFromParent();
-                        actual = itemEntity;
-                    }
-
-                    actual.mx = self.mx;
-                    actual.my = self.my;
-
-
-                    cctx.post(actual, self, subject, undefined, onThrowReaction)
-                        .then(() => {
-                            cctx.postMessage(tr("{0} を撃った", UName.makeNameAsItem(actual)));
-                            return true;
-                        });
-
-                    return true;
-                });
+            TThrow.throwSingleStack(cctx, self, self, activity.object());
             return SCommandResponse.Handled;
         }
         else if (activity.actionId() == MRBasics.actions.ExchangeActionId) {
@@ -433,13 +363,6 @@ export class LUnitBehavior extends LBehavior {
         }
         else if (activity.actionId() == MRBasics.actions.WaveActionId) {
             cctx.postSequel(self, MRBasics.sequels.attack);
-
-            const reactor = activity.object();
-            if (reactor) {
-                cctx.post(reactor, self, subject, undefined, onWaveReaction);
-                // TODO: onWaveReaction 使ってない。onActivityReaction に共通化した。
-            }
-            
             actx.postHandleActivity(cctx, activity.object());
             return SCommandResponse.Handled;
         }
@@ -599,50 +522,6 @@ export class LUnitBehavior extends LBehavior {
         }
 
         return SCommandResponse.Pass;
-
-        /*
-        if (this._manualMovement) {
-            const self = this.ownerEntity();
-            if (self.immediatelyAfterAdjacentMoving) {
-                self.immediatelyAfterAdjacentMoving = false;
-    
-                const targetEntity = REGame.map.firstFeetEntity(self);
-                if (targetEntity && !targetEntity.findEntityBehavior(LTrapBehavior)) {
-                    const actions = targetEntity.queryReactions();
-                    if (actions.length > 0) {
-    
-                        if (actions.includes(REBasics.actions.PickActionId) &&
-                            !targetEntity._shopArticle.isSalling()) {
-        
-                            if (this._straightDashing) {
-                                cctx.postMessage(tr2("%1 に乗った。").format(UName.makeNameAsItem(targetEntity)));
-                            }
-                            else {
-                                // 歩行移動時に足元に拾えるものがあれば取得試行
-                                
-                                // 歩行による自動拾得から実行される場合、この時点では Sequel は Flush されていないことがある。
-                                // v0.5.0 時点では Pick のハンドリングでは REGame.map._removeEntity() を直接実行しているので、
-                                // その前に Flush しておかないと、移動前にいきなり Item が消えたように見えてしまう。
-                                RESystem.sequelContext.attemptFlush(true);
-
-                                cctx.postActivity(LActivity.makePick(self));
-                            }
-        
-        
-                            // コマンドチェーンを動かす
-                            //context.postReopen();
-                        }
-                        else {
-                            cctx.openDialog(self, new LFeetDialog(targetEntity), false);
-                        }
-                        //return SPhaseResult.Pass;
-                    }
-                }
-            }
-        }
-        return SCommandResponse.Pass;
-        */
-
     }
 
     // 歩行移動時、足元に何かアクションを行えるものがあれば、そのアクションをチェックする。

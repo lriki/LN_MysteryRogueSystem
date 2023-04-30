@@ -98,6 +98,8 @@ export const paramDefaultStorageLimit = 8;
 
 export const paramDestroyOverflowingItems = false;
 
+export const paramQuestSystem = false;
+
 //Maximum number of items in the map
 
 /*

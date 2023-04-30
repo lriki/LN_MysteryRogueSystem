@@ -25,6 +25,11 @@ export interface DRmmzFloorRawAnnotation {
     mode?: string;
 }
 
+// @MR-FloorEvent
+// MRCommand-XXX などを実行できる Event.
+export interface DRmmzFloorEventAnnotation {
+}
+
 // @MR-Prefab
 export interface DRmmzPrefabAnnotation {
     // kind?: string;   // TODO: 必須にしてみる
@@ -49,6 +54,12 @@ export interface DRmmzPrefabAnnotation {
 // @MR-PrefabSubPage
 export interface DRmmzPrefabSubPageAnnotation {
     state?: string;
+}
+
+// @MR-EventPage
+// 通常の RMMZ のイベントページに対する追加情報
+export interface DRmmzEventPageAnnotation {
+    conditionActivatedQuestTaskKey?: string;   // Quest または QuestTask のキー
 }
 
 interface DRmmzSpawnerRawAnnotation {
@@ -101,7 +112,7 @@ export interface DRmmzUniqueSpawnerAnnotation {
     override: boolean;
 }
 
-export interface DRmmzREEventAnnotation {
+export interface DRmmzPrefabEventAnnotation {
     trigger?: string;
     condition_state?: string;
     //conditions?: {
@@ -208,6 +219,15 @@ export class DAnnotationReader {
         return rawData;
     }
 
+    public static readFloorEventAnnotationFromPage(page: IDataMapEventPage): DRmmzFloorEventAnnotation | undefined {
+        const block = this.findFirstAnnotationFromPage("@MR-FloorEvent", page.list);
+        if (!block) return undefined;
+        let rawData: DRmmzFloorEventAnnotation | undefined;
+        eval(`rawData = ${block}`);
+        assert(rawData);
+        return rawData;
+    }
+
     /** @deprecated */
     public static readStructuresMetadata(event: IDataMapEvent): RmmzStructuresMetadata | undefined {
         const block = this.findFirstAnnotationFromEvent("@MR-Structures", event);
@@ -229,6 +249,15 @@ export class DAnnotationReader {
         const block = this.findFirstAnnotationFromPage("@MR-PrefabSubPage", page.list);
         if (!block) return undefined;
         let rawData: DRmmzPrefabSubPageAnnotation | undefined;
+        eval(`rawData = ${block}`);
+        assert(rawData);
+        return rawData;
+    }
+
+    public static readEventPageAnnotation(page: IDataMapEventPage): DRmmzEventPageAnnotation | undefined {
+        const block = this.findFirstAnnotationFromPage("@MR-EventPage", page.list);
+        if (!block) return undefined;
+        let rawData: DRmmzEventPageAnnotation | undefined;
         eval(`rawData = ${block}`);
         assert(rawData);
         return rawData;
@@ -273,10 +302,10 @@ export class DAnnotationReader {
         };
     }
 
-    static readREEventAnnotationFromPage(page: IDataMapEventPage): DRmmzREEventAnnotation | undefined {
+    static readREEventAnnotationFromPage(page: IDataMapEventPage): DRmmzPrefabEventAnnotation | undefined {
         const block = this.findFirstAnnotationFromPage("@MR-Event", page.list);
         if (!block) return undefined;
-        let rawData: DRmmzREEventAnnotation | undefined;
+        let rawData: DRmmzPrefabEventAnnotation | undefined;
         eval(`rawData = ${block}`);
         assert(rawData);
         return rawData;

@@ -198,19 +198,21 @@ PluginManager.registerCommand(pluginName, "MR-ResetInventory", function(this: Ga
 PluginManager.registerCommand(pluginName, "MR-AddPostTalkCommand", function(this: Game_Interpreter, args: any) {
     const label = args["label"];
     const name = args["name"];
-    const ctx = this.getMRInterpreterContext().scriptContext;
+    const runenr = this.getMRInterpreterContext()
+    assert(runenr);
+    const ctx = runenr.scriptContext;
     ctx.talkingCommands.push({ label: label, displayName: name });
 });
 
 PluginManager.registerCommand(pluginName, "MR-ShowPostTalkDialog", function(this: Game_Interpreter, args: any) {
-    const sctx = this.getMRInterpreterContext().scriptContext;
+    const runenr = this.getMRInterpreterContext()
+    assert(runenr);
+    const sctx = runenr.scriptContext;
 
     // NOTE: コモンイベントの呼び出し同様、子スクリプトを実行するときは Context を新しく作る。
     //{
-        console.log("MR-ShowPostTalkDialog1", this);
         const s = new DScript((this as any)._list);
         const r = MRLively.scriptManager.callQuery(sctx.entity, s, "MRQuery-GetPostTalkCommands");
-        console.log("MR-ShowPostTalkDialog2", s, r, $gameVariables);
         const commands = r.talkingCommands;
     //return;
     //}
@@ -253,4 +255,15 @@ PluginManager.registerCommand(pluginName, "MR-ShowPostTalkDialog", function(this
         //(this._branch as any)[this._indent] = n;
     });
     this.setWaitMode("message");
+});
+
+PluginManager.registerCommand(pluginName, "MR-OpenQuest", function(this: Game_Interpreter, args: any) {
+    const questKey = args["questKey"];
+    MRLively.questManager.openQuest(questKey);
+});
+
+PluginManager.registerCommand(pluginName, "MR-AdvanceQuestTask", function(this: Game_Interpreter, args: any) {
+    const questKey = args["questKey"];
+    const questTaskKey = args["questTaskKey"];
+    MRLively.questManager.advanceQuestTask(questKey, questTaskKey);
 });

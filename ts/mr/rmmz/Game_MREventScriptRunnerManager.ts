@@ -9,10 +9,8 @@ export class Game_MREventScriptRunnerManager {
         this._eventScriptRunners = [];
     }
 
-    public getRunner(runnerId: number): Game_MREventScriptRunner {
-        const runner = this._eventScriptRunners[runnerId];
-        assert(runner);
-        return runner;
+    public getRunner(runnerId: number): Game_MREventScriptRunner | undefined {
+        return this._eventScriptRunners[runnerId];
     }
 
     public isAnyRunning(): boolean {
@@ -44,7 +42,6 @@ export class Game_MREventScriptRunnerManager {
     }
 
     private onEnd(runner: Game_MREventScriptRunner): void {
-        console.log("onEnd", runner);
         this._eventScriptRunners[runner.scriptId] = undefined;
     }
 }

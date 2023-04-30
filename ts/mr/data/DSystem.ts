@@ -151,4 +151,21 @@ export class DSystem {
             }
         }
     }
+
+    public static getQuestMarkerIcon(key: string | undefined): number {
+        switch (key) {
+            case "kQuestMarkerIcon_Normal":
+                return 320;
+            case "kQuestMarkerIcon_Main":
+                return 321;
+            case "kQuestMarkerIcon_Combat":
+                return 322;
+            case "kQuestMarkerIcon_Collect":
+                return 323;
+            case "kQuestMarkerIcon_Explore":
+                return 322;
+            default:
+                return 0;
+        }
+    }
 }

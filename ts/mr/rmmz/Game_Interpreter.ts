@@ -15,14 +15,14 @@ declare global {
     interface Game_Interpreter {
         _MR_EventScriptRunnerId: number | undefined;
 
-        getMRInterpreterContext(): Game_MREventScriptRunner;
+        getMRInterpreterContext(): Game_MREventScriptRunner | undefined;
         nextEventCommand(): IDataList | undefined;
         MR_resetList(list: IDataList[], index: number): void;
     }
 }
 
-Game_Interpreter.prototype.getMRInterpreterContext = function(): Game_MREventScriptRunner {
-    assert(this._MR_EventScriptRunnerId);
+Game_Interpreter.prototype.getMRInterpreterContext = function(): Game_MREventScriptRunner | undefined {
+    if (!this._MR_EventScriptRunnerId) return undefined;
     return $gameSystem.getMREventScriptRunnerManager().getRunner(this._MR_EventScriptRunnerId);
 }
 
@@ -112,6 +112,13 @@ Game_Interpreter.prototype.command111 = function(params: any): boolean {
                     const entityDataId = MRData.itemData(params[1]).entityId;
                     result = !!inventory.items.find(x => x.dataId == entityDataId);
                 }
+                handled = true;
+                break;
+            }
+            case 12: { // Script
+                // "MR." に続けて関数を呼び出せるようにしたいので、このスコープで eval を実行する。
+                const MR = this.getMRInterpreterContext();
+                result = !!eval(params[1]);
                 handled = true;
                 break;
             }
@@ -251,6 +258,26 @@ Game_Interpreter.prototype.command314 = function(params) {
         return true;
     }
 }
+
+// Script
+const _Game_Interpreter_command355 = Game_Interpreter.prototype.command355;
+Game_Interpreter.prototype.command355 = function() {
+    const runenr = this.getMRInterpreterContext();
+    if (runenr) {
+        // "MR." に続けて関数を呼び出せるようにしたいので、このスコープで eval を実行する。
+        const MR = runenr;
+        let script = this.currentCommand().parameters[0] + "\n";
+        while (this.nextEventCode() === 655) {
+            this._index++;
+            script += this.currentCommand().parameters[0] + "\n";
+        }
+        eval(script);
+        return true;
+    }
+    else {
+        return _Game_Interpreter_command355.call(this);
+    }
+};
 
 function gainItemHelper(interpreter: Game_Interpreter, unit: LEntity, operation: number, operandType: number, operand: number, itemEntityDataId: DEntityId): void {
     const inventory = unit.findEntityBehavior(LInventoryBehavior);

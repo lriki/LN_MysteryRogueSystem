@@ -1,5 +1,5 @@
 import { TypeStore } from "ts/mr/Common";
-import { SBehaviorFactory } from "ts/mr/system/SBehaviorFactory";
+import { SBehaviorManager } from "ts/mr/system/SBehaviorFactory";
 
 export class TestJsonEx {
     public static maxDepth = 100;
@@ -54,7 +54,7 @@ export class TestJsonEx {
 
     private static _createInstance(name: string): any {
         if (name.endsWith("Behavior")) {
-            const i = SBehaviorFactory.createBehaviorInstance(name);
+            const i = SBehaviorManager.createBehaviorInstance(name);
             if (i) return i;
         }
         return TypeStore.createInstance(name);

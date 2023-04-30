@@ -10,6 +10,7 @@ import { tr2 } from "ts/mr/Common";
 import { VMainStatusWindow } from "../windows/VMainStatusWindow";
 import { VLayout } from "../ui/VUIElement";
 import { UDialog } from "ts/mr/utility/UDialog";
+import { Scene_MRQuest } from "ts/mr/rmmz/Scene_MRQuest";
 
 export class VMainMenuDialog extends VDialog {
     _model: SMainMenuDialog;
@@ -35,12 +36,12 @@ export class VMainMenuDialog extends VDialog {
         this._commandWindow.setHandler("cancel", () => this.cancel());
         this._commandWindow.setHandler("save", this.handleSave.bind(this));
         this._commandWindow.setHandler("suspend", this.handleSuspend.bind(this));
+        this._commandWindow.setHandler("quest", this.handleQuest.bind(this));
     }
     
     onStart() {
         this._commandWindow?.activate();
     }
-
 
     private handleItem() {
         UDialog.postOpenInventoryDialog(this.commandContext(), this._model.entity(), dialog => {});
@@ -59,6 +60,10 @@ export class VMainMenuDialog extends VDialog {
 
     private handleSuspend() {
         throw new Error("Not implemented.");
+    }
+
+    private handleQuest() {
+        SceneManager.push(Scene_MRQuest);
     }
 }
 
