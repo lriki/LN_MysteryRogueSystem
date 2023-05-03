@@ -208,6 +208,7 @@ PluginManager.registerCommand(pluginName, "MR-ShowPostTalkDialog", function(this
     const runenr = this.getMRInterpreterContext()
     assert(runenr);
     const sctx = runenr.scriptContext;
+    const entity = sctx.entity;
 
     // NOTE: コモンイベントの呼び出し同様、子スクリプトを実行するときは Context を新しく作る。
     //{
@@ -238,7 +239,7 @@ PluginManager.registerCommand(pluginName, "MR-ShowPostTalkDialog", function(this
         console.log("setChoiceCallback", n);
 
         // Jump to label
-        const result = sctx.findListAndLabel(commands[n].label);
+        const result = sctx.findListAndLabel(entity, commands[n].label);
         if (result) {
             if (result.list == this._list) {
                 this._index = result.index;

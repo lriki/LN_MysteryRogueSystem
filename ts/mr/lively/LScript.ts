@@ -49,7 +49,7 @@ export class LScriptContext {
             this.entityId = entity.entityId().clone();
             
             // Select list.
-            const result = this.findListAndLabel(this.label);
+            const result = this.findListAndLabel(entity, this.label);
             if (result) {
                 this.list = result.list;
                 this.listIndex = result.index;
@@ -77,8 +77,9 @@ export class LScriptContext {
         return MRLively.world.entity(this.entityId);
     }
 
-    public findListAndLabel(label: string): FindListAndLabelResult | undefined {
-        const entity = this.entity;
+    // NOTE: Visual の Collapse 中など、 entity が isDestroyed になっている場合がある。
+    // MRLively.world.entity() で撮ろうとすると assert するので、引数で渡す。
+    public findListAndLabel(entity: LEntity, label: string): FindListAndLabelResult | undefined {
         const prefab = entity.data.prefab();
         const lists = [
             prefab.scripts[0].list, // TODO: [1] 以降も有効化する？
