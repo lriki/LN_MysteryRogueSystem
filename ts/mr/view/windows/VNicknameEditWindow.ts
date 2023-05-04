@@ -1,4 +1,4 @@
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 
 export class VNicknameEditWindow extends Window_NameEdit {
     constructor(rect: Rectangle) {

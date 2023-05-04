@@ -2,9 +2,9 @@ import { SCommand, SCommandResponse, SPhaseResult, STestAddItemCommand, STestTak
 import { SCommandContext, SHandleCommandResult } from "../../system/SCommandContext";
 import { CommandArgs, LBehavior, onAttackReaction, onDirectAttackDamaged, onProceedFloorReaction, onWalkedOnTopAction } from "./LBehavior";
 import { MRLively } from "../MRLively";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { Helpers } from "ts/mr/system/Helpers";
-import { LInventoryBehavior } from "./LInventoryBehavior";
+import { LInventoryBehavior } from "../entity/LInventoryBehavior";
 import { assert, MRSerializable, tr, tr2 } from "ts/mr/Common";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { UMovement } from "ts/mr/utility/UMovement";

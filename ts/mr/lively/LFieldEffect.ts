@@ -3,7 +3,7 @@ import { MRBasics } from "../data/MRBasics";
 import { SCommandResponse } from "../system/SCommand";
 import { SCommandContext } from "../system/SCommandContext";
 import { LEnemyBehavior } from "./behaviors/LEnemyBehavior";
-import { LEntity } from "./LEntity";
+import { LEntity } from "./entity/LEntity";
 import { LEntityId } from "./LObject";
 import { MRLively } from "./MRLively";
 

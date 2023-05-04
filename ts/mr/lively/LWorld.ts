@@ -1,4 +1,4 @@
-import { LEntity } from "./LEntity";
+import { LEntity } from "./entity/LEntity";
 import { assert, MRSerializable } from "../Common";
 import { MRLively } from "./MRLively";
 import { LRandom } from "ts/mr/lively/LRandom";

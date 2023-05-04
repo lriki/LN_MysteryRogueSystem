@@ -1,5 +1,5 @@
 import { SScheduler } from "./SScheduler";
-import { LEntity } from "../../lively/LEntity";
+import { LEntity } from "../../lively/entity/LEntity";
 import { LUnitBehavior } from "../../lively/behaviors/LUnitBehavior";
 
 export abstract class SSchedulerPhase {

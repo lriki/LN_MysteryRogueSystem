@@ -99,16 +99,16 @@
 import { assert, MRSerializable, tr2 } from "ts/mr/Common";
 import { LEntityId } from "../LObject";
 import { MRLively } from "../MRLively";
-import { LEntity } from "../LEntity";
-import { LBehavior, LNameView, SRejectionInfo } from "./LBehavior"
+import { LEntity } from "./LEntity";
+import { LBehavior, LNameView, SRejectionInfo } from "../behaviors/LBehavior"
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { SCommand, SCommandResponse, STestAddItemCommand } from "ts/mr/system/SCommand";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { ItemRemovedFromInventoryArgs } from "ts/mr/data/predefineds/DBasicEvents";
-import { paramDefaultStorageLimit, paramDestroyOverflowingItems, paramInventoryCapacity, paramWorldSandboxSystem } from "ts/mr/PluginParameters";
+import { paramDefaultStorageLimit, paramDestroyOverflowingItems, paramInventoryCapacity, paramSandboxWorldSystem } from "ts/mr/PluginParameters";
 import { DBehaviorProps } from "ts/mr/data/DBehavior";
-import { SSubTaskChain } from "ts/mr/system/tasks/STask";
+import { SSubTaskChain, STaskYieldResult } from "ts/mr/system/tasks/STask";
 import { UName } from "ts/mr/utility/UName";
 //import { TDrop } from "ts/mr/transactions/TDrop";
 
@@ -123,7 +123,7 @@ export class LInventoryBehavior extends LBehavior {
         super();
         this._items = [];
         this._gold = 0;
-        this._capacity = paramWorldSandboxSystem ? 999 : paramInventoryCapacity;
+        this._capacity = paramSandboxWorldSystem ? 999 : paramInventoryCapacity;
         this._storage = false;
     }
 
@@ -347,7 +347,7 @@ export class LInventoryBehavior extends LBehavior {
         return SCommandResponse.Pass;
     }
     
-    override onCommand(self: LEntity, cctx: SCommandContext, chain: SSubTaskChain, cmd: SCommand): void {
+    override *onCommand(self: LEntity, cctx: SCommandContext, cmd: SCommand): Generator<STaskYieldResult> {
         if (cmd instanceof STestAddItemCommand) {
             // 壺の中に壺は入れられない。
             if (this._storage && cmd.item.hasTrait(MRBasics.traits.DisallowIntoStorage)) {
@@ -356,7 +356,7 @@ export class LInventoryBehavior extends LBehavior {
             }
 
             if (!this.isFully) {
-                chain.accept();
+                yield STaskYieldResult.Accept;
             }
         }
     }

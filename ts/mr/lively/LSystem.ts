@@ -1,5 +1,5 @@
 import { LMap } from "./LMap";
-import { LEntity } from "./LEntity";
+import { LEntity } from "./entity/LEntity";
 import { LWorld } from "./LWorld";
 import { LEntityId } from "./LObject";
 import { MRSerializable } from "../Common";

@@ -1,7 +1,7 @@
 import { SPhaseResult } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { LCharacterAI } from "./LCharacterAI";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LCharacterAI_Normal } from "./LStandardAI";
 import { LConfusionAI, LConfusionAIRestriction } from "./LConfusionAI";
 import { assert, MRSerializable } from "ts/mr/Common";

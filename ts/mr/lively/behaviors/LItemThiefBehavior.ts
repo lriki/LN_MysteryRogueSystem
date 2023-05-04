@@ -11,10 +11,10 @@ import { LCharacterAI } from "../ai/LCharacterAI";
 import { LEscapeAI } from "../ai/LEscapeAI";
 import { LMovingTargetFinder_Item } from "../ai/LMovingTargetFinder";
 import { LCharacterAI_Normal } from "../ai/LStandardAI";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { MRLively } from "../MRLively";
 import { DecisionPhase, LBehavior, LBehaviorGroup, LGenerateDropItemCause } from "./LBehavior";
-import { LInventoryBehavior } from "./LInventoryBehavior";
+import { LInventoryBehavior } from "../entity/LInventoryBehavior";
 import { LItemBehavior } from "./LItemBehavior";
 
 

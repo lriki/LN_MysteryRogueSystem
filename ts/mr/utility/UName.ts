@@ -1,5 +1,5 @@
 import { assert } from "ts/mr/Common";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { DescriptionHighlightColor, LEntityDescription } from "ts/mr/lively/LIdentifyer";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { SView } from "ts/mr/system/SView";

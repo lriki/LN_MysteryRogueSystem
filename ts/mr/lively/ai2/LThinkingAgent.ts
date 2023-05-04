@@ -15,7 +15,7 @@ import { LMovingMethod, LUpdateMovingTargetResult } from "../ai/LMoveDeterminer"
 import { HMovement } from "../helpers/HMovement";
 import { LBlock } from "../LBlock";
 import { LActionTokenConsumeType } from "../LCommon";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LEntityId } from "../LObject";
 import { LRandom } from "../LRandom";
 import { MRLively } from "../MRLively";

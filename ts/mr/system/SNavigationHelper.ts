@@ -1,5 +1,5 @@
 import { LTrapBehavior } from "ts/mr/lively/behaviors/LTrapBehavior";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { MRBasics } from "../data/MRBasics";
 import { LExitPointBehavior } from "../lively/behaviors/LExitPointBehavior";

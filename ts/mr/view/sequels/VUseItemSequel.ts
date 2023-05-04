@@ -1,5 +1,5 @@
 import { assert } from "ts/mr/Common";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { MRView } from "../MRView";
 import { VSequel } from "../VSequel";
 import { VSequelContext } from "../VSequelContext";

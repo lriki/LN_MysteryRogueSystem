@@ -1,4 +1,4 @@
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { SDialog } from "ts/mr/system/SDialog";
 import { SDialogContext } from "ts/mr/system/SDialogContext";
 

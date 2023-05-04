@@ -2,7 +2,7 @@ import { assert, tr2 } from "ts/mr/Common";
 import { DHelpers } from "ts/mr/data/DHelper";
 import { LandExitResult, MRData } from "ts/mr/data/MRData";
 import { MRDataManager } from "ts/mr/data/MRDataManager";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { LFloorId } from "ts/mr/lively/LFloorId";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { MRSystem } from "ts/mr/system/MRSystem";

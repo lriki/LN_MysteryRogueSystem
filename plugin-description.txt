@@ -83,6 +83,11 @@
  * @type string
  * @default Traditional
  *
+ * @param SandboxWorldSystem
+ * @text 箱庭世界システム
+ * @parent Group_Experimental
+ * @type boolean
+ * @default false
  *
  *
  *

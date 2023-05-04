@@ -6,7 +6,7 @@ import { DParameterId } from "ts/mr/data/DCommon";
 import { DActionId, DSkillId } from "ts/mr/data/DCommon";
 import { MRData } from "ts/mr/data/MRData";
 import { LBehavior } from "../internal";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { MRLively } from "../MRLively";
 import { LBattlerBehavior } from "./LBattlerBehavior";
 

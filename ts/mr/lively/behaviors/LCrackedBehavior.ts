@@ -1,11 +1,11 @@
 import { MRSerializable, tr2 } from "ts/mr/Common";
 import { SCommand, SEndProjectileMovingCause, SEndProjectileMovingCommand, SItemReactionCommand, SPhaseResult, SSprinkleDropedCommand } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { MRLively } from "../MRLively";
 import { LBehavior } from "./LBehavior";
-import { LInventoryBehavior } from "./LInventoryBehavior";
-import { SSubTaskChain } from "ts/mr/system/tasks/STask";
+import { LInventoryBehavior } from "../entity/LInventoryBehavior";
+import { SSubTaskChain, STaskYieldResult } from "ts/mr/system/tasks/STask";
 import { UName } from "ts/mr/utility/UName";
 import { TDrop } from "ts/mr/transactions/TDrop";
 import { MRBasics } from "ts/mr/data/MRBasics";
@@ -29,13 +29,13 @@ export class LCrackedBehavior extends LBehavior {
         descriptions.push(tr2("\\I[160] 何かにぶつかると割れてしまう。"));
     }
 
-    override onCommand(self: LEntity, cctx: SCommandContext, chain: SSubTaskChain, cmd: SCommand): void {
+    override *onCommand(self: LEntity, cctx: SCommandContext, cmd: SCommand): Generator<STaskYieldResult> {
         if (cmd instanceof SEndProjectileMovingCommand) {
 
             // 壁に当たった？
             if (cmd.cause == SEndProjectileMovingCause.NoPassage) {
                 this.crackeAndDropItems(cctx, self);
-                chain.reject();
+                yield STaskYieldResult.Reject;
             }
         }
         

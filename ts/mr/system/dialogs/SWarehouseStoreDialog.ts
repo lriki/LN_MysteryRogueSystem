@@ -1,5 +1,5 @@
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { LBehaviorId, LEntityId } from "ts/mr/lively/LObject";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { SWarehouseActionResult, UInventory } from "ts/mr/utility/UInventory";

@@ -1,6 +1,6 @@
 import { SPhaseResult } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LCharacterAI } from "./LCharacterAI";
 import { LActionDeterminer } from "./LActionDeterminer";
 import { LMoveDeterminer, LMovingMethod } from "./LMoveDeterminer";

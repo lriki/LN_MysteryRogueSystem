@@ -1,7 +1,7 @@
 import { assert } from "../Common";
 import { MRBasics } from "../data/MRBasics";
 import { MRData } from "../data/MRData";
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
 import { paramPowerToAtk } from "../PluginParameters";
 
 /**

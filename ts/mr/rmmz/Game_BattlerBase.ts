@@ -1,5 +1,5 @@
 import { MRBasics } from "../data";
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
 import { LEntityId } from "../lively/LObject";
 import { MRLively } from "../lively/MRLively";
 

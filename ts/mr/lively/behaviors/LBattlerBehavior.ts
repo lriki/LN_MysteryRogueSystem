@@ -1,7 +1,7 @@
 import { LandExitResult, MRData } from "ts/mr/data/MRData";
 import { MRLively } from "../MRLively";
 import { LBehavior, LGenerateDropItemCause } from "ts/mr/lively/behaviors/LBehavior";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { SCommandResponse } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { MRBasics } from "ts/mr/data/MRBasics";

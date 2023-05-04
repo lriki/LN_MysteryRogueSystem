@@ -1,6 +1,6 @@
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { MRLively } from "../MRLively";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LStructure } from "./LStructure";
 import { DItemShopTypeId } from "ts/mr/data/DItemShop";
 import { LItemBehavior } from "../behaviors/LItemBehavior";

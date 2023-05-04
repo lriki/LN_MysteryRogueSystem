@@ -1,5 +1,5 @@
 import { assert } from "../Common";
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
 import { LRandom } from "../lively/LRandom";
 import { SEffect } from "../system/SEffectApplyer";
 

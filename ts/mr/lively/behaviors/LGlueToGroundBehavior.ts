@@ -4,10 +4,10 @@ import { SCommand, SCommandResponse, STestTakeItemCommand } from "ts/mr/system/S
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { UName } from "ts/mr/utility/UName";
 import { LActivity } from "../activities/LActivity";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { MRLively } from "../MRLively";
 import { CommandArgs, LBehavior, onGrounded } from "./LBehavior";
-import { SSubTaskChain } from "ts/mr/system/tasks/STask";
+import { SSubTaskChain, STaskYieldResult } from "ts/mr/system/tasks/STask";
 
 /**
  * 置くと床に張り付く
@@ -45,11 +45,11 @@ export class LGlueToGroundBehavior extends LBehavior {
         return SCommandResponse.Pass;
     }
     
-    override onCommand(self: LEntity, cctx: SCommandContext, chain: SSubTaskChain, cmd: SCommand): void {
+    override *onCommand(self: LEntity, cctx: SCommandContext, cmd: SCommand): Generator<STaskYieldResult> {
         if (cmd instanceof STestTakeItemCommand) {
             if (this._glued) {
                 cctx.postMessage(tr2("%1は地面にはりついている。").format(UName.makeNameAsItem(self)));
-                chain.reject();
+                return STaskYieldResult.Reject;
             }
         }
     }

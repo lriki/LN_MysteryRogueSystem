@@ -1,6 +1,6 @@
 import { DFactionId, MRData } from "ts/mr/data/MRData";
 import { Vector2 } from "ts/mr/math/Vector2";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { DFactionType } from "../data/DFaction";
 
 export class Helpers {

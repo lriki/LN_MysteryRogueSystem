@@ -3,14 +3,14 @@ import { DActionId, DCommandId } from "ts/mr/data/DCommon";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { SCommand, SCommandResponse, STestTakeItemCommand } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
-import { SSubTaskChain } from "ts/mr/system/tasks/STask";
+import { SSubTaskChain, STaskYieldResult } from "ts/mr/system/tasks/STask";
 import { LReaction } from "../LCommon";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LObject } from "../LObject";
 import { MRLively } from "../MRLively";
 import { CommandArgs, LBehavior } from "./LBehavior";
 import { LEquipmentUserBehavior } from "./LEquipmentUserBehavior";
-import { LInventoryBehavior } from "./LInventoryBehavior";
+import { LInventoryBehavior } from "../entity/LInventoryBehavior";
 import { LItemBehavior } from "./LItemBehavior";
 
 
@@ -120,11 +120,11 @@ export class LEquipmentBehavior extends LBehavior {
         }
     }
     
-    override onCommand(self: LEntity, cctx: SCommandContext, chain: SSubTaskChain, cmd: SCommand): void {
+    override *onCommand(self: LEntity, cctx: SCommandContext, cmd: SCommand): Generator<STaskYieldResult> {
         if (cmd instanceof STestTakeItemCommand) {
             if (self.isCursed()) {
                 cctx.postMessage(tr2("呪われている！"));
-                chain.reject();
+                yield STaskYieldResult.Reject;
             }
         }
     }

@@ -6,7 +6,7 @@ import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { CommandArgs, LBehavior, onPerformStepFeetProcess, onPreStepFeetProcess } from "./LBehavior";
 import { LItemBehavior } from "./LItemBehavior";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { MRLively } from "../MRLively";
 import { DEventId, SkillEmittedArgs } from "ts/mr/data/predefineds/DBasicEvents";
 import { LEventResult } from "../LEventServer";

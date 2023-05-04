@@ -1,6 +1,6 @@
 import { tr2 } from "../Common";
 import { MRBasics } from "../data/MRBasics";
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
 import { MRLively } from "../lively/MRLively";
 import { SCommandContext } from "../system/SCommandContext";
 import { ULimitations } from "../utility/ULimitations";

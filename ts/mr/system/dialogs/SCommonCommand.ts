@@ -1,8 +1,8 @@
 import { assert } from "ts/mr/Common";
 import { DActionId } from "ts/mr/data/DCommon";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { UAction } from "ts/mr/utility/UAction";
 import { MRSystem } from "../MRSystem";
 import { SDialog } from "../SDialog";

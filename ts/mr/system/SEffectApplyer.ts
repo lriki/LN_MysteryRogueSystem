@@ -6,7 +6,7 @@ import { LandExitResult, MRData } from "../data/MRData";
 import { LProjectileBehavior } from "../lively/behaviors/activities/LProjectileBehavior";
 import { LBattlerBehavior } from "../lively/behaviors/LBattlerBehavior";
 import { LEffectResult, LParamEffectResult } from "../lively/LEffectResult";
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
 import { LRandom } from "../lively/LRandom";
 import { UIdentify } from "../utility/UIdentify";
 import { UTransfer } from "../utility/UTransfer";

@@ -10,13 +10,13 @@ import { SEmittorPerformer, SOnPerformedFunc } from "ts/mr/system/SEmittorPerfor
 import { UIdentify } from "ts/mr/utility/UIdentify";
 import { LActivity } from "../activities/LActivity";
 import { LStructureId } from "../LCommon";
-import { LEntity, LParamMinMax } from "../LEntity";
+import { LEntity, LParamMinMax } from "../entity/LEntity";
 import { MRLively } from "../MRLively";
 import { CommandArgs, LBehavior, onAttackReaction } from "./LBehavior";
 import { UAction } from "ts/mr/utility/UAction";
 import { SActivityContext } from "ts/mr/system/SActivityContext";
 import { DActionId } from "ts/mr/data/DCommon";
-import { SSubTaskChain } from "ts/mr/system/tasks/STask";
+import { SSubTaskChain, STaskYieldResult } from "ts/mr/system/tasks/STask";
 
 
 /**
@@ -64,7 +64,7 @@ export class LItemBehavior extends LBehavior {
     //     }
     // }
 
-    override onCommand(self: LEntity, cctx: SCommandContext, chain: SSubTaskChain, cmd: SCommand): void {
+    override *onCommand(self: LEntity, cctx: SCommandContext, cmd: SCommand): Generator<STaskYieldResult> {
         if (cmd instanceof SItemReactionCommand) {
             if (cmd.itemActionId == MRBasics.actions.collide) {
                 

@@ -1,4 +1,4 @@
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LMap, MovingMethod } from "../LMap";
 import { HMap } from "./HMap";
 import { HMovement } from "./HMovement";

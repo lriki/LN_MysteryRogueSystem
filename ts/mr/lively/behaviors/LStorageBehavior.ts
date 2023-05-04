@@ -1,5 +1,5 @@
 import { MRSerializable } from "ts/mr/Common";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { MRLively } from "../MRLively";
 import { LBehavior } from "./LBehavior";
 

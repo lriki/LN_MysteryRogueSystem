@@ -3,7 +3,7 @@ import { TestEnv } from "./TestEnv";
 import "./Extension";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { assert } from "ts/mr/Common";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { MRData } from "ts/mr/data/MRData";
 import { LFloorId } from "ts/mr/lively/LFloorId";

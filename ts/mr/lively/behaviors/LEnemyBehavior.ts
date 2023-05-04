@@ -9,11 +9,11 @@ import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { USpawner } from "ts/mr/utility/USpawner";
 import { DecisionPhase, LBehavior, LGenerateDropItemCause } from "../internal";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LRandom } from "../LRandom";
 import { MRLively } from "../MRLively";
 import { LBattlerBehavior } from "./LBattlerBehavior";
-import { LInventoryBehavior } from "./LInventoryBehavior";
+import { LInventoryBehavior } from "../entity/LInventoryBehavior";
 
 /**
  */

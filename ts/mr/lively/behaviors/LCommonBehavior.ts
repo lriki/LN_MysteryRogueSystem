@@ -1,5 +1,5 @@
 import { MRLively } from "../MRLively";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { DecisionPhase, LBehavior } from "./LBehavior";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { SActivityContext } from "ts/mr/system/SActivityContext";

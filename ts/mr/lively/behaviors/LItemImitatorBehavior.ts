@@ -9,7 +9,7 @@ import { MRSystem } from "ts/mr/system/MRSystem";
 import { UAction } from "ts/mr/utility/UAction";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LEventResult } from "../LEventServer";
 import { LEntityId } from "../LObject";
 import { MRLively } from "../MRLively";
@@ -19,7 +19,7 @@ import { DActionId, DBlockLayerKind } from "ts/mr/data/DCommon";
 import { LMap } from "../LMap";
 import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LMinimapMarkerClass, LReaction } from "../LCommon";
-import { SSubTaskChain } from "ts/mr/system/tasks/STask";
+import { SSubTaskChain, STaskYieldResult } from "ts/mr/system/tasks/STask";
 
 
 /**
@@ -133,7 +133,7 @@ export class LItemImitatorBehavior extends LBehavior {
         return MRData.system.factions.neutral;
     }
     
-    override onCommand(self: LEntity, cctx: SCommandContext, chain: SSubTaskChain, cmd: SCommand): void {
+    override *onCommand(self: LEntity, cctx: SCommandContext, cmd: SCommand): Generator<STaskYieldResult> {
 
         // 
         if (cmd instanceof STestTakeItemCommand) {
@@ -144,7 +144,7 @@ export class LItemImitatorBehavior extends LBehavior {
                 self.removeFromParent();
                 MRLively.mapView.currentMap.appearEntity(self, actor.mx, actor.my);
                 UAction.postDropOrDestroyOnCurrentPos(MRSystem.commandContext, self, self.getHomeLayer());
-                chain.reject();
+                return STaskYieldResult.Reject;
             }
         }
     }

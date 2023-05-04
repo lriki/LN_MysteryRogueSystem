@@ -1,6 +1,6 @@
 import { DEntity, DEntityId } from "ts/mr/data/DEntity";
 import { MRData } from "ts/mr/data/MRData";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { LFloorId } from "ts/mr/lively/LFloorId";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";

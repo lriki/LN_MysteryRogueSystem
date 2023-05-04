@@ -6,7 +6,7 @@ import { UAction } from "ts/mr/utility/UAction";
 import { UBlock } from "ts/mr/utility/UBlock";
 import { UMovement } from "ts/mr/utility/UMovement";
 import { HMovement } from "../helpers/HMovement";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LMap, MovingMethod } from "../LMap";
 import { MRLively } from "../MRLively";
 import { LThinkingAction } from "./LThinkingAction";

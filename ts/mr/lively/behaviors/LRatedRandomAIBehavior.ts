@@ -6,7 +6,7 @@ import { LCharacterAI } from "../ai/LCharacterAI";
 import { LRatedRandomAI } from "../ai/LRatedRandomAI";
 import { LThinkingAgent } from "../ai2/LThinkingAgent";
 import { LThinkingDeterminer_RatedRandom } from "../ai2/LThinkingDeterminer_RatedRandom";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { MRLively } from "../MRLively";
 import { DecisionPhase, LBehavior, LBehaviorGroup } from "./LBehavior";
 

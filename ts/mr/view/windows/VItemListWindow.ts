@@ -1,9 +1,9 @@
 import { assert, tr2 } from "ts/mr/Common";
 import { MRData } from "ts/mr/data/MRData";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { LItemBehavior } from "ts/mr/lively/behaviors/LItemBehavior";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { UName } from "ts/mr/utility/UName";
 import { VISelectableWindow } from "./VSelectableWindow";
 import { SItemListDialog } from "ts/mr/system/dialogs/SItemListDialog";

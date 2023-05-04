@@ -1,4 +1,4 @@
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
 import { LBehavior } from "ts/mr/lively/behaviors/LBehavior";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { LDebugMoveRightBehavior } from "ts/mr/lively/states/LDebugMoveRight";
@@ -7,7 +7,7 @@ import { LKnockbackBehavior } from "ts/mr/lively/abilities/LKnockbackBehavior";
 import { LCommonBehavior } from "ts/mr/lively/behaviors/LCommonBehavior";
 import { LDecisionBehavior } from "ts/mr/lively/behaviors/LDecisionBehavior";
 import { LUnitBehavior } from "ts/mr/lively/behaviors/LUnitBehavior";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { LItemUserBehavior } from "ts/mr/lively/behaviors/LItemUserBehavior";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 import { LExitPointBehavior } from "ts/mr/lively/behaviors/LExitPointBehavior";

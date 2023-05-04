@@ -1,7 +1,7 @@
 import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
 import { DFloorClass, DLandForwardDirection } from "ts/mr/data/DLand";
 import { LEffectResult } from "ts/mr/lively/LEffectResult";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { LFloorId } from "ts/mr/lively/LFloorId";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { UTransfer } from "ts/mr/utility/UTransfer";

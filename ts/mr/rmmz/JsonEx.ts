@@ -1,7 +1,7 @@
 import { LAbility } from "ts/mr/lively/abilities/LAbility";
 import { LMapView } from "ts/mr/lively/LMapView";
 import { LEffectResult, LParamEffectResult } from "ts/mr/lively/LEffectResult";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { LEntityId } from "ts/mr/lively/LObject";
 import { LRandom } from "ts/mr/lively/LRandom";
 import { LRoom } from "ts/mr/lively/LRoom";

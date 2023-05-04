@@ -1,9 +1,9 @@
 import { tr2 } from "ts/mr/Common";
 import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { LEffectResult } from "ts/mr/lively/LEffectResult";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { LRandom } from "ts/mr/lively/LRandom";
 import { UAction } from "ts/mr/utility/UAction";
 import { UName } from "ts/mr/utility/UName";

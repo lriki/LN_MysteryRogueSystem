@@ -1,6 +1,6 @@
 import { tr, tr2 } from "ts/mr/Common";
 import { SWarehouseWithdrawDialog } from "ts/mr/system/dialogs/SWarehouseWithdrawDialog";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
 import { VItemListDialogBase, VItemListMode } from "./VItemListDialogBase";
 import { VWindowHelper } from "../windows/VWindowHelper";

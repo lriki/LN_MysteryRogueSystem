@@ -2,7 +2,7 @@ import { assert } from "../Common";
 import { DEntityId } from "../data/DEntity";
 import { DPrefabId } from "../data/DPrefab";
 import { DScript } from "../data/DScript";
-import { LEntity } from "./LEntity";
+import { LEntity } from "./entity/LEntity";
 import { LEntityId } from "./LObject";
 import { MRLively } from "./MRLively";
 

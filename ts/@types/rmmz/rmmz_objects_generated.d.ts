@@ -496,7 +496,7 @@ declare class Game_System {
     /**
      * 
      */
-    isJapanese(): void;
+    isJapanese(): bool;
 
     /**
      * 

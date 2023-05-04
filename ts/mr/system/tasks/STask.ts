@@ -2,12 +2,20 @@ import { assert, tr2 } from "ts/mr/Common";
 import { SCommand, SCommandResponse } from "../SCommand";
 import { SCommandContext } from "../SCommandContext";
 
+export enum STaskYieldResult {
+    Running,
+    Reject,
+    Success,
+    Accept,
+}
 
 export type MCEntryProc = () => SCommandResponse;
 export type TaskThenFunc = (c: SSubTaskChain) => STask | void;     // task を返した場合、その task が succeeded で終了したら、次の Task を開始する。void の場合、明示的に reject() しないかぎり next() を呼んだとの同じ扱いになる。
 export type TaskCatchFunc = (c: SSubTaskChain) => void;
 export type TaskFinallyFunc = (c: SSubTaskChain) => void;
 export type CommandResultCallback = () => boolean;
+
+export type TaskYieldFunc = (c: SSubTaskChain) => Generator<STaskYieldResult>;
 
 export enum STaskStatus {
     Created,    // 初期状態
@@ -33,6 +41,11 @@ export class STask {
     _catchFunc: TaskCatchFunc | undefined;
     _finallyFunc: TaskFinallyFunc | undefined;
     _callMethod: STaskCallMethod = STaskCallMethod.Default;
+
+
+    _iterator: Generator<STaskYieldResult> | undefined;
+    _onIteratorFinalized: ((result: STaskYieldResult) => void) | undefined;
+
 
     _whenWaitingTasks: STask[] = [];    // whenAny, whenAll で指定された Task. これらの Task が全て完了したら、この Task を実行する。
     _blockingTask: STask | undefined    // then() に指定された処理の戻り値 Task.
@@ -95,7 +108,7 @@ export class STask {
         return task;
     }
 
-    public call(cctx: SCommandContext): void {
+    public call(cctx: SCommandContext): boolean {
         assert(this._status == STaskStatus.Pending);
         this._status = STaskStatus.Running;
 
@@ -161,6 +174,32 @@ export class STask {
                     this.prologueCalling(blockTask);
                 }
             }
+            else if (this._callMethod == STaskCallMethod.Iterator) {
+                assert(this._iterator);
+                const result = this._iterator.next();
+                if (result.done) {
+                    if (this._onIteratorFinalized) this._onIteratorFinalized(STaskYieldResult.Success);
+                    // goto next.
+                }
+                else if (result.value == STaskYieldResult.Running) {
+                    return true;
+                }
+                else if (result.value == STaskYieldResult.Reject) {
+                    if (this._onIteratorFinalized) this._onIteratorFinalized(result.value);
+                    // goto next.
+                }
+                else if (result.value == STaskYieldResult.Success) {
+                    if (this._onIteratorFinalized) this._onIteratorFinalized(result.value);
+                    // goto next.
+                }
+                else if (result.value == STaskYieldResult.Accept) {
+                    if (this._onIteratorFinalized) this._onIteratorFinalized(result.value);
+                    // goto next.
+                }
+                else {
+                    throw new Error("Unreachable.");
+                }
+            }
             else {
                 assert(this._catchFunc);
                 this._catchFunc(this._subChain);
@@ -168,6 +207,8 @@ export class STask {
             }
             cctx.popSubTaskChain(this._subChain);
         }
+
+        return false;
     }
 
     public prologueCalling(blockTask: STask | void): void {
@@ -222,6 +263,7 @@ export enum STaskCallMethod {
     Then,
     Catch,
     When,   // whenAll, whenAny 用のダミー Task
+    Iterator,
 }
 
 
@@ -356,8 +398,8 @@ export class SSubTaskChain {
             // いわゆる resolve()
             const next = this._currentTask._nextTask;
             this._currentTask = undefined;
-            if (next && next._thenFunc2 || next?._finallyFunc) {
-                next._callMethod = STaskCallMethod.Then;
+            if (next && (next._thenFunc2 || next?._finallyFunc || next._iterator)) {
+                next._callMethod = (next._iterator) ? STaskCallMethod.Iterator : STaskCallMethod.Then;
                 this._ctx._setNextPriorityTask(next);
                 this._currentTask = next;
             }

@@ -1,7 +1,7 @@
 
 import { SItemListDialog } from "ts/mr/system/dialogs/SItemListDialog";
 import { SMainMenuDialog } from "ts/mr/system/dialogs/SMainMenuDialog";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { VMenuCommandWindow } from "../windows/VMenuCommandWindow";
 import { VDialog } from "./VDialog";

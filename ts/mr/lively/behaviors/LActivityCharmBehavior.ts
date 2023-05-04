@@ -5,7 +5,7 @@ import { SActivityContext } from "ts/mr/system/SActivityContext";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { SEmittorPerformer } from "ts/mr/system/SEmittorPerformer";
 import { LActivity } from "../activities/LActivity";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { MRLively } from "../MRLively";
 import { LBehavior } from "./LBehavior";
 

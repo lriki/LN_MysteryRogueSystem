@@ -3,7 +3,7 @@ import { MRBasics } from "ts/mr/data/MRBasics";
 import { paramFPLoss } from "ts/mr/PluginParameters";
 import { SPhaseResult } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { MRLively } from "../MRLively";
 import { DecisionPhase, LBehavior } from "./LBehavior";
 

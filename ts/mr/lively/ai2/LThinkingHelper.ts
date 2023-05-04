@@ -4,7 +4,7 @@ import { UBlock } from "ts/mr/utility/UBlock";
 import { UMovement } from "ts/mr/utility/UMovement";
 import { LMovingMethod } from "../ai/LMoveDeterminer";
 import { HMovement } from "../helpers/HMovement";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LMap, MovingMethod } from "../LMap";
 import { LRandom } from "../LRandom";
 import { LThinkingAgent } from "./LThinkingAgent";

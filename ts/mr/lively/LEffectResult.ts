@@ -2,7 +2,7 @@ import { assert, MRSerializable, tr2 } from "ts/mr/Common";
 import { DState, DStateId } from "ts/mr/data/DState";
 import { MRData } from "ts/mr/data/MRData";
 import { DescriptionHighlightColor, LEntityDescription } from "ts/mr/lively/LIdentifyer";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { SCommandContext } from "../system/SCommandContext";
 import { DParameterFlavorEffect, DParamMessageValueSource, DValueAddition } from "ts/mr/data/DParameter";
 import { SSoundManager } from "ts/mr/system/SSoundManager";

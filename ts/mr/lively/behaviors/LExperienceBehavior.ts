@@ -1,7 +1,7 @@
 import { MRData } from "ts/mr/data/MRData";
 import { MRLively } from "../MRLively";
 import { LBehavior } from "ts/mr/lively/behaviors/LBehavior";
-import { LEntity, LParamChangedAction } from "../LEntity";
+import { LEntity, LParamChangedAction } from "../entity/LEntity";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { DParameterId } from "ts/mr/data/DCommon";
 import { DClass } from "ts/mr/data/DClass";

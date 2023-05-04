@@ -12,7 +12,7 @@ import { LTrapBehavior } from "../lively/behaviors/LTrapBehavior";
 import { LUnitBehavior } from "../lively/behaviors/LUnitBehavior";
 import { HMovement } from "../lively/helpers/HMovement";
 import { LBlock } from "../lively/LBlock";
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
 import { LRandom } from "../lively/LRandom";
 import { LRoom } from "../lively/LRoom";
 import { MRLively } from "../lively/MRLively";

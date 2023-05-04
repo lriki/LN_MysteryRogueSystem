@@ -2,7 +2,7 @@ import { DAbilityId } from "ts/mr/data/DAbility";
 import { LBehavior } from "../behaviors/LBehavior";
 import { LBehaviorId, LObject, LObjectId, LObjectType } from "../LObject";
 import { MRLively } from "../MRLively";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { SBehaviorManager } from "ts/mr/system/SBehaviorFactory";
 import { assert, MRSerializable } from "ts/mr/Common";
 

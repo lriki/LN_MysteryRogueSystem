@@ -1,4 +1,4 @@
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { TestEnv } from "../../../TestEnv";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
@@ -11,7 +11,7 @@ import { SItemSelectionDialog } from "ts/mr/system/dialogs/SItemSelectionDialog"
 import { SPlayerDialog } from "ts/mr/system/dialogs/SPlayerDialog";
 import { SDialogSystemCommand } from "ts/mr/system/dialogs/SDialogCommand";
 import { MRBasics } from "ts/mr/data/MRBasics";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

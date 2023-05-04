@@ -10,7 +10,7 @@ import { LActivity } from "../activities/LActivity";
 import { LMovingMethod } from "../ai/LMoveDeterminer";
 import { LBlock } from "../LBlock";
 import { LActionTokenConsumeType } from "../LCommon";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LThinkingAgent } from "./LThinkingAgent";
 
 @MRSerializable

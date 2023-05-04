@@ -1,5 +1,5 @@
 import { tr2 } from "../Common";
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
 import { onPreThrowReaction, onThrowReaction } from "../lively/behaviors/LBehavior";
 import { SCommandContext } from "../system/SCommandContext";
 import { SEffectSubject } from "../system/SEffectContext";

@@ -1,7 +1,7 @@
 import { assert } from "ts/mr/Common";
 import { DSequel, DSequelId } from "ts/mr/data/DSequel";
 import { MRData } from "../data/MRData";
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
 import { MRLively } from "../lively/MRLively";
 
 /**

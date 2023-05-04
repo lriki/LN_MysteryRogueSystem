@@ -1,7 +1,7 @@
 import { tr, tr2 } from "ts/mr/Common";
 import { SWarehouseStoreDialog } from "ts/mr/system/dialogs/SWarehouseStoreDialog";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
 import { VItemListWindow } from "../windows/VItemListWindow";
 import { VDialog } from "./VDialog";

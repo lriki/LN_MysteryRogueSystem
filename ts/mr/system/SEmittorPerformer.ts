@@ -4,7 +4,7 @@ import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { MRData } from "ts/mr/data/MRData";
 import { LProjectileBehavior } from "ts/mr/lively/behaviors/activities/LProjectileBehavior";
 import { onAttackReaction } from "ts/mr/lively/internal";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { SCommandContext } from "./SCommandContext";
 import { SEffectContext, SEffectIncidentType, SEffectSubject } from "./SEffectContext";

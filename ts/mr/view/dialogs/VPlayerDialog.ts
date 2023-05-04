@@ -4,7 +4,7 @@ import { MRSystem } from "ts/mr/system/MRSystem";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { SPlayerDialog } from "ts/mr/system/dialogs/SPlayerDialog";
 import { MRView } from "../MRView";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { LUnitBehavior } from "ts/mr/lively/behaviors/LUnitBehavior";
 import { SDialogContext } from "ts/mr/system/SDialogContext";
 import { SMainMenuDialog } from "ts/mr/system/dialogs/SMainMenuDialog";

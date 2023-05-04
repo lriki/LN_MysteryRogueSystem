@@ -17,7 +17,7 @@ import "./mr/data/MRData";
 import "./mr/data/MRDataManager";
 import "./mr/data/DTextManager";
 import "./mr/lively/internal";
-import "./mr/lively/LEntity";
+import "./mr/lively/entity/LEntity";
 import "./mr/lively/LMap";
 import "./mr/lively/LSystem";
 import "./mr/system/internal";

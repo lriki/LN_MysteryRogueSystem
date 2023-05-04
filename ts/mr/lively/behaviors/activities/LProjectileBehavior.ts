@@ -1,7 +1,7 @@
 import { assert, MRSerializable } from "ts/mr/Common";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { Helpers } from "ts/mr/system/Helpers";
 import { SCommandResponse, SEndProjectileMovingCause, SEndProjectileMovingCommand, SItemReactionCommand } from "ts/mr/system/SCommand";

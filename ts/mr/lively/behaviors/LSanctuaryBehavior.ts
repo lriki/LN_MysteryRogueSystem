@@ -3,7 +3,7 @@ import { MRBasics } from "ts/mr/data/MRBasics";
 import { SCommandResponse } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { LActivity } from "../activities/LActivity";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LFieldEffect, LSanctuaryFieldEffect } from "../LFieldEffect";
 import { MRLively } from "../MRLively";
 import { LBehavior } from "./LBehavior";

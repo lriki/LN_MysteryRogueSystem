@@ -5,7 +5,7 @@ import { MRSystem } from "ts/mr/system/MRSystem";
 import { SDebugHelpers } from "ts/mr/system/SDebugHelpers";
 import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { LProjectileBehavior } from "ts/mr/lively/behaviors/activities/LProjectileBehavior";
 import { SEffectSubject } from "ts/mr/system/SEffectContext";
 import { LActivity } from "ts/mr/lively/activities/LActivity";

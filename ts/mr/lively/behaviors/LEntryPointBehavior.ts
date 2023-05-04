@@ -5,7 +5,7 @@ import { CommandArgs, LBehavior, onProceedFloorReaction } from "ts/mr/lively/beh
 import { SEventExecutionDialog } from "ts/mr/system/dialogs/SEventExecutionDialog";
 import { SCommandResponse } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { MRLively } from "../MRLively";
 import { MRSerializable } from "ts/mr/Common";
 import { LReaction } from "../LCommon";

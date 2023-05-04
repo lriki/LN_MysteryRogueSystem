@@ -4,7 +4,7 @@ import { DActionId, DSkillId } from "ts/mr/data/DCommon";
 import { SAIHelper } from "ts/mr/system/SAIHelper";
 import { UMovement } from "ts/mr/utility/UMovement";
 import { LBlock } from "../LBlock";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LEntityId } from "../LObject";
 import { MRLively } from "../MRLively";
 import { MRData } from "ts/mr/data/MRData";

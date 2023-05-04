@@ -1,5 +1,5 @@
 import { assert, MRSerializable } from "ts/mr/Common";
-import { LEntity } from "./LEntity";
+import { LEntity } from "./entity/LEntity";
 import { FBlockComponent } from "ts/mr/floorgen/FMapData";
 import { MRLively } from "./MRLively";
 import { REBlockLayer } from "./LBlockLayer";

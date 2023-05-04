@@ -1,9 +1,9 @@
 import { tr2 } from "ts/mr/Common";
 import { DActionId } from "ts/mr/data/DCommon";
 import { MRBasics } from "ts/mr/data/MRBasics";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { LStorageBehavior } from "ts/mr/lively/behaviors/LStorageBehavior";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { LEntityId } from "ts/mr/lively/LObject";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { SDialog } from "../SDialog";

@@ -7,14 +7,14 @@ import { MRView } from "ts/mr/view/MRView";
 import { UTransfer } from "ts/mr/utility/UTransfer";
 import { MRBasics } from "../data/MRBasics";
 import { LEntityId } from "../lively/LObject";
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
 import { SWarehouseStoreDialog } from "../system/dialogs/SWarehouseStoreDialog";
 import { USearch } from "../utility/USearch";
 import { SWarehouseWithdrawDialog } from "../system/dialogs/SWarehouseWithdrawDialog";
 import { UProperty } from "../utility/UProperty";
 import { SItemSellDialog } from "../system/dialogs/SItemSellDialog";
 import { RMMZHelper } from "./RMMZHelper";
-import { LInventoryBehavior } from "../lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "../lively/entity/LInventoryBehavior";
 import { DFloorClass } from "../data/DLand";
 import { Diag } from "../Diag";
 import { DScript } from "../data/DScript";
@@ -205,6 +205,8 @@ PluginManager.registerCommand(pluginName, "MR-AddPostTalkCommand", function(this
 });
 
 PluginManager.registerCommand(pluginName, "MR-ShowPostTalkDialog", function(this: Game_Interpreter, args: any) {
+    console.warn("MR-ShowPostTalkDialog is deprecated. Use MR.showPostTalkDialog.");
+    
     const runenr = this.getMRInterpreterContext()
     assert(runenr);
     const sctx = runenr.scriptContext;

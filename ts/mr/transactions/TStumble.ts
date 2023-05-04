@@ -1,10 +1,10 @@
 import { assert } from "../Common";
 import { DBlockLayerKind } from "../data/DCommon";
 import { MRBasics } from "../data/MRBasics";
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
 import { MRLively } from "../lively/MRLively";
 import { LEquipmentUserBehavior } from "../lively/behaviors/LEquipmentUserBehavior";
-import { LInventoryBehavior } from "../lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "../lively/entity/LInventoryBehavior";
 import { LGenerateDropItemCause } from "../lively/internal";
 import { SSprinkleDropedCommand } from "../system/SCommand";
 import { SCommandContext } from "../system/SCommandContext";

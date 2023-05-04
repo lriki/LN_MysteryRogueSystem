@@ -1,7 +1,7 @@
 import { MRSerializable, tr2 } from "ts/mr/Common";
 import { SCommandResponse } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { MRLively } from "../MRLively";
 import { CommandArgs, LBehavior, onEffectResult } from "./LBehavior";
 import { MRBasics } from "ts/mr/data/MRBasics";

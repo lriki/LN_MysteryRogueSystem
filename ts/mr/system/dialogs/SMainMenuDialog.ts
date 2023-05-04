@@ -1,4 +1,4 @@
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { LEntityId } from "ts/mr/lively/LObject";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { SDialog } from "../SDialog";

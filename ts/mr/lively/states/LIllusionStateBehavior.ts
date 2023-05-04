@@ -1,7 +1,7 @@
 import { SPhaseResult } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { DecisionPhase, LBehavior } from "../behaviors/LBehavior";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { MRLively } from "../MRLively";
 import { LCharacterAI } from "../ai/LCharacterAI";
 import { LEscapeAI } from "../ai/LEscapeAI";

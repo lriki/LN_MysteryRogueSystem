@@ -2,7 +2,7 @@ import { DBlockLayerKind } from "ts/mr/data/DCommon";
 import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { MRData } from "ts/mr/data/MRData";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { SFeetDialog } from "ts/mr/system/dialogs/SFeetDialog";
 import { MRSystem } from "ts/mr/system/MRSystem";

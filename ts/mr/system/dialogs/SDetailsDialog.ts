@@ -1,5 +1,5 @@
 import { assert, tr2 } from "ts/mr/Common";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { EntityIdentificationLevel } from "ts/mr/lively/LIdentifyer";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { UName } from "ts/mr/utility/UName";

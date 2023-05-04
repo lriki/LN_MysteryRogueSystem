@@ -4,7 +4,7 @@ import { Vector2 } from "ts/mr/math/Vector2";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { Helpers } from "ts/mr/system/Helpers";
 import { VSequelContext } from "ts/mr/view/VSequelContext";
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
 import { MRView } from "./MRView";
 import { SNavigationHelper } from "ts/mr/system/SNavigationHelper";
 import { LUnitBehavior } from "ts/mr/lively/behaviors/LUnitBehavior";

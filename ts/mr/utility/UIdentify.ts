@@ -1,5 +1,5 @@
 import { tr2 } from "ts/mr/Common";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { DActionId } from "../data/DCommon";

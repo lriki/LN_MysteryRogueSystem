@@ -3,7 +3,7 @@ import { MRBasics } from "ts/mr/data/MRBasics";
 import { DEventId } from "ts/mr/data/predefineds/DBasicEvents";
 import { MRData } from "ts/mr/data/MRData";
 import { LBehavior } from "../internal";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LEventResult } from "../LEventServer";
 import { MRLively } from "../MRLively";
 

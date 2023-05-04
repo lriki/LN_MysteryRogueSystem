@@ -7,7 +7,7 @@ import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { LEntityId } from "../LObject";
 import { MRLively } from "../MRLively";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LBehavior } from "./LBehavior";
 import { DAnimationId, DParameterId } from "ts/mr/data/DCommon";
 import { SSoundManager } from "ts/mr/system/SSoundManager";

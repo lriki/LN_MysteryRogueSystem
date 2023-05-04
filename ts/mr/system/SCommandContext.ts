@@ -1,6 +1,6 @@
 import { checkContinuousResponse, SCommand, SCommandResponse } from "./SCommand";
 import { SDialog } from "./SDialog";
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
 import { assert, Log } from "ts/mr/Common";
 import { SAnumationSequel, SBalloonSequel, SFloatingAnumationSequel, SMotionSequel, SWaitSequel } from "./SSequel";
 import { MRLively } from "../lively/MRLively";
@@ -18,12 +18,11 @@ import { LActionTokenType } from "../lively/LActionToken";
 import { SActivityContext } from "./SActivityContext";
 import { DActionId, DCommandId } from "../data/DCommon";
 import { LActionTokenConsumeType } from "../lively/LCommon";
-import { CommandResultCallback, SSubTaskChain, STask, STaskCallMethod, STaskResult, STaskStatus, TaskThenFunc } from "./tasks/STask";
+import { CommandResultCallback, SSubTaskChain, STask, STaskCallMethod, STaskResult, STaskStatus, STaskYieldResult, TaskThenFunc, TaskYieldFunc } from "./tasks/STask";
 import { DFlavorEffect } from "../data/DFlavorEffect";
 import { LEntityDescription } from "../lively/LIdentifyer";
 import { SSoundManager } from "./SSoundManager";
 import { SDialogContext } from "./SDialogContext";
-import { SDefaultCommandHandler } from "./SDefaultCommandHandler";
 
 export interface SDisplayFlavorEffectOptions {
     messageFormatArgs: unknown[],
@@ -291,66 +290,51 @@ export class SCommandContext
     }
 
     public makeCommandTask(cmd: SCommand): STask {
-        const task = this.makeTask((c) => {
-            c.hold();
+        const task = new STask("Task", undefined);
+        task._callMethod = STaskCallMethod.Iterator;
+        task._subChain = new SSubTaskChain(this, task);
+        task._subChain.hold();
+        const c = task._subChain;
 
+        const cctx = this;
+        task._iterator = function*(): Generator<STaskYieldResult> {
+            
             // まずは普通に、onCommand() を呼び出すチェーンを作る
-            let lastTask: STask | undefined = undefined;
-            cmd.receiver.iterateBehaviorsReverse(b => {
-                lastTask = (!lastTask) ? 
-                    this.postTask((c2) => { b.onCommand(cmd.receiver, this, c2, cmd); }) :
-                    lastTask.then2((c2) => { b.onCommand(cmd.receiver, this, c2, cmd); });
-                lastTask.command = cmd;
-            });
+            const behaviors: LBehavior[] = [];
+            cmd.receiver.iterateBehaviorsReverse(b => behaviors.push(b));
+            for (const b of behaviors) {
+                yield* b.onCommand(cmd.receiver, cctx, cmd);
+            }
 
             // 最後に DefaultHandler を差し込む
-            lastTask = (!lastTask) ? 
-                this.postTask((c2) => { SDefaultCommandHandler.onCommand(cmd.receiver, this, c2, cmd); }) :
-                (lastTask as STask).then2((c2) => { SDefaultCommandHandler.onCommand(cmd.receiver, this, c2, cmd); });
-            assert(lastTask);
+            yield* cmd.onExecute(cmd.receiver, cctx);
 
-            //this.callCommand(c, cmd);
+        }();
+
+        task._onIteratorFinalized = (result: STaskYieldResult) => {
             if (cmd.acceptRequired) {
-                //if (lastTask) {
-                    // finally で結果を判断する。明示的に accept() されたら次の Task へ進む。
-                    (lastTask as STask).finally((c2) => {
-                        if (c2._taskResult === STaskResult.Accept)
-                            c.next();
-                        else
-                            c.handleInternal(STaskResult.Reject);
-                    });
-                    (lastTask as STask).command = cmd;
-                // }
-                // else {
-                //     // Behavior がひとつもない。 reject 扱い。
-                //     c.handleInternal(STaskResult.Reject);
-                // }
+                // finally で結果を判断する。明示的に accept() されたら次の Task へ進む。
+                if (result == STaskYieldResult.Accept) {
+                    c.next();
+                }
+                else {
+                    c.handleInternal(STaskResult.Reject);
+                }
             }
             else {
                 // チェーンの最後にタスクを付ける。ここまでたどり着けば自動的に成功扱い。次の Task へ進む。
-                //if (lastTask) {
-                    lastTask = (lastTask as STask).then2((c2) => {
-                        c.next();
-                    });
-                    // 最後に catch. ここに来たら次の Task へは進めない。
-                    lastTask.catch((c2) => {
-                        c.handleInternal(STaskResult.Reject);
-                    });
-                    lastTask.command = cmd;
-                // }
-                // else {
-                //     // Behavior がひとつもない。 next 扱い。
-                //     c.next();
-                // }
+                if (result == STaskYieldResult.Success) {
+                    c.next();
+                }
+                // 最後に catch. ここに来たら次の Task へは進めない。
+                else {
+                    c.handleInternal(STaskResult.Reject);
+                }
             }
+        }
 
-            
-            // let result = SCommandResponse.Pass;
-            // cmd.entity.iterateBehaviorsReverse(b => {
-            //     result = b.onCommand(cmd.entity, this, c, cmd);
-            //     return result == SCommandResponse.Pass;
-            // });
-        });
+
+
         task.command = cmd;
         return task;
     }
@@ -769,9 +753,11 @@ export class SCommandContext
             const task = this._nextPriorityTask ? this._nextPriorityTask : this._runningCommandList[this._messageIndex];
             this._nextPriorityTask = undefined;
 
-            // Task 実行
+            // Task 実行\
             assert(task);
-            task.call(this);
+            if (task.call(this)) {
+                return;
+            }
 
             // ここまでで、最後に実行した Task の nextTask が無ければ、TaskList にある次の Task へ進む
             if (!this._nextPriorityTask) {

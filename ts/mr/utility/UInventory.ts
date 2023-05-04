@@ -1,7 +1,7 @@
 import { tr2 } from "../Common";
 import { LEquipmentUserBehavior } from "../lively/behaviors/LEquipmentUserBehavior";
-import { LInventoryBehavior } from "../lively/behaviors/LInventoryBehavior";
-import { LEntity } from "../lively/LEntity";
+import { LInventoryBehavior } from "../lively/entity/LInventoryBehavior";
+import { LEntity } from "../lively/entity/LEntity";
 import { STestAddItemCommand, STestTakeItemCommand } from "../system/SCommand";
 import { SCommandContext } from "../system/SCommandContext";
 import { SWarehouseDialogResult } from "../system/SCommon";

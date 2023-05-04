@@ -1,4 +1,4 @@
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { MRBasics } from "ts/mr/data/MRBasics";
 
 export class SDebugHelpers {

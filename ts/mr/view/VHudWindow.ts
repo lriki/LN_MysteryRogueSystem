@@ -1,6 +1,6 @@
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { LActorBehavior } from "ts/mr/lively/behaviors/LActorBehavior";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { LFloorId } from "ts/mr/lively/LFloorId";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { LExperienceBehavior } from "../lively/behaviors/LExperienceBehavior";

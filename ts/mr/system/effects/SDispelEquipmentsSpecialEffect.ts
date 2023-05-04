@@ -2,7 +2,7 @@ import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
 import { MRData } from "ts/mr/data/MRData";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 import { LEffectResult } from "ts/mr/lively/LEffectResult";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { SCommandContext } from "../SCommandContext";
 import { SEffect } from "../SEffectApplyer";
 import { SSpecialEffect } from "./SSpecialEffect";

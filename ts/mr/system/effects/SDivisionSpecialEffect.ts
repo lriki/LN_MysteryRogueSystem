@@ -2,7 +2,7 @@ import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { HMovement } from "ts/mr/lively/helpers/HMovement";
 import { LEffectResult } from "ts/mr/lively/LEffectResult";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { MovingMethod } from "ts/mr/lively/LMap";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { UMovement } from "ts/mr/utility/UMovement";

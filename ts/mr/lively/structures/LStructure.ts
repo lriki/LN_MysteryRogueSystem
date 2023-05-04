@@ -1,7 +1,7 @@
 import { MRSerializable } from "ts/mr/Common";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { LStructureId } from "../LCommon";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 
 
 @MRSerializable

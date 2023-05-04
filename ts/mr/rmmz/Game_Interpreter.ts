@@ -4,8 +4,8 @@ import { DEntityId } from "../data/DEntity";
 import { DEntityCreateInfo } from "../data/DSpawner";
 import { MRData } from "../data/MRData";
 import { LExperienceBehavior } from "../lively/behaviors/LExperienceBehavior";
-import { LInventoryBehavior } from "../lively/behaviors/LInventoryBehavior";
-import { LEntity } from "../lively/LEntity";
+import { LInventoryBehavior } from "../lively/entity/LInventoryBehavior";
+import { LEntity } from "../lively/entity/LEntity";
 import { MRLively } from "../lively/MRLively";
 import { SEntityFactory } from "../system/internal";
 import { MRSystem } from "../system/MRSystem";
@@ -71,10 +71,15 @@ Game_Interpreter.prototype.command101 = function(params: any): boolean {
     const result = _Game_Interpreter_command101.call(this, params);
 
     const next = this.nextEventCommand();
-    console.log("next!!", next);
-    if (next && next.code == 357 && next.parameters[1] == "MR-ShowPostTalkDialog") {
-        this._index++;
-        this.command357(next.parameters);
+    if (next) {
+        if ((next.code == 357 && next.parameters[1] == "MR-ShowPostTalkDialog")) {
+            this._index++;
+            this.command357(next.parameters);
+        }
+        if (next.code == 355 && next.parameters[0].includes("MR.showPostTalkDialog")) {
+            this._index++;
+            this.command355();
+        }
     }
 
     return result;

@@ -4,7 +4,7 @@ import { DFactionId, MRData } from "ts/mr/data/MRData";
 import { DStateRestriction } from "../data/DState";
 import { SSchedulerPhase } from "../system/scheduling/SSchedulerPhase";
 import { LUnitBehavior } from "./behaviors/LUnitBehavior";
-import { LEntity } from "./LEntity";
+import { LEntity } from "./entity/LEntity";
 import { LBehaviorId, LEntityId } from "./LObject";
 import { MRLively } from "./MRLively";
 

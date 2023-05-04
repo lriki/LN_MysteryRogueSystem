@@ -4,7 +4,7 @@ import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { UMovement } from "ts/mr/utility/UMovement";
 import { LBattlerBehavior } from "../behaviors/LBattlerBehavior";
 import { CommandArgs, LBehavior, onDirectAttackDamaged } from "../behaviors/LBehavior";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { MovingMethod } from "../LMap";
 import { MRLively } from "../MRLively";
 import { MRSerializable } from "ts/mr/Common";

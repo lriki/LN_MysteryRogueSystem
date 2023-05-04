@@ -9,6 +9,7 @@ import { VSpriteSet } from "./VSpriteSet";
 import { VChallengeResultWindow } from "./windows/VChallengeResultWindow";
 import { VChronus } from "./VChronus";
 import { VDialogManager } from "./VDialogManager";
+import { paramSandboxWorldSystem } from "../PluginParameters";
 
 /**
  * REシステムと RMMZ の橋渡しを行うモジュールのルートクラス。
@@ -54,7 +55,10 @@ export class MRView {
 
         this._messageWindowSet = new VMessageWindowSet(scene);
         this.guideGrid = new VMapGuideGrid();
-        this.chronus = new VChronus(scene);
+
+        if (paramSandboxWorldSystem) {
+            this.chronus = new VChronus(scene);
+        }
 
         this.ext.onMapVisualSetup();
     }

@@ -8,7 +8,7 @@ import { LTileShape } from "ts/mr/lively/LBlock";
 import { paramFixedMapItemShopRoomRegionId, paramFixedMapMonsterHouseRoomRegionId, paramFixedMapPassagewayRegionId, paramFixedMapRoomRegionId, paramRandomMapPaddingX, paramRandomMapPaddingY } from "ts/mr/PluginParameters";
 import { SEntityFactory } from "./internal";
 import { DEntityCreateInfo, DEntitySpawner } from "ts/mr/data/DSpawner";
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
 import { DAnnotationReader, DRmmzPrefabAnnotation, DRmmzUniqueSpawnerAnnotation } from "../data/importers/DAnnotationReader";
 import { DHelpers } from "../data/DHelper";
 import { MRSystem } from "./MRSystem";

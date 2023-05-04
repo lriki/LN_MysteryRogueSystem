@@ -1,7 +1,7 @@
 import { MRSerializable, tr2 } from "ts/mr/Common";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { UName } from "ts/mr/utility/UName";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { MRLively } from "../MRLively";
 import { LBehavior } from "../behaviors/LBehavior";
 import { UMovement } from "ts/mr/utility/UMovement";

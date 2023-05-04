@@ -1,6 +1,6 @@
 import { tr2 } from "../Common";
-import { LInventoryBehavior } from "../lively/behaviors/LInventoryBehavior";
-import { LEntity } from "../lively/LEntity";
+import { LInventoryBehavior } from "../lively/entity/LInventoryBehavior";
+import { LEntity } from "../lively/entity/LEntity";
 import { MRLively } from "../lively/MRLively";
 import { SFeetDialog } from "../system/dialogs/SFeetDialog";
 import { SItemListDialog, SItemListDialogSourceAction } from "../system/dialogs/SItemListDialog";

@@ -1,5 +1,5 @@
 import { SPhaseResult } from "ts/mr/system/SCommand";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LThinkingAgent } from "./LThinkingAgent";
 
 

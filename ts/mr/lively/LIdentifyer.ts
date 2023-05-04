@@ -3,7 +3,7 @@ import { DEntityId, DIdentificationDifficulty } from "ts/mr/data/DEntity";
 import { DLand } from "ts/mr/data/DLand";
 import { MRData } from "ts/mr/data/MRData";
 import { SView } from "ts/mr/system/SView";
-import { LEntity } from "./LEntity";
+import { LEntity } from "./entity/LEntity";
 
 export enum DescriptionHighlightColor {
     Identified,         // 識別済み。白テキスト

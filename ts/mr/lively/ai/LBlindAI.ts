@@ -6,7 +6,7 @@ import { UAction } from "ts/mr/utility/UAction";
 import { UMovement } from "ts/mr/utility/UMovement";
 import { LActivity } from "../activities/LActivity";
 import { LCharacterAI } from "./LCharacterAI";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LEntityId } from "../LObject";
 import { MRLively } from "../MRLively";
 import { MRSerializable } from "ts/mr/Common";

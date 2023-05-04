@@ -7,7 +7,7 @@ import { LActivity } from "../activities/LActivity";
 import { LBlockHelper } from "../helpers/LBlockHelper";
 import { LBlock } from "../LBlock";
 import { LActionTokenConsumeType } from "../LCommon";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LRandom } from "../LRandom";
 import { LRoom } from "../LRoom";
 import { MRLively } from "../MRLively";

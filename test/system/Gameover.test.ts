@@ -10,7 +10,7 @@ import { LFloorId } from "ts/mr/lively/LFloorId";
 import { STransferMapDialog } from "ts/mr/system/dialogs/STransferMapDialog";
 import { SEntityFactory } from "ts/mr/system/internal";
 import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 
 beforeAll(() => {
     TestEnv.setupDatabase();

@@ -100,7 +100,7 @@ export const paramDestroyOverflowingItems = false;
 
 export const paramQuestSystem = false;
 
-export const paramWorldSandboxSystem = false;
+export const paramSandboxWorldSystem = getBoolean("SandboxWorldSystem", false);
 
 //Maximum number of items in the map
 

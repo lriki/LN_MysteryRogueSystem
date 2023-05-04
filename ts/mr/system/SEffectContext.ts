@@ -2,7 +2,7 @@ import { MRBasics } from "ts/mr/data/MRBasics";
 import { DItemEffect } from "ts/mr/data/DItemEffect";
 import { LandExitResult, MRData } from "ts/mr/data/MRData";
 import { LBattlerBehavior } from "ts/mr/lively/behaviors/LBattlerBehavior";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { Helpers } from "./Helpers";
 import { LEffectResult, LParamEffectResult } from "../lively/LEffectResult";
 import { LEnemyBehavior } from "ts/mr/lively/behaviors/LEnemyBehavior";

@@ -1,7 +1,7 @@
 import { DFactionId, MRData } from "ts/mr/data/MRData";
 import { Helpers } from "ts/mr/system/Helpers";
 import { LBlock } from "../LBlock";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 
 export class LBlockHelper {
     /**

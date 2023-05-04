@@ -5,7 +5,7 @@ import { MRSystem } from "../MRSystem";
 import { UAction } from "../../utility/UAction";
 import { LItemShopStructure } from "../../lively/structures/LItemShopStructure";
 import { SSchedulerPhase } from "./SSchedulerPhase";
-import { LEntity } from "../../lively/LEntity";
+import { LEntity } from "../../lively/entity/LEntity";
 import { LUnitBehavior } from "../../lively/behaviors/LUnitBehavior";
 import { assert } from "../../Common";
 

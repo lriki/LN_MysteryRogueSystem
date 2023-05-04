@@ -1,4 +1,4 @@
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 
 /**
  * ゲーム進行中の重要なタイミングで、各種オブジェクトの状態を調整するクラス。

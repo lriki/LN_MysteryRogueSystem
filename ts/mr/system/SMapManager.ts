@@ -1,5 +1,5 @@
 import { MRLively } from "ts/mr/lively/MRLively";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { MRSystem } from "./MRSystem";
 import { LMap } from "ts/mr/lively/LMap";
 import { SEntityFactory } from "./internal";

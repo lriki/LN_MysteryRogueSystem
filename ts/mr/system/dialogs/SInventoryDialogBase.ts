@@ -1,7 +1,7 @@
 import { LBehaviorId } from "ts/mr/lively/LObject";
 import { SDialog } from "../SDialog";
-import { LEntity } from "ts/mr/lively/LEntity";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { LBehavior } from "ts/mr/lively/internal";
 import { assert } from "ts/mr/Common";

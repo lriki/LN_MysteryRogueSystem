@@ -2,7 +2,7 @@ import { DEventId } from "ts/mr/data/predefineds/DBasicEvents";
 import { LandExitResult } from "ts/mr/data/MRData";
 import { FMap } from "ts/mr/floorgen/FMapData";
 import { LBlock } from "ts/mr/lively/LBlock";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { LMap } from "ts/mr/lively/LMap";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { SSequelSet } from "ts/mr/system/SSequel";

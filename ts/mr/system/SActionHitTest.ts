@@ -1,6 +1,6 @@
 import { DEffectHitType } from "../data/DEffect";
 import { MRBasics } from "../data/MRBasics";
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
 import { LRandom } from "../lively/LRandom";
 import { paraIndirectPhysicalHitRate } from "../PluginParameters";
 

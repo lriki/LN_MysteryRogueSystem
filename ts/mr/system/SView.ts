@@ -7,7 +7,7 @@ import { MRLively } from "ts/mr/lively/MRLively";
 import { LIllusionStateBehavior } from "ts/mr/lively/states/LIllusionStateBehavior";
 import { LUnitBehavior } from "../lively/behaviors/LUnitBehavior";
 import { LNameView } from "../lively/internal";
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
 import { LTrapBehavior } from "../lively/behaviors/LTrapBehavior";
 import { USearch } from "../utility/USearch";
 import { Helpers } from "./Helpers";

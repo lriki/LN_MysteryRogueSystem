@@ -7,7 +7,7 @@ import { SEmittorPerformer } from "ts/mr/system/SEmittorPerformer";
 import { LCandidateSkillAction, UAction } from "ts/mr/utility/UAction";
 import { UMovement } from "ts/mr/utility/UMovement";
 import { LActionTokenConsumeType } from "../LCommon";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LEntityId } from "../LObject";
 import { MRLively } from "../MRLively";
 

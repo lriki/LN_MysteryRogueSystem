@@ -1,10 +1,10 @@
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { TestEnv } from "../../../TestEnv";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { MRData } from "ts/mr/data/MRData";
 import { MRSystem } from "ts/mr/system/MRSystem";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { LTileShape } from "ts/mr/lively/LBlock";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
@@ -77,7 +77,53 @@ test("concretes.item.pots.PotBasic.Crack2_OutOfRange", () => {
     expect(item1.isDestroyed()).toBeFalsy();
 });
 
+enum RunStatus {
+    Running,
+    Fail,
+    Success,
+}
+
+function* doSub() {
+    console.log("doSub 1");
+    yield RunStatus.Running;
+    console.log("doSub 2");
+}
+
+function* doDialog(onSubmit: () => Generator<RunStatus>) {
+    // まずは Running で外へ出す
+    yield RunStatus.Running;
+
+    const result = true;
+    return true;
+}
+
+function* doGoto(): Generator<RunStatus> {
+    console.log("doGoto 1");
+    yield RunStatus.Running;
+
+    const res = yield* doDialog(function*() {
+        console.log("doGoto 12");
+        yield RunStatus.Running;
+        console.log("doGoto 13");
+        yield RunStatus.Running;
+    });
+    console.log("doGoto 2");
+    yield* doSub();
+    console.log("doGoto 4");
+    return ;
+    console.log("doGoto 3");
+}
+
 test("concretes.item.pots.PotBasic.PotIntoPot", () => {
+    for (const v of doGoto()) {
+        console.log("Caller 1");
+        if (v !== RunStatus.Running) {
+            console.log("Caller 2");
+            continue;
+        }
+        console.log("Caller 3");
+    }
+
     TestEnv.newGame();
 
     const player1 = TestEnv.setupPlayer(TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);

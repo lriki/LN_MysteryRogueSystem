@@ -9,7 +9,7 @@ import { Helpers } from "./Helpers";
 import { SNavigationHelper } from "./SNavigationHelper";
 import { SView } from "./SView";
 import { DHelpers } from "../data/DHelper";
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
 import { LMinimapMarkerClass } from "../lively/LCommon";
 import { SEditMapHelper } from "./utils/SEditMapHelper";
 

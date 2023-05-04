@@ -6,7 +6,7 @@ import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { MRData } from "ts/mr/data/MRData";
 import { paramMaxItemsInMap } from "ts/mr/PluginParameters";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { ULimitations } from "ts/mr/utility/ULimitations";
 
 beforeAll(() => {

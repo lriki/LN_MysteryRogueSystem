@@ -2,7 +2,7 @@ import { SPlayerDialog } from "ts/mr/system/dialogs/SPlayerDialog";
 import { SPhaseResult } from "../../system/SCommand";
 import { SCommandContext } from "../../system/SCommandContext";
 import { DecisionPhase, LBehavior } from "./LBehavior";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { LUnitBehavior } from "./LUnitBehavior";
 import { UMovement } from "ts/mr/utility/UMovement";

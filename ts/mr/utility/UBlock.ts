@@ -2,7 +2,7 @@ import { LBlock } from "ts/mr/lively/LBlock";
 import { LMap } from "ts/mr/lively/LMap";
 import { LEnemyBehavior } from "../lively/behaviors/LEnemyBehavior";
 import { LSanctuaryBehavior } from "../lively/behaviors/LSanctuaryBehavior";
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
 import { MRLively } from "../lively/MRLively";
 
 /**

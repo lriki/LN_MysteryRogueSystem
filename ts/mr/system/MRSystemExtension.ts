@@ -1,5 +1,5 @@
 import { DEntity } from "../data/DEntity";
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
 
 export class MRSystemExtension {
     onNewEntity(entity: LEntity, data: DEntity): void {}

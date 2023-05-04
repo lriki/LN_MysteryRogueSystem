@@ -8,7 +8,7 @@ import { UBlock } from "ts/mr/utility/UBlock";
 import { UMovement } from "ts/mr/utility/UMovement";
 import { LConfusionAIRestriction } from "../ai/LConfusionAI";
 import { HMovement } from "../helpers/HMovement";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LMap, MovingMethod } from "../LMap";
 import { MRLively } from "../MRLively";
 import { LThinkingAction } from "./LThinkingAction";

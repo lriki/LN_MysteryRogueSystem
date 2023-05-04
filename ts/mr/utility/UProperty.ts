@@ -1,5 +1,5 @@
 import { assert, tr2 } from "../Common";
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
 import { LObject } from "../lively/LObject";
 import { MRLively } from "../lively/MRLively";
 import { SFormulaOperand } from "../system/SFormulaOperand";

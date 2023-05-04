@@ -1,5 +1,5 @@
 import { LActivity } from "../lively/activities/LActivity";
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
 import { SCommandResponse } from "./SCommand";
 import { HandleActivityCommand, SCommandContext, SHandleCommandResult } from "./SCommandContext";
 import { STask } from "./tasks/STask";

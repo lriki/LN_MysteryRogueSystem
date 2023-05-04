@@ -1,4 +1,4 @@
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
@@ -10,7 +10,7 @@ import { MRGameExtension } from "ts/mr/lively/MRGameExtension";
 import { MRSystemExtension } from "ts/mr/system/MRSystemExtension";
 import { MRData } from "ts/mr/data/MRData";
 import { LBehavior } from "ts/mr/lively/behaviors/LBehavior";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { DEntity } from "ts/mr/data/DEntity";
 import { LEnemyBehavior } from "ts/mr/lively/behaviors/LEnemyBehavior";
 import { SBehaviorManager } from "ts/mr/system/SBehaviorFactory";

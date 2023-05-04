@@ -10,10 +10,10 @@ import { LCharacterAI } from "../ai/LCharacterAI";
 import { LEscapeAI } from "../ai/LEscapeAI";
 import { LMovingTargetFinder_Gold } from "../ai/LMovingTargetFinder";
 import { LCharacterAI_Normal } from "../ai/LStandardAI";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { MRLively } from "../MRLively";
 import { DecisionPhase, LBehavior } from "./LBehavior";
-import { LInventoryBehavior } from "./LInventoryBehavior";
+import { LInventoryBehavior } from "../entity/LInventoryBehavior";
 
 
 

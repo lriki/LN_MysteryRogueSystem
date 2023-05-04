@@ -1,7 +1,7 @@
 import { assert, MRSerializable } from "ts/mr/Common";
 import { MRData } from "ts/mr/data/MRData";
 import { LBehavior } from "../internal";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { MRLively } from "../MRLively";
 import { LBattlerBehavior } from "./LBattlerBehavior";
 import { DRace } from "ts/mr/data/DRace";

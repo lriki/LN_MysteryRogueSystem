@@ -4,7 +4,7 @@ import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { LFloorId } from "ts/mr/lively/LFloorId";
 

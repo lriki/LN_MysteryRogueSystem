@@ -1,7 +1,9 @@
 import { DActionId, DCommandId } from "../data/DCommon";
 import { MRData } from "../data/MRData";
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
+import { SCommandContext } from "./SCommandContext";
 import { SEffectContext } from "./SEffectContext";
+import { SSubTaskChain, STaskYieldResult } from "./tasks/STask";
 
 /**
  * RECommand の処理結果
@@ -124,6 +126,9 @@ export class SCommand {
     //     this._objects = objects;
     //     return this;
     // }
+
+    public *onExecute(entity: LEntity, cctx: SCommandContext): Generator<STaskYieldResult> {
+    }
 }
 
 /**

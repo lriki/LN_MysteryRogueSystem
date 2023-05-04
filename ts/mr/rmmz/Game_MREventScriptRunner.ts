@@ -1,3 +1,5 @@
+import { tr2 } from "../Common";
+import { DScript } from "../data/DScript";
 import { LScriptContext, LScriptId } from "../lively/LScript";
 import { MRLively } from "../lively/MRLively";
 import { MRSystem } from "../system/MRSystem";
@@ -51,5 +53,54 @@ export class Game_MREventScriptRunner {
 
     public isQuestTaskAcivated(questTaskKey: string): boolean {
         return MRLively.questManager.isQuestTaskAcivated(questTaskKey);
+    }
+
+    /**
+     * この Entity が持つアクティブな選択肢を調べ、選択肢ウィンドウを表示します。
+     */
+    public showPostTalkDialog(): void {
+        const sctx = this.scriptContext;
+        const entity = sctx.entity;
+
+        // NOTE: コモンイベントの呼び出し同様、子スクリプトを実行するときは Context を新しく作る。
+        const s = new DScript(this._interpreter._list);
+        const r = MRLively.scriptManager.callQuery(entity, s, "MRQuery-GetPostTalkCommands");
+        const commands = r.talkingCommands;
+        
+        const choices = commands.map(x => x.displayName);
+        const cancelIndex = commands.findIndex(x => x.label == "MRCommand-OnEndTalk");
+        if (cancelIndex < 0) {
+            commands.push({ label: "MRCommand-OnEndTalk", displayName: tr2("さようなら") });
+        }
+
+        // command102 (Show Choices) と同様の処理
+        const cancelType = -2;
+        const defaultType = 0;
+        const positionType = 2;
+        const background = 0;
+        $gameMessage.setChoices(choices, defaultType, cancelType);
+        $gameMessage.setChoiceBackground(background);
+        $gameMessage.setChoicePositionType(positionType);
+        $gameMessage.setChoiceCallback(n => {
+            console.log("setChoiceCallback", n);
+
+            // Jump to label
+            const result = sctx.findListAndLabel(entity, commands[n].label);
+            if (result) {
+                if (result.list == this._interpreter._list) {
+                    this._interpreter._index = result.index;
+                }
+                else {
+                    this._interpreter.MR_resetList(result.list, result.index);
+                }
+            }
+
+            // const index = LScriptContext.findLabelIndex(this._list, commands[n].label);
+            // if (index >= 0) {
+            //     this._index = index;
+            // }
+            //(this._branch as any)[this._indent] = n;
+        });
+        this._interpreter.setWaitMode("message");
     }
 }

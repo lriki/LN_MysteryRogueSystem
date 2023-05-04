@@ -6,7 +6,7 @@ import { LEscapeAI } from "../ai/LEscapeAI";
 import { LThinkingAgent } from "../ai2/LThinkingAgent";
 import { LThinkingDeterminer_Escape } from "../ai2/LThinkingDeterminer_Escape";
 import { DecisionPhase, LBehavior, LBehaviorGroup } from "../internal";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { MRLively } from "../MRLively";
 
 

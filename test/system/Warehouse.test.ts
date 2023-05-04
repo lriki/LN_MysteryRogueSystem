@@ -1,5 +1,5 @@
 import { assert } from "ts/mr/Common";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";

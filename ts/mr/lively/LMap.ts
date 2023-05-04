@@ -1,6 +1,6 @@
 import { assert, MRSerializable } from "../Common";
 import { LBlock, LTileShape } from "./LBlock";
-import { LEntity } from "./LEntity";
+import { LEntity } from "./entity/LEntity";
 import { MRLively } from "./MRLively";
 import { Helpers } from "ts/mr/system/Helpers";
 import { MRSystem } from "ts/mr/system/MRSystem";

@@ -1,7 +1,7 @@
 import { FRoom } from "ts/mr/floorgen/FMapData";
 import { MRLively } from "./MRLively";
 import { LBlock, LTileShape } from "./LBlock";
-import { LEntity } from "./LEntity";
+import { LEntity } from "./entity/LEntity";
 import { MRSerializable } from "../Common";
 
 export enum MonsterHouseState {

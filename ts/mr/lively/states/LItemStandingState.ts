@@ -1,7 +1,7 @@
 
 import { LBehavior } from "../behaviors/LBehavior";
 import { MRLively } from "../MRLively";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { MRSerializable } from "ts/mr/Common";
 import { DBlockLayerKind } from "ts/mr/data/DCommon";
 

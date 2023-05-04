@@ -5,7 +5,7 @@ import { SPhaseResult } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { DecisionPhase, LBehavior } from "../behaviors/LBehavior";
 import { MRLively } from "../MRLively";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LState } from "./LState";
 import { LEventResult } from "../LEventServer";
 import { DSequelId } from "ts/mr/data/DSequel";

@@ -5,7 +5,7 @@ import { Helpers } from "ts/mr/system/Helpers";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { LRoom, MonsterHouseState } from "../LRoom";
 import { MRLively } from "../MRLively";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LStructure } from "./LStructure";
 import { SSoundManager } from "ts/mr/system/SSoundManager";
 import { LRoomId } from "../LCommon";

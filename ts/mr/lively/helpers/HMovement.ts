@@ -1,7 +1,7 @@
 import { assert } from "ts/mr/Common";
 import { DBlockLayerKind } from "ts/mr/data/DCommon";
 import { LBlock } from "../LBlock";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LMap, MovingMethod } from "../LMap";
 import { MRLively } from "../MRLively";
 

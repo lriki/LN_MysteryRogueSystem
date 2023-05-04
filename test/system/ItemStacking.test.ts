@@ -1,7 +1,7 @@
 import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { MRData } from "ts/mr/data/MRData";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { TestEnv } from "../TestEnv";

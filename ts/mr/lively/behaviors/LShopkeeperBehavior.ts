@@ -1,6 +1,6 @@
 
 import { DecisionPhase, LBehavior } from "./LBehavior";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { SCommandResponse, SPhaseResult } from "ts/mr/system/SCommand";
@@ -13,7 +13,7 @@ import { LMovingTargetFinder } from "../ai/LMovingTargetFinder";
 import { SEventExecutionDialog } from "ts/mr/system/dialogs/SEventExecutionDialog";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { LActivity } from "../activities/LActivity";
-import { LInventoryBehavior } from "./LInventoryBehavior";
+import { LInventoryBehavior } from "../entity/LInventoryBehavior";
 import { MRSerializable } from "ts/mr/Common";
 import { LThinkingActionRatings, LThinkingAgent } from "../ai2/LThinkingAgent";
 import { MRData } from "ts/mr/data/MRData";

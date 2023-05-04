@@ -5,7 +5,7 @@ import { UMovement } from "ts/mr/utility/UMovement";
 import { LMovingMethod } from "../ai/LMoveDeterminer";
 import { LBlockHelper } from "../helpers/LBlockHelper";
 import { LBlock } from "../LBlock";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LRandom } from "../LRandom";
 import { LRoom } from "../LRoom";
 import { MRLively } from "../MRLively";

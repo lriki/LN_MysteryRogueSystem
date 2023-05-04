@@ -4,7 +4,7 @@ import { TestEnv } from "../TestEnv";
 import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 
 beforeAll(() => {

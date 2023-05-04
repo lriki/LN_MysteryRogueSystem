@@ -1,6 +1,6 @@
 import { LFloorId } from "ts/mr/lively/LFloorId";
 import { assert } from "../Common";
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
 import { MRSystem } from "./MRSystem";
 import { SDialogContext } from "./SDialogContext";
 

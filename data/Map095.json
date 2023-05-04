@@ -5873,7 +5873,7 @@
           "walkAnime": true
         }
       ],
-      "x": 12,
+      "x": 10,
       "y": 24
     },
     {
@@ -5942,16 +5942,8 @@
               ]
             },
             {
-              "code": 111,
-              "indent": 0,
-              "parameters": [
-                12,
-                "MR.isQuestInactived(\"kQuest_メインクエスト\")"
-              ]
-            },
-            {
               "code": 101,
-              "indent": 1,
+              "indent": 0,
               "parameters": [
                 "",
                 0,
@@ -5962,55 +5954,17 @@
             },
             {
               "code": 401,
-              "indent": 1,
-              "parameters": [
-                "あああ"
-              ]
-            },
-            {
-              "code": 355,
-              "indent": 1,
-              "parameters": [
-                "MR.openQuest(\"kQuest_メインクエスト\")"
-              ]
-            },
-            {
-              "code": 0,
-              "indent": 1,
-              "parameters": []
-            },
-            {
-              "code": 411,
               "indent": 0,
-              "parameters": []
-            },
-            {
-              "code": 101,
-              "indent": 1,
               "parameters": [
-                "",
-                0,
-                0,
-                2,
-                ""
+                "このメッセージはマップデータのロードが"
               ]
             },
             {
               "code": 401,
-              "indent": 1,
-              "parameters": [
-                "あああfff"
-              ]
-            },
-            {
-              "code": 0,
-              "indent": 1,
-              "parameters": []
-            },
-            {
-              "code": 412,
               "indent": 0,
-              "parameters": []
+              "parameters": [
+                "完了したときに表示されます。"
+              ]
             },
             {
               "code": 115,
@@ -6204,6 +6158,472 @@
               "parameters": []
             },
             {
+              "code": 108,
+              "indent": 0,
+              "parameters": [
+                "======================================================"
+              ]
+            },
+            {
+              "code": 408,
+              "indent": 0,
+              "parameters": [
+                " ■ この Entity への [話す] 実行時の処理"
+              ]
+            },
+            {
+              "code": 408,
+              "indent": 0,
+              "parameters": [
+                "======================================================"
+              ]
+            },
+            {
+              "code": 118,
+              "indent": 0,
+              "parameters": [
+                "MRCommand-OnTalk"
+              ]
+            },
+            {
+              "code": 101,
+              "indent": 0,
+              "parameters": [
+                "",
+                0,
+                0,
+                2,
+                ""
+              ]
+            },
+            {
+              "code": 401,
+              "indent": 0,
+              "parameters": [
+                "箱庭世界システムのテストへようこそ！"
+              ]
+            },
+            {
+              "code": 401,
+              "indent": 0,
+              "parameters": [
+                ""
+              ]
+            },
+            {
+              "code": 401,
+              "indent": 0,
+              "parameters": [
+                "試すときはプラグインパラメータの「箱庭世界システム」を"
+              ]
+            },
+            {
+              "code": 401,
+              "indent": 0,
+              "parameters": [
+                "ON にしてください。"
+              ]
+            },
+            {
+              "code": 101,
+              "indent": 0,
+              "parameters": [
+                "",
+                0,
+                0,
+                2,
+                ""
+              ]
+            },
+            {
+              "code": 401,
+              "indent": 0,
+              "parameters": [
+                ""
+              ]
+            },
+            {
+              "code": 401,
+              "indent": 0,
+              "parameters": [
+                "・・・まだあんまり出来てないけど。"
+              ]
+            },
+            {
+              "code": 355,
+              "indent": 0,
+              "parameters": [
+                "MR.showPostTalkDialog()"
+              ]
+            },
+            {
+              "code": 115,
+              "indent": 0,
+              "parameters": []
+            },
+            {
+              "code": 108,
+              "indent": 0,
+              "parameters": [
+                "=========================================================================="
+              ]
+            },
+            {
+              "code": 408,
+              "indent": 0,
+              "parameters": [
+                " ■ 会話後コマンドの選択肢を列挙する"
+              ]
+            },
+            {
+              "code": 408,
+              "indent": 0,
+              "parameters": [
+                "=========================================================================="
+              ]
+            },
+            {
+              "code": 118,
+              "indent": 0,
+              "parameters": [
+                "MRQuery-GetPostTalkCommands"
+              ]
+            },
+            {
+              "code": 111,
+              "indent": 0,
+              "parameters": [
+                1,
+                1,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "code": 357,
+              "indent": 1,
+              "parameters": [
+                "LN_MysteryRogueSystem",
+                "MR-AddPostTalkCommand",
+                "[experimental] MR-AddPostTalkCommand",
+                {
+                  "name": "\\I[89]クエストについて…",
+                  "label": "OnQuest1"
+                }
+              ]
+            },
+            {
+              "code": 657,
+              "indent": 1,
+              "parameters": [
+                "name = \\I[89]クエストについて…"
+              ]
+            },
+            {
+              "code": 657,
+              "indent": 1,
+              "parameters": [
+                "label = OnQuest1"
+              ]
+            },
+            {
+              "code": 0,
+              "indent": 1,
+              "parameters": []
+            },
+            {
+              "code": 412,
+              "indent": 0,
+              "parameters": []
+            },
+            {
+              "code": 357,
+              "indent": 0,
+              "parameters": [
+                "LN_MysteryRogueSystem",
+                "MR-AddPostTalkCommand",
+                "[experimental] MR-AddPostTalkCommand",
+                {
+                  "name": "\\I[4]あなたについて…",
+                  "label": "OnTalk2"
+                }
+              ]
+            },
+            {
+              "code": 657,
+              "indent": 0,
+              "parameters": [
+                "name = \\I[4]あなたについて…"
+              ]
+            },
+            {
+              "code": 657,
+              "indent": 0,
+              "parameters": [
+                "label = OnTalk2"
+              ]
+            },
+            {
+              "code": 357,
+              "indent": 0,
+              "parameters": [
+                "LN_MysteryRogueSystem",
+                "MR-AddPostTalkCommand",
+                "[experimental] MR-AddPostTalkCommand",
+                {
+                  "name": "\\I[4]さようなら",
+                  "label": "MRCommand-OnEndTalk"
+                }
+              ]
+            },
+            {
+              "code": 657,
+              "indent": 0,
+              "parameters": [
+                "name = \\I[4]さようなら"
+              ]
+            },
+            {
+              "code": 657,
+              "indent": 0,
+              "parameters": [
+                "label = MRCommand-OnEndTalk"
+              ]
+            },
+            {
+              "code": 115,
+              "indent": 0,
+              "parameters": []
+            },
+            {
+              "code": 108,
+              "indent": 0,
+              "parameters": [
+                "------------------------------------------------------"
+              ]
+            },
+            {
+              "code": 408,
+              "indent": 0,
+              "parameters": [
+                " ▼ [クエストついて…] 選択時"
+              ]
+            },
+            {
+              "code": 408,
+              "indent": 0,
+              "parameters": [
+                "------------------------------------------------------"
+              ]
+            },
+            {
+              "code": 118,
+              "indent": 0,
+              "parameters": [
+                "OnQuest1"
+              ]
+            },
+            {
+              "code": 101,
+              "indent": 0,
+              "parameters": [
+                "",
+                0,
+                0,
+                2,
+                ""
+              ]
+            },
+            {
+              "code": 401,
+              "indent": 0,
+              "parameters": [
+                "このプラグインには独自のクエストシステムが含まれています。"
+              ]
+            },
+            {
+              "code": 401,
+              "indent": 0,
+              "parameters": [
+                ""
+              ]
+            },
+            {
+              "code": 401,
+              "indent": 0,
+              "parameters": [
+                "このクエストシステムでフラグ管理を行うと、プレイヤーが"
+              ]
+            },
+            {
+              "code": 401,
+              "indent": 0,
+              "parameters": [
+                "次にすべきことを示すことができ、進行がスムーズになります。"
+              ]
+            },
+            {
+              "code": 111,
+              "indent": 0,
+              "parameters": [
+                12,
+                "MR.isQuestInactived(\"kQuest_メインクエスト\")"
+              ]
+            },
+            {
+              "code": 101,
+              "indent": 1,
+              "parameters": [
+                "",
+                0,
+                0,
+                2,
+                ""
+              ]
+            },
+            {
+              "code": 401,
+              "indent": 1,
+              "parameters": [
+                "\"kQuest_メインクエスト\" を請けたことにしました。"
+              ]
+            },
+            {
+              "code": 355,
+              "indent": 1,
+              "parameters": [
+                "MR.openQuest(\"kQuest_メインクエスト\")"
+              ]
+            },
+            {
+              "code": 0,
+              "indent": 1,
+              "parameters": []
+            },
+            {
+              "code": 411,
+              "indent": 0,
+              "parameters": []
+            },
+            {
+              "code": 0,
+              "indent": 1,
+              "parameters": []
+            },
+            {
+              "code": 412,
+              "indent": 0,
+              "parameters": []
+            },
+            {
+              "code": 115,
+              "indent": 0,
+              "parameters": []
+            },
+            {
+              "code": 108,
+              "indent": 0,
+              "parameters": [
+                "------------------------------------------------------"
+              ]
+            },
+            {
+              "code": 408,
+              "indent": 0,
+              "parameters": [
+                " ▼ [あなたについて…] 選択時"
+              ]
+            },
+            {
+              "code": 408,
+              "indent": 0,
+              "parameters": [
+                "------------------------------------------------------"
+              ]
+            },
+            {
+              "code": 118,
+              "indent": 0,
+              "parameters": [
+                "OnTalk2"
+              ]
+            },
+            {
+              "code": 101,
+              "indent": 0,
+              "parameters": [
+                "",
+                0,
+                0,
+                2,
+                ""
+              ]
+            },
+            {
+              "code": 401,
+              "indent": 0,
+              "parameters": [
+                "タケノコ派です。"
+              ]
+            },
+            {
+              "code": 115,
+              "indent": 0,
+              "parameters": []
+            },
+            {
+              "code": 108,
+              "indent": 0,
+              "parameters": [
+                "------------------------------------------------------"
+              ]
+            },
+            {
+              "code": 408,
+              "indent": 0,
+              "parameters": [
+                " ■ [さようなら] 選択時"
+              ]
+            },
+            {
+              "code": 408,
+              "indent": 0,
+              "parameters": [
+                "------------------------------------------------------"
+              ]
+            },
+            {
+              "code": 118,
+              "indent": 0,
+              "parameters": [
+                "MRCommand-OnEndTalk"
+              ]
+            },
+            {
+              "code": 101,
+              "indent": 0,
+              "parameters": [
+                "",
+                0,
+                0,
+                2,
+                ""
+              ]
+            },
+            {
+              "code": 401,
+              "indent": 0,
+              "parameters": [
+                "じゃあね。"
+              ]
+            },
+            {
+              "code": 115,
+              "indent": 0,
+              "parameters": []
+            },
+            {
               "code": 0,
               "indent": 0,
               "parameters": []
@@ -6230,8 +6650,8 @@
           "walkAnime": true
         }
       ],
-      "x": 13,
-      "y": 24
+      "x": 14,
+      "y": 19
     }
   ]
 }

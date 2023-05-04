@@ -1,6 +1,6 @@
 import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { MRData } from "ts/mr/data/MRData";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { SItemListDialog, SItemListDialogSourceAction } from "ts/mr/system/dialogs/SItemListDialog";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";

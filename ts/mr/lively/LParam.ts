@@ -4,7 +4,7 @@ import { DParameter, DParameterType } from "ts/mr/data/DParameter";
 import { MRData } from "ts/mr/data/MRData";
 import { DParameterId } from "../data/DCommon";
 import { MRBasics } from "../data/MRBasics";
-import { LEntity } from "./LEntity";
+import { LEntity } from "./entity/LEntity";
 import { LEntityId } from "./LObject";
 import { MRLively } from "./MRLively";
 

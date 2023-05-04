@@ -1,6 +1,6 @@
 import { assert, MRSerializable } from "../Common";
 import { LActionTokenConsumeType } from "./LCommon";
-import { LEntity } from "./LEntity";
+import { LEntity } from "./entity/LEntity";
 import { LEntityId } from "./LObject";
 
 export enum LActionTokenType {

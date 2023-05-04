@@ -1,4 +1,5 @@
 import { tr2 } from "../Common";
+import { paramSandboxWorldSystem } from "../PluginParameters";
 
 export enum DChronusTimeFrameKind {
     Daytime = 0,
@@ -20,7 +21,7 @@ export interface DChronusTimeTone {
 }
 
 export class DChronus {
-    public enabled: boolean;
+    public get enabled() { return paramSandboxWorldSystem; }
 
     public readonly timeFrames: DChronusTimeFrame[];
     public readonly timeTones: DChronusTimeTone[];
@@ -47,7 +48,6 @@ export class DChronus {
     public readonly hoursInDay = 24;
 
     public constructor() {
-        this.enabled = false;
         this.timeFrames = [
             { name: tr2("深夜"), kind: DChronusTimeFrameKind.Nighttime, startHour: 0, lastHouer: 4, timeFrameId: 0 },
             { name: tr2("早朝"), kind: DChronusTimeFrameKind.Nighttime, startHour: 5, lastHouer: 6, timeFrameId: 1 },
@@ -69,7 +69,7 @@ export class DChronus {
         this.daysOfMonth = [31,28,31,30,31,30,31,31,30,31,30,31];
         this.monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
         this.weekNames = ["(日)", "(月)", "(火)", "(水)", "(木)", "(金)", "(土)"];
-        this.secondsInRound = this.secondsInHour; //60;
+        this.secondsInRound = this.secondsInHour / 6;   // 10 minutes
     }
 
     /** 1日の秒数 */
@@ -84,12 +84,17 @@ export class DChronus {
 
     public getDaysOfWeek(): number {
         return this.weekNames.length;
-    };
+    }
 
     public getDaysOfMonth(month: number): number {
         return this.daysOfMonth[month - 1];
-    };
+    }
 
+    public getMonthOfYear(): number {
+        return this.monthNames.length;
+    }
+
+    /** 1年の日数 */
     public getDaysOfYear(): number {
         let result = 0;
         for (const d of this.daysOfMonth) {

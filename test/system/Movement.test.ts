@@ -3,7 +3,7 @@ import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { MRData } from "ts/mr/data/MRData";
 import { LActivity, LDashType } from "ts/mr/lively/activities/LActivity";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { LUnitBehavior } from "ts/mr/lively/behaviors/LUnitBehavior";
 import { HMovement } from "ts/mr/lively/helpers/HMovement";
 import { LTileShape } from "ts/mr/lively/LBlock";

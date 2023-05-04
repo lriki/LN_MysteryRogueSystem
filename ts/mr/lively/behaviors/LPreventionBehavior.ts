@@ -3,7 +3,7 @@ import { MRBasics } from "ts/mr/data/MRBasics";
 import { SCommandResponse } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { UName } from "ts/mr/utility/UName";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { MRLively } from "../MRLively";
 import { LBehavior, SRejectionInfo } from "./LBehavior";
 

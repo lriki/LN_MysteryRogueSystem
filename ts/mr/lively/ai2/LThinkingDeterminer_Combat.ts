@@ -1,7 +1,7 @@
 import { MRSerializable } from "ts/mr/Common";
 import { SPhaseResult } from "ts/mr/system/SCommand";
 import { UAction } from "ts/mr/utility/UAction";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LThinkingAction } from "./LThinkingAction";
 import { LThinkingAgent } from "./LThinkingAgent";
 import { LThinkingDeterminer } from "./LThinkingDeterminer";

@@ -3,7 +3,7 @@ import { LStateLevelType } from "ts/mr/data/DEffect";
 import { DAutoRemovalTiming, DState, DStateEffect, DStateId } from "ts/mr/data/DState";
 import { DStateGroup } from "ts/mr/data/DStateGroup";
 import { MRData } from "ts/mr/data/MRData";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { LState } from "ts/mr/lively/states/LState";
 import { SStateFactory } from "ts/mr/system/SStateFactory";
 import { Diag } from "../Diag";

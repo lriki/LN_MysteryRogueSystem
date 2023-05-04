@@ -2,7 +2,7 @@ import { assert } from "../Common";
 import { LandExitResult, MRData } from "../data/MRData";
 import { MRDataManager } from "../data/MRDataManager";
 import { FMap } from "../floorgen/FMapData";
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
 import { SSequelSet } from "../system/SSequel";
 import { SIntegration } from "../system/SIntegration";
 import { MRView } from "../view/MRView";

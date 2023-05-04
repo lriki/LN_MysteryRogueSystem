@@ -1,9 +1,9 @@
 import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
 import { MRData } from "ts/mr/data/MRData";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { LEffectResult } from "ts/mr/lively/LEffectResult";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { USpawner } from "ts/mr/utility/USpawner";
 import { SCommandContext } from "../SCommandContext";

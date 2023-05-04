@@ -1,6 +1,6 @@
 import { MRLively } from "ts/mr/lively/MRLively";
 import { DecisionPhase, LBehavior } from "ts/mr/lively/behaviors/LBehavior";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { SPhaseResult } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { MovingMethod } from "../LMap";

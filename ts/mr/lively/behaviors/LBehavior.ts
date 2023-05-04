@@ -32,7 +32,7 @@ import { SEffectSubject } from "ts/mr/system/SEffectContext";
 import { SCommand, SCommandResponse, SPhaseResult } from "../../system/SCommand";
 import { SCommandContext } from "../../system/SCommandContext";
 import { LBehaviorId, LEntityId, LObject, LObjectType } from "../LObject";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LActivity } from "../activities/LActivity";
 import { DAnimationId, DParameterId } from "ts/mr/data/DCommon";
 import { LEventResult } from "../LEventServer";
@@ -50,7 +50,7 @@ import { LMap } from "../LMap";
 import { DEmittor } from "ts/mr/data/DEmittor";
 import { SActivityContext } from "ts/mr/system/SActivityContext";
 import { LFieldEffect } from "../LFieldEffect";
-import { SSubTaskChain } from "ts/mr/system/tasks/STask";
+import { SSubTaskChain, STaskYieldResult } from "ts/mr/system/tasks/STask";
 import { LParam } from "../LParam";
 import { LThinkingAgent } from "../ai2/LThinkingAgent";
 import { DBehaviorProps } from "ts/mr/data/DBehavior";
@@ -380,7 +380,7 @@ export abstract class LBehavior extends LObject {
     // また実行内容も onAction などとは少し毛色が違うので、あえて分離してみる。
     onDecisionPhase(self: LEntity, cctx: SCommandContext, phase: DecisionPhase): SPhaseResult { return SPhaseResult.Pass; }
 
-    onCommand(self: LEntity, cctx: SCommandContext, chain: SSubTaskChain, cmd: SCommand): void { }
+    public *onCommand(self: LEntity, cctx: SCommandContext, cmd: SCommand): Generator<STaskYieldResult> { }
 
     public onPreprocessActivity(cctx: SCommandContext, activity: LActivity): LActivity { return activity; }
     

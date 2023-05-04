@@ -1,7 +1,7 @@
 import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
 import { DClarificationType } from "ts/mr/data/MRBasics";
 import { LEffectResult } from "ts/mr/lively/LEffectResult";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { MRSystem } from "../MRSystem";
 import { SCommandContext } from "../SCommandContext";

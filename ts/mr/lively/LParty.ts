@@ -1,6 +1,6 @@
 import { assert, MRSerializable } from "ts/mr/Common";
 import { MRLively } from "./MRLively";
-import { LEntity } from "./LEntity";
+import { LEntity } from "./entity/LEntity";
 import { LBehaviorId, LEntityId } from "./LObject";
 import { DEventId } from "ts/mr/data/predefineds/DBasicEvents";
 import { LBehavior } from "./internal";
@@ -8,7 +8,7 @@ import { LEventResult } from "./LEventServer";
 import { LJournal } from "./LJournal";
 import { MRData } from "../data";
 import { DLandId } from "../data/DCommon";
-import { LInventoryBehavior } from "./behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "./entity/LInventoryBehavior";
 
 export type LPartyId = number;
 

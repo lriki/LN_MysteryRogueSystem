@@ -1,7 +1,7 @@
 import { assert } from "../Common";
 import { DScript } from "../data/DScript";
 import { MRSystem } from "../system/MRSystem";
-import { LEntity } from "./LEntity";
+import { LEntity } from "./entity/LEntity";
 import { LScriptContext, LScriptCallMode, LScriptId } from "./LScript";
 
 

@@ -3,7 +3,7 @@ import { MRBasics } from "ts/mr/data/MRBasics";
 import { RoomEventArgs } from "ts/mr/data/predefineds/DBasicEvents";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { LBlock } from "ts/mr/lively/LBlock";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { LMap, MovingMethod } from "ts/mr/lively/LMap";
 import { Helpers } from "../system/Helpers";
 import { MRSystem } from "../system/MRSystem";

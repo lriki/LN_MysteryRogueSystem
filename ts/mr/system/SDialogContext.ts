@@ -1,7 +1,7 @@
 
 import { assert } from "ts/mr/Common";
 import { MRLively } from "../lively/MRLively";
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
 import { SCommandContext } from "./SCommandContext";
 import { ActivityRecordingCommandType } from "./SActivityRecorder";
 import { MRSystem } from "./MRSystem";

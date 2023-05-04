@@ -1,4 +1,4 @@
-import { LInventoryBehavior } from "../lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "../lively/entity/LInventoryBehavior";
 import { MRLively } from "../lively/MRLively";
 
 // たくさんの場所に条件を追加しなければならなくなる。

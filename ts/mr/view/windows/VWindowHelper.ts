@@ -1,6 +1,6 @@
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 import { LItemBehavior } from "ts/mr/lively/behaviors/LItemBehavior";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { UName } from "ts/mr/utility/UName";
 
 export class VWindowHelper {

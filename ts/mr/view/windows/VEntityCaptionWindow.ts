@@ -1,4 +1,4 @@
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { VLayout } from "../ui/VUIElement";
 import { VWindowHelper } from "./VWindowHelper";
 

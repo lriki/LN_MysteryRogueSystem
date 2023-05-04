@@ -1,4 +1,4 @@
-import { LEntity } from "../lively/LEntity";
+import { LEntity } from "../lively/entity/LEntity";
 import { MRData } from "../data/MRData";
 import { MRLively } from "../lively/MRLively";
 import { LDecisionBehavior } from "../lively/behaviors/LDecisionBehavior";
@@ -6,7 +6,7 @@ import { LUnitBehavior } from "../lively/behaviors/LUnitBehavior";
 import { LExitPointBehavior } from "ts/mr/lively/behaviors/LExitPointBehavior";
 import { LItemUserBehavior } from "ts/mr/lively/behaviors/LItemUserBehavior";
 import { LCommonBehavior } from "ts/mr/lively/behaviors/LCommonBehavior";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { LItemBehavior } from "ts/mr/lively/behaviors/LItemBehavior";
 import { LTrapBehavior } from "ts/mr/lively/behaviors/LTrapBehavior";
 import { LEnemyBehavior } from "ts/mr/lively/behaviors/LEnemyBehavior";

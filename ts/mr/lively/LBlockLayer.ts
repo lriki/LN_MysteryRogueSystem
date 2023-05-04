@@ -1,5 +1,5 @@
 import { MRSerializable } from "../Common";
-import { LEntity } from "./LEntity";
+import { LEntity } from "./entity/LEntity";
 import { LEntityId } from "./LObject";
 import { MRLively } from "./MRLively";
 

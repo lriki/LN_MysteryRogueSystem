@@ -1,7 +1,7 @@
 import { MRSerializable } from "ts/mr/Common";
 import { DTextManager } from "ts/mr/data/DTextManager";
 import { MRBasics } from "ts/mr/data/MRBasics";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { MRLively } from "../MRLively";
 import { LBehavior, LNameView } from "./LBehavior";
 

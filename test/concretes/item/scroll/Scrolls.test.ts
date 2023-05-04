@@ -1,4 +1,4 @@
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { SEntityFactory } from "ts/mr/system/SEntityFactory";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "../../../TestEnv";
@@ -6,7 +6,7 @@ import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { MRLively } from "ts/mr/lively/MRLively";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { LFloorId } from "ts/mr/lively/LFloorId";
 import { ULimitations } from "ts/mr/utility/ULimitations";
 import { paramMaxTrapsInMap } from "ts/mr/PluginParameters";

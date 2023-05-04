@@ -1,6 +1,6 @@
 import { MRDataManager } from "ts/mr/data/MRDataManager";
 import { MRLively } from "ts/mr/lively/MRLively";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { SSequelSet } from "ts/mr/system/SSequel";
 import { VSequelManager } from "./VSequelManager";
 import { VEntity } from "./VEntity";

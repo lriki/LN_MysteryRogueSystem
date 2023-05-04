@@ -1,6 +1,6 @@
 import { MRSerializable } from "ts/mr/Common";
 import { USearch } from "ts/mr/utility/USearch";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 
 /**
  * LActionDeterminer で有効スキルが発生しなかったため移動処理を行う際に、移動先座標を決定するためのクラス。

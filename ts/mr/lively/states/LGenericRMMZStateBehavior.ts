@@ -1,7 +1,7 @@
 import { SCommandResponse, SPhaseResult } from "ts/mr/system/SCommand";
 import { SCommandContext } from "ts/mr/system/SCommandContext";
 import { DecisionPhase, LBehavior } from "../behaviors/LBehavior";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LState } from "./LState";
 import { DAutoRemovalTiming, DState, DStateEffect, DStateRestriction } from "ts/mr/data/DState";
 import { assert, MRSerializable } from "ts/mr/Common";

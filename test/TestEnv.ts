@@ -4,7 +4,7 @@ import { LandExitResult, MRData } from "ts/mr/data/MRData";
 import { MRDataManager } from "ts/mr/data/MRDataManager";
 import { FMap } from "ts/mr/floorgen/FMapData";
 import { MRLively } from "ts/mr/lively/MRLively";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { SSequelSet } from "ts/mr/system/SSequel";
 import { SIntegration } from "ts/mr/system/SIntegration";
 import { SGameManager } from "ts/mr/system/SGameManager";

@@ -7,7 +7,7 @@ import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { SEntityFactory } from "ts/mr/system/internal";
 import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { MRData } from "ts/mr/data/MRData";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { MRBasics } from "ts/mr/data/MRBasics";
 
 beforeAll(() => {

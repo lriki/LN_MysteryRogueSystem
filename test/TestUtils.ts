@@ -1,7 +1,7 @@
 import { assert } from "ts/mr/Common";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { UName } from "ts/mr/utility/UName";
 

@@ -1,10 +1,10 @@
 import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
 import { SCommandContext } from "../SCommandContext";
 import { SSpecialEffect } from "./SSpecialEffect";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { SEffect } from "../SEffectApplyer";
 import { LEffectResult } from "ts/mr/lively/LEffectResult";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { assert, tr2 } from "ts/mr/Common";
 import { UName } from "ts/mr/utility/UName";
 import { paramDestroyOverflowingItems } from "ts/mr/PluginParameters";

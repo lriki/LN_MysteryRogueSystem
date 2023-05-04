@@ -4,8 +4,10 @@ import { DChronusTimeFrame } from "../data/DChronus";
 
 @MRSerializable
 export class LChronus {
+    // NOTE: トリアコンタンさんのプラグインは秒と日数を分けていたが、
+    // 本プラグインではマップロード時に前回セーブ時の日時との差分から
+    // シミュレーションを実行したりするので、差分を出しやすいようにひとつの変数で表す。
     private _totalSeconds: number;
-    private _totalDays: number;
 
     private _currentTimeFrameIndex: number;
     private _revisionNumber: number;
@@ -13,10 +15,13 @@ export class LChronus {
 
     public constructor() {
         this._totalSeconds = 0;
-        this._totalDays = 0;
         this._currentTimeFrameIndex = 0;
         this._revisionNumber = 0;
         this._needsLivingTimeFrameRefresh = false;
+    }
+
+    public get revisionNumber(): number {
+        return this._revisionNumber;
     }
 
     /** 日中の秒数。(0 ~ MRData.chronus.secondsInDay-1) */
@@ -25,8 +30,8 @@ export class LChronus {
     }
 
     /** 経過日数 */
-    public get totalDays(): number {
-        return this._totalDays;
+    public getTotalDays(): number {
+        return Math.floor(this._totalSeconds / MRData.chronus.secondsInDay);
     }
 
     public get currentTimeFrameIndex(): number {
@@ -54,7 +59,7 @@ export class LChronus {
     };
 
     private isHourInRange(start: number, last: number) {
-        var hour = this.hour;
+        var hour = this.getClockHour();
         return hour >= start && hour <= last;
     };
 
@@ -64,17 +69,7 @@ export class LChronus {
     
     private advanceSeconds(secs: number): void {
         if (!MRData.chronus.enabled) return;
-        const secondsInDay = MRData.chronus.secondsInDay;
         this._totalSeconds += secs;
-        while (this._totalSeconds >= secondsInDay) {
-            this.advanceDay(1);
-            this._totalSeconds -= secondsInDay;
-        }
-        this.requireRefresh();
-    }
-
-    private advanceDay(days: number): void {
-        this._totalDays += days;
         this.requireRefresh();
     }
 
@@ -82,9 +77,7 @@ export class LChronus {
         this._revisionNumber++;
         const oldTimeFrameKind = this.currentTimeFrame.kind;
         this._currentTimeFrameIndex = this.getTimeFrameIndex();
-        console.log("this.currentTimeFrame", this.currentTimeFrame);
         if (oldTimeFrameKind !== this.currentTimeFrame.kind) {
-            console.log("reserveLivingTimeFrameRefresh");
             this.reserveLivingTimeFrameRefresh();
         }
     }
@@ -102,13 +95,108 @@ export class LChronus {
     }
 
     public get weekIndex(): number {
-        return this._totalDays % MRData.chronus.getDaysOfWeek();
+        return this.getTotalDays() % MRData.chronus.getDaysOfWeek();
     }
 
-    public get hour(): number {
-        return Math.floor(this._totalSeconds / MRData.chronus.secondsInHour);
+    /** 現在の曜日名 */
+    public getWeekName(): string {
+        return MRData.chronus.weekNames[this.weekIndex];
+    };
+
+    /** 現在の秒表示 (0~59) */
+    public getClockSecond(): number {
+        return Math.floor(this._totalSeconds / MRData.chronus.secondsInMinute);
     }
 
+    /** 現在の時表示 (0~23) */
+    public getClockHour(): number {
+        return Math.floor(this._totalSeconds / MRData.chronus.secondsInHour % MRData.chronus.hoursInDay);
+    }
+
+    /** 現在の分表示 (0~59) */
+    public getClockMinute(): number {
+        return Math.floor(this._totalSeconds / MRData.chronus.secondsInMinute % MRData.chronus.minutesInHour);
+    }
+
+    /** 現在の日表示 (1~12) */
+    public getCalendarDay(): number {
+        let days = this.getTotalDays() % MRData.chronus.getDaysOfYear();
+        for (let i = 0; i < MRData.chronus.daysOfMonth.length; i++) {
+            if (days < MRData.chronus.daysOfMonth[i]) return days + 1;
+            days -= MRData.chronus.daysOfMonth[i];
+        }
+        throw new Error("Unreachable.");
+    }
+
+    /** 現在の月表示 (1~12) */
+    public getCalendarMonth(): number {
+        let days = this.getTotalDays() % MRData.chronus.getDaysOfYear();
+        for (let i = 0; i < MRData.chronus.daysOfMonth.length; i++) {
+            days -= MRData.chronus.daysOfMonth[i];
+            if (days < 0) return i + 1;
+        }
+        throw new Error("Unreachable.");
+    }
+
+    /** 現在の年表示 (1~12) */
+    public getCalendarYear(): number {
+        return Math.floor(this.getTotalDays() / MRData.chronus.getDaysOfYear()) + 1;
+    }
+
+    public getDisplayText(): string {
+        return this.convertDateFormatText("YYYY/MM/DD HH24:MI");
+    }
+
+    public convertDateFormatText(format: string): string {
+        format = format.replace(/(YYYY)/gi, (substring, args) => {
+            return this.getValuePadding(this.getCalendarYear(), substring.length);
+        });
+        format = format.replace(/MON/gi, () => {
+            return MRData.chronus.monthNames[this.getCalendarMonth() - 1];
+        });
+        format = format.replace(/MM/gi, () => {
+            return this.getValuePadding(this.getCalendarMonth(), String(MRData.chronus.getMonthOfYear()).length);
+        });
+        format = format.replace(/DDALL/gi, () => {
+            return this.getValuePadding(this.getTotalDays());
+        });
+        format = format.replace(/DD/gi, () => {
+            return this.getValuePadding(this.getCalendarDay(),
+                String(MRData.chronus.getDaysOfMonth(this.getCalendarMonth())).length);
+        });
+        format = format.replace(/HH24/gi, () => {
+            return this.getValuePadding(this.getClockHour(), 2);
+        });
+        format = format.replace(/HH12/gi, () => {
+            return this.getValuePadding(this.getClockHour() % 12, 2);
+        });
+        format = format.replace(/AM/gi, () => {
+            return Math.floor(this.getClockHour() / 12) === 0 ?
+                $gameSystem.isJapanese() ? '午前' : 'Morning  ' :
+                $gameSystem.isJapanese() ? '午後' : 'Afternoon';
+        });
+        format = format.replace(/MI/gi, () => {
+            return this.getValuePadding(this.getClockMinute(), 2);
+        });
+        format = format.replace(/DY/gi, () => {
+            return this.getWeekName();
+        });
+        // format = format.replace(/TZ/gi, () => {
+        //     return this.getTimeZoneName();
+        // });
+        return format;
+    };
+
+    private getValuePadding(value: number, digit: number = 0, padChar?: string | undefined) {
+        // if (this._disablePadding) {
+        //     return value;
+        // }
+        if (arguments.length === 2) padChar = '0';
+        var result = '';
+        for (var i = 0; i < digit; i++) result += padChar;
+        result += value;
+        return result.substr(-digit);
+    };
 
     
 

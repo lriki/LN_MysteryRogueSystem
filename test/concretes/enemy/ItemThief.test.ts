@@ -6,7 +6,7 @@ import { MRData } from "ts/mr/data/MRData";
 import { DEntityCreateInfo } from "ts/mr/data/DSpawner";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { MRBasics } from "ts/mr/data/MRBasics";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { assert } from "ts/mr/Common";
 import { LItemBehavior } from "ts/mr/lively/behaviors/LItemBehavior";
 

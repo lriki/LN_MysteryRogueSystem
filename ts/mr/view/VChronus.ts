@@ -1,5 +1,6 @@
 import { assert } from "../Common";
 import { MRData } from "../data";
+import { LChronus } from "../lively/LChronus";
 import { MRLively } from "../lively/MRLively";
 import { VKeyFrameAnimationCurve } from "./animation/VAnimation";
 
@@ -11,6 +12,7 @@ export class VChronus {
     private _textBitmap: Bitmap;
     private _textSprite: Sprite;
     private _fadeAnimation: VKeyFrameAnimationCurve;
+    private _chronusWindow: VChronusWindow;
 
     public constructor(scene: Scene_Map) {
         this._timeFrameId = -1;
@@ -43,6 +45,9 @@ export class VChronus {
         this._fadeAnimation.addFrame(60, 255);
         this._fadeAnimation.addFrame(120, 255);
         this._fadeAnimation.addFrame(180, 0);
+        
+        this._chronusWindow = new VChronusWindow(new Rectangle(0, 0, 200, 60));
+        scene.addWindow(this._chronusWindow);
     }
 
     public update(): void {
@@ -87,4 +92,33 @@ export class VChronus {
         // }
         $gameScreen.startTint(tone, withEffect ? this.getEffectDuration() : 0);
     };
+}
+
+export class VChronusWindow extends Window_Base {
+    private _revisionNumber: number;
+
+    public constructor(rect: Rectangle) {
+        super(rect);
+        this._revisionNumber = 0;
+        this.refresh();
+    }
+
+    public get chronus(): LChronus  {
+        return MRLively.chronus;
+    }
+
+    override update(): void {
+        super.update();
+        if (this._revisionNumber !== this.chronus.revisionNumber) {
+            this._revisionNumber = this.chronus.revisionNumber;
+            this.refresh();
+        }
+    }
+
+    public refresh(): void {
+        this.contents.clear();
+        var width  = this.contents.width;
+        var height = this.lineHeight();
+        this.contents.drawText(this.chronus.getDisplayText(), 0, 0, width, height, 'left');
+    }
 }

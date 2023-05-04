@@ -2,7 +2,7 @@ import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
 import { DStateId } from "ts/mr/data/DState";
 import { MRData } from "ts/mr/data/MRData";
 import { LEffectResult } from "ts/mr/lively/LEffectResult";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { LRandom } from "ts/mr/lively/LRandom";
 import { UState } from "ts/mr/utility/UState";
 import { SCommandContext } from "../SCommandContext";

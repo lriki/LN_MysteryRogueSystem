@@ -6,7 +6,7 @@ import { UMovement } from "ts/mr/utility/UMovement";
 import { LActivity } from "../activities/LActivity";
 import { LBlock } from "../LBlock";
 import { LActionTokenConsumeType } from "../LCommon";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { MRLively } from "../MRLively";
 
 @MRSerializable

@@ -1,6 +1,6 @@
 import { tr2 } from "ts/mr/Common";
-import { LInventoryBehavior } from "ts/mr/lively/behaviors/LInventoryBehavior";
-import { LEntity } from "ts/mr/lively/LEntity";
+import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
+import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { EntityIdentificationLevel } from "ts/mr/lively/LIdentifyer";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { paramInventoryItemsPerPage } from "ts/mr/PluginParameters";

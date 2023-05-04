@@ -1,7 +1,7 @@
 import { MRSerializable } from "ts/mr/Common";
 import { DParameterId } from "ts/mr/data/DCommon";
 import { LBehavior, LBehaviorGroup } from "../internal";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { MRLively } from "../MRLively";
 
 

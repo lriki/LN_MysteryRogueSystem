@@ -4,7 +4,7 @@ import { MRData } from "ts/mr/data/MRData";
 import { checkContinuousResponse, SCommandResponse } from "ts/mr/system/SCommand";
 import { LBehaviorId, LObject, LObjectId, LObjectType } from "../LObject";
 import { MRLively } from "../MRLively";
-import { LEntity } from "../LEntity";
+import { LEntity } from "../entity/LEntity";
 import { LBehavior } from "../behaviors/LBehavior";
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { DParameterId } from "ts/mr/data/DCommon";
