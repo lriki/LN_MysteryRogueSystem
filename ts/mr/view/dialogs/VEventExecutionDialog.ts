@@ -23,9 +23,11 @@ export class VEventExecutionDialog extends VDialog {
             event = $gameMap.event(this.model.rmmzEventId());
         }
 
-        if (1) {
-            const data = new DScript(event.list());
-            MRLively.scriptManager.callCommand(this.model.owner, data, "MRCommand-OnTalk");
+        // TODO: とりあえず、既存の階段イベントが動かなくなるので暫定処置。
+        // callCommand() 方式に統一したい。
+        const data = new DScript(event.list());
+        if (MRLively.scriptManager.callCommand(this.model.owner, data, "MRCommand-OnTalk")) {
+            
         }
         else {
             event.start();

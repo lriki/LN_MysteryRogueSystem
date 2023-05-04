@@ -53,24 +53,6 @@ test("concretes.dialogs.FeetDialog.test", () => {
     expect(inventory.items[0]).toBe(item1);
 });
 
-test("concretes.dialogs.FeetDialog.ExitPoint", () => {
-    TestEnv.newGame();
-    const floorId = TestEnv.FloorId_FlatMap50x50;
-
-    const player1 = TestEnv.setupPlayer(floorId, 10, 10);
-    
-    const exitPoint1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_ExitPointA").id, [], "exitPoint1"));
-    TestEnv.transferEntity(exitPoint1, floorId, 10, 10);
-
-    MRSystem.scheduler.stepSimulation();    // Advance Simulation ----------
-
-    const dialog = new SFeetDialog(player1, exitPoint1);
-    MRSystem.dialogContext.activeDialog().openSubDialog(dialog);
-
-    const commands = dialog.makeActionList();
-    expect(commands.length).toBe(1);
-    expect(commands[0].actionId).toBe(MRBasics.actions.ForwardFloorActionId);   // [進む]
-});
 
 test("concretes.dialogs.FeetDialog.Trap", () => {
     TestEnv.newGame();

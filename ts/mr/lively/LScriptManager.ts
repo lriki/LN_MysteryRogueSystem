@@ -28,13 +28,15 @@ export class LScriptManager {
         return script;
     }
 
-    public callCommand(entity: LEntity | undefined, finalClassScript: DScript, label: string): void {
+    public callCommand(entity: LEntity | undefined, finalClassScript: DScript, label: string): boolean {
         const id = this.getId();
         const script = new LScriptContext(id, entity, finalClassScript, label, LScriptCallMode.Command);
         if (script.isValid) {
             this._scriptContexts[id] = script;
             MRSystem.integration.onStartEventScript(script);
+            return true;
         }
+        return false;
     }
 
     private getId(): LScriptId {

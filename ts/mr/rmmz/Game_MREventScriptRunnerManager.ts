@@ -1,7 +1,8 @@
-import { assert } from "../Common";
+import { MRSerializable, assert } from "../Common";
 import { LScriptContext } from "../lively/LScript";
 import { Game_MREventScriptRunner } from "./Game_MREventScriptRunner";
 
+@MRSerializable
 export class Game_MREventScriptRunnerManager {
     public _eventScriptRunners: (Game_MREventScriptRunner | undefined)[];
 
