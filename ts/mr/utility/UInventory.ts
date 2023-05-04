@@ -48,7 +48,7 @@ export class UInventory {
                 return sa - sb;
             });
         }
-        inventory._entities = result.map(x => x.entityId().clone());
+        inventory.entities = result.map(x => x.entityId().clone());
     }
 
     public static makeMergedStackables(inventory: LInventoryBehavior): LEntity[] {

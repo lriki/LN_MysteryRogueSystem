@@ -100,6 +100,7 @@ test("concretes.item.pots.PotBasic.PotIntoPot", () => {
     // 壺に壺は入らない
     expect(inventory1.contains(item2)).toBeTruthy();
     expect(item1Inventory.contains(item2)).toBeFalsy();
+    expect(MRLively.messageHistory.includesText("入れることはできない")).toBeTruthy();
 });
 
 test("concretes.item.pots.PotBasic.CollideAllItems", () => {

@@ -137,7 +137,18 @@ export class LEntity extends LObject
     _partyId: LPartyId = 0;
 
     
-    //private _parentIsMap = false;
+    _name: string = ""; // 主にデバッグ用
+
+    // HC3 で作ってた CommonAttribute はこっちに持ってきた。
+    // これらは Entity ごとに一意であるべきで、Framework が必要としている必須パラメータ。
+    // Attribute よりはこっちに置いた方がいいだろう。
+    _displayName: string = '';
+    _iconName: string = '';
+    //_blockLayer: BlockLayer = BlockLayer.Unit;
+
+    _weight: number = 1; // 重さ
+
+
 
     public constructor() {
         super(LObjectType.Entity);
@@ -230,14 +241,6 @@ export class LEntity extends LObject
         return MRLively.mapView.currentMap.uniqueSpawners[this.dataId];
     }
 
-    _name: string = ""; // 主にデバッグ用
-
-    // HC3 で作ってた CommonAttribute はこっちに持ってきた。
-    // これらは Entity ごとに一意であるべきで、Framework が必要としている必須パラメータ。
-    // Attribute よりはこっちに置いた方がいいだろう。
-    _displayName: string = '';
-    _iconName: string = '';
-    //_blockLayer: BlockLayer = BlockLayer.Unit;
 
 
     /**

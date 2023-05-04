@@ -96,7 +96,7 @@
  * 
  */
 
-import { assert, MRSerializable } from "ts/mr/Common";
+import { assert, MRSerializable, tr2 } from "ts/mr/Common";
 import { LEntityId } from "../LObject";
 import { MRLively } from "../MRLively";
 import { LEntity } from "../LEntity";
@@ -106,17 +106,34 @@ import { SCommand, SCommandResponse, STestAddItemCommand } from "ts/mr/system/SC
 import { MRBasics } from "ts/mr/data/MRBasics";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { ItemRemovedFromInventoryArgs } from "ts/mr/data/predefineds/DBasicEvents";
-import { paramDefaultStorageLimit, paramDestroyOverflowingItems, paramInventoryCapacity } from "ts/mr/PluginParameters";
+import { paramDefaultStorageLimit, paramDestroyOverflowingItems, paramInventoryCapacity, paramWorldSandboxSystem } from "ts/mr/PluginParameters";
 import { DBehaviorProps } from "ts/mr/data/DBehavior";
 import { SSubTaskChain } from "ts/mr/system/tasks/STask";
+import { UName } from "ts/mr/utility/UName";
 //import { TDrop } from "ts/mr/transactions/TDrop";
 
 @MRSerializable
 export class LInventoryBehavior extends LBehavior {
-    _entities: LEntityId[] = [];
-    private _gold: number = 0;
-    private _capacity: number = paramInventoryCapacity;
-    private _storage: boolean = false;
+    private _items: LEntityId[];
+    private _gold: number;
+    private _capacity: number;
+    private _storage: boolean;
+
+    public constructor() {
+        super();
+        this._items = [];
+        this._gold = 0;
+        this._capacity = paramWorldSandboxSystem ? 999 : paramInventoryCapacity;
+        this._storage = false;
+    }
+
+    public get entities(): LEntityId[] {
+        return this._items;
+    }
+
+    public set entities(value: LEntityId[]) {
+        this._items = value;
+    }
 
     public get capacity(): number {
         return this._capacity;
@@ -127,15 +144,15 @@ export class LInventoryBehavior extends LBehavior {
     }
 
     public get itemCount(): number {
-        return this._entities.length;
+        return this._items.length;
     }
 
     public get remaining(): number {
-        return this._capacity - this._entities.length;
+        return this._capacity - this._items.length;
     }
 
     public get isFully(): boolean {
-        return this._entities.length >= this._capacity;
+        return this._items.length >= this._capacity;
     }
 
     public get isStorage(): boolean {
@@ -143,11 +160,11 @@ export class LInventoryBehavior extends LBehavior {
     }
 
     public hasAnyItem(): boolean {
-        return this._entities.length > 0;
+        return this._items.length > 0;
     }
 
     public get items(): LEntity[] {
-        return this._entities.map(x => MRLively.world.entity(x));
+        return this._items.map(x => MRLively.world.entity(x));
     }
 
     override onInitialized(self: LEntity, props: DBehaviorProps): void {
@@ -159,7 +176,7 @@ export class LInventoryBehavior extends LBehavior {
 
     override onQueryNameView(self: LEntity, nameView: LNameView): void {
         if (this._storage) {
-            nameView.capacity = this.capacity - this._entities.length;
+            nameView.capacity = this.capacity - this._items.length;
         }
     }
 
@@ -167,7 +184,7 @@ export class LInventoryBehavior extends LBehavior {
         const b = MRLively.world.spawn(LInventoryBehavior);
         // Item のディープコピーはやめてみる。
         // 盗み能力を持つ敵にわざとアイテムを盗ませて分裂の杖を振ればアイテム増殖ができてしまうことになる。
-        b._entities = [];
+        b._items = [];
         b._gold = this._gold;
         return b
     }
@@ -188,7 +205,7 @@ export class LInventoryBehavior extends LBehavior {
             entity.clearParent();
             entity.destroy();
         }
-        this._entities.splice(0);
+        this._items.splice(0);
 
         this._gold = 0;
     }
@@ -213,20 +230,20 @@ export class LInventoryBehavior extends LBehavior {
     //     }
 
         // 消える分のアイテムはあらかじめ呼び出し側で処理しておくこと。
-        assert(newCapacity >= this._entities.length);
+        assert(newCapacity >= this._items.length);
 
         this._capacity =  newCapacity.clamp(0, paramDefaultStorageLimit);
     }
 
     public iterateItems(func : ((item: LEntity) => void) | ((item: LEntity) => boolean)): void {
-        for (const id of this._entities) {
+        for (const id of this._items) {
             const r = func(MRLively.world.entity(id));
             if (r === false) break;
         }
     } 
 
     public contains(entity: LEntity): boolean {
-        return this._entities.findIndex(x => x.equals(entity.entityId())) >= 0;
+        return this._items.findIndex(x => x.equals(entity.entityId())) >= 0;
     }
 
     public addEntity(entity: LEntity) {
@@ -235,8 +252,8 @@ export class LInventoryBehavior extends LBehavior {
         assert(!this.isFully);
 
         const id = entity.entityId();
-        assert(this._entities.find(x => x.equals(id)) === undefined);
-        this._entities.push(id);
+        assert(this._items.find(x => x.equals(id)) === undefined);
+        this._items.push(id);
         
         entity.setParent(this);
     }
@@ -275,9 +292,9 @@ export class LInventoryBehavior extends LBehavior {
         assert(entity.parentObject() == this);
 
         const id = entity.entityId();
-        const index = this._entities.findIndex(x => x.equals(id));
+        const index = this._items.findIndex(x => x.equals(id));
         assert(index >= 0);
-        this._entities.splice(index, 1);
+        this._items.splice(index, 1);
         
         entity.clearParent();
         
@@ -288,7 +305,7 @@ export class LInventoryBehavior extends LBehavior {
 
 
     onRemoveChild(entity: LEntity): void {
-        if (this._entities.mutableRemove(x => x.equals(entity.entityId()))) {
+        if (this._items.mutableRemove(x => x.equals(entity.entityId()))) {
             entity.clearParent();
 
             
@@ -334,6 +351,7 @@ export class LInventoryBehavior extends LBehavior {
         if (cmd instanceof STestAddItemCommand) {
             // 壺の中に壺は入れられない。
             if (this._storage && cmd.item.hasTrait(MRBasics.traits.DisallowIntoStorage)) {
+                cctx.postMessage(tr2("%1を入れることはできない。").format(UName.makeNameAsItem(cmd.item)));
                 return;
             }
 
