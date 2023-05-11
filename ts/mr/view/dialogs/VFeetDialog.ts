@@ -1,7 +1,7 @@
 import { SFeetDialog } from "ts/mr/system/dialogs/SFeetDialog";
 import { VDialog } from "./VDialog";
-import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
-import { VEntityCaptionWindow } from "../windows/VEntityCaptionWindow";
+import { VFlexCommandWindow } from "../window/windows/VFlexCommandWindow";
+import { VEntityCaptionWindow } from "../window/windows/VEntityCaptionWindow";
 import { tr2 } from "ts/mr/Common";
 import { SDetailsDialog } from "ts/mr/system/dialogs/SDetailsDialog";
 

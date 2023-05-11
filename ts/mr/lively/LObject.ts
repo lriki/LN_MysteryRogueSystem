@@ -119,11 +119,21 @@ export class LObject {
         return this._parentObjectId.hasAny();
     }
 
+    public hasLivingParent(): boolean {
+        if (this.hasParent()) {
+            // 親は既に削除されていない？
+            if (!!MRLively.world.findObject(this._parentObjectId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public isGCReady(): boolean {
         // Unique Entity は削除されない
         if (this.isUnique()) return false;
         // 親から参照されているものは削除されない (明示的に除外されなければならない)
-        if (this.hasParent()) return false;
+        if (this.hasLivingParent()) return false;
         
         return true;
     }
@@ -184,7 +194,7 @@ export class LObject {
      * 除外された UniqueEntity 以外の Entity は、そのターンの間にいずれかから参照を得ない場合 GC によって削除される。
      */
     public removeFromParent(): void {
-        if (this.hasParent()) {
+        if (this.hasLivingParent()) {
             // onRemoveFromParent() では、parent を間接的に参照しているオブジェクトの後始末を行う。
             // 様々な理由で parent にアクセスするため、parent が null になる前に、this に通知する。
             this.onRemoveFromParent();

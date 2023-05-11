@@ -102,6 +102,8 @@ export const paramQuestSystem = false;
 
 export const paramSandboxWorldSystem = getBoolean("SandboxWorldSystem", false);
 
+export const paramDisableWindowStencil = getBoolean("DisableWindowStencil", false);
+
 //Maximum number of items in the map
 
 /*

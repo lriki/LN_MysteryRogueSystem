@@ -1,8 +1,8 @@
 import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
-import { SCommandContext } from "../SCommandContext";
+import { SCommandContext } from "../../SCommandContext";
 import { SSpecialEffect } from "./SSpecialEffect";
 import { LEntity } from "ts/mr/lively/entity/LEntity";
-import { SEffect } from "../SEffectApplyer";
+import { SEffect } from "../../SEffectApplyer";
 import { LEffectResult } from "ts/mr/lively/LEffectResult";
 import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { assert, tr2 } from "ts/mr/Common";

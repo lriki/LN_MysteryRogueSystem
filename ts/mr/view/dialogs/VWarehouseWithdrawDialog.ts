@@ -1,9 +1,9 @@
 import { tr, tr2 } from "ts/mr/Common";
 import { SWarehouseWithdrawDialog } from "ts/mr/system/dialogs/SWarehouseWithdrawDialog";
 import { LEntity } from "ts/mr/lively/entity/LEntity";
-import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
+import { VFlexCommandWindow } from "../window/windows/VFlexCommandWindow";
 import { VItemListDialogBase, VItemListMode } from "./VItemListDialogBase";
-import { VWindowHelper } from "../windows/VWindowHelper";
+import { VWindowHelper } from "../window/VWindowHelper";
 
 export class VWarehouseWithdrawDialog extends VItemListDialogBase {
     private _model: SWarehouseWithdrawDialog;

@@ -5,10 +5,10 @@ import { MRData } from "ts/mr/data/MRData";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 import { LExperienceBehavior } from "ts/mr/lively/behaviors/LExperienceBehavior";
 import { LEntity } from "ts/mr/lively/entity/LEntity";
-import { VAnimation, VEasingAnimationCurve } from "../animation/VAnimation";
-import { easing } from "../animation/VEasing";
-import { VUITextElement } from "../ui/VUIElement";
-import { VUIGridLayout } from "../ui/VUIGridLayout";
+import { VAnimation, VEasingAnimationCurve } from "../../animation/VAnimation";
+import { easing } from "../../animation/VEasing";
+import { VUITextElement } from "../../ui/VUIElement";
+import { VUIGridLayout } from "../../ui/VUIGridLayout";
 
 export class VMainStatusWindow extends Window_Base {
     private _entity: LEntity | undefined;

@@ -32,9 +32,17 @@ import "./mr/rmmz/Sprite_Character";
 import "./mr/rmmz/Spriteset_Base";
 import "./mr/rmmz/Spriteset_Map";
 import "./mr/rmmz/Window_MapName";
+import "./mr/rmmz/WindowLayer";
 import "./mr/rmmz/PluginCommands";
 import "./mr/rmmz/JsonEx";
 import "./mr/ConsoleCommands";
 
 export * from "./mr/data/index";
+export * from "./mr/view/MRView";
+export * from "./mr/view/VChronus";
+
+// 後段のプラグインが、 MRModule という名前で MRシステムにアクセスできるようにする。
+(window as any).MRModule = this;
+
+
 

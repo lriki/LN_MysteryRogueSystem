@@ -168,7 +168,7 @@ test("concretes.item.pots.PotBasic.CollideAllItems", () => {
 
     const enemy1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_スライムA").id, [], "enemy1"));
     TestEnv.transferEntity(enemy1, floorId, 15, 10);
-    enemy1.setParamCurrentValue(MRBasics.params.hp, 1); // HPを1にしておく
+    enemy1.setParamCurrentValue(MRBasics.params.hp, 2); // HPを2にしておく (投げ当て1ダメで倒れないように)
 
     MRSystem.scheduler.stepSimulation(); // Advance Simulation --------------------------------------------------
 
@@ -184,8 +184,8 @@ test("concretes.item.pots.PotBasic.CollideAllItems", () => {
     expect(item1.isDestroyed()).toBeTruthy();
     expect(item2.isDestroyed()).toBeTruthy();
     expect(item3.isDestroyed()).toBeTruthy();
-    expect(item4.isDestroyed()).toBeTruthy();   // 衝突効果なく明示的に destroy() されていなくても、Inventory から取り出されて親が無ければ GC される
-    expect(!!enemy1.states.find(x => x.stateDataId() == MRData.getState("kState_UT混乱").id)).toBe(true);
+    expect(item4.isDestroyed()).toBeFalsy();   // 衝突効果が無ければ、地面に落下する。
+    expect(enemy1.isStateAffected(MRData.getState("kState_UT混乱").id)).toBeTruthy();
     expect(enemy1.getActualParam(MRBasics.params.hp)).toBeGreaterThan(10);
 });
 

@@ -23,9 +23,9 @@ beforeAll(() => {
 });
 
 
-//------------------------------------------------------------------------------
-// Reinforcement Scroll
-//------------------------------------------------------------------------------
+//==============================================================================
+// 天の恵みの巻物
+//==============================================================================
 test("concretes.item.Scrolls.ReinforcementScroll.Weapon.basic", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_UnitTestFlatMap50x50;
@@ -192,9 +192,9 @@ test("concretes.item.Scrolls.ReinforcementScroll.Shield.basic", () => {
 });
 
 
-//------------------------------------------------------------------------------
-// InflateStorage Scroll
-//------------------------------------------------------------------------------
+//==============================================================================
+// 壺増大の巻物
+//==============================================================================
 test("concretes.item.Scrolls.InflateStorage", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_UnitTestFlatMap50x50;
@@ -223,9 +223,9 @@ test("concretes.item.Scrolls.InflateStorage", () => {
     expect(storageInventory.capacity).toBe(capacity1 + 1);
 });
 
-//------------------------------------------------------------------------------
-// DeflateStorage Scroll
-//------------------------------------------------------------------------------
+//==============================================================================
+// 壺縮小の巻物
+//==============================================================================
 test("concretes.item.Scrolls.DeflateStorage", () => {
     TestEnv.newGame();
     const floorId = TestEnv.FloorId_UnitTestFlatMap50x50;
@@ -269,9 +269,85 @@ test("concretes.item.Scrolls.DeflateStorage", () => {
     
 });
 
-//------------------------------------------------------------------------------
+//==============================================================================
+// 壺割れずの巻物
+//==============================================================================
+test("concretes.item.Scrolls.StorageProtectionScroll", () => {
+    TestEnv.newGame();
+    const stateId = MRData.getState("kState_System_StorageProtection").id;
+
+    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
+    const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
+    
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_壺割れずの巻物A").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_保存の壺A").id, [], "item2"));
+    inventory1.addEntity(item1);
+    inventory1.addEntity(item2);
+
+    // Player の右に壁を作る
+    MRLively.mapView.currentMap.block(player1.mx + 2, player1.my)._tileShape = LTileShape.Wall;
+
+    MRSystem.scheduler.stepSimulation();
+
+    //--------------------------------------------------------------------------
+
+    // [読む]
+    MRSystem.dialogContext.postActivity(LActivity.makeRead(player1, item1, [item2]).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
+    
+    MRSystem.scheduler.stepSimulation();
+
+    // 壺割れず効果が付いている
+    expect(item2.isStateAffected(stateId)).toBe(true);
+    expect(item2.hasTrait(MRBasics.traits.StorageProtection)).toBe(true);
+});
+
+//==============================================================================
+// すいだしの巻物
+//==============================================================================
+test("concretes.item.Scrolls.SuckOutScroll", () => {
+    TestEnv.newGame();
+
+    const player1 = TestEnv.setupPlayer(TestEnv.FloorId_UnitTestFlatMap50x50, 10, 10);
+    const inventory1 = player1.getEntityBehavior(LInventoryBehavior);
+    
+    const item1 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_すいだしの巻物A").id, [], "item1"));
+    const item2 = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_保存の壺A").id, [], "item2"));
+    inventory1.addEntity(item1);
+    inventory1.addEntity(item2);
+    
+    // 壺にアイテムを詰める
+    const storageInventory = item2.getEntityBehavior(LInventoryBehavior);
+    const items: LEntity[] = [];
+    for (let i = 0; i < storageInventory.capacity; i++) {
+        const item = SEntityFactory.newEntity(DEntityCreateInfo.makeSingle(MRData.getEntity("kEntity_薬草A").id, [], "itemX" + i));
+        storageInventory.addEntity(item);
+        items.push(item);
+    }
+    
+    MRSystem.scheduler.stepSimulation();
+
+    //--------------------------------------------------------------------------
+
+    // [読む]
+    MRSystem.dialogContext.postActivity(LActivity.makeRead(player1, item1, [item2]).withConsumeAction());
+    MRSystem.dialogContext.activeDialog().submit();
+    
+    MRSystem.scheduler.stepSimulation();
+    
+    // 壺を持っている人を位置を中心に、中身は散らばっている
+    const ox = player1.mx;
+    const oy = player1.my;
+    for (const item of items) {
+        expect(
+            (ox - 1) <= item.mx && item.mx <= (ox + 1) &&
+            (oy - 1) <= item.my && item.my <= (oy + 1)).toBeTruthy();
+    }
+});
+
+//==============================================================================
 // TrapScroll Scroll
-//------------------------------------------------------------------------------
+//==============================================================================
 test("concretes.item.Scrolls.TrapScroll", () => {
     TestEnv.newGame();
     const floorId = LFloorId.makeFromKeys("MR-Land:UnitTestDungeon1", "kFloor_ランダム罠テスト");
@@ -308,9 +384,9 @@ test("concretes.item.Scrolls.TrapScroll", () => {
 });
 
 
-//------------------------------------------------------------------------------
+//==============================================================================
 // Sanctuary Scroll
-//------------------------------------------------------------------------------
+//==============================================================================
 // 張り付いていないので、効果を発揮しない
 test("concretes.item.Scrolls.Sanctuary.NoEffect", () => {
     TestEnv.newGame();
@@ -426,9 +502,9 @@ test("concretes.item.Scrolls.Sanctuary.ForceDeth", () => {
     expect(enemy1.isDestroyed()).toBe(true);
 });
 
-//------------------------------------------------------------------------------
+//==============================================================================
 // RestartScroll Scroll
-//------------------------------------------------------------------------------
+//==============================================================================
 test("concretes.item.Scrolls.RestartScroll", async () => {
     TestEnv.newGame();
     MRLively.recorder.setSavefileId(999);

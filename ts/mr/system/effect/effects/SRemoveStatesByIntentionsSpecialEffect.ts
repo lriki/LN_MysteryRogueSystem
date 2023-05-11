@@ -2,8 +2,8 @@ import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
 import { DStateIntentions } from "ts/mr/data/DState";
 import { LEffectResult } from "ts/mr/lively/LEffectResult";
 import { LEntity } from "ts/mr/lively/entity/LEntity";
-import { SCommandContext } from "../SCommandContext";
-import { SEffect } from "../SEffectApplyer";
+import { SCommandContext } from "../../SCommandContext";
+import { SEffect } from "../../SEffectApplyer";
 import { SSpecialEffect } from "./SSpecialEffect";
 
 export class SRemoveStatesByIntentionsSpecialEffect extends SSpecialEffect {

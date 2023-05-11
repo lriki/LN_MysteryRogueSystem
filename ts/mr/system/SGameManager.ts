@@ -29,7 +29,7 @@ import { LBlock } from "ts/mr/lively/LBlock";
 import { UTransfer } from "ts/mr/utility/UTransfer";
 import { LObjectType } from "ts/mr/lively/LObject";
 import { STurnContext } from "./STurnContext";
-import { SSpecialEffectManager } from "./effects/SSpecialEffectManager";
+import { SSpecialEffectManager } from "./effect/SSpecialEffectManager";
 import { SFormulaOperand } from "./SFormulaOperand";
 import { LEntity } from "../lively/entity/LEntity";
 import { LInventoryBehavior } from "../lively/entity/LInventoryBehavior";

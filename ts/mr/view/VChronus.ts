@@ -2,6 +2,7 @@ import { assert } from "../Common";
 import { MRData } from "../data";
 import { LChronus } from "../lively/LChronus";
 import { MRLively } from "../lively/MRLively";
+import { MRView } from "./MRView";
 import { VKeyFrameAnimationCurve } from "./animation/VAnimation";
 
 export class VChronus {
@@ -46,7 +47,7 @@ export class VChronus {
         this._fadeAnimation.addFrame(120, 255);
         this._fadeAnimation.addFrame(180, 0);
         
-        this._chronusWindow = new VChronusWindow(new Rectangle(0, 0, 200, 60));
+        this._chronusWindow =  MRView.windowFactory.createWindowr(VChronusWindow, new Rectangle(0, 0, 200, 60));
         scene.addWindow(this._chronusWindow);
     }
 
@@ -99,6 +100,7 @@ export class VChronusWindow extends Window_Base {
 
     public constructor(rect: Rectangle) {
         super(rect);
+        this._isWindow = false;
         this._revisionNumber = 0;
         this.refresh();
     }

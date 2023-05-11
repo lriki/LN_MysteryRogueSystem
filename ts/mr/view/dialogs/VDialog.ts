@@ -20,6 +20,10 @@ export class VDialog {
         this.model = model;
     }
 
+    public get scene(): Scene_Base {
+        return SceneManager._scene;
+    }
+
     protected dialogContext(): SDialogContext {
         return MRSystem.dialogContext;
     }
@@ -109,16 +113,16 @@ export class VDialog {
     }
 
     public get windowLayer(): PIXI.Container {
-        return SceneManager._scene._windowLayer as any;
+        return this.scene._windowLayer as any;
     }
 
     protected addWindow(window: Window_Base) {
-        SceneManager._scene.addWindow(window);
+        this.scene.addWindow(window);
         this._windows.push(window);
     }
 
     private _removeWindow(window: Window_Base) {
-        const windowLayer = SceneManager._scene._windowLayer as any;
+        const windowLayer = this.scene._windowLayer as any;
         windowLayer.removeChild(window);
     }
 

@@ -1,8 +1,8 @@
 import { VDialog } from "./VDialog";
-import { VWindowHelper } from "../windows/VWindowHelper";
+import { VWindowHelper } from "../window/VWindowHelper";
 import { SNicknameDialog } from "ts/mr/system/dialogs/SNicknameDialog";
-import { VNicknameEditWindow } from "../windows/VNicknameEditWindow";
-import { VNicknameInputWindow } from "../windows/VNicknameInputWindow";
+import { VNicknameEditWindow } from "../window/windows/VNicknameEditWindow";
+import { VNicknameInputWindow } from "../window/windows/VNicknameInputWindow";
 
 /**
  * 未識別アイテムの名前付け

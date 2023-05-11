@@ -1,6 +1,6 @@
 import { LEntity } from "ts/mr/lively/entity/LEntity";
-import { VLayout } from "../ui/VUIElement";
-import { VWindowHelper } from "./VWindowHelper";
+import { VLayout } from "../../ui/VUIElement";
+import { VWindowHelper } from "../VWindowHelper";
 
 export class VEntityCaptionWindow extends Window_Base {
     private _entity: LEntity;

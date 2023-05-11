@@ -410,6 +410,17 @@ export namespace Tilemap {
 }
 
 
+//-----------------------------------------------------------------------------
+/**
+ * The layer which contains game windows.
+ *
+ * @class
+ * @extends PIXI.Container
+ */
+class WindowLayer extends PIXI.Container {
+	
+}
+
 
 export interface Array<T> {
 	clone(): T[]; 

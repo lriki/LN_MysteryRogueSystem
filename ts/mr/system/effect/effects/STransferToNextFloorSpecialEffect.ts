@@ -5,8 +5,8 @@ import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { LFloorId } from "ts/mr/lively/LFloorId";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { UTransfer } from "ts/mr/utility/UTransfer";
-import { SCommandContext } from "../SCommandContext";
-import { SEffect } from "../SEffectApplyer";
+import { SCommandContext } from "../../SCommandContext";
+import { SEffect } from "../../SEffectApplyer";
 import { SSpecialEffect } from "./SSpecialEffect";
 
 export class STransferToNextFloorSpecialEffect extends SSpecialEffect {

@@ -1,6 +1,6 @@
 import { VDialog } from "./VDialog";
 import { SDetailsDialog } from "ts/mr/system/dialogs/SDetailsDialog";
-import { VDetailsWindow } from "../windows/VDetailsWindow";
+import { VDetailsWindow } from "../window/windows/VDetailsWindow";
 
 export class VDetailsDialog extends VDialog {
     public readonly model: SDetailsDialog;

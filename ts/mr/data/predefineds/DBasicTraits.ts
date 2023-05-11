@@ -227,6 +227,10 @@ export interface DBasicTraits {
      */
     DisallowIntoStorage: DTraitId;
 
+    /**
+     * 壺割れず
+     */
+    StorageProtection: DTraitId;
     
 }
 

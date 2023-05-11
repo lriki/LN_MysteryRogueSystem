@@ -1,17 +1,64 @@
+//import fs from "fs";
 import { SPlayerDialog } from "ts/mr/system/dialogs/SPlayerDialog";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { MRSystem } from "ts/mr/system/MRSystem";
 import { TestEnv } from "./TestEnv";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
-
-beforeAll(() => {
+//import { Browser, Page } from 'puppeteer';
+// declare global {
+//     const browser: Browser;
+//     const page: Page;
+//   }
+beforeAll(async () => {
     TestEnv.setupDatabase();
+    //await (page as any).goto('https://google.com');
 });
 
 afterAll(() => {
 });
 
+// eval 前に定義しておかないと、"$dataActors = null;" の時に Reference Error になる。
+// let $dataActors = null;
+// let $dataClasses = null;
+// let $dataSkills = null;
+// let $dataItems = null;
+// let $dataWeapons = null;
+// let $dataArmors = null;
+// let $dataEnemies = null;
+// let $dataTroops = null;
+// let $dataStates = null;
+// let $dataAnimations = null;
+// let $dataTilesets = null;
+// let $dataCommonEvents = null;
+// let $dataSystem = null;
+// let $dataMapInfos = null;
+// let $dataMap = null;
+// let $gameTemp = null;
+// let $gameSystem = null;
+// let $gameScreen = null;
+// let $gameTimer = null;
+// let $gameMessage = null;
+// let $gameSwitches = null;
+// let $gameVariables = null;
+// let $gameSelfSwitches = null;
+// let $gameActors = null;
+// let $gameParty = null;
+// let $gameTroop = null;
+// let $gameMap = null;
+// let $gamePlayer = null;
+// let $testEvent = null;
+
+// eval(fs.readFileSync("C:/Proj/LN_MysteryRogueSystem/js/libs/pixi.js").toString());
+// eval(fs.readFileSync("C:/Proj/LN_MysteryRogueSystem/js/rmmz_core.js").toString());
+// eval(fs.readFileSync("C:/Proj/LN_MysteryRogueSystem/js/rmmz_managers.js").toString());
+//eval(fs.readFileSync("C:/Proj/LN_MysteryRogueSystem/js/rmmz_objects.js").toString());
+
+
 test("Basic1", () => {
+    // console.log("DataManager", DataManager);
+    // console.log("DataManager.isDatabaseLoaded", DataManager.isDatabaseLoaded());
+
+
     // NewGame.
     TestEnv.newGame();
 

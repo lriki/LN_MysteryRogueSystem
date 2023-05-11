@@ -107,6 +107,8 @@ export class UAction {
     
     /**
      * entity を現在マップの指定位置へ落とす。"Fall" ではないため、これによって罠が発動したりすることは無い。
+     * 
+     * @deprecated use TDrop
      */
     public static postDropOrDestroy(cctx: SCommandContext, entity: LEntity, mx: number, my: number): void {
         cctx.postCall(() => {

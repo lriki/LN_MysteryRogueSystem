@@ -13,10 +13,12 @@ import { MRBasics } from "ts/mr/data/MRBasics";
 const SprinkleDropedRate = 15;  // 15%
 
 /**
- * 
  */
 @MRSerializable
 export class LCrackedBehavior extends LBehavior {
+    
+    /*
+    */
     public constructor() {
         super();
     }
@@ -34,51 +36,68 @@ export class LCrackedBehavior extends LBehavior {
 
             // 壁に当たった？
             if (cmd.cause == SEndProjectileMovingCause.NoPassage) {
-                this.crackeAndDropItems(cctx, self);
-                yield STaskYieldResult.Reject;
+                if (this.tryCrackeAndDropItems(cctx, self)) {
+                    yield STaskYieldResult.Reject;
+                }
             }
         }
         
         // 別の Entity に衝突した？
         if (cmd instanceof SItemReactionCommand && cmd.itemActionId == MRBasics.actions.collide) {
-            cctx.postSequel(self, MRBasics.sequels.crack);
-            cctx.postMessage(tr2("%1は割れた。").format(UName.makeNameAsItem(self)));
 
-            // 格納されているアイテムをすべてぶつける
-            const inventory = self.findEntityBehavior(LInventoryBehavior);
-            if (inventory) {
-                const items = inventory.items;
-                inventory.clearItems();
-                for (const item of items) {
-                    cctx.postCommandTask(new SItemReactionCommand(
-                        MRBasics.actions.collide, item, cmd.target, [], cmd.subject, cmd.direction));
+            
+            if (!this.checkProtected(self)) {
+                cctx.postSequel(self, MRBasics.sequels.crack);
+                cctx.postMessage(tr2("%1は割れた。").format(UName.makeNameAsItem(self)));
+
+                // 格納されているアイテムをすべてぶつける
+                const inventory = self.findEntityBehavior(LInventoryBehavior);
+                if (inventory) {
+                    const items = inventory.items;
+                    inventory.clearItems();
+                    for (const item of items) {
+                        cctx.postCommandTask(new SItemReactionCommand(
+                            MRBasics.actions.collide, item, cmd.target, [], cmd.subject, cmd.direction));
+                    }
                 }
+
+                cctx.postDestroy(self);
             }
 
-            cctx.postDestroy(self);
-            // 衝突した時の Effect 発動など、後続の処理は行いたいので、処理済みにはしない。
+            // 衝突した時の Effect 発動 (投げ当て1ダメージ) など、後続の処理は行いたいので、処理済みにはしない。
         }
 
         // 転んでバラまかれた？
         if (cmd instanceof SSprinkleDropedCommand) {
             if (cctx.random().nextIntWithMax(100) < SprinkleDropedRate) {
-                this.crackeAndDropItems(cctx, self);
+                this.tryCrackeAndDropItems(cctx, self);
             }
         }
     }
 
-    private crackeAndDropItems(cctx: SCommandContext, self: LEntity): void {
+    private tryCrackeAndDropItems(cctx: SCommandContext, self: LEntity): boolean {
+        // 壺割れず？
+        if (this.checkProtected(self)) return false;
+
         cctx.postSequel(self, MRBasics.sequels.crack);
         cctx.postMessage(tr2("%1は割れた。").format(UName.makeNameAsItem(self)));
 
-        const inventory = self.findEntityBehavior(LInventoryBehavior);
-        if (inventory) {
-            for (const item of inventory.items) {
-                TDrop.dropOrDestroyEntityForce(cctx, item, self.mx, self.my);
-            }
-        }
+        TDrop.makeFromEntityInventory(self)
+            .withLocation(self.mx, self.my)
+            .performe(cctx);
+        // const inventory = self.findEntityBehavior(LInventoryBehavior);
+        // if (inventory) {
+        //     for (const item of inventory.items) {
+        //         TDrop.dropOrDestroyEntityForce(cctx, item, self.mx, self.my);
+        //     }
+        // }
 
         cctx.postDestroy(self);
+        return true;
+    }
+
+    private checkProtected(self: LEntity): boolean {
+        return self.hasTrait(MRBasics.traits.StorageProtection);
     }
 
 }

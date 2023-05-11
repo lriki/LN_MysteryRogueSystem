@@ -342,6 +342,7 @@ export class MRDataManager {
             MRBasics.traits.ForceParameter = MRData.newTrait("ForceParameter").id;
             MRBasics.traits.DisableMovement = MRData.newTrait("DisableMovement").id;
             MRBasics.traits.DisallowIntoStorage = MRData.newTrait("DisallowIntoStorage").id;
+            MRBasics.traits.StorageProtection = MRData.newTrait("StorageProtection").id;
         }
 
         // Factions
@@ -464,6 +465,7 @@ export class MRDataManager {
             removeStatesByIntentions: MRData.newEffectBehavior("RemoveStatesByIntentions").id,
             performeSkill: MRData.newEffectBehavior("PerformeSkill").id,
             gainCapacity: MRData.newEffectBehavior("GainCapacity").id,
+            suckOut: MRData.newEffectBehavior("SuckOut").id,
         };
 
         MRData.newBehavior("kBehavior_Common", "LCommonBehavior", "Common");

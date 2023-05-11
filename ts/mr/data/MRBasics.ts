@@ -48,6 +48,8 @@ export interface DBasicSpecialEffects {
      * 
      */
     gainCapacity: DSpecialEffectId;
+
+    suckOut: DSpecialEffectId;
 }
 
 export enum DClarificationType {

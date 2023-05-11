@@ -803,6 +803,7 @@ export class MRSetup {
             case "kEntity_保存の壺A":
                 entity.addReaction(MRBasics.actions.PutInActionId);
                 entity.addReaction(MRBasics.actions.PickOutActionId);
+                entity.addReaction(MRBasics.actions.collide, MRData.getSkill("kSkill_投げ当て_1ダメ").emittor());
                 entity.entity.behaviors.push(new DBehaviorInstantiation(MRData.getBehavior("Inventory").id, {code: "Inventory", minCapacity: 4, maxCapacity: 6, storage: true}));
                 break;
             case "kEntity_くちなしの巻物A":
@@ -973,6 +974,23 @@ export class MRSetup {
                 emittor.scope.range = DEffectFieldScopeType.Selection;
                 entity.addReaction(MRBasics.actions.ReadActionId, entity.mainEmittor());
                 emittor.effectSuite.targetEffect(0).effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.gainCapacity, entityId: 0, dataId: 0, value: -1 });
+                break;
+            }
+            case "kEntity_壺割れずの巻物A": {
+                this.setupScrollCommon(entity);
+                const emittor = entity.mainEmittor();
+                emittor.scope.range = DEffectFieldScopeType.Selection;
+                emittor.effectSuite.targetEffect(0).effect.rmmzSpecialEffectQualifyings.push({code: DItemEffect.EFFECT_ADD_STATE, dataId: MRData.getState("kState_System_StorageProtection").id, value1: 1.0, value2: 0});
+                emittor.effectSuite.targetEffect(0).effect.flavorEffect = DFlavorEffect.fromRmmzAnimationId(12);
+                entity.addReaction(MRBasics.actions.ReadActionId, emittor);
+                break;
+            }
+            case "kEntity_すいだしの巻物A": {
+                this.setupScrollCommon(entity);
+                const emittor = entity.mainEmittor();
+                emittor.scope.range = DEffectFieldScopeType.Selection;
+                entity.addReaction(MRBasics.actions.ReadActionId, entity.mainEmittor());
+                emittor.effectSuite.targetEffect(0).effect.effectBehaviors.push({ specialEffectId: MRBasics.effectBehaviors.suckOut, entityId: 0, dataId: 0, value: -1 });
                 break;
             }
             case "kEntity_投擲反射石A":
@@ -1362,6 +1380,10 @@ export class MRSetup {
                 data.effect.traits.push({ code: MRBasics.traits.ParamDamageRate, dataId: MRBasics.params.upgradeValue, value: 0.0 });
                 data.applyConditions.kindIds = [MRBasics.entityCategories.WeaponKindId, MRBasics.entityCategories.ShieldKindId];
                 break;
+            case "kState_System_StorageProtection":
+                data.effect.traits.push({ code: MRBasics.traits.StorageProtection, dataId: 0, value: 0 });
+                data.applyConditions.kindIds = [MRBasics.entityCategories.PotKindId];
+                break;
         }
     }
     
@@ -1537,6 +1559,7 @@ export class MRSetup {
 
     public static setupStorageCommon(entity: DEntity): void {
         this.setupItemCommon(entity);
+        entity.entity.kindId = MRBasics.entityCategories.PotKindId;
         entity.identificationDifficulty = DIdentificationDifficulty.Obscure;
         entity.selfTraits.push({ code: MRBasics.traits.DisallowIntoStorage, dataId: 0, value: 0 });
     }

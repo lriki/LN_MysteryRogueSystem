@@ -2,12 +2,12 @@ import { tr, tr2 } from "ts/mr/Common";
 import { SWarehouseStoreDialog } from "ts/mr/system/dialogs/SWarehouseStoreDialog";
 import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { LEntity } from "ts/mr/lively/entity/LEntity";
-import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
-import { VItemListWindow } from "../windows/VItemListWindow";
+import { VFlexCommandWindow } from "../window/windows/VFlexCommandWindow";
+import { VItemListWindow } from "../window/windows/VItemListWindow";
 import { VDialog } from "./VDialog";
 import { VItemListDialogBase, VItemListMode } from "./VItemListDialogBase";
 import { SDetailsDialog } from "ts/mr/system/dialogs/SDetailsDialog";
-import { VWindowHelper } from "../windows/VWindowHelper";
+import { VWindowHelper } from "../window/VWindowHelper";
 
 export class VWarehouseStoreDialog extends VItemListDialogBase {
     _model: SWarehouseStoreDialog;

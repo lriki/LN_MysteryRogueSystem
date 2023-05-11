@@ -1,7 +1,7 @@
 import { SItemListDialog } from "ts/mr/system/dialogs/SItemListDialog";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 import { LEntity } from "ts/mr/lively/entity/LEntity";
-import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
+import { VFlexCommandWindow } from "../window/windows/VFlexCommandWindow";
 import { VItemListDialogBase, VItemListMode } from "./VItemListDialogBase";
 import { UInventory } from "ts/mr/utility/UInventory";
 

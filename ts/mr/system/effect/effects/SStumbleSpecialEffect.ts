@@ -3,8 +3,8 @@ import { MRBasics } from "ts/mr/data/MRBasics";
 import { LActivity } from "ts/mr/lively/activities/LActivity";
 import { LEffectResult } from "ts/mr/lively/LEffectResult";
 import { LEntity } from "ts/mr/lively/entity/LEntity";
-import { SCommandContext } from "../SCommandContext";
-import { SEffect } from "../SEffectApplyer";
+import { SCommandContext } from "../../SCommandContext";
+import { SEffect } from "../../SEffectApplyer";
 import { SSpecialEffect } from "./SSpecialEffect";
 
 // 転ぶ (一般的な英語は fall だが、本システムとして fall はいろいろ使うので混乱を避けるため stumble にしてみる)

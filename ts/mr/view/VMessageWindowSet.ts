@@ -4,9 +4,10 @@ import { VPlayerStatusWindow2 } from "./rules/default/VPartyStatusWindow";
 import { VSceneMapView_Default } from "./rules/default/VSceneMapView_Default";
 import { VSceneMapView } from "./rules/VSceneMapView";
 import { VHudWindow } from "./VHudWindow";
-import { VFloorNameWindow } from "./windows/VFloorNameWindow";
-import { VMessageLogWindow } from "./windows/VMessageLogWindow";
-import { VWindowHelper } from "./windows/VWindowHelper";
+import { VFloorNameWindow } from "./window/windows/VFloorNameWindow";
+import { VMessageLogWindow } from "./window/windows/VMessageLogWindow";
+import { VWindowHelper } from "./window/VWindowHelper";
+import { VMinimapWindow } from "./window/windows/VMinimapWindow";
 
 
 /**
@@ -23,6 +24,8 @@ export class VMessageWindowSet {
 
     private _logWindow: VMessageLogWindow | undefined;
     //private _messageWindow: VMessageWindow;
+
+    private _minimapWindow: VMinimapWindow;
 
     // コアスクリプトのフェード機能は Window 全体にも影響する。つまり、黒画面の上に文字だけ出すような演出ができない。
     // そのため黒Spriteで画面を覆うようにすることで独自のフェード処理を実装する。
@@ -54,6 +57,12 @@ export class VMessageWindowSet {
 
         this._floorNameWindow = new VFloorNameWindow(new Rectangle(0, 0, Graphics.boxWidth, Graphics.boxHeight));
         this._scene.addWindow(this._floorNameWindow);
+
+
+        this._minimapWindow = new VMinimapWindow(new Rectangle(0, VHudWindow.HeaderHeight, Graphics.boxWidth, Graphics.boxHeight));
+        this._scene.addWindow(this._minimapWindow);
+
+        //this._scene._windowLayer.addChildAt( this._minimapWindow , 0);
 
         
         this._fadeDuration = 0;

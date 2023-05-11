@@ -11,7 +11,7 @@ import { SDialogContext } from "./SDialogContext";
 import { SGroundRules } from "./SGroundRules";
 import { MRSystemExtension } from "./MRSystemExtension";
 import { STurnContext } from "./STurnContext";
-import { SSpecialEffectManager } from "./effects/SSpecialEffectManager";
+import { SSpecialEffectManager } from "./effect/SSpecialEffectManager";
 import { SFormulaOperand } from "./SFormulaOperand";
 import { LEntityId } from "../lively/LObject";
 import { SFovShadowMap } from "./SFovShadowMap";

@@ -6,10 +6,11 @@ import { VSequelFactory } from "./VSequelFactory";
 import { VMapGuideGrid } from "./VMapGuideGrid";
 import { VMessageWindowSet } from "./VMessageWindowSet";
 import { VSpriteSet } from "./VSpriteSet";
-import { VChallengeResultWindow } from "./windows/VChallengeResultWindow";
+import { VChallengeResultWindow } from "./window/windows/VChallengeResultWindow";
 import { VChronus } from "./VChronus";
 import { VDialogManager } from "./VDialogManager";
 import { paramSandboxWorldSystem } from "../PluginParameters";
+import { VWindowFactory } from "./window/VWindowFactory";
 
 /**
  * REシステムと RMMZ の橋渡しを行うモジュールのルートクラス。
@@ -23,6 +24,7 @@ export class MRView {
     // グローバルな情報
     static ext: MRVisualExtension = new MRVisualExtension();
     static sequelFactory: VSequelFactory | undefined;
+    static windowFactory: VWindowFactory;
     static dialogManager: VDialogManager | undefined;
     static mapBuilder: VMapEditor | undefined;
     static chronus: VChronus | undefined;
@@ -44,6 +46,7 @@ export class MRView {
         this.finalize();
         this.sequelFactory = new VSequelFactory();
         this.dialogManager = new VDialogManager();
+        this.windowFactory = new VWindowFactory();
     }
 
     static onSceneChanged(scene: Scene_Map) {

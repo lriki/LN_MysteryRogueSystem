@@ -5,8 +5,8 @@ import { LEffectResult } from "ts/mr/lively/LEffectResult";
 import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { LRandom } from "ts/mr/lively/LRandom";
 import { UState } from "ts/mr/utility/UState";
-import { SCommandContext } from "../SCommandContext";
-import { SEffect } from "../SEffectApplyer";
+import { SCommandContext } from "../../SCommandContext";
+import { SEffect } from "../../SEffectApplyer";
 import { SSpecialEffect } from "./SSpecialEffect";
 
 export class SAddStateSpecialEffect extends SSpecialEffect {

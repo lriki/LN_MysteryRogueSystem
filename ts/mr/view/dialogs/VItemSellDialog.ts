@@ -1,10 +1,10 @@
 import { tr, tr2 } from "ts/mr/Common";
 import { SWarehouseWithdrawDialog } from "ts/mr/system/dialogs/SWarehouseWithdrawDialog";
 import { LEntity } from "ts/mr/lively/entity/LEntity";
-import { VFlexCommandWindow } from "../windows/VFlexCommandWindow";
+import { VFlexCommandWindow } from "../window/windows/VFlexCommandWindow";
 import { VItemListDialogBase, VItemListMode } from "./VItemListDialogBase";
 import { SItemSellDialog } from "ts/mr/system/dialogs/SItemSellDialog";
-import { VItemListPriceTag } from "../windows/VItemListWindow";
+import { VItemListPriceTag } from "../window/windows/VItemListWindow";
 
 export class VItemSellDialog extends VItemListDialogBase {
     private _model: SItemSellDialog;

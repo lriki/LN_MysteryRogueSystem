@@ -1,6 +1,6 @@
 import { MRLively } from "ts/mr/lively/MRLively";
-import { VMessageLogWindow } from "../../windows/VMessageLogWindow";
-import { VWindowHelper } from "../../windows/VWindowHelper";
+import { VMessageLogWindow } from "../../window/windows/VMessageLogWindow";
+import { VWindowHelper } from "../../window/VWindowHelper";
 import { VSceneMapView } from "../VSceneMapView";
 import { VLayoutDef } from "./VDefaultRule";
 import { VPartyInfoWindow } from "./VPartyInfoWindow";

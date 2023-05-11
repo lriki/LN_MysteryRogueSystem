@@ -8,8 +8,8 @@ import { LRandom } from "ts/mr/lively/LRandom";
 import { UAction } from "ts/mr/utility/UAction";
 import { UName } from "ts/mr/utility/UName";
 import { USearch } from "ts/mr/utility/USearch";
-import { SCommandContext } from "../SCommandContext";
-import { SEffect } from "../SEffectApplyer";
+import { SCommandContext } from "../../SCommandContext";
+import { SEffect } from "../../SEffectApplyer";
 import { SSpecialEffect } from "./SSpecialEffect";
 
 export class SItemStealSpecialEffect extends SSpecialEffect {

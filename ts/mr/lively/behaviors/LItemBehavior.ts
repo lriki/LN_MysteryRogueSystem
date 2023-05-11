@@ -17,6 +17,7 @@ import { UAction } from "ts/mr/utility/UAction";
 import { SActivityContext } from "ts/mr/system/SActivityContext";
 import { DActionId } from "ts/mr/data/DCommon";
 import { SSubTaskChain, STaskYieldResult } from "ts/mr/system/tasks/STask";
+import { TDrop } from "ts/mr/transactions/TDrop";
 
 
 /**
@@ -67,8 +68,12 @@ export class LItemBehavior extends LBehavior {
     override *onCommand(self: LEntity, cctx: SCommandContext, cmd: SCommand): Generator<STaskYieldResult> {
         if (cmd instanceof SItemReactionCommand) {
             if (cmd.itemActionId == MRBasics.actions.collide) {
+
+                // TODO: このあたり、 Reaction 関係の処理は Common に移動していいかも。
+                //       destroy の有無は Reaction 側に付ける。
+                //       これによって、単に１ダメ与えてロストするようなのをやめることもできる。
                 
-                this.applyHitEffect(cctx, self, MRBasics.actions.collide, cmd.target, cmd.subject, cmd.direction, (targets: LEntity[]) => {
+                const hasReaction = this.applyHitEffect(cctx, self, MRBasics.actions.collide, cmd.target, cmd.subject, cmd.direction, (targets: LEntity[]) => {
                     if (targets.find(x => !x._effectResult.missed)) {
                         // ここは postDestroy() ではなく普通の destroy().
                         // 上記 applyEffect() の中から postAnimation() が実行されるが、
@@ -79,6 +84,12 @@ export class LItemBehavior extends LBehavior {
                         UAction.postDropOrDestroy(cctx, self, self.mx, self.my);
                     }
                 });
+
+                if (!hasReaction) {
+                    TDrop.makeFromSingleItem(self)
+                        .withLocation(cmd.target.mx, cmd.target.my)
+                        .performe(cctx);
+                }
                 //chain.accept();
             }
         }
@@ -188,7 +199,7 @@ export class LItemBehavior extends LBehavior {
         return SCommandResponse.Pass;
     }
 
-    private applyHitEffect(cctx: SCommandContext, self: LEntity, actionId: DActionId, target: LEntity, subject: LEntity, effectDir: number, onPerformedFunc?: SOnPerformedFunc): void {
+    private applyHitEffect(cctx: SCommandContext, self: LEntity, actionId: DActionId, target: LEntity, subject: LEntity, effectDir: number, onPerformedFunc?: SOnPerformedFunc): boolean {
         const entityData = self.data;
         //const emittors = entityData.emittorSet.emittors(cause);
         const reaction = entityData.findReaction(actionId);
@@ -205,20 +216,12 @@ export class LItemBehavior extends LBehavior {
                     }
                 });
             }
+            return true;
         }
         else {
             // 吹き飛ばした Enemy が他 Enemy と衝突した場合など、Reaction を持たない場合
+            return false;
         }
-        
-        // const skill = entityData.emittorSet.skill(cause);
-        // if (skill) {
-        //     cctx.postCall(() => {
-        //         SEmittorPerformer.makeWithSkill(subject.entity(), skill.id)
-        //             .setItemEntity(self)
-        //             .setDffectDirection(effectDir)
-        //             .performe(cctx);
-        //     });
-        // }
     }
 
     

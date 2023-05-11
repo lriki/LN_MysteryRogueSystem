@@ -6,8 +6,8 @@ import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { MovingMethod } from "ts/mr/lively/LMap";
 import { MRLively } from "ts/mr/lively/MRLively";
 import { UMovement } from "ts/mr/utility/UMovement";
-import { SCommandContext } from "../SCommandContext";
-import { SEffect } from "../SEffectApplyer";
+import { SCommandContext } from "../../SCommandContext";
+import { SEffect } from "../../SEffectApplyer";
 import { SSpecialEffect } from "./SSpecialEffect";
 
 export class SDivisionSpecialEffect extends SSpecialEffect {

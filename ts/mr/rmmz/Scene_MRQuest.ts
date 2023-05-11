@@ -1,7 +1,7 @@
-import { VQuestClassWindow } from "../view/windows/VQuestClassWindow";
-import { VWindowHelper } from "../view/windows/VWindowHelper";
+import { VQuestClassWindow } from "../view/window/windows/VQuestClassWindow";
+import { VWindowHelper } from "../view/window/VWindowHelper";
 import { VLayout } from "../view/ui/VUIElement";
-import { VQuestListWindow } from "../view/windows/VQuestListWindow";
+import { VQuestListWindow } from "../view/window/windows/VQuestListWindow";
 
 export class Scene_MRQuest extends Scene_MenuBase {
     private _questClassWindow!: VQuestClassWindow;

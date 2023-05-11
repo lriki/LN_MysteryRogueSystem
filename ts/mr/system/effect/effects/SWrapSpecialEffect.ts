@@ -2,8 +2,8 @@ import { DSpecialEffectRef } from "ts/mr/data/DSpecialEffect";
 import { LEffectResult } from "ts/mr/lively/LEffectResult";
 import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { UAction } from "ts/mr/utility/UAction";
-import { SCommandContext } from "../SCommandContext";
-import { SEffect } from "../SEffectApplyer";
+import { SCommandContext } from "../../SCommandContext";
+import { SEffect } from "../../SEffectApplyer";
 import { SSpecialEffect } from "./SSpecialEffect";
 
 export class SWarpSpecialEffect extends SSpecialEffect {

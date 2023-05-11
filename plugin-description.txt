@@ -22,7 +22,7 @@
  *
  * @param Group_Inventory
  * @text 持ち物
- * @default ------------------------------
+ * @default ------------------------------------------------------------
  * 
  * @param InventoryCapacity
  * @parent Group_Inventory
@@ -38,7 +38,7 @@
  * 
  * @param Group_Map
  * @text マップ
- * @default ------------------------------
+ * @default ------------------------------------------------------------
 * 
  * @param RandomMapPaddingX
  * @parent Group_Map
@@ -62,7 +62,7 @@
  *
  * @param Group_System
  * @text システム
- * @default ------------------------------
+ * @default ------------------------------------------------------------
   * 
  * @param SyncActorParams
  * @text ステータスの同期
@@ -71,16 +71,29 @@
  * @type boolean
  * @default true
  *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * @param Group_UI
+ * @text インターフェイス
+ * @default ------------------------------------------------------------
+  * 
+ * @param DisableWindowStencil
+ * @text 背面ウィンドウクリッピングの無効化
+ * @desc ウィンドウが重なるとき、背面ウィンドウが透過表示されるようになります。
+ * @parent Group_UI
+ * @type boolean
+ * @default false
  *
  * @param Group_Experimental
  * @text 試験的な機能
- * @default ------------------------------
+ * @default ------------------------------------------------------------
  *
  * @param UIMode
  * @text UIモード
  * @parent Group_Experimental
- * @type string
+ * @type select
+ * @option Default
+ * @value Default
+ * @option Traditional
+ * @value Traditional
  * @default Traditional
  *
  * @param SandboxWorldSystem
