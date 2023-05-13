@@ -32,6 +32,7 @@ import { MRSystem } from "ts/mr/system/MRSystem";
 import { LReaction } from "../LCommon";
 import { TStumble } from "ts/mr/transactions/TStumble";
 import { TThrow } from "ts/mr/transactions/TThrow";
+import { LFov } from "../LFov";
 
 enum LFeetProcess {
     None,
@@ -72,6 +73,8 @@ export class LUnitBehavior extends LBehavior {
         if (params) {
             this.setFactionId((params as any).factionId);   // TODO: type
         }
+
+        self.fov = new LFov();
     }
 
     // Battler params

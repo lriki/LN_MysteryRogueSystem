@@ -25,6 +25,7 @@ export interface DSystemStates {
     curse: DStateId,
     seal: DStateId,
     plating: DStateId,
+    storageProtection: DStateId,
 }
 
 
@@ -102,6 +103,7 @@ export class DSystem {
             curse: 0,
             seal: 0,
             plating: 0,
+            storageProtection: 0,
         }
         this.fallbackEnemyEntityId = 0;
         this.fallbackItemEntityId = 0;
@@ -136,6 +138,7 @@ export class DSystem {
         this.states.curse = curse.id;
         this.states.seal = seal.id;
         this.states.plating = MRData.getState("kState_System_Plating").id;
+        this.states.storageProtection = MRData.getState("kState_System_StorageProtection").id;
 
         this.fallbackEnemyEntityId = MRData.getEnemy("kEntity_スライムA").entityId;
         this.fallbackItemEntityId = MRData.getItem("kEntity_雑草A").id;

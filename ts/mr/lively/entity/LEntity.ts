@@ -42,6 +42,7 @@ import { LMap } from "../LMap";
 import { DEntitySpawner } from "../../data/DSpawner";
 import { LThinkingAgent } from "../ai2/LThinkingAgent";
 import { LThinkingContext } from "../ai2/LThinkingContext";
+import { LFov } from "../LFov";
 
 enum BlockLayer
 {
@@ -148,6 +149,7 @@ export class LEntity extends LObject
 
     _weight: number = 1; // 重さ
 
+    public fov: LFov | undefined;
 
 
     public constructor() {
@@ -621,6 +623,8 @@ export class LEntity extends LObject
                     this.refreshConditions();
                 }
             } 
+            
+            MRSystem.integration.onEntityStatusChanged(this);
         }
         else {
             throw new Error(`LParam not registerd (paramId:${paramId})`);

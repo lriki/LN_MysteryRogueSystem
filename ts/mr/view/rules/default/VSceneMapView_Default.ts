@@ -37,7 +37,7 @@ export class VSceneMapView_Default extends VSceneMapView {
 
     private partyInfoWindowRect(): Rectangle {
         // 画面全体を覆うとツクールデフォルトの MessageWindow などが見えなくなってしまう
-        return new Rectangle(0, 0, Graphics.boxWidth, 160);
+        return new Rectangle(0, 0, Graphics.boxWidth, VLayoutDef.PartyInfoWindowHeight);
     }
 
     private messageWindowRect(): Rectangle {

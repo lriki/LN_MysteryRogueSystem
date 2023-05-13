@@ -234,14 +234,15 @@ export class RMMZIntegration extends SIntegration {
     }
 
     override onEntityStatusChanged(entity: LEntity): void {
-        // const actor = entity.findEntityBehavior(LActorBehavior);
-        // if (actor) {
-        //     const rmmzActor = $gameActors.actor(actor.rmmzActorId);
-        //     assert(rmmzActor);
+        const actor = entity.findEntityBehavior(LActorBehavior);
+        if (actor) {
+            const rmmzActor = $gameActors.actor(actor.rmmzActorId);
+            assert(rmmzActor);
 
-        //     rmmzActor.setHp(entity.getActualParam(MRBasics.params.hp));
-        //     rmmzActor.mxp(entity.getActualParam(MRBasics.params.hp));
-        // }
+            rmmzActor.setHp(entity.getActualParam(MRBasics.params.hp));
+            rmmzActor.setMp(entity.getActualParam(MRBasics.params.mp));
+            console.log("rmmzActor", rmmzActor);
+        }
     }
 
     override onEquipmentChanged(entity: LEntity): void {

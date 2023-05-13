@@ -60,8 +60,8 @@ export class LActorBehavior extends LBattlerBehavior {
         //this._nickname = actor.nickname;
         //this._profile = actor.profile;
         this.initSkills();
-        const a1= self.getActualParam(MRBasics.params.level);
-        const b1= self.getActualParam(MRBasics.params.exp);
+        // const a1= self.getActualParam(MRBasics.params.level);
+        // const b1= self.getActualParam(MRBasics.params.exp);
         //this.initEquips(actor.equips);
         //this.paramSet().clearParamPlus();
         self.recoverAll();

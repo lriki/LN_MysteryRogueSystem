@@ -1,5 +1,8 @@
 
 export class VLayoutDef {
+    // 上部のパーティ情報及びログウィンドウ領域
+    public static readonly PartyInfoWindowHeight = 100;
+
     // フロア番号表示領域の幅
     public static readonly FloorFieldWidth = 120;
     public static readonly FloorFieldHeight = 40;

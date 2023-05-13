@@ -372,8 +372,5 @@ Tilemap.Layer.prototype.render = function(renderer: any) {
         renderer.state.set(this._state);
         renderer.geometry.draw(gl.TRIANGLES, numElements * 6, 0);
     }
-
-    console.log("Tilemap.Layer.prototype.render2");
-    console.trace();
 }
 

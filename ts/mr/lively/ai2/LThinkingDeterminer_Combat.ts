@@ -50,7 +50,7 @@ export class LThinkingDeterminer_Combat extends LThinkingDeterminer {
             const party = self.party();
             if (party && party.isFollower(self)) {
                 const leader = party.leader;
-                if (1/*USearch.checkInSightBlockFromSubject(self, leader)*/) {
+                if (self.fov!.testTargetVisible(self, leader)) {
 
                         // リーダーに隣接しているときは待機。うろうろしない。
                     let pos = [leader.mx, leader.my];

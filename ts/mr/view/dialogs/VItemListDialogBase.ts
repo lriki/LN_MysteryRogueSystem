@@ -3,7 +3,7 @@ import { LInventoryBehavior } from "ts/mr/lively/entity/LInventoryBehavior";
 import { LEntity } from "ts/mr/lively/entity/LEntity";
 import { EntityIdentificationLevel } from "ts/mr/lively/LIdentifyer";
 import { MRLively } from "ts/mr/lively/MRLively";
-import { paramInventoryItemsPerPage } from "ts/mr/PluginParameters";
+import { paramInventoryItemsPerPage, paramUIMode } from "ts/mr/PluginParameters";
 import { SDetailsDialog } from "ts/mr/system/dialogs/SDetailsDialog";
 import { SNicknameDialog } from "ts/mr/system/dialogs/SNicknameDialog";
 import { SDialog } from "ts/mr/system/SDialog";
@@ -11,6 +11,7 @@ import { VFlexCommandWindow } from "../window/windows/VFlexCommandWindow";
 import { VItemListWindow } from "../window/windows/VItemListWindow";
 import { VDialog } from "./VDialog";
 import { SInventoryDialogBase } from "ts/mr/system/dialogs/SInventoryDialogBase";
+import { VLayoutDef } from "../rules/default/VDefaultRule";
 
 export enum VItemListMode {
     Use,
@@ -32,9 +33,7 @@ export class VItemListDialogBase extends VDialog {
 
         
         
-        const y = 100;
-        const cw = 200;
-        this._itemListWindow = new VItemListWindow(new Rectangle(0, y, Graphics.boxWidth - cw, 400), model);
+        this._itemListWindow = new VItemListWindow(this.itemListWinodwRect(), model);
         this._itemListWindow.multipleSelectionEnabled = model.multipleSelectionEnabled;
         //this._itemListWindow.setInventory(this._inventory);
         this._itemListWindow.setHandler("ok", () => this.handleItemSubmit());
@@ -58,14 +57,14 @@ export class VItemListDialogBase extends VDialog {
             this._itemListWindow.refresh();
 
             //this._itemListWindow.y = Graphics.boxHeight - this._itemListWindow.height;
-            this._itemListWindow.y = 64;
+            //this._itemListWindow.y = 64;
 
             this._itemListWindow.createContents();
             this._itemListWindow.refresh();
         }
 
         // CommandWindow は最初は空。表示するとき、複数選択かどうかなどを考慮して Command を作る。
-        this._commandWindow = new VFlexCommandWindow(new Rectangle(Graphics.boxWidth - cw, this._itemListWindow.y, 200, 200));
+        this._commandWindow = new VFlexCommandWindow(this.commandListWinodwRect());
         this.addWindow(this._commandWindow);
     }
 
@@ -75,6 +74,24 @@ export class VItemListDialogBase extends VDialog {
 
     public get commandWindow(): VFlexCommandWindow {
         return this._commandWindow;
+    }
+
+    public itemListWinodwRect(): Rectangle {
+        if (paramUIMode.toLowerCase() === "traditional") {
+            return new Rectangle(0, 64, Graphics.boxWidth - 200, 400);
+        }
+        else {
+            return new Rectangle(0, VLayoutDef.PartyInfoWindowHeight, Graphics.boxWidth - 200, Graphics.boxHeight - VLayoutDef.PartyInfoWindowHeight);
+        }
+    }
+    
+    public commandListWinodwRect(): Rectangle {
+        if (paramUIMode.toLowerCase() === "traditional") {
+            return new Rectangle(Graphics.boxWidth - 200, this._itemListWindow.y, 200, 200);
+        }
+        else {
+            return new Rectangle(Graphics.boxWidth - 200, VLayoutDef.PartyInfoWindowHeight, 200, 200);
+        }
     }
     
     onCreate() {

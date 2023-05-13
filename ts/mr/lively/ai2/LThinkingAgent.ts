@@ -261,10 +261,6 @@ export class LThinkingAgent {
             this._requiredSkillAction = undefined;
         }
 
-        if (self.mx == 19 && self.my == 13) {
-            console.log("debug");
-        }
-
         // 移動先決定
         [this._movingTargetX, this._movingTargetY] = this.selectMovingTargetPosition(self);
     }

@@ -100,36 +100,6 @@ export class VItemListWindow extends VISelectableWindow {
         //return item.entity;
     }
 
-    // public isMultipleSelecting(): boolean {
-    //     return this._items.find(x => x.selectedIndex !== undefined) !== undefined;
-    // }
-
-    // public getSelectedItems(): LEntity[] {
-    //     const result: VItemListWindowItem[] = [];
-        
-    //     // まずは複数選択状態の Item を探してみる
-    //     for (const item of this._items) {
-    //         if (item.selectedIndex !== undefined) {
-    //             result.push(item);
-    //         }
-    //     }
-
-    //     if (result.length == 0) {
-    //         // もしひとつも選択状態ないなら、カーソル位置の Item を返す
-    //         const item = this.itemAt(this.index());
-    //         return item ? [item.entity] : [];
-    //     }
-    //     else {
-    //         // 選択された順で返す
-    //         const items = result.sort((a, b) => {
-    //             assert(a.selectedIndex !== undefined);
-    //             assert(b.selectedIndex !== undefined);
-    //             return a.selectedIndex - b.selectedIndex;
-    //         });
-    //         return items.map(x => x.entity);
-    //     }
-    // }
-
     // override
     maxCols(): number {
         return 1;
@@ -238,31 +208,6 @@ export class VItemListWindow extends VISelectableWindow {
         }
     }
 
-    // private toggleItemSelection(item: VItemListWindowItem): void {
-    //     if (item.selectedIndex === undefined) {
-    //         // 新しく選択する
-    //         let maxIndex = -1;
-    //         for (const item of this._items) {
-    //             if (item.selectedIndex !== undefined) {
-    //                 maxIndex = Math.max(maxIndex, item.selectedIndex);
-    //             }
-    //         }
-    //         item.selectedIndex = maxIndex + 1;
-    //     }
-    //     else {
-    //         // 選択解除
-    //         const removeIndex = item.selectedIndex;
-    //         for (const item of this._items) {
-    //             if (item.selectedIndex !== undefined && item.selectedIndex > removeIndex) {
-    //                 item.selectedIndex -= 1;
-    //             }
-    //         }
-    //         item.selectedIndex = undefined;
-    //     }
-    //     this.playCursorSound();
-    //     this.paint();
-    // }
-
     private correctSelectedIndex(): void {
         const max = this.maxItems();
         if (this.index() > max - 1) {
@@ -273,21 +218,6 @@ export class VItemListWindow extends VISelectableWindow {
     private numberWidth(): number {
         return this.textWidth("000");
     }
-
-    // public itemAt(index: number): VItemListWindowItem | undefined {
-    //     if (this._items.length == 0) {
-    //         return undefined;
-    //     }
-    //     else if (this._pagenationEnabled) {
-    //         return this._items[this._currentPageIndex * this.itemsParPage + index];
-    //     }
-    //     else {
-    //         return this._items[index];
-    //     }
-    // }
-
-    // private makeItemList(): void {
-    // }
     
     private drawEntityItemName(index: number, x: number, y: number, width: number): void {
         const item = this._model.items[index];
@@ -325,7 +255,8 @@ export class VItemListWindow extends VISelectableWindow {
                 }
 
                 // メッキ状態アイコンを表示する
-                if (entity.isStateAffected(MRData.system.states.plating)) {
+                if (entity.isStateAffected(MRData.system.states.plating) ||
+                    entity.isStateAffected(MRData.system.states.storageProtection)) {
                     this.drawIcon(13, nameX, iconY);
                 }
             }
