@@ -26,7 +26,9 @@ export class VSceneMapView_Default extends VSceneMapView {
         this.scene._windowLayer.addChildAt(this._logWindow, 0);
 
         this._partyStatusWindow = new VPlayerStatusWindow2();
-        this.scene._windowLayer.addChildAt(this._partyStatusWindow, 0);
+        this._partyStatusWindow._isWindow = false;
+        //this.scene._windowLayer.addChildAt(this._partyStatusWindow, 0);
+        this.scene.addWindow(this._partyStatusWindow);
         this._partyStatusWindow.show();
     }
 

@@ -9128,7 +9128,7 @@
             "tileId": 0,
             "characterName": "Actor1",
             "direction": 2,
-            "pattern": 0,
+            "pattern": 1,
             "characterIndex": 1
           },
           "list": [
@@ -9552,7 +9552,7 @@
           "moveSpeed": 3,
           "moveType": 0,
           "priorityType": 1,
-          "stepAnime": false,
+          "stepAnime": true,
           "through": false,
           "trigger": 0,
           "walkAnime": true

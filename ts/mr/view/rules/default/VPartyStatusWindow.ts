@@ -77,7 +77,18 @@ export class VPlayerStatusWindow2 extends Window_BattleStatus {
         // 128: Sprite_Gauge.prototype.bitmapWidth
     }
 
-    override drawItemImage(index: number) {
+    override drawBackgroundRect(rect: any): void {
+        const c1 = "rgba(1, 0, 0, 0.0)";//ColorManager.itemBackColor1();
+        const c2 = ColorManager.itemBackColor2();
+        const x = rect.x;
+        const y = rect.y;
+        const w = rect.width;
+        const h = rect.height;
+        this.contentsBack.gradientFillRect(x, y, w, h, c1, c2, true);
+        //this.contentsBack.strokeRect(x, y, w, h, c1);
+    }
+
+    override drawItemImage(index: number): void {
         if (index != 0) return;
         const actor = this.actor(index);
         const rect = this.itemRect(index);
@@ -86,14 +97,9 @@ export class VPlayerStatusWindow2 extends Window_BattleStatus {
         this.changePaintOpacity(actor.isBattleMember());
         this.drawActorFace(actor, rect.x + 1, rect.y + rect.height - height - 1, width, height);
         this.changePaintOpacity(true);
-    };
+    }
 
-    // override drawItem(index: number) {
-    //     this.drawItemImage(index);
-    //     this.drawItemStatus(index);
-    // };
-
-    override drawItemStatus(index: number) {
+    override drawItemStatus(index: number): void {
         const actor = this.actor(index);
         const rect = this.itemRectWithPadding(index);
         const nameX = this.nameX(rect);
@@ -121,6 +127,16 @@ export class VPlayerStatusWindow2 extends Window_BattleStatus {
                 ImageManager.faceWidth + 1,
                 containerHeight,
                 this.faceOverrayGaugeBackground());
+            // this.contents.gradientFillRect(
+            //     itemRect.x,
+            //     y,
+            //     ImageManager.faceWidth + 1,
+            //     containerHeight,
+            //     "rgba(1, 0, 0, 0.0)",
+            //     this.faceOverrayGaugeBackground(),
+            //     true);
+
+    
 
             this.drawSmallGauge(
                 itemRect.x + padding + 2,

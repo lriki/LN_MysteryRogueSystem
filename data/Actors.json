@@ -33,7 +33,7 @@
     "id": 2,
     "battlerName": "",
     "characterIndex": 1,
-    "characterName": "",
+    "characterName": "Actor1",
     "classId": 1,
     "equips": [
       0,
@@ -47,7 +47,7 @@
     "traits": [],
     "initialLevel": 1,
     "maxLevel": 99,
-    "name": "アクターB",
+    "name": "プリシア",
     "nickname": "",
     "note": "<MR-Type: Entity>\n<MR-Category: kEntityCategory_Actor>\n<MR-Key: kEntity_ActorB>\n<MR-Prefab: kPrefab_ActorB>",
     "profile": ""
