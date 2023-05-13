@@ -95,6 +95,9 @@ export const paramTouchMoveEnabled = false;
 export const paramUseThinkingAgent = true;
 
 export const paramFollowerEnabled = true;
+
+export const paramDirectionCircleEnabled = false;
+
 export const paramDefaultStorageLimit = 8;
 
 export const paramDestroyOverflowingItems = false;

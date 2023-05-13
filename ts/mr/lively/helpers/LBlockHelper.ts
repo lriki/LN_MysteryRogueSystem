@@ -51,6 +51,7 @@ export class LBlockHelper {
     /**
      * 2点間の距離 (到達に必要な移動ブロック数) を求める。
      * 斜め移動を許可している Block 単位の距離なので、マンハッタン距離やユークリッド距離とは違う点に注意。
+     * @deprecated use HDimension.getMoveDistance
      */
     public static blockDistance(x1: number, y1: number, x2: number, y2: number): number {
         const dx = Math.abs(x2 - x1);

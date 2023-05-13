@@ -80,6 +80,8 @@ export abstract class SIntegration {
 
     abstract onSetLandExitResult(result: LandExitResult): void;
 
+    abstract onEntityStatusChanged(entity: LEntity): void;
+
     abstract onEquipmentChanged(entity: LEntity): void;
 
     abstract onStartEventScript(script: LScriptContext): void;

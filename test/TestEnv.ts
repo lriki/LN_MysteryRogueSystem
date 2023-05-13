@@ -71,6 +71,12 @@ export class TestEnv {
     static setupDatabase() {
         MRData.testMode = true;
         this.loadRmmzDatabase();
+
+        // ユニットテスト用にデータベースを書き換える
+        {
+            $dataSystem.partyMembers = [1];
+        }
+
         MRData.reset();
         MRDataManager.testMode = true;
         MRDataManager.load();
@@ -330,6 +336,9 @@ export class TestEnvIntegration extends SIntegration {
         this.exitResult = result;
     }
     
+    override onEntityStatusChanged(entity: LEntity): void {
+    }
+
     override onEquipmentChanged(entity: LEntity): void {
     }
 

@@ -523,6 +523,8 @@ export class LEntity extends LObject
             if (action & LParamChangedAction.WithRefresh) {
                 this.refreshConditions();
             }
+
+            MRSystem.integration.onEntityStatusChanged(this);
         }
     }
 

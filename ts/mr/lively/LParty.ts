@@ -18,6 +18,14 @@ interface LPartyEventSubscriber {
     behaviorId: LBehaviorId,
 }
 
+export enum LPartyAgreement {
+    /** フリー。 */
+    None = 0,
+
+    /** ひとりの Entity に付き従う。 */
+    Leadership = 1,
+}
+
 /**
  * 仲間キャラや、グループで動くモンスターをまとめる仕組み。
  * RMMZ の Party と Troop を合わせたようなもの。
@@ -36,13 +44,24 @@ export class LParty {
     private _id: LPartyId = 0;
     private _members: LEntityId[] = [];
     private _leaderEntityId: LEntityId;
+    private _agreement: LPartyAgreement = LPartyAgreement.None;
 
     public readonly journal: LJournal;
 
     public constructor() {
         this._leaderEntityId = LEntityId.makeEmpty();
+        this._agreement = LPartyAgreement.None;
         this.journal = new LJournal();
         this.journal.startChallenging();
+    }
+    
+    public get members(): LEntity[] {
+        return this._members.map(e => MRLively.world.entity(e));
+    }
+
+    public get leader(): LEntity {
+        assert(this._leaderEntityId.hasAny());
+        return MRLively.world.entity(this._leaderEntityId);
     }
 
     public setup(id: LPartyId) {
@@ -57,8 +76,19 @@ export class LParty {
         return this._members.length == 0;
     }
 
-    public get members(): LEntity[] {
-        return this._members.map(e => MRLively.world.entity(e));
+
+    public setPartyAgreement(value: LPartyAgreement): void {
+        this._agreement = value;
+    }
+
+    public isFollower(entity: LEntity): boolean {
+        if (this._agreement == LPartyAgreement.Leadership) {
+            if (entity.entityId().equals(this._leaderEntityId)) {
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     public addMember(entity: LEntity): void {

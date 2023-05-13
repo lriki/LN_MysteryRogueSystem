@@ -4,6 +4,11 @@ import { MRData } from "ts/mr/data/MRData";
 import { LEquipmentUserBehavior } from "ts/mr/lively/behaviors/LEquipmentUserBehavior";
 import { DEntityId } from "../data/DEntity";
 import { LEntityIdData } from "../lively/activities/LActivity";
+import { paramDirectionCircleEnabled } from "../PluginParameters";
+import { easing } from "./animation/VEasing";
+import { VEasingAnimationCurve } from "./animation/VAnimation";
+
+const CIRCLE_ANIMATION_FRAMES = 60;
 
 const ZOFFSET_TABLE_RIGHT_HAND = [
     0,
@@ -35,17 +40,65 @@ export class VCharacterSpriteSet {
     private _sprites: SpriteData[];
     private _revisionNumber: number;
 
+    private _directionCircle: Sprite | undefined;
+    private _directionCircleEffect: Sprite | undefined;
+    private _easingAnimationCurve: VEasingAnimationCurve;
+    private _directionCircleAnimationCount: number;
+
     constructor(parent: Spriteset_Map, owner: Sprite_Character) {
         this._parent = parent;
         this._owner = owner;
         this._sprites = [];
         this._revisionNumber = 0;
+        this._easingAnimationCurve = new VEasingAnimationCurve(0, 1.0, CIRCLE_ANIMATION_FRAMES, easing.outQuad);
+        this._directionCircleAnimationCount = 0;
     }
 
     public update(): void {
+        if (paramDirectionCircleEnabled) {
+            if (!this._directionCircle) {
+                this._directionCircle = new Sprite(ImageManager.loadSystem("MR-DirectionCircle"));
+                this._directionCircle.setFrame(0, 0, 64, 64);
+                this._directionCircle.anchor.x = 0.5;
+                this._directionCircle.anchor.y = 0.5;
+                // this._directionCircle.scale.x = 1.0;
+                // this._directionCircle.scale.y = 0.5;
+                this._directionCircle.z = this._owner.z-2;
+                //this._directionCircle.blendMode = 1;
+                this._parent.addChild(this._directionCircle);
+                
+                this._directionCircleEffect = new Sprite(ImageManager.loadSystem("MR-DirectionCircle"));
+                this._directionCircleEffect.setFrame(0, 0, 64, 64);
+                this._directionCircleEffect.anchor.x = 0.5;
+                this._directionCircleEffect.anchor.y = 0.5;
+                this._directionCircleEffect.z = this._owner.z-2;
+                //this._directionCircleEffect.blendMode = 1;
+                this._parent.addChild(this._directionCircleEffect);
+            }
+            
+            if (this._directionCircle) {
+                // Owner と同期する
+                this._directionCircle.position = this._owner.position;
+                this._directionCircle.visible = this._owner.visible;
+                this._directionCircle.opacity = this._owner.opacity * 0.5;
+                this._directionCircleEffect!.position = this._owner.position;
+                this._directionCircleEffect!.visible = this._owner.visible;
+                this._directionCircleEffect!.opacity = this._owner.opacity;
+
+                const v = this._easingAnimationCurve.evaluate(this._directionCircleAnimationCount);
+                this._directionCircleEffect!.scale.x = 1.0 + v * 0.5;
+                this._directionCircleEffect!.scale.y = 1.0 + v * 0.5;
+                this._directionCircleEffect!.opacity = (1.0 - v) * 255;
+
+                this._directionCircleAnimationCount++;
+                if (this._directionCircleAnimationCount > CIRCLE_ANIMATION_FRAMES) {
+                    this._directionCircleAnimationCount = 0;
+                }
+            }
+        }
+
         const visual = this._owner.findVisual();
         const equipments = visual?.entity().findEntityBehavior(LEquipmentUserBehavior);
-
         if (visual && equipments) {
             if (this._revisionNumber != equipments.revisitonNumber()) {
                 const items = equipments.equippedItemEntities();

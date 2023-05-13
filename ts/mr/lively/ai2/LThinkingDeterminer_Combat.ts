@@ -3,8 +3,10 @@ import { SPhaseResult } from "ts/mr/system/SCommand";
 import { UAction } from "ts/mr/utility/UAction";
 import { LEntity } from "../entity/LEntity";
 import { LThinkingAction } from "./LThinkingAction";
-import { LThinkingAgent } from "./LThinkingAgent";
+import { LThinkingActionRatings, LThinkingAgent } from "./LThinkingAgent";
 import { LThinkingDeterminer } from "./LThinkingDeterminer";
+import { HDimension } from "../helpers/HDimension";
+import { MRData } from "ts/mr/data/MRData";
 
 @MRSerializable
 export class LThinkingDeterminer_Combat extends LThinkingDeterminer {
@@ -40,6 +42,37 @@ export class LThinkingDeterminer_Combat extends LThinkingDeterminer {
                 action.action,
                 action.targets,
             ));
+        }
+
+
+        {
+            // Folloer としてパーティに参加していて、視界内にリーダーがいる場合は、リーダーに追従する
+            const party = self.party();
+            if (party && party.isFollower(self)) {
+                const leader = party.leader;
+                if (1/*USearch.checkInSightBlockFromSubject(self, leader)*/) {
+
+                        // リーダーに隣接しているときは待機。うろうろしない。
+                    let pos = [leader.mx, leader.my];
+                    if (HDimension.getMoveDistanceEntites(self, leader) <= 1) {
+                        pos = [self.mx, self.my];
+                    }
+
+                    const action = new LThinkingAction(
+                        { 
+                            rating: LThinkingActionRatings.Moving,
+                            skillId: MRData.system.skills.move,
+                        },
+                        [],
+                    );
+                    //action.priorityMovingDirection = dir;
+                    action.priorityTargetX = pos[0];
+                    action.priorityTargetY = pos[1];
+                    agent.addCandidateAction(action);
+                }
+            }
+            
+            
         }
         
         return SPhaseResult.Handled;

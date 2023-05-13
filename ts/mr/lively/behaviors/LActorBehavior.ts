@@ -136,6 +136,15 @@ export class LActorBehavior extends LBattlerBehavior {
         }
     }
     
+    override onCollectSkillActions(result: IDataAction[]): void {
+        super.onCollectSkillActions(result);
+        result.push(
+            { 
+                rating: 5,
+                skillId: MRData.system.skills.normalAttack,
+            });
+    }
+    
 }
 
 

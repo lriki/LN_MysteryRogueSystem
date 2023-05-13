@@ -47,6 +47,7 @@ import { SSymmetricShadowcastFovSystem } from "./fov/SSymmetricShadowcastFovSyst
 import { LQuestManager } from "../lively/LQuestManager";
 import { LScriptManager } from "../lively/LScriptManager";
 import { SQuestManager } from "./SQuestManager";
+import { LPartyAgreement } from "../lively/LParty";
 
 /**
  */
@@ -98,6 +99,7 @@ export class SGameManager {
                 const actor = MRData.entities[entityId].actorData();
                 if (actor.id > 0) {
                     const unit = SEntityFactory.newActor(entityId);
+                    unit._name = `UniqueEntity.${entityId}`;
                     //unit.prefabKey = `Actor:${actor.id}`;
                     //unit.floorId = LFlo;//x.initialFloorId;
                     unit.mx = actor.initialX;
@@ -129,6 +131,7 @@ export class SGameManager {
         // }
 
         const party = MRLively.world.newParty();
+        party.setPartyAgreement(LPartyAgreement.Leadership);
         for (const dataId of MRData.system.initialPartyMembers) {
             const actor = MRLively.world.findFirstEntity(x => x.dataId == dataId);
             if (actor) {

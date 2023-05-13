@@ -176,12 +176,11 @@ export class SMapManager {
             const player = MRLively.mapView.getFocusedEntity();
             assert(player.floorId.equals(this.map.floorId()));
             const party = player.party();
-            console.log("party", party);
             assert(party);
-            console.log("party.members", party.members);
             for (const member of party.members) {
                 if (member == player) continue;
-                this.map.locateEntity(member, player.mx + 1, player.my);
+                MRLively.world.transferEntity(member, this.map.floorId(), player.mx + 1, player.my);
+                //this.map.locateEntity(member, player.mx + 1, player.my);
 
                 console.log("member", member);
                 // if (member.floorId.equals(this.map.floorId())) {

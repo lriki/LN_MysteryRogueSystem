@@ -23,6 +23,8 @@ import { LMinorActionExecutor } from "./LMinorActionExecutor";
 import { LThinkingAction } from "./LThinkingAction";
 import { LThinkingContext } from "./LThinkingContext";
 import { LThinkingDeterminer } from "./LThinkingDeterminer";
+import { HDimension } from "../helpers/HDimension";
+import { USearch } from "ts/mr/utility/USearch";
 
 export class LThinkingActionRatings {
     /*
@@ -270,22 +272,36 @@ export class LThinkingAgent {
     private selectMovingTargetPosition(self: LEntity): [number, number] {
         const spawner = self.getUniqueSpawner();
 
-        if (this._requiredSkillAction && this._requiredSkillAction.priorityMovingDirection) {
-            // 移動スキルに優先移動先が設定されている場合は、その方向に移動する
-            const d = HMovement.directionToOffset(this._requiredSkillAction.priorityMovingDirection);
-            return [self.mx + d.x, self.my + d.y];
+        const getPriorityMovingTarget = (): [number, number] | undefined => {
+
+            if (this._requiredSkillAction && this._requiredSkillAction.priorityMovingDirection) {
+                // 移動スキルに優先移動先が設定されている場合は、その方向に移動する
+                const d = HMovement.directionToOffset(this._requiredSkillAction.priorityMovingDirection);
+                return [self.mx + d.x, self.my + d.y];
+            }
+
+            if (this._requiredSkillAction && this._requiredSkillAction.priorityTargetX !== undefined && this._requiredSkillAction.priorityTargetY !== undefined) {
+                return [this._requiredSkillAction.priorityTargetX, this._requiredSkillAction.priorityTargetY];
+            }
+
+            if (this.hasPrimaryTarget) {
+                // 攻撃対象が設定されていれば、常に目標座標を更新し続ける
+                const target = this.primaryTarget;
+                return [target.mx, target.my];
+            }
+
+            if (spawner && spawner.moveType == DUniqueSpawnerMoveType.Homecoming) {
+                return [spawner.mx, spawner.my];
+            }
+
+            return undefined;
         }
-        else if (this._requiredSkillAction && this._requiredSkillAction.priorityTargetX !== undefined && this._requiredSkillAction.priorityTargetY !== undefined) {
-            return [this._requiredSkillAction.priorityTargetX, this._requiredSkillAction.priorityTargetY];
+
+        const result = getPriorityMovingTarget();
+        if (result) {
+            return result;
         }
-        else if (this.hasPrimaryTarget) {
-            // 攻撃対象が設定されていれば、常に目標座標を更新し続ける
-            const target = this.primaryTarget;
-            return [target.mx, target.my];
-        }
-        else if (spawner && spawner.moveType == DUniqueSpawnerMoveType.Homecoming) {
-            return [spawner.mx, spawner.my];
-        }
+
         //else if (prevHasPrimaryTarget != this._actionDeterminer.hasPrimaryTarget()) {
             // decide() によってこれまでの PrimaryTarget を見失った
             //this._moveDeterminer.setTargetPosition(-1, -1);
@@ -314,6 +330,11 @@ export class LThinkingAgent {
     //     return SPhaseResult.Handled;
     // }
 
+    /** 
+     * マイナーアクションが要求されている場合は実行する。
+     * 
+     * @return Hadled の場合、 postConsumeActionToken されている。
+     */
     public executeMinorActionIfNeeded(cctx: SCommandContext, self: LEntity): SPhaseResult {
         return this._minorActionExecutor.executeMinorActionIfNeeded(cctx, this, self);
     }

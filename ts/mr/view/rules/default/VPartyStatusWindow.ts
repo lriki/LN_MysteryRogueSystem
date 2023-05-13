@@ -45,6 +45,11 @@ export class VPlayerStatusWindow2 extends Window_BattleStatus {
         }
     }
 
+    override update() {
+        super.update();
+        this.refresh();
+    }
+
     override refresh() {
         super.refresh();
         // this.contents.clear();

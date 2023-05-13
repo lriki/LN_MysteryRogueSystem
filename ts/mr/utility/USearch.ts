@@ -59,7 +59,9 @@ export class USearch {
 
     /**
      * subject から見て、 target は視界内であるか。
-     * ※可視であるか、ではない点に注意。この関数は地形や位置関係による視界チェックとなる。
+     * 
+     * - 可視であるか、ではない点に注意。この関数は地形や位置関係による視界チェックとなる。
+     * - subject が目つぶしか、target が透明かといったステートは考慮しない。
      */
     public static checkInSightEntity(subject: LEntity, target: LEntity): boolean {
         if (subject.isOnRoom()) {
