@@ -4,5 +4,5 @@ var $plugins =
 [
 {"name":"LN_MysteryRogueSystem","status":true,"description":"LN_MysteryRogueSystem v0.8.0","parameters":{"Group_Inventory":"--------------------","InventoryCapacity":"24","InventoryItemsPerPage":"12","Group_Map":"--------------------","RandomMapPaddingX":"8","RandomPaddingY":"6","SuspendMenuEnabled":"false","Group_System":"------------------------------","SyncActorParams":"true\n\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *","Group_UI":"------------------------------------------------------------","DisableWindowStencil":"false","Group_Experimental":"------------------------------","UIMode":"Traditional","SandboxWorldSystem":"false"}},
 {"name":"LN_FilmicFilter","status":false,"description":"LN_FilmicFilter v1.0.1 (MIT License)","parameters":{}},
-{"name":"VW_Ext","status":true,"description":"","parameters":{}}
+{"name":"VW_Ext","status":false,"description":"","parameters":{}}
 ];

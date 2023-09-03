@@ -47,6 +47,7 @@ import { SSymmetricShadowcastFovSystem } from "./fov/SSymmetricShadowcastFovSyst
 import { LQuestManager } from "../lively/LQuestManager";
 import { LScriptManager } from "../lively/LScriptManager";
 import { SQuestManager } from "./SQuestManager";
+import { MRView } from "../view/MRView";
 
 /**
  */
@@ -315,6 +316,9 @@ export class SGameManager {
         MRSystem.mapManager.requestRefreshVisual();
 
         MRSystem.mapDataManager.unloadAllData();
+        
+        // DialogNavigator が持っている TransformDialog を破棄したい。
+        MRView.dialogManager?.onLoadGame();
     }
 
     public static loadGame(contents: any, withPlayback: boolean) {

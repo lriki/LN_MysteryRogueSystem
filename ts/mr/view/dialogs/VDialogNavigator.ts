@@ -76,7 +76,7 @@ export class VDialogNavigator {
         }
     }
 
-    private clear(): void {
+    public clear(): void {
         this.destryDialogs();
 
         if (this._scene) {

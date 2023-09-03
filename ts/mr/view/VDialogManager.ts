@@ -66,6 +66,10 @@ export class VDialogManager {
         this.dialogNavigator.openDialog(dialog);
     }
 
+    public onLoadGame(): void {
+        this.dialogNavigator.clear();
+    }
+
     public onRmmzSetupMapCompleted(): void {
         const dialog = this.dialogNavigator.currentDialog;
         if (dialog instanceof VTransferMapDialog)
